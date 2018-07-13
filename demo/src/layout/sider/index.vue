@@ -2,19 +2,39 @@
 	<Sider  ref="SiderBox" collapsible :collapsed-width="78" v-model="isCollapsed" class="siderBox"  hide-trigger>
 		<Menu :active-name="currentMenu" theme="dark" width="auto" :class="menuitemClasses" @on-open-change="onOpenChange" ref="side_menu">
 			<MenuItem name="1-1">
-				<router-link  to="/home" />
+				<router-link  to="/agile" />
 				<Icon type="ios-navigate"></Icon>
-				<span>我的任务</span>
+				<span>敏捷项目列表</span>
 			</MenuItem>
 			<MenuItem name="1-2">
-				<router-link :to="{path:'/page1',query: {ID: 'id_myid'}}" />
+				<router-link to="/demand" />
 				<Icon type="ios-navigate"></Icon>
-				<span>page 1</span>
+				<span>需求项管理</span>
 			</MenuItem>
 			<MenuItem name="1-3">
-				<router-link  to="/page2" />
+				<router-link  to="/product" />
 				<Icon type="ios-navigate"></Icon>
-				<span>page 2</span>
+				<span>产品待办列表</span>
+			</MenuItem>
+			<MenuItem name="1-4">
+				<router-link  to="/iteration" />
+				<Icon type="ios-navigate"></Icon>
+				<span>迭代管理</span>
+			</MenuItem>
+			<MenuItem name="1-5">
+				<router-link  to="/development" />
+				<Icon type="ios-navigate"></Icon>
+				<span>开发任务管理</span>
+			</MenuItem>
+			<MenuItem name="1-6">
+				<router-link  to="/defect" />
+				<Icon type="ios-navigate"></Icon>
+				<span>缺陷管理</span>
+			</MenuItem>
+			<MenuItem name="1-7">
+				<router-link  to="/overView" />
+				<Icon type="ios-navigate"></Icon>
+				<span>项目概览</span>
 			</MenuItem>
 		</Menu>
 		<Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '-12px 8px 0 0'}" type="chevron-left" size="24" class="triggerBtn" color="white" ></Icon> 
@@ -27,9 +47,14 @@ export default {
 		return{
 			isCollapsed: false,
 			pathActive:{
-				home:["1","1-1"],
-				page1:["1","1-2"],
-				page2:["1","1-3"],
+				agile:["1","1-1"],
+				demand:["1","1-2"],
+				product:["1","1-3"],
+				iteration:["1","1-4"],
+				development:["1","1-5"],
+				defect:["1","1-6"],
+				overView:["1","1-7"],
+
 			},
 			OpenNames:[],//["1"]
 			currentMenu:"",//1-1
@@ -59,8 +84,8 @@ export default {
 
 	},
 	mounted() {
-		if(this.$route.path.indexOf("home")!= -1){
-				this.side_menu("home")
+		if(this.$route.path.indexOf("agile")!= -1){
+				this.side_menu("agile")
 		}
 	},
 	computed: {
@@ -78,17 +103,35 @@ export default {
 	    },
 	    
 	},
+
+
+
+
+
 	watch: {
 		'$route'(to,from) {
-			let home = "home";
-			let page1 = "page1";
-			let page2 = "page2";
+			let home = "agile";
+			let page2 = "demand";
+			let page3 = "product";
+			let page4 = "iteration";
+			let page5 = "development";
+			let page6 = "defect";
+			let page7 = "overView";
+			
 			if(to.path.indexOf(home)!= -1){
 				this.side_menu(home)
-			}else if(to.path.indexOf(page1)!= -1){
-				this.side_menu(page1)
 			}else if(to.path.indexOf(page2)!= -1){
 				this.side_menu(page2)
+			}else if(to.path.indexOf(page3)!= -1){
+				this.side_menu(page3)
+			}else if(to.path.indexOf(page4)!= -1){
+				this.side_menu(page4)
+			}else if(to.path.indexOf(page5)!= -1){
+				this.side_menu(page5)
+			}else if(to.path.indexOf(page6)!= -1){
+				this.side_menu(page6)
+			}else if(to.path.indexOf(page7)!= -1){
+				this.side_menu(page7)
 			}
 		}
 	},

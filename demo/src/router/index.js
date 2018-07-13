@@ -46,17 +46,56 @@ const router =   new Router({
       },
     },
     {
-      path: '/page1',
-      name:'Page1',
+      path: '/agile',
+      name:'agile',
       components: {
-      	Cont:resolve => {require(["../pages/page1/"], resolve)}
+        Cont:resolve => {require(["../pages/agile/"], resolve)}
       },
     },
     {
-      path: '/page2',
-      name:'Page2',
+      path: '/demand',
+      name:'demand',
       components: {
-        Cont:resolve => {require(["../pages/page2/"], resolve)}
+      	Cont:resolve => {require(["../pages/demand/"], resolve)}
+      },
+    },
+    {
+      path: '/product',
+      name:'product',
+      components: {
+        Cont:resolve => {require(["../pages/product/"], resolve)}
+      
+      },
+    },
+    {
+      path: '/iteration',
+      name:'iteration',
+      components: {
+        Cont:resolve => {require(["../pages/iteration/"], resolve)}
+      
+      },
+    },
+    {
+      path: '/development',
+      name:'development',
+      components: {
+        Cont:resolve => {require(["../pages/development/"], resolve)}
+      
+      },
+    },
+    {
+      path: '/defect',
+      name:'defect',
+      components: {
+        Cont:resolve => {require(["../pages/defect/"], resolve)}
+      
+      },
+    },
+    {
+      path: '/overView',
+      name:'overView',
+      components: {
+        Cont:resolve => {require(["../pages/overView/"], resolve)}
       
       },
     },

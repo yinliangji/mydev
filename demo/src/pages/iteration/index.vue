@@ -34,7 +34,7 @@
             </Radio-Group>
             <br>
             <Select v-model="choseType" style="width:250px;margin:20px auto" v-if="radioType=='选择文件'">
-              <Option v-for="item in obj" :value="item.type">
+              <Option v-for="item in obj" :value="item.type" :key="item">
               </Option>
             </Select>
             <div v-if="radioType=='新建'">

@@ -193,7 +193,9 @@ export default {
 <style lang="less" scoped>
 @import './style.less';
 @import './style.css';
-
+.crumbsBox{
+    
+}
 .formValidate {
 	margin:0 auto;
 	width: 80%;

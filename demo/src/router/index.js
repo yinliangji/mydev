@@ -99,6 +99,13 @@ const router =   new Router({
       
       },
     },
+    {
+      path: '/baseinfo',
+      name:'baseinfo',
+      components: {
+        Cont:resolve => {require(["../pages/baseinfo/"], resolve)}
+      },
+    },
   ]
 })
 

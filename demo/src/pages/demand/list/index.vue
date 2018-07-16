@@ -15,7 +15,11 @@
 	</div>
 </template>
 <script>
+import kanbanboard from "@/components/kanbanboard";
 export default {
+	components: {
+		kanbanboard,
+	}
 
 }
 </script>

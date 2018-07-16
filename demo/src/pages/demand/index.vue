@@ -6,8 +6,8 @@
             <BreadcrumbItem>敏捷项目列表</BreadcrumbItem>
         </Breadcrumb>
         <Card>
-            <div class="aglieBox">
-                <h3>需求项管理</h3>
+            <div class="demandBox">
+                <h3 class="Title">需求项管理</h3>
                 <Form ref="formValidate" class="formValidate">
                    
                     <FormItem >
@@ -77,6 +77,21 @@ export default {
                 {
                     title: '需求项名称',
                     key: 'name',
+                    render: (h, params) => {
+                        return h(
+                            'a',
+                            {
+                                style:{color:'#2d8cf0'},
+                                //domProps:{href:"###"},
+                                on: {
+                                    click: () => {
+                                        this.linkFn(params.index)
+                                    }
+                                }
+                            },
+                            params.row.name
+                        );
+                    }
                 },
                 {
                     title: '需求项完成进度',
@@ -114,7 +129,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.toLIstFn(params.index)
                                     }
                                 }
                             }, '查看产品代办列表'),
@@ -152,7 +167,14 @@ export default {
         }
     },
     methods: {
-        
+        linkFn (index) {
+            //alert(index)
+            this.$router.push('/baseinfo')
+        },
+        toLIstFn (index) {
+            //alert(index)
+            this.$router.push('/demand/list')
+        },
         show (index) {
             this.$Modal.info({
                 title: 'User Info',
@@ -175,38 +197,8 @@ export default {
     margin-left: 0;
 
 }
-h3 {
-    margin-left:0;
-    text-align:left;
-    color:#495060;
-    font-weight: 400;
-    font-size: 16px;
-    margin-bottom: 30px;
-    margin-top: 10px;
-    position: relative;
-    padding-left:1em;
-}
-h3:before{
-    content: counter(number);
-    position:absolute;
-    left:0;
-    top:0%;
-    transform: translate(100%, -5%);
-    width: 3px;
-    height:100%;
-    background:#ed3f14;
-    color:transparent;
-    border-radius: 0%;
 
-}
-h4{
-    font-size: 20px;
-    color:#495060;
-    font-weight: 400;
-}
-.aglieBox{
-    
-}
+
 .tableBox{
     padding-top: 20px;
 }

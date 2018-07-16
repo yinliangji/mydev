@@ -60,6 +60,13 @@ const router =   new Router({
       },
     },
     {
+      path: '/demand/list',
+      name:'demand_list',
+      components: {
+        Cont:resolve => {require(["../pages/demand/list/"], resolve)}
+      },
+    },
+    {
       path: '/product',
       name:'product',
       components: {

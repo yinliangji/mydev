@@ -179,7 +179,7 @@ li>span{
 .menu-item span{
     display: inline-block;
     overflow: hidden;
-    width: 69px;
+    width: 85px;
     text-overflow: ellipsis;
     white-space: nowrap;
     vertical-align: bottom;

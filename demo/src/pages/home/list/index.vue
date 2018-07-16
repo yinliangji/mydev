@@ -3,7 +3,7 @@
         <Breadcrumb :style="{margin: '16px 0'}">
             <BreadcrumbItem>首页</BreadcrumbItem>
             <BreadcrumbItem>工作台</BreadcrumbItem>
-            <BreadcrumbItem>列表1</BreadcrumbItem>
+            <BreadcrumbItem>列表</BreadcrumbItem>
         </Breadcrumb>
         <Card>
             <Row class="listCont">

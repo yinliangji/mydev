@@ -21,21 +21,7 @@ const router = new Router({
             },
 
 
-            // redirect: '/item1/firstcontent',
-            // components: {
-            // 	content: FirstContent,
-            // 	aside: First
-            // },
-            // children: [{
-            //     path: '/firstcontent',
-            //     // redirect: '/first/yingyong'
-            //     component: FirstContent
-            //   },
-            //   {
-            //   	path: '/firstcontent2',
-            //   	component: FirstContentSec
-            //   }
-            // ]
+
         },
         {
             path: '/home/list',
@@ -131,7 +117,102 @@ const router = new Router({
                     require(["../pages/iteration/iteration"], resolve)
                 }
             },
-        }
+        },
+        {
+            path: '/home/list',
+            name: 'List',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/home/list/"], resolve)
+                }
+            },
+        },
+        {
+            path: '/agile',
+            name: 'agile',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/agile/"], resolve)
+                }
+            },
+        },
+        {
+            path: '/demand',
+            name: 'demand',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/demand/"], resolve)
+                }
+            },
+        },
+        {
+            path: '/demand/list',
+            name: 'demand_list',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/demand/list/"], resolve)
+                }
+            },
+        },
+        {
+            path: '/product',
+            name: 'product',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/product/"], resolve)
+                }
+
+            },
+        },
+        {
+            path: '/iteration',
+            name: 'iteration',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/iteration/"], resolve)
+                }
+
+            },
+        },
+        {
+            path: '/development',
+            name: 'development',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/development/"], resolve)
+                }
+
+            },
+        },
+        {
+            path: '/defect',
+            name: 'defect',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/defect/"], resolve)
+                }
+
+            },
+        },
+        {
+            path: '/overView',
+            name: 'overView',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/overView/"], resolve)
+                }
+
+            },
+        },
+        {
+            path: '/baseinfo',
+            name: 'baseinfo',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/baseinfo/"], resolve)
+                }
+            },
+        },
     ]
 })
 

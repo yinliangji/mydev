@@ -1,6 +1,6 @@
 <template>
 	<Sider  ref="SiderBox" collapsible :collapsed-width="78" v-model="isCollapsed" class="siderBox"  hide-trigger>
-		<Menu :active-name="currentMenu" theme="dark" width="auto" :class="menuitemClasses" @on-open-change="onOpenChange" ref="side_menu">
+		<Menu :active-name="currentMenu" theme="dark" width="auto" :class="menuitemClasses" @on-open-change="onOpenChange" ref="side_menu" class="siderMenu">
 			<MenuItem name="1-1">
 				<router-link  to="/agile" />
 				<Icon type="ios-navigate"></Icon>
@@ -150,12 +150,23 @@ li a {
 li>span{
 	padding-bottom: 1px;
 }
+
+
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu) {
+    color: white;
+}
+
 .siderBox {
   
   height:100%;
   overflow-y:auto;
   overflow-x:hidden;
+  background: #21488a;//
 
+}
+.siderMenu {
+	background: transparent;
 }
 .layout-con{
     height: 100%;

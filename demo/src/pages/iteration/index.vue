@@ -9,7 +9,7 @@
       <kanbanSearch :searchParams="searchParams"></kanbanSearch>
       <div class="w80">
         <Button type="primary" icon="ios-cloud-upload-outline" style="margin:6px 0">添加</Button>
-
+        <Button type="primary"  @click="showModalList">归档</Button>
         <div class="orange">
           <div class="un-plan">
             <Table border @on-selection-change="handleRowChange" ref="Selection"
@@ -22,19 +22,19 @@
 
             <Button @click="handleSelectAll(true)">全选</Button>
             <Button @click="handleSelectAll(false)">取消全选</Button>
-            <Button type="primary" style="margin-left: 40px;" @click="showModalList">规划迭代</Button>
+
           </div>
           <Modal
               v-model="ismodalShow"
               title="迭代规划"
               @on-ok="ok()">
             <Radio-Group v-model="radioType">
-              <Radio label="选择文件"></Radio>
+              <Radio label="选择已有归档"></Radio>
               <Radio label="新建"></Radio>
             </Radio-Group>
             <br>
-            <Select v-model="choseType" style="width:250px;margin:20px auto" v-if="radioType=='选择文件'">
-              <Option v-for="item in obj" :value="item.type" :key="item">
+            <Select v-model="choseType" style="width:250px;margin:20px auto" v-if="radioType=='选择已有归档'">
+              <Option v-for="item in obj" :value="item.type" :key="item.type">
               </Option>
             </Select>
             <div v-if="radioType=='新建'">
@@ -49,7 +49,7 @@
             </div>
           </Modal>
 
-          <div class="paln1 paln" v-for="item in obj">
+          <div class="paln1 paln" v-for="item in obj" :key="item.name">
             <div class="plan-title">
               <!-- <span v-text=`${item.name}(${item.startTime}${item.startTime})`></span> -->
                <span>{{item.name}}
@@ -57,14 +57,11 @@
               <span class="plan-title-btn" @click="item.isShow = false" v-show="item.isShow">隐藏</span>
               <span class="plan-title-btn" @click="item.isShow = true" v-show="!item.isShow">显示</span>
             </div>
-            <Table border :columns="column1" :data="item.list" v-if="item.isShow"></Table>
+            <Table border :columns="column2" :data="item.list" v-if="item.isShow"></Table>
           </div>
         </div>
       </div>
-
-
     </div>
-
 	</div>
 </template>
 
@@ -75,7 +72,7 @@ export default {
   data() {
     return {
       ismodalShow: false,
-      radioType: "选择文件",
+      radioType: "选择已有归档",
       index: 2,
       choseType: "", // 选择迭代到的类型
       newName: "",
@@ -85,6 +82,76 @@ export default {
       curSelelectList: [], // 当前选择得要规划得list
       isHandleMore: false, // 是否点击了多列按钮 规划
       column1: [
+        {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
+        {
+          title: "迭代编号",
+          key: "number"
+        },
+        {
+          title: "迭代名称",
+          key: "name"
+        },
+        {
+          title: "开始时间",
+          key: "startTime"
+        },
+        {
+          title: "结束时间",
+          key: "endTime"
+        },
+        {
+          title: "操作",
+          key: "action",
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "span",
+                {
+                  style: {
+                    marginRight: "20px",
+                    color: "#2baee9",
+                    cursor: "pointer"
+                  },
+                  on: {
+                    click: () => {
+                      // this.showModal(params);
+                      //点击跳转页面
+                      this.$router.push({
+                        path:"/iteration/iteration",
+                        query:{
+                          iterationName:params
+                        }
+                      })
+                    }
+                  }
+                },
+                "规划迭代"
+              ),
+              h(
+                "span",
+                {
+                  style: {
+                    color: "#f90",
+                    cursor: "pointer"
+                  },
+                  on: {
+                    click: () => {
+                      this.fillEdit(params.index);
+                    }
+                  }
+                },
+                "编辑"
+              )
+            ]);
+          }
+        }
+      ],
+      column2: [
         {
           type: "selection",
           width: 60,
@@ -137,23 +204,9 @@ export default {
                     }
                   }
                 },
-                "规划迭代"
-              ),
-              h(
-                "span",
-                {
-                  style: {
-                    color: "#f90",
-                    cursor: "pointer"
-                  },
-                  on: {
-                    click: () => {
-                      this.fillEdit(params.index);
-                    }
-                  }
-                },
-                "编辑"
+                "取消归档"
               )
+
             ]);
           }
         }
@@ -590,6 +643,7 @@ export default {
 .ivu-breadcrumb{padding-left: 10px;}
 
 //orange
+.orange{padding: 20px;}
 .iterative-container {
   font-size: 14px;
   width: 80%;

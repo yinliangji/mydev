@@ -12,25 +12,58 @@
         <Page :total="200" show-sizer show-total  @on-change="changeCurrentPage"
         @on-page-size-change="changePageSize" style="margin:6px 0; text-align:right"></Page>
       </div>
-       <kanbanboard
+      <Header>
+        <Row :gutter="10">
+          <Col span="2">
+            <Button :style="{border: '1px dashed #ccc'}" @click="addNewTask">添加任务</Button>
+          </Col>
+          <Col span="1">
+            <img src="@/assets/images/product-list.png" @click="showList" class="cursor">
+          </Col>
+          <Col span="1">
+            <img src="@/assets/images/product-kanban.png" @click="showTask" class="cursor">
+        </Col>
+          <Col span="1" >
+            <span class="high">
+                高
+            </span>
+
+          </Col>
+          <Col span="1">
+            <span class="middle">
+                中
+            </span>
+
+          </Col>
+          <Col span="1">
+            <span class="low">
+                低
+            </span>
+
+          </Col>
+        </Row>
+
+
+      </Header>
+      <component :is="currentView"></component>
+       <!-- <kanbanboard
           :cardList="cardList"
           :groupList="groupList"
           :statusList="statusList"
-        ></kanbanboard>
-
-
+        ></kanbanboard> -->
     </div>
-
 	</div>
 </template>
 
 <script>
 import { EventBus } from "@/tools";
 import kanbanSearch from "@/components/kanbanSearch";
-import kanbanboard from '@/components/kanbanboard';
+import kanbanboard from "@/components/kanbanboard";
+import developList from "@/pages/development/development";
 export default {
   data() {
     return {
+      currentView: "kanbanboard",
       ismodalShow: false,
       radioType: "选择文件",
       index: 2,
@@ -237,6 +270,15 @@ export default {
     addNewTask(info) {
       console.log("  添加任务  :::", info);
     },
+    // addNewTask(info) {
+    //   EventBus.$emit("addTask", info);
+    // },
+    showList() {
+      this.currentView = "developList";
+    },
+    showTask(){
+      this.currentView = "kanbanboard";
+    },
     //分页
     changeCurrentPage(i) {
       alert(i);
@@ -246,158 +288,6 @@ export default {
     }
   },
   computed: {
-    cardList: function() {
-      let _cardList = [
-        {
-          taskId: "#US0001",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_01",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "未开始",
-          taskState: "01",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0002",
-          description:
-            "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_02",
-          groupId: "group_02",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "设计开发",
-          taskState: "02",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0003",
-          description:
-            "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_03",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "02",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0004",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_04",
-          groupId: "group_03",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "01",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0005",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_05",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "04",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0006",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_06",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "01",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0007",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_07",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "01",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0008",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_08",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "03",
-          headPortrait: require("@/assets/images/user_02.png")
-        }
-      ];
-
-      return _cardList;
-    },
-    groupList: function() {
-      let _groupList = [
-        { text: "产品待办事项" },
-        {
-          text: "用户登录",
-          groupId: "group_01"
-        },
-        {
-          text: "创建代码仓库",
-          groupId: "group_02"
-        },
-        {
-          text: "未知项",
-          groupId: "group_03"
-        }
-      ];
-
-      return _groupList;
-    },
-    statusList: function() {
-      let _statusList = [
-        {
-          stateStr: "未开始",
-          state: "01",
-          taskNumber: "3"
-        },
-        {
-          stateStr: "设计开发",
-          state: "02",
-          taskNumber: "4"
-        },
-        {
-          stateStr: "测试",
-          state: "03",
-          taskNumber: "5"
-        },
-        {
-          stateStr: "发布",
-          state: "04",
-          taskNumber: "6"
-        },
-        {
-          stateStr: "上线",
-          state: "05",
-          taskNumber: "3"
-        }
-      ];
-
-      return _statusList;
-    },
     searchParams: function() {
       return [
         {
@@ -436,7 +326,8 @@ export default {
 
   components: {
     kanbanSearch,
-    kanbanboard
+    kanbanboard,
+    developList
   }
 };
 </script>
@@ -464,5 +355,34 @@ export default {
 }
 .ivu-breadcrumb {
   padding-left: 10px;
+}
+//头部
+  .ivu-layout-header {
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+  }
+span.high {
+  background: #f8d6af;
+  width: 100%;
+  height: 25px;
+  display: inline-block;
+  line-height: 25px;
+  text-align: center;
+}
+span.middle {
+  background: #b3ecec;
+  width: 100%;
+  height: 25px;
+  display: inline-block;
+  line-height: 25px;
+  text-align: center;
+}
+span.low {
+  background: #f2e1f0;
+  width: 100%;
+  height: 25px;
+  display: inline-block;
+  line-height: 25px;
+  text-align: center;
 }
 </style>

@@ -5,10 +5,10 @@
             <Button :style="{border: '1px dashed #ccc'}" @click="addNewTask">添加任务</Button>
           </Col>
           <Col span="1">
-            <img src="@/assets/images/product-list.png"  alt="">
+            <img src="@/assets/images/product-list.png" @click="showList">
           </Col>
           <Col span="1">
-            <img src="@/assets/images/product-kanban.png"  alt="">
+            <img src="@/assets/images/product-kanban.png" @click="showTask">
         </Col>
           <Col span="1" >
             <span class="high">
@@ -42,6 +42,9 @@
     methods: {
       addNewTask(info){
         EventBus.$emit('addTask', info);
+      },
+      showList(){
+
       }
     }
   }

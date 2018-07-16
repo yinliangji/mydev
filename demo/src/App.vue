@@ -6,11 +6,11 @@
         <!-- 开始 -->
         <Layout  class="contentBox">
           <Mysider></Mysider>
-          <MyContainer></MyContainer> 
+          <MyContainer></MyContainer>
         </Layout>
         <!-- 结束 -->
       </Content>
-      <MyFooter>===MyFooter</MyFooter>
+      <!-- <MyFooter>===MyFooter</MyFooter> -->
     </Layout>
 </template>
 <script>
@@ -27,7 +27,7 @@ export default {
   name: 'App',
   data() {
     return {
-     
+
     }
   },
   computed: {

@@ -170,12 +170,10 @@ export default {
     },
     methods: {
         linkFn (index) {
-            //alert(index)
             this.$router.push('/baseinfo')
         },
         toLIstFn (index) {
-            //alert(index)
-            this.$router.push('/demand/list')
+            this.$router.push('/product')
         },
         show (index) {
             this.$Modal.info({

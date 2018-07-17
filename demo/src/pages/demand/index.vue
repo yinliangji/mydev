@@ -3,7 +3,7 @@
         <Breadcrumb :style="{margin: '16px 0'}" >
             <BreadcrumbItem>首页</BreadcrumbItem>
             <BreadcrumbItem>敏捷项目管理</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目列表</BreadcrumbItem>
+            <BreadcrumbItem>需求项管理</BreadcrumbItem>
         </Breadcrumb>
         <Card>
             <div class="demandBox">

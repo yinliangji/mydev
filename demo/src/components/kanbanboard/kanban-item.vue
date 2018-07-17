@@ -7,21 +7,22 @@
                 <p class="circle">
                     <Icon type="record" :size="12"></Icon>
                 </p>
-                <span class="taskId">{{item.taskId}}</span> 
+                <span class="taskId">{{item.taskId}}</span>
             </div>
-             
+
+              <p class="item-content">{{item.taskName}}</p>
               <p class="item-content">{{item.description}}</p>
               <p class="item-name">
                 <span class="user_name">
                     {{item.userName}}
                 </span>
                 <img :src="item.headPortrait" />
-              
+
               </p>
-              
+
             </Card>
       </div>
-  
+
   </div>
 
 
@@ -29,7 +30,7 @@
 
 <script>
   import { EventBus } from '@/tools';
- 
+
   import Sortable from 'sortablejs';
 
   export default {
@@ -40,12 +41,12 @@
           return {}
         }
       },
-     
+
       Group: {
         type: Boolean,
-       
+
       },
-    
+
     },
     mounted() {
       document.body.ondrop = function (event) {
@@ -53,7 +54,7 @@
         event.stopPropagation();
       };
      this.bindSortable(this.item.userId, this.groupId);
-    
+
     },
     methods: {
       itemClick(info){
@@ -62,7 +63,7 @@
       bindSortable(moveId, groupId) {
         let vm = this;
         let todoList = document.getElementById(moveId);
-      
+
         Sortable.create(todoList, {
           group: {
             name: 'list',
@@ -72,7 +73,7 @@
           ghostClass: 'placeholder-style',
           fallbackClass: 'iview-admin-cloned-item',
           onMove: function(evt, originalEvent){
-          
+
             if(vm.Group){ // 分组时移动
               if(evt.from.getAttribute('groupId') == evt.to.getAttribute('groupId')){
                 return;
@@ -86,7 +87,7 @@
                 return;
               }
             }
-    
+
           },
           onEnd: function(evt){
           console.log(evt);
@@ -96,15 +97,15 @@
 
       }
     },
- 
+
   }
 </script>
 
 <style scoped>
   .card-wrapper {
-   
+
     min-height: 10px;
-    
+
   }
 .card-wrap{
   margin-right: 10px;

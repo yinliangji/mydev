@@ -94,188 +94,6 @@ export default {
     return {
       addTaskOnoff: false,
       currentView: "developList",
-      ismodalShow: false,
-      radioType: "选择文件",
-      index: 2,
-      choseType: "", // 选择迭代到的类型
-      newName: "",
-      newStart: "",
-      newEnd: "",
-      curSelectSingleId: 0, // 当前选择的要规划的项
-      curSelelectList: [], // 当前选择得要规划得list
-      isHandleMore: false, // 是否点击了多列按钮 规划
-      column1: [
-        {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
-        {
-          title: "迭代编号",
-          key: "number"
-        },
-        {
-          title: "迭代名称",
-          key: "name",
-          render: (h, params) => {
-            return h(
-              "a",
-              {
-                domProps: {
-                  href: "#"
-                }
-              },
-              params.row.name
-            );
-          }
-        },
-        {
-          title: "开始时间",
-          key: "startTime"
-        },
-        {
-          title: "结束时间",
-          key: "endTime"
-        },
-        {
-          title: "操作",
-          key: "action",
-          align: "center",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "span",
-                {
-                  style: {
-                    marginRight: "20px",
-                    color: "#2baee9",
-                    cursor: "pointer"
-                  },
-                  on: {
-                    click: () => {
-                      this.showModal(params);
-                    }
-                  }
-                },
-                "规划迭代"
-              ),
-              h(
-                "span",
-                {
-                  style: {
-                    color: "#f90",
-                    cursor: "pointer"
-                  },
-                  on: {
-                    click: () => {
-                      this.fillEdit(params.index);
-                    }
-                  }
-                },
-                "编辑"
-              )
-            ]);
-          }
-        }
-      ],
-      Table1: {
-        type: 0, // 未规划
-        name: "未规划迭代",
-        list: [
-          {
-            id: 1,
-            number: "001",
-            name: "prj001",
-            dec: "TPM敏捷管理系统",
-            startTime: "2017-08-01",
-            endTime: "2018-05-01"
-          },
-          {
-            id: 2,
-            number: "001",
-            name: "prj001",
-            dec: "TPM敏捷管理系统",
-            startTime: "2017-08-01",
-            endTime: "2018-05-01"
-          },
-          {
-            id: 3,
-            number: "001",
-            name: "prj001",
-            dec: "TPM敏捷管理系统",
-            startTime: "2017-08-01",
-            endTime: "2018-05-01"
-          }
-        ]
-      },
-      obj: [
-        {
-          type: 1,
-          name: "TPM产品第一阶段1",
-          startTime: "2017-08-01",
-          endTime: "2017-08-01",
-          isShow: false,
-          list: [
-            {
-              id: 4,
-              number: "002",
-              name: "prj001",
-              dec: "TPM敏捷管理系统1",
-              startTime: "2017-08-01",
-              endTime: "2018-05-01"
-            },
-            {
-              id: 5,
-              number: "002",
-              name: "prj001",
-              dec: "TPM敏捷管理系统1",
-              startTime: "2017-08-01",
-              endTime: "2018-05-01"
-            },
-            {
-              id: 6,
-              number: "002",
-              name: "prj001",
-              dec: "TPM敏捷管理系统1",
-              startTime: "2017-08-01",
-              endTime: "2018-05-01"
-            }
-          ]
-        },
-        {
-          type: 2,
-          name: "TPM产品第二阶段",
-          startTime: "2017-08-01",
-          endTime: "2017-08-01",
-          isShow: false,
-          list: [
-            {
-              id: 7,
-              number: "003",
-              name: "prj001",
-              dec: "TPM敏捷管理系统2",
-              startTime: "2017-08-01",
-              endTime: "2018-05-01"
-            },
-            {
-              id: 8,
-              number: "003",
-              name: "prj001",
-              dec: "TPM敏捷管理系统2",
-              startTime: "2017-08-01",
-              endTime: "2018-05-01"
-            },
-            {
-              id: 9,
-              number: "003",
-              name: "prj001",
-              dec: "TPM敏捷管理系统2",
-              startTime: "2017-08-01",
-              endTime: "2018-05-01"
-            }
-          ]
-        }
-      ],
       ownNeed: [
         {
           value: "taskvalue1",
@@ -412,6 +230,7 @@ export default {
         },
         {
           taskId: "#US0003",
+          taskName:"任务名3",
           description:
             "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
           userName: "user1",
@@ -424,6 +243,7 @@ export default {
         },
         {
           taskId: "#US0004",
+          taskName:"任务名4",
           description:
             "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
           userName: "user1",
@@ -436,6 +256,7 @@ export default {
         },
         {
           taskId: "#US0005",
+          taskName:"任务名5",
           description:
             "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
           userName: "user1",
@@ -448,6 +269,7 @@ export default {
         },
         {
           taskId: "#US0006",
+          taskName:"任务名6",
           description:
             "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
           userName: "user1",
@@ -460,6 +282,7 @@ export default {
         },
         {
           taskId: "#US0007",
+          taskName:"任务名7",
           description:
             "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
           userName: "user1",
@@ -472,6 +295,7 @@ export default {
         },
         {
           taskId: "#US0008",
+          taskName:"任务名8",
           description:
             "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
           userName: "user1",
@@ -479,7 +303,7 @@ export default {
           groupId: "group_01",
           bgColor: { background: "#f8d6af" },
           taskStateStr: "测试",
-          taskState: "03",
+          taskState: "05",
           headPortrait: require("@/assets/images/user_02.png")
         }
       ];

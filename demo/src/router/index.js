@@ -18,10 +18,7 @@ const router = new Router({
             name: 'Home',
             components: {
                 Cont: Home
-            },
-
-
-
+            }
         },
         {
             path: '/home/list',
@@ -115,6 +112,15 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/iteration/iteration"], resolve)
+                }
+            },
+        },
+        {
+            path: '/iteration/iteration2',
+            name: 'iterationTo',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/iteration/iteration2"], resolve)
                 }
             },
         },

@@ -3,7 +3,7 @@
         <Breadcrumb :style="{margin: '16px 0'}" >
             <BreadcrumbItem>首页</BreadcrumbItem>
             <BreadcrumbItem>敏捷项目管理</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目列表</BreadcrumbItem>
+            <BreadcrumbItem>需求项管理</BreadcrumbItem>
         </Breadcrumb>
         <Card>
             <div class="demandBox">
@@ -95,7 +95,9 @@ export default {
                 },
                 {
                     title: '需求项完成进度',
-                    key: 'address'
+                    key: 'address',
+                    align: 'center',
+                    width: 140,
                 },
                
                 {
@@ -168,12 +170,10 @@ export default {
     },
     methods: {
         linkFn (index) {
-            //alert(index)
             this.$router.push('/baseinfo')
         },
         toLIstFn (index) {
-            //alert(index)
-            this.$router.push('/demand/list')
+            this.$router.push('/product')
         },
         show (index) {
             this.$Modal.info({

@@ -110,19 +110,19 @@ export default {
 			currentView: "developList",//developList//kanbanboard
 			
 			groupList:[
-		        { text: "产品待办事项" },
-		        {
-		          text: "用户登录1",
-		          groupId: "group_01"
-		        },
-		        {
-		          text: "创建代码仓库",
-		          groupId: "group_02"
-		        },
-		        {
-		          text: "未知项",
-		          groupId: "group_03"
-		        },
+		        // { text: "产品待办事项" },
+		        // {
+		        //   text: "用户登录1",
+		        //   groupId: "group_01"
+		        // },
+		        // {
+		        //   text: "创建代码仓库",
+		        //   groupId: "group_02"
+		        // },
+		        // {
+		        //   text: "未知项",
+		        //   groupId: "group_03"
+		        // },
 			],
 			statusList:[
 				{

@@ -89,7 +89,7 @@
     
           },
           onEnd: function(evt){
-         
+          console.log(evt);
             EventBus.$emit('moveEnd', {evt,item: vm.item});
           }
         });

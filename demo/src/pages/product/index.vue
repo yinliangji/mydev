@@ -71,21 +71,31 @@
 							<Col span="1">
 								<img src="@/assets/images/product-kanban.png" @click="showTask" class="cursor">
 							</Col>
-							<Col span="1" >
+							<Col span="1" v-if="currentView == 'kanbanboard'">
 								<span class="high">高</span>
 							</Col>
-							<Col span="1">
+							<Col span="1" v-if="currentView == 'kanbanboard'">
 								<span class="middle">中</span>
 							</Col>
-							<Col span="1">
+							<Col span="1" v-if="currentView == 'kanbanboard'">
 								<span class="low">低</span>
 							</Col>
 						</Row>
 					</div>
 
-					<div class="listBox">
-						<component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>
+
+					<div class="tableContBox" v-if="currentView == 'developList'">
+						<Table border :columns="columns" :data="tableData" />
+						<div class="pageBox">
+				    		<Page :total="100" show-elevator></Page>
+				    		<p>显示第1到第5条记录，总共90条记录</p>
+				    	</div>
 					</div>
+					<div class="listBox" v-else>
+						<kanbanboard :myCardList="cardList" :myStatusList="statusList" :myGroupList="groupList" />
+						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
+					</div> 
+					
 
 			    </div>
 			</div>
@@ -97,8 +107,8 @@ import kanbanboard from "@/components/kanbanboard";
 export default {
 	data() {
 		return {
-			currentView: "kanbanboard",
-			MyProduct:"=-=-=-=-===-=-=-=-=-",
+			currentView: "developList",//developList//kanbanboard
+			
 			groupList:[
 		        { text: "产品待办事项" },
 		        {
@@ -239,6 +249,231 @@ export default {
 	              headPortrait: require("@/assets/images/user_02.png")
 	            }
 	        ],
+	        //
+	        columns: [
+	        	{
+                    title: '事项编号',
+                    key: 'age',
+                    width: 85,
+                    align: 'center'
+                },
+            	
+                {
+                    title: '产品待办事项名称',
+                    key: 'name',
+                    render: (h, params) => {
+                        return h(
+                            'a',
+                            {
+                                style:{color:'#2d8cf0'},
+                                //domProps:{href:"###"},
+                                on: {
+                                    click: () => {
+                                        this.linkFn(params.index)
+                                    }
+                                }
+                            },
+                            params.row.name
+                        );
+                    }
+                },
+               
+                {
+                    title: '事项类型',
+                    key: 'describe',
+                    width: 85,
+                    align: 'center',
+                },
+                {
+                    title: '所属需求项',
+                    key: 'needs',
+                    width: 100,
+                    render: (h, params) => {
+                        return h(
+                            'a',
+                            {
+                                style:{color:'#2d8cf0'},
+                                //domProps:{href:"###"},
+                                on: {
+                                    click: () => {
+                                        this.linkFn(params.index)
+                                    }
+                                }
+                            },
+                            params.row.needs
+                        );
+                    }
+                },
+                {
+                    title: '状态',
+                    key: 'status',
+                    width: 85,
+                    align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'span',
+                            {
+                                style:{
+                                	color:"white",
+                                	background:(function(S){if(S == "已完成"){return "#19be6b"}else{return "#ed3f14"} })(params.row.status),
+                                	padding:'0.5em',
+                                	display:"inline-block",
+                                	borderRadius:"3px",
+
+                                },
+
+                                //domProps:{href:"###"},
+                            },
+                            params.row.status
+                        )
+                    }
+                },
+                {
+                    title: '所属迭代',
+                    key: 'Iteration',
+                    width: 90,
+                    align: 'center',
+                },
+                {
+                    title: '优先级',
+                    key: 'priority',
+                    width: 80,
+                    align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'span',
+                            {
+                                style:{
+                                	color:"white",
+                                	background:(function(S){if(S == "1"){return "#ed3f14"}else if(S == "2"){return "#19be6b"}else{return "#2d8cf0"} })(params.row.priority),
+                                	display:"inline-block",
+                                	borderRadius:"50%",
+                                	height:"1.5em",
+                                	width:"1.5em",
+                                	lineHeight:"1.5em",
+                                },
+
+                                //domProps:{href:"###"},
+                            },
+                            params.row.priority
+                        )
+                    }
+
+                },
+                {
+                    title: '工时|实际|预计',
+                    key: 'manHours',
+                    type: 'html',
+                    align: 'center',
+                    width: 90,
+                    renderHeader: (h, params) => {
+				        return h('div', {}, [
+				            h('span', {}, '工时'),
+				            h('br'),
+				            h('span', {}, '实际|预计')
+				        ]);
+				    }
+                },
+                {
+                    title: '关联任务|已完成|全部',
+                    key: 'correlation',
+                    width: 105,
+                    align: 'center',
+                    renderHeader: (h, params) => {
+				        return h('div', {}, [
+				            h('span', {}, '关联任务'),
+				            h('br'),
+				            h('span', {}, '已完成|全部')
+				        ]);
+				    }
+                },
+                {
+                    title: '操作',
+                    key: 'action',
+                    width: 220,
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.show(params.index)
+                                    }
+                                }
+                            }, '编辑'),
+                            h('Button', {
+                                props: {
+                                    type: 'info',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.show(params.index)
+                                    }
+                                }
+                            }, '添加任务'),
+                            h('Button', {
+                                props: {
+                                    type: 'success',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.show(params.index)
+                                    }
+                                }
+                            }, '任务看板')
+                        ]);
+                    }
+                }
+            ],
+	        tableData: [
+                {
+					name: '项目名称1',
+					age: 18,
+					describe: '产品需求',
+					needs:"代码仓库",
+					status:"已完成",
+					Iteration:"迭代1",
+					priority:"1",
+					manHours:"20 | 10",
+					correlation:"5 | 10",
+                },
+                {
+					name: 'Jim Green',
+					age: 24,
+					describe: '产品需求',
+					needs:"用户登录",
+					status:"处理中",
+					Iteration:"迭代2",
+					priority:"2",
+					manHours:"20 | 10",
+					correlation:"5 | 10",
+                },
+                {
+					name: 'Jim Green',
+					age: 24,
+					describe: '产品需求',
+					needs:"用户登录",
+					status:"处理中",
+					Iteration:"迭代3",
+					priority:"3",
+					manHours:"20 | 10",
+					correlation:"5 | 10",
+                },
+               
+            ]
+	        //
 		}
 	},
 	components: {
@@ -306,5 +541,21 @@ span.low {
   display: inline-block;
   line-height: 25px;
   text-align: center;
+}
+.pageBox {
+	padding-bottom:20px;
+	padding-top:20px;
+	overflow: hidden;
+}
+.pageBox ul{
+	float: right;
+}
+.pageBox p{
+	float:left;
+	line-height: 32px;
+	font-size:12px;
+}
+.cursor {
+	cursor: pointer;
 }
 </style>

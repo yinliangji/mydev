@@ -95,7 +95,9 @@ export default {
                 },
                 {
                     title: '需求项完成进度',
-                    key: 'address'
+                    key: 'address',
+                    align: 'center',
+                    width: 140,
                 },
                
                 {

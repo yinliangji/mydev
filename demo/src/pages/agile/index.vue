@@ -97,7 +97,9 @@ export default {
                 },
                 {
                     title: '项目编号',
-                    key: 'age'
+                    key: 'age',
+                    width: 85,
+                    align: 'center',
                 },
                 {
                     title: '项目描述',
@@ -105,11 +107,15 @@ export default {
                 },
                 {
                     title: '开始时间',
-                    key: 'startTime'
+                    key: 'startTime',
+                    width: 100,
+                    align: 'center',
                 },
                 {
                     title: '结束时间',
-                    key: 'endTime'
+                    key: 'endTime',
+                    width: 100,
+                    align: 'center',
                 },
                 {
                     title: '操作',

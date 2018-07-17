@@ -60,7 +60,33 @@
 			        </FormItem>
 			    </Form>
 			    <div class="tableBox">
-			    	<kanbanSearch :searchParams="searchParams"></kanbanSearch>
+					<div class="tagBox">
+						<Row :gutter="10" align="middle">
+							<Col span="2" class="addBtnBox">
+								<Button type="success">添加任务</Button>
+							</Col>
+							<Col span="1">
+								<img src="@/assets/images/product-list.png" @click="showList" class="cursor">
+							</Col>
+							<Col span="1">
+								<img src="@/assets/images/product-kanban.png" @click="showTask" class="cursor">
+							</Col>
+							<Col span="1" >
+								<span class="high">高</span>
+							</Col>
+							<Col span="1">
+								<span class="middle">中</span>
+							</Col>
+							<Col span="1">
+								<span class="low">低</span>
+							</Col>
+						</Row>
+					</div>
+
+					<div class="listBox">
+						<component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>
+					</div>
+
 			    </div>
 			</div>
 		</Card>
@@ -69,45 +95,166 @@
 <script>
 import kanbanboard from "@/components/kanbanboard";
 export default {
+	data() {
+		return {
+			currentView: "kanbanboard",
+			MyProduct:"=-=-=-=-===-=-=-=-=-",
+			groupList:[
+		        { text: "产品待办事项" },
+		        {
+		          text: "用户登录1",
+		          groupId: "group_01"
+		        },
+		        {
+		          text: "创建代码仓库",
+		          groupId: "group_02"
+		        },
+		        {
+		          text: "未知项",
+		          groupId: "group_03"
+		        },
+			],
+			statusList:[
+				{
+				  stateStr: "未开始",
+				  state: "01",
+				  taskNumber: "3"
+				},
+				{
+				  stateStr: "设计开发",
+				  state: "02",
+				  taskNumber: "4"
+				},
+				{
+				  stateStr: "测试",
+				  state: "03",
+				  taskNumber: "5"
+				},
+				{
+				  stateStr: "发布",
+				  state: "04",
+				  taskNumber: "6"
+				},
+				{
+				  stateStr: "上线",
+				  state: "05",
+				  taskNumber: "3"
+				}
+			],
+			cardList:[
+	            {
+	              taskId: "#US0001",
+	              description:
+	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              userName: "user1",
+	              userId: "userId_01",
+	              groupId: "group_01",
+	              bgColor: { background: "#b3ecec" },
+	              taskStateStr: "未开始",
+	              taskState: "01",
+	              headPortrait: require("@/assets/images/user_02.png")
+	            },
+	            {
+	              taskId: "#US0002",
+	              description:
+	                "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              userName: "user1",
+	              userId: "userId_02",
+	              groupId: "group_02",
+	              bgColor: { background: "#f8d6af" },
+	              taskStateStr: "设计开发",
+	              taskState: "02",
+	              headPortrait: require("@/assets/images/user_02.png")
+	            },
+	            {
+	              taskId: "#US0003",
+	              description:
+	                "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              userName: "user1",
+	              userId: "userId_03",
+	              groupId: "group_01",
+	              bgColor: { background: "#f8d6af" },
+	              taskStateStr: "测试",
+	              taskState: "02",
+	              headPortrait: require("@/assets/images/user_02.png")
+	            },
+	            {
+	              taskId: "#US0004",
+	              description:
+	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              userName: "user1",
+	              userId: "userId_04",
+	              groupId: "group_03",
+	              bgColor: { background: "#f8d6af" },
+	              taskStateStr: "测试",
+	              taskState: "01",
+	              headPortrait: require("@/assets/images/user_02.png")
+	            },
+	            {
+	              taskId: "#US0005",
+	              description:
+	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              userName: "user1",
+	              userId: "userId_05",
+	              groupId: "group_01",
+	              bgColor: { background: "#f8d6af" },
+	              taskStateStr: "测试",
+	              taskState: "04",
+	              headPortrait: require("@/assets/images/user_02.png")
+	            },
+	            {
+	              taskId: "#US0006",
+	              description:
+	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              userName: "user1",
+	              userId: "userId_06",
+	              groupId: "group_01",
+	              bgColor: { background: "#f8d6af" },
+	              taskStateStr: "测试",
+	              taskState: "01",
+	              headPortrait: require("@/assets/images/user_02.png")
+	            },
+	            {
+	              taskId: "#US0007",
+	              description:
+	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              userName: "user1",
+	              userId: "userId_07",
+	              groupId: "group_01",
+	              bgColor: { background: "#f8d6af" },
+	              taskStateStr: "测试",
+	              taskState: "01",
+	              headPortrait: require("@/assets/images/user_02.png")
+	            },
+	            {
+	              taskId: "#US0008",
+	              description:
+	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              userName: "user1",
+	              userId: "userId_08",
+	              groupId: "group_01",
+	              bgColor: { background: "#f8d6af" },
+	              taskStateStr: "测试",
+	              taskState: "03",
+	              headPortrait: require("@/assets/images/user_02.png")
+	            }
+	        ],
+		}
+	},
 	components: {
 		kanbanboard,
 	},
 	computed: {
-		searchParams: function() {
-			return [
-				{
-					type: "input",
-					label: "迭代名称",
-					params: "iterationName"
-				},
-				{
-					type: "input",
-					label: "迭代编号",
-					params: "iterationNumber"
-				},
-				{
-					type: "input",
-					label: "需求名称",
-					params: "needName"
-				},
-				{
-					type: "input",
-					label: "任务状态",
-					params: "taskStatus"
-				},
-				{
-					type: "input",
-					label: "所属迭代",
-					params: "belongIteration"
-				},
-				{
-					type: "input",
-					label: "责任人",
-					params: "personLiable"
-				}
-			];
-		}
+
 	},
+	methods:{
+		showList() {
+			this.currentView = "developList";
+		},
+		showTask(){
+			this.currentView = "kanbanboard";
+		},
+	}
 }
 </script>
 <style lang="less" scoped>
@@ -121,5 +268,43 @@ export default {
 }
 .tableBox{
 	padding-top: 20px;
+
+}
+.tagBox{
+	background: #fff;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    margin-bottom: 20px;
+    padding-left:5px;
+}
+.addBtnBox {
+	transform: translate(0, -15%);
+}
+.listBox {
+	overflow: hidden;
+	position:relative;
+}
+span.high {
+  background: #f8d6af;
+  width: 100%;
+  height: 25px;
+  display: inline-block;
+  line-height: 25px;
+  text-align: center;
+}
+span.middle {
+  background: #b3ecec;
+  width: 100%;
+  height: 25px;
+  display: inline-block;
+  line-height: 25px;
+  text-align: center;
+}
+span.low {
+  background: #f2e1f0;
+  width: 100%;
+  height: 25px;
+  display: inline-block;
+  line-height: 25px;
+  text-align: center;
 }
 </style>

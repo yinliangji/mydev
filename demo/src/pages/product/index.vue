@@ -92,7 +92,7 @@
 				    	</div>
 					</div>
 					<div class="listBox" v-else>
-						<kanbanboard :myCardList="cardList" :myStatusList="statusList" :myGroupList="groupList" />
+						<kanbanboard :cardList="cardList" :statusList="statusList" :groupList="groupList" />
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div> 
 					

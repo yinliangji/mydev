@@ -48,12 +48,8 @@
           </Col>
         </Row>
       </div>
-
-
     </content>
-
   </Layout>
-
 </template>
 
 <script>

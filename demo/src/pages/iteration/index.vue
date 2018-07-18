@@ -8,7 +8,8 @@
       <h3 class="pageConTitle">迭代管理</h3>
       <kanbanSearch :searchParams="searchParams"></kanbanSearch>
       <div class="w80">
-        <Button type="primary" icon="ios-cloud-upload-outline" style="margin:6px 0">添加</Button>
+        <Button type="primary" icon="ios-cloud-upload-outline"
+        style="margin:6px 0" @click="addIteration">添加</Button>
         <Button type="primary"  @click="showModalList">归档</Button>
         <div class="orange">
           <div class="un-plan">
@@ -34,7 +35,7 @@
             </Radio-Group>
             <br>
             <Select v-model="choseType" style="width:250px;margin:20px auto" v-if="radioType=='选择已有归档'">
-              <Option v-for="item in obj" :value="item.type" :key="item.type">
+              <Option v-for="item in obj" :value="item.type" :key="item.type">{{item.name}}
               </Option>
             </Select>
             <div v-if="radioType=='新建'">
@@ -48,10 +49,39 @@
               <br>
             </div>
           </Modal>
+          <Modal
+            v-model="addTaskOnoff"
+            title="添加迭代"
+            width="500"
+            @on-ok="ok"
+            >
+            <div class="addTaskTable">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">迭代名称：</div>
+                  <div class="addTaskTableCon">
+                    <Input v-model="taskName" style="width:200px"></Input>
+                  </div>
+                </div>
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">开始时间：</div>
+                  <div class="addTaskTableCon">
 
+                    <DatePicker type="date" placeholder="开始时间" style="width: 200px"></DatePicker>
+                  </div>
+                </div>
+                <div class="taskrow clearfix" style="height:70px;">
+                  <div class="addTaskTableTitle">结束时间：</div>
+                  <div class="addTaskTableCon">
+                    <DatePicker type="date" placeholder="结束时间" style="width: 200px"></DatePicker>
+                  </div>
+                </div>
+
+
+            </div>
+          </Modal>
           <div class="paln1 paln" v-for="item in obj" :key="item.name">
             <div class="plan-title">
-              <!-- <span v-text=`${item.name}(${item.startTime}${item.startTime})`></span> -->
+
                <span>{{item.name}}
               {{item.startTime}}--{{item.startTime}}</span>
               <span class="plan-title-btn" @click="item.isShow = false" v-show="item.isShow">隐藏</span>
@@ -71,6 +101,10 @@ import kanbanSearch from "@/components/kanbanSearch";
 export default {
   data() {
     return {
+      taskName: "",
+      startTime: "",
+      endTime: "",
+      addTaskOnoff: false,
       ismodalShow: false,
       radioType: "选择已有归档",
       index: 2,
@@ -122,11 +156,11 @@ export default {
                       // this.showModal(params);
                       //点击跳转页面
                       this.$router.push({
-                        path:"/iteration/iteration",
-                        query:{
-                          iterationName:params
+                        path: "/iteration/iteration",
+                        query: {
+                          iterationName: params
                         }
-                      })
+                      });
                     }
                   }
                 },
@@ -152,11 +186,6 @@ export default {
         }
       ],
       column2: [
-        {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
         {
           title: "迭代编号",
           key: "number"
@@ -206,7 +235,6 @@ export default {
                 },
                 "取消归档"
               )
-
             ]);
           }
         }
@@ -318,20 +346,8 @@ export default {
     EventBus.$on("addTask", this.addNewTask);
   },
   methods: {
-    moveEnd(info) {
-      // 移动卡片结束后
-      console.log(" 移动卡片结束后 :::", info);
-    },
-    clicked(info) {
-      // 点击卡片方法
-      console.log(" 点击卡片方法 ::: ", info);
-    },
-    searchHandle(info) {
-      // 查询方法
-      console.log("查询  ::: ", info);
-    },
-    addNewTask(info) {
-      console.log("  添加任务  :::", info);
+    addIteration() {
+      this.addTaskOnoff = true;
     },
     //分页
     changeCurrentPage(i) {
@@ -347,7 +363,7 @@ export default {
     handleRowChange(Selection) {
       this.curSelelectList = Selection;
     },
-    // 多选规划操作
+    // 归档操作
     showModalList() {
       this.ismodalShow = true;
       this.isHandleMore = true;
@@ -359,7 +375,7 @@ export default {
     handleSelectAll(status) {
       this.$refs.Selection.selectAll(status);
     },
-    // 显示迭代面板
+    // 显示规划迭代面板
     showModal(params) {
       this.curSelectSingleId = params.row.id;
       this.ismodalShow = true;
@@ -369,7 +385,7 @@ export default {
       this.newEnd = "";
     },
 
-    //点击迭代面板确认按钮
+    //点击归档面板确认按钮
     ok() {
       let item = this._setIterativeItem();
       if (typeof item === "undefined") {
@@ -400,13 +416,13 @@ export default {
       }
       this._deleteIterationItem(item);
     },
-    // 需要进行得迭代得类目
+    // 需要进行归档的迭代
     _setIterativeItem() {
       let item = [];
       if (this.isHandleMore && this.curSelelectList.length) {
         item = this.curSelelectList;
       } else if (this.isHandleMore && !this.curSelelectList.length) {
-        this.$Message.info("请选择要迭代得内容");
+        this.$Message.info("请选择要归档的内容");
         return;
       } else {
         item = this.Table1.list.find(n => n.id === this.curSelectSingleId);
@@ -640,10 +656,14 @@ export default {
   width: 80%;
   margin: 0 auto;
 }
-.ivu-breadcrumb{padding-left: 10px;}
+.ivu-breadcrumb {
+  padding-left: 10px;
+}
 
 //orange
-.orange{padding: 20px;}
+.orange {
+  padding: 20px;
+}
 .iterative-container {
   font-size: 14px;
   width: 80%;

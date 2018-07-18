@@ -8,7 +8,7 @@
         title="编辑任务"
         width="500"
         @on-ok="ok"
-        @on-cancel="cancel">
+        >
         <div class="addTaskTable">
             <div class="taskrow clearfix">
               <div class="addTaskTableTitle">任务名称：</div>
@@ -182,10 +182,8 @@ export default {
     },
     ok() {
       alert("添加成功");
-    },
-    cancel() {
-      alert("取消添加");
     }
+
   },
   computed: {
     // groupLists() {

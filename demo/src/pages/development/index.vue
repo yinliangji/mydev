@@ -41,8 +41,7 @@
         v-model="addTaskOnoff"
         title="添加任务"
         width="500"
-        @on-ok="ok"
-        @on-cancel="cancel">
+        @on-ok="ok">
         <div class="addTaskTable">
             <div class="taskrow clearfix">
               <div class="addTaskTableTitle">任务名称：</div>
@@ -144,9 +143,7 @@ export default {
     ok() {
       alert("添加成功");
     },
-    cancel() {
-      alert("取消添加");
-    },
+
     // addNewTask(info) {
     //   EventBus.$emit("addTask", info);
     // },

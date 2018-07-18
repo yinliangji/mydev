@@ -85,7 +85,7 @@
 
 
 					<div class="tableContBox" v-if="currentView == 'developList'">
-						<Table border :columns="columns" :data="tableData" />
+						<Table border :columns="columns" :data="tableData"  />
 						<div class="pageBox">
 				    		<Page :total="100" show-elevator></Page>
 				    		<p>显示第1到第5条记录，总共90条记录</p>
@@ -460,7 +460,7 @@ export default {
 					age: 24,
 					describe: '产品需求',
 					person:"谢呗3",
-					status:"处理中",
+					status:"未开始",
 					Iteration:"迭代3",
 					priority:"3",
 					manHours:"20 | 10",
@@ -500,6 +500,7 @@ export default {
 		}
 	},
 	methods:{
+		
 		linkFn (index) {
             //alert(index)
             this.$router.push('/baseinfo')

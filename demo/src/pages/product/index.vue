@@ -131,31 +131,30 @@ export default {
 				  taskNumber: "3"
 				},
 				{
-				  stateStr: "设计开发",
+				  stateStr: "处理中",
 				  state: "02",
 				  taskNumber: "4"
 				},
 				{
-				  stateStr: "测试",
+				  stateStr: "已完成",
 				  state: "03",
 				  taskNumber: "5"
 				},
 				{
-				  stateStr: "发布",
+				  stateStr: "废弃",
 				  state: "04",
 				  taskNumber: "6"
 				},
-				{
-				  stateStr: "上线",
-				  state: "05",
-				  taskNumber: "3"
-				}
+				// {
+				//   stateStr: "上线",
+				//   state: "05",
+				//   taskNumber: "3"
+				// }
 			],
 			cardList:[
 	            {
 	              taskId: "#US0001",
-	              description:
-	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
 	              userName: "user1",
 	              userId: "userId_01",
 	              groupId: "group_01",
@@ -166,8 +165,7 @@ export default {
 	            },
 	            {
 	              taskId: "#US0002",
-	              description:
-	                "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              description:"设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
 	              userName: "user1",
 	              userId: "userId_02",
 	              groupId: "group_02",
@@ -178,8 +176,7 @@ export default {
 	            },
 	            {
 	              taskId: "#US0003",
-	              description:
-	                "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              description:"设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
 	              userName: "user1",
 	              userId: "userId_03",
 	              groupId: "group_01",
@@ -190,8 +187,7 @@ export default {
 	            },
 	            {
 	              taskId: "#US0004",
-	              description:
-	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
 	              userName: "user1",
 	              userId: "userId_04",
 	              groupId: "group_03",
@@ -202,8 +198,7 @@ export default {
 	            },
 	            {
 	              taskId: "#US0005",
-	              description:
-	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
 	              userName: "user1",
 	              userId: "userId_05",
 	              groupId: "group_01",
@@ -214,8 +209,7 @@ export default {
 	            },
 	            {
 	              taskId: "#US0006",
-	              description:
-	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
 	              userName: "user1",
 	              userId: "userId_06",
 	              groupId: "group_01",
@@ -226,8 +220,7 @@ export default {
 	            },
 	            {
 	              taskId: "#US0007",
-	              description:
-	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
 	              userName: "user1",
 	              userId: "userId_07",
 	              groupId: "group_01",
@@ -238,8 +231,7 @@ export default {
 	            },
 	            {
 	              taskId: "#US0008",
-	              description:
-	                "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
 	              userName: "user1",
 	              userId: "userId_08",
 	              groupId: "group_01",
@@ -483,6 +475,16 @@ export default {
 
 	},
 	methods:{
+		linkFn (index) {
+            //alert(index)
+            this.$router.push('/baseinfo')
+        },
+        show (index) {
+            this.$Modal.info({
+                title: 'User Info',
+                content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
+            })
+        },
 		showList() {
 			this.currentView = "developList";
 		},

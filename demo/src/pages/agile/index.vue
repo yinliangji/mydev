@@ -46,7 +46,10 @@
 					    <Button type="warning">编辑</Button>
 					    <Button type="error">删除</Button>
 					</div>
-			    	<Table border :columns="columns7" :data="data6"></Table>
+			    	<Table border ref="selection" :columns="columns7" :data="data6" class="myTable"></Table>
+
+                    <Button @click="handleSelectAll(true)">设置全选</Button>
+                    <Button @click="handleSelectAll(false)">全部取消</Button>
 			    	
 			    	<div class="pageBox">
 			    		<Page :total="100" show-elevator></Page>
@@ -222,6 +225,9 @@ export default {
 <style lang="less" scoped>
 @import './style.less';
 @import './style.css';
+.myTable {
+    margin-bottom: 15px;
+}
 .crumbsBox{
     
 }

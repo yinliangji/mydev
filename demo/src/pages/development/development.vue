@@ -88,7 +88,7 @@ export default {
         },
         {
           title: "所属待办事项",
-          key: "need"
+          key: "userNeed"
         },
         {
           title: "所属迭代",
@@ -138,14 +138,6 @@ export default {
         }
       ],
       defaultList: [
-        {
-          taskNum: "us0001",
-          taskName: "设计登录界面",
-          personLiable: "谢蓓",
-          status: "未开始",
-          need: "用户界面设计",
-          iterations: "基础界面设计阶段"
-        }
 
       ],
       addTaskOnoff: false,
@@ -170,7 +162,7 @@ export default {
       curNeed: "",
       taskName: "",
       personLiable: "",
-      describe:""
+      describe: ""
     };
   },
   methods: {
@@ -196,11 +188,24 @@ export default {
     }
   },
   computed: {
-    groupLists() {
-      return this.groupList.slice(1, this.groupList.length);
-    }
+    // groupLists() {
+    //   return this.groupList.slice(1, this.groupList.length);
+    // }
   },
-  mounted(){}
+  mounted() {
+    //alert(this.cardList.length);
+    this.cardList.forEach(element => {
+      this.defaultList.push({
+        taskNum: element.taskId,
+        taskName: element.taskName,
+        personLiable: element.userName,
+        status: element.taskStateStr,
+        userNeed: element.userNeed,
+        iterations: element.iterations
+      });
+     //卡片数据需要添加两个内容：所属待办事项+所属迭代
+    });
+  }
 };
 </script>
 <style scoped>

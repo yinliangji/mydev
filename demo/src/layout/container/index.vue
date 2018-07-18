@@ -21,13 +21,14 @@ export default {
 </script>
 <style lang="less" scoped>
 .container {
- 	padding: 0 16px 16px;
+   padding: 0 16px 16px;
+   background: #fff;
 }
 .main{
 	height:100%;
 	overflow: auto;
 	position:relative;
-	
+
 }
 
 </style>

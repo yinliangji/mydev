@@ -1,5 +1,5 @@
 <template>
-  <div class="container-transfer">
+  <div class="container-transfer" :style="{minHeight: '100vh'}">
     <div class="trans-top">
       <span>迭代</span>
       <Select v-model="model1" style="width:100px">
@@ -137,71 +137,15 @@ export default {
   text-align: center;
 }
 
-.trans-top-search {
-  position: relative;
-}
-
-.trans-top-search i {
-  position: absolute;
-  right: 5px;
-  top: 0;
-}
-
-.ivu-transfer {
-  display: flex;
-}
-
-.ivu-transfer-list {
-  width: 45%;
-  height: auto;
-}
-
-.ivu-transfer-list-content {
-  overflow: visible;
-}
-
-.ivu-transfer-list-body {
-  overflow: visible;
-  border: none;
-}
-
-.ivu-transfer-operation {
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  width: 5 opx;
-  height: 300px;
-  border-radius: 10px;
-  background-color: #f2f2f2;
-}
-
-.ivu-transfer-operation .ivu-btn {
-  margin: auto 8px;
-}
-
 .interation-tip {
-  font-size: 12px;
-  color: #909090;
-  padding: 10px 20px;
-  border-radius: 10px;
-  background-color: #e0e0e0;
-  margin-top: 30px;
+    font-size: 12px;
+    color: #909090;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: #e0e0e0;
+    margin-top: 30px;
+    line-height: 20px;
 }
 
-.transtion-items {
-  position: relative;
-  padding: 10px;
-  background-color: #eee;
-}
 
-.transtion-items-btn {
-  position: absolute;
-  top: -25px;
-  right: 10px;
-  display: block;
-  width: 24px;
-  height: 24px;
-  text-align: center;
-  line-height: 24px;
-}
 </style>

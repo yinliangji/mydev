@@ -213,7 +213,10 @@ export default {
           bgColor: { background: "#b3ecec" },
           taskStateStr: "未开始",
           taskState: "01",
-          headPortrait: require("@/assets/images/user_02.png")
+          headPortrait: require("@/assets/images/user_02.png"),
+          userNeed:"用户界面设计",
+          iterations:"基础界面设计阶段"
+
         },
         {
           taskId: "#US0002",
@@ -250,7 +253,7 @@ export default {
           userId: "userId_04",
           groupId: "group_03",
           bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
+          taskStateStr: "发布",
           taskState: "01",
           headPortrait: require("@/assets/images/user_02.png")
         },
@@ -263,7 +266,7 @@ export default {
           userId: "userId_05",
           groupId: "group_01",
           bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
+          taskStateStr: "发布",
           taskState: "04",
           headPortrait: require("@/assets/images/user_02.png")
         },
@@ -276,7 +279,7 @@ export default {
           userId: "userId_06",
           groupId: "group_01",
           bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
+          taskStateStr: "上线",
           taskState: "01",
           headPortrait: require("@/assets/images/user_02.png")
         },

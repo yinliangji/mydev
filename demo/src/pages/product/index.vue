@@ -65,10 +65,10 @@
 							<Col span="2" class="addBtnBox">
 								<Button type="success">添加任务</Button>
 							</Col>
-							<Col span="1">
+							<Col span="1" v-if="currentView == 'kanbanboard'">
 								<img src="@/assets/images/product-list.png" @click="showList" class="cursor">
 							</Col>
-							<Col span="1">
+							<Col span="1" v-else>
 								<img src="@/assets/images/product-kanban.png" @click="showTask" class="cursor">
 							</Col>
 							<Col span="1" v-if="currentView == 'kanbanboard'">
@@ -185,61 +185,61 @@ export default {
 	              taskState: "02",
 	              headPortrait: require("@/assets/images/user_02.png")
 	            },
-	            {
-	              taskId: "#US0004",
-	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-	              userName: "user1",
-	              userId: "userId_04",
-	              groupId: "group_03",
-	              bgColor: { background: "#f8d6af" },
-	              taskStateStr: "测试",
-	              taskState: "01",
-	              headPortrait: require("@/assets/images/user_02.png")
-	            },
-	            {
-	              taskId: "#US0005",
-	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-	              userName: "user1",
-	              userId: "userId_05",
-	              groupId: "group_01",
-	              bgColor: { background: "#f8d6af" },
-	              taskStateStr: "测试",
-	              taskState: "04",
-	              headPortrait: require("@/assets/images/user_02.png")
-	            },
-	            {
-	              taskId: "#US0006",
-	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-	              userName: "user1",
-	              userId: "userId_06",
-	              groupId: "group_01",
-	              bgColor: { background: "#f8d6af" },
-	              taskStateStr: "测试",
-	              taskState: "01",
-	              headPortrait: require("@/assets/images/user_02.png")
-	            },
-	            {
-	              taskId: "#US0007",
-	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-	              userName: "user1",
-	              userId: "userId_07",
-	              groupId: "group_01",
-	              bgColor: { background: "#f8d6af" },
-	              taskStateStr: "测试",
-	              taskState: "01",
-	              headPortrait: require("@/assets/images/user_02.png")
-	            },
-	            {
-	              taskId: "#US0008",
-	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-	              userName: "user1",
-	              userId: "userId_08",
-	              groupId: "group_01",
-	              bgColor: { background: "#f8d6af" },
-	              taskStateStr: "测试",
-	              taskState: "03",
-	              headPortrait: require("@/assets/images/user_02.png")
-	            }
+	            // {
+	            //   taskId: "#US0004",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_04",
+	            //   groupId: "group_03",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "测试",
+	            //   taskState: "01",
+	            //   headPortrait: require("@/assets/images/user_02.png")
+	            // },
+	            // {
+	            //   taskId: "#US0005",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_05",
+	            //   groupId: "group_01",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "测试",
+	            //   taskState: "04",
+	            //   headPortrait: require("@/assets/images/user_02.png")
+	            // },
+	            // {
+	            //   taskId: "#US0006",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_06",
+	            //   groupId: "group_01",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "测试",
+	            //   taskState: "01",
+	            //   headPortrait: require("@/assets/images/user_02.png")
+	            // },
+	            // {
+	            //   taskId: "#US0007",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_07",
+	            //   groupId: "group_01",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "测试",
+	            //   taskState: "01",
+	            //   headPortrait: require("@/assets/images/user_02.png")
+	            // },
+	            // {
+	            //   taskId: "#US0008",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_08",
+	            //   groupId: "group_01",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "测试",
+	            //   taskState: "03",
+	            //   headPortrait: require("@/assets/images/user_02.png")
+	            // }
 	        ],
 	        //
 	        columns: [
@@ -277,24 +277,25 @@ export default {
                     align: 'center',
                 },
                 {
-                    title: '所属需求项',
-                    key: 'needs',
-                    width: 100,
-                    render: (h, params) => {
-                        return h(
-                            'a',
-                            {
-                                style:{color:'#2d8cf0'},
-                                //domProps:{href:"###"},
-                                on: {
-                                    click: () => {
-                                        this.linkFn(params.index)
-                                    }
-                                }
-                            },
-                            params.row.needs
-                        );
-                    }
+                    title: '负责人',
+                    key: 'person',
+                    width: 80,
+                    align: 'center',
+                    // render: (h, params) => {
+                    //     return h(
+                    //         'a',
+                    //         {
+                    //             style:{color:'#2d8cf0'},
+                    //             //domProps:{href:"###"},
+                    //             on: {
+                    //                 click: () => {
+                    //                     this.linkFn(params.index)
+                    //                 }
+                    //             }
+                    //         },
+                    //         params.row.person
+                    //     );
+                    // }
                 },
                 {
                     title: '状态',
@@ -307,7 +308,7 @@ export default {
                             {
                                 style:{
                                 	color:"white",
-                                	background:(function(S){if(S == "已完成"){return "#19be6b"}else{return "#ed3f14"} })(params.row.status),
+                                	background:(function(S){if(S == "未开始"){return "#5cadff"}else if(S == "处理中"){return "#ff9900"}else if(S == "已完成"){return "#19be6b"}else{return "#1c2438"} })(params.row.status),
                                 	padding:'0.5em',
                                 	display:"inline-block",
                                 	borderRadius:"3px",
@@ -434,34 +435,37 @@ export default {
 					name: '项目名称1',
 					age: 18,
 					describe: '产品需求',
-					needs:"代码仓库",
+					person:"谢呗",
 					status:"已完成",
 					Iteration:"迭代1",
 					priority:"1",
 					manHours:"20 | 10",
 					correlation:"5 | 10",
+					icon: require("@/assets/images/user_02.png")
                 },
                 {
-					name: 'Jim Green',
+					name: '项目名称2',
 					age: 24,
 					describe: '产品需求',
-					needs:"用户登录",
+					person:"谢呗2",
 					status:"处理中",
 					Iteration:"迭代2",
 					priority:"2",
 					manHours:"20 | 10",
 					correlation:"5 | 10",
+					icon: require("@/assets/images/user_02.png")
                 },
                 {
-					name: 'Jim Green',
+					name: '项目名称3',
 					age: 24,
 					describe: '产品需求',
-					needs:"用户登录",
+					person:"谢呗3",
 					status:"处理中",
 					Iteration:"迭代3",
 					priority:"3",
 					manHours:"20 | 10",
 					correlation:"5 | 10",
+					icon: require("@/assets/images/user_02.png")
                 },
                
             ]
@@ -473,6 +477,27 @@ export default {
 	},
 	computed: {
 
+	},
+	mounted(){
+		for(let i=0;i<this.tableData.length;i++){
+			let statusNum = false;
+			let statusData = this.tableData[i].status;
+			if(statusData == "未开始"){
+				statusNum = "01";
+			}else if(statusData == "处理中"){
+				statusNum = "02";
+			}else if(statusData == "已完成"){
+				statusNum = "03";
+			}else{
+				statusNum = "04";
+			}
+			this.cardList[i].description = this.tableData[i].name
+			this.cardList[i].userName = this.tableData[i].person;
+			this.cardList[i].taskState = statusNum;
+			this.cardList[i].headPortrait = this.tableData[i].icon;
+			
+			
+		}
 	},
 	methods:{
 		linkFn (index) {

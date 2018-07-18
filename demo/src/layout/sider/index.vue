@@ -3,7 +3,7 @@
 		<Menu :active-name="currentMenu" theme="dark" width="auto" :class="menuitemClasses" @on-open-change="onOpenChange" ref="side_menu" class="siderMenu">
 			<MenuItem name="1-1">
 				<router-link  to="/agile" />
-				<Icon type="ios-bolt-outline"></Icon>
+				<Icon type="ios-bolt"></Icon>
 				<span>敏捷项目列表</span>
 			</MenuItem>
 			<MenuItem name="1-2">

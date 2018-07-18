@@ -44,9 +44,9 @@
 					<div class="tableBtnBox">
 						<Button type="success">添加</Button>
 					    <Button type="warning">编辑</Button>
-					    <Button type="error">删除</Button>
+					    <Button type="error" @click="deleteTableItem">删除</Button>
 					</div>
-			    	<Table border ref="selection" :columns="columns7" :data="data6" class="myTable"></Table>
+			    	<Table border  ref="selection" :columns="columns7" :data="itemData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
                     <Button @click="handleSelectAll(true)">设置全选</Button>
                     <Button @click="handleSelectAll(false)">全部取消</Button>
@@ -100,13 +100,13 @@ export default {
                 },
                 {
                     title: '项目编号',
-                    key: 'age',
+                    key: 'num',
                     width: 85,
                     align: 'center',
                 },
                 {
                     title: '项目描述',
-                    key: 'address'
+                    key: 'describe'
                 },
                 {
                     title: '开始时间',
@@ -170,39 +170,74 @@ export default {
                     }
                 }
             ],
-            data6: [
+            itemData: [
                 {
                     name: '项目名称1',
-                    age: 18,
-                    address: 'New York No. 1 Lake Park',
+                    num: 18,
+                    describe: '项目描述1',
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
                 },
                 {
                     name: 'Jim Green',
-                    age: 24,
-                    address: 'London No. 1 Lake Park',
+                    num: 24,
+                    describe: 'London No. 1 Lake Park',
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
                 },
                 {
                     name: 'Joe Black',
-                    age: 30,
-                    address: 'Sydney No. 1 Lake Park',
+                    num: 30,
+                    describe: 'Sydney No. 1 Lake Park',
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
                 },
-                {
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: 'Ottawa No. 2 Lake Park',
-                    startTime:"2012-10-10",
-                    endTime:"2012-10-10",
-                }
-            ]
+                // {
+                //     name: 'Jon Snow',
+                //     age: 26,
+                //     describe: 'Ottawa No. 2 Lake Park',
+                //     startTime:"2012-10-10",
+                //     endTime:"2012-10-10",
+                // }
+            ],
+            actionArr:[],
         }
     },
     methods: {
+        error (MSG) {
+            this.$Message.error(MSG);
+        },
+        deleteTableItem(){
+            //console.log(JSON.stringify(this.actionArr))
+            if(this.actionArr.length){
+                for(let i=0;i<this.itemData.length;i++){
+                    for(let j=0;j<this.actionArr.length;j++){
+                        if(JSON.stringify(this.itemData[i]).indexOf(JSON.stringify(this.actionArr[j])) != -1){
+                            console.log(i)
+                            this.itemData.splice(i, 1);
+                        }
+                    }
+                }
+            }else {
+                this.$Message.config({
+                    top: 250,
+                    duration: 3
+                });
+               this.error('请选择一行数据');
+            }
+            
+        },
+        onSelectionChangeFn(S){
+            console.log("<===*onSelectionChangeFn*===Sel->",S,"<-Sel===*onSelectionChangeFn*===>")
+            this.actionArr = S;
+            
+        },
+        onSelectAllFn(S){
+            console.log("<===*onSelectAllFn*===Sel->",S,"<-Sel===*onSelectAllFn*===>")
+        },
+        onSelectFn(S,R){
+            console.log("<===*onSelectFn*===Sel->",S,"<-Sel======ROW->",R,"<-ROW===*onSelectFn*===>")
+        },
     	handleSelectAll (status) {
             this.$refs.selection.selectAll(status);
         },

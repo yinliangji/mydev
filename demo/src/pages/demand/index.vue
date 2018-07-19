@@ -42,10 +42,10 @@
 
                 <div class="tableBox">
                     <div class="tableBtnBox">
-                        <Button type="success">添加需求项</Button>
+                        <Button type="success" @click="addItem">添加需求项</Button>
                      
                     </div>
-                    <Table border :columns="columns7" :data="data6"></Table>
+                    <Table border :columns="columns" :data="itemData"></Table>
                     
                     <div class="pageBox">
                         <Page :total="100" show-elevator></Page>
@@ -55,7 +55,14 @@
                 
             </div>
         </Card>
-        
+       <Modal ref="addPop" v-model="modaAdd" title="添加需求" @on-ok="submitAdd"  ok-text="提交" :loading="modal_add_loading" visible="true">
+            <Form :model="formItem" :label-width="80" >
+                <FormItem label="项目名称" >
+                    <Input v-model="formItem.name" placeholder="请输入项目名称"></Input>
+                </FormItem>
+               
+            </Form>
+        </Modal> 
     </div>
 </template>
 <script>
@@ -65,12 +72,18 @@ export default {
     name: 'demand',
     data () {
         return {
-            columns7: [
+            modaAdd: false,
+            modal_add_loading: true,
+            formItem: {
+                name:"",
+               
+            },
+            columns: [
                
               
                 {
                     title: '需求项编号',
-                    key: 'age',
+                    key: 'num',
                     width: 100,
                     align: 'center',
                 },
@@ -95,7 +108,7 @@ export default {
                 },
                 {
                     title: '需求项完成进度',
-                    key: 'address',
+                    key: 'percent',
                     align: 'center',
                     width: 140,
                 },
@@ -140,35 +153,52 @@ export default {
                     }
                 }
             ],
-            data6: [
+            itemData: [
                 {
                     name: '项目名称1',
-                    age: 18,
-                    address: '10%',
+                    num: 18,
+                    percent: '10%',
                    
                 },
                 {
                     name: 'Jim Green',
-                    age: 24,
-                    address: '10%',
+                    num: 24,
+                    percent: '10%',
                    
                 },
                 {
                     name: 'Joe Black',
-                    age: 30,
-                    address: '10%',
+                    num: 30,
+                    percent: '10%',
                    
                 },
-                {
-                    name: 'Jon Snow',
-                    age: 26,
-                    address: '10%',
-                   
-                }
+               
             ]
         }
     },
     methods: {
+        addItem(){
+            this.modaAdd = true;
+        },
+        formItemReset(){
+            this.$nextTick(() => {
+                this.formItem.name = "";
+            });
+        },
+        submitAdd () {
+            let tempData = {
+                name: this.formItem.name,
+                num: parseInt(Math.random()*100),
+                percent:"0%",
+            }
+            setTimeout(() => {
+               this.itemData.push(tempData);
+                this.modaAdd = false;
+                this.$Message.info('成功');
+                this.formItemReset();
+            },1000)
+            
+        },
         linkFn (index) {
             this.$router.push('/baseinfo')
         },

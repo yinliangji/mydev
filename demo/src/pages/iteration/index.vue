@@ -180,7 +180,7 @@ export default {
                       this.$router.push({
                         path: "/iteration/iteration",
                         query: {
-                          iterationName: params
+                          iterationName: params.row.name
                         }
                       });
                     }
@@ -265,7 +265,7 @@ export default {
           {
             id: 2,
             number: "001",
-            name: "prj001",
+            name: "prj002",
             dec: "TPM敏捷管理系统",
             startTime: "2017-08-01",
             endTime: "2018-05-01"
@@ -273,7 +273,7 @@ export default {
           {
             id: 3,
             number: "001",
-            name: "prj001",
+            name: "prj003",
             dec: "TPM敏捷管理系统",
             startTime: "2017-08-01",
             endTime: "2018-05-01"

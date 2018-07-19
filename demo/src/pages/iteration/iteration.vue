@@ -7,7 +7,7 @@
             :value="checkAll"
             @click.prevent.native="handleCheckAll" v-if="obj.length>0">全选</Checkbox>
         <CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
-          checkAllGroup--{{checkAllGroup}}+checkAllGroupOnoff{{checkAllGroupOnoff}}
+          <!-- checkAllGroup:{{checkAllGroup}}+checkAllGroupOnoff:{{checkAllGroupOnoff}} -->
           <ul>
             <li v-for="item in obj" :key="item.type">
               <div class="tranHeader">
@@ -57,8 +57,7 @@
             :value="checkAllR"
             @click.prevent.native="handleCheckAllR" v-if="obj2.length>0">全选</Checkbox>
         <CheckboxGroup v-model="checkAllGroupR" @on-change="checkAllGroupChangeR">
-          checkAllGroup--{{checkAllGroupR}}+checkAllGroupOnoffR{{checkAllGroupOnoffR}}
-          <!-- <CheckboxGroup v-model="fruit"> -->
+          <!-- checkAllGroupR:{{checkAllGroupR}}+checkAllGroupOnoffR:{{checkAllGroupOnoffR}} -->
               <ul>
                 <li v-for="item in obj2" :key="item.type">
                   <div class="tranHeader">

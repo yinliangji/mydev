@@ -59,6 +59,19 @@
             	
             </div>
         </Card>
+        <Modal v-model="modaDelete" width="360">
+            <p slot="header" style="color:#f60;text-align:center">
+                <Icon type="information-circled"></Icon>
+                <span>删除确认</span>
+            </p>
+            <div style="text-align:center">
+                <p>确认删除？请点击删除按钮</p>
+            </div>
+            <div slot="footer">
+                <Button type="error" size="large" long :loading="modal_loading" @click="del">删除</Button>
+            </div>
+        </Modal>
+        
 		
 	</div>
 </template>
@@ -69,6 +82,9 @@ export default {
 	name: 'aglie',
     data () {
         return {
+            modaDelete: false,
+            modal_loading: false,
+            
             columns7: [
             	{
                     type: 'selection',
@@ -204,28 +220,42 @@ export default {
         }
     },
     methods: {
-        error (MSG) {
-            this.$Message.error(MSG);
-        },
-        deleteTableItem(){
-            //console.log(JSON.stringify(this.actionArr))
-            if(this.actionArr.length){
+        del () {
+            this.modal_loading = true;
+            setTimeout(() => {
                 for(let i=0;i<this.itemData.length;i++){
                     for(let j=0;j<this.actionArr.length;j++){
                         if(JSON.stringify(this.itemData[i]).indexOf(JSON.stringify(this.actionArr[j])) != -1){
                             console.log(i)
-                            this.itemData.splice(i, 1);
+                            this.itemData.splice(i, 1);//删除
                         }
                     }
                 }
-            }else {
+                this.actionArr = [];
+                //
+                this.modal_loading = false;
+                this.modaDelete = false;
                 this.$Message.config({
                     top: 250,
                     duration: 3
                 });
+                this.$Message.success('删除完成');
+            }, 1000);
+        },
+       
+        error (MSG) {
+            this.$Message.config({
+                top: 250,
+                duration: 3
+            });
+            this.$Message.error(MSG);
+        },
+        deleteTableItem(){
+            if(this.actionArr.length){
+                this.modaDelete = true;
+            }else {
                this.error('请选择一行数据');
             }
-            
         },
         onSelectionChangeFn(S){
             console.log("<===*onSelectionChangeFn*===Sel->",S,"<-Sel===*onSelectionChangeFn*===>")

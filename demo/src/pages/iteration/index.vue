@@ -25,9 +25,10 @@
             <Button @click="handleSelectAll(false)">取消全选</Button>
 
           </div>
+          <!-- 迭代归档 -->
           <Modal
               v-model="ismodalShow"
-              title="迭代规划"
+              title="迭代归档"
               @on-ok="ok()">
             <Radio-Group v-model="radioType">
               <Radio label="选择已有归档"></Radio>
@@ -49,12 +50,12 @@
               <br>
             </div>
           </Modal>
+          <!-- 添加迭代面板 -->
           <Modal
             v-model="addTaskOnoff"
             title="添加迭代"
             width="500"
-            @on-ok="ok"
-            >
+            @on-ok="addIterationOk">
             <div class="addTaskTable">
                 <div class="taskrow clearfix">
                   <div class="addTaskTableTitle">迭代名称：</div>
@@ -65,23 +66,40 @@
                 <div class="taskrow clearfix">
                   <div class="addTaskTableTitle">开始时间：</div>
                   <div class="addTaskTableCon">
-
-                    <DatePicker type="date" placeholder="开始时间" style="width: 200px"></DatePicker>
+                    <DatePicker type="date" placeholder="开始时间" style="width: 200px"
+                    v-model="startTime" @on-change="TimeAction"></DatePicker>
                   </div>
                 </div>
                 <div class="taskrow clearfix" style="height:70px;">
                   <div class="addTaskTableTitle">结束时间：</div>
                   <div class="addTaskTableCon">
-                    <DatePicker type="date" placeholder="结束时间" style="width: 200px"></DatePicker>
+                    <DatePicker type="date" placeholder="结束时间" style="width: 200px"
+                    v-model="endTime" @on-change="TimeAction"></DatePicker>
                   </div>
                 </div>
 
 
             </div>
           </Modal>
+          <!--取消归档弹出框 -->
+          <Modal class-name="confirm"
+              v-model="cancelIteration"
+              width="300">
+
+              <p slot="header" style="color:#f60;text-align:center">
+                  <Icon type="information-circled"></Icon>
+                  <span>提示</span>
+              </p>
+              <div style="text-align:center">
+                  <p>确定取消归档吗?</p>
+              </div>
+              <div slot="footer">
+                  <Button type="error" size="large" long  @click="delSure">删除</Button>
+
+              </div>
+          </Modal>
           <div class="paln1 paln" v-for="item in obj" :key="item.name">
             <div class="plan-title">
-
                <span>{{item.name}}
               {{item.startTime}}--{{item.startTime}}</span>
               <span class="plan-title-btn" @click="item.isShow = false" v-show="item.isShow">隐藏</span>
@@ -101,6 +119,10 @@ import kanbanSearch from "@/components/kanbanSearch";
 export default {
   data() {
     return {
+      iterationIndex: 0,
+      delIndex: 0,
+      cancelDom: {},
+      cancelIteration: false,
       taskName: "",
       startTime: "",
       endTime: "",
@@ -192,18 +214,7 @@ export default {
         },
         {
           title: "迭代名称",
-          key: "name",
-          render: (h, params) => {
-            return h(
-              "a",
-              {
-                domProps: {
-                  href: "#"
-                }
-              },
-              params.row.name
-            );
-          }
+          key: "name"
         },
         {
           title: "开始时间",
@@ -229,7 +240,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.showModal(params);
+                      this.cancelModal(params.row.id, params.row.type);
                     }
                   }
                 },
@@ -278,6 +289,7 @@ export default {
           isShow: false,
           list: [
             {
+              type: 1,
               id: 4,
               number: "002",
               name: "prj001",
@@ -286,6 +298,7 @@ export default {
               endTime: "2018-05-01"
             },
             {
+              type: 1,
               id: 5,
               number: "002",
               name: "prj001",
@@ -294,6 +307,7 @@ export default {
               endTime: "2018-05-01"
             },
             {
+              type: 1,
               id: 6,
               number: "002",
               name: "prj001",
@@ -311,6 +325,7 @@ export default {
           isShow: false,
           list: [
             {
+              type: 2,
               id: 7,
               number: "003",
               name: "prj001",
@@ -319,6 +334,7 @@ export default {
               endTime: "2018-05-01"
             },
             {
+              type: 2,
               id: 8,
               number: "003",
               name: "prj001",
@@ -327,6 +343,7 @@ export default {
               endTime: "2018-05-01"
             },
             {
+              type: 2,
               id: 9,
               number: "003",
               name: "prj001",
@@ -346,9 +363,40 @@ export default {
     EventBus.$on("addTask", this.addNewTask);
   },
   methods: {
+    delSure() {
+      this.obj[this.iterationIndex].list.splice(this.delIndex, 1);
+      this.Table1.list.push(this.cancelDom);
+      this.cancelIteration = false;
+    },
+    //添加按钮
     addIteration() {
       this.addTaskOnoff = true;
+      this.startTime = "";
+      this.endTime = "";
     },
+    //添加迭代确认按钮
+    addIterationOk() {
+      alert("sfjef");
+    },
+    TimeAction() {},
+
+    // 归档按钮
+    showModalList() {
+      this.ismodalShow = true;
+      this.isHandleMore = true;
+      this.newName = "";
+      this.newStart = "";
+      this.newEnd = "";
+    },
+    // 显示规划迭代面板
+    // showModal(params) {
+    //   this.curSelectSingleId = params.row.id;
+    //   this.ismodalShow = true;
+    //   this.isHandleMore = false;
+    //   this.newName = "";
+    //   this.newStart = "";
+    //   this.newEnd = "";
+    // },
     //分页
     changeCurrentPage(i) {
       alert(i);
@@ -363,26 +411,28 @@ export default {
     handleRowChange(Selection) {
       this.curSelelectList = Selection;
     },
-    // 归档操作
-    showModalList() {
-      this.ismodalShow = true;
-      this.isHandleMore = true;
-      this.newName = "";
-      this.newStart = "";
-      this.newEnd = "";
+    //取消归档
+    cancelModal(id, type) {
+      this.cancelIteration = true;
+      console.log(id, type);
+      this.iterationIndex = this.obj.findIndex(n => n.type === type);
+      this.delIndex = this.obj[this.iterationIndex].list.findIndex(
+        n => n.id === id
+      );
+      this.cancelDom = this.obj[this.iterationIndex].list.find(
+        n => n.id === id
+      );
+      // if (!item.length) {
+      //   list.list.push(item);
+      // } else {
+      //   let iterationList = list.list;
+      //   list.list = [...iterationList, ...item];
+      // }
     },
+
     // 全选按钮
     handleSelectAll(status) {
       this.$refs.Selection.selectAll(status);
-    },
-    // 显示规划迭代面板
-    showModal(params) {
-      this.curSelectSingleId = params.row.id;
-      this.ismodalShow = true;
-      this.isHandleMore = false;
-      this.newName = "";
-      this.newStart = "";
-      this.newEnd = "";
     },
 
     //点击归档面板确认按钮
@@ -461,158 +511,6 @@ export default {
     }
   },
   computed: {
-    cardList: function() {
-      let _cardList = [
-        {
-          taskId: "#US0001",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_01",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "未开始",
-          taskState: "01",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0002",
-          description:
-            "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_02",
-          groupId: "group_02",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "设计开发",
-          taskState: "02",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0003",
-          description:
-            "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_03",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "02",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0004",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_04",
-          groupId: "group_03",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "01",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0005",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_05",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "04",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0006",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_06",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "01",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0007",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_07",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "01",
-          headPortrait: require("@/assets/images/user_02.png")
-        },
-        {
-          taskId: "#US0008",
-          description:
-            "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-          userName: "user1",
-          userId: "userId_08",
-          groupId: "group_01",
-          bgColor: { background: "#f8d6af" },
-          taskStateStr: "测试",
-          taskState: "03",
-          headPortrait: require("@/assets/images/user_02.png")
-        }
-      ];
-
-      return _cardList;
-    },
-    groupList: function() {
-      let _groupList = [
-        { text: "产品待办事项" },
-        {
-          text: "用户登录",
-          groupId: "group_01"
-        },
-        {
-          text: "创建代码仓库",
-          groupId: "group_02"
-        },
-        {
-          text: "未知项",
-          groupId: "group_03"
-        }
-      ];
-
-      return _groupList;
-    },
-    statusList: function() {
-      let _statusList = [
-        {
-          stateStr: "未开始",
-          state: "01",
-          taskNumber: "3"
-        },
-        {
-          stateStr: "设计开发",
-          state: "02",
-          taskNumber: "4"
-        },
-        {
-          stateStr: "测试",
-          state: "03",
-          taskNumber: "5"
-        },
-        {
-          stateStr: "发布",
-          state: "04",
-          taskNumber: "6"
-        },
-        {
-          stateStr: "上线",
-          state: "05",
-          taskNumber: "3"
-        }
-      ];
-
-      return _statusList;
-    },
     searchParams: function() {
       return [
         {
@@ -628,6 +526,7 @@ export default {
       ];
     }
   },
+  created() {},
 
   components: {
     kanbanSearch

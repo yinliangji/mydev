@@ -42,8 +42,8 @@
 
 				<div class="tableBox">
 					<div class="tableBtnBox">
-						<Button type="success">添加</Button>
-					    <Button type="warning">编辑</Button>
+						<Button type="success" @click="addItem">添加</Button>
+					    <Button type="warning" @click="editItem">编辑</Button>
 					    <Button type="error" @click="deleteTableItem">删除</Button>
 					</div>
 			    	<Table border  ref="selection" :columns="columns7" :data="itemData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
@@ -71,6 +71,22 @@
                 <Button type="error" size="large" long :loading="modal_loading" @click="del">删除</Button>
             </div>
         </Modal>
+
+
+        <Modal ref="addPop" v-model="modaAdd" :title="ADDorEDIT?'添加':'编辑'" @on-ok="submitAdd" @on-cancel="cancel" ok-text="提交" :loading="modal_add_loading" visible="true">
+            <Form :model="formItem" :label-width="80" >
+                <FormItem label="项目名称" >
+                    <Input v-model="formItem.name" placeholder="请输入项目名称"></Input>
+                </FormItem>
+                <FormItem label="设置时间" >
+                   <DatePicker type="datetimerange" v-model="formItem.data" split-panels placeholder="选择开始和结束日期" />
+                </FormItem>
+                <FormItem label="项目描述" >
+                    <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目描述"></Input>
+                </FormItem>
+               
+            </Form>
+        </Modal>
         
 		
 	</div>
@@ -81,15 +97,32 @@
 export default {
 	name: 'aglie',
     data () {
+
         return {
+            formItem: {
+                name:"",
+                date:[],
+                textarea: "",
+            },
+           
+            modaAdd: false,
+            ADDorEDIT:true,
+
+
             modaDelete: false,
             modal_loading: false,
-            
+            modal_add_loading: true,
             columns7: [
             	{
                     type: 'selection',
                     width: 60,
                     align: 'center'
+                },
+                 {
+                    title: '项目编号',
+                    key: 'num',
+                    width: 85,
+                    align: 'center',
                 },
                 {
                     title: '项目名称',
@@ -114,12 +147,7 @@ export default {
 
 
                 },
-                {
-                    title: '项目编号',
-                    key: 'num',
-                    width: 85,
-                    align: 'center',
-                },
+               
                 {
                     title: '项目描述',
                     key: 'describe'
@@ -153,7 +181,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.goDemandFn(params.index)
                                     }
                                 }
                             }, '需求'),
@@ -167,7 +195,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.goDevelopmentFn(params.index)
                                     }
                                 }
                             }, '任务'),
@@ -178,7 +206,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.goOverViewFn(params.index)
                                     }
                                 }
                             }, '概览')
@@ -208,18 +236,58 @@ export default {
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
                 },
-                // {
-                //     name: 'Jon Snow',
-                //     age: 26,
-                //     describe: 'Ottawa No. 2 Lake Park',
-                //     startTime:"2012-10-10",
-                //     endTime:"2012-10-10",
-                // }
+                
             ],
             actionArr:[],
         }
     },
     methods: {
+        addItem(){
+            this.modaAdd = true;
+            this.ADDorEDIT = true;
+        },
+        editItem(){
+            this.modaAdd = true;
+            this.ADDorEDIT = false;
+        },
+        formItemReset(){
+            
+            // this.formItem.name = "";
+            // this.formItem.date = [];
+            // this.formItem.textarea = "";
+
+            this.$nextTick(() => {
+                this.formItem.name = "";
+                this.formItem.date = [];
+                this.formItem.textarea = "";
+            });
+
+
+          
+            
+        },
+        submitAdd () {
+            let tempData = {
+                name: this.formItem.name,
+                num: parseInt(Math.random()*100),
+                describe: this.formItem.textarea,
+                startTime:JSON.stringify(this.formItem.data[0]).split("T")[0].substring(1),
+                endTime:JSON.stringify(this.formItem.data[1]).split("T")[0].substring(1),
+            }
+            setTimeout(() => {
+                if(this.ADDorEDIT){
+                    this.itemData.push(tempData);
+                }
+                
+                this.modaAdd = false;
+                this.$Message.info('成功');
+                this.formItemReset();
+            },1000)
+            
+        },
+        cancel () {
+            this.$Message.info('取消');
+        },
         del () {
             this.modal_loading = true;
             setTimeout(() => {
@@ -272,8 +340,16 @@ export default {
             this.$refs.selection.selectAll(status);
         },
         linkFn (index) {
-            //alert(index)
             this.$router.push('/baseinfo')
+        },
+        goDemandFn (index) {
+            this.$router.push('/demand')
+        },
+        goDevelopmentFn (index) {
+            this.$router.push('/development')
+        },
+        goOverViewFn (index){
+            this.$router.push('/overView')
         },
         show (index) {
             this.$Modal.info({

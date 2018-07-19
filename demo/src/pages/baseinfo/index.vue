@@ -49,21 +49,22 @@
             		<!-- -->
             	</div>
             	<div class="addModule">
-                    <Select v-model="model1" style="width:200px">
+	            	<Row class="tagBox">
+		                <Col span="2">
+		                    <h4>技术模块</h4>
+		                </Col>
+		                <Col span="22" >
+		                    <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose2">技术模块{{ item + 1 }}</Tag>
+		                    <Button icon="ios-plus-empty" type="dashed" size="small" @click="handleAdd">添加</Button>
+		                </Col>
+		            </Row>
+                  <!--   <Select v-model="model1" style="width:200px">
 				        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
 				    </Select>
-				    <Button type="ghost">添加模块</Button>
+				    <Button type="ghost">添加模块</Button> -->
             	</div>
 
-				<Row class="tagBox">
-	                <Col span="2">
-	                    <h4>所有标签</h4>
-	                </Col>
-	                <Col span="22" >
-	                    <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose2">标签{{ item + 1 }}</Tag>
-	                    <Button icon="ios-plus-empty" type="dashed" size="small" @click="handleAdd">添加</Button>
-	                </Col>
-	            </Row>
+				
 
             </div>
 		</Card>

@@ -219,6 +219,15 @@ const router = new Router({
                 }
             },
         },
+        {
+            path: '/test',
+            name: 'test',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/test/test"], resolve)
+                }
+            },
+        },
 
 
         {

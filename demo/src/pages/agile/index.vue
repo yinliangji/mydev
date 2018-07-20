@@ -42,8 +42,8 @@
 
 				<div class="tableBox">
 					<div class="tableBtnBox">
-						<Button type="success">添加</Button>
-					    <Button type="warning">编辑</Button>
+						<Button type="success" @click="addItem">添加</Button>
+					    <Button type="warning" @click="editItem">编辑</Button>
 					    <Button type="error" @click="deleteTableItem">删除</Button>
 					</div>
 			    	<Table border  ref="selection" :columns="columns7" :data="itemData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
@@ -59,6 +59,35 @@
             	
             </div>
         </Card>
+        <Modal v-model="modaDelete" width="360">
+            <p slot="header" style="color:#f60;text-align:center">
+                <Icon type="information-circled"></Icon>
+                <span>删除确认</span>
+            </p>
+            <div style="text-align:center">
+                <p>确认删除？请点击删除按钮</p>
+            </div>
+            <div slot="footer">
+                <Button type="error" size="large" long :loading="modal_loading" @click="del">删除</Button>
+            </div>
+        </Modal>
+
+
+        <Modal ref="addPop" v-model="modaAdd" :title="ADDorEDIT?'添加':'编辑'" @on-ok="submitAdd" @on-cancel="cancel" ok-text="提交" :loading="modal_add_loading" visible="true">
+            <Form :model="formItem" :label-width="80" >
+                <FormItem label="项目名称" >
+                    <Input v-model="formItem.name" placeholder="请输入项目名称"></Input>
+                </FormItem>
+                <FormItem label="设置时间" >
+                   <DatePicker type="datetimerange" v-model="formItem.data" split-panels placeholder="选择开始和结束日期" />
+                </FormItem>
+                <FormItem label="项目描述" >
+                    <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目描述"></Input>
+                </FormItem>
+               
+            </Form>
+        </Modal>
+        
 		
 	</div>
 </template>
@@ -68,12 +97,32 @@
 export default {
 	name: 'aglie',
     data () {
+
         return {
+            formItem: {
+                name:"",
+                date:[],
+                textarea: "",
+            },
+           
+            modaAdd: false,
+            ADDorEDIT:true,
+
+
+            modaDelete: false,
+            modal_loading: false,
+            modal_add_loading: true,
             columns7: [
             	{
                     type: 'selection',
                     width: 60,
                     align: 'center'
+                },
+                 {
+                    title: '项目编号',
+                    key: 'num',
+                    width: 85,
+                    align: 'center',
                 },
                 {
                     title: '项目名称',
@@ -98,12 +147,7 @@ export default {
 
 
                 },
-                {
-                    title: '项目编号',
-                    key: 'num',
-                    width: 85,
-                    align: 'center',
-                },
+               
                 {
                     title: '项目描述',
                     key: 'describe'
@@ -137,7 +181,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.goDemandFn(params.index)
                                     }
                                 }
                             }, '需求'),
@@ -151,7 +195,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.goDevelopmentFn(params.index)
                                     }
                                 }
                             }, '任务'),
@@ -162,7 +206,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.goOverViewFn(params.index)
                                     }
                                 }
                             }, '概览')
@@ -192,40 +236,94 @@ export default {
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
                 },
-                // {
-                //     name: 'Jon Snow',
-                //     age: 26,
-                //     describe: 'Ottawa No. 2 Lake Park',
-                //     startTime:"2012-10-10",
-                //     endTime:"2012-10-10",
-                // }
+                
             ],
             actionArr:[],
         }
     },
     methods: {
-        error (MSG) {
-            this.$Message.error(MSG);
+        addItem(){
+            this.modaAdd = true;
+            this.ADDorEDIT = true;
         },
-        deleteTableItem(){
-            //console.log(JSON.stringify(this.actionArr))
-            if(this.actionArr.length){
+        editItem(){
+            this.modaAdd = true;
+            this.ADDorEDIT = false;
+        },
+        formItemReset(){
+            
+            // this.formItem.name = "";
+            // this.formItem.date = [];
+            // this.formItem.textarea = "";
+
+            this.$nextTick(() => {
+                this.formItem.name = "";
+                this.formItem.date = [];
+                this.formItem.textarea = "";
+            });
+
+
+          
+            
+        },
+        submitAdd () {
+            let tempData = {
+                name: this.formItem.name,
+                num: parseInt(Math.random()*100),
+                describe: this.formItem.textarea,
+                startTime:JSON.stringify(this.formItem.data[0]).split("T")[0].substring(1),
+                endTime:JSON.stringify(this.formItem.data[1]).split("T")[0].substring(1),
+            }
+            setTimeout(() => {
+                if(this.ADDorEDIT){
+                    this.itemData.push(tempData);
+                }
+                
+                this.modaAdd = false;
+                this.$Message.info('成功');
+                this.formItemReset();
+            },1000)
+            
+        },
+        cancel () {
+            this.$Message.info('取消');
+        },
+        del () {
+            this.modal_loading = true;
+            setTimeout(() => {
                 for(let i=0;i<this.itemData.length;i++){
                     for(let j=0;j<this.actionArr.length;j++){
                         if(JSON.stringify(this.itemData[i]).indexOf(JSON.stringify(this.actionArr[j])) != -1){
                             console.log(i)
-                            this.itemData.splice(i, 1);
+                            this.itemData.splice(i, 1);//删除
                         }
                     }
                 }
-            }else {
+                this.actionArr = [];
+                //
+                this.modal_loading = false;
+                this.modaDelete = false;
                 this.$Message.config({
                     top: 250,
                     duration: 3
                 });
+                this.$Message.success('删除完成');
+            }, 1000);
+        },
+       
+        error (MSG) {
+            this.$Message.config({
+                top: 250,
+                duration: 3
+            });
+            this.$Message.error(MSG);
+        },
+        deleteTableItem(){
+            if(this.actionArr.length){
+                this.modaDelete = true;
+            }else {
                this.error('请选择一行数据');
             }
-            
         },
         onSelectionChangeFn(S){
             console.log("<===*onSelectionChangeFn*===Sel->",S,"<-Sel===*onSelectionChangeFn*===>")
@@ -242,8 +340,16 @@ export default {
             this.$refs.selection.selectAll(status);
         },
         linkFn (index) {
-            //alert(index)
             this.$router.push('/baseinfo')
+        },
+        goDemandFn (index) {
+            this.$router.push('/demand')
+        },
+        goDevelopmentFn (index) {
+            this.$router.push('/development')
+        },
+        goOverViewFn (index){
+            this.$router.push('/overView')
         },
         show (index) {
             this.$Modal.info({

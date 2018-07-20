@@ -1,7 +1,7 @@
 <template>
     <Layout class="wrap">
       <MyLoading v-if="isLoading" />
-      <MyHeader>====MyHeader</MyHeader>
+      <MyHeader :isgo="false">====MyHeader</MyHeader>
       <Content class="Content">
         <!-- 开始 -->
         <Layout  class="contentBox">
@@ -15,7 +15,8 @@
 </template>
 <script>
 
-import MyHeader from '@/layout/header'
+// import MyHeader from '@/layout/header'
+import MyHeader from '@/layout/header/myHeader'
 import Mysider from '@/layout/sider'
 import MyFooter from '@/layout/footer'
 import MyContainer from '@/layout/container'

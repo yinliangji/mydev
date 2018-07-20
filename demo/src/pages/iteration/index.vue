@@ -8,7 +8,7 @@
       <!-- <h3 class="pageConTitle">迭代管理</h3> -->
       <div class="newTop">
         <h3 class="Title">迭代管理</h3>
-        <Form ref="formValidate" class="formValidate">
+        <Form>
           <Row>
             <Col span="12">
             <Row>
@@ -74,28 +74,41 @@
             </div>
           </Modal>
           <!-- 添加迭代面板 -->
-          <Modal v-model="addTaskOnoff" title="添加迭代" width="500" @on-ok="addIterationOk">
-            <div class="addTaskTable">
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">迭代名称：</div>
-                <div class="addTaskTableCon">
-                  <Input v-model="taskName" style="width:200px"></Input>
-                </div>
-              </div>
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">开始时间：</div>
-                <div class="addTaskTableCon">
-                  <DatePicker type="date" placeholder="开始时间" style="width: 200px" v-model="startTime" @on-change="TimeAction"></DatePicker>
-                </div>
-              </div>
-              <div class="taskrow clearfix" style="height:70px;">
-                <div class="addTaskTableTitle">结束时间：</div>
-                <div class="addTaskTableCon">
-                  <DatePicker type="date" placeholder="结束时间" style="width: 200px" v-model="endTime" @on-change="TimeAction"></DatePicker>
-                </div>
-              </div>
+          <Modal v-model="addTaskOnoff" title="添加迭代" width="500" @on-ok="addIterationOk('formValidate')">
+            <Form ref="formValidate" class="formValidate" :model="formValidate" :rules="ruleValidate">
+              <div class="addTaskTable">
+                <!-- <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">迭代名称：</div>
+                  <div class="addTaskTableCon">
+                    <Input v-model="taskName" style="width:200px"></Input>
+                    <Input v-model="taskName" style="width:200px"></Input>
+                  </div>
+                </div> -->
+                <FormItem label="迭代名称：" prop="taskName">
+                  <Input v-model="formValidate.taskName" style="width: 200px"></Input>
+                </FormItem>
+                <!-- <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">开始时间：</div>
+                  <div class="addTaskTableCon">
+                    <DatePicker type="date" placeholder="开始时间" style="width: 200px" v-model="startTime" @on-change="TimeAction"></DatePicker>
+                  </div>
+                </div> -->
+                <FormItem label="开始时间：" prop="startTime">
+                  <DatePicker type="date" style="width: 200px" v-model="formValidate.startTime" @on-change="TimeAction"></DatePicker>
+                </FormItem>
+                <!-- <div class="taskrow clearfix" style="height:70px;">
+                  <div class="addTaskTableTitle">结束时间：</div>
+                  <div class="addTaskTableCon">
+                    <DatePicker type="date" placeholder="结束时间" style="width: 200px" v-model="endTime" @on-change="TimeAction"></DatePicker>
+                  </div>
+                </div> -->
 
-            </div>
+                <FormItem label="结束时间：" prop="endTime">
+                  <DatePicker type="date" style="width: 200px" v-model="formValidate.endTime" @on-change="TimeAction"></DatePicker>
+                </FormItem>
+
+              </div>
+            </Form>
           </Modal>
           <!--取消归档弹出框 -->
           <Modal class-name="confirm" v-model="cancelIteration" width="300">
@@ -133,6 +146,36 @@ import { EventBus } from "@/tools";
 export default {
     data() {
         return {
+            formValidate: {
+                taskName: "",
+                startTime: "",
+                endTime: ""
+            },
+            ruleValidate: {
+                taskName: [
+                    {
+                        required: true,
+                        message: "迭代名称不能为空",
+                        trigger: "blur"
+                    }
+                ],
+                startTime: [
+                    {
+                        required: true,
+                        type: "date",
+                        message: "请选择开始时间",
+                        trigger: "change"
+                    }
+                ],
+                endTime: [
+                    {
+                        required: true,
+                        type: "date",
+                        message: "请选择结束时间",
+                        trigger: "change"
+                    }
+                ]
+            },
             iterationName: "",
             iterationNumber: "",
             needName: "",
@@ -140,9 +183,7 @@ export default {
             delIndex: 0,
             cancelDom: {},
             cancelIteration: false,
-            taskName: "",
-            startTime: "",
-            endTime: "",
+
             addTaskOnoff: false,
             ismodalShow: false,
             radioType: "选择已有归档",
@@ -396,8 +437,16 @@ export default {
             this.endTime = "";
         },
         //添加迭代确认按钮
-        addIterationOk() {
-            alert("sfjef");
+        addIterationOk(name) {
+          this.$refs[name].validate(valid => {
+              if (valid) {
+                  this.$Message.success("Success!");
+                  this.$refs[name].resetFields();
+              } else {
+                  this.$Message.error("Fail!");
+                  this.$refs[name].resetFields();
+              }
+          });
         },
         TimeAction() {},
 

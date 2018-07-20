@@ -76,11 +76,7 @@
                     <Input v-model="formValidate.name" placeholder="请填写项目名称"></Input>
                 </FormItem>
                 <FormItem label="设置时间" prop="date">
-                 
-
-
                     <DatePicker :value="formValidate.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择开始和结束日期" v-model="formValidate.date" split-panels  style="width: 300px"></DatePicker>
-
                 </FormItem>
                 <FormItem label="项目描述" prop="desc">
                     <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目描述"></Input>

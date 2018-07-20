@@ -63,7 +63,7 @@
 					<div class="tagBox">
 						<Row :gutter="10" align="middle">
 							<Col span="3" class="addBtnBox">
-								<Button type="success">添加待办事项</Button>
+								<Button type="success" @click="addItem">添加待办事项</Button>
 							</Col>
 							<Col span="1" >
 								<img src="@/assets/images/product-list.png" @click="showList" class="cursor">
@@ -100,6 +100,68 @@
 			    </div>
 			</div>
 		</Card>
+
+
+<Modal ref="addPop" v-model="modaAdd" title="添加" @on-ok="submitAdd" @on-cancel="cancel" ok-text="提交" :loading="modal_add_loading" visible="true">
+	<Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140">
+        <FormItem label="产品待办事项名称" prop="name">
+            <Input v-model="formValidate.name" placeholder="请填写产品待办事项名称"></Input>
+        </FormItem>
+
+        <FormItem label="事项类型">
+            <Input v-model="formValidate.style" placeholder="请填写事项类型"></Input>
+        </FormItem>
+
+        <FormItem label="负责人" prop="city">
+            <Select v-model="formValidate.person" placeholder="请选择负责人">
+                <Option value="beijing">New York</Option>
+                <Option value="shanghai">London</Option>
+                <Option value="shenzhen">Sydney</Option>
+            </Select>
+        </FormItem>
+
+
+        
+       
+       
+        <FormItem label="状态" prop="gender">
+            <RadioGroup v-model="formValidate.gender">
+                <Radio label="male">未开始</Radio>
+                <Radio label="female">处理中</Radio>
+                <Radio label="female2">已完成 </Radio>
+                <Radio label="female3">废弃</Radio>
+            </RadioGroup>
+        </FormItem>
+
+
+        <FormItem label="所属迭代" prop="city">
+            <Select v-model="formValidate.person" placeholder="请选所属迭代">
+                <Option value="beijing">New York</Option>
+                <Option value="shanghai">London</Option>
+                <Option value="shenzhen">Sydney</Option>
+            </Select>
+        </FormItem>
+
+
+
+        <FormItem label="优先级" prop="gender">
+            <RadioGroup v-model="formValidate.gender">
+                <Radio label="male2">1</Radio>
+                <Radio label="female4">2</Radio>
+                <Radio label="female5">3</Radio>
+                <Radio label="female6">4</Radio>
+            </RadioGroup>
+        </FormItem>
+
+		
+		<FormItem label="工时">
+            <Input v-model="formValidate.style" placeholder="请填写预计工时"></Input>
+        </FormItem>
+
+    </Form>
+</Modal>
+
+
 	</div>
 </template>
 <script>
@@ -107,8 +169,50 @@ import kanbanboard from "@/components/kanbanboard";
 export default {
 	data() {
 		return {
-			currentView: "developList",//developList//kanbanboard
 			
+			modaAdd: false,
+			modal_add_loading: true,
+			formValidate: {
+                name: '',
+                style:"",
+                mail: '',
+                city: '',
+                gender: '',
+                interest: [],
+                date: '',
+                time: '',
+                desc: ''
+            },
+            ruleValidate: {
+                name: [
+                    { required: true, message: 'The name cannot be empty', trigger: 'blur' }
+                ],
+                mail: [
+                    { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
+                    { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
+                ],
+                city: [
+                    { required: true, message: 'Please select the city', trigger: 'change' }
+                ],
+                gender: [
+                    { required: true, message: 'Please select gender', trigger: 'change' }
+                ],
+                interest: [
+                    { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
+                    { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
+                ],
+                date: [
+                    { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
+                ],
+                time: [
+                    { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
+                ],
+                desc: [
+                    { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
+                    { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+                ]
+            },
+			currentView: "developList",//developList//kanbanboard
 			groupList:[
 		        // { text: "产品待办事项" },
 		        // {
@@ -500,7 +604,16 @@ export default {
 		}
 	},
 	methods:{
-		
+		addItem(){
+            this.modaAdd = true;
+            
+        },
+		submitAdd(){
+
+		},
+		cancel(){
+
+		},
 		linkFn (index) {
             //alert(index)
             this.$router.push('/baseinfo')

@@ -15,8 +15,8 @@
 </template>
 <script>
 
-// import MyHeader from '@/layout/header'
-import MyHeader from '@/layout/header/myHeader'
+import MyHeader from '@/layout/header'
+//import MyHeader from '@/layout/header/myHeader'
 import Mysider from '@/layout/sider'
 import MyFooter from '@/layout/footer'
 import MyContainer from '@/layout/container'

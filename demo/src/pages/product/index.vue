@@ -62,13 +62,13 @@
 			    <div class="tableBox">
 					<div class="tagBox">
 						<Row :gutter="10" align="middle">
-							<Col span="2" class="addBtnBox">
-								<Button type="success">添加任务</Button>
+							<Col span="3" class="addBtnBox">
+								<Button type="success">添加待办事项</Button>
 							</Col>
-							<Col span="1" v-if="currentView == 'kanbanboard'">
+							<Col span="1" >
 								<img src="@/assets/images/product-list.png" @click="showList" class="cursor">
 							</Col>
-							<Col span="1" v-else>
+							<Col span="1" >
 								<img src="@/assets/images/product-kanban.png" @click="showTask" class="cursor">
 							</Col>
 							<Col span="1" v-if="currentView == 'kanbanboard'">

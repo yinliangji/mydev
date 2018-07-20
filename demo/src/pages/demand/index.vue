@@ -114,9 +114,9 @@ export default {
                 },
                
                 {
-                    title: '操作',
+                    title: '操作产品待办事项',
                     key: 'action',
-                    width: 300,
+                    width: 140,
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
@@ -133,7 +133,7 @@ export default {
                                         this.show(params.index)
                                     }
                                 }
-                            }, '添加产品待办事项 '),
+                            }, '添加 '),
                             h('Button', {
                                 props: {
                                     type: 'info',
@@ -147,7 +147,7 @@ export default {
                                         this.toLIstFn(params.index)
                                     }
                                 }
-                            }, '查看产品代办列表'),
+                            }, '查看'),
                            
                         ]);
                     }

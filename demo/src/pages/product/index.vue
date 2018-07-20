@@ -108,15 +108,21 @@
             <Input v-model="formValidate.name" placeholder="请填写产品待办事项名称"></Input>
         </FormItem>
 
-        <FormItem label="事项类型">
-            <Input v-model="formValidate.style" placeholder="请填写事项类型"></Input>
+      
+
+        <FormItem label="事项类型" prop="style">
+            <Select v-model="formValidate.style" placeholder="请选择事项类型">
+                <Option value="产品需求">产品需求</Option>
+                <Option value="事项类型1">事项类型1</Option>
+                <Option value="事项类型2">事项类型2</Option>
+            </Select>
         </FormItem>
 
-        <FormItem label="负责人" prop="city">
+        <FormItem label="负责人" prop="person">
             <Select v-model="formValidate.person" placeholder="请选择负责人">
-                <Option value="beijing">New York</Option>
-                <Option value="shanghai">London</Option>
-                <Option value="shenzhen">Sydney</Option>
+                <Option value="谢呗5">谢呗5</Option>
+                <Option value="谢呗6">谢呗6</Option>
+                <Option value="谢呗7">谢呗7</Option>
             </Select>
         </FormItem>
 
@@ -124,38 +130,38 @@
         
        
        
-        <FormItem label="状态" prop="gender">
-            <RadioGroup v-model="formValidate.gender">
-                <Radio label="male">未开始</Radio>
-                <Radio label="female">处理中</Radio>
-                <Radio label="female2">已完成 </Radio>
-                <Radio label="female3">废弃</Radio>
+        <FormItem label="状态" prop="status">
+            <RadioGroup v-model="formValidate.status">
+                <Radio label="未开始">未开始</Radio>
+                <Radio label="处理中">处理中</Radio>
+                <Radio label="已完成">已完成 </Radio>
+                <Radio label="废弃">废弃</Radio>
             </RadioGroup>
         </FormItem>
 
 
-        <FormItem label="所属迭代" prop="city">
-            <Select v-model="formValidate.person" placeholder="请选所属迭代">
-                <Option value="beijing">New York</Option>
-                <Option value="shanghai">London</Option>
-                <Option value="shenzhen">Sydney</Option>
+        <FormItem label="所属迭代" prop="iteration">
+            <Select v-model="formValidate.iteration" placeholder="请选所属迭代">
+                <Option value="迭代1">迭代1</Option>
+                <Option value="迭代2">迭代2</Option>
+                <Option value="迭代3">迭代3</Option>
             </Select>
         </FormItem>
 
 
 
-        <FormItem label="优先级" prop="gender">
-            <RadioGroup v-model="formValidate.gender">
-                <Radio label="male2">1</Radio>
-                <Radio label="female4">2</Radio>
-                <Radio label="female5">3</Radio>
-                <Radio label="female6">4</Radio>
+        <FormItem label="优先级" prop="grade">
+            <RadioGroup v-model="formValidate.grade">
+                <Radio label="1">1</Radio>
+                <Radio label="2">2</Radio>
+                <Radio label="3">3</Radio>
+                <Radio label="4">4</Radio>
             </RadioGroup>
         </FormItem>
 
 		
-		<FormItem label="工时">
-            <Input v-model="formValidate.style" placeholder="请填写预计工时"></Input>
+		<FormItem label="工时" prop="manhour">
+            <Input v-model="formValidate.manhour" placeholder="请填写预计工时" number></Input>
         </FormItem>
 
     </Form>
@@ -166,6 +172,24 @@
 </template>
 <script>
 import kanbanboard from "@/components/kanbanboard";
+const validateNumber = (rule, value, callback) => {
+    if (!value) {
+        return callback(new Error('Age cannot be empty'));
+    }
+    // 模拟异步验证效果
+    setTimeout(() => {
+        if (!Number.isInteger(value)) {
+            callback(new Error('Please enter a numeric value'));
+        } else {
+        	callback();
+            // if (value < 18) {
+            //     callback(new Error('Must be over 18 years of age'));
+            // } else {
+            //     callback();
+            // }
+        }
+    }, 1000);
+};
 export default {
 	data() {
 		return {
@@ -175,6 +199,13 @@ export default {
 			formValidate: {
                 name: '',
                 style:"",
+                person:"",
+                status:"",
+                iteration:"",
+                grade:"",
+                manhour:"",
+
+
                 mail: '',
                 city: '',
                 gender: '',
@@ -187,30 +218,56 @@ export default {
                 name: [
                     { required: true, message: 'The name cannot be empty', trigger: 'blur' }
                 ],
-                mail: [
-                    { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
-                    { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
-                ],
-                city: [
+
+                style: [
                     { required: true, message: 'Please select the city', trigger: 'change' }
                 ],
-                gender: [
+
+                person: [
+                    { required: true, message: 'Please select the city', trigger: 'change' }
+                ],
+                status: [
                     { required: true, message: 'Please select gender', trigger: 'change' }
                 ],
-                interest: [
-                    { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
-                    { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
+                
+                iteration: [
+                    { required: true, message: 'Please select the city', trigger: 'change' }
                 ],
-                date: [
-                    { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
+
+                grade: [
+                    { required: true, message: 'Please select gender', trigger: 'change' }
                 ],
-                time: [
-                    { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
+                manhour: [
+                	{ validator: validateNumber, trigger: 'blur' }
+                
+                    // { required: true, message: 'The name cannot be empty', trigger: 'blur' },
+                    // { type: 'number', message: 'Incorrect email format', trigger: 'blur' }
                 ],
-                desc: [
-                    { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
-                    { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
-                ]
+                
+
+
+                // mail: [
+                //     { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
+                //     { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
+                // ],
+               
+                // gender: [
+                //     { required: true, message: 'Please select gender', trigger: 'change' }
+                // ],
+                // interest: [
+                //     { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
+                //     { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
+                // ],
+                // date: [
+                //     { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
+                // ],
+                // time: [
+                //     { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
+                // ],
+                // desc: [
+                //     { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
+                //     { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+                // ]
             },
 			currentView: "developList",//developList//kanbanboard
 			groupList:[
@@ -606,10 +663,52 @@ export default {
 	methods:{
 		addItem(){
             this.modaAdd = true;
-            
+        },
+        formItemReset(){
+			this.formValidate.name= ''
+			this.formValidate.style=""
+			this.formValidate.person=""
+			this.formValidate.status=""
+			this.formValidate.iteration=""
+			this.formValidate.grade=""
+			this.formValidate.manhour=""
         },
 		submitAdd(){
+			let IsStop = false;
+            this.$refs.formValidate.validate((valid)=>{//验证
+                this.modal_add_loading = false;
+                this.$nextTick(() => {
+                  this.modal_add_loading = true;
+                });
+                IsStop = !valid;
+            })
 
+            if(IsStop){
+                return;
+            }else{
+                this.modal_add_loading = true;
+                this.$nextTick(() => {
+                  this.modal_add_loading = true;
+                });
+            }
+            let tempData = {
+                name: this.formValidate.name,
+				age: parseInt(Math.random()*100),
+				describe: '产品需求',
+				person:this.formValidate.person,
+				status:this.formValidate.status,
+				Iteration:this.formValidate.iteration,
+				priority:this.formValidate.grade,
+				manHours:"0 | "+this.formValidate.manhour,
+				correlation:"0 | 0",
+				icon: require("@/assets/images/user_02.png"),
+            }
+            setTimeout(() => {
+                this.tableData.push(tempData);
+                this.modaAdd = false;
+                this.$Message.info('成功');
+                this.formItemReset();
+            },1000)
 		},
 		cancel(){
 

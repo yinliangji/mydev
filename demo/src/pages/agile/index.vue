@@ -306,6 +306,10 @@ export default {
             this.ADDorEDIT = true;
         },
         editItem(){
+            this.$Message.config({
+                top: 250,
+                duration: 3
+            });
             if(this.actionArr.length >1){
                 this.error("只能选择一项，进行编辑！")
                 return

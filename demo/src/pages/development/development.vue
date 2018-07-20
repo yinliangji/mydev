@@ -1,5 +1,5 @@
 <template>
- <div class="w90">
+ <div class="w80">
     <Table :columns="columns1" :data="defaultList"></Table>
     <Page :total="200" show-sizer show-total  @on-change="changeCurrentPage"
         @on-page-size-change="changePageSize"></Page>

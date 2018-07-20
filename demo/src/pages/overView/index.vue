@@ -34,7 +34,7 @@
         </div>
         <div class="showCount">
             <div class="showCountL">
-              <Button type="info">未开始</Button><br><br>
+              <Button type="info" @click="gotoForm">未开始</Button><br><br>
               <Button type="success">进行中</Button><br><br>
               <Button >已完成</Button>
             </div>
@@ -115,6 +115,11 @@ export default {
     },
     changePageSize(i) {
       alert(i);
+    },
+    gotoForm(){
+      this.$router.push({
+        path:"test"
+      })
     }
   },
   computed: {},

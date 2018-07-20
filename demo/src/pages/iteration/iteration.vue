@@ -170,7 +170,11 @@ export default {
     //移动操作
     toLeft() {
       if (this.checkAllGroupR.length < 1) {
-        alert("请选择事项");
+        //alert("请选择事项");
+        this.$Modal.error({
+            title: '提示',
+            content: "请选择事项"
+        })
       } else {
         this.checkAllGroupR.forEach(element => {
           // alert(this.obj2.find(n => n.type == element))
@@ -183,7 +187,11 @@ export default {
     },
     toRight() {
       if (this.checkAllGroup.length < 1) {
-        alert("请选择事项");
+        //alert("请选择事项");
+         this.$Modal.error({
+            title: '提示',
+            content: "请选择事项"
+        })
       } else {
         this.checkAllGroup.forEach(element => {
           // alert(this.obj2.find(n => n.type == element))

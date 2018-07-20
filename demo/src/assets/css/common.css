@@ -90,9 +90,8 @@ h3.Title:before {
     cursor: pointer;
 }
 
-.w90 {
-    width: 90%;
-    margin: 10px auto 0;
+.w80 {
+    margin: 0 16px;
 }
 
 .pageContent {
@@ -204,4 +203,22 @@ h3.Title:before {
 
 .ivu-transfer {
     display: flex;
+}
+
+.newTop {
+    margin: 16px
+}
+
+
+/* .SerchBox {
+    padding-bottom: 10px;
+} */
+
+.serchBtnBox {
+    padding-left: 20px;
+}
+
+.searchName {
+    text-align: center;
+    line-height: 34px;
 }

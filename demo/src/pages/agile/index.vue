@@ -1,10 +1,11 @@
 <template>
 	<div class="pageContent">
-		<Breadcrumb :style="{margin: '16px 0'}">
+        <selectMenu></selectMenu>
+		<!-- <Breadcrumb :style="{margin: '16px 0'}">
             <BreadcrumbItem>首页</BreadcrumbItem>
             <BreadcrumbItem>敏捷项目管理</BreadcrumbItem>
             <BreadcrumbItem>敏捷项目列表</BreadcrumbItem>
-        </Breadcrumb>
+        </Breadcrumb> -->
         <Card>
             <div class="aglieBox">
             	<h3 class="Title">敏捷项目列表</h3>
@@ -77,6 +78,7 @@
 </template>
 <script>
 import AddItemPop from "./additempop";
+import selectMenu from "@/components/selectMenu/selectMenu";
 export default {
 	name: 'aglie',
     mounted(){
@@ -84,6 +86,7 @@ export default {
     },
     components: {
         AddItemPop,
+        selectMenu,
     },
     data () {
         return {

@@ -1,10 +1,11 @@
 <template>
     <div class="pageContent">
-        <Breadcrumb :style="{margin: '16px 0'}" >
+        <selectMenu></selectMenu>
+        <!-- <Breadcrumb :style="{margin: '16px 0'}">
             <BreadcrumbItem>首页</BreadcrumbItem>
             <BreadcrumbItem>敏捷项目管理</BreadcrumbItem>
-            <BreadcrumbItem>需求项管理</BreadcrumbItem>
-        </Breadcrumb>
+            <BreadcrumbItem>敏捷项目列表</BreadcrumbItem>
+        </Breadcrumb> -->
         <Card>
             <div class="demandBox">
                 <h3 class="Title">需求项管理</h3>
@@ -73,8 +74,8 @@
     </div>
 </template>
 <script>
-
 import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
+import selectMenu from "@/components/selectMenu/selectMenu";
 export default {
     name: 'demand',
     data () {
@@ -239,6 +240,7 @@ export default {
     },
     components: {
         ADDorEDITpop,
+        selectMenu,
     },
 }
 </script>

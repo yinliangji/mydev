@@ -144,7 +144,7 @@
   text-align: left;
 
   background-color: #fff;
-  z-index: 2017;
+  // z-index: 2017;
   overflow: hidden;
 
   img{

@@ -136,6 +136,10 @@ export default {
                     key: 'describe'
                 },
                 {
+                    title: '项目经理',
+                    key: 'manager'
+                },
+                {
                     title: '开始时间',
                     key: 'startTime',
                     width: 100,
@@ -202,6 +206,7 @@ export default {
                     name: '项目名称1',
                     num: 18,
                     describe: '项目描述1',
+                    manager:"项目经理1",
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
                 },
@@ -209,6 +214,7 @@ export default {
                     name: 'Jim Green',
                     num: 24,
                     describe: 'London No. 1 Lake Park',
+                    manager:"项目经理2",
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
                 },
@@ -216,6 +222,7 @@ export default {
                     name: 'Joe Black',
                     num: 30,
                     describe: 'Sydney No. 1 Lake Park',
+                    manager:"项目经理3",
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
                 },

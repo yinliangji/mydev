@@ -273,6 +273,7 @@ export default {
                 name: this.formValidate.name,
                 num: parseInt(Math.random()*100),
                 describe: this.formValidate.desc,
+                manager:this.formValidate.manager,
                 startTime:new Date(this.formValidate.date[0]).Format("yyyy-MM-dd"),
                 endTime:new Date(this.formValidate.date[1]).Format("yyyy-MM-dd"),
             }

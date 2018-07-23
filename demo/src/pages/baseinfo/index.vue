@@ -12,38 +12,38 @@
             		<!-- -->
             		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 					  <tbody>
-					    <tr>
-					      <th>项目编号</th>
-					      <td>prj0001</td>
-					      <th>项目名称</th>
-					      <td>TPM敏捷项目管理系统</td>
-					      <th>项目经理</th>
-					      <td>李卓</td>
-					    </tr>
-					    <tr>
-					      <th>项目创建时间</th>
-					      <td>2017-08-01</td>
-					      <th>开始时间</th>
-					      <td>2017-08-01</td>
-					      <th>结束时间</th>
-					      <td>2017-12-31</td>
-					    </tr>
-					    <tr>
-					      <th>开发人员</th>
-					      <td>李卓、谢蓓、王昕亮</td>
-					      <th>测试人员</th>
-					      <td>李卓  谢蓓 王昕亮</td>
-					      <th>维护人员</th>
-					      <td>李卓、赵筝、谢蓓、王昕亮、邢磊</td>
-					    </tr>
-					    <tr>
-					      <th>项目描述</th>
-					      <td>TPM敏捷项目管理系统</td>
-					      <th>项目目标</th>
-					      <td>支持备课敏捷开发模块的落地</td>
-					      <th>&nbsp;</th>
-					      <td>&nbsp;</td>
-					    </tr>
+						<tr>
+						  <th>项目编号</th>
+						  <td>prj0001</td>
+						  <th>项目名称</th>
+						  <td>TPM敏捷项目管理系统</td>
+						  <th>项目经理</th>
+						  <td>李卓</td>
+						</tr>
+						<tr>
+						  <th>项目创建时间</th>
+						  <td>2017-08-01</td>
+						  <th>开始时间</th>
+						  <td>2017-08-01</td>
+						  <th>结束时间</th>
+						  <td>2017-12-31</td>
+						</tr>
+						<tr>
+						  <th>开发人员</th>
+						  <td>李卓、谢蓓、王昕亮</td>
+						  <th>测试人员</th>
+						  <td>李卓  谢蓓 王昕亮</td>
+						  <th>维护人员</th>
+						  <td>李卓、赵筝、谢蓓、王昕亮、邢磊</td>
+						</tr>
+						<tr>
+						  <th>项目描述</th>
+						  <td colspan="5">TPM敏捷项目管理系统</td>
+						</tr>
+						<tr>
+						  <th>项目目标</th>
+						  <td colspan="5">支持备课敏捷开发模块的落地</td>
+						</tr>
 					  </tbody>
 					</table>
             		<!-- -->

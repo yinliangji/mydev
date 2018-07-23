@@ -1,15 +1,71 @@
 <template>
-    <Modal ref="addPop" v-model="modaAdd" :title="ADDorEDIT?'添加':'编辑'" @on-ok="submitAdd" @on-cancel="cancel" ok-text="提交" :loading="addLoading" >
+    <Modal ref="addPop" v-model="modaAdd" :title="ADDorEDIT?'添加':'编辑'" @on-ok="submitAdd" @on-cancel="cancel" ok-text="提交" :loading="modal_add_loading" >
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
             <FormItem label="项目名称" prop="name">
                 <Input v-model="formValidate.name" placeholder="请填写项目名称"></Input>
             </FormItem>
+
+            <FormItem label="技术模块" prop="technology">
+                <Select v-model="formValidate.technology" multiple >
+                    <Option v-for="item in technologyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+            </FormItem>
+
+            <FormItem label="业务模块" prop="business">
+                <Select v-model="formValidate.business" multiple >
+                    <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+            </FormItem>
+
+            
+
+            <FormItem label="项目经理" prop="manager">
+                <Select v-model="formValidate.manager" placeholder="请选择项目经理">
+                    <Option value="经理1">经理1</Option>
+                    <Option value="经理2">经理2</Option>
+                    <Option value="经理3">经理3</Option>
+                </Select>
+            </FormItem>
+
+
+            <FormItem label="开发人员" prop="developer">
+                <Select v-model="formValidate.developer" placeholder="请选择开发人员">
+                    <Option value="开发人员1">开发人员1</Option>
+                    <Option value="开发人员2">开发人员2</Option>
+                    <Option value="开发人员3">开发人员3</Option>
+                </Select>
+            </FormItem>
+
+            <FormItem label="测试人员" prop="tester">
+                <Select v-model="formValidate.tester" placeholder="请选择测试人员">
+                    <Option value="测试人员1">测试人员1</Option>
+                    <Option value="测试人员2">测试人员2</Option>
+                    <Option value="测试人员3">测试人员13</Option>
+                </Select>
+            </FormItem>
+
+            <FormItem label="维护人员" prop="maintainer">
+                <Select v-model="formValidate.maintainer" placeholder="请选择维护人员">
+                    <Option value="维护人员1">测试人员1</Option>
+                    <Option value="维护人员2">测试人员2</Option>
+                    <Option value="维护人员3">测试人员13</Option>
+                </Select>
+            </FormItem>
+
+
+
             <FormItem label="设置时间" prop="date">
                 <DatePicker :value="formValidate.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择开始和结束日期" v-model="formValidate.date" split-panels  style="width: 300px"></DatePicker>
             </FormItem>
             <FormItem label="项目描述" prop="desc">
                 <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目描述"></Input>
             </FormItem>
+
+            <FormItem label="项目目标" prop="target">
+                <Input v-model="formValidate.target" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目目标"></Input>
+            </FormItem>
+
+
         </Form>
     </Modal>
 </template>
@@ -32,8 +88,6 @@ Date.prototype.Format = function (fmt) { // author: meizz
 }
 
 const validateDate = (rule, value, callback) => {
-   
-   
     if (!value || !value[0] || !value[1]) {
         console.log("value 错误",)  
         return callback(new Error('请选择日期'));
@@ -79,10 +133,12 @@ export default {
             this.editTableData = this.tabDataRow;
             this.modaAdd = this.isShow;
         },
-        
-        
-       
     },
+
+
+
+
+
     data () {
         return {
             nowDate:"",
@@ -92,8 +148,45 @@ export default {
                 date:[],
                 startDate: '',
                 startTime: '',
-                desc: ''
+                desc: '',
+                manager:"", 
+                developer:"", 
+                tester:"", 
+                maintainer:"", 
+                target:"",
+                technology: [],
+                business:[],
             },
+            technologyList: [
+                {
+                    value: 'New York',
+                    label: '技术模块1'
+                },
+                {
+                    value: 'London',
+                    label: '技术模块2'
+                },
+                {
+                    value: 'Sydney',
+                    label: '技术模块3'
+                },
+               
+            ],
+            businessList: [
+                {
+                    value: 'New York',
+                    label: '业务模块1'
+                },
+                {
+                    value: 'London',
+                    label: '业务模块2'
+                },
+                {
+                    value: 'Sydney',
+                    label: '业务模块3'
+                },
+               
+            ],
             ruleValidate: {
                 name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
@@ -107,7 +200,26 @@ export default {
                 startTime: [
                     { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
                 ],
+
+                manager: [
+                    { required: true, message: '请选择', trigger: 'change' }
+                ],
+                developer: [
+                    { required: true, message: '请选择', trigger: 'change' }
+                ],
+                tester: [
+                    { required: true, message: '请选择', trigger: 'change' }
+                ],
+                maintainer: [
+                    { required: true, message: '请选择', trigger: 'change' }
+                ],
+
+
                 desc: [
+                    { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
+                    //{ type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+                ],
+                target: [
                     { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
                     //{ type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
                 ]
@@ -199,17 +311,6 @@ export default {
                     this.submitAddData();
                 }
             })
-
-            // if(IsStop){
-            //     return;
-            // }else{
-                
-            // }
-
-
-
-            
-            
         },
         cancel () {
             //this.$Message.info('取消');

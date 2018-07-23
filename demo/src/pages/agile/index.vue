@@ -228,6 +228,7 @@ export default {
             this.isShowAddPop = false;
             this.isAdd = true;
             this.tableDataRow = false;
+            this.actionArr = [];
         },
         tableDataAddFn(Data){
             this.tableData.push(Data);

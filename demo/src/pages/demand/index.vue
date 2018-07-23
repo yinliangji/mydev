@@ -42,7 +42,7 @@
 
                 <div class="tableBox">
                     <div class="tableBtnBox">
-                        <Button type="success" @click="addItem">添加需求项</Button>
+                        <Button type="success" @click="addItem2">添加需求项</Button>
                      
                     </div>
                     <Table border :columns="columns" :data="itemData"></Table>
@@ -55,7 +55,7 @@
                 
             </div>
         </Card>
-       <Modal ref="addPop" v-model="modaAdd" title="添加需求" @on-ok="submitAdd"  ok-text="提交" :loading="modal_add_loading" visible="true">
+       <Modal ref="addPop" v-model="modaAdd2" title="添加需求" @on-ok="submitAdd2"  ok-text="提交" :loading="modal_add_loading2" visible="true">
             <Form :model="formItem" :label-width="80" >
                 <FormItem label="项目名称" >
                     <Input v-model="formItem.name" placeholder="请输入项目名称"></Input>
@@ -63,24 +63,32 @@
                
             </Form>
         </Modal> 
+
+
+      <ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  />
+
+
+
+
     </div>
 </template>
 <script>
 
-
+import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 export default {
     name: 'demand',
     data () {
         return {
-            modaAdd: false,
-            modal_add_loading: true,
+            isShowAddPop:false,
+            isAdd:true,
+            tableDataRow:false,
+            //
+            modaAdd2: false,
+            modal_add_loading2: true,
             formItem: {
                 name:"",
-               
             },
             columns: [
-               
-              
                 {
                     title: '需求项编号',
                     key: 'num',
@@ -130,7 +138,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.addItem(params.index)
                                     }
                                 }
                             }, '添加 '),
@@ -177,15 +185,29 @@ export default {
         }
     },
     methods: {
-        addItem(){
-            this.modaAdd = true;
+        //
+        tableDataAddFn(Data){
+            this.$Message.info('成功');
         },
-        formItemReset(){
+        addItem(){
+            this.isShowAddPop = true;
+            this.isAdd = true;
+        },
+        popCloseFn(){
+            this.isShowAddPop = false;
+            this.isAdd = true;
+            this.tableDataRow = false;
+        },
+        //
+        addItem2(){
+            this.modaAdd2 = true;
+        },
+        formItemReset2(){
             this.$nextTick(() => {
                 this.formItem.name = "";
             });
         },
-        submitAdd () {
+        submitAdd2 () {
             let tempData = {
                 name: this.formItem.name,
                 num: parseInt(Math.random()*100),
@@ -193,9 +215,9 @@ export default {
             }
             setTimeout(() => {
                this.itemData.push(tempData);
-                this.modaAdd = false;
+                this.modaAdd2 = false;
                 this.$Message.info('成功');
-                this.formItemReset();
+                this.formItemReset2();
             },1000)
             
         },
@@ -214,7 +236,10 @@ export default {
         remove (index) {
             this.data6.splice(index, 1);
         }
-    }
+    },
+    components: {
+        ADDorEDITpop,
+    },
 }
 </script>
 <style lang="less" scoped>

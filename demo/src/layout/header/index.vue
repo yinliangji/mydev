@@ -29,7 +29,7 @@
 	</Layout>
 </template>
 <script>
-import MyHeaderCont from './myHeader'
+import MyHeaderCont from 'header'
 export default {
 	components: {
     	MyHeaderCont,

@@ -9,6 +9,11 @@ import promise from 'promise-polyfill';
 import 'babel-polyfill'
 import Lodash from 'lodash'
 Vue.prototype._ = Lodash
+
+import axios from 'axios'
+Vue.prototype.$axios = axios
+
+
 Vue.use(iView)
 Vue.config.productionTip = false
 

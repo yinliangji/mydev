@@ -102,185 +102,21 @@
 		</Card>
 
 
-<Modal ref="addPop" v-model="modaAdd" :title="ADDorEDIT?'添加':'编辑'" @on-ok="submitAdd" @on-cancel="cancel" ok-text="提交" :loading="modal_add_loading" >
-	<Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140">
-        <FormItem label="产品待办事项名称" prop="name">
-            <Input v-model="formValidate.name" placeholder="请填写产品待办事项名称"></Input>
-        </FormItem>
-      
-        <FormItem label="事项类型" prop="style">
-            <Select v-model="formValidate.style" placeholder="请选择事项类型">
-                <Option value="产品需求">产品需求</Option>
-                <Option value="事项类型1">事项类型1</Option>
-                <Option value="事项类型2">事项类型2</Option>
-            </Select>
-        </FormItem>
-
-        <FormItem label="负责人" prop="person">
-            <Select v-model="formValidate.person" placeholder="请选择负责人">
-                <Option value="谢呗5">谢呗5</Option>
-                <Option value="谢呗6">谢呗6</Option>
-                <Option value="谢呗7">谢呗7</Option>
-            </Select>
-        </FormItem>
-
-
-        
-       
-       
-        <FormItem label="状态" prop="status">
-            <RadioGroup v-model="formValidate.status">
-                <Radio label="未开始">未开始</Radio>
-                <Radio label="处理中">处理中</Radio>
-                <Radio label="已完成">已完成 </Radio>
-                <Radio label="废弃">废弃</Radio>
-            </RadioGroup>
-        </FormItem>
-
-
-        <FormItem label="所属迭代" prop="iteration">
-            <Select v-model="formValidate.iteration" placeholder="请选所属迭代">
-                <Option value="迭代1">迭代1</Option>
-                <Option value="迭代2">迭代2</Option>
-                <Option value="迭代3">迭代3</Option>
-            </Select>
-        </FormItem>
-
-
-
-        <FormItem label="优先级" prop="grade">
-            <RadioGroup v-model="formValidate.grade">
-                <Radio label="1">1</Radio>
-                <Radio label="2">2</Radio>
-                <Radio label="3">3</Radio>
-                <Radio label="4">4</Radio>
-            </RadioGroup>
-        </FormItem>
-
-		
-		<FormItem label="工时(预计)" prop="manhour">
-            <Input v-model="formValidate.manhour" placeholder="请填写工时(预计)" number></Input>
-        </FormItem>
-
-
-		<FormItem label="关联任务(全部)" prop="mission">
-            <Input v-model="formValidate.mission" placeholder="请填写关联任务(全部)" number></Input>
-        </FormItem>
-
-
-    </Form>
-</Modal>
+		<ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  />
 
 
 	</div>
 </template>
 <script>
 import kanbanboard from "@/components/kanbanboard";
-const validateNumber = (rule, value, callback) => {
-    if (!value) {
-        return callback(new Error('请填写内容，不能为空'));
-    }
-    // 模拟异步验证效果
-    setTimeout(() => {
-        if (!Number.isInteger(value)) {
-            callback(new Error('请填写数字'));
-        } else {
-        	callback();
-            // if (value < 18) {
-            //     callback(new Error('Must be over 18 years of age'));
-            // } else {
-            //     callback();
-            // }
-        }
-    }, 1000);
-};
+import ADDorEDITpop from "./add_or_edit_pop";
+
 export default {
 	data() {
 		return {
-			
-			modaAdd: false,
-			ADDorEDIT:true,
-			modal_add_loading: true,
-			formValidate: {
-                name: '',
-                style:"",
-                person:"",
-                status:"",
-                iteration:"",
-                grade:"",
-                manhour:"",
-                mission:"",
-
-
-                mail: '',
-                city: '',
-                gender: '',
-                interest: [],
-                date: '',
-                time: '',
-                desc: ''
-            },
-            ruleValidate: {
-                name: [
-                    { required: true, message: 'The name cannot be empty', trigger: 'blur' }
-                ],
-
-                style: [
-                    { required: true, message: 'Please select the city', trigger: 'change' }
-                ],
-
-                person: [
-                    { required: true, message: 'Please select the city', trigger: 'change' }
-                ],
-                status: [
-                    { required: true, message: 'Please select gender', trigger: 'change' }
-                ],
-                
-                iteration: [
-                    { required: true, message: 'Please select the city', trigger: 'change' }
-                ],
-
-                grade: [
-                    { required: true, message: 'Please select gender', trigger: 'change' }
-                ],
-                manhour: [
-                	{ required: true,validator: validateNumber, trigger: 'blur' }
-                
-                    // { required: true, message: 'The name cannot be empty', trigger: 'blur' },
-                    // { type: 'number', message: 'Incorrect email format', trigger: 'blur' }
-                ],
-                mission: [
-                	{required: true, validator: validateNumber, trigger: 'blur' }
-                ],
-
-
-                
-                
-
-
-                // mail: [
-                //     { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
-                //     { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
-                // ],
-               
-                // gender: [
-                //     { required: true, message: 'Please select gender', trigger: 'change' }
-                // ],
-                // interest: [
-                //     { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
-                //     { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
-                // ],
-                // date: [
-                //     { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
-                // ],
-                // time: [
-                //     { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
-                // ],
-                // desc: [
-                //     { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
-                //     { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
-                // ]
-            },
+			isShowAddPop:false,
+            isAdd:true,
+            tableDataRow:false,
 			currentView: "developList",//developList//kanbanboard
 			groupList:[
 		        // { text: "产品待办事项" },
@@ -414,7 +250,6 @@ export default {
 	            //   headPortrait: require("@/assets/images/user_02.png")
 	            // }
 	        ],
-	        //
 	        columns: [
 	        	{
                     title: '事项编号',
@@ -542,7 +377,7 @@ export default {
                 },
                 {
                     title: '关联任务|已完成|全部',
-                    key: 'correlation',
+                    key: 'mission',
                     width: 105,
                     align: 'center',
                     renderHeader: (h, params) => {
@@ -615,7 +450,7 @@ export default {
 					Iteration:"迭代1",
 					priority:"1",
 					manHours:"20 | 10",
-					correlation:"5 | 10",
+					mission:"5 | 10",
 					icon: require("@/assets/images/user_02.png")
                 },
                 {
@@ -627,7 +462,7 @@ export default {
 					Iteration:"迭代2",
 					priority:"2",
 					manHours:"20 | 10",
-					correlation:"5 | 10",
+					mission:"5 | 10",
 					icon: require("@/assets/images/user_02.png")
                 },
                 {
@@ -639,21 +474,20 @@ export default {
 					Iteration:"迭代3",
 					priority:"3",
 					manHours:"20 | 10",
-					correlation:"5 | 10",
+					mission:"5 | 10",
 					icon: require("@/assets/images/user_02.png")
                 },
-               
             ],
-            tableDataIndex:NaN,
-	        //
 		}
 	},
 	components: {
 		kanbanboard,
+		ADDorEDITpop,
 	},
 	computed: {
 
 	},
+
 	mounted(){
 		for(let i=0;i<this.tableData.length;i++){
 			let statusNum = false;
@@ -676,97 +510,26 @@ export default {
 		}
 	},
 	methods:{
-		addItem(){
-            this.modaAdd = true;
-            this.ADDorEDIT = true;
-        },
-        editItem(I){
-        	this.tableDataIndex = I;
-        	this.modaAdd = true;
-            this.ADDorEDIT = false;
-
-
-
-			console.log(this.tableData[I])
-
-
-			// name: '项目名称3',
-			// num: 24,
-			// describe: '产品需求',
-			// person:"谢呗3",
-			// status:"未开始",
-			// Iteration:"迭代3",
-			// priority:"3",
-			// manHours:"20 | 10",
-			// correlation:"5 | 10",
-			// icon: require("@/assets/images/user_02.png")
-
-			// name: this.formValidate.name,
-			// age: parseInt(Math.random()*100),
-			// describe: '产品需求',
-			// person:this.formValidate.person,
-			// status:this.formValidate.status,
-			// Iteration:this.formValidate.iteration,
-			// priority:this.formValidate.grade,
-			// manHours:"0 | "+this.formValidate.manhour,
-			// correlation:"0 | 0",
-			// icon: require("@/assets/images/user_02.png"),
-
-
-
-
-
-        },
-        formItemReset(){
-			this.formValidate.name= ''
-			this.formValidate.style=""
-			this.formValidate.person=""
-			this.formValidate.status=""
-			this.formValidate.iteration=""
-			this.formValidate.grade=""
-			this.formValidate.manhour=""
-        },
-        submitAddData(){
-        	let tempData = {
-                name: this.formValidate.name,
-				num: parseInt(Math.random()*100),
-				describe: '产品需求',
-				person:this.formValidate.person,
-				status:this.formValidate.status,
-				Iteration:this.formValidate.iteration,
-				priority:this.formValidate.grade,
-				manHours:"0 | "+this.formValidate.manhour,
-				correlation:"0 | 0",
-				icon: require("@/assets/images/user_02.png"),
-            }
-            setTimeout(() => {
-                this.tableData.push(tempData);
-                this.modaAdd = false;
-                this.$Message.info('成功');
-                this.formItemReset();
-                this.$refs.formValidate.resetFields();
-            },1000)
-        },
-		submitAdd(){
-			let IsStop = false;
-            this.$refs.formValidate.validate((valid)=>{//验证
-                this.modal_add_loading = false;
-                this.$nextTick(() => {
-                  this.modal_add_loading = true;
-                });
-                console.log(valid)
-				if(valid){
-				    this.modal_add_loading = true;
-				    this.$nextTick(() => {
-				      this.modal_add_loading = true;
-				    });
-				    this.submitAddData();
-				}
-            })
+		tableDataAddFn(Data){
+			this.tableData.push(Data);
+			this.$Message.info('成功');
 		},
-		cancel(){
-			this.formItemReset();
-            this.$refs.formValidate.resetFields();
+		addItem(){
+			console.log("this.isShowAddPop",this.isShowAddPop)
+			this.isShowAddPop = true;
+            this.isAdd = true;
+		},
+		editItem(I){
+			console.log(I,this.tableData[I])
+			// 
+			this.isShowAddPop = true;
+            this.isAdd = false;
+            this.tableDataRow = this.tableData[I]
+		},
+		popCloseFn(){
+			this.isShowAddPop = false;
+            this.isAdd = true;
+            this.tableDataRow = false;
 		},
 		goDevelopmentFn (index) {
             this.$router.push('/development')

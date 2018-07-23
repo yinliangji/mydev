@@ -48,8 +48,8 @@
 					</div>
 			    	<Table border  ref="selection" :columns="columns" :data="tableData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
-                    <Button @click="handleSelectAll(true)">设置全选</Button>
-                    <Button @click="handleSelectAll(false)">全部取消</Button>
+                    <Button @click="handleSelectAll(true)" v-if="allSelectTableRome">设置全选</Button>
+                    <Button @click="handleSelectAll(false)" v-else>全部取消</Button>
 			    	
 			    	<div class="pageBox">
 			    		<Page :total="100" show-elevator></Page>
@@ -87,6 +87,7 @@ export default {
     },
     data () {
         return {
+            allSelectTableRome:true,
             isShowAddPop:false,
             isAdd:true,
             tableDataRow:false,
@@ -229,6 +230,7 @@ export default {
             this.isAdd = true;
             this.tableDataRow = false;
             this.actionArr = [];
+            this.$refs.selection.selectAll(false);
         },
         tableDataAddFn(Data){
             this.tableData.push(Data);
@@ -296,6 +298,7 @@ export default {
             
         },
         onSelectAllFn(S){
+            //this.allSelectTableRome = false;
             console.log("<===*onSelectAllFn*===Sel->",S,"<-Sel===*onSelectAllFn*===>")
         },
         onSelectFn(S,R){
@@ -303,6 +306,7 @@ export default {
         },
     	handleSelectAll (status) {
             this.$refs.selection.selectAll(status);
+            this.allSelectTableRome = !this.allSelectTableRome;
         },
         linkFn (index) {
             this.$router.push('/baseinfo')

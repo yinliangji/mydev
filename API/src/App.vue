@@ -10,7 +10,7 @@
         </Layout>
         <!-- 结束 -->
       </Content>
-      <MyFooter>===MyFooter</MyFooter>
+      <!-- <MyFooter>===MyFooter</MyFooter> -->
     </Layout>
 </template>
 <script>

@@ -1,6 +1,6 @@
 <template>
 	<Sider  ref="SiderBox" collapsible :collapsed-width="78" v-model="isCollapsed" class="siderBox"  hide-trigger>
-		<Menu :active-name="currentMenu" theme="dark" width="auto" :class="menuitemClasses" @on-open-change="onOpenChange" ref="side_menu">
+		<Menu :active-name="currentMenu" theme="dark" width="auto" :class="menuitemClasses" @on-open-change="onOpenChange" ref="side_menu" class="siderMenu">
 			<MenuItem name="1-1">
 				<router-link  to="/home" />
 				<Icon type="ios-navigate"></Icon>
@@ -97,22 +97,95 @@ export default {
 </script>
 <style lang="less" scoped>
 
+// li a {
+// 	position:absolute;
+// 	left:0;
+// 	top: 0;
+// 	width: 100%;
+// 	height:100%;
+// }
+// li>span{
+// 	padding-bottom: 1px;
+// }
+// .siderBox {
+  
+//   height:100%;
+//   overflow-y:auto;
+//   overflow-x:hidden;
+
+// }
+// .layout-con{
+//     height: 100%;
+//     width: 100%;
+// }
+// .triggerBtn {
+//   position:absolute;
+//   right:0;
+//   top:50%;
+//   z-index: 901;
+//   cursor: pointer;
+
+// }
+// .menu-icon{
+//   transition: all .3s;
+// }
+// .rotate-icon{
+//   transform: rotate(-180deg);
+// }
+
+// .menu-item span{
+//     display: inline-block;
+//     overflow: hidden;
+//     width: 69px;
+//     text-overflow: ellipsis;
+//     white-space: nowrap;
+//     vertical-align: bottom;
+//     transition: width .2s ease .2s;
+// }
+// .menu-item i{
+//     transform: translateX(0px);
+//     transition: font-size .2s ease, transform .2s ease;
+//     vertical-align: middle;
+//     font-size: 16px;
+// }
+// .collapsed-menu span{
+//     width: 0px;
+//     transition: width .2s ease;
+// }
+// .collapsed-menu i{
+//     transform: translateX(5px);
+//     transition: font-size .2s ease .2s, transform .2s ease .2s;
+//     vertical-align: middle;
+//     font-size: 22px;
+// }
 li a {
 	position:absolute;
 	left:0;
 	top: 0;
 	width: 100%;
 	height:100%;
+	z-index:10;
 }
 li>span{
 	padding-bottom: 1px;
 }
+
+
+
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu) {
+    color: white;
+}
+
 .siderBox {
   
   height:100%;
   overflow-y:auto;
   overflow-x:hidden;
+  background: #21488a;//
 
+}
+.siderMenu {
+	background: transparent;
 }
 .layout-con{
     height: 100%;
@@ -136,7 +209,7 @@ li>span{
 .menu-item span{
     display: inline-block;
     overflow: hidden;
-    width: 69px;
+    width: 85px;
     text-overflow: ellipsis;
     white-space: nowrap;
     vertical-align: bottom;
@@ -158,5 +231,4 @@ li>span{
     vertical-align: middle;
     font-size: 22px;
 }
-
 </style>

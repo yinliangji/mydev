@@ -1,7 +1,7 @@
 <template>
 	<!-- <Header>Header<slot>Header slot</slot></Header> -->
 	<Layout class="headerBox">
-		<Header class="header">
+		<!-- <Header class="header">
 			<Menu class="header-menu" mode="horizontal" theme="dark" active-name="1">
 				<div class="layout-logo header-logo">
 					<img src="@/assets/images/logo.png">
@@ -23,14 +23,18 @@
 					</MenuItem>
 				</div>
 			</Menu>	
-		</Header>
+		</Header> -->
+		<MyHeaderCont :isgo="false" />
 		<div class="header-under-bar"></div>
 	</Layout>
 </template>
 <script>
-	export default {
-
-	}
+import MyHeaderCont from 'header'
+export default {
+	components: {
+    	MyHeaderCont,
+  	}
+}
 </script>
 <style lang="less" scoped>
 
@@ -39,6 +43,14 @@
 	position:relative;
 	height:74px;
 	flex:0 0 auto;
+	.header {
+		position: absolute;
+		left:0;
+		top:0;
+		width: 100%;
+		height:64px;
+		background:white;
+	}
 }
 .header {
 	position: absolute;

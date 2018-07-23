@@ -12,6 +12,9 @@ Vue.prototype._ = Lodash
 Vue.use(iView)
 Vue.config.productionTip = false
 
+import axios from 'axios'
+Vue.prototype.$axios = axios
+
 import '@/assets/css/normalize.css'
 import '@/assets/css/reset.css'
 import '@/assets/css/common.css'

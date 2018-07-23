@@ -24,7 +24,7 @@
 				</div>
 			</Menu>	
 		</Header> -->
-		<MyHeaderCont />
+		<MyHeaderCont :isgo="false" />
 		<div class="header-under-bar"></div>
 	</Layout>
 </template>

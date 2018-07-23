@@ -102,14 +102,12 @@
 		</Card>
 
 
-<Modal ref="addPop" v-model="modaAdd" title="添加" @on-ok="submitAdd" @on-cancel="cancel" ok-text="提交" :loading="modal_add_loading" visible="true">
+<Modal ref="addPop" v-model="modaAdd" :title="ADDorEDIT?'添加':'编辑'" @on-ok="submitAdd" @on-cancel="cancel" ok-text="提交" :loading="modal_add_loading" >
 	<Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140">
         <FormItem label="产品待办事项名称" prop="name">
             <Input v-model="formValidate.name" placeholder="请填写产品待办事项名称"></Input>
         </FormItem>
-
       
-
         <FormItem label="事项类型" prop="style">
             <Select v-model="formValidate.style" placeholder="请选择事项类型">
                 <Option value="产品需求">产品需求</Option>
@@ -160,9 +158,15 @@
         </FormItem>
 
 		
-		<FormItem label="工时" prop="manhour">
-            <Input v-model="formValidate.manhour" placeholder="请填写预计工时" number></Input>
+		<FormItem label="工时(预计)" prop="manhour">
+            <Input v-model="formValidate.manhour" placeholder="请填写工时(预计)" number></Input>
         </FormItem>
+
+
+		<FormItem label="关联任务(全部)" prop="mission">
+            <Input v-model="formValidate.mission" placeholder="请填写关联任务(全部)" number></Input>
+        </FormItem>
+
 
     </Form>
 </Modal>
@@ -174,12 +178,12 @@
 import kanbanboard from "@/components/kanbanboard";
 const validateNumber = (rule, value, callback) => {
     if (!value) {
-        return callback(new Error('Age cannot be empty'));
+        return callback(new Error('请填写内容，不能为空'));
     }
     // 模拟异步验证效果
     setTimeout(() => {
         if (!Number.isInteger(value)) {
-            callback(new Error('Please enter a numeric value'));
+            callback(new Error('请填写数字'));
         } else {
         	callback();
             // if (value < 18) {
@@ -195,6 +199,7 @@ export default {
 		return {
 			
 			modaAdd: false,
+			ADDorEDIT:true,
 			modal_add_loading: true,
 			formValidate: {
                 name: '',
@@ -204,6 +209,7 @@ export default {
                 iteration:"",
                 grade:"",
                 manhour:"",
+                mission:"",
 
 
                 mail: '',
@@ -238,11 +244,17 @@ export default {
                     { required: true, message: 'Please select gender', trigger: 'change' }
                 ],
                 manhour: [
-                	{ validator: validateNumber, trigger: 'blur' }
+                	{ required: true,validator: validateNumber, trigger: 'blur' }
                 
                     // { required: true, message: 'The name cannot be empty', trigger: 'blur' },
                     // { type: 'number', message: 'Incorrect email format', trigger: 'blur' }
                 ],
+                mission: [
+                	{required: true, validator: validateNumber, trigger: 'blur' }
+                ],
+
+
+                
                 
 
 
@@ -406,7 +418,7 @@ export default {
 	        columns: [
 	        	{
                     title: '事项编号',
-                    key: 'age',
+                    key: 'num',
                     width: 85,
                     align: 'center'
                 },
@@ -558,7 +570,8 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        //this.show(params.index)
+                                        this.editItem(params.index)
                                     }
                                 }
                             }, '编辑'),
@@ -583,7 +596,8 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        //this.show(params.index)
+                                        this.goDevelopmentFn();
                                     }
                                 }
                             }, '任务看板')
@@ -594,7 +608,7 @@ export default {
 	        tableData: [
                 {
 					name: '项目名称1',
-					age: 18,
+					num: 18,
 					describe: '产品需求',
 					person:"谢呗",
 					status:"已完成",
@@ -606,7 +620,7 @@ export default {
                 },
                 {
 					name: '项目名称2',
-					age: 24,
+					num: 24,
 					describe: '产品需求',
 					person:"谢呗2",
 					status:"处理中",
@@ -618,7 +632,7 @@ export default {
                 },
                 {
 					name: '项目名称3',
-					age: 24,
+					num: 24,
 					describe: '产品需求',
 					person:"谢呗3",
 					status:"未开始",
@@ -629,7 +643,8 @@ export default {
 					icon: require("@/assets/images/user_02.png")
                 },
                
-            ]
+            ],
+            tableDataIndex:NaN,
 	        //
 		}
 	},
@@ -663,6 +678,44 @@ export default {
 	methods:{
 		addItem(){
             this.modaAdd = true;
+            this.ADDorEDIT = true;
+        },
+        editItem(I){
+        	this.tableDataIndex = I;
+        	this.modaAdd = true;
+            this.ADDorEDIT = false;
+
+
+
+			console.log(this.tableData[I])
+
+
+			// name: '项目名称3',
+			// num: 24,
+			// describe: '产品需求',
+			// person:"谢呗3",
+			// status:"未开始",
+			// Iteration:"迭代3",
+			// priority:"3",
+			// manHours:"20 | 10",
+			// correlation:"5 | 10",
+			// icon: require("@/assets/images/user_02.png")
+
+			// name: this.formValidate.name,
+			// age: parseInt(Math.random()*100),
+			// describe: '产品需求',
+			// person:this.formValidate.person,
+			// status:this.formValidate.status,
+			// Iteration:this.formValidate.iteration,
+			// priority:this.formValidate.grade,
+			// manHours:"0 | "+this.formValidate.manhour,
+			// correlation:"0 | 0",
+			// icon: require("@/assets/images/user_02.png"),
+
+
+
+
+
         },
         formItemReset(){
 			this.formValidate.name= ''
@@ -673,27 +726,10 @@ export default {
 			this.formValidate.grade=""
 			this.formValidate.manhour=""
         },
-		submitAdd(){
-			let IsStop = false;
-            this.$refs.formValidate.validate((valid)=>{//验证
-                this.modal_add_loading = false;
-                this.$nextTick(() => {
-                  this.modal_add_loading = true;
-                });
-                IsStop = !valid;
-            })
-
-            if(IsStop){
-                return;
-            }else{
-                this.modal_add_loading = true;
-                this.$nextTick(() => {
-                  this.modal_add_loading = true;
-                });
-            }
-            let tempData = {
+        submitAddData(){
+        	let tempData = {
                 name: this.formValidate.name,
-				age: parseInt(Math.random()*100),
+				num: parseInt(Math.random()*100),
 				describe: '产品需求',
 				person:this.formValidate.person,
 				status:this.formValidate.status,
@@ -708,11 +744,33 @@ export default {
                 this.modaAdd = false;
                 this.$Message.info('成功');
                 this.formItemReset();
+                this.$refs.formValidate.resetFields();
             },1000)
+        },
+		submitAdd(){
+			let IsStop = false;
+            this.$refs.formValidate.validate((valid)=>{//验证
+                this.modal_add_loading = false;
+                this.$nextTick(() => {
+                  this.modal_add_loading = true;
+                });
+                console.log(valid)
+				if(valid){
+				    this.modal_add_loading = true;
+				    this.$nextTick(() => {
+				      this.modal_add_loading = true;
+				    });
+				    this.submitAddData();
+				}
+            })
 		},
 		cancel(){
-
+			this.formItemReset();
+            this.$refs.formValidate.resetFields();
 		},
+		goDevelopmentFn (index) {
+            this.$router.push('/development')
+        },
 		linkFn (index) {
             //alert(index)
             this.$router.push('/baseinfo')

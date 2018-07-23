@@ -1,9 +1,10 @@
 <template>
   <div class="pageContent">
-    <Breadcrumb :style="{margin: '16px 0'}">
+    <!-- <Breadcrumb :style="{margin: '16px 0'}">
       <BreadcrumbItem>当前位置</BreadcrumbItem>
       <BreadcrumbItem>迭代管理</BreadcrumbItem>
-    </Breadcrumb>
+    </Breadcrumb> -->
+    <selectMenu></selectMenu>
     <div class="pageCon">
       <!-- <h3 class="pageConTitle">迭代管理</h3> -->
       <div class="newTop">
@@ -40,8 +41,9 @@
 
       <!-- <kanbanSearch :searchParams="searchParams"></kanbanSearch> -->
       <div class="w80">
-        <Button type="primary" icon="ios-cloud-upload-outline" @click="addIteration">添加</Button>
+        <Button type="success" @click="addIteration">添加迭代</Button>
         <Button type="primary" @click="showModalList">归档</Button>
+        <Button type="error" @click="delList">删除</Button>
         <div class="orange">
           <div class="un-plan">
             <Table border @on-selection-change="handleRowChange" ref="Selection" :columns="column1" :data="Table1.list">
@@ -49,8 +51,8 @@
 
             <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize" style="margin:6px 0; text-align:right"></Page>
 
-            <Button @click="handleSelectAll(true)">全选</Button>
-            <Button @click="handleSelectAll(false)">取消全选</Button>
+            <Button @click="handleSelectAll">全选 / 取消全选</Button>
+            <!-- <Button @click="handleSelectAll(false)">取消全选</Button> -->
 
           </div>
           <!-- 迭代归档 -->
@@ -74,7 +76,7 @@
             </div>
           </Modal>
           <!-- 添加迭代面板 -->
-          <Modal v-model="addTaskOnoff" title="添加迭代" width="500" @on-ok="addIterationOk('formValidate')">
+          <Modal v-model="addTaskOnoff" :title="formValidate.title" width="500" @on-ok="addIterationOk('formValidate')">
             <Form ref="formValidate" class="formValidate" :model="formValidate" :rules="ruleValidate">
               <div class="addTaskTable">
                 <!-- <div class="taskrow clearfix">
@@ -94,7 +96,7 @@
                   </div>
                 </div> -->
                 <FormItem label="开始时间：" prop="startTime">
-                  <DatePicker type="date" style="width: 200px" v-model="formValidate.startTime" @on-change="TimeAction"></DatePicker>
+                  <DatePicker type="date" style="width: 200px" v-model="formValidate.startTime"></DatePicker>
                 </FormItem>
                 <!-- <div class="taskrow clearfix" style="height:70px;">
                   <div class="addTaskTableTitle">结束时间：</div>
@@ -104,12 +106,13 @@
                 </div> -->
 
                 <FormItem label="结束时间：" prop="endTime">
-                  <DatePicker type="date" style="width: 200px" v-model="formValidate.endTime" @on-change="TimeAction"></DatePicker>
+                  <DatePicker type="date" style="width: 200px" v-model="formValidate.endTime"></DatePicker>
                 </FormItem>
 
               </div>
             </Form>
           </Modal>
+
           <!--取消归档弹出框 -->
           <Modal class-name="confirm" v-model="cancelIteration" width="300">
 
@@ -142,11 +145,26 @@
 
 <script>
 import { EventBus } from "@/tools";
+import selectMenu from "@/components/selectMenu/selectMenu";
 // import kanbanSearch from "@/components/kanbanSearch";
 export default {
     data() {
+        // const validateEndTime = (rule, value, callback) => {
+        //     if (value === "") {
+        //         callback(new Error("Please enter your password"));
+        //     } else {
+        //         if (this.formCustom.passwdCheck !== "") {
+        //             // 对第二个密码框单独验证
+        //             this.$refs.formCustom.validateField("passwdCheck");
+        //         }
+        //         callback();
+        //     }
+        // };
         return {
+            status: false,
+            alertInfo: "添加成功",
             formValidate: {
+                title: "添加迭代",
                 taskName: "",
                 startTime: "",
                 endTime: ""
@@ -173,6 +191,7 @@ export default {
                         type: "date",
                         message: "请选择结束时间",
                         trigger: "change"
+                        // validator: validateEndTime
                     }
                 ]
             },
@@ -183,7 +202,6 @@ export default {
             delIndex: 0,
             cancelDom: {},
             cancelIteration: false,
-
             addTaskOnoff: false,
             ismodalShow: false,
             radioType: "选择已有归档",
@@ -224,12 +242,14 @@ export default {
                     render: (h, params) => {
                         return h("div", [
                             h(
-                                "span",
+                                "Button",
                                 {
+                                    props: {
+                                        type: "info",
+                                        size: "small"
+                                    },
                                     style: {
-                                        marginRight: "20px",
-                                        color: "#2baee9",
-                                        cursor: "pointer"
+                                        marginRight: "5px"
                                     },
                                     on: {
                                         click: () => {
@@ -248,15 +268,15 @@ export default {
                                 "规划迭代"
                             ),
                             h(
-                                "span",
+                                "Button",
                                 {
-                                    style: {
-                                        color: "#f90",
-                                        cursor: "pointer"
+                                    props: {
+                                        type: "warning",
+                                        size: "small"
                                     },
                                     on: {
                                         click: () => {
-                                            this.fillEdit(params.index);
+                                            this.fillEdit(params.row);
                                         }
                                     }
                                 },
@@ -322,7 +342,7 @@ export default {
                         name: "prj001",
                         dec: "TPM敏捷管理系统",
                         startTime: "2017-08-01",
-                        endTime: "2018-05-01"
+                        endTime: "2017-08-01"
                     },
                     {
                         id: 2,
@@ -330,7 +350,7 @@ export default {
                         name: "prj002",
                         dec: "TPM敏捷管理系统",
                         startTime: "2017-08-01",
-                        endTime: "2018-05-01"
+                        endTime: "2017-08-02"
                     },
                     {
                         id: 3,
@@ -338,7 +358,7 @@ export default {
                         name: "prj003",
                         dec: "TPM敏捷管理系统",
                         startTime: "2017-08-01",
-                        endTime: "2018-05-01"
+                        endTime: "2017-08-03"
                     }
                 ]
             },
@@ -425,6 +445,31 @@ export default {
         EventBus.$on("addTask", this.addNewTask);
     },
     methods: {
+        delList() {
+            let item = this._delItem();
+            if (typeof item === "undefined") {
+                return;
+            }
+            this._deleteIterationItem(item);
+        },
+
+        // 所要删除的选项
+        _delItem() {
+            let item = [];
+            console.log(this.isHandleMore);
+            if (this.curSelelectList.length) {
+                item = this.curSelelectList;
+            } else if (!this.curSelelectList.length) {
+                this.$Message.info("请选择要删除的内容");
+                return;
+            } else {
+                item = this.Table1.list.find(
+                    n => n.id === this.curSelectSingleId
+                );
+            }
+            return item;
+        },
+
         delSure() {
             this.obj[this.iterationIndex].list.splice(this.delIndex, 1);
             this.Table1.list.push(this.cancelDom);
@@ -436,19 +481,39 @@ export default {
             this.startTime = "";
             this.endTime = "";
         },
+        //开始时间与结束时间判断
+        timeJudge(date1, date2) {
+            let oDate1 = new Date(date1);
+            let oDate2 = new Date(date2);
+            if (oDate1.getTime() > oDate2.getTime()) {
+                return false;
+            } else {
+                return true;
+            }
+        },
         //添加迭代确认按钮
         addIterationOk(name) {
-          this.$refs[name].validate(valid => {
-              if (valid) {
-                  this.$Message.success("Success!");
-                  this.$refs[name].resetFields();
-              } else {
-                  this.$Message.error("Fail!");
-                  this.$refs[name].resetFields();
-              }
-          });
+            this.$refs[name].validate(valid => {
+                if (valid) {
+                    let onoff = this.timeJudge(
+                        this.formValidate.startTime,
+                        this.formValidate.endTime
+                    );
+                    if (!onoff) {
+                        this.$Message.error("开始时间不能大于结束时间!");
+                    } else {
+                        this.$Message.success(this.alertInfo);
+                        this.$refs[name].resetFields();
+                    }
+                } else {
+                    this.$Message.error("请填写好必填内容!");
+                    // this.$refs[name].resetFields();
+                }
+            });
         },
-        TimeAction() {},
+        TimeAction(data) {
+            console.log(data);
+        },
 
         // 归档按钮
         showModalList() {
@@ -475,10 +540,16 @@ export default {
             alert(i);
         },
         //迭代规划+编辑
-        fillEdit() {
-            alert("编辑");
+        fillEdit(data) {
+            this.addTaskOnoff = true;
+            this.formValidate.title = "编辑迭代" + data.name;
+            this.formValidate.taskName = data.name;
+            this.alertInfo = "修改成功！";
+            // this.formValidate.startTime = data.startTime;
+            // this.formValidate.endTime = data.endTime;
         },
         handleRowChange(Selection) {
+            // console.log(Selection);
             this.curSelelectList = Selection;
         },
         //取消归档
@@ -501,8 +572,9 @@ export default {
         },
 
         // 全选按钮
-        handleSelectAll(status) {
-            this.$refs.Selection.selectAll(status);
+        handleSelectAll() {
+            this.status = !this.status;
+            this.$refs.Selection.selectAll(this.status);
         },
 
         //点击归档面板确认按钮
@@ -602,6 +674,7 @@ export default {
 
     components: {
         // kanbanSearch
+        selectMenu:selectMenu
     }
 };
 </script>

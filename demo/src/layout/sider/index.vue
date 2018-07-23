@@ -26,19 +26,19 @@
 				<Icon type="ios-navigate"></Icon>
 				<span>开发任务管理</span>
 			</MenuItem>
-			<MenuItem name="1-6">
+			<!-- <MenuItem name="1-6">
 				<router-link  to="/defect" />
 				<Icon type="alert-circled"></Icon>
 				<span>缺陷管理</span>
-			</MenuItem>
+			</MenuItem> -->
 			<MenuItem name="1-7">
 				<router-link  to="/overView" />
 				<Icon type="clipboard"></Icon>
 				<span>项目概览</span>
 			</MenuItem>
 		</Menu>
-		<Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '-12px 8px 0 0'}" type="chevron-left" size="24" class="triggerBtn" color="white" ></Icon> 
-	</Sider> 
+		<Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '-12px 8px 0 0'}" type="chevron-left" size="24" class="triggerBtn" color="white" ></Icon>
+	</Sider>
 </template>
 <script>
 export default {
@@ -101,7 +101,7 @@ export default {
 	            this.isCollapsed ? 'collapsed-menu' : ''
 	        ]
 	    },
-	    
+
 	},
 
 
@@ -117,7 +117,7 @@ export default {
 			let page5 = "development";
 			let page6 = "defect";
 			let page7 = "overView";
-			
+
 			if(to.path.indexOf(home)!= -1){
 				this.side_menu(home)
 			}else if(to.path.indexOf(page2)!= -1){
@@ -159,7 +159,7 @@ li>span{
 }
 
 .siderBox {
-  
+
   height:100%;
   overflow-y:auto;
   overflow-x:hidden;

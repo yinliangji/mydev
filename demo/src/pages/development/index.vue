@@ -1,9 +1,10 @@
 <template>
   <div class="pageContent">
-    <Breadcrumb :style="{margin: '16px 0'}">
+    <!-- <Breadcrumb :style="{margin: '16px 0'}">
       <BreadcrumbItem>当前位置</BreadcrumbItem>
       <BreadcrumbItem>开发任务管理</BreadcrumbItem>
-    </Breadcrumb>
+    </Breadcrumb> -->
+    <selectMenu></selectMenu>
     <div class="pageCon">
 
       <div class="newTop">
@@ -99,7 +100,7 @@
           </Col>
         </Row>
       </div>
-      <Modal v-model="addTaskOnoff" title="添加任务" width="500" @on-ok="ok">
+      <!-- <Modal v-model="addTaskOnoff" title="添加任务" width="500" @on-ok="ok">
         <div class="addTaskTable">
           <div class="taskrow clearfix">
             <div class="addTaskTableTitle">任务名称：</div>
@@ -130,6 +131,32 @@
           </div>
 
         </div>
+      </Modal> -->
+      <!-- 添加迭代面板 -->
+      <Modal v-model="addTaskOnoff" :title="formValidate.title" width="500" @on-ok="addTaskOk('formValidate')">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
+          <div class="addTaskTable">
+
+            <FormItem label="任务名称：" prop="taskName">
+              <Input v-model="formValidate.taskName" style="width: 200px"></Input>
+            </FormItem>
+
+            <FormItem label="责任人：" prop="personLiable">
+              <Input v-model="formValidate.personLiable" style="width:200px"></Input>
+            </FormItem>
+
+            <FormItem label="任务描述：" prop="describe">
+              <Input v-model="formValidate.describe" type="textarea" style="width:200px" placeholder="描述..."></Input>
+            </FormItem>
+            <FormItem label="所属待办事项：" prop="curNeed">
+              <Select v-model="formValidate.curNeed" style="width:200px">
+                <Option v-for="item in formValidate.ownNeed" :value="item.value" :key="item.value">
+                  {{ item.label }}</Option>
+              </Select>
+            </FormItem>
+
+          </div>
+        </Form>
       </Modal>
       <component :is="currentView" :cardList="cardList" :groupList="groupList" :statusList="statusList">
       </component>
@@ -139,7 +166,7 @@
 
 <script>
 import { EventBus } from "@/tools";
-
+import selectMenu from "@/components/selectMenu/selectMenu";
 import kanbanboard from "@/components/kanbanboard";
 import developList from "@/pages/development/development";
 export default {
@@ -154,28 +181,62 @@ export default {
             personLiable: "",
             addTaskOnoff: false,
             currentView: "developList",
-            ownNeed: [
-                {
-                    value: "taskvalue1",
-                    label: "用户界面设计1"
-                },
-                {
-                    value: "taskvalue2",
-                    label: "用户界面设计2"
-                },
-                {
-                    value: "taskvalue3",
-                    label: "用户界面设计3"
-                },
-                {
-                    value: "taskvalue4",
-                    label: "用户界面设计4"
-                }
-            ],
-            curNeed: "",
-            taskName: "",
-            personLiable: "",
-            describe: ""
+            formValidate: {
+                title: "添加任务",
+                taskName: "",
+                ownNeed: [
+                    {
+                        value: "taskvalue1",
+                        label: "用户界面设计1"
+                    },
+                    {
+                        value: "taskvalue2",
+                        label: "用户界面设计2"
+                    },
+                    {
+                        value: "taskvalue3",
+                        label: "用户界面设计3"
+                    },
+                    {
+                        value: "taskvalue4",
+                        label: "用户界面设计4"
+                    }
+                ],
+                curNeed: "",
+                personLiable: "",
+                describe: ""
+            },
+            ruleValidate: {
+                taskName: [
+                    {
+                        required: true,
+                        message: "任务名称不能为空",
+                        trigger: "blur"
+                    }
+                ],
+                personLiable: [
+                    {
+                        required: true,
+                        message: "责任人不能为空",
+                        trigger: "blur"
+                    }
+                ],
+                describe: [
+                     {
+                        required: true,
+                        message: "任务描述不能为空",
+                        trigger: "blur"
+                    }
+                ],
+                curNeed: [
+                     {
+                        required: true,
+                        message: "所属待办事项不能为空",
+                        trigger: "change"
+                    }
+                ],
+
+            }
         };
     },
     mounted() {
@@ -200,10 +261,19 @@ export default {
         addNewTask(info) {
             this.addTaskOnoff = true;
         },
-        ok() {
-            alert("添加成功");
-        },
 
+        //添加任务确认按钮
+        addTaskOk(name) {
+            this.$refs[name].validate(valid => {
+                if (valid) {
+                    this.$Message.success(this.alertInfo);
+                    this.$refs[name].resetFields();
+                } else {
+                    this.$Message.error("请填写好必填内容!");
+                    // this.$refs[name].resetFields();
+                }
+            });
+        },
         // addNewTask(info) {
         //   EventBus.$emit("addTask", info);
         // },
@@ -422,7 +492,8 @@ export default {
 
     components: {
         kanbanboard,
-        developList
+        developList,
+         selectMenu:selectMenu
     }
 };
 </script>

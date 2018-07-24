@@ -166,7 +166,7 @@
 
 <script>
 import { EventBus } from "@/tools";
-import selectMenu from "@/components/selectMenu/selectMenu";
+
 import kanbanboard from "@/components/kanbanboard";
 import developList from "@/pages/development/development";
 export default {
@@ -492,8 +492,8 @@ export default {
 
     components: {
         kanbanboard,
-        developList,
-         selectMenu:selectMenu
+        developList
+
     }
 };
 </script>

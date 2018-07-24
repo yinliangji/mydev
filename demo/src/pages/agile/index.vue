@@ -10,10 +10,10 @@
             <div class="aglieBox">
             	<h3 class="Title">敏捷项目列表</h3>
             	<Form ref="formValidate" class="formValidate">
-			       
+
 			        <FormItem >
 			            <Row>
-			            	
+
 			            	<Col span="2" style="text-align: center">项目名称</Col>
 			                <Col span="4">
 			                    <FormItem >
@@ -38,7 +38,7 @@
 			            	<Col span="3" style="text-align:left"></Col>
 			            </Row>
 			        </FormItem>
-			       
+
 			    </Form>
 
 				<div class="tableBox">
@@ -51,7 +51,7 @@
 
                     <Button @click="handleSelectAll(true)" v-if="allSelectTableRome">设置全选</Button>
                     <Button @click="handleSelectAll(false)" v-else>全部取消</Button>
-			    	
+
 			    	<div class="pageBox">
 			    		<Page :total="100" show-elevator></Page>
 			    		<p>显示第1到第5条记录，总共90条记录</p>
@@ -71,22 +71,22 @@
                 <Button type="error" size="large" long :loading="modal_loading" @click="del">删除</Button>
             </div>
         </Modal>
-        
+
         <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" />
 
 	</div>
 </template>
 <script>
 import AddItemPop from "./additempop";
-import selectMenu from "@/components/selectMenu/selectMenu";
+
 export default {
 	name: 'aglie',
     mounted(){
-        
+
     },
     components: {
         AddItemPop,
-        selectMenu,
+
     },
     data () {
         return {
@@ -94,10 +94,10 @@ export default {
             isShowAddPop:false,
             isAdd:true,
             tableDataRow:false,
-            
+
             modaDelete: false,
             modal_loading: false,
-            
+
             columns: [
             	{
                     type: 'selection',
@@ -133,7 +133,7 @@ export default {
 
 
                 },
-               
+
                 {
                     title: '项目描述',
                     key: 'describe'
@@ -229,7 +229,7 @@ export default {
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
                 },
-                
+
             ],
             actionArr:[],
         }
@@ -287,7 +287,7 @@ export default {
                 this.$Message.success('删除完成');
             }, 1000);
         },
-       
+
         error (MSG) {
             this.$Message.config({
                 top: 250,
@@ -305,7 +305,7 @@ export default {
         onSelectionChangeFn(S){
             console.log("<===*onSelectionChangeFn*===Sel->",S,"<-Sel===*onSelectionChangeFn*===>")
             this.actionArr = S;
-            
+
         },
         onSelectAllFn(S){
             //this.allSelectTableRome = false;
@@ -349,7 +349,7 @@ export default {
     margin-bottom: 15px;
 }
 .crumbsBox{
-    
+
 }
 .formValidate {
 	margin:0 auto;
@@ -360,7 +360,7 @@ export default {
 
 
 .aglieBox{
-	
+
 }
 .tableBox{
 	padding-top: 20px;

@@ -145,7 +145,7 @@
 
 <script>
 import { EventBus } from "@/tools";
-import selectMenu from "@/components/selectMenu/selectMenu";
+
 // import kanbanSearch from "@/components/kanbanSearch";
 export default {
     data() {
@@ -673,8 +673,7 @@ export default {
     created() {},
 
     components: {
-        // kanbanSearch
-        selectMenu:selectMenu
+
     }
 };
 </script>

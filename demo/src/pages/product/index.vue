@@ -95,8 +95,8 @@
 					<div class="listBox" v-else>
 						<kanbanboard :cardList="cardList" :statusList="statusList" :groupList="groupList" />
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
-					</div> 
-					
+					</div>
+
 
 			    </div>
 			</div>
@@ -111,7 +111,7 @@
 <script>
 import kanbanboard from "@/components/kanbanboard";
 import ADDorEDITpop from "./add_or_edit_pop";
-import selectMenu from "@/components/selectMenu/selectMenu";
+
 export default {
 	data() {
 		return {
@@ -258,7 +258,7 @@ export default {
                     width: 85,
                     align: 'center'
                 },
-            	
+
                 {
                     title: '产品待办事项名称',
                     key: 'name',
@@ -278,7 +278,7 @@ export default {
                         );
                     }
                 },
-               
+
                 {
                     title: '事项类型',
                     key: 'describe',
@@ -483,8 +483,8 @@ export default {
 	},
 	components: {
 		kanbanboard,
-		ADDorEDITpop,
-		selectMenu,
+		ADDorEDITpop
+
 	},
 	computed: {
 
@@ -507,8 +507,8 @@ export default {
 			this.cardList[i].userName = this.tableData[i].person;
 			this.cardList[i].taskState = statusNum;
 			this.cardList[i].headPortrait = this.tableData[i].icon;
-			
-			
+
+
 		}
 	},
 	methods:{
@@ -523,7 +523,7 @@ export default {
 		},
 		editItem(I){
 			console.log(I,this.tableData[I])
-			// 
+			//
 			this.isShowAddPop = true;
             this.isAdd = false;
             this.tableDataRow = this.tableData[I]

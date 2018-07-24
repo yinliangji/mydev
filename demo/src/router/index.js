@@ -11,14 +11,14 @@ const router = new Router({
     mode: 'hash', //'history',
     routes: [{
             path: '/',
-            redirect: '/home',
+            redirect: '/agile',
         },
         {
             path: '/home',
             name: 'agile',
             components: {
                 Cont: resolve => {
-                    require(["../pages/agile/"], resolve)
+                    require(["../pages/home"], resolve)
                 }
             },
         },

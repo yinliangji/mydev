@@ -13,9 +13,12 @@ Vue.prototype._ = Lodash
 import axios from 'axios'
 Vue.prototype.$axios = axios
 
-
 Vue.use(iView)
 Vue.config.productionTip = false
+
+// 引入自定义组件。index.js是组件的默认入口
+// import Loading11 from './components/Loading'
+// Vue.use(Loading11);
 
 import '@/assets/css/normalize.css'
 import '@/assets/css/reset.css'
@@ -23,8 +26,8 @@ import '@/assets/css/common.css'
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
+    el: '#app',
+    router,
+    store,
+    render: h => h(App)
 })

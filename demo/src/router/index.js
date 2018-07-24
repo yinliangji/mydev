@@ -15,10 +15,12 @@ const router = new Router({
         },
         {
             path: '/home',
-            name: 'Home',
+            name: 'agile',
             components: {
-                Cont: Home
-            }
+                Cont: resolve => {
+                    require(["../pages/agile/"], resolve)
+                }
+            },
         },
         {
             path: '/home/list',

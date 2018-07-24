@@ -17,8 +17,11 @@ Vue.use(iView)
 Vue.config.productionTip = false
 
 // 引入自定义组件。index.js是组件的默认入口
-// import Loading11 from './components/Loading'
+// import Loading11 from './Common/Loading'
 // Vue.use(Loading11);
+
+import selectMenu from './components/selectMenu'
+Vue.use(selectMenu);
 
 import '@/assets/css/normalize.css'
 import '@/assets/css/reset.css'

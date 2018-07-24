@@ -10,8 +10,10 @@
             <div class="aglieBox">
             	<h3 class="Title">敏捷项目列表</h3>
             	<Form ref="formValidate" class="formValidate">
+
 			        <FormItem >
 			            <Row>
+
 			            	<Col span="2" style="text-align: center">项目名称</Col>
 			                <Col span="4">
 			                    <FormItem >
@@ -39,7 +41,9 @@
                             <Icon type="chevron-down" color="#ed3f14"></Icon>
                         </div>
 			        </FormItem>
+
 			    </Form>
+
 				<div class="tableBox">
 					<div class="tableBtnBox">
 						<Button type="success" @click="addItemFn">添加</Button>
@@ -48,9 +52,9 @@
 					</div>
 			    	<Table border  ref="selection" :columns="columns" :data="tableData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
-                    <Button @click="handleSelectAll(true)" v-if="allSelectTableRome">设置全选</Button>
+                    <Button @click="handleSelectAll(true)" v-if="!allSelectTableRome">设置全选</Button>
                     <Button @click="handleSelectAll(false)" v-else>全部取消</Button>
-			    	
+
 			    	<div class="pageBox">
 			    		<Page :total="100" show-elevator></Page>
 			    		<p>显示第1到第5条记录，总共90条记录</p>
@@ -70,33 +74,33 @@
                 <Button type="error" size="large" long :loading="modal_loading" @click="del">删除</Button>
             </div>
         </Modal>
-        
+
         <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" />
 
 	</div>
 </template>
 <script>
 import AddItemPop from "./additempop";
-import selectMenu from "@/components/selectMenu/selectMenu";
+
 export default {
 	name: 'aglie',
     mounted(){
-        
+
     },
     components: {
         AddItemPop,
-        selectMenu,
+
     },
     data () {
         return {
-            allSelectTableRome:true,
+            allSelectTableRome:false,
             isShowAddPop:false,
             isAdd:true,
             tableDataRow:false,
-            
+
             modaDelete: false,
             modal_loading: false,
-            
+
             columns: [
             	{
                     type: 'selection',
@@ -132,7 +136,7 @@ export default {
 
 
                 },
-               
+
                 {
                     title: '项目描述',
                     key: 'describe'
@@ -228,7 +232,7 @@ export default {
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
                 },
-                
+
             ],
             actionArr:[],
         }
@@ -276,7 +280,6 @@ export default {
                     }
                 }
                 this.actionArr = [];
-                //
                 this.modal_loading = false;
                 this.modaDelete = false;
                 this.$Message.config({
@@ -286,7 +289,7 @@ export default {
                 this.$Message.success('删除完成');
             }, 1000);
         },
-       
+
         error (MSG) {
             this.$Message.config({
                 top: 250,
@@ -304,18 +307,21 @@ export default {
         onSelectionChangeFn(S){
             console.log("<===*onSelectionChangeFn*===Sel->",S,"<-Sel===*onSelectionChangeFn*===>")
             this.actionArr = S;
-            
+            if(!S.length){
+                this.allSelectTableRome = false;
+            }else{
+                this.allSelectTableRome = true;
+            }
+
         },
         onSelectAllFn(S){
-            //this.allSelectTableRome = false;
-            console.log("<===*onSelectAllFn*===Sel->",S,"<-Sel===*onSelectAllFn*===>")
+            console.log("<===*onSelectAllFn*===Sel 全选->",S,"<-Sel===*onSelectAllFn*===>")
         },
         onSelectFn(S,R){
             console.log("<===*onSelectFn*===Sel->",S,"<-Sel======ROW->",R,"<-ROW===*onSelectFn*===>")
         },
     	handleSelectAll (status) {
             this.$refs.selection.selectAll(status);
-            this.allSelectTableRome = !this.allSelectTableRome;
         },
         linkFn (index) {
             this.$router.push('/baseinfo')
@@ -348,21 +354,18 @@ export default {
     margin-bottom: 15px;
 }
 .crumbsBox{
-    
+
 }
 .formValidate {
 	margin:0 auto;
 	width: 80%;
 	margin-left: 0;
-    position: relative;
-   
+
 }
 
 
-
-
 .aglieBox{
-	
+
 }
 .tableBox{
 	padding-top: 20px;
@@ -387,3 +390,4 @@ export default {
 </style>
 
 
+>>>>>>> 3a9c8b48b77372d601a379367a1f5d8b2575e4a2

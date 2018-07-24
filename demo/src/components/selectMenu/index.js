@@ -1,8 +1,8 @@
-import selectMenu from './selectMenu.vue'
+import myselectMenu from './selectMenu.vue'
 
-const selectmenu = {
+const selectMenu = {
     install: function(Vue) {
-            Vue.component('selectMenu', selectMenu)
-        } //'Loading'这就是后面可以使用的组件的名字，install是默认的一个方法
+        Vue.component('selectMenu', myselectMenu)
+    }
 };
-export default selectmenu;
+export default selectMenu;

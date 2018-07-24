@@ -10,10 +10,10 @@
             <div class="demandBox">
                 <h3 class="Title">需求项管理</h3>
                 <Form ref="formValidate" class="formValidate">
-                   
+
                     <FormItem >
                         <Row>
-                            
+
                             <Col span="3" style="text-align: center">需求项名称</Col>
                             <Col span="4">
                                 <FormItem >
@@ -35,28 +35,28 @@
                             <Col span="3" style="text-align: center">
                                 <Button type="primary" icon="ios-search">查询</Button>
                             </Col>
-                            
+                           
                         </Row>
-                        <div class="formValidateMoreBtnBox">
+                         <div class="formValidateMoreBtnBox">
                             <Icon type="chevron-down" color="#ed3f14"></Icon>
                         </div>
                     </FormItem>
-                   
+
                 </Form>
 
                 <div class="tableBox">
                     <div class="tableBtnBox">
                         <Button type="success" @click="addItem2">添加需求项</Button>
-                     
+
                     </div>
                     <Table border :columns="columns" :data="itemData"></Table>
-                    
+
                     <div class="pageBox">
                         <Page :total="100" show-elevator></Page>
                         <p>显示第1到第5条记录，总共90条记录</p>
                     </div>
                 </div>
-                
+
             </div>
         </Card>
        <Modal ref="addPop" v-model="modaAdd2" title="添加需求" @on-ok="submitAdd2"  ok-text="提交" :loading="modal_add_loading2" visible="true">
@@ -64,9 +64,9 @@
                 <FormItem label="项目名称" >
                     <Input v-model="formItem.name" placeholder="请输入项目名称"></Input>
                 </FormItem>
-               
+
             </Form>
-        </Modal> 
+        </Modal>
 
 
       <ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  />
@@ -78,7 +78,7 @@
 </template>
 <script>
 import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
-import selectMenu from "@/components/selectMenu/selectMenu";
+
 export default {
     name: 'demand',
     data () {
@@ -124,7 +124,7 @@ export default {
                     align: 'center',
                     width: 140,
                 },
-               
+
                 {
                     title: '操作产品待办事项',
                     key: 'action',
@@ -160,7 +160,7 @@ export default {
                                     }
                                 }
                             }, '查看'),
-                           
+
                         ]);
                     }
                 }
@@ -170,21 +170,21 @@ export default {
                     name: '项目名称1',
                     num: 18,
                     percent: '10%',
-                   
+
                 },
                 {
                     name: 'Jim Green',
                     num: 24,
                     percent: '10%',
-                   
+
                 },
                 {
                     name: 'Joe Black',
                     num: 30,
                     percent: '10%',
-                   
+
                 },
-               
+
             ]
         }
     },
@@ -223,7 +223,7 @@ export default {
                 this.$Message.info('成功');
                 this.formItemReset2();
             },1000)
-            
+
         },
         linkFn (index) {
             this.$router.push('/baseinfo')
@@ -242,8 +242,8 @@ export default {
         }
     },
     components: {
-        ADDorEDITpop,
-        selectMenu,
+        ADDorEDITpop
+
     },
 }
 </script>
@@ -282,3 +282,4 @@ export default {
 </style>
 
 
+>>>>>>> 3a9c8b48b77372d601a379367a1f5d8b2575e4a2

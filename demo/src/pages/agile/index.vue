@@ -10,10 +10,8 @@
             <div class="aglieBox">
             	<h3 class="Title">敏捷项目列表</h3>
             	<Form ref="formValidate" class="formValidate">
-			       
 			        <FormItem >
 			            <Row>
-			            	
 			            	<Col span="2" style="text-align: center">项目名称</Col>
 			                <Col span="4">
 			                    <FormItem >
@@ -37,10 +35,11 @@
 			            	</Col>
 			            	<Col span="3" style="text-align:left"></Col>
 			            </Row>
+                        <div class="formValidateMoreBtnBox">
+                            <Icon type="chevron-down" color="#ed3f14"></Icon>
+                        </div>
 			        </FormItem>
-			       
 			    </Form>
-
 				<div class="tableBox">
 					<div class="tableBtnBox">
 						<Button type="success" @click="addItemFn">添加</Button>
@@ -355,8 +354,11 @@ export default {
 	margin:0 auto;
 	width: 80%;
 	margin-left: 0;
-
+    position: relative;
+   
 }
+
+
 
 
 .aglieBox{

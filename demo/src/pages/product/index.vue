@@ -58,6 +58,9 @@
 								<Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
 							</Col>
 						</Row>
+						<div class="formValidateMoreBtnBox">
+                            <Icon type="chevron-down" color="#ed3f14"></Icon>
+                        </div>
 			        </FormItem>
 			    </Form>
 			    <div class="tableBox">

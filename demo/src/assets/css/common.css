@@ -232,3 +232,20 @@ h3.Title:before {
     text-align: center;
     line-height: 34px;
 }
+
+.formValidateMoreBtnBox {
+    text-align: center;
+    height: 16px;
+    background: #e9eaec;
+    position: relative;
+    width: 10%;
+    margin: 0 auto;
+    cursor:pointer;
+    border-top:10px solid red; 
+}
+.formValidateMoreBtnBox .ivu-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}

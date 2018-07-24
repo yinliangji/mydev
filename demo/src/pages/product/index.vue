@@ -515,7 +515,13 @@ export default {
 	},
 	methods:{
 		tableDataAddFn(Data){
-			this.tableData.push(Data);
+			alert(this.isAdd)
+			if(this.isAdd){
+				this.tableData.push(Data);
+			}else{
+				alert(JSON.stringify(Data))
+			}
+			
 			this.$Message.info('成功');
 		},
 		addItem(){
@@ -1143,8 +1149,13 @@ export default {
 	},
 	methods:{
 		tableDataAddFn(Data){
-			this.tableData.push(Data);
-			this.$Message.info('成功');
+			if(this.isAdd){
+                this.tableData.push(Data);
+                this.$Message.info('成功');
+            }else{
+                alert(JSON.stringify(Data))
+            }
+			
 		},
 		addItem(){
 			console.log("this.isShowAddPop",this.isShowAddPop)
@@ -1168,7 +1179,7 @@ export default {
         },
 		linkFn (index) {
             //alert(index)
-            this.$router.push('/baseinfo')
+            this.$router.push('/product/baseinfo')
         },
         show (index) {
             this.$Modal.info({

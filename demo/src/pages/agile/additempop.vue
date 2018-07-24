@@ -135,7 +135,12 @@ export default {
         },
     },
 
-
+    beforeUpdate(){
+        console.log("beforeUpdate-------",this.editTableData)
+    },
+    updated(){
+        console.log("updated-------",this.editTableData)
+    },
 
 
 
@@ -227,6 +232,7 @@ export default {
             modaAdd: false,
             ADDorEDIT:true,
             modal_add_loading: this.addLoading,
+            editTableData:false,
         }
     },
     mounted(){
@@ -267,6 +273,7 @@ export default {
             this.formValidate.name = "";
             this.resetData(); //this.formValidate.date = [];
             this.formValidate.desc = "";
+            this.editTableData = false;
         },
         submitAddData(){
             let tempData = {
@@ -287,9 +294,10 @@ export default {
             // 
           
             setTimeout(() => {
-                if(this.ADDorEDIT){
-                    this.$emit("tableDataAdd",tempData)
-                }
+                // if(this.ADDorEDIT){
+                //     this.$emit("tableDataAdd",tempData)
+                // }
+                this.$emit("tableDataAdd",tempData);
                 this.modaAdd = false;
                 this.formItemReset();
                 this.$refs.formValidate.resetFields();

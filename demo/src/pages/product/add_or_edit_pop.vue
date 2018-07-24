@@ -288,9 +288,10 @@ export default {
                 icon: require("@/assets/images/user_02.png"),
             }
             setTimeout(() => {
-                if(this.ADDorEDIT){
-                    this.$emit("tableDataAdd",tempData)
-                }
+                // if(this.ADDorEDIT){
+                //     this.$emit("tableDataAdd",tempData)
+                // }
+                this.$emit("tableDataAdd",tempData)
                 this.modaAdd = false;
                 this.formItemReset();
                 this.$refs.formValidate.resetFields();

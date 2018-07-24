@@ -1,29 +1,52 @@
 <template>
-    <Modal ref="addPop" v-model="modaAdd" :title="ADDorEDIT?'添加':'编辑'" @on-ok="submitAdd" @on-cancel="cancel" ok-text="提交" :loading="modal_add_loading" >
+    <Modal ref="addPop" v-model="modaAdd" :title="ADDorEDIT?'添加':'编辑'" @on-ok="submitAdd" @on-cancel="cancel" ok-text="提交" :loading="modal_add_loading" width="600px">
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140">
+
+
+
+
+
+
+
+
+
             <FormItem label="产品待办事项名称" prop="name">
                 <Input v-model="formValidate.name" placeholder="请填写产品待办事项名称"></Input>
             </FormItem>
           
-            <FormItem label="事项类型" prop="style">
-                <Select v-model="formValidate.style" placeholder="请选择事项类型">
-                    <Option value="产品需求">产品需求</Option>
-                    <Option value="事项类型1">事项类型1</Option>
-                    <Option value="事项类型2">事项类型2</Option>
-                </Select>
-            </FormItem>
-
-            <FormItem label="负责人" prop="person">
-                <Select v-model="formValidate.person" placeholder="请选择负责人">
-                    <Option value="谢呗5">谢呗5</Option>
-                    <Option value="谢呗6">谢呗6</Option>
-                    <Option value="谢呗7">谢呗7</Option>
-                </Select>
-            </FormItem>
-
-
             
+
+
+            <FormItem label="业务模块" prop="business">
+                <Select v-model="formValidate.business" multiple >
+                    <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+            </FormItem>
+
+
            
+
+
+            <Row>
+                <Col span="12">
+                   <FormItem label="事项类型" prop="style">
+                        <Select v-model="formValidate.style" placeholder="请选择事项类型">
+                            <Option value="产品需求">产品需求</Option>
+                            <Option value="事项类型1">事项类型1</Option>
+                            <Option value="事项类型2">事项类型2</Option>
+                        </Select>
+                    </FormItem>
+                </Col>
+                <Col span="12">
+                     <FormItem label="负责人" prop="person">
+                        <Select v-model="formValidate.person" placeholder="请选择负责人">
+                            <Option value="谢呗5">谢呗5</Option>
+                            <Option value="谢呗6">谢呗6</Option>
+                            <Option value="谢呗7">谢呗7</Option>
+                        </Select>
+                    </FormItem>
+                </Col>
+            </Row>  
            
             <FormItem label="状态" prop="status">
                 <RadioGroup v-model="formValidate.status">
@@ -34,35 +57,36 @@
                 </RadioGroup>
             </FormItem>
 
-
-            <FormItem label="所属迭代" prop="iteration">
-                <Select v-model="formValidate.iteration" placeholder="请选所属迭代">
-                    <Option value="迭代1">迭代1</Option>
-                    <Option value="迭代2">迭代2</Option>
-                    <Option value="迭代3">迭代3</Option>
-                </Select>
-            </FormItem>
-
-
-
             <FormItem label="优先级" prop="grade">
                 <RadioGroup v-model="formValidate.grade">
-                    <Radio label="1">1</Radio>
-                    <Radio label="2">2</Radio>
-                    <Radio label="3">3</Radio>
-                    <Radio label="4">4</Radio>
+                    <Radio label="1">高</Radio>
+                    <Radio label="2">中</Radio>
+                    <Radio label="3">低</Radio>
+                   
                 </RadioGroup>
             </FormItem>
 
-            
-            <FormItem label="工时(预计)" prop="manhour">
-                <Input v-model="formValidate.manhour" placeholder="请填写工时(预计)" number></Input>
-            </FormItem>
+            <Row>
+                <Col span="12">
+                    <FormItem label="所属迭代" prop="iteration">
+                        <Select v-model="formValidate.iteration" placeholder="请选所属迭代">
+                            <Option value="迭代1">迭代1</Option>
+                            <Option value="迭代2">迭代2</Option>
+                            <Option value="迭代3">迭代3</Option>
+                        </Select>
+                    </FormItem>
+                </Col>
+                <Col span="12">
+                     <FormItem label="工时(预计)" prop="manhour">
+                        <Input v-model="formValidate.manhour" placeholder="请填写工时(预计)" number style="width: 70px"></Input> 小时
+                    </FormItem>
+                </Col>
+            </Row>
 
 
-            <FormItem label="关联任务(全部)" prop="mission">
+          <!--   <FormItem label="关联任务(全部)" prop="mission">
                 <Input v-model="formValidate.mission" placeholder="请填写关联任务(全部)" number></Input>
-            </FormItem>
+            </FormItem> -->
 
 
         </Form>
@@ -146,11 +170,12 @@ export default {
                 name: '',
                 style:"",
                 person:"",
-                status:"",
+                status:"未开始",
                 iteration:"",
-                grade:"",
+                grade:"3",
                 manhour:"",
                 mission:"",
+                business:[],
 
 
                 mail: '',
@@ -161,6 +186,21 @@ export default {
                 time: '',
                 desc: ''
             },
+            businessList: [
+                {
+                    value: 'New York',
+                    label: '业务模块1'
+                },
+                {
+                    value: 'London',
+                    label: '业务模块2'
+                },
+                {
+                    value: 'Sydney',
+                    label: '业务模块3'
+                },
+               
+            ],
             ruleValidate: {
                 name: [
                     { required: true, message: 'The name cannot be empty', trigger: 'blur' }
@@ -178,7 +218,7 @@ export default {
                 ],
                 
                 iteration: [
-                    { required: true, message: 'Please select the city', trigger: 'change' }
+                    { required: false, message: 'Please select the city', trigger: 'change' }
                 ],
 
                 grade: [

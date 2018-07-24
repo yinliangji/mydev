@@ -104,16 +104,15 @@
 			    </div>
 			</div>
 		</Card>
-
-
 		<ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  />
-
-
 	</div>
 </template>
 <script>
 import kanbanboard from "@/components/kanbanboard";
 import ADDorEDITpop from "./add_or_edit_pop";
+
+
+
 
 export default {
 	data() {
@@ -360,7 +359,8 @@ export default {
 
                                 //domProps:{href:"###"},
                             },
-                            params.row.priority
+                            //
+                            ((N) => {if (N == 1) {return "高"}else if (N == 2) {return "中"}else if (N == 3) {return "低"}else {return "无"}})(params.row.priority)
                         )
                     }
 

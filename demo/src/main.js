@@ -27,6 +27,9 @@ import '@/assets/css/normalize.css'
 import '@/assets/css/reset.css'
 import '@/assets/css/common.css'
 
+
+
+
 /* eslint-disable no-new */
 new Vue({
     el: '#app',

@@ -5,11 +5,6 @@
                 <Input v-model="formValidate.name" placeholder="请填写项目名称"></Input>
             </FormItem>
 
-            <FormItem label="技术模块" prop="technology">
-                <Select v-model="formValidate.technology" multiple >
-                    <Option v-for="item in technologyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
-            </FormItem>
 
             <FormItem label="业务模块" prop="business">
                 <Select v-model="formValidate.business" multiple >
@@ -17,40 +12,62 @@
                 </Select>
             </FormItem>
 
+            <FormItem label="技术模块" prop="technology">
+                <Select v-model="formValidate.technology" multiple >
+                    <Option v-for="item in technologyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+            </FormItem>
+
+            
+            <Row>
+                <Col span="12">
+                    <FormItem label="项目经理" prop="manager">
+                        <Select v-model="formValidate.manager" placeholder="请选择项目经理">
+                            <Option value="经理1">经理1</Option>
+                            <Option value="经理2">经理2</Option>
+                            <Option value="经理3">经理3</Option>
+                        </Select>
+                    </FormItem>       
+                </Col>
+                <Col span="12">
+                    <FormItem label="开发人员" prop="developer">
+                        <Select v-model="formValidate.developer" placeholder="请选择开发人员">
+                            <Option value="开发人员1">开发人员1</Option>
+                            <Option value="开发人员2">开发人员2</Option>
+                            <Option value="开发人员3">开发人员3</Option>
+                        </Select>
+                    </FormItem>
+                </Col>
+            </Row>
+                        
+
+            <Row>
+                <Col span="12">
+                    <FormItem label="测试人员" prop="tester">
+                        <Select v-model="formValidate.tester" placeholder="请选择测试人员">
+                            <Option value="测试人员1">测试人员1</Option>
+                            <Option value="测试人员2">测试人员2</Option>
+                            <Option value="测试人员3">测试人员13</Option>
+                        </Select>
+                    </FormItem>       
+                </Col>
+                <Col span="12">
+                    <FormItem label="维护人员" prop="maintainer">
+                        <Select v-model="formValidate.maintainer" placeholder="请选择维护人员">
+                            <Option value="维护人员1">测试人员1</Option>
+                            <Option value="维护人员2">测试人员2</Option>
+                            <Option value="维护人员3">测试人员13</Option>
+                        </Select>
+                    </FormItem>
+                </Col>
+            </Row>
+
+
             
 
-            <FormItem label="项目经理" prop="manager">
-                <Select v-model="formValidate.manager" placeholder="请选择项目经理">
-                    <Option value="经理1">经理1</Option>
-                    <Option value="经理2">经理2</Option>
-                    <Option value="经理3">经理3</Option>
-                </Select>
-            </FormItem>
+            
 
 
-            <FormItem label="开发人员" prop="developer">
-                <Select v-model="formValidate.developer" placeholder="请选择开发人员">
-                    <Option value="开发人员1">开发人员1</Option>
-                    <Option value="开发人员2">开发人员2</Option>
-                    <Option value="开发人员3">开发人员3</Option>
-                </Select>
-            </FormItem>
-
-            <FormItem label="测试人员" prop="tester">
-                <Select v-model="formValidate.tester" placeholder="请选择测试人员">
-                    <Option value="测试人员1">测试人员1</Option>
-                    <Option value="测试人员2">测试人员2</Option>
-                    <Option value="测试人员3">测试人员13</Option>
-                </Select>
-            </FormItem>
-
-            <FormItem label="维护人员" prop="maintainer">
-                <Select v-model="formValidate.maintainer" placeholder="请选择维护人员">
-                    <Option value="维护人员1">测试人员1</Option>
-                    <Option value="维护人员2">测试人员2</Option>
-                    <Option value="维护人员3">测试人员13</Option>
-                </Select>
-            </FormItem>
 
 
 

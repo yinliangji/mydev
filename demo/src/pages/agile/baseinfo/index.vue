@@ -13,11 +13,11 @@
             		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 					  <tbody>
 						<tr>
-						  <th>项目编号</th>
+						  <th width="11%">项目编号</th>
 						  <td>prj0001</td>
-						  <th>项目名称</th>
+						  <th width="11%">项目名称</th>
 						  <td>TPM敏捷项目管理系统</td>
-						  <th>项目经理</th>
+						  <th width="11%">项目经理</th>
 						  <td>李卓</td>
 						</tr>
 						<tr>

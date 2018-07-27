@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Home from '../pages/home'
+// import Home from '../pages/home'
 import Store from '@/vuex/store'
 // import iterationTo from '@/pages/iteration/iteration'
 Vue.use(Router)
@@ -80,6 +80,16 @@ const router = new Router({
             },
         },
         {
+            path: '/development/detail',
+            name: 'developmentDetail',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/development/detail"], resolve)
+                }
+
+            },
+        },
+        {
             path: '/defect',
             name: 'defect',
             components: {
@@ -114,15 +124,6 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/iteration/iteration"], resolve)
-                }
-            },
-        },
-        {
-            path: '/iteration/iteration2',
-            name: 'iterationTo',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/iteration/iteration2"], resolve)
                 }
             },
         },

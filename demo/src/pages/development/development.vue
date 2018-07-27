@@ -94,7 +94,22 @@ export default {
                 },
                 {
                     title: "任务名称",
-                    key: "taskName"
+                    key: "taskName",
+                    render: (h, params) => {
+                        return h(
+                            'a',
+                            {
+                                style:{color:'#2d8cf0'},
+                                //domProps:{href:"###"},
+                                on: {
+                                    click: () => {
+                                        this.linkFn(params.row.taskName)
+                                    }
+                                }
+                            },
+                            params.row.taskName
+                        );
+                    }
                 },
 
                 {
@@ -247,7 +262,16 @@ export default {
         fillDel(i) {
             //alert(i);
             this.defaultList.splice(i, 1);
-        }
+        },
+        linkFn (name) {
+            //alert(name)
+            this.$router.push({
+              name:"developmentDetail",
+              query:{
+                titleName:name
+              }
+            })
+        },
 
     },
     computed: {

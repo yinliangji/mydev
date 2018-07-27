@@ -142,11 +142,14 @@ h3.Title:before {
     float: left;
     width: 100px;
     text-align: right;
+    font-weight: bold;
 }
 
 .addTaskTableCon {
     float: left;
-    padding-left: 40px;
+    padding-left: 6px;
+    width: 200px;
+    border-bottom: 1px solid #ccc;
 }
 
 .ivu-modal {

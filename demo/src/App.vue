@@ -36,8 +36,8 @@ export default {
     }
   },
   mounted: function(){
-    let path = this.$router;
-    console.log(process.env.NODE_ENV,process.env.BASE_URL,path)
+    let router = this.$router;
+    console.log("process.env.NODE_ENV-->",process.env.NODE_ENV,"<-- process.env.BASE_URL-->",process.env.BASE_URL,"<--",router)
   },
   watch: {
   },

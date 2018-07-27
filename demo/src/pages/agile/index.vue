@@ -37,6 +37,9 @@
 			            	</Col>
 			            	<Col span="3" style="text-align:left"></Col>
 			            </Row>
+                        <div class="formValidateMoreBtnBox">
+                            <Icon type="chevron-down" color="#ed3f14"></Icon>
+                        </div>
 			        </FormItem>
 
 			    </Form>
@@ -49,8 +52,8 @@
 					</div>
 			    	<Table border  ref="selection" :columns="columns" :data="tableData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
-                    <Button @click="handleSelectAll(true)" v-if="allSelectTableRome">设置全选</Button>
-                    <Button @click="handleSelectAll(false)" v-else>全部取消</Button>
+                    <!-- <Button @click="handleSelectAll(true)" v-if="!allSelectTableRome">设置全选</Button>
+                    <Button @click="handleSelectAll(false)" v-else>全部取消</Button> -->
 
 			    	<div class="pageBox">
 			    		<Page :total="100" show-elevator></Page>
@@ -90,7 +93,7 @@ export default {
     },
     data () {
         return {
-            allSelectTableRome:true,
+            //allSelectTableRome:false,
             isShowAddPop:false,
             isAdd:true,
             tableDataRow:false,
@@ -104,7 +107,7 @@ export default {
                     width: 60,
                     align: 'center'
                 },
-                 {
+                {
                     title: '项目编号',
                     key: 'num',
                     width: 85,
@@ -243,8 +246,13 @@ export default {
             this.$refs.selection.selectAll(false);
         },
         tableDataAddFn(Data){
-            this.tableData.push(Data);
-            this.$Message.info('成功');
+            if(this.isAdd){
+                this.tableData.push(Data);
+                this.$Message.info('成功');
+            }else{
+                alert(JSON.stringify(Data))
+            }
+            
         },
         addItemFn(){
             this.isShowAddPop = true;
@@ -264,20 +272,20 @@ export default {
             }
             this.isShowAddPop = true;
             this.isAdd = false;
+            this.tableDataRow = this.actionArr;
         },
         del () {
             this.modal_loading = true;
             setTimeout(() => {
-                for(let i=0;i<this.itemData.length;i++){
+                for(let i=0;i<this.tableData.length;i++){
                     for(let j=0;j<this.actionArr.length;j++){
-                        if(JSON.stringify(this.itemData[i]).indexOf(JSON.stringify(this.actionArr[j])) != -1){
+                        if(JSON.stringify(this.tableData[i]).indexOf(JSON.stringify(this.actionArr[j])) != -1){
                             console.log(i)
-                            this.itemData.splice(i, 1);//删除
+                            this.tableData.splice(i, 1);//删除
                         }
                     }
                 }
                 this.actionArr = [];
-                //
                 this.modal_loading = false;
                 this.modaDelete = false;
                 this.$Message.config({
@@ -305,21 +313,24 @@ export default {
         onSelectionChangeFn(S){
             console.log("<===*onSelectionChangeFn*===Sel->",S,"<-Sel===*onSelectionChangeFn*===>")
             this.actionArr = S;
+            // if(!S.length){
+            //     this.allSelectTableRome = false;
+            // }else{
+            //     this.allSelectTableRome = true;
+            // }
 
         },
         onSelectAllFn(S){
-            //this.allSelectTableRome = false;
-            console.log("<===*onSelectAllFn*===Sel->",S,"<-Sel===*onSelectAllFn*===>")
+            console.log("<===*onSelectAllFn*===Sel 全选->",S,"<-Sel===*onSelectAllFn*===>")
         },
         onSelectFn(S,R){
             console.log("<===*onSelectFn*===Sel->",S,"<-Sel======ROW->",R,"<-ROW===*onSelectFn*===>")
         },
     	handleSelectAll (status) {
             this.$refs.selection.selectAll(status);
-            this.allSelectTableRome = !this.allSelectTableRome;
         },
         linkFn (index) {
-            this.$router.push('/baseinfo')
+            this.$router.push('/agile/baseinfo')
         },
         goDemandFn (index) {
             this.$router.push('/demand')
@@ -383,5 +394,6 @@ export default {
 	font-size:12px;
 }
 </style>
+
 
 

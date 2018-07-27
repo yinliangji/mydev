@@ -58,6 +58,9 @@
 								<Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
 							</Col>
 						</Row>
+						<div class="formValidateMoreBtnBox">
+                            <Icon type="chevron-down" color="#ed3f14"></Icon>
+                        </div>
 			        </FormItem>
 			    </Form>
 			    <div class="tableBox">
@@ -101,16 +104,15 @@
 			    </div>
 			</div>
 		</Card>
-
-
 		<ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  />
-
-
 	</div>
 </template>
 <script>
 import kanbanboard from "@/components/kanbanboard";
 import ADDorEDITpop from "./add_or_edit_pop";
+
+
+
 
 export default {
 	data() {
@@ -357,7 +359,8 @@ export default {
 
                                 //domProps:{href:"###"},
                             },
-                            params.row.priority
+                            //
+                            ((N) => {if (N == 1) {return "高"}else if (N == 2) {return "中"}else if (N == 3) {return "低"}else {return "无"}})(params.row.priority)
                         )
                     }
 
@@ -513,8 +516,13 @@ export default {
 	},
 	methods:{
 		tableDataAddFn(Data){
-			this.tableData.push(Data);
-			this.$Message.info('成功');
+			if(this.isAdd){
+                this.tableData.push(Data);
+                this.$Message.info('成功');
+            }else{
+                alert(JSON.stringify(Data))
+            }
+			
 		},
 		addItem(){
 			console.log("this.isShowAddPop",this.isShowAddPop)
@@ -538,7 +546,7 @@ export default {
         },
 		linkFn (index) {
             //alert(index)
-            this.$router.push('/baseinfo')
+            this.$router.push('/product/baseinfo')
         },
         show (index) {
             this.$Modal.info({
@@ -622,3 +630,4 @@ span.low {
 	cursor: pointer;
 }
 </style>
+

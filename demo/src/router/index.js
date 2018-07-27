@@ -1,24 +1,20 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-// import Home from '../pages/home'
+import Home from '../pages/home'
 import Store from '@/vuex/store'
-// import iterationTo from '@/pages/iteration/iteration'
 Vue.use(Router)
-
-
 const router = new Router({
     mode: 'hash', //'history',
     routes: [{
             path: '/',
-            redirect: '/home',
+            redirect: '/agile',
         },
         {
             path: '/home',
-            name: 'agile',
+            name: 'Home',
             components: {
                 Cont: resolve => {
-                    require(["../pages/agile/"], resolve)
+                    require(["../pages/home"], resolve)
                 }
             },
         },
@@ -33,7 +29,7 @@ const router = new Router({
         },
         {
             path: '/agile',
-            name: 'agile',
+            name: 'Agile',
             components: {
                 Cont: resolve => {
                     require(["../pages/agile/"], resolve)
@@ -42,112 +38,7 @@ const router = new Router({
         },
         {
             path: '/demand',
-            name: 'demand',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/demand/"], resolve)
-                }
-            },
-        },
-        {
-            path: '/product',
-            name: 'product',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/product/"], resolve)
-                }
-
-            },
-        },
-        {
-            path: '/iteration',
-            name: 'iteration',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/iteration/"], resolve)
-                }
-
-            },
-        },
-        {
-            path: '/development',
-            name: 'development',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/development/"], resolve)
-                }
-
-            },
-        },
-        {
-            path: '/development/detail',
-            name: 'developmentDetail',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/development/detail"], resolve)
-                }
-
-            },
-        },
-        {
-            path: '/defect',
-            name: 'defect',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/defect/"], resolve)
-                }
-
-            },
-        },
-        {
-            path: '/overView',
-            name: 'overView',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/overView/"], resolve)
-                }
-
-            },
-        },
-        {
-            path: '/baseinfo',
-            name: 'baseinfo',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/baseinfo/"], resolve)
-                }
-            },
-        },
-        {
-            path: '/iteration/iteration',
-            name: 'iterationTo',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/iteration/iteration"], resolve)
-                }
-            },
-        },
-        {
-            path: '/home/list',
-            name: 'List',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/home/list/"], resolve)
-                }
-            },
-        },
-        {
-            path: '/agile',
-            name: 'agile',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/agile/"], resolve)
-                }
-            },
-        },
-        {
-            path: '/demand',
-            name: 'demand',
+            name: 'Demand',
             components: {
                 Cont: resolve => {
                     require(["../pages/demand/"], resolve)
@@ -156,7 +47,7 @@ const router = new Router({
         },
         {
             path: '/demand/list',
-            name: 'demand_list',
+            name: 'Demand_list',
             components: {
                 Cont: resolve => {
                     require(["../pages/demand/list/"], resolve)
@@ -165,7 +56,7 @@ const router = new Router({
         },
         {
             path: '/product',
-            name: 'product',
+            name: 'Product',
             components: {
                 Cont: resolve => {
                     require(["../pages/product/"], resolve)
@@ -174,8 +65,17 @@ const router = new Router({
             },
         },
         {
+            path: '/product/baseinfo',
+            name: 'Productbaseinfo',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/product/baseinfo/"], resolve)
+                }
+            },
+        },
+        {
             path: '/iteration',
-            name: 'iteration',
+            name: 'Iteration',
             components: {
                 Cont: resolve => {
                     require(["../pages/iteration/"], resolve)
@@ -185,7 +85,7 @@ const router = new Router({
         },
         {
             path: '/development',
-            name: 'development',
+            name: 'Development',
             components: {
                 Cont: resolve => {
                     require(["../pages/development/"], resolve)
@@ -195,7 +95,7 @@ const router = new Router({
         },
         {
             path: '/defect',
-            name: 'defect',
+            name: 'Defect',
             components: {
                 Cont: resolve => {
                     require(["../pages/defect/"], resolve)
@@ -205,7 +105,7 @@ const router = new Router({
         },
         {
             path: '/overView',
-            name: 'overView',
+            name: 'OverView',
             components: {
                 Cont: resolve => {
                     require(["../pages/overView/"], resolve)
@@ -214,14 +114,26 @@ const router = new Router({
             },
         },
         {
-            path: '/baseinfo',
-            name: 'baseinfo',
+            path: '/agile/baseinfo',
+            name: 'Agilebaseinfo',
             components: {
                 Cont: resolve => {
-                    require(["../pages/baseinfo/"], resolve)
+                    require(["../pages/agile/baseinfo/"], resolve)
                 }
             },
         },
+        {
+            path: '/iteration/iteration',
+            name: 'IterationTo',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/iteration/iteration"], resolve)
+                }
+            },
+        },
+
+        //以后删除开始
+
         {
             path: '/test',
             name: 'test',
@@ -231,8 +143,6 @@ const router = new Router({
                 }
             },
         },
-
-
         {
             path: '/page2',
             name: 'page2',
@@ -242,7 +152,7 @@ const router = new Router({
                 }
             },
         },
-
+        //以后删除结束
     ]
 })
 

@@ -2,48 +2,50 @@
 	<div class="pageContent">
 		<Breadcrumb :style="{margin: '16px 0'}">
             <BreadcrumbItem>首页</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目管理</BreadcrumbItem>
-            <BreadcrumbItem>项目基本信息</BreadcrumbItem>
+            <BreadcrumbItem>产品待办列表</BreadcrumbItem>
+            <BreadcrumbItem>产品待办基本信息</BreadcrumbItem>
         </Breadcrumb>
         <Card>
         	<div class="baseInfoBox">
-            	<h3 class="Title">项目基本信息</h3>
+            	<h3 class="Title">产品待办基本信息</h3>
             	<div class="tableBox">
             		<!-- -->
             		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 					  <tbody>
 						<tr>
-						  <th>项目编号</th>
-						  <td>prj0001</td>
-						  <th>项目名称</th>
-						  <td>TPM敏捷项目管理系统</td>
-						  <th>项目经理</th>
-						  <td>李卓</td>
+						  <th width="13%">事项编号</th>
+						  <td width="20%">159678</td>
+						  <th width="13%">产品待办事项名称</th>
+						  <td width="20%" >TPM敏捷项目管理系统</td>
+						  <th width="13%">事项类型</th>
+						  <td>产品需求</td>
 						</tr>
+
 						<tr>
-						  <th>项目创建时间</th>
-						  <td>2017-08-01</td>
-						  <th>开始时间</th>
-						  <td>2017-08-01</td>
-						  <th>结束时间</th>
-						  <td>2017-12-31</td>
+						  <th>负责人</th>
+						  <td>谢呗</td>
+						  <th>状态</th>
+						  <td>已完成</td>
+						  <th>所属迭代</th>
+						  <td>迭代1</td>
 						</tr>
+
+
 						<tr>
-						  <th>开发人员</th>
-						  <td>李卓、谢蓓、王昕亮</td>
-						  <th>测试人员</th>
-						  <td>李卓  谢蓓 王昕亮</td>
-						  <th>维护人员</th>
-						  <td>李卓、赵筝、谢蓓、王昕亮、邢磊</td>
+						  <th>优先级</th>
+						  <td>高</td>
+						  <th>工时<br />(实际|预计)</th>
+						  <td>20 | 10	</td>
+						  <th>关联任务<br />(已完成|全部)</th>
+						  <td>5 | 10</td>
 						</tr>
+						
+						
 						<tr>
-						  <th>项目描述</th>
+						  <th>详情</th>
 						  <td colspan="5">TPM敏捷项目管理系统</td>
 						</tr>
-						<tr>
-						  <th>项目目标</th>
-						  <td colspan="5">支持备课敏捷开发模块的落地</td>
-						</tr>
+						
 					  </tbody>
 					</table>
             		<!-- -->

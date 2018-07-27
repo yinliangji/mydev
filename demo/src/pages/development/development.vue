@@ -266,7 +266,7 @@ export default {
         linkFn (name) {
             //alert(name)
             this.$router.push({
-              name:"developmentDetail",
+              path:"/development/detail",
               query:{
                 titleName:name
               }

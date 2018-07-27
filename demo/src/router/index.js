@@ -94,6 +94,15 @@ const router = new Router({
             },
         },
         {
+            path: '/development/detail',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/development/detail"], resolve)
+                }
+
+            },
+        },
+        {
             path: '/defect',
             name: 'Defect',
             components: {

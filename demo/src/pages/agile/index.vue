@@ -331,7 +331,7 @@ export default {
         },
         linkFn (index,Obj) {
             console.log(Obj)
-            this.$router.push('/agile/baseinfo')
+            this.$router.push('/agile/detail')
         },
         goDemandFn (index) {
             this.$router.push('/demand')

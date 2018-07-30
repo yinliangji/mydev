@@ -7,7 +7,7 @@
 			<span>需求项管理</span>
 		</MenuItem> -->
 		<MenuItem name="1-8">
-			<router-link to="/demand" />
+			<router-link to="/agile/detail" />
 			<Icon type="ios-photos-outline"></Icon>
 			<span>项目详情</span>
 		</MenuItem>
@@ -37,7 +37,7 @@
 </template>
 <script>
 export default {
-	name: 'sider_1',
+	name: 'sider_2',
 	data(){
 		return{
 

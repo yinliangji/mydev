@@ -40,18 +40,30 @@ const router = new Router({
             },
         },
         //
-        // {
-        //     path: '/agile/detail',
-        //     name: 'AgileDetail',
-        //     components: {
-        //         Cont: resolve => {
-        //             require(["../pages/agile/"], resolve)
-        //         },
-        //         Aside: resolve => {
-        //             require(["../layout/sider/sider_1"], resolve)
-        //         }
-        //     },
-        // },
+        {
+            path: '/agile/detail',
+            name: 'AgileDetail',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/agile/detail/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
+        {
+            path: '/agile/baseinfo',
+            name: 'Agilebaseinfo',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/agile/baseinfo/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
         //
         {
             path: '/demand',
@@ -166,18 +178,7 @@ const router = new Router({
 
             },
         },
-        {
-            path: '/agile/baseinfo',
-            name: 'Agilebaseinfo',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/agile/baseinfo/"], resolve)
-                },
-                Aside: resolve => {
-                    require(["../layout/sider/sider_2"], resolve)
-                }
-            },
-        },
+       
         {
             path: '/iteration/iteration',
             name: 'IterationTo',

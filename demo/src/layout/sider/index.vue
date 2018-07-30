@@ -20,6 +20,7 @@ export default {
 				development:["1","1-5"],
 				defect:["1","1-6"],
 				overView:["1","1-7"],
+				'agile/detail':["1","1-8"],
 
 			},
 			OpenNames:[],//["1"]
@@ -83,8 +84,12 @@ export default {
 			let page5 = "development";
 			let page6 = "defect";
 			let page7 = "overView";
+			let page8 = "agile/detail";
 
-			if(to.path.indexOf(home)!= -1){
+
+			if(to.path.indexOf(page8)!= -1){
+				this.side_menu(page8)
+			}else  if(to.path.indexOf(home)!= -1){
 				this.side_menu(home)
 			}else if(to.path.indexOf(page2)!= -1){
 				this.side_menu(page2)
@@ -106,78 +111,83 @@ export default {
 </script>
 <style lang="less">
 
-.siderMenu li a {
-	position:absolute;
-	left:0;
-	top: 0;
-	width: 100%;
-	height:100%;
-	z-index:10;
-}
-.siderMenu li>span{
-	padding-bottom: 1px;
-}
-
-
-
-.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu) {
-    color: white;
-}
 
 .siderBox {
-
   height:100%;
   overflow-y:auto;
   overflow-x:hidden;
-  background: #21488a;//
+  background: #21488a;
+  //
+  .siderMenu li a {
+		position:absolute;
+		left:0;
+		top: 0;
+		width: 100%;
+		height:100%;
+		z-index:10;
+	}
+	.siderMenu li>span{
+		padding-bottom: 1px;
+	}
 
-}
-.siderMenu {
-	background: transparent;
-}
-.layout-con{
-    height: 100%;
-    width: 100%;
-}
-.triggerBtn {
-  position:absolute;
-  right:0;
-  top:50%;
-  z-index: 901;
-  cursor: pointer;
 
-}
-.menu-icon{
-  transition: all .3s;
-}
-.rotate-icon{
-  transform: rotate(-180deg);
+
+	.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu) {
+	    color: white;
+	}
+
+
+	.siderMenu {
+		background: transparent;
+	}
+	.layout-con{
+	    height: 100%;
+	    width: 100%;
+	}
+	.triggerBtn {
+	  position:absolute;
+	  right:0;
+	  top:50%;
+	  z-index: 901;
+	  cursor: pointer;
+
+	}
+	.menu-icon{
+	  transition: all .3s;
+	}
+	.rotate-icon{
+	  transform: rotate(-180deg);
+	}
+
+	.menu-item span{
+	    display: inline-block;
+	    overflow: hidden;
+	    width: 85px;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	    vertical-align: bottom;
+	    transition: width .2s ease .2s;
+	}
+	.menu-item i{
+	    transform: translateX(0px);
+	    transition: font-size .2s ease, transform .2s ease;
+	    vertical-align: middle;
+	    font-size: 16px;
+	}
+	.collapsed-menu span{
+	    width: 0px;
+	    transition: width .2s ease;
+	}
+	.collapsed-menu i{
+	    transform: translateX(5px);
+	    transition: font-size .2s ease .2s, transform .2s ease .2s;
+	    vertical-align: middle;
+	    font-size: 22px;
+	}
+
+  
 }
 
-.menu-item span{
-    display: inline-block;
-    overflow: hidden;
-    width: 85px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    vertical-align: bottom;
-    transition: width .2s ease .2s;
-}
-.menu-item i{
-    transform: translateX(0px);
-    transition: font-size .2s ease, transform .2s ease;
-    vertical-align: middle;
-    font-size: 16px;
-}
-.collapsed-menu span{
-    width: 0px;
-    transition: width .2s ease;
-}
-.collapsed-menu i{
-    transform: translateX(5px);
-    transition: font-size .2s ease .2s, transform .2s ease .2s;
-    vertical-align: middle;
-    font-size: 22px;
-}
+
 
 </style>

@@ -33,15 +33,35 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/agile/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_1"], resolve)
                 }
             },
         },
+        //
+        // {
+        //     path: '/agile/detail',
+        //     name: 'AgileDetail',
+        //     components: {
+        //         Cont: resolve => {
+        //             require(["../pages/agile/"], resolve)
+        //         },
+        //         Aside: resolve => {
+        //             require(["../layout/sider/sider_1"], resolve)
+        //         }
+        //     },
+        // },
+        //
         {
             path: '/demand',
             name: 'Demand',
             components: {
                 Cont: resolve => {
                     require(["../pages/demand/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
             },
         },
@@ -51,6 +71,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/demand/list/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
             },
         },
@@ -60,6 +83,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/product/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
 
             },
@@ -70,6 +96,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/product/baseinfo/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
             },
         },
@@ -79,6 +108,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/iteration/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
 
             },
@@ -89,6 +121,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/development/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
 
             },
@@ -98,6 +133,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/development/detail"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
 
             },
@@ -108,6 +146,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/defect/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
 
             },
@@ -118,6 +159,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/overView/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
 
             },
@@ -128,6 +172,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/agile/baseinfo/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
             },
         },
@@ -137,6 +184,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/iteration/iteration"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
             },
         },
@@ -149,6 +199,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/test/test"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_all"], resolve)
                 }
             },
         },
@@ -158,6 +211,9 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/page2/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_all"], resolve)
                 }
             },
         },

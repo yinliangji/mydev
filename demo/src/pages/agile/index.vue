@@ -1,6 +1,6 @@
 <template>
 	<div class="pageContent">
-        <selectMenu></selectMenu>
+        <!-- <selectMenu></selectMenu> -->
 		<!-- <Breadcrumb :style="{margin: '16px 0'}">
             <BreadcrumbItem>首页</BreadcrumbItem>
             <BreadcrumbItem>敏捷项目管理</BreadcrumbItem>
@@ -125,7 +125,7 @@ export default {
                                 //domProps:{href:"###"},
                                 on: {
                                     click: () => {
-                                        this.linkFn(params.index)
+                                        this.linkFn(params.index,params)
                                     }
                                 }
                             },
@@ -329,7 +329,8 @@ export default {
     	handleSelectAll (status) {
             this.$refs.selection.selectAll(status);
         },
-        linkFn (index) {
+        linkFn (index,Obj) {
+            console.log(Obj)
             this.$router.push('/agile/baseinfo')
         },
         goDemandFn (index) {

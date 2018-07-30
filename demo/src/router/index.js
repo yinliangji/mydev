@@ -41,6 +41,18 @@ const router = new Router({
         },
         //
         {
+            path: '/agile/add',
+            name: 'AgileAdd',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/agile/add/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_1"], resolve)
+                }
+            },
+        },
+        {
             path: '/agile/detail',
             name: 'AgileDetail',
             components: {

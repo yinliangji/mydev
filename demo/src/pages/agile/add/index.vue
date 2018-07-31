@@ -1,28 +1,31 @@
 <template>
 	<div class="pageContent">
+        <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :Top="'5'" />
         <Card>
             <div class="aglieAddBox">
-                <h3 class="Title">项目基本信息</h3>
-
+                
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" class="fromBox">
-
+					<h3 class="Title">项目基本信息</h3>
                     <FormItem label="项目名称" prop="name">
                         <Input v-model="formValidate.name" placeholder="请填写项目名称"></Input>
                     </FormItem>
-
 
                     <!-- <FormItem label="设置时间" prop="date">
                         <DatePicker :value="formValidate.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择开始和结束日期" v-model="formValidate.date" split-panels  style="width: 300px"></DatePicker>
                     </FormItem> -->
 
-
-                    <FormItem label="开始时间" prop="startDate">
-                        <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期" style="width: 200px" :value="formValidate.startDate" v-model="formValidate.startDate"></DatePicker>
-                    </FormItem>
-
-                    <FormItem label="结束时间">
-                        <DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择结束日期" style="width: 200px" v-model="formValidate.endDate"></DatePicker>
-                    </FormItem>
+					<Row>
+                        <Col span="12">
+                            <FormItem label="开始时间" prop="startDate">
+                        		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"  :value="formValidate.startDate" v-model="formValidate.startDate"></DatePicker>
+                    		</FormItem>
+                        </Col>
+                        <Col span="12">
+                             <FormItem label="结束时间" prop="endDate">
+                        		<DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择结束日期" v-model="formValidate.endDate"></DatePicker>
+                    		</FormItem>
+                        </Col>
+                    </Row>
 
                   
 					<FormItem label="项目描述" prop="desc">
@@ -49,20 +52,34 @@
                             <Option v-for="item in technologyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </FormItem> -->
+					<h3 class="Title">成员信息</h3>
 
+					
+
+                    <Row>
+                        <Col span="12">
+							<FormItem label="总体组" prop="group">
+		                        <Select v-model="formValidate.group" placeholder="请选择总体组">
+		                            <Option value="总体组1">总体组1</Option>
+		                            <Option value="总体组2">总体组2</Option>
+		                            <Option value="总体组3">总体组3</Option>
+		                        </Select>
+		                    </FormItem> 
+                        </Col>
+                        <Col span="12">
+	                        <FormItem label="项目经理" prop="manager">
+		                        <Select v-model="formValidate.manager" placeholder="请选择项目经理">
+		                            <Option value="经理1">经理1</Option>
+		                            <Option value="经理2">经理2</Option>
+		                            <Option value="经理3">经理3</Option>
+		                        </Select>
+		                    </FormItem> 
+                        </Col>
+                    </Row>
                     
                     <Row>
                         <Col span="12">
-                            <FormItem label="项目经理" prop="manager">
-                                <Select v-model="formValidate.manager" placeholder="请选择项目经理">
-                                    <Option value="经理1">经理1</Option>
-                                    <Option value="经理2">经理2</Option>
-                                    <Option value="经理3">经理3</Option>
-                                </Select>
-                            </FormItem>       
-                        </Col>
-                        <Col span="12">
-                            <FormItem label="开发人员" prop="developer">
+							<FormItem label="开发人员" prop="developer">
                                 <Select v-model="formValidate.developer" placeholder="请选择开发人员">
                                     <Option value="开发人员1">开发人员1</Option>
                                     <Option value="开发人员2">开发人员2</Option>
@@ -70,10 +87,6 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                    </Row>
-                                
-
-                    <Row>
                         <Col span="12">
                             <FormItem label="测试人员" prop="tester">
                                 <Select v-model="formValidate.tester" placeholder="请选择测试人员">
@@ -81,7 +94,16 @@
                                     <Option value="测试人员2">测试人员2</Option>
                                     <Option value="测试人员3">测试人员13</Option>
                                 </Select>
-                            </FormItem>       
+                            </FormItem>
+                        </Col>
+                    </Row>
+                                
+
+                    <!-- 
+                    
+                    <Row>
+                        <Col span="12">
+                                   
                         </Col>
                         <Col span="12">
                             <FormItem label="维护人员" prop="maintainer">
@@ -92,31 +114,24 @@
                                 </Select>
                             </FormItem>
                         </Col>
-                    </Row>
-
-
-                   
-                    
-
-                    
-
-
-
+                    </Row> 
+                	-->
                     <FormItem>
-                    	<Button type="primary" @click="submitAdd">Submit</Button>
-                        <Button type="ghost" style="margin-left: 8px" @click="cancel">Cancel</Button>
+                    	<!-- <Button type="primary" @click="submitAdd">提交</Button> -->
+					<Button type="primary" :loading="modal_add_loading" @click="submitAdd">
+				        <span v-if="!modal_add_loading">提交</span>
+				        <span v-else>Loading...</span>
+				    </Button>
+                        <Button type="ghost" style="margin-left: 8px" @click="cancel">重填</Button>
                     </FormItem>
-
-
+                    
                 </Form>
-
-
-
             </div>
         </Card>   
     </div>
 </template>
 <script>
+import Store from '@/vuex/store'
 Date.prototype.Format = function (fmt) { // author: meizz
     var o = {
         "M+": this.getMonth() + 1, // 月份
@@ -155,28 +170,35 @@ export default {
         
     },
 
-    beforeUpdate(){
-        console.log("beforeUpdate-------",this.formValidate)
-    },
-    updated(){
-        console.log("updated-------",this.formValidate)
-    },
+    
     beforecreated(){
-        console.log("beforecreated-------",this.formValidate)
+        console.log("agileAdd--beforecreated-------",this.addtest)
     },
     created(){
-        console.log("created-------",this.formValidate)
+        console.log("agileAdd--created-------",this.addtest)
+    },
+    beforeUpdate(){
+        console.log("agileAdd--beforeUpdate-------",this.addtest)
+    },
+    updated(){
+        console.log("agileAdd--updated-------",this.addtest)
+        if(this.addtest){
+        	this.$router.push('/agile')
+        }
     },
 
+	computed: {
+        addtest() {
+            return this.$store.state["ADD_DATA_TEST"].data
+        },
+    },
 
     data () {
         let _this = this;
         return {
             options3: {
                 disabledDate (date) {
-                    
                     if(_this.formValidate.startDate){
-                        
                         return date && date.valueOf() < _this.formValidate.startDate.getTime() + 86400000;//24*60*1000*60
                     }else{
                         //return date && date.valueOf() < Date.now() - 86400000;//24*60*1000*60
@@ -184,12 +206,7 @@ export default {
                     
                 }
             },
-            // options4: {
-            //     disabledDate (date) {
-            //         const disabledDay = date.getDate();
-            //         return disabledDay === 15;
-            //     }
-            // },
+           
             nowDate:"",
             defDate:"",
             formValidate: {
@@ -208,6 +225,7 @@ export default {
                 technology: [],
                 business:[],
                 moudle:"",
+                group:"",
             },
             technologyList: [
                 {
@@ -244,32 +262,36 @@ export default {
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
                 moudle: [
-                    { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
+                    { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
                 date: [
                     { required: true, type: 'array', validator: validateDate, trigger: ['blur','change'], }
                 ],
                 startDate: [
-                    { required: true, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
+                    { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
                 ],
                 startTime: [
-                    { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
+                    { required: false, type: 'string', message: 'Please select time', trigger: 'change' }
                 ],
                 endDate: [
-                    { required: true, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
+                    { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
                 ],
                 endTime: [
-                    { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
+                    { required: false, type: 'string', message: 'Please select time', trigger: 'change' }
+                ],
+
+                group: [
+                    { required: true, message: '请选择', trigger: 'change' }
                 ],
 
                 manager: [
-                    { required: true, message: '请选择', trigger: 'change' }
+                    { required: false, message: '请选择', trigger: 'change' }
                 ],
                 developer: [
-                    { required: true, message: '请选择', trigger: 'change' }
+                    { required: false, message: '请选择', trigger: 'change' }
                 ],
                 tester: [
-                    { required: true, message: '请选择', trigger: 'change' }
+                    { required: false, message: '请选择', trigger: 'change' }
                 ],
                 maintainer: [
                     { required: true, message: '请选择', trigger: 'change' }
@@ -288,6 +310,7 @@ export default {
             
             ADDorEDIT:true,
             editTableData:false,
+            modal_add_loading:false,
         }
     },
     mounted(){
@@ -329,10 +352,25 @@ export default {
             this.ADDorEDIT = false;
         },
         formItemReset(){
-            this.formValidate.name = "";
             this.resetData(); //this.formValidate.date = [];
-            this.formValidate.desc = "";
             this.editTableData = false;
+
+            this.formValidate.date = [];
+            this.formValidate.startDate = "";
+            this.formValidate.startTime = "";
+            this.formValidate.endDate = "";
+            this.formValidate.endTime = "";
+            this.formValidate.desc = "";
+            this.formValidate.manager = "";
+            this.formValidate.developer = "";
+            this.formValidate.tester = "";
+            this.formValidate.maintainer = "";
+            this.formValidate.target = "";
+            this.formValidate.technology = [];
+            this.formValidate.business = [];
+            this.formValidate.moudle = "";
+            this.formValidate.group = "";
+
         },
         submitAddData(){
             let tempData = {
@@ -340,43 +378,37 @@ export default {
                 num: parseInt(Math.random()*100),
                 describe: this.formValidate.desc,
                 manager:this.formValidate.manager,
-                startTime:new Date(this.formValidate.date[0]).Format("yyyy-MM-dd"),
+                // startTime:new Date(this.formValidate.date[0]).Format("yyyy-MM-dd"),
+                // endTime:new Date(this.formValidate.date[1]).Format("yyyy-MM-dd"),
+                // startTime:this.formValidate.startDate,
+                // endTime:this.formValidate.endDate,
+
+
+                startTime:new Date(this.formValidate.startDate).Format("yyyy-MM-dd"),
                 endTime:new Date(this.formValidate.date[1]).Format("yyyy-MM-dd"),
+
+                group:this.formValidate.group,
             }
-            // let tempData = {
-            //     name: this.formValidate.name,
-            //     num: parseInt(Math.random()*100),
-            //     describe: this.formValidate.desc,
-            //     startTime:JSON.stringify(this.formValidate.date[0]).split("T")[0].substring(1),
-            //     endTime:JSON.stringify(this.formValidate.date[1]).split("T")[0].substring(1),
-            // }
-            // 
+           
           
             setTimeout(() => {
-                // if(this.ADDorEDIT){
-                //     this.$emit("tableDataAdd",tempData)
-                // }
-                this.$emit("tableDataAdd",tempData);
-                this.modaAdd = false;
+            	this.modal_add_loading = false;
+            	Store.dispatch('ADD_DATA_TEST/incrementAsync', {
+		            msg: tempData
+		        })
                 this.formItemReset();
                 this.$refs.formValidate.resetFields();
-                this.$emit("popClose",true);
+                
+                
+                
             },1000)
         },
         submitAdd () {
             let IsStop = false;
             this.$refs.formValidate.validate((valid)=>{//验证
-                this.modal_add_loading = false;
-                this.$nextTick(() => {
-                  this.modal_add_loading = true;
-                });
-                //IsStop = !valid;
                 if(valid){
-                    this.modal_add_loading = true;
-                    this.$nextTick(() => {
-                      this.modal_add_loading = true;
-                    });
                     this.submitAddData();
+                    this.modal_add_loading = true;
                 }
             })
         },
@@ -395,7 +427,6 @@ export default {
 
 }
 .fromBox {
-	
 	width: 50%;
 }
 </style>

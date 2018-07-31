@@ -56,6 +56,7 @@
 						</Row>
 						<div class="formValidateMoreBtnBox">
                             <Icon type="chevron-down" color="#ed3f14"></Icon>
+                            <Icon type="chevron-down" color="#ed3f14"></Icon>
                         </div>
 			        </FormItem>
 			    </Form>

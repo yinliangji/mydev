@@ -48,5 +48,6 @@ export default {
     position: absolute;
     right:5px;
     top:10px;
+    z-index: 10;
 }
 </style>

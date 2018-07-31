@@ -2,10 +2,17 @@
   <div class="container-transfer">
     <div class="clearfix">
       <div class="infoGroup">
-        <h3 class="Title">迭代基本信息</h3>
+        <h3 class="Title">项目名称：敏捷项目二期开发</h3>
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate">
           <div class="addTaskTable">
+            <Row>
+              <Col span="8">
 
+              </Col>
+              <Col span="8" >
+
+              </Col>
+	          </Row>
             <FormItem label="迭代名称：" prop="taskName">
               <Input v-model="formValidate.taskName" style="width: 200px"></Input>
             </FormItem>
@@ -21,19 +28,7 @@
           </div>
         </Form>
       </div>
-      <div class="infoGroup">
-        <h3 class="Title">迭代所属项目信息</h3>
-        <div class="addTaskTable">
-          <dl class="showInfo">
-            <dt class="showTitle">产品名称：</dt>
-            <dd class="showCon">私有云项目</dd>
-          </dl>
-          <dl class="showInfo">
-            <dt class="showTitle">项目名称：</dt>
-            <dd class="showCon">敏捷项目二期开发</dd>
-          </dl>
-        </div>
-      </div>
+
     </div>
 
     <h3 class="Title">规划当前迭代：
@@ -118,7 +113,7 @@
                   <Icon type="navicon-round" @click="item.isShow=!item.isShow"></Icon>
                 </div>
                 <div class="tranpanel" v-show="item.isShow">
-                  <Table :columns="columns1" :data="item.list"></Table>
+                  <Table :columns="columns1" :data="item.list" size="small"></Table>
                 </div>
               </li>
 
@@ -128,12 +123,16 @@
 
       </div>
     </div>
-    <Button type="primary" @click="addIterationOk('formValidate')">确定</Button>
-    <div class="interation-tip">
+    <div style="text-align:right;margin-right:12px;margin-top:10px">
+        <Button type="primary" @click="addIterationOk('formValidate')">确定</Button>
+        <Button @click="closeSelf">关闭</Button>
+    </div>
+
+    <!-- <div class="interation-tip">
       <span>
         说明：归档后的产品待办事项不能修改所属迭代。需求不与模块关联，任务与模块关联但是不是必须可删除任务，在任务详情里加删除按钮 删除迭代后，相关待办事项和任务不会删除，只是迭代未设置产品上线时需选择完成的待办事项或需求项，自动改变其任务、事项、需求项状态为完成
       </span>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -229,14 +228,17 @@ export default {
             columns1: [
                 {
                     title: "任务名称",
+                    width:260,
                     key: "smallName"
                 },
                 {
                     title: "责任人",
+                    width:100,
                     key: "personLiable"
                 },
                 {
                     title: "状态",
+
                     key: "status"
                 }
             ],
@@ -428,7 +430,12 @@ export default {
                     this.$Message.error("请填写好必填内容!");
                 }
             });
-        }
+        },
+        closeSelf() {
+          this.$router.push({
+              path: "/iteration"
+          });
+        },
     },
     computed: {
         totalNum: function() {
@@ -530,7 +537,7 @@ h3.Title {
 }
 .transBody {
     overflow: hidden;
-    min-height: 50vh;
+    /* min-height: 50vh; */
     margin-top: 20px;
     /* display: flex; */
 }
@@ -550,7 +557,7 @@ h3.Title {
     margin-bottom: 10px;
 }
 .transBodyL li {
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 .transBodyC {
@@ -558,7 +565,7 @@ h3.Title {
     float: left;
     overflow: hidden;
     margin: 0 10px;
-    margin-top: 30vh;
+    margin-top:6vh;
     line-height: 40px;
 }
 .transBodyR {
@@ -596,9 +603,7 @@ h3.Title {
     font-size: 16px;
 }
 .infoGroup {
-    float: left;
-    width: 46%;
-    margin-right: 20px;
+
 }
 
 </style>

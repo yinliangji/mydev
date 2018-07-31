@@ -90,10 +90,11 @@
           <span>删除确认</span>
         </p>
         <div style="text-align:center">
-          <p>删除此迭代后将不能恢复。是否继续删除？</p>
+          <p>删除此迭代无法恢复，但是迭代中的用户故事和开发任务不会被删除。是否继续？</p>
         </div>
         <div slot="footer">
-          <Button type="error" size="large" long @click="delSure">删除</Button>
+          <Button type="error"  @click="delSure">删除</Button>
+          <Button @click="cancel">取消</Button>
         </div>
       </Modal>
     </div>
@@ -417,6 +418,10 @@ export default {
             }
             this.delOnoff = false;
             this.$Message.success("删除成功");
+        },
+        //取消
+        cancel(){
+          this.delOnoff = false;
         },
         //添加按钮
         addIteration() {

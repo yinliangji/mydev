@@ -102,6 +102,7 @@
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
             </Upload>
             <Table :columns="columns2" :data="data2" style="margin-top:6px"></Table>
+             <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
           </div>
         </div>
       </TabPane>
@@ -111,8 +112,8 @@
             <Icon type="navicon-round" class="toggle" @click="toggleOnoff.part3=!toggleOnoff.part3"></Icon>
           </div> -->
           <div class="con" v-show="toggleOnoff.part3">
-            <Button type="success" @click="defectOnoff=true">添加缺陷</Button>
-            <Table :columns="columns3" :data="data3" style="margin-top:6px"></Table>
+            <Table :columns="columns3" :data="data3"></Table>
+             <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
           </div>
         </div>
       </TabPane>
@@ -122,7 +123,9 @@
             <Icon type="navicon-round" class="toggle" @click="toggleOnoff.part4=!toggleOnoff.part4"></Icon>
           </div> -->
           <div class="con" v-show="toggleOnoff.part4">
-            <Table :columns="columns4" :data="data4"></Table>
+            <Button type="success" @click="defectOnoff=true">添加缺陷</Button>
+            <Table :columns="columns4" :data="data4" style="margin-top:6px"></Table>
+             <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
           </div>
         </div>
       </TabPane>
@@ -132,38 +135,85 @@
             <Icon type="navicon-round" class="toggle" @click="toggleOnoff.part5=!toggleOnoff.part5"></Icon>
           </div> -->
           <div class="con" v-show="toggleOnoff.part5">
-            <Table :columns="columns5" :data="data5" ></Table>
+            <Table :columns="columns5" :data="data5"></Table>
+             <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
           </div>
         </div>
       </TabPane>
     </Tabs>
-
-    <!-- 添加+编辑任务面板 -->
-    <!-- <Modal v-model="defectOnoff" :title="formValidate.title" width="500" @on-ok="adddefectOk('formValidate')">
+    <!-- 确认删除弹出框 -->
+      <Modal v-model="delOnoff" width="300">
+        <p slot="header" style="color:#f60;text-align:center">
+          <Icon type="ios-information-circle"></Icon>
+          <span>删除确认</span>
+        </p>
+        <div style="text-align:center">
+          <p>删除此附件后无法恢复。是否继续？</p>
+        </div>
+        <div slot="footer">
+          <Button type="error"  @click="delSure">删除</Button>
+          <Button @click="cancel">取消</Button>
+        </div>
+      </Modal>
+    <!-- 添加缺陷面板 -->
+    <Modal v-model="defectOnoff" title="添加缺陷" width="800" @on-ok="adddefectOk('formValidate')">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
         <div class="addTaskTable">
 
           <FormItem label="缺陷名称：" prop="defectName">
-            <Input v-model="formValidate.taskName" style="width: 200px"></Input>
+            <Input v-model="formValidate.defectName"></Input>
           </FormItem>
 
-          <FormItem label="缺陷类型：" prop="defectType">
-            <Input v-model="formValidate.personLiable" style="width:200px"></Input>
-          </FormItem>
-
-          <FormItem label="任务描述：" prop="describe">
-            <Input v-model="formValidate.describe" type="textarea" style="width:200px" placeholder="描述..."></Input>
-          </FormItem>
-          <FormItem label="所属待办事项：" prop="curNeed">
-            <Select v-model="formValidate.curNeed" style="width:200px">
-              <Option v-for="item in formValidate.ownNeed" :value="item.value" :key="item.value">
+          <FormItem label="开发任务编号：">
+            <!-- <Input v-model="formValidate.taskNum" style="width:200px"></Input> -->
+            <Select v-model="formValidate.curTaskNum">
+              <Option v-for="item in formValidate.taskNum" :value="item.value" :key="item.value">
                 {{ item.label }}</Option>
             </Select>
           </FormItem>
 
+          <Row>
+            <Col span="8">
+            <FormItem label="缺陷类型：" prop="curDefectType">
+              <!-- <Input v-model="formValidate.defectType" style="width:200px"></Input> -->
+              <Select v-model="formValidate.curDefectType" style="width:130px">
+                <Option v-for="item in formValidate.defectType" :value="item.value" :key="item.value">
+                  {{ item.label }}</Option>
+              </Select>
+            </FormItem>
+            </Col>
+            <Col span="8">
+            <FormItem label="缺陷状态：" prop="curDefectStatus">
+              <!-- <Input v-model="formValidate.defectStatus" style="width:200px"></Input> -->
+              <Select v-model="formValidate.curDefectStatus" style="width:130px">
+                <Option v-for="item in formValidate.defectStatus" :value="item.value" :key="item.value">
+                  {{ item.label }}</Option>
+              </Select>
+            </FormItem>
+            </Col>
+            <Col span="8">
+            <FormItem label="责任人" prop="curPersonLiable">
+              <!-- <Input v-model="formValidate.personLiable" style="width:200px"></Input> -->
+              <Select v-model="formValidate.curPersonLiable" style="width:130px">
+                <Option v-for="item in formValidate.personLiable" :value="item.value" :key="item.value">
+                  {{ item.label }}</Option>
+              </Select>
+            </FormItem>
+            </Col>
+          </Row>
+
+          <FormItem label="缺陷描述：" prop="describe">
+            <Input v-model="formValidate.describe" type="textarea" placeholder="描述..."></Input>
+
+          </FormItem>
+
+          <FormItem label="备注">
+            <Input v-model="formValidate.Remarks" type="textarea" placeholder="描述..."></Input>
+          </FormItem>
+
         </div>
       </Form>
-    </Modal> -->
+    </Modal>
   </div>
 </template>
 <script>
@@ -172,6 +222,83 @@ export default {
 
     data() {
         return {
+            delOnoff:false,
+            delIndex:100,
+            formValidate: {
+                defectName: "",
+                curDefectType: "",
+                curDefectStatus: "",
+                curPersonLiable: "",
+                describe: "",
+                remarks: "",
+                defectType: [
+                  {
+                      value: "1",
+                      label: "缺陷类型1"
+                  },
+                  {
+                      value: "2",
+                      label: "缺陷类型2"
+                  }
+                ],
+                defectStatus: [
+                  {
+                      value: "1",
+                      label: "缺陷状态1"
+                  },
+                  {
+                      value: "2",
+                      label: "缺陷类型2"
+                  }
+                ],
+                 personLiable: [
+                  {
+                      value: "1",
+                      label: "责任人1"
+                  },
+                  {
+                      value: "2",
+                      label: "责任人2"
+                  }
+                ]
+            },
+            ruleValidate: {
+                defectName: [
+                    {
+                        required: true,
+                        message: "缺陷名称不能为空",
+                        trigger: "blur"
+                    }
+                ],
+                curDefectType: [
+                    {
+                        required: true,
+                        message: "请输入缺陷类型",
+                        trigger: "change"
+                    }
+                ],
+                curDefectStatus: [
+                    {
+                        required: true,
+                        message: "请输入缺陷状态",
+                        trigger: "change"
+                    }
+                ],
+                curPersonLiable: [
+                    {
+                        required: true,
+                        message: "请输入责任人",
+                        trigger: "change"
+                    }
+                ],
+                describe: [
+                    {
+                        required: true,
+                        message: "描述不能为空",
+                        trigger: "blur"
+                    }
+                ]
+            },
             defectOnoff: false,
             toggleOnoff: {
                 part1: true,
@@ -198,7 +325,7 @@ export default {
                                 //domProps:{href:"###"},
                                 on: {
                                     click: () => {
-                                        this.linkFn(params.row.taskName);
+                                        this.downLoadFn(params.row.taskName);
                                     }
                                 }
                             },
@@ -361,6 +488,17 @@ export default {
         };
     },
     methods: {
+        //添加缺陷确认按钮
+        adddefectOk(name) {
+            this.$refs[name].validate(valid => {
+                if (valid) {
+                    this.$Message.success("恭喜你，添加成功！");
+                    this.$refs[name].resetFields();
+                } else {
+                    this.$Message.error("请填写好必填内容!");
+                }
+            });
+        },
         defectTodo() {},
         handleSuccess(res, file) {
             // console.log(res)
@@ -377,12 +515,31 @@ export default {
                 title: "添加成功！"
             });
         },
-        linkFn(data) {
-            alert(data);
+        downLoadFn(data) {
+            //alert(data);
+        },
+        //删除取消
+        cancel(){
+          this.delOnoff = false;
+        },
+
+      //删除
+        delSure() {
+            //走接口
+            this.delOnoff = false;
+            this.data2.splice(this.delIndex, 1);
+            this.$Message.success("删除成功");
         },
         fillDel(i) {
-            // alert(i)
-            this.data2.splice(i, 1);
+            this.delOnoff = true;
+            this.delIndex = i;
+        },
+        //分页
+        changeCurrentPage(i) {
+            alert(i);
+        },
+        changePageSize(i) {
+            alert(i);
         }
     },
     computed: {},
@@ -444,6 +601,11 @@ h3 {
 
 .pageContent {
     background: #fff;
+}
+.ivu-page {
+    margin: 10px 0;
+    text-align: right;
+    overflow: hidden;
 }
 </style>
 

@@ -9,7 +9,7 @@
 
       <div class="newTop">
         <h3 class="Title">开发任务管理</h3>
-        <Form ref="formValidate" class="formValidate">
+        <Form>
           <Row>
             <Col span="15">
             <Row>

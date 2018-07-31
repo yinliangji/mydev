@@ -14,7 +14,9 @@
         <p>删除此任务后将不能恢复。是否继续删除？</p>
       </div>
       <div slot="footer">
-        <Button type="error" size="large" long @click="delSure">删除</Button>
+
+        <Button type="error"  @click="delSure">删除</Button>
+        <Button @click="cancel">取消</Button>
       </div>
     </Modal>
   </div>
@@ -158,6 +160,10 @@ export default {
         fillDel(i) {
             this.delOnoff = true;
             this.delIndex = i;
+        },
+         //取消
+        cancel(){
+          this.delOnoff = false;
         },
         //分页
         changeCurrentPage(i) {

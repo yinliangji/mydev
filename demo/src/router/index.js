@@ -174,16 +174,19 @@ const router = new Router({
                     require(["../layout/sider/sider_2"], resolve)
                 }
 
-            },
+            }
         },
         {
             path: '/development/add',
             components: {
                 Cont: resolve => {
                     require(["../pages/development/add"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
                 }
 
-            },
+            }
         },
         {
             path: '/defect',
@@ -211,7 +214,7 @@ const router = new Router({
 
             },
         },
-       
+
         {
             path: '/iteration/iteration',
             name: 'IterationTo',

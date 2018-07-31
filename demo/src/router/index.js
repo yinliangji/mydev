@@ -39,7 +39,6 @@ const router = new Router({
                 }
             },
         },
-        //
         {
             path: '/agile/add',
             name: 'AgileAdd',
@@ -125,6 +124,44 @@ const router = new Router({
                     require(["../layout/sider/sider_2"], resolve)
                 }
 
+            },
+        },
+        {
+            path: '/product/add',
+            name: 'ProductAdd',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/product/add/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+
+            },
+        },
+        {
+            path: '/product/edit',
+            name: 'ProductEdit',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/product/edit/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+
+            },
+        },
+        {
+            path: '/product/detail',
+            name: 'ProductDetail',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/product/detail/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
             },
         },
         {

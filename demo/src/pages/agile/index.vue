@@ -1,6 +1,6 @@
 <template>
 	<div class="pageContent">
-        <selectMenu></selectMenu>
+        <!-- <selectMenu></selectMenu> -->
 		<!-- <Breadcrumb :style="{margin: '16px 0'}">
             <BreadcrumbItem>首页</BreadcrumbItem>
             <BreadcrumbItem>敏捷项目管理</BreadcrumbItem>
@@ -12,32 +12,95 @@
             	<Form ref="formValidate" class="formValidate">
 
 			        <FormItem >
-			            <Row>
-
-			            	<Col span="2" style="text-align: center">项目名称</Col>
-			                <Col span="4">
-			                    <FormItem >
-			                        <Input  placeholder="输入项目名称"></Input>
-			                    </FormItem>
-			                </Col>
-			                <Col span="2" style="text-align: center">项目编号</Col>
-			                <Col span="4">
-			                    <FormItem >
-			                        <Input  placeholder="输入项目编号"></Input>
-			                    </FormItem>
-			                </Col>
-			                <Col span="2" style="text-align: center">产品经理</Col>
-			                <Col span="4">
-			                    <FormItem >
-			                        <Input  placeholder="输入产品经理"></Input>
-			                    </FormItem>
-			                </Col>
-			                <Col span="3" style="text-align: center">
-			                	<Button type="primary" icon="ios-search">查询</Button>
-			            	</Col>
-			            	<Col span="3" style="text-align:left"></Col>
-			            </Row>
-                        <div class="formValidateMoreBtnBox">
+			            <Row class="serchInputBox">
+                            <Col span="15">
+                                <Row class="SerchBox">
+                                    <Col span="3" style="text-align: center">项目名称</Col>
+                                    <Col span="5">
+                                        <FormItem >
+                                            <Input  placeholder="输入项目名称"></Input>
+                                        </FormItem>
+                                    </Col>
+                                    <Col span="3" style="text-align: center">项目编号</Col>
+                                    <Col span="5">
+                                        <FormItem >
+                                            <Input  placeholder="输入项目编号"></Input>
+                                        </FormItem>
+                                    </Col>
+                                    <Col span="3" style="text-align: center">开始时间</Col>
+                                    <Col span="5">
+                                        <FormItem >
+                                            <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"></DatePicker>
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row class="SerchBox" v-if="isShowMoreShow">
+                                    <Col span="3" style="text-align: center">项目经理</Col>
+                                    <Col span="5">
+                                        <FormItem >
+                                            <Select  placeholder="请选择项目经理">
+                                                <Option value="经理1">经理1</Option>
+                                                <Option value="经理2">经理2</Option>
+                                                <Option value="经理3">经理3</Option>
+                                            </Select>
+                                        </FormItem>
+                                    </Col>
+                                    <Col span="3" style="text-align: center">项目状态</Col>
+                                    <Col span="5">
+                                        <FormItem >
+                                            <Select  placeholder="请选项目状态">
+                                                <Option value="1">已提出</Option>
+                                                <Option value="2">开发中</Option>
+                                                <Option value="3">测试</Option>
+                                                <Option value="4">上线</Option>
+                                            </Select>
+                                        </FormItem>
+                                    </Col>
+                                    <Col span="3" style="text-align: center">开发人员</Col>
+                                    <Col span="5">
+                                        <FormItem >
+                                            <Select  placeholder="请选择开发人员">
+                                                <Option value="开发人员1">开发人员1</Option>
+                                                <Option value="开发人员2">开发人员2</Option>
+                                                <Option value="开发人员3">开发人员3</Option>
+                                            </Select>
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                                <Row class="SerchBox" v-if="isShowMoreShow">
+                                    <Col span="3" style="text-align: center">测试人员</Col>
+                                    <Col span="5">
+                                        <FormItem >
+                                            <Select  placeholder="请选择测试人员">
+                                                <Option value="测试人员1">测试人员1</Option>
+                                                <Option value="测试人员2">测试人员2</Option>
+                                                <Option value="测试人员3">测试人员3</Option>
+                                            </Select>
+                                        </FormItem>
+                                    </Col>
+                                    <Col span="3" style="text-align: center">教练</Col>
+                                    <Col span="5">
+                                        <FormItem >
+                                            <Select  placeholder="请选教练">
+                                                <Option value="1">教练1</Option>
+                                                <Option value="2">教练2</Option>
+                                                <Option value="3">教练3</Option>
+                                                <Option value="4">教练4</Option>
+                                            </Select>
+                                        </FormItem>
+                                    </Col>
+                                    <Col span="3" style="text-align: center">&nbsp;</Col>
+                                    <Col span="5">
+                                        &nbsp;
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col span="9" style="text-align: left" class="serchBtnBox">
+                                <Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
+                            </Col>
+                        </Row>
+                        <div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
+                            <Icon type="chevron-down" color="#ed3f14"></Icon>
                             <Icon type="chevron-down" color="#ed3f14"></Icon>
                         </div>
 			        </FormItem>
@@ -75,13 +138,13 @@
             </div>
         </Modal>
 
-        <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" />
+        <!-- <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" /> -->
 
 	</div>
 </template>
 <script>
 import AddItemPop from "./additempop";
-
+import Store from '@/vuex/store'
 export default {
 	name: 'aglie',
     mounted(){
@@ -89,18 +152,41 @@ export default {
     },
     components: {
         AddItemPop,
-
+    },
+    computed: {
+        addtest() {
+            return this.$store.state["ADD_DATA_TEST"].data
+        },
+    },
+    beforecreated(){
+        console.log("agile--beforecreated-------",this.addtest)
+    },
+    created(){
+        console.log("agile--created-------",this.addtest)
+        if(this.addtest){
+            this.tabRowAddFn()
+        }
+    },
+    beforeUpdate(){
+        console.log("agile--beforeUpdate-------",this.addtest)
+    },
+    updated(){
+        console.log("agile--updated-------",this.addtest)
+        if(this.addtest){
+            this.tabRowAddFn()
+        }
+        
+        
     },
     data () {
         return {
+            isShowMoreShow:false,
             //allSelectTableRome:false,
             isShowAddPop:false,
             isAdd:true,
             tableDataRow:false,
-
             modaDelete: false,
             modal_loading: false,
-
             columns: [
             	{
                     type: 'selection',
@@ -125,7 +211,7 @@ export default {
                                 //domProps:{href:"###"},
                                 on: {
                                     click: () => {
-                                        this.linkFn(params.index)
+                                        this.goAgileDetailFn(params.index,params)
                                     }
                                 }
                             },
@@ -146,45 +232,67 @@ export default {
                     key: 'manager'
                 },
                 {
+                    title: '所属产品',
+                    key: 'product'
+                },
+                {
                     title: '开始时间',
                     key: 'startTime',
                     width: 100,
                     align: 'center',
                 },
+               
                 {
                     title: '结束时间',
                     key: 'endTime',
                     width: 100,
                     align: 'center',
                 },
+
                 {
                     title: '操作',
                     key: 'action',
-                    width: 180,
+                    width: 125,
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
+                            // h('Button', {
+                            //     props: {
+                            //         type: 'primary',
+                            //         size: 'small'
+                            //     },
+                            //     style: {
+                            //         marginRight: '5px'
+                            //     },
+                            //     on: {
+                            //         click: () => {
+                            //             this.goDemandFn(params.index)
+                            //         }
+                            //     }
+                            // }, '需求项'),
                             h('Button', {
                                 props: {
-                                    type: 'primary',
+                                    type: 'success',
                                     size: 'small'
                                 },
                                 style: {
-                                    marginRight: '5px'
+                                    marginRight: '2px',
+                                    marginLeft: '2px',
                                 },
                                 on: {
                                     click: () => {
-                                        this.goDemandFn(params.index)
+                                        this.goProductFn(params.index)
                                     }
                                 }
-                            }, '需求项'),
+                            }, '故事'),
                             h('Button', {
                                 props: {
                                     type: 'info',
                                     size: 'small'
                                 },
                                 style: {
-                                    marginRight: '5px'
+                                    marginRight: '2px',
+                                    marginLeft: '2px',
                                 },
                                 on: {
                                     click: () => {
@@ -192,17 +300,7 @@ export default {
                                     }
                                 }
                             }, '任务'),
-                            h('Button', {
-                                props: {
-                                    type: 'success',
-                                    size: 'small'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.goOverViewFn(params.index)
-                                    }
-                                }
-                            }, '概览')
+                            
                         ]);
                     }
                 }
@@ -215,6 +313,7 @@ export default {
                     manager:"项目经理1",
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
+                    product:"产品1",
                 },
                 {
                     name: 'Jim Green',
@@ -223,6 +322,7 @@ export default {
                     manager:"项目经理2",
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
+                    product:"产品2",
                 },
                 {
                     name: 'Joe Black',
@@ -231,13 +331,21 @@ export default {
                     manager:"项目经理3",
                     startTime:"2012-10-10",
                     endTime:"2012-10-10",
+                    product:"产品3",
                 },
-
             ],
             actionArr:[],
         }
     },
     methods: {
+        tabRowAddFn(){
+            this.tableData.push(this.addtest);
+            Store.dispatch('ADD_DATA_TEST/incrementAsync', {
+                msg: false
+            })
+            console.log('this.$store.state["ADD_DATA_TEST"].data',this.$store.getters["ADD_DATA_TEST/getFn"])
+        },
+        //---------
         popCloseFn(){
             this.isShowAddPop = false;
             this.isAdd = true;
@@ -255,6 +363,8 @@ export default {
             
         },
         addItemFn(){
+            this.$router.push('/agile/add')
+            return;
             this.isShowAddPop = true;
             this.isAdd = true;
         },
@@ -270,6 +380,11 @@ export default {
                 this.error("请选择一项，进行编辑！")
                 return
             }
+
+
+            this.$router.push('/agile/edit')
+            return;
+
             this.isShowAddPop = true;
             this.isAdd = false;
             this.tableDataRow = this.actionArr;
@@ -329,8 +444,8 @@ export default {
     	handleSelectAll (status) {
             this.$refs.selection.selectAll(status);
         },
-        linkFn (index) {
-            this.$router.push('/agile/baseinfo')
+        goAgileDetailFn (index) {
+            this.$router.push('/agile/detail')
         },
         goDemandFn (index) {
             this.$router.push('/demand')
@@ -340,6 +455,9 @@ export default {
         },
         goOverViewFn (index){
             this.$router.push('/overView')
+        },
+        goProductFn (index){
+            this.$router.push('/product')
         },
         show (index) {
             this.$Modal.info({
@@ -362,9 +480,24 @@ export default {
 .crumbsBox{
 
 }
+.serchInputBox{
+    display: flex;
+}
+.serchBtnBox{
+    position: relative;
+}
+.SerchBox{
+    padding-bottom:10px;
+}
+.serchBtn{
+    position: absolute;
+    left:0;
+    top:50%;
+    transform: translate(50%, -65%);
+}
 .formValidate {
 	margin:0 auto;
-	width: 80%;
+	width: 100%;
 	margin-left: 0;
 
 }

@@ -16,9 +16,8 @@ Vue.prototype.$axios = axios
 Vue.use(iView)
 Vue.config.productionTip = false
 
-// 引入自定义组件。index.js是组件的默认入口
-// import Loading11 from './Common/Loading'
-// Vue.use(Loading11);
+import goAgile from './components/goAgile/index.js'
+Vue.use(goAgile);
 
 import selectMenu from './components/selectMenu'
 Vue.use(selectMenu);

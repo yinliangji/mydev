@@ -53,9 +53,34 @@ const module_pageLoading = {
 	},
 }
 
+
+const module_testAdd = {
+	namespaced: true,
+	state:{
+		data:false,
+	},
+	mutations:{
+	    increment (state,payload) {
+	        state.data = payload.Msg;
+	    }
+	},
+	getters:{
+		getFn:state=>{return state.data},
+		getFn1:state=>{return state.data},
+		getFns:(state, getters) => {return getters},
+
+	},
+	actions:{
+		incrementAsync (context,{msg}) {
+			context.commit({type: 'increment',Msg:msg})
+		}
+	},
+}
+
 export default new Vuex.Store({
 	modules: {
 	    IS_LOADING:module_globalLoading,
 	    IS_PAGELOADING:module_pageLoading,
+	    ADD_DATA_TEST:module_testAdd,
   	}
 });

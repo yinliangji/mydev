@@ -1,41 +1,7 @@
 <template>
-	<Sider  ref="SiderBox" collapsible :collapsed-width="78" v-model="isCollapsed" class="siderBox"  hide-trigger>
+	<Sider  ref="SiderBox" collapsible :collapsed-width="65" v-model="isCollapsed" class="siderBox"  hide-trigger>
 		<Menu :active-name="currentMenu" theme="dark" width="auto" :class="menuitemClasses" @on-open-change="onOpenChange" ref="side_menu" class="siderMenu">
-			<MenuItem name="1-1">
-				<router-link  to="/agile" />
-				<Icon type="ios-bolt"></Icon>
-				<span>敏捷项目列表</span>
-			</MenuItem>
-			<MenuItem name="1-2">
-				<router-link to="/demand" />
-				<Icon type="ios-photos-outline"></Icon>
-				<span>需求项管理</span>
-			</MenuItem>
-			<MenuItem name="1-3">
-				<router-link  to="/product" />
-				<Icon type="ios-list-outline"></Icon>
-				<span>产品待办列表</span>
-			</MenuItem>
-			<MenuItem name="1-4">
-				<router-link  to="/iteration" />
-				<Icon type="ios-albums-outline"></Icon>
-				<span>迭代管理</span>
-			</MenuItem>
-			<MenuItem name="1-5">
-				<router-link  to="/development" />
-				<Icon type="ios-navigate"></Icon>
-				<span>开发任务管理</span>
-			</MenuItem>
-			<!-- <MenuItem name="1-6">
-				<router-link  to="/defect" />
-				<Icon type="alert-circled"></Icon>
-				<span>缺陷管理</span>
-			</MenuItem> -->
-			<MenuItem name="1-7">
-				<router-link  to="/overView" />
-				<Icon type="clipboard"></Icon>
-				<span>项目概览</span>
-			</MenuItem>
+			<router-view name="Aside" />
 		</Menu>
 		<Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '-12px 8px 0 0'}" type="chevron-left" size="24" class="triggerBtn" color="white" ></Icon>
 	</Sider>
@@ -54,6 +20,7 @@ export default {
 				development:["1","1-5"],
 				defect:["1","1-6"],
 				overView:["1","1-7"],
+				'agile/detail':["1","1-8"],
 
 			},
 			OpenNames:[],//["1"]
@@ -117,8 +84,12 @@ export default {
 			let page5 = "development";
 			let page6 = "defect";
 			let page7 = "overView";
+			let page8 = "agile/detail";
 
-			if(to.path.indexOf(home)!= -1){
+
+			if(to.path.indexOf(page8)!= -1){
+				this.side_menu(page8)
+			}else  if(to.path.indexOf(home)!= -1){
 				this.side_menu(home)
 			}else if(to.path.indexOf(page2)!= -1){
 				this.side_menu(page2)
@@ -138,80 +109,85 @@ export default {
 
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 
-li a {
-	position:absolute;
-	left:0;
-	top: 0;
-	width: 100%;
-	height:100%;
-	z-index:10;
-}
-li>span{
-	padding-bottom: 1px;
-}
-
-
-
-.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu) {
-    color: white;
-}
 
 .siderBox {
-
   height:100%;
   overflow-y:auto;
   overflow-x:hidden;
-  background: #21488a;//
+  background: #21488a;
+  //
+  .siderMenu li a {
+		position:absolute;
+		left:0;
+		top: 0;
+		width: 100%;
+		height:100%;
+		z-index:10;
+	}
+	.siderMenu li>span{
+		padding-bottom: 1px;
+	}
 
-}
-.siderMenu {
-	background: transparent;
-}
-.layout-con{
-    height: 100%;
-    width: 100%;
-}
-.triggerBtn {
-  position:absolute;
-  right:0;
-  top:50%;
-  z-index: 901;
-  cursor: pointer;
 
-}
-.menu-icon{
-  transition: all .3s;
-}
-.rotate-icon{
-  transform: rotate(-180deg);
+
+	.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu) {
+	    color: white;
+	}
+
+
+	.siderMenu {
+		background: transparent;
+	}
+	.layout-con{
+	    height: 100%;
+	    width: 100%;
+	}
+	.triggerBtn {
+	  position:absolute;
+	  right:0;
+	  top:50%;
+	  z-index: 901;
+	  cursor: pointer;
+
+	}
+	.menu-icon{
+	  transition: all .3s;
+	}
+	.rotate-icon{
+	  transform: rotate(-180deg);
+	}
+
+	.menu-item span{
+	    display: inline-block;
+	    overflow: hidden;
+	    width: 85px;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	    vertical-align: bottom;
+	    transition: width .2s ease .2s;
+	}
+	.menu-item i{
+	    transform: translateX(0px);
+	    transition: font-size .2s ease, transform .2s ease;
+	    vertical-align: middle;
+	    font-size: 16px;
+	}
+	.collapsed-menu span{
+	    width: 0px;
+	    transition: width .2s ease;
+	}
+	.collapsed-menu i{
+	    transform: translateX(5px);
+	    transition: font-size .2s ease .2s, transform .2s ease .2s;
+	    vertical-align: middle;
+	    font-size: 22px;
+	}
+
+  
 }
 
-.menu-item span{
-    display: inline-block;
-    overflow: hidden;
-    width: 85px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    vertical-align: bottom;
-    transition: width .2s ease .2s;
-}
-.menu-item i{
-    transform: translateX(0px);
-    transition: font-size .2s ease, transform .2s ease;
-    vertical-align: middle;
-    font-size: 16px;
-}
-.collapsed-menu span{
-    width: 0px;
-    transition: width .2s ease;
-}
-.collapsed-menu i{
-    transform: translateX(5px);
-    transition: font-size .2s ease .2s, transform .2s ease .2s;
-    vertical-align: middle;
-    font-size: 22px;
-}
+
 
 </style>

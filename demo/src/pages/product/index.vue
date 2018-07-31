@@ -1,11 +1,7 @@
 <template>
 	<div class="pageContent">
+		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :Top="'10'" />
 		<selectMenu></selectMenu>
-        <!-- <Breadcrumb :style="{margin: '16px 0'}">
-            <BreadcrumbItem>首页</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目管理</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目列表</BreadcrumbItem>
-        </Breadcrumb> -->
 		<Card>
 			<div class="productBox">
 				<h3 class="Title">产品代办列表</h3>
@@ -60,6 +56,7 @@
 						</Row>
 						<div class="formValidateMoreBtnBox">
                             <Icon type="chevron-down" color="#ed3f14"></Icon>
+                            <Icon type="chevron-down" color="#ed3f14"></Icon>
                         </div>
 			        </FormItem>
 			    </Form>
@@ -110,10 +107,6 @@
 <script>
 import kanbanboard from "@/components/kanbanboard";
 import ADDorEDITpop from "./add_or_edit_pop";
-
-
-
-
 export default {
 	data() {
 		return {
@@ -566,6 +559,7 @@ export default {
 <style lang="less" scoped>
 @import './style.less';
 @import './style.css';
+
 .SerchBox{
 	padding-bottom:10px;
 }

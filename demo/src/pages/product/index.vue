@@ -160,10 +160,24 @@ export default {
 	beforecreated(){
         console.log("product--beforecreated-------",this.addtest)
     },
+	watch: {
+		'$route' (to, from) {
+			if(to.query.board){
+	        	this.currentView = "kanbanboard";
+	        }else{
+	        	this.currentView = "developList";
+	        }
+		}
+	},
     created(){
         console.log("product--created-------",this.addtest)
         if(this.addtest){
             this.tabRowAddFn()
+        }
+        if(this.$route.query.board){
+        	this.currentView = "kanbanboard";
+        }else{
+        	this.currentView = "developList";
         }
     },
     beforeUpdate(){
@@ -488,7 +502,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.goAddDevelopmentFn(params.index)
                                     }
                                 }
                             }, '添加任务'),
@@ -620,8 +634,13 @@ export default {
             this.isAdd = true;
             this.tableDataRow = false;
 		},
+		goAddDevelopmentFn (index) {
+            //this.$router.push('/development')
+            this.$router.push({path: '/development', query: {add: true}})
+        },
 		goDevelopmentFn (index) {
-            this.$router.push('/development')
+            //this.$router.push('/development')
+            this.$router.push({path: '/development', query: {board: true}})
         },
 		goProductDetailFn (index) {
             //alert(index)

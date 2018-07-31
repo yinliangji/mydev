@@ -451,13 +451,15 @@ export default {
             this.$router.push('/demand')
         },
         goDevelopmentFn (index) {
-            this.$router.push('/development')
+            //this.$router.push('/development')
+            this.$router.push({path: '/development', query: {board: true}})
         },
         goOverViewFn (index){
             this.$router.push('/overView')
         },
         goProductFn (index){
-            this.$router.push('/product')
+            //this.$router.push('/product')
+            this.$router.push({path: '/product', query: {board: true}})
         },
         show (index) {
             this.$Modal.info({

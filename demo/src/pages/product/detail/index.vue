@@ -3,87 +3,95 @@
 		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :top="'7'" />
 		<Breadcrumb :style="{margin: '16px 0'}">
             <BreadcrumbItem>首页</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目列表</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目基本信息</BreadcrumbItem>
+            <BreadcrumbItem>用户故事</BreadcrumbItem>
+            <BreadcrumbItem>用户故事基本信息</BreadcrumbItem>
         </Breadcrumb>
-       
         <Card>
         	<Tabs value="name1">
-		        <TabPane label="项目基本信息" name="name1">
+		        <TabPane label="用户故事基本信息" name="name1">
+					<div class="baseInfoBox">
+		            	<h3 class="Title">用户故事基本信息</h3>
+		            	<div class="tableBox">
+		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
+							  <tbody>
+							  	<tr>
+								  <th width="13%">所属产品</th>
+								  <td width="20%">xxxxxxx产品</td>
+								  <th width="13%">所属项目</th>
+								  <td width="20%" >xxxxxxx项目</td>
+								  <th width="13%">用户故事名称</th>
+								  <td>用户故事名称1</td>
+								</tr>
+								<tr>
+								  <th width="13%">故事类型</th>
+								  <td width="20%">生产问题</td>
+								  <th width="13%">故事状态</th>
+								  <td width="20%" >提出</td>
+								  <th width="13%">优先级</th>
+								  <td>高</td>
+								</tr>
+								<tr>
+								  <th>故事描述</th>
+								  <td colspan="5">TPM敏捷项目管理系统</td>
+								</tr>
+								
+							  </tbody>
+							</table>
+		            	</div>
+		            </div>
+		        </TabPane>
+		        <TabPane label="计划故事相关" name="name2">
 		        	<div class="baseInfoBox">
-		            	<h3 class="Title">项目基本信息</h3>
+		            	<h3 class="Title">计划故事相关</h3>
 		            	<div class="tableBox">
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 							  <tbody>
 								<tr>
-								  <th width="11%">项目编号</th>
-								  <td>prj0001</td>
-								  <th width="11%">项目名称</th>
-								  <td>TPM敏捷项目管理系统</td>
-								  <th width="11%">所属产品</th>
-								  <td>产品1</td>
+								  <th width="13%">所属迭代</th>
+								  <td width="20%">迭代1</td>
+								  <th width="13%">工时(预计)</th>
+								  <td width="20%" >1</td>
+								  <th width="13%">工时(实际)</th>
+								  <td>10</td>
 								</tr>
 								<tr>
-								  <th>项目创建时间</th>
-								  <td>2017-08-01</td>
-								  <th>开始时间</th>
-								  <td>2017-08-01</td>
-								  <th>结束时间</th>
-								  <td>2017-12-31</td>
-								</tr>
-
-								<tr>
-								  <th>所属模块</th>
-								  <td colspan="5">模块1、模块5、模块4、模块2、</td>
-								</tr>
-								
-								<tr>
-								  <th>项目描述</th>
-								  <td colspan="5">TPM敏捷项目管理系统、项目计划书是指项目方为了达到招商融资和其它发展目标等目的所制作的计划书。一份好的项目计划书的特点是：关注产品、敢于竞争、充分市场调研，有力资料说明、表明行动的方</td>
-								</tr>
-								<tr>
-								  <th>项目目标</th>
-								  <td colspan="5">支持备课敏捷开发模块的落地</td>
+								  <th>关联任务(已完成)</th>
+								  <td>任务</td>
+								  <th>关联任务(全部)</th>
+								  <td>任务、任务、任务、任务</td>
+								  <th>&nbsp;</th>
+								  <td>&nbsp;</td>
 								</tr>
 							  </tbody>
 							</table>
 		            	</div>
 		            </div>
 		        </TabPane>
-		        <TabPane label="成员信息" name="name2">
+		        <TabPane label="需求相关" name="name3">
 		        	<div class="baseInfoBox">
-		            	<h3 class="Title">成员信息</h3>
+		            	<h3 class="Title">需求相关</h3>
 		            	<div class="tableBox">
+		            		<!-- -->
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
-								<tbody>
-									<tr>
-										<th width="11%">项目经理</th>
-										<td>李卓、赵筝、谢蓓、王昕亮、邢磊</td>
-										<th width="11%">开发人员</th>
-										<td>李卓、谢蓓、王昕亮</td>
-										<th width="11%">测试人员</th>
-										<td>李卓  谢蓓 王昕亮</td>
-									</tr>
-									<tr>
-										<th>维护人员</th>
-										<td>李卓、赵筝、谢蓓、王昕亮、邢磊</td>
-										<th>总体组</th>
-										<td>总体组1</td>
-										<th>&nbsp;</th>
-										<td>&nbsp;</td>
-									</tr>
-								</tbody>
+							  <tbody>
+								<tr>
+								  <th width="13%">所属需求</th>
+								  <td width="20%">需求</td>
+								  <th width="13%">故事提出人</th>
+								  <td width="20%" >提出人</td>
+								  <th width="13%">提出人部门</th>
+								  <td>部门1</td>
+								</tr>
+							  </tbody>
 							</table>
+		            		<!-- -->
 		            	</div>
 		            </div>
 		        </TabPane>
-		        
 		    </Tabs>
-        	
-            
-           
+		  
             <!-- <div class="addModule">
-	        	<Row class="tagBox">
+            	<Row class="tagBox">
 	                <Col span="2">
 	                    <h4>技术模块</h4>
 	                </Col>
@@ -101,12 +109,11 @@
 	                    <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem2">添加业务模块</Button>
 	                </Col>
 	            </Row>
-	    	</div> -->
-           
-
+        	</div> -->
+        	
 		</Card>
 
-		
+
 		<Modal ref="addPop" v-model="modaAdd" title="添加模块" @on-ok="submitAdd"  ok-text="提交" :loading="modal_add_loading" visible="true">
             <Form :model="formItem" :label-width="80" >
                 <FormItem label="模块名称" v-if="technologyORbusiness">

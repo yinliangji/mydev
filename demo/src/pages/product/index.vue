@@ -4,48 +4,97 @@
 		<selectMenu></selectMenu>
 		<Card>
 			<div class="productBox">
-				<h3 class="Title">产品代办列表</h3>
+				<h3 class="Title">用户故事</h3>
 				<Form ref="formValidate" class="formValidate">
 			        <FormItem >
-						<Row>
+						<Row class="serchInputBox">
 							<Col span="15">
 								<Row class="SerchBox">
-						        	<Col span="3" style="text-align: center">需求名称</Col>
+						        	<Col span="3" style="text-align: center">用户故事名称</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Input  placeholder="输入需求名称"></Input>
+						                    <Input  placeholder="输入用户故事名称"></Input>
 						                </FormItem>
 						            </Col>
-						            <Col span="3" style="text-align: center">需求编号</Col>
+						            <Col span="3" style="text-align: center">故事编号</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Input  placeholder="输入需求编号"></Input>
+						                    <Input  placeholder="输入故事编号"></Input>
 						                </FormItem>
 						            </Col>
-						            <Col span="3" style="text-align: center">需求类型</Col>
+						            <Col span="3" style="text-align: center">故事类型</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Input  placeholder="输入需求类型"></Input>
-						                </FormItem>
+                                            <Select  placeholder="请选择故事类型">
+                                                <Option value="用户需求">用户需求</Option>
+					                            <Option value="生产问题">生产问题</Option>
+					                            <Option value="自主创新">自主创新</Option>
+                                            </Select>
+                                        </FormItem>
 						            </Col>
 						        </Row>
-						        <Row class="SerchBox">
-						        	<Col span="3" style="text-align: center">需求状态</Col>
+						        <Row class="SerchBox"  v-if="isShowMoreShow">
+						        	<Col span="3" style="text-align: center">故事状态</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Input  placeholder="输入需求状态"></Input>
+						                    <Select  placeholder="请选择故事状态">
+                                                <Option value="提出">提出</Option>
+					                            <Option value="开发中">开发中</Option>
+					                            <Option value="测试">测试</Option>
+					                            <Option value="上线">上线</Option>
+                                            </Select>
 						                </FormItem>
 						            </Col>
-						            <Col span="3" style="text-align: center">所属需求项</Col>
+						            <Col span="3" style="text-align: center">所属需求</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Input  placeholder="输入所属需求项"></Input>
+						                    <Select placeholder="请选择所属需求">
+					                            <Option value="需求1">需求1</Option>
+					                            <Option value="需求2">需求2</Option>
+					                            <Option value="需求3">需求3</Option>
+					                        </Select>
 						                </FormItem>
 						            </Col>
 						            <Col span="3" style="text-align: center">优先级</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Input  placeholder="输入优先级"></Input>
+						                    <Select  placeholder="请选择优先级">
+                                                <Option value="高">高</Option>
+					                            <Option value="中">中</Option>
+					                            <Option value="低">低</Option>
+                                            </Select>
+						                </FormItem>
+						            </Col>
+						        </Row>
+						        <Row class="SerchBox"  v-if="isShowMoreShow">
+						        	<Col span="3" style="text-align: center">负责人</Col>
+						            <Col span="5">
+						                <FormItem >
+						                    <Select  placeholder="请选择负责人">
+                                                <Option value="负责人1">负责人1</Option>
+					                            <Option value="负责人2">负责人2</Option>
+					                            <Option value="负责人3">负责人3</Option>
+					                            <Option value="负责人4">负责人4</Option>
+                                            </Select>
+						                </FormItem>
+						            </Col>
+						            <Col span="3" style="text-align: center">是否领导关心</Col>
+						            <Col span="5">
+						                <FormItem >
+						                    <Select placeholder="请选择是否领导关心">
+					                            <Option value="是">是</Option>
+					                            <Option value="否">否</Option>
+					                        </Select>
+						                </FormItem>
+						            </Col>
+						            <Col span="3" style="text-align: center">所属迭代</Col>
+						            <Col span="5">
+						                <FormItem >
+						                    <Select  placeholder="请选择迭代">
+                                                <Option value="迭代1">迭代1</Option>
+					                            <Option value="迭代2">迭代2</Option>
+					                            <Option value="迭代3">迭代3</Option>
+                                            </Select>
 						                </FormItem>
 						            </Col>
 						        </Row>
@@ -54,7 +103,7 @@
 								<Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
 							</Col>
 						</Row>
-						<div class="formValidateMoreBtnBox">
+						<div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
                             <Icon type="chevron-down" color="#ed3f14"></Icon>
                             <Icon type="chevron-down" color="#ed3f14"></Icon>
                         </div>
@@ -101,15 +150,37 @@
 			    </div>
 			</div>
 		</Card>
-		<ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  />
+		<!-- <ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  /> -->
 	</div>
 </template>
 <script>
 import kanbanboard from "@/components/kanbanboard";
 import ADDorEDITpop from "./add_or_edit_pop";
 export default {
+	beforecreated(){
+        console.log("product--beforecreated-------",this.addtest)
+    },
+    created(){
+        console.log("product--created-------",this.addtest)
+        if(this.addtest){
+            this.tabRowAddFn()
+        }
+    },
+    beforeUpdate(){
+        console.log("product--beforeUpdate-------",this.addtest)
+    },
+    updated(){
+        console.log("product--updated-------",this.addtest)
+        if(this.addtest){
+            this.tabRowAddFn()
+        }
+        
+        
+    },
 	data() {
 		return {
+			isShowMoreShow:false,
+			//--------
 			isShowAddPop:false,
             isAdd:true,
             tableDataRow:false,
@@ -131,22 +202,22 @@ export default {
 			],
 			statusList:[
 				{
-				  stateStr: "未开始",
+				  stateStr: "提出",
 				  state: "01",
 				  taskNumber: "3"
 				},
 				{
-				  stateStr: "处理中",
+				  stateStr: "开发中",
 				  state: "02",
 				  taskNumber: "4"
 				},
 				{
-				  stateStr: "已完成",
+				  stateStr: "测试",
 				  state: "03",
 				  taskNumber: "5"
 				},
 				{
-				  stateStr: "废弃",
+				  stateStr: "上线",
 				  state: "04",
 				  taskNumber: "6"
 				},
@@ -255,7 +326,7 @@ export default {
                 },
 
                 {
-                    title: '产品待办事项名称',
+                    title: '用户故事名称',
                     key: 'name',
                     render: (h, params) => {
                         return h(
@@ -265,7 +336,7 @@ export default {
                                 //domProps:{href:"###"},
                                 on: {
                                     click: () => {
-                                        this.linkFn(params.index)
+                                        this.goProductDetailFn(params.index)
                                     }
                                 }
                             },
@@ -483,8 +554,10 @@ export default {
 
 	},
 	computed: {
-
-	},
+        addtest() {
+            return this.$store.state["ADD_DATA_TEST"].data
+        },
+    },
 
 	mounted(){
 		for(let i=0;i<this.tableData.length;i++){
@@ -508,6 +581,14 @@ export default {
 		}
 	},
 	methods:{
+		tabRowAddFn(){
+            this.tableData.push(this.addtest);
+            Store.dispatch('ADD_DATA_TEST/incrementAsync', {
+                msg: false
+            })
+            console.log('this.$store.state["ADD_DATA_TEST"].data',this.$store.getters["ADD_DATA_TEST/getFn"])
+        },
+        //---------
 		tableDataAddFn(Data){
 			if(this.isAdd){
                 this.tableData.push(Data);
@@ -518,12 +599,17 @@ export default {
 			
 		},
 		addItem(){
+			this.$router.push('/product/add')
+            return;
 			console.log("this.isShowAddPop",this.isShowAddPop)
 			this.isShowAddPop = true;
             this.isAdd = true;
 		},
 		editItem(I){
+
 			console.log(I,this.tableData[I])
+			this.$router.push('/product/edit')
+            return;
 			//
 			this.isShowAddPop = true;
             this.isAdd = false;
@@ -537,9 +623,9 @@ export default {
 		goDevelopmentFn (index) {
             this.$router.push('/development')
         },
-		linkFn (index) {
+		goProductDetailFn (index) {
             //alert(index)
-            this.$router.push('/product/baseinfo')
+            this.$router.push('/product/detail')
         },
         show (index) {
             this.$Modal.info({
@@ -559,12 +645,20 @@ export default {
 <style lang="less" scoped>
 @import './style.less';
 @import './style.css';
-
+.serchInputBox{
+    display: flex;
+}
+.serchBtnBox{
+    position: relative;
+}
 .SerchBox{
 	padding-bottom:10px;
 }
 .serchBtn{
-	transform: translate(50%, 60%);
+	position: absolute;
+    left:0;
+    top:50%;
+    transform: translate(50%, -65%);
 }
 .tableBox{
 	padding-top: 20px;

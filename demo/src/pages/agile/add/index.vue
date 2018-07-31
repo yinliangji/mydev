@@ -118,10 +118,10 @@
                 	-->
                     <FormItem>
                     	<!-- <Button type="primary" @click="submitAdd">提交</Button> -->
-					<Button type="primary" :loading="modal_add_loading" @click="submitAdd">
-				        <span v-if="!modal_add_loading">提交</span>
-				        <span v-else>Loading...</span>
-				    </Button>
+    					<Button type="primary" :loading="modal_add_loading" @click="submitAdd">
+    				        <span v-if="!modal_add_loading">提交</span>
+    				        <span v-else>Loading...</span>
+    				    </Button>
                         <Button type="ghost" style="margin-left: 8px" @click="cancel">重填</Button>
                     </FormItem>
                     
@@ -398,9 +398,6 @@ export default {
 		        })
                 this.formItemReset();
                 this.$refs.formValidate.resetFields();
-                
-                
-                
             },1000)
         },
         submitAdd () {
@@ -416,7 +413,7 @@ export default {
             //this.$Message.info('取消');
             this.formItemReset();
             this.$refs.formValidate.resetFields();
-            this.$emit("popClose",true)
+            
         },
     }
 

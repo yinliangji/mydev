@@ -188,8 +188,8 @@ export default {
         if(this.addtest){
             this.tabRowAddFn()
         }
-        
-        
+
+
     },
 	data() {
 		return {
@@ -610,7 +610,7 @@ export default {
             }else{
                 alert(JSON.stringify(Data))
             }
-			
+
 		},
 		addItem(){
 			this.$router.push('/product/add')
@@ -636,7 +636,7 @@ export default {
 		},
 		goAddDevelopmentFn (index) {
             //this.$router.push('/development')
-            this.$router.push({path: '/development', query: {add: true}})
+            this.$router.push({path: '/development/add'})
         },
 		goDevelopmentFn (index) {
             //this.$router.push('/development')

@@ -7,23 +7,21 @@
           <div class="addTaskTable">
             <Row>
               <Col span="8">
-
+              <FormItem label="迭代名称：" prop="taskName">
+                <Input v-model="formValidate.taskName" style="width: 200px"></Input>
+              </FormItem>
               </Col>
-              <Col span="8" >
-
+              <Col span="8">
+              <FormItem label="开始时间：" prop="startTime">
+                <DatePicker type="date" style="width: 200px" v-model="formValidate.startTime"></DatePicker>
+              </FormItem>
               </Col>
-	          </Row>
-            <FormItem label="迭代名称：" prop="taskName">
-              <Input v-model="formValidate.taskName" style="width: 200px"></Input>
-            </FormItem>
-
-            <FormItem label="开始时间：" prop="startTime">
-              <DatePicker type="date" style="width: 200px" v-model="formValidate.startTime"></DatePicker>
-            </FormItem>
-
-            <FormItem label="结束时间：" prop="endTime">
-              <DatePicker type="date" style="width: 200px" v-model="formValidate.endTime"></DatePicker>
-            </FormItem>
+              <Col span="8">
+              <FormItem label="结束时间：" prop="endTime">
+                <DatePicker type="date" style="width: 200px" v-model="formValidate.endTime"></DatePicker>
+              </FormItem>
+              </Col>
+            </Row>
 
           </div>
         </Form>
@@ -123,9 +121,9 @@
 
       </div>
     </div>
-    <div style="text-align:right;margin-right:12px;margin-top:10px">
-        <Button type="primary" @click="addIterationOk('formValidate')">确定</Button>
-        <Button @click="closeSelf">关闭</Button>
+    <div style="text-align:right;margin-right:30px;margin-top:10px">
+      <Button type="primary" @click="addIterationOk('formValidate')">确定</Button>
+      <Button @click="closeSelf">关闭</Button>
     </div>
 
     <!-- <div class="interation-tip">
@@ -228,12 +226,12 @@ export default {
             columns1: [
                 {
                     title: "任务名称",
-                    width:260,
+                    width: 260,
                     key: "smallName"
                 },
                 {
                     title: "责任人",
-                    width:100,
+                    width: 100,
                     key: "personLiable"
                 },
                 {
@@ -421,10 +419,10 @@ export default {
                     } else {
                         this.$Message.success(this.sureInfo);
                         // this.$refs[name].resetFields();
-                         //点击跳转页面
-                          this.$router.push({
-                              path: "/iteration"
-                          });
+                        //点击跳转页面
+                        this.$router.push({
+                            path: "/iteration"
+                        });
                     }
                 } else {
                     this.$Message.error("请填写好必填内容!");
@@ -432,10 +430,10 @@ export default {
             });
         },
         closeSelf() {
-          this.$router.push({
-              path: "/iteration"
-          });
-        },
+            this.$router.push({
+                path: "/iteration"
+            });
+        }
     },
     computed: {
         totalNum: function() {
@@ -565,7 +563,7 @@ h3.Title {
     float: left;
     overflow: hidden;
     margin: 0 10px;
-    margin-top:6vh;
+    margin-top: 6vh;
     line-height: 40px;
 }
 .transBodyR {
@@ -581,7 +579,7 @@ h3.Title {
     margin-bottom: 6px;
 }
 .addTaskTable {
-    height: 192px;
+    width:1106px;
     padding: 10px;
     border: 1px solid #d8d8d8;
     border-radius: 4px;
@@ -603,7 +601,5 @@ h3.Title {
     font-size: 16px;
 }
 .infoGroup {
-
 }
-
 </style>

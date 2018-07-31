@@ -1,5 +1,5 @@
 <template>
-	<Sider  ref="SiderBox" collapsible :collapsed-width="78" v-model="isCollapsed" class="siderBox"  hide-trigger>
+	<Sider  ref="SiderBox" collapsible :collapsed-width="65" v-model="isCollapsed" class="siderBox"  hide-trigger>
 		<Menu :active-name="currentMenu" theme="dark" width="auto" :class="menuitemClasses" @on-open-change="onOpenChange" ref="side_menu" class="siderMenu">
 			<router-view name="Aside" />
 		</Menu>

@@ -8,76 +8,105 @@
         </Breadcrumb>
        
         <Card>
-        	<div class="baseInfoBox">
-            	<h3 class="Title">项目基本信息</h3>
-            	<div class="tableBox">
-            		<!-- -->
-            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
-					  <tbody>
-						<tr>
-						  <th width="11%">项目编号</th>
-						  <td>prj0001</td>
-						  <th width="11%">项目名称</th>
-						  <td>TPM敏捷项目管理系统</td>
-						  <th width="11%">项目经理</th>
-						  <td>李卓</td>
-						</tr>
-						<tr>
-						  <th>项目创建时间</th>
-						  <td>2017-08-01</td>
-						  <th>开始时间</th>
-						  <td>2017-08-01</td>
-						  <th>结束时间</th>
-						  <td>2017-12-31</td>
-						</tr>
-						<tr>
-						  <th>开发人员</th>
-						  <td>李卓、谢蓓、王昕亮</td>
-						  <th>测试人员</th>
-						  <td>李卓  谢蓓 王昕亮</td>
-						  <th>维护人员</th>
-						  <td>李卓、赵筝、谢蓓、王昕亮、邢磊</td>
-						</tr>
-						<tr>
-						  <th>项目描述</th>
-						  <td colspan="5">TPM敏捷项目管理系统</td>
-						</tr>
-						<tr>
-						  <th>项目目标</th>
-						  <td colspan="5">支持备课敏捷开发模块的落地</td>
-						</tr>
-					  </tbody>
-					</table>
-            		<!-- -->
-            	</div>
-            	<div class="addModule">
-	            	<Row class="tagBox">
-		                <Col span="2">
-		                    <h4>技术模块</h4>
-		                </Col>
-		                <Col span="22" >
-		                    <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose">{{ item}}</Tag>
-		                    <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">添加技术模块</Button>
-		                </Col>
-		            </Row>
-		            <Row class="tagBox">
-		                <Col span="2">
-		                    <h4>业务模块</h4>
-		                </Col>
-		                <Col span="22" >
-		                    <Tag v-for="item in count2" :key="item" :name="item" closable @on-close="handleClose2">{{ item}}</Tag>
-		                    <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem2">添加业务模块</Button>
-		                </Col>
-		            </Row>
-               
-            	</div>
+        	<Tabs value="name1">
+		        <TabPane label="项目基本信息" name="name1">
+		        	<div class="baseInfoBox">
+		            	<h3 class="Title">项目基本信息</h3>
+		            	<div class="tableBox">
+		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
+							  <tbody>
+								<tr>
+								  <th width="11%">项目编号</th>
+								  <td>prj0001</td>
+								  <th width="11%">项目名称</th>
+								  <td>TPM敏捷项目管理系统</td>
+								  <th width="11%">所属产品</th>
+								  <td>产品1</td>
+								</tr>
+								<tr>
+								  <th>项目创建时间</th>
+								  <td>2017-08-01</td>
+								  <th>开始时间</th>
+								  <td>2017-08-01</td>
+								  <th>结束时间</th>
+								  <td>2017-12-31</td>
+								</tr>
 
-				
+								<tr>
+								  <th>所属模块</th>
+								  <td colspan="5">模块1、模块5、模块4、模块2、</td>
+								</tr>
+								
+								<tr>
+								  <th>项目描述</th>
+								  <td colspan="5">TPM敏捷项目管理系统、项目计划书是指项目方为了达到招商融资和其它发展目标等目的所制作的计划书。一份好的项目计划书的特点是：关注产品、敢于竞争、充分市场调研，有力资料说明、表明行动的方</td>
+								</tr>
+								<tr>
+								  <th>项目目标</th>
+								  <td colspan="5">支持备课敏捷开发模块的落地</td>
+								</tr>
+							  </tbody>
+							</table>
+		            	</div>
+		            </div>
+		        </TabPane>
+		        <TabPane label="成员信息" name="name2">
+		        	<div class="baseInfoBox">
+		            	<h3 class="Title">成员信息</h3>
+		            	<div class="tableBox">
+		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
+								<tbody>
+									<tr>
+										<th width="11%">项目经理</th>
+										<td>李卓、赵筝、谢蓓、王昕亮、邢磊</td>
+										<th width="11%">开发人员</th>
+										<td>李卓、谢蓓、王昕亮</td>
+										<th width="11%">测试人员</th>
+										<td>李卓  谢蓓 王昕亮</td>
+									</tr>
+									<tr>
+										<th>维护人员</th>
+										<td>李卓、赵筝、谢蓓、王昕亮、邢磊</td>
+										<th>总体组</th>
+										<td>总体组1</td>
+										<th>&nbsp;</th>
+										<td>&nbsp;</td>
+									</tr>
+								</tbody>
+							</table>
+		            	</div>
+		            </div>
+		        </TabPane>
+		        
+		    </Tabs>
+        	
+            
+           
+            <!-- <div class="addModule">
+	        	<Row class="tagBox">
+	                <Col span="2">
+	                    <h4>技术模块</h4>
+	                </Col>
+	                <Col span="22" >
+	                    <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose">{{ item}}</Tag>
+	                    <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">添加技术模块</Button>
+	                </Col>
+	            </Row>
+	            <Row class="tagBox">
+	                <Col span="2">
+	                    <h4>业务模块</h4>
+	                </Col>
+	                <Col span="22" >
+	                    <Tag v-for="item in count2" :key="item" :name="item" closable @on-close="handleClose2">{{ item}}</Tag>
+	                    <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem2">添加业务模块</Button>
+	                </Col>
+	            </Row>
+	    	</div> -->
+           
 
-            </div>
 		</Card>
 
-
+		
 		<Modal ref="addPop" v-model="modaAdd" title="添加模块" @on-ok="submitAdd"  ok-text="提交" :loading="modal_add_loading" visible="true">
             <Form :model="formItem" :label-width="80" >
                 <FormItem label="模块名称" v-if="technologyORbusiness">

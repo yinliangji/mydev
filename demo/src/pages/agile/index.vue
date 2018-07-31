@@ -380,6 +380,11 @@ export default {
                 this.error("请选择一项，进行编辑！")
                 return
             }
+
+
+            this.$router.push('/agile/edit')
+            return;
+
             this.isShowAddPop = true;
             this.isAdd = false;
             this.tableDataRow = this.actionArr;

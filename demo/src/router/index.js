@@ -53,6 +53,19 @@ const router = new Router({
             },
         },
         {
+            path: '/agile/edit',
+            name: 'AgileEdit',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/agile/edit/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_1"], resolve)
+                }
+            },
+        },
+        //
+        {
             path: '/agile/detail',
             name: 'AgileDetail',
             components: {

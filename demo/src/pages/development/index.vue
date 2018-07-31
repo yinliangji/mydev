@@ -100,64 +100,7 @@
           </Col>
         </Row>
       </div>
-      <!-- <Modal v-model="addTaskOnoff" title="添加任务" width="500" @on-ok="ok">
-        <div class="addTaskTable">
-          <div class="taskrow clearfix">
-            <div class="addTaskTableTitle">任务名称：</div>
-            <div class="addTaskTableCon">
-              <Input v-model="taskName" style="width:200px"></Input>
-            </div>
-          </div>
-          <div class="taskrow clearfix">
-            <div class="addTaskTableTitle">责任人：</div>
-            <div class="addTaskTableCon">
-              <Input v-model="personLiable" style="width:200px"></Input>
-            </div>
-          </div>
-          <div class="taskrow clearfix" style="height:70px;">
-            <div class="addTaskTableTitle">任务描述：</div>
-            <div class="addTaskTableCon">
-              <Input v-model="describe" type="textarea" style="width:200px" placeholder="描述..."></Input>
-            </div>
-          </div>
-          <div class="taskrow clearfix">
-            <div class="addTaskTableTitle">所属待办事项：</div>
-            <div class="addTaskTableCon">
-              <Select v-model="curNeed" style="width:200px">
-                <Option v-for="item in ownNeed" :value="item.value" :key="item.value">
-                  {{ item.label }}</Option>
-              </Select>
-            </div>
-          </div>
 
-        </div>
-      </Modal> -->
-      <!-- 添加迭代面板 -->
-      <Modal v-model="addTaskOnoff" :title="formValidate.title" width="500" @on-ok="addTaskOk('formValidate')">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
-          <div class="addTaskTable">
-
-            <FormItem label="任务名称：" prop="taskName">
-              <Input v-model="formValidate.taskName" style="width: 200px"></Input>
-            </FormItem>
-
-            <FormItem label="责任人：" prop="personLiable">
-              <Input v-model="formValidate.personLiable" style="width:200px"></Input>
-            </FormItem>
-
-            <FormItem label="任务描述：" prop="describe">
-              <Input v-model="formValidate.describe" type="textarea" style="width:200px" placeholder="描述..."></Input>
-            </FormItem>
-            <FormItem label="所属待办事项：" prop="curNeed">
-              <Select v-model="formValidate.curNeed" style="width:200px">
-                <Option v-for="item in formValidate.ownNeed" :value="item.value" :key="item.value">
-                  {{ item.label }}</Option>
-              </Select>
-            </FormItem>
-
-          </div>
-        </Form>
-      </Modal>
       <component :is="currentView" :cardList="cardList" :groupList="groupList" :statusList="statusList">
       </component>
     </div>
@@ -179,64 +122,7 @@ export default {
             taskStatus: "",
             belongIteration: "",
             personLiable: "",
-            addTaskOnoff: false,
-            currentView: "developList",
-            formValidate: {
-                title: "添加任务",
-                taskName: "",
-                ownNeed: [
-                    {
-                        value: "taskvalue1",
-                        label: "用户界面设计1"
-                    },
-                    {
-                        value: "taskvalue2",
-                        label: "用户界面设计2"
-                    },
-                    {
-                        value: "taskvalue3",
-                        label: "用户界面设计3"
-                    },
-                    {
-                        value: "taskvalue4",
-                        label: "用户界面设计4"
-                    }
-                ],
-                curNeed: "",
-                personLiable: "",
-                describe: ""
-            },
-            ruleValidate: {
-                taskName: [
-                    {
-                        required: true,
-                        message: "任务名称不能为空",
-                        trigger: "blur"
-                    }
-                ],
-                personLiable: [
-                    {
-                        required: true,
-                        message: "责任人不能为空",
-                        trigger: "blur"
-                    }
-                ],
-                describe: [
-                     {
-                        required: true,
-                        message: "任务描述不能为空",
-                        trigger: "blur"
-                    }
-                ],
-                curNeed: [
-                     {
-                        required: true,
-                        message: "所属待办事项不能为空",
-                        trigger: "change"
-                    }
-                ],
-
-            }
+            currentView: "developList"
         };
     },
     mounted() {
@@ -258,22 +144,13 @@ export default {
             // 查询方法
             console.log("查询  ::: ", info);
         },
-        addNewTask(info) {
-            this.addTaskOnoff = true;
-        },
-
-        //添加任务确认按钮
-        addTaskOk(name) {
-            this.$refs[name].validate(valid => {
-                if (valid) {
-                    this.$Message.success(this.alertInfo);
-                    this.$refs[name].resetFields();
-                } else {
-                    this.$Message.error("请填写好必填内容!");
-                    // this.$refs[name].resetFields();
-                }
+        addNewTask() {
+            //点击跳转页面
+            this.$router.push({
+              path: "/development/add"
             });
         },
+
         // addNewTask(info) {
         //   EventBus.$emit("addTask", info);
         // },
@@ -292,40 +169,6 @@ export default {
         }
     },
     computed: {
-        searchParams: function() {
-            return [
-                {
-                    type: "input",
-                    label: "迭代名称",
-                    params: "iterationName"
-                },
-                {
-                    type: "input",
-                    label: "迭代编号",
-                    params: "iterationNumber"
-                },
-                {
-                    type: "input",
-                    label: "需求名称",
-                    params: "needName"
-                },
-                {
-                    type: "input",
-                    label: "任务状态",
-                    params: "taskStatus"
-                },
-                {
-                    type: "input",
-                    label: "所属迭代",
-                    params: "belongIteration"
-                },
-                {
-                    type: "input",
-                    label: "责任人",
-                    params: "personLiable"
-                }
-            ];
-        },
         //所有卡片数据
         cardList: function() {
             let _cardList = [
@@ -493,7 +336,6 @@ export default {
     components: {
         kanbanboard,
         developList
-
     }
 };
 </script>

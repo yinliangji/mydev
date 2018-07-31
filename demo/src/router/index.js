@@ -191,7 +191,6 @@ const router = new Router({
         },
         {
             path: '/development',
-            name: 'Development',
             components: {
                 Cont: resolve => {
                     require(["../pages/development/"], resolve)
@@ -210,6 +209,15 @@ const router = new Router({
                 },
                 Aside: resolve => {
                     require(["../layout/sider/sider_2"], resolve)
+                }
+
+            },
+        },
+        {
+            path: '/development/add',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/development/add"], resolve)
                 }
 
             },

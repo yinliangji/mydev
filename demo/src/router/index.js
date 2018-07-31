@@ -85,7 +85,6 @@ const router = new Router({
         },
         {
             path: '/development',
-            name: 'Development',
             components: {
                 Cont: resolve => {
                     require(["../pages/development/"], resolve)
@@ -98,6 +97,15 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/development/detail"], resolve)
+                }
+
+            },
+        },
+        {
+            path: '/development/add',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/development/add"], resolve)
                 }
 
             },

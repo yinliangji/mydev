@@ -1,36 +1,78 @@
 <template>
-  <div class="container-transfer" :style="{minHeight: '100vh'}">
+  <div class="container-transfer">
+    <div class="clearfix">
+      <div class="infoGroup">
+        <h3 class="Title">迭代基本信息</h3>
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate">
+          <div class="addTaskTable">
+
+            <FormItem label="迭代名称：" prop="taskName">
+              <Input v-model="formValidate.taskName" style="width: 200px"></Input>
+            </FormItem>
+
+            <FormItem label="开始时间：" prop="startTime">
+              <DatePicker type="date" style="width: 200px" v-model="formValidate.startTime"></DatePicker>
+            </FormItem>
+
+            <FormItem label="结束时间：" prop="endTime">
+              <DatePicker type="date" style="width: 200px" v-model="formValidate.endTime"></DatePicker>
+            </FormItem>
+
+          </div>
+        </Form>
+      </div>
+      <div class="infoGroup">
+        <h3 class="Title">迭代所属项目信息</h3>
+        <div class="addTaskTable">
+          <dl class="showInfo">
+            <dt class="showTitle">产品名称：</dt>
+            <dd class="showCon">私有云项目</dd>
+          </dl>
+          <dl class="showInfo">
+            <dt class="showTitle">项目名称：</dt>
+            <dd class="showCon">敏捷项目二期开发</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="Title">规划当前迭代：
+      <span style="color:red">{{formValidate.taskName}}</span>
+    </h3>
     <div class="transBody">
+
       <div class="transBodyL">
-        <h3>迭代名称-{{titleName}}
-          <span class="totalNum">
-            <i>{{nowlNum}}/</i>{{totalNum}}</span>
-        </h3>
+
+        <div class="trans-top">
+
+          <span style="margin:0 4px">故事名称：</span>
+          <Input v-model="storySearch" placeholder="搜索" style="width:130px" icon="android-search"></Input>
+
+          <span style="margin:0 4px">故事类型：</span>
+          <Select v-model="storyType" style="width:130px">
+            <Option v-for="item in storyTypeArr" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+
+        </div>
         <Checkbox :value="checkAll" @click.prevent.native="handleCheckAll" v-if="dataL.length>0">全选</Checkbox>
+        <span class="totalNum">
+          (
+          <i>{{nowlNum}}/</i>{{totalNum}})
+        </span>
         <CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
           <!-- checkAllGroup:{{checkAllGroup}}+checkAllGroupOnoff:{{checkAllGroupOnoff}} -->
           <ul>
             <li v-for="item in dataL" :key="item.type">
               <div class="tranHeader">
                 <Checkbox :label="item.type">{{item.bigName}}</Checkbox>
+                <span style="margin:0 80px">{{item.stoyrType}} </span>
+                <span>{{item.stoyrStatus}}</span>
+
                 <Icon type="navicon-round" @click="item.isShow=!item.isShow"></Icon>
               </div>
               <div class="tranpanel" v-show="item.isShow">
-                <!-- <div class="addTaskTable">
-                  <div class="taskrow clearfix">
-                    <div class="addTaskTableTitle">任务名称：</div>
-                    <div class="addTaskTableCon">{{item.name}}</div>
-                  </div>
-                  <div class="taskrow clearfix">
-                    <div class="addTaskTableTitle">开始时间：</div>
-                    <div class="addTaskTableCon">{{item.startTime}}</div>
-                  </div>
-                  <div class="taskrow clearfix">
-                    <div class="addTaskTableTitle">结束时间：</div>
-                    <div class="addTaskTableCon">2018-8-19</div>
-                  </div>
-                </div> -->
-                <Table :columns="columns1" :data="dataL" size="small"></Table>
+
+                <Table :columns="columns1" :data="item.list" size="small"></Table>
               </div>
             </li>
           </ul>
@@ -38,8 +80,8 @@
 
       </div>
       <div class="transBodyC">
-        <Button :type="bgcolorL" long icon="chevron-left" @click="toLeft">To left</Button>
-        <Button :type="bgcolorR" long icon="chevron-right" @click="toRight">To right</Button>
+        <Button :type="bgcolorL" long icon="chevron-left" @click="toLeft">向左移动</Button>
+        <Button :type="bgcolorR" long icon="chevron-right" @click="toRight">向右移动</Button>
       </div>
       <div class="transBodyR">
         <div class="trans-top">
@@ -49,11 +91,21 @@
               {{ item.label }}
             </Option>
           </Select>
-          <Input v-model="search" placeholder="search" style="width:180px" icon="android-search">
-          </Input>
+          <span>故事类型</span>
+          <Select v-model="model1" style="width:100px">
+            <Option v-for="item in optionList" :value="item.label" :key="item.value">
+              {{ item.label }}
+            </Option>
+          </Select>
+          <span>故事状态</span>
+          <Select v-model="model1" style="width:100px">
+            <Option v-for="item in optionList" :value="item.label" :key="item.value">
+              {{ item.label }}
+            </Option>
+          </Select>
         </div>
         <div class="transBodyRcon">
-          <h3>{{model1}}</h3>
+
           <Checkbox :value="checkAllR" @click.prevent.native="handleCheckAllR" v-if="dataR.length>0">全选</Checkbox>
           <CheckboxGroup v-model="checkAllGroupR" @on-change="checkAllGroupChangeR">
             <!-- checkAllGroupR:{{checkAllGroupR}}+checkAllGroupOnoffR:{{checkAllGroupOnoffR}} -->
@@ -61,24 +113,12 @@
               <li v-for="item in dataR" :key="item.type">
                 <div class="tranHeader">
                   <Checkbox :label="item.type">{{item.bigName}}</Checkbox>
+                  <span style="margin:0 20px">{{item.stoyrType}} </span>
+                  <span>{{item.stoyrStatus}}</span>
                   <Icon type="navicon-round" @click="item.isShow=!item.isShow"></Icon>
                 </div>
                 <div class="tranpanel" v-show="item.isShow">
-                  <!-- <div class="addTaskTable">
-                    <div class="taskrow clearfix">
-                      <div class="addTaskTableTitle">任务名称：</div>
-                      <div class="addTaskTableCon">{{item.name}}</div>
-                    </div>
-                    <div class="taskrow clearfix">
-                      <div class="addTaskTableTitle">开始时间：</div>
-                      <div class="addTaskTableCon">{{item.startTime}}</div>
-                    </div>
-                    <div class="taskrow clearfix">
-                      <div class="addTaskTableTitle">结束时间：</div>
-                      <div class="addTaskTableCon">2018-8-19</div>
-                    </div>
-                  </div> -->
-                  <Table :columns="columns1" :data="dataR"></Table>
+                  <Table :columns="columns1" :data="item.list"></Table>
                 </div>
               </li>
 
@@ -88,7 +128,7 @@
 
       </div>
     </div>
-
+    <Button type="primary" @click="addIterationOk('formValidate')">确定</Button>
     <div class="interation-tip">
       <span>
         说明：归档后的产品待办事项不能修改所属迭代。需求不与模块关联，任务与模块关联但是不是必须可删除任务，在任务详情里加删除按钮 删除迭代后，相关待办事项和任务不会删除，只是迭代未设置产品上线时需选择完成的待办事项或需求项，自动改变其任务、事项、需求项状态为完成
@@ -100,8 +140,61 @@
 export default {
     data() {
         return {
-            bgcolorL:"ghost",
-            bgcolorR:"ghost",
+            sureInfo: "添加成功",
+            storySearch: "",
+            storyType: "",
+            storyTypeArr: [
+                {
+                    value: "New York",
+                    label: "故事类型1"
+                },
+                {
+                    value: "London",
+                    label: "故事类型2"
+                },
+                {
+                    value: "Sydney",
+                    label: "故事类型3"
+                },
+                {
+                    value: "Ottawa",
+                    label: "故事类型4"
+                }
+            ],
+            formValidate: {
+                title: "添加迭代",
+                taskName: "",
+                startTime: "",
+                endTime: ""
+            },
+            ruleValidate: {
+                taskName: [
+                    {
+                        required: true,
+                        message: "迭代名称不能为空",
+                        trigger: "blur"
+                    }
+                ],
+                startTime: [
+                    {
+                        required: true,
+                        type: "date",
+                        message: "请选择开始时间",
+                        trigger: "change"
+                    }
+                ],
+                endTime: [
+                    {
+                        required: true,
+                        type: "date",
+                        message: "请选择结束时间",
+                        trigger: "change"
+                        // validator: validateEndTime
+                    }
+                ]
+            },
+            bgcolorL: "ghost",
+            bgcolorR: "ghost",
             nowNum: 0,
             search: "",
             titleName: "",
@@ -132,42 +225,15 @@ export default {
             checkAllGroupR: [],
             checkAllGroupOnoff: [], //全选按钮
             checkAllGroupOnoffR: [],
-            // dataL: [
-            //     {
-            //         type: 1,
-            //         name: "事项1",
-            //         startTime: "2017-08-01",
-            //         endTime: "2017-08-01",
-            //         isShow: true
-            //     },
-            //     {
-            //         type: 2,
-            //         name: "事项2",
-            //         startTime: "2017-08-01",
-            //         endTime: "2017-08-01",
-            //         isShow: false
-            //     }
-            // ],
-            // dataR: [
-            //     {
-            //         type: 3,
-            //         name: "事项3",
-            //         startTime: "2017-08-01",
-            //         endTime: "2017-08-01",
-            //         isShow: false
-            //     },
-            //     {
-            //         type: 4,
-            //         name: "事项4",
-            //         startTime: "2017-08-01",
-            //         endTime: "2017-08-01",
-            //         isShow: false
-            //     }
-            // ],
+
             columns1: [
                 {
                     title: "任务名称",
                     key: "smallName"
+                },
+                {
+                    title: "责任人",
+                    key: "personLiable"
                 },
                 {
                     title: "状态",
@@ -177,33 +243,81 @@ export default {
             dataL: [
                 {
                     type: 1,
-                    bigName: "事项1",
-                    smallName: "全流程敏捷开发全流程敏捷开发",
-                    status: "进行中",
-                    isShow: false
+                    bigName: "故事1",
+                    stoyrType: "类型1",
+                    stoyrStatus: "stoyrStatus1",
+                    isShow: true,
+                    list: [
+                        {
+                            smallName: "全流程敏捷开发全流程敏捷开发",
+                            status: "进行中",
+                            personLiable: "李卓"
+                        },
+                        {
+                            smallName: "web组件开发",
+                            status: "已完成",
+                            personLiable: "李卓"
+                        }
+                    ]
                 },
                 {
                     type: 2,
-                    bigName: "事项2",
-                    smallName: "web组件开发",
-                    status: "已完成",
-                    isShow: false
+                    bigName: "故事2",
+                    stoyrType: "类型2",
+                    stoyrStatus: "stoyrStatus2",
+                    isShow: false,
+                    list: [
+                        {
+                            smallName: "全流程敏捷开发全流程敏捷开发2",
+                            status: "进行中",
+                            personLiable: "李卓"
+                        },
+                        {
+                            smallName: "web组件开发2",
+                            status: "已完成",
+                            personLiable: "李卓"
+                        }
+                    ]
                 }
             ],
             dataR: [
                 {
                     type: 3,
-                    bigName: "事项3",
-                    smallName: "全流程敏捷开发",
-                    status: "进行中",
-                    isShow: false
+                    bigName: "故事3",
+                    stoyrType: "类型3",
+                    stoyrStatus: "stoyrStatus3",
+                    isShow: true,
+                    list: [
+                        {
+                            smallName: "全流程敏捷开发全流程敏捷开发3",
+                            status: "进行中",
+                            personLiable: "李卓"
+                        },
+                        {
+                            smallName: "web组件开发3",
+                            status: "已完成",
+                            personLiable: "李卓"
+                        }
+                    ]
                 },
                 {
                     type: 4,
-                    bigName: "事项4",
-                    smallName: "web组件开发",
-                    status: "已完成",
-                    isShow: false
+                    bigName: "故事4",
+                    stoyrType: "类型4",
+                    stoyrStatus: "stoyrStatus4",
+                    isShow: false,
+                    list: [
+                        {
+                            smallName: "全流程敏捷开发全流程敏捷开发4",
+                            status: "进行中",
+                            personLiable: "李卓"
+                        },
+                        {
+                            smallName: "web组件开发4",
+                            status: "已完成",
+                            personLiable: "李卓"
+                        }
+                    ]
                 }
             ]
         };
@@ -281,6 +395,39 @@ export default {
             } else {
                 this.checkAllR = true;
             }
+        },
+        //开始时间与结束时间判断
+        timeJudge(date1, date2) {
+            let oDate1 = new Date(date1);
+            let oDate2 = new Date(date2);
+            if (oDate1.getTime() > oDate2.getTime()) {
+                return false;
+            } else {
+                return true;
+            }
+        },
+        //添加迭代确认按钮
+        addIterationOk(name) {
+            this.$refs[name].validate(valid => {
+                if (valid) {
+                    let onoff = this.timeJudge(
+                        this.formValidate.startTime,
+                        this.formValidate.endTime
+                    );
+                    if (!onoff) {
+                        this.$Message.error("开始时间不能大于结束时间!");
+                    } else {
+                        this.$Message.success(this.sureInfo);
+                        // this.$refs[name].resetFields();
+                         //点击跳转页面
+                          this.$router.push({
+                              path: "/iteration"
+                          });
+                    }
+                } else {
+                    this.$Message.error("请填写好必填内容!");
+                }
+            });
         }
     },
     computed: {
@@ -310,21 +457,21 @@ export default {
         //   },
         //   deep: true
         // }
-        checkAllGroup(val){
-          console.log(val);
-          if(val.length>0){
-            this.bgcolorL="info"
-          }else{
-            this.bgcolorL="ghost"
-          }
+        checkAllGroup(val) {
+            console.log(val);
+            if (val.length > 0) {
+                this.bgcolorR = "info";
+            } else {
+                this.bgcolorR = "ghost";
+            }
         },
-        checkAllGroupR(val){
-          console.log(val);
-          if(val.length>0){
-            this.bgcolorR="info"
-          }else{
-            this.bgcolorR="ghost"
-          }
+        checkAllGroupR(val) {
+            console.log(val);
+            if (val.length > 0) {
+                this.bgcolorL = "info";
+            } else {
+                this.bgcolorL = "ghost";
+            }
         },
         dataL(val) {
             alert("监控到了obj变化");
@@ -352,12 +499,20 @@ export default {
         });
     },
     mounted() {
-        this.titleName = this.$route.query.iterationName;
+        this.formValidate.taskName = this.$route.query.iterationName;
+        this.$Message.config({
+            top: 100,
+            duration: 2
+        });
     }
 };
 </script>
 
 <style scoped>
+h3.Title {
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
 .container-transfer {
     width: 100%;
     margin: 0 auto;
@@ -375,19 +530,20 @@ export default {
 }
 .transBody {
     overflow: hidden;
-    min-height: 80vh;
+    min-height: 50vh;
     margin-top: 20px;
     /* display: flex; */
 }
 .transBodyL {
-   /* flex-grow:1; */
-   width: 454px;
-   float: left;
+    /* flex-grow:1; */
+    width: 454px;
+    float: left;
     overflow: hidden;
     border: 1px solid #d8d8d8;
     border-radius: 4px;
 }
 .transBody h3 {
+    height: 40px;
     line-height: 40px;
     text-indent: 10px;
     background: #f9fafc;
@@ -399,15 +555,15 @@ export default {
 
 .transBodyC {
     width: 140px;
-  float: left;
+    float: left;
     overflow: hidden;
     margin: 0 10px;
     margin-top: 30vh;
     line-height: 40px;
 }
 .transBodyR {
-    width: 454px;
-   float: left;
+    width: 490px;
+    float: left;
     overflow: hidden;
     border: 1px solid #d8d8d8;
     border-radius: 4px;
@@ -418,8 +574,10 @@ export default {
     margin-bottom: 6px;
 }
 .addTaskTable {
-    background: #d8d8d8;
-    margin-top: 10px;
+    height: 192px;
+    padding: 10px;
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
 }
 .taskrow {
     height: 30px;
@@ -432,10 +590,15 @@ export default {
     cursor: pointer;
 }
 .totalNum {
-    float: right;
     margin-right: 10px;
     color: #ff9900;
     font-weight: normal;
     font-size: 16px;
 }
+.infoGroup {
+    float: left;
+    width: 46%;
+    margin-right: 20px;
+}
+
 </style>

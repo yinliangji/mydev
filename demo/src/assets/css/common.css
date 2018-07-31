@@ -1,4 +1,4 @@
-.clearfix {
+/* .clearfix {
     display: block;
 }
 
@@ -6,6 +6,18 @@
     display: table;
     content: "";
     line-height: 0;
+} */
+
+.clearfix:after {
+    display: block;
+    clear: both;
+    content: "";
+    visibility: hidden;
+    height: 0;
+}
+
+.clearfix {
+    zoom: 1;
 }
 
 .float-left {
@@ -85,6 +97,27 @@ h3.Title:before {
 
 
 /* qhc */
+
+
+/* 迭代所属项目信息 */
+
+.showInfo {
+    font-size: 14px;
+    overflow: hidden;
+    line-height: 30px
+}
+
+.showTitle {
+    float: left;
+    text-align: right;
+}
+
+.showCon {
+    float: left;
+}
+
+
+/* 迭代所属项目信息end */
 
 .curPosition {
     margin: 10px 0;
@@ -243,15 +276,15 @@ h3.Title:before {
     position: relative;
     width: 10%;
     margin: 0 auto;
-    cursor:pointer;
+    cursor: pointer;
     margin-top: 10px;
 }
+
 .formValidateMoreBtnBox .ivu-icon {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -30%);
     -ms-transform: translate(-50%, -30%);
-    -webkit-transform:translate(-50%, -30%);
-    
+    -webkit-transform: translate(-50%, -30%);
 }

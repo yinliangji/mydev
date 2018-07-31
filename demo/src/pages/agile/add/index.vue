@@ -4,18 +4,19 @@
             <div class="aglieAddBox">
                 <h3 class="Title">项目基本信息</h3>
 
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" class="fromBox">
+
                     <FormItem label="项目名称" prop="name">
                         <Input v-model="formValidate.name" placeholder="请填写项目名称"></Input>
                     </FormItem>
 
 
-                     <FormItem label="设置时间" prop="date">
+                    <!-- <FormItem label="设置时间" prop="date">
                         <DatePicker :value="formValidate.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择开始和结束日期" v-model="formValidate.date" split-panels  style="width: 300px"></DatePicker>
-                    </FormItem>
+                    </FormItem> -->
 
 
-                    <FormItem label="开始时间">
+                    <FormItem label="开始时间" prop="startDate">
                         <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期" style="width: 200px" :value="formValidate.startDate" v-model="formValidate.startDate"></DatePicker>
                     </FormItem>
 
@@ -24,19 +25,30 @@
                     </FormItem>
 
                   
+					<FormItem label="项目描述" prop="desc">
+                        <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目描述"></Input>
+                    </FormItem>
 
 
-                    <FormItem label="业务模块" prop="business">
+                    <FormItem label="项目目标" prop="target">
+                        <Input v-model="formValidate.target" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目目标"></Input>
+                    </FormItem>
+
+                    <FormItem label="填写模块" prop="moudle">
+                        <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input>
+                    </FormItem>
+
+                    <FormItem label="模块选择" prop="business">
                         <Select v-model="formValidate.business" multiple >
                             <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </FormItem>
 
-                    <FormItem label="技术模块" prop="technology">
+                    <!-- <FormItem label="技术模块" prop="technology">
                         <Select v-model="formValidate.technology" multiple >
                             <Option v-for="item in technologyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
-                    </FormItem>
+                    </FormItem> -->
 
                     
                     <Row>
@@ -84,19 +96,15 @@
 
 
                    
-                    <FormItem label="项目描述" prop="desc">
-                        <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目描述"></Input>
-                    </FormItem>
+                    
 
-                    <FormItem label="项目目标" prop="target">
-                        <Input v-model="formValidate.target" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目目标"></Input>
-                    </FormItem>
+                    
 
 
 
                     <FormItem>
-                    <Button type="primary">Submit</Button>
-                        <Button type="ghost" style="margin-left: 8px">Cancel</Button>
+                    	<Button type="primary" @click="submitAdd">Submit</Button>
+                        <Button type="ghost" style="margin-left: 8px" @click="cancel">Cancel</Button>
                     </FormItem>
 
 
@@ -199,6 +207,7 @@ export default {
                 target:"",
                 technology: [],
                 business:[],
+                moudle:"",
             },
             technologyList: [
                 {
@@ -222,7 +231,7 @@ export default {
                 },
                 {
                     value: 'London',
-                    label: '业务模块2'
+                    label: '技术模块1'
                 },
                 {
                     value: 'Sydney',
@@ -234,6 +243,9 @@ export default {
                 name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
+                moudle: [
+                    { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
                 date: [
                     { required: true, type: 'array', validator: validateDate, trigger: ['blur','change'], }
                 ],
@@ -241,6 +253,12 @@ export default {
                     { required: true, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
                 ],
                 startTime: [
+                    { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
+                ],
+                endDate: [
+                    { required: true, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
+                ],
+                endTime: [
                     { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
                 ],
 
@@ -374,6 +392,10 @@ export default {
 </script>
 <style lang="less" scoped>
 .aglieAddBox {
-    width: 50%;
+
+}
+.fromBox {
+	
+	width: 50%;
 }
 </style>

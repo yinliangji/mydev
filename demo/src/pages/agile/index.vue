@@ -255,6 +255,8 @@ export default {
             
         },
         addItemFn(){
+            this.$router.push('/agile/add')
+            return;
             this.isShowAddPop = true;
             this.isAdd = true;
         },

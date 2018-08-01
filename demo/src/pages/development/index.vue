@@ -125,15 +125,17 @@ export default {
             currentView: "developList"
         };
     },
+    created(){
+        if(this.$route.query.board){
+           this.currentView = kanbanboard
+        }
+    },
     mounted() {
         EventBus.$on("moveEnd", this.moveEnd);
         EventBus.$on("clickItem", this.clicked);
         EventBus.$on("search", this.searchHandle);
         EventBus.$on("addTask", this.addNewTask);
-        console.log(this.$route.query.board);
-        if(this.$route.query.board){
-           this.currentView = kanbanboard
-        }
+
     },
     methods: {
         moveEnd(info) {

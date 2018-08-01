@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '../pages/home'
+// import Home from '../pages/home'
 import Store from '@/vuex/store'
 Vue.use(Router)
 const router = new Router({
@@ -9,24 +9,24 @@ const router = new Router({
             path: '/',
             redirect: '/agile',
         },
-        {
-            path: '/home',
-            name: 'Home',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/home"], resolve)
-                }
-            },
-        },
-        {
-            path: '/home/list',
-            name: 'List',
-            components: {
-                Cont: resolve => {
-                    require(["../pages/home/list/"], resolve)
-                }
-            },
-        },
+        // {
+        //     path: '/home',
+        //     name: 'Home',
+        //     components: {
+        //         Cont: resolve => {
+        //             require(["../pages/home"], resolve)
+        //         }
+        //     },
+        // },
+        // {
+        //     path: '/home/list',
+        //     name: 'List',
+        //     components: {
+        //         Cont: resolve => {
+        //             require(["../pages/home/list/"], resolve)
+        //         }
+        //     },
+        // },
         {
             path: '/agile',
             name: 'Agile',

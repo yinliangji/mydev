@@ -316,7 +316,7 @@ export default {
                     product:"产品1",
                 },
                 {
-                    name: 'Jim Green',
+                    name: '项目名称2',
                     num: 24,
                     describe: 'London No. 1 Lake Park',
                     manager:"项目经理2",
@@ -325,7 +325,7 @@ export default {
                     product:"产品2",
                 },
                 {
-                    name: 'Joe Black',
+                    name: '项目名称3',
                     num: 30,
                     describe: 'Sydney No. 1 Lake Park',
                     manager:"项目经理3",

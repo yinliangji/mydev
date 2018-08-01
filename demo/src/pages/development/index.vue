@@ -4,6 +4,7 @@
       <BreadcrumbItem>当前位置</BreadcrumbItem>
       <BreadcrumbItem>开发任务管理</BreadcrumbItem>
     </Breadcrumb> -->
+    <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :Top="'10'" />
     <selectMenu></selectMenu>
     <div class="pageCon">
 

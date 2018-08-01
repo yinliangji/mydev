@@ -524,7 +524,7 @@ export default {
             ],
 	        tableData: [
                 {
-					name: '项目名称1',
+					name: '用户故事1',
 					num: 18,
 					describe: '产品需求',
 					person:"谢呗",
@@ -536,7 +536,7 @@ export default {
 					icon: require("@/assets/images/user_02.png")
                 },
                 {
-					name: '项目名称2',
+					name: '用户故事2',
 					num: 24,
 					describe: '产品需求',
 					person:"谢呗2",
@@ -548,7 +548,7 @@ export default {
 					icon: require("@/assets/images/user_02.png")
                 },
                 {
-					name: '项目名称3',
+					name: '用户故事3',
 					num: 24,
 					describe: '产品需求',
 					person:"谢呗3",

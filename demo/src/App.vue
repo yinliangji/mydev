@@ -1,12 +1,12 @@
 <template>
     <Layout class="wrap">
       <MyLoading v-if="isLoading" />
-      <MyHeader :isgo="false">====MyHeader</MyHeader>
+      <MyHeader />
       <Content class="Content">
         <!-- 开始 -->
         <Layout  class="contentBox">
-          <Mysider></Mysider>
-          <MyContainer></MyContainer>
+          <Mysider />
+          <MyContainer />
         </Layout>
         <!-- 结束 -->
       </Content>
@@ -14,15 +14,12 @@
     </Layout>
 </template>
 <script>
-
 import MyHeader from '@/layout/header'
 import Mysider from '@/layout/sider'
 import MyFooter from '@/layout/footer'
 import MyContainer from '@/layout/container'
 import MyLoading from '@/components/loading'
-
 import Store from '@/vuex/store'
-
 export default {
   name: 'App',
   data() {

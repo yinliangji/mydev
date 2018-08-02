@@ -1,6 +1,6 @@
 <template>
 	<div class="pageContent">
-		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :top="'7'" />
+		<goAgile :go="'/product'" :text="'返回用户故事列表'" :top="'7'" />
 		<Breadcrumb :style="{margin: '16px 0'}">
             <BreadcrumbItem>首页</BreadcrumbItem>
             <BreadcrumbItem>用户故事</BreadcrumbItem>
@@ -40,7 +40,7 @@
 		            	</div>
 		            </div>
 		        </TabPane>
-		        <TabPane label="计划故事相关" name="name2">
+		        <TabPane label="计划效率相关" name="name2">
 		        	<div class="baseInfoBox">
 		            	<h3 class="Title">计划故事相关</h3>
 		            	<div class="tableBox">
@@ -77,7 +77,7 @@
 								<tr>
 								  <th width="13%">所属需求</th>
 								  <td width="20%">需求</td>
-								  <th width="13%">故事提出人</th>
+								  <th width="13%">需求提出人</th>
 								  <td width="20%" >提出人</td>
 								  <th width="13%">提出人部门</th>
 								  <td>部门1</td>

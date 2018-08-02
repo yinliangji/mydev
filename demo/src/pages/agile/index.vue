@@ -45,14 +45,22 @@
                                             </Select>
                                         </FormItem>
                                     </Col>
-                                    <Col span="3" style="text-align: center">项目状态</Col>
+                                    <Col span="3" style="text-align: center">教练<!-- 项目状态 --></Col>
                                     <Col span="5">
-                                        <FormItem >
+                                        <!-- <FormItem >
                                             <Select  placeholder="请选项目状态">
                                                 <Option value="1">已提出</Option>
                                                 <Option value="2">开发中</Option>
                                                 <Option value="3">测试</Option>
                                                 <Option value="4">上线</Option>
+                                            </Select>
+                                        </FormItem> -->
+                                        <FormItem >
+                                            <Select  placeholder="请选教练">
+                                                <Option value="1">教练1</Option>
+                                                <Option value="2">教练2</Option>
+                                                <Option value="3">教练3</Option>
+                                                <Option value="4">教练4</Option>
                                             </Select>
                                         </FormItem>
                                     </Col>
@@ -78,16 +86,9 @@
                                             </Select>
                                         </FormItem>
                                     </Col>
-                                    <Col span="3" style="text-align: center">教练</Col>
+                                    <Col span="3" style="text-align: center">&nbsp;</Col>
                                     <Col span="5">
-                                        <FormItem >
-                                            <Select  placeholder="请选教练">
-                                                <Option value="1">教练1</Option>
-                                                <Option value="2">教练2</Option>
-                                                <Option value="3">教练3</Option>
-                                                <Option value="4">教练4</Option>
-                                            </Select>
-                                        </FormItem>
+                                        &nbsp;
                                     </Col>
                                     <Col span="3" style="text-align: center">&nbsp;</Col>
                                     <Col span="5">
@@ -125,7 +126,7 @@
 			    </div>
             </div>
         </Card>
-        <Modal v-model="modaDelete" width="360">
+        <!-- <Modal v-model="modaDelete" width="360">
             <p slot="header" style="color:#f60;text-align:center">
                 <Icon type="information-circled"></Icon>
                 <span>删除确认</span>
@@ -136,7 +137,22 @@
             <div slot="footer">
                 <Button type="error" size="large" long :loading="modal_loading" @click="del">删除</Button>
             </div>
-        </Modal>
+        </Modal> -->
+
+
+        <Modal v-model="modaDelete" width="300">
+        <p slot="header" style="color:#f60;text-align:center">
+          <Icon type="ios-information-circle"></Icon>
+          <span>删除确认</span>
+        </p>
+        <div style="text-align:center">
+          <p>删除无法恢复，是否继续？</p>
+        </div>
+        <div slot="footer">
+          <Button color="#1c2438"  :loading="modal_loading"  @click="del">删除</Button>
+          <Button type="primary" @click="cancel">取消</Button>
+        </div>
+      </Modal>
 
         <!-- <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" /> -->
 
@@ -180,6 +196,7 @@ export default {
     },
     data () {
         return {
+
             isShowMoreShow:false,
             //allSelectTableRome:false,
             isShowAddPop:false,
@@ -389,6 +406,7 @@ export default {
             this.isAdd = false;
             this.tableDataRow = this.actionArr;
         },
+
         del () {
             this.modal_loading = true;
             setTimeout(() => {
@@ -410,7 +428,9 @@ export default {
                 this.$Message.success('删除完成');
             }, 1000);
         },
-
+        cancel(){
+          this.modaDelete = false;
+        },
         error (MSG) {
             this.$Message.config({
                 top: 250,

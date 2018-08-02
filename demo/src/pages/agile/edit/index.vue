@@ -37,8 +37,15 @@
                         <Input v-model="formValidate.target" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目目标"></Input>
                     </FormItem>
 
+
                     <FormItem label="填写模块" prop="moudle">
-                        <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input>
+                        <!-- <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input> -->
+                        <Tag v-for="item in formValidate.count" :key="item" :name="item" closable @on-close="handleClose">
+                            {{ item}}
+                        </Tag>
+                        <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
+                            添加模块
+                        </Button>
                     </FormItem>
 
                     <FormItem label="模块选择" prop="business">
@@ -58,42 +65,54 @@
 
                     <Row>
                         <Col span="12">
-							<FormItem label="总体组" prop="group">
-		                        <Select v-model="formValidate.group" placeholder="请选择总体组">
-		                            <Option value="总体组1">总体组1</Option>
-		                            <Option value="总体组2">总体组2</Option>
-		                            <Option value="总体组3">总体组3</Option>
-		                        </Select>
-		                    </FormItem> 
+                            <FormItem label="总体组" prop="allgroup">
+                                <!-- <Select v-model="formValidate.group" placeholder="请选择总体组">
+                                    <Option value="总体组1">总体组1</Option>
+                                    <Option value="总体组2">总体组2</Option>
+                                    <Option value="总体组3">总体组3</Option>
+                                </Select> -->
+                                <Select v-model.lazy="formValidate.allgroup" filterable multiple>
+                                    <Option v-for="item in allgroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                            </FormItem> 
                         </Col>
                         <Col span="12">
-	                        <FormItem label="项目经理" prop="manager">
-		                        <Select v-model="formValidate.manager" placeholder="请选择项目经理">
-		                            <Option value="经理1">经理1</Option>
-		                            <Option value="经理2">经理2</Option>
-		                            <Option value="经理3">经理3</Option>
-		                        </Select>
-		                    </FormItem> 
+                            <FormItem label="项目经理" prop="managerGroup">
+                                <Select v-model.lazy="formValidate.managerGroup" filterable multiple>
+                                    <Option v-for="item in managerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                                <!-- <Select v-model="formValidate.manager" placeholder="请选择项目经理">
+                                    <Option value="经理1">经理1</Option>
+                                    <Option value="经理2">经理2</Option>
+                                    <Option value="经理3">经理3</Option>
+                                </Select> -->
+                            </FormItem> 
                         </Col>
                     </Row>
                     
                     <Row>
                         <Col span="12">
-							<FormItem label="开发人员" prop="developer">
-                                <Select v-model="formValidate.developer" placeholder="请选择开发人员">
+                            <FormItem label="开发组" prop="developerGroup">
+                                <Select v-model.lazy="formValidate.developerGroup" filterable multiple>
+                                    <Option v-for="item in developerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                                <!-- <Select v-model="formValidate.developer" placeholder="请选择开发人员">
                                     <Option value="开发人员1">开发人员1</Option>
                                     <Option value="开发人员2">开发人员2</Option>
                                     <Option value="开发人员3">开发人员3</Option>
-                                </Select>
+                                </Select> -->
                             </FormItem>
                         </Col>
                         <Col span="12">
-                            <FormItem label="测试人员" prop="tester">
-                                <Select v-model="formValidate.tester" placeholder="请选择测试人员">
+                            <FormItem label="测试组" prop="testerGroup">
+                                <Select v-model.lazy="formValidate.testerGroup" filterable multiple>
+                                    <Option v-for="item in testerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                                <!-- <Select v-model="formValidate.tester" placeholder="请选择测试人员">
                                     <Option value="测试人员1">测试人员1</Option>
                                     <Option value="测试人员2">测试人员2</Option>
                                     <Option value="测试人员3">测试人员13</Option>
-                                </Select>
+                                </Select> -->
                             </FormItem>
                         </Col>
                     </Row>
@@ -127,6 +146,14 @@
                     
                 </Form>
             </div>
+            <Modal ref="addPop" v-model="modaAdd" title="添加模块" @on-ok="submitModule"  ok-text="提交" :loading="modal_add_loading" visible="true">
+                <Form :model="formItem" :label-width="80" >
+                    <FormItem label="模块名称">
+                        <Input v-model="formItem.businessName" placeholder="请输入项目名称"></Input>
+                    </FormItem>
+                   
+                </Form>
+            </Modal>
         </Card>   
     </div>
 </template>
@@ -226,7 +253,116 @@ export default {
                 business:[],
                 moudle:"",
                 group:"",
+                count:[],
+                allgroup:[],
+                managerGroup:[],
+                developerGroup:[],
+                testerGroup:[],
             },
+            allgroupList: [
+                {
+                    value: 'New York',
+                    label: 'New York'
+                },
+                {
+                    value: 'London',
+                    label: 'London'
+                },
+                {
+                    value: 'Sydney',
+                    label: 'Sydney'
+                },
+                {
+                    value: 'Ottawa',
+                    label: 'Ottawa'
+                },
+                {
+                    value: 'Paris',
+                    label: 'Paris'
+                },
+                {
+                    value: 'Canberra',
+                    label: 'Canberra'
+                }
+            ],
+            managerGroupList: [
+                {
+                    value: 'New York',
+                    label: 'New York'
+                },
+                {
+                    value: 'London',
+                    label: 'London'
+                },
+                {
+                    value: 'Sydney',
+                    label: 'Sydney'
+                },
+                {
+                    value: 'Ottawa',
+                    label: 'Ottawa'
+                },
+                {
+                    value: 'Paris',
+                    label: 'Paris'
+                },
+                {
+                    value: 'Canberra',
+                    label: 'Canberra'
+                }
+            ],
+            developerGroupList: [
+                {
+                    value: 'New York',
+                    label: 'New York'
+                },
+                {
+                    value: 'London',
+                    label: 'London'
+                },
+                {
+                    value: 'Sydney',
+                    label: 'Sydney'
+                },
+                {
+                    value: 'Ottawa',
+                    label: 'Ottawa'
+                },
+                {
+                    value: 'Paris',
+                    label: 'Paris'
+                },
+                {
+                    value: 'Canberra',
+                    label: 'Canberra'
+                }
+            ],
+            testerGroupList: [
+                {
+                    value: 'New York',
+                    label: 'New York'
+                },
+                {
+                    value: 'London',
+                    label: 'London'
+                },
+                {
+                    value: 'Sydney',
+                    label: 'Sydney'
+                },
+                {
+                    value: 'Ottawa',
+                    label: 'Ottawa'
+                },
+                {
+                    value: 'Paris',
+                    label: 'Paris'
+                },
+                {
+                    value: 'Canberra',
+                    label: 'Canberra'
+                }
+            ],
             technologyList: [
                 {
                     value: 'New York',
@@ -305,12 +441,21 @@ export default {
                 target: [
                     { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
                     //{ type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
-                ]
+                ],
+                allgroup: [
+                    { required: true, type: 'array',  message: '请选择内容，不能为空！', trigger: 'change' }
+                ],
             },
             
-            ADDorEDIT:true,
+            
             editTableData:false,
             modal_add_loading:false,
+
+            formItem: {
+                technologyName:"",
+                businessName:"",
+            },
+            modaAdd: false,
         }
     },
     mounted(){
@@ -370,6 +515,11 @@ export default {
             this.formValidate.business = [];
             this.formValidate.moudle = "";
             this.formValidate.group = "";
+            this.formValidate.count = [];
+            this.formValidate.allgroup = [];
+            this.formValidate.managerGroup = [];
+            this.formValidate.developerGroup = [];
+            this.formValidate.testerGroup = [];
 
         },
         submitAddData(){
@@ -418,6 +568,29 @@ export default {
             this.formItemReset();
             this.$refs.formValidate.resetFields();
             this.$emit("popClose",true)
+        },
+        handleClose (event, name) {
+            const index = this.formValidate.count.indexOf(name);
+            this.formValidate.count.splice(index, 1);
+        },
+
+        submitModule () {
+            setTimeout(() => {
+                this.formValidate.count.push(this.formItem.businessName)
+                this.modaAdd = false;
+                this.$Message.info('成功');
+                this.ModuleformItemReset();
+            },1000)
+            
+        },
+        addItem(){
+            this.modaAdd = true;
+        },
+        ModuleformItemReset(){
+            this.$nextTick(() => {
+                this.formItem.technologyName = "";
+                this.formItem.businessName = "";
+            });
         },
     }
 

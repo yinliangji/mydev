@@ -113,7 +113,7 @@
 					<div class="tagBox">
 						<Row :gutter="10" align="middle">
 							<Col span="3" class="addBtnBox">
-								<Button type="success" @click="addItem">添加待办事项</Button>
+								<Button type="success" @click="addItem">添加用户故事</Button>
 							</Col>
 							<Col span="1" >
 								<img src="@/assets/images/product-list.png" @click="showList" class="cursor">

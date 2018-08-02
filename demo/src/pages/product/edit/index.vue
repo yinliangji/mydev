@@ -98,7 +98,7 @@
                             <Option value="需求3">需求3</Option>
                         </Select>
                     </FormItem>
-                    <FormItem label="用户故事提出人" prop="introducer">
+                    <!-- <FormItem label="用户故事提出人" prop="introducer">
                         <Select v-model="formValidate.introducer" placeholder="请选择用户故事提出人">
                             <Option value="提出人1">提出人1</Option>
                             <Option value="提出人2">提出人2</Option>
@@ -108,7 +108,7 @@
 
                     <FormItem label="提出人部门" prop="department">
                         <Input v-model="formValidate.department" placeholder="请填提出人部门"></Input>
-                    </FormItem>
+                    </FormItem> -->
 
                     <!-- <Row>
                         <Col span="12">

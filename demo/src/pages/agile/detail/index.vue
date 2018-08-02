@@ -1,11 +1,7 @@
 <template>
 	<div class="pageContent">
 		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :top="'7'" />
-		<Breadcrumb :style="{margin: '16px 0'}">
-            <BreadcrumbItem>首页</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目列表</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目基本信息</BreadcrumbItem>
-        </Breadcrumb>
+		<selectMenu></selectMenu>
        
         <Card>
         	<Tabs value="name1">

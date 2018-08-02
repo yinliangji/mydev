@@ -6,7 +6,7 @@
 				<Icon type="ios-navigate"></Icon>
 				<span>我的任务</span>
 			</MenuItem>
-			<MenuItem name="1-2">
+<!-- 			<MenuItem name="1-2">
 				<router-link :to="{path:'/page1',query: {ID: 'id_myid'}}" />
 				<Icon type="ios-navigate"></Icon>
 				<span>page 1</span>
@@ -15,7 +15,7 @@
 				<router-link  to="/page2" />
 				<Icon type="ios-navigate"></Icon>
 				<span>page 2</span>
-			</MenuItem>
+			</MenuItem> -->
 		</Menu>
 		<Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '-12px 8px 0 0'}" type="chevron-left" size="24" class="triggerBtn" color="white" ></Icon> 
 	</Sider> 

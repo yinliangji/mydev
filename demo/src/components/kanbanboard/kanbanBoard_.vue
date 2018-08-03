@@ -114,7 +114,7 @@ import kanbanItem from './kanban-item';
       return {
           currentView: "AlreadyBucket",
           def_groupList:[
-            { text: "产品待办事项" },
+            { text: "用户故事" },
             {
               text: "用户登录",
               groupId: "group_01"

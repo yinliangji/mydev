@@ -26,7 +26,8 @@ import '@/assets/css/normalize.css'
 import '@/assets/css/reset.css'
 import '@/assets/css/common.css'
 
-
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts;
 
 
 /* eslint-disable no-new */

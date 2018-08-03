@@ -1,5 +1,11 @@
 <template>
   <div class="container-transfer">
+    <div class="clearfix" style="background: #f5f7f9; width:1106px;
+    border: 1px solid #e8e8e8; margin-top:10px; position:relative; border-radius:2px">
+      <goAgile :go="'/iteration'" :text="'返回迭代管理列表'" :Top="'10'" />
+      <selectMenu></selectMenu>
+    </div>
+
     <div class="clearfix">
       <div class="infoGroup">
         <h3 class="Title">项目名称：敏捷项目二期开发</h3>
@@ -246,7 +252,7 @@ export default {
                     bigName: "故事1",
                     stoyrType: "类型1",
                     stoyrStatus: "stoyrStatus1",
-                    isShow: true,
+                    isShow: false,
                     list: [
                         {
                             smallName: "全流程敏捷开发全流程敏捷开发",
@@ -286,7 +292,7 @@ export default {
                     bigName: "故事3",
                     stoyrType: "类型3",
                     stoyrStatus: "stoyrStatus3",
-                    isShow: true,
+                    isShow: false,
                     list: [
                         {
                             smallName: "全流程敏捷开发全流程敏捷开发3",
@@ -579,7 +585,7 @@ h3.Title {
     margin-bottom: 6px;
 }
 .addTaskTable {
-    width:1106px;
+    width: 1106px;
     padding: 10px;
     border: 1px solid #d8d8d8;
     border-radius: 4px;

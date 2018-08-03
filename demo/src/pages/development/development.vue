@@ -13,10 +13,10 @@
       <div style="text-align:center">
         <p>删除此任务后将不能恢复。是否继续删除？</p>
       </div>
-      <div slot="footer">
 
-        <Button type="error"  @click="delSure">删除</Button>
-        <Button @click="cancel">取消</Button>
+      <div slot="footer">
+        <Button @click="delSure">删除</Button>
+        <Button type="info" @click="cancel">取消</Button>
       </div>
     </Modal>
   </div>
@@ -88,7 +88,7 @@ export default {
                     key: "status"
                 },
                 {
-                    title: "所属待办事项",
+                    title: "用户故事",
                     key: "userNeed"
                 },
                 {
@@ -114,7 +114,7 @@ export default {
                                     on: {
                                         click: () => {
                                             //点击跳转页面
-                                            alert(params.row.taskName)
+                                            alert(params.row.taskName);
                                             this.$router.push({
                                                 path: "/development/add",
                                                 query: {
@@ -161,9 +161,9 @@ export default {
             this.delOnoff = true;
             this.delIndex = i;
         },
-         //取消
-        cancel(){
-          this.delOnoff = false;
+        //取消
+        cancel() {
+            this.delOnoff = false;
         },
         //分页
         changeCurrentPage(i) {
@@ -172,8 +172,6 @@ export default {
         changePageSize(i) {
             alert(i);
         }
-
-
     },
     computed: {
         // groupLists() {

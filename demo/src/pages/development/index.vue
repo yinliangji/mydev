@@ -291,7 +291,7 @@ export default {
         //左侧分组数据
         groupList: function() {
             let _groupList = [
-                { text: "产品待办事项" },
+                { text: "用户故事" },
                 {
                     text: "用户登录",
                     groupId: "group_01"

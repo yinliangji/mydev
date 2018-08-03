@@ -1,160 +1,166 @@
 <template>
   <div class="pageContent" style="min-height:85vh">
-    <Tabs value="name1">
-      <TabPane label="任务基本信息" name="name1">
-        <div class="part part1">
-          <!-- <div class="title">任务基本信息
+    <goAgile :go="'/development'" :text="'返回开发任务列表'" :Top="'10'" />
+    <selectMenu></selectMenu>
+    <div class="pageCon">
+      <Tabs value="name1">
+        <TabPane label="任务基本信息" name="name1">
+          <div class="part part1">
+            <!-- <div class="title">任务基本信息
             <Icon type="navicon-round" class="toggle" @click="toggleOnoff.part1=!toggleOnoff.part1"></Icon>
           </div> -->
-          <div class="con" v-show="toggleOnoff.part1">
-            <Row>
-              <Col span="8">
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">任务编号：</div>
-                <div class="addTaskTableCon">U26263632</div>
-              </div>
-              </Col>
-              <Col span="8">
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">任务名称：</div>
-                <div class="addTaskTableCon">热点讨论</div>
-              </div>
-              </Col>
-              <Col span="8">
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">任务状态：</div>
-                <div class="addTaskTableCon">进行中</div>
-              </div>
-              </Col>
-
-            </Row>
-            <Row>
-              <Col span="8">
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">任务编号：</div>
-                <div class="addTaskTableCon">U26263632</div>
-              </div>
-              </Col>
-              <Col span="8">
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">任务名称：</div>
-                <div class="addTaskTableCon">热点讨论</div>
-              </div>
-              </Col>
-              <Col span="8">
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">任务状态：</div>
-                <div class="addTaskTableCon">进行中</div>
-              </div>
-              </Col>
-
-            </Row>
-            <Row>
-              <Col span="24">
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">任务描述：</div>
-                <div class="addTaskTableConThrough">我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。 使用栅格系统进行网页布局，可以。我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。
+            <div class="con" v-show="toggleOnoff.part1">
+              <Row>
+                <Col span="8">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">任务编号：</div>
+                  <div class="addTaskTableCon">U26263632</div>
                 </div>
-              </div>
-              </Col>
-
-            </Row>
-            <Row>
-              <Col span="24">
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">设计说明：</div>
-                <div class="addTaskTableConThrough">我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。 使用栅格系统进行网页布局，可以。我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。
+                </Col>
+                <Col span="8">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">任务名称：</div>
+                  <div class="addTaskTableCon">热点讨论</div>
                 </div>
-              </div>
-              </Col>
-
-            </Row>
-            <Row>
-              <Col span="24">
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">测试要求：</div>
-                <div class="addTaskTableConThrough">我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。 使用栅格系统进行网页布局，可以。我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。
+                </Col>
+                <Col span="8">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">任务状态：</div>
+                  <div class="addTaskTableCon">进行中</div>
                 </div>
-              </div>
-              </Col>
+                </Col>
 
-            </Row>
-            <Row>
-              <Col span="24">
-              <div class="taskrow clearfix">
-                <div class="addTaskTableTitle">备注：</div>
-                <div class="addTaskTableConThrough">
+              </Row>
+              <Row>
+                <Col span="8">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">任务编号：</div>
+                  <div class="addTaskTableCon">U26263632</div>
                 </div>
-              </div>
-              </Col>
+                </Col>
+                <Col span="8">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">任务名称：</div>
+                  <div class="addTaskTableCon">热点讨论</div>
+                </div>
+                </Col>
+                <Col span="8">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">任务状态：</div>
+                  <div class="addTaskTableCon">进行中</div>
+                </div>
+                </Col>
 
-            </Row>
+              </Row>
+              <Row>
+                <Col span="24">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">任务描述：</div>
+                  <div class="addTaskTableConThrough">我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。 使用栅格系统进行网页布局，可以。我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。
+                  </div>
+                </div>
+                </Col>
+
+              </Row>
+              <Row>
+                <Col span="24">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">设计说明：</div>
+                  <div class="addTaskTableConThrough">我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。 使用栅格系统进行网页布局，可以。我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。
+                  </div>
+                </div>
+                </Col>
+
+              </Row>
+              <Row>
+                <Col span="24">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">测试要求：</div>
+                  <div class="addTaskTableConThrough">我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。 使用栅格系统进行网页布局，可以。我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。
+                  </div>
+                </div>
+                </Col>
+
+              </Row>
+              <Row>
+                <Col span="24">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">备注：</div>
+                  <div class="addTaskTableConThrough">
+                  </div>
+                </div>
+                </Col>
+
+              </Row>
+            </div>
           </div>
-        </div>
-      </TabPane>
-      <TabPane label="任务附件" name="name2">
-        <div class="part part2">
-          <!-- <div class="title">任务附件
+        </TabPane>
+        <TabPane label="任务附件" name="name2">
+          <div class="part part2">
+            <!-- <div class="title">任务附件
             <Icon type="navicon-round" class="toggle" @click="toggleOnoff.part2=!toggleOnoff.part2"></Icon>
           </div> -->
-          <div class="con" v-show="toggleOnoff.part2">
-            <Upload action="http://localhost/" :on-success="handleSuccess" :show-upload-list="false">
-              <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-            </Upload>
-            <Table :columns="columns2" :data="data2" style="margin-top:6px"></Table>
-             <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+            <div class="con" v-show="toggleOnoff.part2">
+              <Upload action="http://localhost/" :on-success="handleSuccess" :show-upload-list="false">
+                <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+              </Upload>
+              <Table :columns="columns2" :data="data2" style="margin-top:6px"></Table>
+              <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+            </div>
           </div>
-        </div>
-      </TabPane>
-      <TabPane label="任务状态变更信息" name="name3">
-        <div class="part part3">
-          <!-- <div class="title">任务状态变更信息
+        </TabPane>
+        <TabPane label="任务状态变更信息" name="name3">
+          <div class="part part3">
+            <!-- <div class="title">任务状态变更信息
             <Icon type="navicon-round" class="toggle" @click="toggleOnoff.part3=!toggleOnoff.part3"></Icon>
           </div> -->
-          <div class="con" v-show="toggleOnoff.part3">
-            <Table :columns="columns3" :data="data3"></Table>
-             <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+            <div class="con" v-show="toggleOnoff.part3">
+              <Table :columns="columns3" :data="data3"></Table>
+              <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+            </div>
           </div>
-        </div>
-      </TabPane>
-      <TabPane label="任务测试情况" name="nam4">
-        <div class="part part4">
-          <!-- <div class="title">任务测试情况
+        </TabPane>
+        <TabPane label="任务测试情况" name="nam4">
+          <div class="part part4">
+            <!-- <div class="title">任务测试情况
             <Icon type="navicon-round" class="toggle" @click="toggleOnoff.part4=!toggleOnoff.part4"></Icon>
           </div> -->
-          <div class="con" v-show="toggleOnoff.part4">
-            <Button type="success" @click="defectOnoff=true">添加缺陷</Button>
-            <Table :columns="columns4" :data="data4" style="margin-top:6px"></Table>
-             <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+            <div class="con" v-show="toggleOnoff.part4">
+              <Button type="success" @click="defectOnoff=true">添加缺陷</Button>
+              <Table :columns="columns4" :data="data4" style="margin-top:6px"></Table>
+              <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+            </div>
           </div>
-        </div>
-      </TabPane>
-      <TabPane label="任务代码提交情况" name="name5">
-        <div class="part part5">
-          <!-- <div class="title">任务代码提交情况
+        </TabPane>
+        <TabPane label="任务代码提交情况" name="name5">
+          <div class="part part5">
+            <!-- <div class="title">任务代码提交情况
             <Icon type="navicon-round" class="toggle" @click="toggleOnoff.part5=!toggleOnoff.part5"></Icon>
           </div> -->
-          <div class="con" v-show="toggleOnoff.part5">
-            <Table :columns="columns5" :data="data5"></Table>
-             <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+            <div class="con" v-show="toggleOnoff.part5">
+              <Table :columns="columns5" :data="data5"></Table>
+              <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+            </div>
           </div>
-        </div>
-      </TabPane>
-    </Tabs>
+        </TabPane>
+      </Tabs>
+    </div>
+
     <!-- 确认删除弹出框 -->
-      <Modal v-model="delOnoff" width="300">
-        <p slot="header" style="color:#f60;text-align:center">
-          <Icon type="ios-information-circle"></Icon>
-          <span>删除确认</span>
-        </p>
-        <div style="text-align:center">
-          <p>删除此附件后无法恢复。是否继续？</p>
-        </div>
-        <div slot="footer">
-          <Button type="error"  @click="delSure">删除</Button>
-          <Button @click="cancel">取消</Button>
-        </div>
-      </Modal>
+    <Modal v-model="delOnoff" width="300">
+      <p slot="header" style="color:#f60;text-align:center">
+        <Icon type="ios-information-circle"></Icon>
+        <span>删除确认</span>
+      </p>
+      <div style="text-align:center">
+        <p>删除此附件后无法恢复。是否继续？</p>
+      </div>
+
+      <div slot="footer">
+        <Button @click="delSure">删除</Button>
+        <Button type="info" @click="cancel">取消</Button>
+      </div>
+    </Modal>
     <!-- 添加缺陷面板 -->
     <Modal v-model="defectOnoff" title="添加缺陷" width="800" @on-ok="adddefectOk('formValidate')">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
@@ -222,8 +228,8 @@ export default {
 
     data() {
         return {
-            delOnoff:false,
-            delIndex:100,
+            delOnoff: false,
+            delIndex: 100,
             formValidate: {
                 defectName: "",
                 curDefectType: "",
@@ -232,34 +238,34 @@ export default {
                 describe: "",
                 remarks: "",
                 defectType: [
-                  {
-                      value: "1",
-                      label: "缺陷类型1"
-                  },
-                  {
-                      value: "2",
-                      label: "缺陷类型2"
-                  }
+                    {
+                        value: "1",
+                        label: "缺陷类型1"
+                    },
+                    {
+                        value: "2",
+                        label: "缺陷类型2"
+                    }
                 ],
                 defectStatus: [
-                  {
-                      value: "1",
-                      label: "缺陷状态1"
-                  },
-                  {
-                      value: "2",
-                      label: "缺陷类型2"
-                  }
+                    {
+                        value: "1",
+                        label: "缺陷状态1"
+                    },
+                    {
+                        value: "2",
+                        label: "缺陷类型2"
+                    }
                 ],
-                 personLiable: [
-                  {
-                      value: "1",
-                      label: "责任人1"
-                  },
-                  {
-                      value: "2",
-                      label: "责任人2"
-                  }
+                personLiable: [
+                    {
+                        value: "1",
+                        label: "责任人1"
+                    },
+                    {
+                        value: "2",
+                        label: "责任人2"
+                    }
                 ]
             },
             ruleValidate: {
@@ -519,11 +525,11 @@ export default {
             //alert(data);
         },
         //删除取消
-        cancel(){
-          this.delOnoff = false;
+        cancel() {
+            this.delOnoff = false;
         },
 
-      //删除
+        //删除
         delSure() {
             //走接口
             this.delOnoff = false;
@@ -599,8 +605,7 @@ h3 {
     height: 30px;
 }
 
-.pageContent {
-    background: #fff;
+.pageCon {background: #fff;
 }
 .ivu-page {
     margin: 10px 0;

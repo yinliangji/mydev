@@ -67,15 +67,14 @@
             </Table>
           </div>
 
-          <div class="paln1 paln" v-for="item in obj" :key="item.name">
+          <div class="paln1 paln">
             <div class="plan-title">
-              <span>{{item.name}} {{item.startTime}}--{{item.startTime}}
-              </span>
-              <span class="plan-title-btn" @click="item.isShow = false" v-show="item.isShow">隐藏</span>
-              <span class="plan-title-btn" @click="item.isShow = true" v-show="!item.isShow">显示</span>
+              <span>历史迭代列表</span>
+              <span class="plan-title-btn" @click="obj.isShow = false" v-show="obj.isShow">隐藏</span>
+              <span class="plan-title-btn" @click="obj.isShow = true" v-show="!obj.isShow">显示</span>
             </div>
-            <div class="tableToggle" v-if="item.isShow">
-              <Table border :columns="column2" :data="item.list"></Table>
+            <div class="tableToggle" v-if="obj.isShow">
+              <Table border :columns="column2" :data="obj.list"></Table>
               <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize" style="margin:6px 0; text-align:right">
               </Page>
             </div>
@@ -94,8 +93,23 @@
           <p>删除此迭代无法恢复，但是迭代中的用户故事和开发任务不会被删除。是否继续？</p>
         </div>
         <div slot="footer">
-          <Button type="error"  @click="delSure">删除</Button>
-          <Button @click="cancel">取消</Button>
+          <Button @click="delSure">删除</Button>
+          <Button type="info" @click="cancel">取消</Button>
+        </div>
+      </Modal>
+
+      <!-- 确认修改弹出框 -->
+      <Modal v-model="modifyOnoff" width="300">
+        <p slot="header" style="color:#f60;text-align:center">
+          <Icon type="ios-information-circle"></Icon>
+          <span>修改确认</span>
+        </p>
+        <div style="text-align:center">
+          <p>确定需要修改此迭代吗？</p>
+        </div>
+        <div slot="footer">
+          <Button @click="modifySure">确认</Button>
+          <Button type="info" @click="cancel">取消</Button>
         </div>
       </Modal>
     </div>
@@ -109,6 +123,8 @@ export default {
     data() {
         return {
             delOnoff: false,
+            modifyOnoff: false,
+            modifyName:"",
             status: false,
             startTime: "",
             endTime: "",
@@ -208,7 +224,7 @@ export default {
                                     on: {
                                         click: () => {
                                             //点击跳转页面
-                                            alert(params.row.name)
+                                            //alert(params.row.name);
                                             this.$router.push({
                                                 path: "/iteration/iteration",
                                                 query: {
@@ -252,19 +268,42 @@ export default {
                                 "Button",
                                 {
                                     props: {
+                                        type: "info",
+                                        size: "small"
+                                    },
+                                    style: {
+                                        marginRight: "5px"
+                                    },
+                                    on: {
+                                        click: () => {
+                                            // this.showModal(params);
+                                            //点击跳转页面
+                                            this.$router.push({
+                                                path: "/development",
+                                                query: {
+                                                    iterationName:
+                                                        params.row.name
+                                                }
+                                            });
+                                        }
+                                    }
+                                },
+                                "查看任务"
+                            ),
+                            h(
+                                "Button",
+                                {
+                                    props: {
                                         type: "warning",
                                         size: "small"
                                     },
                                     on: {
                                         click: () => {
                                             //点击跳转页面
-                                            this.$router.push({
-                                                path: "/iteration/iteration",
-                                                query: {
-                                                    iterationName:
-                                                        params.row.name
-                                                }
-                                            });
+                                            //alert(params.row.name);此编辑要弹出询问是否编辑
+                                            this.modifyOnoff = true;
+                                            this.modifyName=params.row.name
+
                                         }
                                     }
                                 },
@@ -304,80 +343,42 @@ export default {
                     }
                 ]
             },
-            obj: [
-                {
-                    type: 1,
-                    name: "TPM产品第一阶段1",
-                    startTime: "2017-08-01",
-                    endTime: "2017-08-01",
-                    isShow: false,
-                    list: [
-                        {
-                            type: 1,
-                            id: 4,
-                            number: "002",
-                            name: "prj001",
-                            dec: "TPM敏捷管理系统1",
-                            startTime: "2017-08-01",
-                            endTime: "2018-05-01"
-                        },
-                        {
-                            type: 1,
-                            id: 5,
-                            number: "002",
-                            name: "prj001",
-                            dec: "TPM敏捷管理系统1",
-                            startTime: "2017-08-01",
-                            endTime: "2018-05-01"
-                        },
-                        {
-                            type: 1,
-                            id: 6,
-                            number: "002",
-                            name: "prj001",
-                            dec: "TPM敏捷管理系统1",
-                            startTime: "2017-08-01",
-                            endTime: "2018-05-01"
-                        }
-                    ]
-                },
-                {
-                    type: 2,
-                    name: "TPM产品第二阶段",
-                    startTime: "2017-08-01",
-                    endTime: "2017-08-01",
-                    isShow: false,
-                    list: [
-                        {
-                            type: 2,
-                            id: 7,
-                            number: "003",
-                            name: "prj001",
-                            dec: "TPM敏捷管理系统2",
-                            startTime: "2017-08-01",
-                            endTime: "2018-05-01"
-                        },
-                        {
-                            type: 2,
-                            id: 8,
-                            number: "003",
-                            name: "prj001",
-                            dec: "TPM敏捷管理系统2",
-                            startTime: "2017-08-01",
-                            endTime: "2018-05-01"
-                        },
-                        {
-                            type: 2,
-                            id: 9,
-                            number: "003",
-                            name: "prj001",
-                            dec: "TPM敏捷管理系统2",
-                            startTime: "2017-08-01",
-                            endTime: "2018-05-01"
-                        }
-                    ]
-                }
-            ]
+            obj: {
+                type: 1,
+                name: "TPM产品第一阶段1",
+                startTime: "2017-08-01",
+                endTime: "2017-08-01",
+                isShow: false,
+                list: [
+                    {
+                        type: 1,
+                        id: 4,
+                        number: "002",
+                        name: "1111",
+                        dec: "TPM敏捷管理系统1",
+                        startTime: "2017-08-01",
+                        endTime: "2018-05-01"
+                    },
+                    {
+                        type: 1,
+                        id: 5,
+                        number: "002",
+                        name: "2222",
+                        dec: "TPM敏捷管理系统1",
+                        startTime: "2017-08-01",
+                        endTime: "2018-05-01"
+                    },
+                    {
+                        type: 1,
+                        id: 6,
+                        number: "002",
+                        name: "33333",
+                        dec: "TPM敏捷管理系统1",
+                        startTime: "2017-08-01",
+                        endTime: "2018-05-01"
+                    }
+                ]
+            }
         };
     },
     mounted() {
@@ -420,9 +421,19 @@ export default {
             this.delOnoff = false;
             this.$Message.success("删除成功");
         },
+        //编辑
+        modifySure() {
+            this.$router.push({
+                path: "/iteration/iteration",
+                query: {
+                    iterationName: this.modifyName
+                }
+            });
+        },
         //取消
-        cancel(){
-          this.delOnoff = false;
+        cancel() {
+            this.delOnoff = false;
+            this.modifyOnoff = false;
         },
         //添加按钮
         addIteration() {

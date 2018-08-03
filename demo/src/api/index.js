@@ -9,7 +9,7 @@ Vue.use(VueAxios, axios)
 //axios <---
 
 import * as errorCode from './error'
-const {DemoURL_1} = Common.restUrl;
+const {DemoURL_1,projectAll} = Common.restUrl;
 let AXIOS = axios.create(config);
 
 //AXIOS.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8'
@@ -41,7 +41,11 @@ AXIOS.interceptors.response.use( (response) => {
 
 export default {
     demoAXIOS (url, data = {}, reset = {}) {/* demo */
-        let _url = url?url:DemoURL_1 
+        let _url = url?url:DemoURL_1;
+        return AXIOS.post(_url,data,reset)
+    },
+    projectAllAXIOS (url, data = {}, reset = {}) {/* demo */
+        let _url = url?url:projectAll; 
         return AXIOS.post(_url,data,reset)
     },
    

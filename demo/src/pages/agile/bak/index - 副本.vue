@@ -119,12 +119,9 @@
                     <!-- <Button @click="handleSelectAll(true)" v-if="!allSelectTableRome">设置全选</Button>
                     <Button @click="handleSelectAll(false)" v-else>全部取消</Button> -->
 
-
-
-
-			    	<div class="pageBox" v-if="tableData.length">
-			    		<Page :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
-			    		<p>总共{{tableDAtaTatol}}条记录</p>
+			    	<div class="pageBox">
+			    		<Page :total="100" show-elevator></Page>
+			    		<p>显示第1到第5条记录，总共90条记录</p>
 			    	</div>
 			    </div>
             </div>
@@ -172,7 +169,11 @@ const {projectAllAXIOS} = API;
 export default {
 	name: 'aglie',
     mounted(){
-        this.tableDataAjaxFn();
+        projectAllAXIOS("",{page:1,pageline:20},{timeout:2000,method:'get'}).then((response) => {
+            console.log("page1+++++++++response++++++++++++",response)
+        }).catch( (error) => {
+            console.log(error)
+        });
 
     },
     components: {
@@ -221,13 +222,13 @@ export default {
                 },
                 {
                     title: '项目编号',
-                    key: 'prj_id',
+                    key: 'num',
                     width: 85,
                     align: 'center',
                 },
                 {
                     title: '项目名称',
-                    key: 'prj_name',
+                    key: 'name',
                     //
                     render: (h, params) => {
                         return h(
@@ -241,7 +242,7 @@ export default {
                                     }
                                 }
                             },
-                            params.row.prj_name
+                            params.row.name
                         );
                     }
                     //
@@ -251,26 +252,26 @@ export default {
 
                 {
                     title: '项目描述',
-                    key: 'prj_desc'
+                    key: 'describe'
                 },
                 {
                     title: '项目经理',
-                    key: 'prj_manager'
+                    key: 'manager'
                 },
                 {
                     title: '所属产品',
-                    key: 'prod_name'
+                    key: 'product'
                 },
                 {
                     title: '开始时间',
-                    key: 'start_time',
+                    key: 'startTime',
                     width: 100,
                     align: 'center',
                 },
                
                 {
                     title: '结束时间',
-                    key: 'end_time',
+                    key: 'endTime',
                     width: 100,
                     align: 'center',
                 },
@@ -332,45 +333,38 @@ export default {
                 }
             ],
             tableData: [
-                // {
-                //     prj_name: '项目名称1',
-                //     prj_id: 18,
-                //     prj_desc: '项目描述1',
-                //     prj_manager:"项目经理1",
-                //     start_time:"2012-10-10",
-                //     end_time:"2012-10-10",
-                //     prod_name:"产品1",
-                // },
-               
+                {
+                    name: '项目名称1',
+                    num: 18,
+                    describe: '项目描述1',
+                    manager:"项目经理1",
+                    startTime:"2012-10-10",
+                    endTime:"2012-10-10",
+                    product:"产品1",
+                },
+                {
+                    name: '项目名称2',
+                    num: 24,
+                    describe: 'London No. 1 Lake Park',
+                    manager:"项目经理2",
+                    startTime:"2012-10-10",
+                    endTime:"2012-10-10",
+                    product:"产品2",
+                },
+                {
+                    name: '项目名称3',
+                    num: 30,
+                    describe: 'Sydney No. 1 Lake Park',
+                    manager:"项目经理3",
+                    startTime:"2012-10-10",
+                    endTime:"2012-10-10",
+                    product:"产品3",
+                },
             ],
-            tableDAtaTatol:0,
-            tableDAtaPageLine:3,
             actionArr:[],
         }
     },
     methods: {
-        changeCurrentPage(i) {
-            this.tableDataAjaxFn("",i,3)
-            //alert(i);
-        },
-        changePageSize(i) {
-            //alert(i);
-        },
-        tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3){
-            alert(process.env.NODE_ENV);
-            alert(process.env.BASE_URL)
-            projectAllAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'get'}).then((response) => {
-                //alert(JSON.stringify(response))
-                let myData = response.data;
-                console.log("page1+++++++++response++++++++++++",myData,myData.data.list);
-                this.tableData = myData.data.list;
-                this.tableDAtaTatol = myData.data.total;
-
-            }).catch( (error) => {
-                console.log(error)
-            });
-
-        },
         tabRowAddFn(){
             this.tableData.push(this.addtest);
             Store.dispatch('ADD_DATA_TEST/incrementAsync', {

@@ -146,6 +146,10 @@ export default {
         clicked(info) {
             // 点击卡片方法
             console.log(" 点击卡片方法 ::: ", info);
+             //点击跳转页面
+            this.$router.push({
+              path: "/development/detail"
+            });
         },
         searchHandle(info) {
             // 查询方法

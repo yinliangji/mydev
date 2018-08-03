@@ -45,10 +45,21 @@
           </Row>
           <Row>
             <Col span="12">
-            <bar></bar>
+            <bar
+            :titleName="part1.title4"
+            :dataX="part1.data4X"
+            :dataY="part1.data4Y"
+            :name="part1.name4"
+            :barColor="part1.barColor4"
+            :xyAxisColor="part1.xyAxisColor4"
+            :xAxisName="part1.xAxisName4"
+            :yAxisName="part1.yAxisName4"
+            :labelOnoff="part1.labelOnoff4"
+            :labelColor="part1.labelColor4"
+            ></bar>
             </Col>
             <Col span="12">
-            <cyclic :titleName="part1.title3" :data="part1.data3" :name="part1.name3"></cyclic>
+            <pie :titleName="part1.title3" :data="part1.data3" :name="part1.name3"></pie>
             </Col>
           </Row>
 
@@ -58,16 +69,18 @@
         <div class="pageCon">
           <Row>
             <Col span="12">
-            <line11></line11>
+            <lineChart></lineChart>
             </Col>
             <Col span="12">
             <barSection></barSection>
             </Col>
           </Row>
 
+
         </div>
         <div style="margin:28px;">
-          <Table height="300" :columns="tableColumns" :data="tableData"></Table>
+           <h3 class="Title">项目开发情况汇总表</h3>
+          <Table stripe  height="300" :columns="tableColumns" :data="tableData"></Table>
         </div>
 
       </TabPane>
@@ -79,7 +92,7 @@
 </template>
 
 <script>
-import line11 from "./myChart/line";
+import lineChart from "./myChart/line";
 import pie from "./myChart/pie";
 import cyclic from "./myChart/cyclic";
 import bar from "./myChart/bar";
@@ -87,6 +100,7 @@ import barSection from "./myChart/barSection";
 export default {
     data() {
         return {
+          // table表单数据
             tableColumns: [
                 {
                     title: "任务总数",
@@ -195,6 +209,7 @@ export default {
                 product: "",
                 project: ""
             },
+           // table表单数据
             part1: {
                 title1: "人员构成图",
                 data1: [
@@ -212,13 +227,27 @@ export default {
                     { value: 10, name: "已上线" }
                 ],
                 name2: "故事状态",
+
                 title3: "任务健康状态",
                 data3: [
-                    { value: 10, name: "快到期" },
-                    { value: 80, name: "已完成" },
+                    { value: 30, name: "快到期" },
+                    { value: 30, name: "已完成" },
                     { value: 10, name: "其他" }
                 ],
-                name3: "健康状态"
+                name3: "健康状态",
+
+                title4:"迭代上线情况",
+                data4X:["5.1", "6.1", "7.1", "8.1", "9.1", "10.1"],
+                data4Y:[5, 20, 36, 10, 10, 20],
+                barColor4:"#66CCFF",
+                xyAxisColor4:"#ffcb5b",
+                xAxisName4:"时间",
+                yAxisName4:"上线情况",
+                name4: "迭代",
+                labelOnoff4:true,
+                labelColor4:"#fff"
+
+
             }
         };
     },
@@ -227,7 +256,7 @@ export default {
     computed: {},
 
     components: {
-        line11,
+        lineChart,
         pie,
         cyclic,
         barSection,
@@ -260,4 +289,5 @@ export default {
 .showTop {
     margin-bottom: 20px;
 }
+h3.Title{margin-bottom: 15px;}
 </style>

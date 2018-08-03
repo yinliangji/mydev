@@ -1,6 +1,6 @@
 <template>
 
-  <div id="myChart" :style="{width: '500px', height: '500px'}" ref="myChart"></div>
+  <div id="myChart" :style="{width: '530px', height: '350px'}" ref="myChart"></div>
 </template>
 <script>
 export default {
@@ -20,32 +20,27 @@ export default {
             let myChart = this.$echarts.init(this.$refs.myChart);
             // 绘制图表
             let option = {
-                tooltip: {
-                    trigger: "axis",
-                    axisPointer: {
-                        // 坐标轴指示器，坐标轴触发有效
-                        type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
-                    }
+                legend: {},
+                title: {
+                    text: "任务状态分布图",
+                    x: "center",
+                    bottom:10,
+                    textStyle: { fontSize: 14 }
                 },
                 legend: {
-                    data: [
-                        "直接访问",
-                        "邮件营销",
-                        "联盟广告",
-                        "视频广告",
-                        "搜索引擎",
-                        "百度",
-                        "谷歌",
-                        "必应",
-                        "其他"
-                    ]
+                    top: "10px"
                 },
-                grid: {
-                    left: "3%",
-                    right: "4%",
-                    bottom: "3%",
-                    containLabel: true
+                  label:{
+                  show:true
                 },
+                color: [
+                    "#66cbff",
+                    "#ff6666",
+                    "#ffcb5b",
+                    "#76c043",
+                    "#ea7e53",
+                    "#eedd78"
+                ],
                 xAxis: [
                     {
                         type: "category",
@@ -67,65 +62,22 @@ export default {
                 ],
                 series: [
                     {
-                        name: "直接访问",
-                        type: "bar",
-                        data: [320, 332, 301, 334, 390, 330, 320]
-                    },
-                    {
                         name: "邮件营销",
                         type: "bar",
                         stack: "广告",
-                        data: [120, 132, 101, 134, 90, 230, 210]
+                        data: [10, 20, 30, 25, 16, 18, 22]
                     },
                     {
                         name: "联盟广告",
                         type: "bar",
                         stack: "广告",
-                        data: [220, 182, 191, 234, 290, 330, 310]
+                        data: [10, 20, 30, 25, 16, 18, 22]
                     },
                     {
                         name: "视频广告",
                         type: "bar",
                         stack: "广告",
-                        data: [150, 232, 201, 154, 190, 330, 410]
-                    },
-                    {
-                        name: "搜索引擎",
-                        type: "bar",
-                        data: [862, 1018, 964, 1026, 1679, 1600, 1570],
-                        markLine: {
-                            lineStyle: {
-                                normal: {
-                                    type: "dashed"
-                                }
-                            },
-                            data: [[{ type: "min" }, { type: "max" }]]
-                        }
-                    },
-                    {
-                        name: "百度",
-                        type: "bar",
-                        barWidth: 5,
-                        stack: "搜索引擎",
-                        data: [620, 732, 701, 734, 1090, 1130, 1120]
-                    },
-                    {
-                        name: "谷歌",
-                        type: "bar",
-                        stack: "搜索引擎",
-                        data: [120, 132, 101, 134, 290, 230, 220]
-                    },
-                    {
-                        name: "必应",
-                        type: "bar",
-                        stack: "搜索引擎",
-                        data: [60, 72, 71, 74, 190, 130, 110]
-                    },
-                    {
-                        name: "其他",
-                        type: "bar",
-                        stack: "搜索引擎",
-                        data: [62, 82, 91, 84, 109, 110, 120]
+                        data: [10, 20, 30, 25, 16, 18, 22]
                     }
                 ]
             };

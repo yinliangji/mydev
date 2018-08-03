@@ -45,8 +45,11 @@ export default {
         return AXIOS.post(_url,data,reset)
     },
     projectAllAXIOS (url, data = {}, reset = {}) {/* demo */
-        let _url = url?url:projectAll; 
-        return AXIOS.post(_url,data,reset)
+        let _url = url?url:projectAll;
+
+       
+        
+        return AXIOS.get(_url+"?page="+data.page+"&pageline="+data.pageline,data,reset)
     },
    
 

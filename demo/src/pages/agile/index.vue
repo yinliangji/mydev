@@ -357,8 +357,8 @@ export default {
             //alert(i);
         },
         tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3){
-            alert(process.env.NODE_ENV);
-            alert(process.env.BASE_URL)
+            // alert(process.env.NODE_ENV);
+            // alert(process.env.BASE_URL)
             projectAllAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;

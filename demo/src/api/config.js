@@ -1,19 +1,19 @@
-//import Qs from 'qs'
+import Qs from 'qs'
 //baseURL: 'http://127.0.0.1:9090/',
 const defaultSet = {
   method: 'post',
   url: 'json.action',
   baseURL:process.env.TEST_URL,
   data: {
-    firstName: 'Fred',
-    lastName: 'Flintstone'
+    firstName: '_firstName',
+    lastName: '_lastName'
   },
   transformRequest: [function (data) {
     // 这里可以在发送请求之前对请求数据做处理，比如form-data格式化等，这里可以使用开头引入的Qs（这个模块在安装axios的时候就已经安装了，不需要另外安装）
     console.log("========transformRequest=======",data)
-    data = JSON.stringify(data)
+    //data = JSON.stringify(data)
     //data = JSON.parse(JSON.stringify(data))
-    //data = Qs.stringify(data);
+    data = Qs.stringify(data);
     //data = Qs.parse(data)
     return data;
   }],
@@ -23,7 +23,7 @@ const defaultSet = {
     return data;
   }],
    // 请求头信息
-  headers: {'X-Requested-With': 'XMLHttpRequest','Content-Type':'application/json; charset=utf-8'}, //application/x-www-form-urlencoded;charset=UTF-8
+  headers: {'X-Requested-With': 'XMLHttpRequest','Content-Type':'application/x-www-form-urlencoded; charset=utf-8'}, //application/x-www-form-urlencoded;charset=UTF-8 //application/json
 
     //设置超时时间
   timeout: 5000,

@@ -1,0 +1,29 @@
+http://128.192.214.34/Citrix/XenDesktop/auth/login.aspx
+
+
+xiebei
+888888
+
+mainporta 首页
+
+aglie 敏捷
+
+安全认证：
+73230509
+ccb123456
+
+云：
+testuser70
+yinliangji
+
+
+sftp:128.196.39.38
+user:devops
+password:devops
+port:22
+
+
+32bit git
+
+
+git push origin head:refs/for/dev

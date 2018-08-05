@@ -45,10 +45,22 @@ let mockData2 = (val1,val2,val3 = 200)=>{
 
 
 
+let menuGetMenu = (val1 = 0,val2 = 0,val3 = 200)=>{
+  return Mock.mock({
+      "status": val3,
+      "message":"menuGetMenu xxxxxxx",
+      "data": {
+        data:[],
+      }
+  })
+}
+
+
+
 let mockDataList = (val1 = 200,val2 = 1,val3 = 3)=>{
   return Mock.mock({
       "status": val1,
-      "message":"xxxxxxx",
+      "message":"mockDataList xxxxxxx",
       data:{
         "list|3-9":[ {
           "id|+1":1 ,
@@ -104,6 +116,15 @@ app.all('/project/all', function(req, res) {
   console.log("req==>",req.body);
   console.log("resVal==>",resVal);
   res.json(mockDataList(req.body.myStatus,req.body.page,req.body.pageline));
+  res.end()
+});
+
+
+app.all('/menu/getMenu', function(req, res) {
+  let resVal = menuGetMenu(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  res.json(menuGetMenu(req.body.myStatus,req.body.page,req.body.pageline));
   res.end()
 });
 

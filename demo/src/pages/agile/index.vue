@@ -167,12 +167,14 @@ import Store from '@/vuex/store'
 
 
 import API from '@/api'
-const {projectAllAXIOS} = API;
+const {defaultAXIOS} = API;
+import Common from '@/Common';
+const {projectAll} = Common.restUrl;
 
 export default {
 	name: 'aglie',
     mounted(){
-        this.tableDataAjaxFn();
+        this.tableDataAjaxFn(projectAll);
 
     },
     components: {
@@ -200,12 +202,9 @@ export default {
         if(this.addtest){
             this.tabRowAddFn()
         }
-        
-        
     },
     data () {
         return {
-
             isShowMoreShow:false,
             //allSelectTableRome:false,
             isShowAddPop:false,
@@ -350,26 +349,21 @@ export default {
     },
     methods: {
         changeCurrentPage(i) {
-            this.tableDataAjaxFn("",i,3)
-            //alert(i);
+            this.tableDataAjaxFn(projectAll,i,this.tableDAtaPageLine)
         },
         changePageSize(i) {
-            //alert(i);
         },
         tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3){
-            // alert(process.env.NODE_ENV);
-            // alert(process.env.BASE_URL)
-            projectAllAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'get'}).then((response) => {
+            defaultAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("page1+++++++++response++++++++++++",myData,myData.data.list);
+                console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");
                 this.tableData = myData.data.list;
                 this.tableDAtaTatol = myData.data.total;
-
             }).catch( (error) => {
-                console.log(error)
+                console.log(error);
+                alert(error)
             });
-
         },
         tabRowAddFn(){
             this.tableData.push(this.addtest);

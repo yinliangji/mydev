@@ -27,8 +27,8 @@ export default {
 	},
 	mounted(){
 		//
-		projectAllAXIOS("",{page:1,pageline:20},{timeout:2000,method:'get'}).then((response) => {
-			console.log("page1+++++++++response++++++++++++",response)
+		demoAXIOS("",{x:1,y:2},{timeout:2000,method:'get'}).then((response) => {
+			console.log("page1+++++++++++++++++++++",response)
 		}).catch( (error) => {
 			console.log(error)
 		});

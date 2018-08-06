@@ -92,7 +92,7 @@ app.use(allowCrossDomain);//运用跨域的中间件
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 //app.use(bodyParser.text());//运用中间件，对请求体的文本进行解析
-app.use(express.static("vConsole"))
+app.use(express.static("static/vConsole"))
 
 
 app.all('/json.action', function(req, res) {

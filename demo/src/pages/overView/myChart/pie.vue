@@ -24,7 +24,7 @@ export default {
                     text: this.titleName,
                     // subtext: "纯属虚构",
                     x: "center",
-                    bottom:10,
+                    bottom: 10,
                     textStyle: { fontSize: 14 }
                 },
                 tooltip: {
@@ -52,8 +52,16 @@ export default {
                             "#ea7e53",
                             "#eedd78"
                         ],
+                        label: {
+                            normal: {
+                                show: true,
+                                //  position:"inside",
+                                formatter: '{b}:{d}'
+                            }
+                        },
+
                         // color: ['#0b62a4','#7a92a3','#3980b5','#67a7c5','#ea7e53','#eedd78'],
-                        radius:'55%',
+                        radius: "55%",
                         center: ["50%", "50%"],
                         data: this.data,
                         itemStyle: {

@@ -69,7 +69,14 @@
         <div class="pageCon">
           <Row>
             <Col span="12">
-            <lineChart></lineChart>
+            <lineChart
+            :titleName="part1.title5"
+            :dataX="part1.data5X"
+            :dataY="part1.data5Y"
+            :xyAxisColor="part1.xyAxisColor5"
+            :xAxisName="part1.xAxisName5"
+            :yAxisName="part1.yAxisName5">
+            </lineChart>
             </Col>
             <Col span="12">
             <barSection></barSection>
@@ -245,7 +252,15 @@ export default {
                 yAxisName4:"上线情况",
                 name4: "迭代",
                 labelOnoff4:true,
-                labelColor4:"#fff"
+                labelColor4:"#fff",
+
+                title5:"燃尽图",
+                data5X:["5.1", "6.1", "7.1", "8.1", "9.1", "10.1"],
+                data5Y:[750, 650, 500, 300, 200, 100, 10],
+                xyAxisColor5:"#ffcb5b",
+                xAxisName5:"时间",
+                yAxisName5:"完成情况",
+
 
 
             }

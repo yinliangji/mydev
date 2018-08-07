@@ -10,18 +10,14 @@ export default {
             msg: "折线图"
         };
     },
-    //标题名称、X数据、Y数据、X轴名称、Y轴名称
+    //标题名称、X数据、Y数据、X轴名称、Y轴名称、xy颜色
     props: [
         "titleName",
         "dataX",
         "dataY",
-        "name",
-        "barColor",
         "xyAxisColor",
         "xAxisName",
-        "yAxisName",
-        "labelOnoff",
-        "labelColor"
+        "yAxisName"
     ],
     mounted() {
         this.drawChart();
@@ -34,23 +30,27 @@ export default {
             // 绘制图表
             myChart.setOption({
                 title: {
-                    text: "燃尽图",
+                    text: this.titleName,
                     x: "center",
                     bottom: 10,
                     textStyle: { fontSize: 14 }
                 },
+                tooltip: {
+                    trigger: "axis"
+                },
                 //  backgroundColor: '#eee',
                 xAxis: {
-                    data: ["5.1", "6.1", "7.1", "8.1", "9.1", "10.1"],
-                    name: "时间",
+                    data: this.dataX,
+                    name: this.xAxisName,
                     nameTextStyle: {
-                        color: "#66CCFF"
+                        color: this.xyAxisColor
                     }
                 },
                 yAxis: {
-                    name: "完成情况",
+                    type: "value",
+                    name: this.yAxisName,
                     nameTextStyle: {
-                        color: "#66CCFF"
+                        color: this.xyAxisColor
                     }
                 },
                 color: [
@@ -63,15 +63,8 @@ export default {
                 ],
                 series: [
                     {
-                        data: [800, 700, 600, 500, 400, 300, 200],
+                        data: this.dataY,
                         type: "line",
-                        name: "总量1",
-                        smooth: true
-                    },
-                    {
-                        data: [750, 650, 500, 300, 200, 100, 10],
-                        type: "line",
-                        name: "总量2",
                         smooth: true
                     }
                 ]

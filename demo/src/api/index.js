@@ -14,6 +14,7 @@ let AXIOS = axios.create(config);
 
 //AXIOS.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8'
 //AXIOS.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+//AXIOS.defaults.headers['Content-Type'] = 'multipart/form-data;charset=UTF-8'
 
 AXIOS.interceptors.request.use( (config) => {
 	console.log("========AXIOS添加请求拦截器 config==========",config);
@@ -41,8 +42,24 @@ AXIOS.interceptors.response.use( (response) => {
 
 export default {
     demoAXIOS (url, data = {}, reset = {}) {/* demo */
-        let _url = url?url:DemoURL_1 
+        let _url = url?url:DemoURL_1;
         return AXIOS.post(_url,data,reset)
+    },
+    demo2AXIOS (url, data = {}, reset = {}) {/* demo2 */
+        let _url = url?url:DemoURL_1;
+        return AXIOS.post(_url,data,reset)
+    },
+    defaultAXIOS (url, data = {}, reset = {}) {/* 敏捷项目列表 */
+        if(!url){
+            return new Promise((resolve, reject) => {reject("没有url")});
+        }
+        if(reset.method && /post/gi.test(reset.method)){
+            return AXIOS.post(url,data,reset)
+        }else if(reset.method && /delete/gi.test(reset.method)){
+            return AXIOS.delete(url,Object.assign({params: data},reset));
+        }else{
+            return AXIOS.get(url,Object.assign({params: data},reset));
+        }
     },
    
 

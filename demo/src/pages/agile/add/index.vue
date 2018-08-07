@@ -6,40 +6,41 @@
                 
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" class="fromBox">
 					<h3 class="Title">项目基本信息</h3>
-                    <FormItem label="项目名称" prop="name">
-                        <Input v-model="formValidate.name" placeholder="请填写项目名称"></Input>
+                    <FormItem label="项目名称" prop="prj_name">
+                        <Input v-model="formValidate.prj_name" placeholder="请填写项目名称"></Input>
                     </FormItem>
 
-                    <FormItem label="设置时间" prop="date">
+                   <!--  <FormItem label="设置时间" prop="date">
                         <DatePicker :value="formValidate.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择开始和结束日期" v-model="formValidate.date" split-panels  style="width: 300px"></DatePicker>
-                    </FormItem>
+                    </FormItem> -->
 
 					<Row>
                         <Col span="12">
-                            <FormItem label="开始时间" prop="startDate">
-                        		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"  :value="formValidate.startDate" v-model="formValidate.startDate"></DatePicker>
+                            <FormItem label="开始时间" prop="start_time">
+                        		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"  :value="formValidate.start_time" v-model="formValidate.start_time"></DatePicker>
                     		</FormItem>
                         </Col>
                         <Col span="12">
-                             <FormItem label="结束时间" prop="endDate">
-                        		<DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择结束日期" v-model="formValidate.endDate"></DatePicker>
+                             <FormItem label="结束时间" prop="end_time">
+                        		<DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择结束日期" v-model="formValidate.end_time" ></DatePicker>
                     		</FormItem>
                         </Col>
                     </Row>
 
                   
-					<FormItem label="项目描述" prop="desc">
-                        <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目描述"></Input>
+					<FormItem label="项目描述" prop="prj_desc">
+                        <Input v-model="formValidate.prj_desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目描述"></Input>
                     </FormItem>
 
 
-                    <FormItem label="项目目标" prop="target">
-                        <Input v-model="formValidate.target" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目目标"></Input>
+                    <FormItem label="项目目标" prop="prj_goal">
+                        <Input v-model="formValidate.prj_goal" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目目标"></Input>
                     </FormItem>
 
-                    <FormItem label="填写模块" prop="moudle">
-                        <!-- <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input> -->
-                        <Tag v-for="item in formValidate.count" :key="item" :name="item" closable @on-close="handleClose">
+
+                    <!-- <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input> -->
+                    <FormItem label="填写模块" prop="modules">
+                        <Tag v-for="item in formValidate.modules" :key="item" :name="item" closable @on-close="handleClose">
                             {{ item}}
                         </Tag>
                         <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
@@ -47,9 +48,13 @@
                         </Button>
                     </FormItem>
 
-                    <FormItem label="模块选择" prop="business">
-                        <Select v-model="formValidate.business" multiple >
-                            <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+
+
+
+
+                    <FormItem label="模块选择" prop="module">
+                        <Select v-model="formValidate.module" multiple >
+                            <Option v-for="item in moduleList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </FormItem>
 
@@ -159,6 +164,11 @@
 <script>
 
 
+import API from '@/api'
+const {defaultAXIOS} = API;
+import Common from '@/Common';
+const {projectAdd,projectAll} = Common.restUrl;
+
 
 import Store from '@/vuex/store'
 Date.prototype.Format = function (fmt) { // author: meizz
@@ -201,16 +211,16 @@ export default {
         
     },
     beforecreated(){
-        console.log("agileAdd--beforecreated-------",this.addtest)
+        console.log("agileAdd--beforecreated-------",this.formValidate.modules)
     },
     created(){
-        console.log("agileAdd--created-------",this.addtest)
+        console.log("agileAdd--created-------",this.formValidate.modules)
     },
     beforeUpdate(){
-        console.log("agileAdd--beforeUpdate-------",this.addtest)
+        console.log("agileAdd--beforeUpdate-------",this.formValidate.modules)
     },
     updated(){
-        console.log("agileAdd--updated-------",this.addtest)
+        console.log("agileAdd--updated-------",this.formValidate.modules)
         if(this.addtest){
         	this.$router.push('/agile')
         }
@@ -237,27 +247,35 @@ export default {
             nowDate:"",
             defDate:"",
             formValidate: {
-                name: '',
-                date:[],
-                startDate: '',
-                startTime: '',
-                endDate: '',
-                endTime: '',
-                desc: '',
-                manager:"", 
-                developer:"", 
-                tester:"", 
-                maintainer:"", 
-                target:"",
-                technology: [],
-                business:[],
-                moudle:"",
-                group:"",
-                count:[],
+                prj_name:'',
+                start_time: '',
+                end_time: '',
+                prj_desc: '',
+                prj_goal:"",
+                modules:[],
+                module:"",
                 allgroup:[],
                 managerGroup:[],
                 developerGroup:[],
                 testerGroup:[],
+
+
+
+
+
+
+                date:[],
+                startTime: '',
+                endTime: '',
+                manager:"", 
+                developer:"", 
+                tester:"", 
+                maintainer:"", 
+                technology: [],
+                moudle:"",
+                group:"",
+                
+               
             },
             allgroupList: [
                 {
@@ -378,7 +396,7 @@ export default {
                 },
                
             ],
-            businessList: [
+            moduleList: [
                 {
                     value: 'New York',
                     label: '业务模块1'
@@ -394,24 +412,53 @@ export default {
                
             ],
             ruleValidate: {
-                name: [
+                prj_name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
-                moudle: [
-                    { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                start_time: [
+                    { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
                 ],
+                end_time: [
+                    { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
+                ],
+                prj_desc: [
+                    { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
+                    //{ type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+                ],
+                prj_goal: [
+                    { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
+                    //{ type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+                ],
+                modules: [
+                    { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
+                ],
+                allgroup: [
+                    { required: true, type: 'array',  message: '请选择内容，不能为空！', trigger: 'change' }
+                ],
+                managerGroup: [
+                    { required: false, type: 'array', message: '请选择', trigger: 'change' }
+                ],
+                developerGroup: [
+                    { required: false, type: 'array', message: '请选择', trigger: 'change' }
+                ],
+                testerGroup: [
+                    { required: false, type: 'array', message: '请选择', trigger: 'change' }
+                ],
+
+
+
+               
+
+
+               
                 date: [
                     { required: true, type: 'array', validator: validateDate, trigger: ['blur','change'], }
                 ],
-                startDate: [
-                    { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
-                ],
+               
                 startTime: [
                     { required: false, type: 'string', message: 'Please select time', trigger: 'change' }
                 ],
-                endDate: [
-                    { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
-                ],
+                
                 endTime: [
                     { required: false, type: 'string', message: 'Please select time', trigger: 'change' }
                 ],
@@ -419,30 +466,12 @@ export default {
                 group: [
                     { required: true, message: '请选择', trigger: 'change' }
                 ],
-
-                manager: [
-                    { required: false, message: '请选择', trigger: 'change' }
-                ],
-                developer: [
-                    { required: false, message: '请选择', trigger: 'change' }
-                ],
-                tester: [
-                    { required: false, message: '请选择', trigger: 'change' }
-                ],
                 maintainer: [
                     { required: true, message: '请选择', trigger: 'change' }
                 ],
-                desc: [
-                    { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
-                    //{ type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
-                ],
-                target: [
-                    { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
-                    //{ type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
-                ],
-                allgroup: [
-                    { required: true, type: 'array',  message: '请选择内容，不能为空！', trigger: 'change' }
-                ],
+               
+                
+                
                
                 
             },
@@ -474,54 +503,95 @@ export default {
             this.formValidate.date[0] = nowDay;
             this.formValidate.date[1] = defDay;
 
-            this.formValidate.startDate  = nowDay;
+            this.formValidate.start_time  = nowDay;
         },
        
         
         formItemReset(){
             this.resetData(); //this.formValidate.date = [];
-            this.editTableData = false;
-
-            this.formValidate.date = [];
-            this.formValidate.startDate = "";
-            this.formValidate.startTime = "";
-            this.formValidate.endDate = "";
-            this.formValidate.endTime = "";
-            this.formValidate.desc = "";
-            this.formValidate.manager = "";
-            this.formValidate.developer = "";
-            this.formValidate.tester = "";
-            this.formValidate.maintainer = "";
-            this.formValidate.target = "";
-            this.formValidate.technology = [];
-            this.formValidate.business = [];
+            this.formValidate.prj_name = "";
+            this.formValidate.start_time = "";
+            this.formValidate.end_time = "";
+            this.formValidate.prj_desc = "";
+            this.formValidate.prj_goal = "";
+            this.formValidate.modules = [];
             this.formValidate.moudle = "";
-            this.formValidate.group = "";
-            this.formValidate.count = [];
             this.formValidate.allgroup = [];
             this.formValidate.managerGroup = [];
             this.formValidate.developerGroup = [];
             this.formValidate.testerGroup = [];
+
+
+
+
+            this.editTableData = false;
+            this.formValidate.date = [];
+            this.formValidate.startTime = "";
+            this.formValidate.endTime = "";
+            this.formValidate.manager = "";
+            this.formValidate.developer = "";
+            this.formValidate.tester = "";
+            this.formValidate.maintainer = "";
+            this.formValidate.technology = [];
+            this.formValidate.business = [];
+            this.formValidate.group = "";
+            
         },
         submitAddData(){
+            let _modules = this.formValidate.module ? this.formValidate.modules.push(this.formValidate.module) : this.formValidate.modules;
+            //let _modules = this.formValidate.modules;
+            let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
+            let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
             let tempData = {
-                name: this.formValidate.name,
+                prj_name: this.formValidate.prj_name,
+                start_time:_start_time,
+                end_time:_end_time,
+                prj_desc: this.formValidate.prj_desc,
+                prj_goal: this.formValidate.prj_goal,
+                modules:_modules,
+                allgroup: this.formValidate.allgroup,
+                managerGroup: this.formValidate.managerGroup,
+                developerGroup: this.formValidate.developerGroup,
+                testerGroup: this.formValidate.testerGroup,
+               
+
+
                 num: parseInt(Math.random()*100),
-                describe: this.formValidate.desc,
-                manager:this.formValidate.manager,
+                manager:"经理",
+                group:"group|group",
                 // startTime:new Date(this.formValidate.date[0]).Format("yyyy-MM-dd"),
                 // endTime:new Date(this.formValidate.date[1]).Format("yyyy-MM-dd"),
                 // startTime:this.formValidate.startDate,
                 // endTime:this.formValidate.endDate,
-
-
-                startTime:new Date(this.formValidate.startDate).Format("yyyy-MM-dd"),
-                endTime:new Date(this.formValidate.date[1]).Format("yyyy-MM-dd"),
-
-                group:this.formValidate.group,
             }
-           
-          
+
+/**/
+defaultAXIOS(projectAll,{page:1,pageline:3},{timeout:2000,method:'post'}).then((response) => {
+                alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");
+                this.tableData = myData.data.list;
+                this.tableDAtaTatol = myData.data.total;
+            }).catch( (error) => {
+                console.log(error);
+                alert(error)
+            });
+
+            defaultAXIOS(projectAdd,{page:1,pageline:3},{timeout:2000,method:'post'}).then((response) => {
+                alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======agile***response+++",response,myData,"+++agile***response======>");
+                this.modal_add_loading = false;
+                this.formItemReset();
+                this.$refs.formValidate.resetFields();
+                //this.$router.push('/agile')
+            }).catch( (error) => {
+                console.log(error);
+                alert(error)
+                this.modal_add_loading = false;
+            });
+
+            /*
             setTimeout(() => {
             	this.modal_add_loading = false;
             	Store.dispatch('ADD_DATA_TEST/incrementAsync', {
@@ -530,9 +600,9 @@ export default {
                 this.formItemReset();
                 this.$refs.formValidate.resetFields();
             },1000)
+            */
         },
         submitAdd () {
-            let IsStop = false;
             this.$refs.formValidate.validate((valid)=>{//验证
                 if(valid){
                     this.submitAddData();
@@ -546,13 +616,13 @@ export default {
             this.$refs.formValidate.resetFields();
         },
         handleClose (event, name) {
-            const index = this.formValidate.count.indexOf(name);
-            this.formValidate.count.splice(index, 1);
+            const index = this.formValidate.modules.indexOf(name);
+            this.formValidate.modules.splice(index, 1);
         },
 
         submitModule () {
             setTimeout(() => {
-                this.formValidate.count.push(this.formItem.businessName)
+                this.formValidate.modules.push(this.formItem.businessName)
                 this.modaAdd = false;
                 this.$Message.info('成功');
                 this.ModuleformItemReset();

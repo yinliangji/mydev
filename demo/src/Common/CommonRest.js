@@ -4,7 +4,10 @@ export default  class  CommonRest{
     }
 }
 CommonRest.restUrl={
-	"DemoURL_1":process.env.BASE_URL+"json.action",/****express demo json****/
+	"DemoURL_1":process.env.BASE_URL+"/json.action",/****express demo json****/
+	"projectAll":process.env.BASE_URL+"/project/all",/****express 敏捷项目列表 get****/
+	"projectAdd":process.env.BASE_URL+"/project/add",/****express 敏捷项目添加 post****/
+
 
 }
 CommonRest.UA = navigator.userAgent.toLowerCase();

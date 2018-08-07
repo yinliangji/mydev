@@ -45,22 +45,10 @@ let mockData2 = (val1,val2,val3 = 200)=>{
 
 
 
-let menuGetMenu = (val1 = 0,val2 = 0,val3 = 200)=>{
-  return Mock.mock({
-      "status": val3,
-      "message":"menuGetMenu xxxxxxx",
-      "data": {
-        data:[],
-      }
-  })
-}
-
-
-
 let mockDataList = (val1 = 200,val2 = 1,val3 = 3)=>{
   return Mock.mock({
       "status": val1,
-      "message":"mockDataList xxxxxxx",
+      "message":"xxxxxxx",
       data:{
         "list|3-9":[ {
           "id|+1":1 ,
@@ -83,7 +71,7 @@ let mockDataList = (val1 = 200,val2 = 1,val3 = 3)=>{
           
       }],
       "total|3-9":3,
-      "per_page|3-9":3,
+      "per_page|3-5":10,
       },
   })
 }
@@ -92,7 +80,7 @@ app.use(allowCrossDomain);//运用跨域的中间件
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 //app.use(bodyParser.text());//运用中间件，对请求体的文本进行解析
-app.use(express.static("static/vConsole"))
+app.use(express.static("vConsole"))
 
 
 app.all('/json.action', function(req, res) {
@@ -116,27 +104,6 @@ app.all('/project/all', function(req, res) {
   console.log("req==>",req.body);
   console.log("resVal==>",resVal);
   res.json(mockDataList(req.body.myStatus,req.body.page,req.body.pageline));
-  res.end()
-});
-
-
-app.post('/project/add', function(req, res) {
-  let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
-  console.log("req==>",req.body);
-  console.log("resVal==>",resVal);
-  
-
-  //res.json(mockDataList(req.body.myStatus,req.body.page,req.body.pageline));
-  res.json({returnReq:"1111111",returnRes:"2222222"});
-  res.end()
-});
-
-
-app.all('/menu/getMenu', function(req, res) {
-  let resVal = menuGetMenu(req.body.myStatus,req.body.page,req.body.pageline);
-  console.log("req==>",req.body);
-  console.log("resVal==>",resVal);
-  res.json(menuGetMenu(req.body.myStatus,req.body.page,req.body.pageline));
   res.end()
 });
 

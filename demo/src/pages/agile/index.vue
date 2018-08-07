@@ -358,7 +358,7 @@ export default {
         },
         tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3){
             defaultAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'get'}).then((response) => {
-                alert(JSON.stringify(response))
+                //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");
                 this.tableData = myData.data.list;
@@ -479,7 +479,7 @@ export default {
         },
         goAgileDetailFn (I,P) {
             console.log(this.tableData[I].id,I,P)
-            this.$router.push({path: '/agile/detail', query: {id: this.tableData[I].id}})
+            this.$router.push({path: '/agile/detail', query: {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id}})
         },
         goDemandFn (index) {
             this.$router.push('/demand')

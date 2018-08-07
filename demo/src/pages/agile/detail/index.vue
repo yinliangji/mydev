@@ -169,7 +169,7 @@ export default {
     	},
      	tableDataAjaxFn(URL = "",ID = 0){
             defaultAXIOS(URL+ID,{},{timeout:2000,method:'get'}).then((response) => {
-                alert(JSON.stringify(response))
+                //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======detail***response+++",response,myData,"+++detail***response======>");
                 if(myData.data && myData.data.id){

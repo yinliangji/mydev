@@ -10,6 +10,17 @@
                         <Input v-model="formValidate.prj_name" placeholder="请填写项目名称"></Input>
                     </FormItem>
 
+                    <FormItem label="项目编号" prop="prj_id">
+                        <Input v-model="formValidate.prj_id" placeholder="请填写项目编号"></Input>
+                    </FormItem>
+
+                    <FormItem label="项目类型" prop="prj_type">
+                        <RadioGroup v-model="formValidate.prj_type">
+                            <Radio label="1">立研</Radio>
+                            <Radio label="2">自研</Radio>
+                        </RadioGroup>
+                    </FormItem>
+
                    <!--  <FormItem label="设置时间" prop="date">
                         <DatePicker :value="formValidate.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择开始和结束日期" v-model="formValidate.date" split-panels  style="width: 300px"></DatePicker>
                     </FormItem> -->
@@ -203,6 +214,8 @@ const validateDate = (rule, value, callback) => {
 };
 
 
+
+
 export default {
     props: {
         
@@ -236,8 +249,8 @@ export default {
         return {
             options3: {
                 disabledDate (date) {
-                    if(_this.formValidate.startDate){
-                        return date && date.valueOf() < _this.formValidate.startDate.getTime() + 86400000;//24*60*1000*60
+                    if(_this.formValidate.start_time){
+                        return date && date.valueOf() < _this.formValidate.start_time.getTime() + 86400000;//24*60*1000*60
                     }else{
                         //return date && date.valueOf() < Date.now() - 86400000;//24*60*1000*60
                     }
@@ -247,6 +260,8 @@ export default {
             nowDate:"",
             defDate:"",
             formValidate: {
+                prj_type:"1",
+                prj_id:'',
                 prj_name:'',
                 start_time: '',
                 end_time: '',
@@ -279,111 +294,111 @@ export default {
             },
             allgroupList: [
                 {
-                    value: 'New York',
-                    label: 'New York'
+                    value: 'New York1',
+                    label: 'New York总体组人1'
                 },
                 {
                     value: 'London',
-                    label: 'London'
+                    label: 'London总体组人2'
                 },
                 {
                     value: 'Sydney',
-                    label: 'Sydney'
+                    label: 'Sydney总体组人3'
                 },
                 {
                     value: 'Ottawa',
-                    label: 'Ottawa'
+                    label: 'Ottawa总体组人4'
                 },
                 {
                     value: 'Paris',
-                    label: 'Paris'
+                    label: 'Paris总体组人5'
                 },
                 {
                     value: 'Canberra',
-                    label: 'Canberra'
+                    label: 'Canberra总体组人6'
                 }
             ],
             managerGroupList: [
                 {
-                    value: 'New York',
-                    label: 'New York'
+                    value: 'New York2',
+                    label: 'New York项目经理1'
                 },
                 {
                     value: 'London',
-                    label: 'London'
+                    label: 'London项目经理2'
                 },
                 {
                     value: 'Sydney',
-                    label: 'Sydney'
+                    label: 'Sydney项目经理3'
                 },
                 {
                     value: 'Ottawa',
-                    label: 'Ottawa'
+                    label: 'Ottawa项目经理4'
                 },
                 {
                     value: 'Paris',
-                    label: 'Paris'
+                    label: 'Paris项目经理5'
                 },
                 {
                     value: 'Canberra',
-                    label: 'Canberra'
+                    label: 'Canberra项目经理6'
                 }
             ],
             developerGroupList: [
                 {
-                    value: 'New York',
-                    label: 'New York'
+                    value: 'New York3',
+                    label: 'New York开发人员1'
                 },
                 {
                     value: 'London',
-                    label: 'London'
+                    label: 'London开发人员2'
                 },
                 {
                     value: 'Sydney',
-                    label: 'Sydney'
+                    label: 'Sydney开发人员3'
                 },
                 {
                     value: 'Ottawa',
-                    label: 'Ottawa'
+                    label: 'Ottawa开发人员4'
                 },
                 {
                     value: 'Paris',
-                    label: 'Paris'
+                    label: 'Paris开发人员5'
                 },
                 {
                     value: 'Canberra',
-                    label: 'Canberra'
+                    label: 'Canberra开发人员6'
                 }
             ],
             testerGroupList: [
                 {
-                    value: 'New York',
-                    label: 'New York'
+                    value: 'New York4',
+                    label: 'New York测试人员1'
                 },
                 {
                     value: 'London',
-                    label: 'London'
+                    label: 'London测试人员2'
                 },
                 {
                     value: 'Sydney',
-                    label: 'Sydney'
+                    label: 'Sydney测试人员3'
                 },
                 {
                     value: 'Ottawa',
-                    label: 'Ottawa'
+                    label: 'Ottawa测试人员4'
                 },
                 {
                     value: 'Paris',
-                    label: 'Paris'
+                    label: 'Paris测试人员5'
                 },
                 {
                     value: 'Canberra',
-                    label: 'Canberra'
+                    label: 'Canberra测试人员6'
                 }
             ],
             technologyList: [
                 {
-                    value: 'New York',
+                    value: 'New York5',
                     label: '技术模块1'
                 },
                 {
@@ -398,27 +413,34 @@ export default {
             ],
             moduleList: [
                 {
-                    value: 'New York',
-                    label: '业务模块1'
+                    value: '模块1-1',
+                    label: '模块1'
                 },
                 {
-                    value: 'London',
-                    label: '技术模块1'
+                    value: '模块2-2',
+                    label: '模块2'
                 },
                 {
-                    value: 'Sydney',
-                    label: '业务模块3'
+                    value: '模块3-3',
+                    label: '模块3'
                 },
                
             ],
             ruleValidate: {
+                prj_type: [
+                    { required: false, message: 'Please select gender', trigger: 'change' }
+                ],
+                prj_id: [
+                    { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
                 prj_name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
                 start_time: [
                     { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
                 ],
-                end_time: [
+                end_time: [//
+                    //{ required: false, type: 'date', validator: validateDate2, trigger: 'change' }
                     { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
                 ],
                 prj_desc: [
@@ -493,7 +515,7 @@ export default {
     
     methods: {
         showError(ERR){
-            alert(ERR)
+            alert(JSON.stringify(ERR))
         },
         resetData(){
             //new Date().Format("yyyy-MM-dd HH:mm:ss");
@@ -512,6 +534,8 @@ export default {
         
         formItemReset(){
             this.resetData(); //this.formValidate.date = [];
+            this.formValidate.prj_type = "1";
+            this.formValidate.prj_id = "";
             this.formValidate.prj_name = "";
             this.formValidate.start_time = "";
             this.formValidate.end_time = "";
@@ -541,53 +565,54 @@ export default {
             
         },
         submitAddData(){
-            let _modules = this.formValidate.module ? this.formValidate.modules.push(this.formValidate.module) : this.formValidate.modules;
-            //let _modules = this.formValidate.modules;
+            let _modules = false;
+            let _join = ";";
+            if(this.formValidate.module){
+                if(Array.isArray(this.formValidate.module)){
+                    this.formValidate.modules.push(...this.formValidate.module)
+                }else{
+                    this.formValidate.modules.push(this.formValidate.module)
+                }
+                _modules = this.formValidate.modules
+            }else{
+                _modules = this.formValidate.modules
+            }
             let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
             let tempData = {
+                prj_type:this.formValidate.prj_type,
+                prj_id: this.formValidate.prj_id,
                 prj_name: this.formValidate.prj_name,
                 start_time:_start_time,
                 end_time:_end_time,
                 prj_desc: this.formValidate.prj_desc,
                 prj_goal: this.formValidate.prj_goal,
-                modules:_modules,
-                allgroup: this.formValidate.allgroup,
-                managerGroup: this.formValidate.managerGroup,
-                developerGroup: this.formValidate.developerGroup,
-                testerGroup: this.formValidate.testerGroup,
+                modules:_modules.join("<=>"),
+                allgroup: this.formValidate.allgroup.join(_join),
+                managerGroup: this.formValidate.managerGroup.join(_join),
+                developerGroup: this.formValidate.developerGroup.join(_join),
+                testerGroup: this.formValidate.testerGroup.join(_join),
                
 
 
-                num: parseInt(Math.random()*100),
-                manager:"经理",
-                group:"group|group",
+                //num: parseInt(Math.random()*100),
+                //manager:"经理",
+                //group:"group|group",
                 // startTime:new Date(this.formValidate.date[0]).Format("yyyy-MM-dd"),
                 // endTime:new Date(this.formValidate.date[1]).Format("yyyy-MM-dd"),
                 // startTime:this.formValidate.startDate,
                 // endTime:this.formValidate.endDate,
             }
 
-/*  //临时 删除
-            defaultAXIOS(projectAll,{page:1,pageline:3},{timeout:2000,method:'post'}).then((response) => {
-                alert(JSON.stringify(response))
+
+            defaultAXIOS(projectAdd,tempData,{timeout:2000,method:'post'}).then((response) => {
+                //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");
-                this.tableData = myData.data.list;
-                this.tableDAtaTatol = myData.data.total;
-            }).catch( (error) => {
-                console.log(error);
-                alert(error)
-            });
-*/
-            defaultAXIOS(projectAdd,{page:1,pageline:3},{timeout:2000,method:'post'}).then((response) => {
-                alert(JSON.stringify(response))
-                let myData = response.data;
-                console.log("<======agile***response+++",response,myData,"+++agile***response======>");
+                console.log("<======agile add***response+++",response,myData,"+++agile add***response======>");
                 this.modal_add_loading = false;
                 this.formItemReset();
                 this.$refs.formValidate.resetFields();
-                //this.$router.push('/agile')
+                this.$router.push('/agile');
             }).catch( (error) => {
                 console.log(error);
                 this.modal_add_loading = false;

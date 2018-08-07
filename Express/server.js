@@ -63,8 +63,8 @@ let mockDataList = (val1 = 200,val2 = 1,val3 = 3)=>{
       "message":"mockDataList xxxxxxx",
       data:{
         "list|3-9":[ {
-          "id|+1":1 ,
-          "prj_id|+1":100,
+          "id":1 ,
+          "prj_id":1,
           "prj_name|5-8":/[a-zA-Z]/,
           "prj_manager":"项目经理",
           "prj_desc":"项目描述",
@@ -165,7 +165,7 @@ app.post('/project/add', function(req, res) {
   res.end()
 });
 
-app.all('/project/detail/0', function(req, res) {
+app.all('/project/detail/1', function(req, res) {
   let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
   console.log("req==>",req.body);
   console.log("resVal==>",resVal);

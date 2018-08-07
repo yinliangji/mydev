@@ -10,6 +10,15 @@ export default {
             msg: "折线图"
         };
     },
+    //标题名称、X数据、Y数据、X轴名称、Y轴名称、xy颜色
+    props: [
+        "titleName",
+        "dataX",
+        "dataY",
+        "xyAxisColor",
+        "xAxisName",
+        "yAxisName"
+    ],
     mounted() {
         this.drawChart();
     },
@@ -20,26 +29,34 @@ export default {
             let myChart = this.$echarts.init(this.$refs.myChart);
             // 绘制图表
             myChart.setOption({
-                title: { text: '燃尽图', x: "center" },
-                 backgroundColor: '#eee',
+                title: {
+                    text: this.titleName,
+                    x: "center",
+                    bottom: 10,
+                    textStyle: { fontSize: 14 }
+                },
+                tooltip: {
+                    trigger: "axis"
+                },
+                //  backgroundColor: '#eee',
                 xAxis: {
-                    type: "category",
-                    data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+                    data: this.dataX,
+                    name: this.xAxisName,
+                    nameTextStyle: {
+                        color: this.xyAxisColor
+                    }
                 },
                 yAxis: {
-                    type: "value"
+                    type: "value",
+                    name: this.yAxisName,
+                    nameTextStyle: {
+                        color: this.xyAxisColor
+                    }
                 },
                 series: [
                     {
-                        data: [820, 932, 901, 934, 1290, 1330, 1320],
+                        data: this.dataY,
                         type: "line",
-                        name: '总量1',
-                        smooth: true
-                    },
-                    {
-                        data: [60, 100, 500, 300, 700, 900, 80],
-                        type: "line",
-                        name: '总量2',
                         smooth: true
                     }
                 ]

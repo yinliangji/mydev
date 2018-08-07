@@ -53,6 +53,14 @@ export default {
                         color: this.xyAxisColor
                     }
                 },
+                color: [
+                    "#66ccff",
+                    "#ff6666",
+                    "#ffcb5b",
+                    "#76c043",
+                    "#ea7e53",
+                    "#eedd78"
+                ],
                 series: [
                     {
                         data: this.dataY,

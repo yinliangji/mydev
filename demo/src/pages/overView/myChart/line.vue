@@ -1,6 +1,6 @@
 <template>
 
-  <div id="myChart" :style="{width: '500px', height: '500px'}" ref="myChart"></div>
+  <div id="myChart" :style="{width: '530px', height: '350px'}" ref="myChart"></div>
 </template>
 <script>
 export default {
@@ -53,6 +53,14 @@ export default {
                         color: this.xyAxisColor
                     }
                 },
+                color: [
+                    "#66ccff",
+                    "#ff6666",
+                    "#ffcb5b",
+                    "#76c043",
+                    "#ea7e53",
+                    "#eedd78"
+                ],
                 series: [
                     {
                         data: this.dataY,

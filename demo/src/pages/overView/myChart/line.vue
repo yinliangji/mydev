@@ -1,6 +1,6 @@
 <template>
 
-  <div id="myChart" :style="{width: '500px', height: '500px'}" ref="myChart"></div>
+  <div id="myChart" :style="{width: '530px', height: '350px'}" ref="myChart"></div>
 </template>
 <script>
 export default {

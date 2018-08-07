@@ -1,6 +1,5 @@
 <template>
-
-  <div id="myChart" :style="{width: '500px', height: '500px'}" ref="myChart"></div>
+  <div id="myChart" :style="{width: '530px', height: '350px'}" ref="myChart"></div>
 </template>
 <script>
 export default {
@@ -10,6 +9,7 @@ export default {
             msg: "饼图"
         };
     },
+    props: ["titleName", "data", "name"],
     mounted() {
         this.drawChart();
     },
@@ -21,20 +21,28 @@ export default {
             // 绘制图表
             myChart.setOption({
                 title: {
-                    text: "人员构成图",
+                    text: this.titleName,
                     // subtext: "纯属虚构",
                     x: "center",
-                    bottom: 10,
+                    bottom:10,
                     textStyle: { fontSize: 14 }
                 },
                 tooltip: {
                     trigger: "item",
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    show: true,
+                    formatter: "{a} <br/>{b} : {c} "
                 },
-
+                legend: {
+                    orient: "vertical",
+                    left: "10px",
+                    top: "10px"
+                },
+                label: {
+                    show: true
+                },
                 series: [
                     {
-                        name: "人员占比",
+                        name: this.name,
                         type: "pie",
                         color: [
                             "#66ccff",
@@ -53,15 +61,9 @@ export default {
                         },
 
                         // color: ['#0b62a4','#7a92a3','#3980b5','#67a7c5','#ea7e53','#eedd78'],
-                        radius: "55%",
+                        radius:'55%',
                         center: ["50%", "50%"],
-                        data: [
-                            { value: 3, name: "总体组" },
-                            { value: 10, name: "开发一组" },
-                            { value: 10, name: "开发二组" },
-                            { value: 10, name: "开发三组" },
-                            { value: 6, name: "测试组" }
-                        ],
+                        data: this.data,
                         itemStyle: {
                             emphasis: {
                                 shadowBlur: 10,

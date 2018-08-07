@@ -353,6 +353,9 @@ export default {
         },
         changePageSize(i) {
         },
+        showError(ERR){
+            alert(ERR)
+        },
         tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3){
             defaultAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'get'}).then((response) => {
                 alert(JSON.stringify(response))
@@ -362,7 +365,7 @@ export default {
                 this.tableDAtaTatol = myData.data.total;
             }).catch( (error) => {
                 console.log(error);
-                alert(error)
+                this.showError(error);
             });
         },
         tabRowAddFn(){
@@ -474,8 +477,9 @@ export default {
     	handleSelectAll (status) {
             this.$refs.selection.selectAll(status);
         },
-        goAgileDetailFn (index) {
-            this.$router.push('/agile/detail')
+        goAgileDetailFn (I,P) {
+            console.log(this.tableData[I].id,I,P)
+            this.$router.push({path: '/agile/detail', query: {id: this.tableData[I].id}})
         },
         goDemandFn (index) {
             this.$router.push('/demand')

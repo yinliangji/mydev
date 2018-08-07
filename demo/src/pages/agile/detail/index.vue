@@ -13,33 +13,33 @@
 							  <tbody>
 								<tr>
 								  <th width="11%">项目编号</th>
-								  <td>prj0001</td>
+								  <td>{{ formValidate.prj_id | FALSEINFO}}</td>
 								  <th width="11%">项目名称</th>
-								  <td>TPM敏捷项目管理系统</td>
+								  <td>{{formValidate.prj_name | FALSEINFO}}</td>
 								  <th width="11%">所属产品</th>
-								  <td>产品1</td>
+								  <td>{{formValidate.prod_name | FALSEINFO}}</td>
 								</tr>
 								<tr>
 								  <th>项目创建时间</th>
-								  <td>2017-08-01</td>
+								  <td>{{formValidate.settle_time | FALSEINFO}}</td>
 								  <th>开始时间</th>
-								  <td>2017-08-01</td>
+								  <td>{{formValidate.start_time | FALSEINFO}}</td>
 								  <th>结束时间</th>
-								  <td>2017-12-31</td>
+								  <td>{{formValidate.end_time | FALSEINFO}}</td>
 								</tr>
 
 								<tr>
 								  <th>所属模块</th>
-								  <td colspan="5">模块1、模块5、模块4、模块2、</td>
+								  <td colspan="5">{{formValidate.modules | FALSEINFO}}</td>
 								</tr>
 								
 								<tr>
 								  <th>项目描述</th>
-								  <td colspan="5">TPM敏捷项目管理系统、项目计划书是指项目方为了达到招商融资和其它发展目标等目的所制作的计划书。一份好的项目计划书的特点是：关注产品、敢于竞争、充分市场调研，有力资料说明、表明行动的方</td>
+								  <td colspan="5">{{formValidate.prj_desc | FALSEINFO}}</td>
 								</tr>
 								<tr>
 								  <th>项目目标</th>
-								  <td colspan="5">支持备课敏捷开发模块的落地</td>
+								  <td colspan="5">{{formValidate.prj_goal | FALSEINFO}}</td>
 								</tr>
 							  </tbody>
 							</table>
@@ -54,17 +54,18 @@
 								<tbody>
 									<tr>
 										<th width="11%">项目经理</th>
-										<td>李卓、赵筝、谢蓓、王昕亮、邢磊</td>
+										<td>{{formValidate.managerGroup | FALSEINFO}}</td>
 										<th width="11%">开发人员</th>
-										<td>李卓、谢蓓、王昕亮</td>
+										<td>{{formValidate.developerGroup | FALSEINFO}}</td>
 										<th width="11%">测试人员</th>
-										<td>李卓  谢蓓 王昕亮</td>
+										<td>{{formValidate.testerGroup | FALSEINFO}}</td>
+
 									</tr>
 									<tr>
-										<th>维护人员</th>
-										<td>李卓、赵筝、谢蓓、王昕亮、邢磊</td>
 										<th>总体组</th>
-										<td>总体组1</td>
+										<td>{{formValidate.allgroup | FALSEINFO}}</td>
+										<th>&nbsp;<!-- 维护人员 --></th>
+										<td>&nbsp;<!-- 李卓、赵筝、谢蓓、王昕亮、邢磊 --></td>
 										<th>&nbsp;</th>
 										<td>&nbsp;</td>
 									</tr>
@@ -119,6 +120,10 @@
 	</div>
 </template>
 <script>
+import API from '@/api'
+const {defaultAXIOS} = API;
+import Common from '@/Common';
+const {projectDetail} = Common.restUrl;
 export default {
 	data () {
         return {
@@ -132,9 +137,51 @@ export default {
             },
         	count: ["技术模块1", "技术模块2", "技术模块3"],
         	count2: ["业务模块1", "业务模块2", "业务模块3"],
+        	formValidate: {
+        		prj_id:"",
+                prj_name:"",
+                settle_time:"",
+                start_time: "",
+                end_time: "",
+                prj_desc: "",
+                prj_goal:"",
+                modules:"",
+                allgroup:"",
+                managerGroup:"",
+                developerGroup:"",
+                testerGroup:"",
+                prod_name:"",
+            },
         }
     },
-     methods: {
+    mounted(){
+    	if(this.$router.history.current.query.id){
+    		this.tableDataAjaxFn(projectDetail,this.$router.history.current.query.id)
+    	}else{
+    		this.tableDataAjaxFn(projectDetail,0)
+    	}
+    	
+    },
+    
+    methods: {
+    	showError(ERR){
+    		alert(ERR)
+    	},
+     	tableDataAjaxFn(URL = "",ID = 0){
+            defaultAXIOS(URL+ID,{},{timeout:2000,method:'get'}).then((response) => {
+                alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======detail***response+++",response,myData,"+++detail***response======>");
+                if(myData.data && myData.data.id){
+                	for(var I in this.formValidate){
+                		this.formValidate[I] = myData.data[I]
+                	}
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
      	addItem(){
             this.modaAdd = true;
             this.technologyORbusiness = true;

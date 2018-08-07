@@ -88,6 +88,40 @@ let mockDataList = (val1 = 200,val2 = 1,val3 = 3)=>{
   })
 }
 
+
+
+let detail = (val1 = 200,val2 = 1,val3 = 3)=>{
+  return Mock.mock({
+      "status": val1,
+      "message":"detail xxxxxxx",
+      data:{
+         "id|+1":1 ,
+          "prj_id|+1":100,
+          "prj_name|5-8":/[a-zA-Z]/,
+          "prj_manager":"项目经理",
+          "prj_desc":"项目描述",
+          "prj_goal":"项目目标",
+          "settle_time":"2018-01-01",
+          "start_time":"2018-10-10",
+          "end_time":"2018-12-10",
+          "prj_type|0-1":0,
+          "logic_sys_id":"logic_sys_id",
+          "phycics_sys_id":"phycics_sys_id",
+          "modules":"modules",
+          "allgroup":"allgroup、allgroup",
+          "managerGroup":"managerGroup、managerGroup",
+          "developerGroup":"developerGroup、developerGroup",
+          "testerGroup":"testerGroup、testerGroup",
+          "prod_id|+1":500,
+          "prod_name|5-8":/[a-zA-Z]/,
+          "__value2__page":val2,
+          "__value3__pageline":val3,
+      },
+  })
+}
+
+
+
 app.use(allowCrossDomain);//运用跨域的中间件
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -130,6 +164,16 @@ app.post('/project/add', function(req, res) {
   res.json({returnReq:"1111111",returnRes:"2222222"});
   res.end()
 });
+
+app.all('/project/detail/0', function(req, res) {
+  let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  res.json(detail(req.body.myStatus));
+  res.end()
+});
+
+
 
 
 app.all('/menu/getMenu', function(req, res) {

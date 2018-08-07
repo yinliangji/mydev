@@ -29,6 +29,13 @@ import '@/assets/css/common.css'
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts;
 
+Vue.filter('FALSEINFO', value => { // 交易明细
+  if (!value) {
+    return "没有数据"
+  }else{
+  	return value;
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({

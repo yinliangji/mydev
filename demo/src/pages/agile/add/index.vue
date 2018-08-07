@@ -492,6 +492,9 @@ export default {
     },
     
     methods: {
+        showError(ERR){
+            alert(ERR)
+        },
         resetData(){
             //new Date().Format("yyyy-MM-dd HH:mm:ss");
             let minute = 60*1000;
@@ -565,8 +568,8 @@ export default {
                 // endTime:this.formValidate.endDate,
             }
 
-/**/
-defaultAXIOS(projectAll,{page:1,pageline:3},{timeout:2000,method:'post'}).then((response) => {
+/*  //临时 删除
+            defaultAXIOS(projectAll,{page:1,pageline:3},{timeout:2000,method:'post'}).then((response) => {
                 alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");
@@ -576,7 +579,7 @@ defaultAXIOS(projectAll,{page:1,pageline:3},{timeout:2000,method:'post'}).then((
                 console.log(error);
                 alert(error)
             });
-
+*/
             defaultAXIOS(projectAdd,{page:1,pageline:3},{timeout:2000,method:'post'}).then((response) => {
                 alert(JSON.stringify(response))
                 let myData = response.data;
@@ -587,8 +590,8 @@ defaultAXIOS(projectAll,{page:1,pageline:3},{timeout:2000,method:'post'}).then((
                 //this.$router.push('/agile')
             }).catch( (error) => {
                 console.log(error);
-                alert(error)
                 this.modal_add_loading = false;
+                this.showError(error);
             });
 
             /*

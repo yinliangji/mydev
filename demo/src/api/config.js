@@ -1,13 +1,14 @@
-//import Qs from 'qs'
+import Qs from 'qs'
 //baseURL: 'http://127.0.0.1:9090/',
 const defaultSet = {
   method: 'post',
   url: 'json.action',
   baseURL:process.env.TEST_URL,
+  
   data: {
-    firstName: 'Fred',
-    lastName: 'Flintstone'
+    defaultParams:Date.now(),
   },
+
   transformRequest: [function (data) {
     // 这里可以在发送请求之前对请求数据做处理，比如form-data格式化等，这里可以使用开头引入的Qs（这个模块在安装axios的时候就已经安装了，不需要另外安装）
     console.log("========transformRequest=======",data)
@@ -17,17 +18,28 @@ const defaultSet = {
     //data = Qs.parse(data)
     return data;
   }],
-   transformResponse: [function (data) {
+
+  transformResponse: [function (data) {
     // 这里提前处理返回的数据
     console.log("============transformResponse================",data)
     return data;
   }],
-   // 请求头信息
-  headers: {'X-Requested-With': 'XMLHttpRequest','Content-Type':'application/json; charset=utf-8'}, //application/x-www-form-urlencoded;charset=UTF-8
 
+   // 请求头信息
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+    //'Content-Type':'application/x-www-form-urlencoded; charset=utf-8',
+    //multipart/form-data;charset=UTF-8 
+    //application/x-www-form-urlencoded;charset=UTF-8 
+    //application/json;charset=UTF-8
+  },
     //设置超时时间
-  timeout: 5000,
+  timeout: 60000,
+
   //返回数据类型
   responseType: 'json', // default
+
+  // `withCredentials` 表示跨域请求时是否需要使用凭证
+  withCredentials: false, // 默认的
 }
 export default defaultSet

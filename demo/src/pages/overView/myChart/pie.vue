@@ -1,15 +1,15 @@
 <template>
-  <div id="myChart" :style="{width: '530px', height: '350px'}" ref="myChart"></div>
+
+  <div id="myChart" :style="{width: '500px', height: '500px'}" ref="myChart"></div>
 </template>
 <script>
 export default {
     name: "hello",
     data() {
         return {
-            msg: "环状图"
+            msg: "饼图"
         };
     },
-    props: ["titleName", "data", "name"],
     mounted() {
         this.drawChart();
     },
@@ -21,7 +21,7 @@ export default {
             // 绘制图表
             myChart.setOption({
                 title: {
-                    text: this.titleName,
+                    text: "人员构成图",
                     // subtext: "纯属虚构",
                     x: "center",
                     bottom: 10,
@@ -29,20 +29,12 @@ export default {
                 },
                 tooltip: {
                     trigger: "item",
-                    show: true,
-                    formatter: "{a} <br/>{b} : {c} "
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
                 },
-                legend: {
-                    orient: "vertical",
-                    left: "10px",
-                    top: "10px"
-                },
-                label: {
-                    show: true
-                },
+
                 series: [
                     {
-                        name: this.name,
+                        name: "人员占比",
                         type: "pie",
                         color: [
                             "#66ccff",
@@ -63,7 +55,13 @@ export default {
                         // color: ['#0b62a4','#7a92a3','#3980b5','#67a7c5','#ea7e53','#eedd78'],
                         radius: "55%",
                         center: ["50%", "50%"],
-                        data: this.data,
+                        data: [
+                            { value: 3, name: "总体组" },
+                            { value: 10, name: "开发一组" },
+                            { value: 10, name: "开发二组" },
+                            { value: 10, name: "开发三组" },
+                            { value: 6, name: "测试组" }
+                        ],
                         itemStyle: {
                             emphasis: {
                                 shadowBlur: 10,
@@ -78,4 +76,3 @@ export default {
     }
 };
 </script>
-

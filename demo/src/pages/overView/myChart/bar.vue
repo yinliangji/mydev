@@ -8,24 +8,6 @@ export default {
             msg: "柱状图"
         };
     },
-    props: [
-        "titleName",
-        "dataX",
-        "dataY",
-        "name",
-        "barColor",
-        "xyAxisColor",
-        "xAxisName",
-        "yAxisName",
-        "labelOnoff",
-        "labelColor"
-    ],
-    // props: {
-    //     childMsg: {
-    //         type: Array,
-    //         default: [0, 0, 0] //这样可以指定默认的值
-    //     }
-    // },
     mounted() {
         this.drawChart();
     },
@@ -37,54 +19,44 @@ export default {
             // 绘制图表
             myChart.setOption({
                 title: {
-                    text: this.titleName,
+                    text: "迭代上线情况",
                     x: "center",
-                    bottom: 10,
                     textStyle: { fontSize: 14 }
                 },
                 tooltip: {},
                 xAxis: {
-                    data: this.dataX,
-                    name: this.xAxisName,
-                    nameTextStyle: {
-                        color: this.xyAxisColor
-                    }
+                    data: ["5.1", "6.1", "7.1", "8.1", "9.1", "10.1"]
                 },
-                yAxis: {
-                    name: this.yAxisName,
-                    nameTextStyle: {
-                        color: this.xyAxisColor
-                    }
+                yAxis: {},
+                legend: {
+                    data: ['bar', 'bar2', 'bar3', 'bar4'],
+
                 },
 
+                backgroundColor: '#eee',
                 series: [
                     {
-                        name: this.name,
+                        name: "迭代",
                         type: "bar",
-                        data: this.dataY,
+                        data: [5, 20, 36, 10, 10, 20],
                         itemStyle: {
-                            // normal: {
-                            //     color: function(params) {
-                            //         //首先定义一个数组
-                            //         var colorList = [
-                            //             "#66ccff",
-                            //             // "#ff6666",
-                            //             // "#ffcb5b",
-                            //             // "#76c043",
-                            //             // "#ea7e53",
-                            //             // "#eedd78"
-                            //         ];
-                            //         return colorList[params.dataIndex];
-                            //     }, //以下为是否显示
-                            //     label: {
-                            //         show: false
-                            //     }
-                            // }
-                            color: this.barColor
-                        },
-                        label: {
-                            show: this.labelOnoff,
-                            color: this.labelColor
+                            normal: {
+                                color: function(params) {
+                                    //首先定义一个数组
+                                    var colorList = [
+                                        "#66ccff",
+                                        "#ff6666",
+                                        "#ffcb5b",
+                                        "#76c043",
+                                        "#ea7e53",
+                                        "#eedd78"
+                                    ];
+                                    return colorList[params.dataIndex];
+                                }, //以下为是否显示
+                                label: {
+                                    show: false
+                                }
+                            }
                         }
                     }
                 ]

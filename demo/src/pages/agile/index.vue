@@ -354,7 +354,7 @@ export default {
         changePageSize(i) {
         },
         tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3){
-            defaultAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'post'}).then((response) => {
+            defaultAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'get'}).then((response) => {
                 alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");

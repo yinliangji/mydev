@@ -120,6 +120,18 @@ app.all('/project/all', function(req, res) {
 });
 
 
+app.post('/project/add', function(req, res) {
+  let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  
+
+  //res.json(mockDataList(req.body.myStatus,req.body.page,req.body.pageline));
+  res.json({returnReq:"1111111",returnRes:"2222222"});
+  res.end()
+});
+
+
 app.all('/menu/getMenu', function(req, res) {
   let resVal = menuGetMenu(req.body.myStatus,req.body.page,req.body.pageline);
   console.log("req==>",req.body);

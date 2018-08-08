@@ -154,6 +154,7 @@
 	</div>
 </template>
 <script>
+import { EventBus } from "@/tools";
 import kanbanboard from "@/components/kanbanboard";
 import ADDorEDITpop from "./add_or_edit_pop";
 export default {
@@ -586,15 +587,46 @@ export default {
 			}else{
 				statusNum = "04";
 			}
-			this.cardList[i].description = this.tableData[i].name
+			this.cardList[i].taskName = this.tableData[i].name
 			this.cardList[i].userName = this.tableData[i].person;
 			this.cardList[i].taskState = statusNum;
 			this.cardList[i].headPortrait = this.tableData[i].icon;
 
 
+			EventBus.$on("moveEnd", this.moveEnd);
+	        EventBus.$on("clickItem", this.clicked);
+	        EventBus.$on("search", this.searchHandle);
+	        EventBus.$on("addTask", this.addNewTask);
+
+
+
 		}
 	},
 	methods:{
+
+		moveEnd(info) {
+            // 移动卡片结束后
+            console.log(" 移动卡片结束后 :::", info);
+        },
+        clicked(info) {
+            // 点击卡片方法
+            console.log(" 点击卡片方法 ::: ", info);
+            this.$router.push({
+              path: "/product/detail"
+            });
+        },
+        searchHandle(info) {
+            // 查询方法
+            console.log("查询  ::: ", info);
+        },
+        addNewTask() {
+            //点击跳转页面
+            // this.$router.push({
+            //   path: "/development/add"
+            // });
+        },
+
+
 		tabRowAddFn(){
             this.tableData.push(this.addtest);
             Store.dispatch('ADD_DATA_TEST/incrementAsync', {

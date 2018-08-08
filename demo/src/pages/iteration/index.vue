@@ -129,6 +129,8 @@ export default {
             delOnoff: false,
             modifyOnoff: false,
             modifyName:"",
+            startTime:"",
+            endTime:"",
             status: false,
             startTime: "",
             endTime: "",
@@ -236,7 +238,7 @@ export default {
                                                 query: {
                                                     iterationName:params.row.name,
                                                     startTime:params.row.startTime,
-                                                    endTime:params.row.startTime
+                                                    endTime:params.row.endTime
                                                 }
                                             });
                                         }
@@ -309,9 +311,12 @@ export default {
                                             //点击跳转页面
                                             //alert(params.row.name);此编辑要弹出询问是否编辑
                                             this.modifyOnoff = true;
-                                            this.modifyName=params.row.name
+                                            this.modifyName=params.row.name;
+                                            this.startTime=params.row.startTime;
+                                            this.endTime=params.row.endTime
 
                                         }
+
                                     }
                                 },
                                 "编辑"
@@ -433,7 +438,9 @@ export default {
             this.$router.push({
                 path: "/iteration/iteration",
                 query: {
-                    iterationName: this.modifyName
+                    iterationName: this.modifyName,
+                    startTime:this.startTime,
+                    endTime:this.endTime
                 }
             });
         },

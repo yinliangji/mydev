@@ -13,48 +13,51 @@
         <Form>
           <Row>
             <Col span="12">
-            <Row>
-              <Col span="4">
-              <div class="searchName">迭代名称</div>
-              </Col>
-              <Col span="8">
-              <FormItem>
-                <Input placeholder="输入迭代名称" v-model="iterationName"></Input>
-              </FormItem>
-              </Col>
-              <Col span="4">
-              <div class="searchName">迭代编号</div>
-              </Col>
-              <Col span="8">
-              <FormItem>
-                <Input placeholder="输入迭代编号" v-model="iterationNumber"></Input>
-              </FormItem>
-              </Col>
-            </Row>
-            <Row>
-              <Col span="4">
-              <div class="searchName">开始时间</div>
-              </Col>
-              <Col span="8">
-              <FormItem>
-                <DatePicker type="date" v-model="startTime" style="width: 180px"></DatePicker>
-              </FormItem>
-              </Col>
-              <Col span="4">
-              <div class="searchName">结束时间</div>
-              </Col>
-              <Col span="8">
-              <FormItem>
-                <DatePicker type="date" v-model="endTime" style="width: 180px"></DatePicker>
-              </FormItem>
-              </Col>
-            </Row>
+              <Row>
+                <Col span="4">
+                <div class="searchName">迭代名称</div>
+                </Col>
+                <Col span="8">
+                <FormItem>
+                  <Input placeholder="输入迭代名称" v-model="iterationName"></Input>
+                </FormItem>
+                </Col>
+                <Col span="4">
+                <div class="searchName">迭代编号</div>
+                </Col>
+                <Col span="8">
+                <FormItem>
+                  <Input placeholder="输入迭代编号" v-model="iterationNumber"></Input>
+                </FormItem>
+                </Col>
+              </Row>
+              <Row v-if="isShowMoreShow">
+                <Col span="4">
+                <div class="searchName">开始时间</div>
+                </Col>
+                <Col span="8">
+                <FormItem>
+                  <DatePicker type="date" v-model="startTime" style="width: 180px"></DatePicker>
+                </FormItem>
+                </Col>
+                <Col span="4">
+                <div class="searchName">结束时间</div>
+                </Col>
+                <Col span="8">
+                <FormItem>
+                  <DatePicker type="date" v-model="endTime" style="width: 180px"></DatePicker>
+                </FormItem>
+                </Col>
+              </Row>
             </Col>
             <Col span="4" class="serchBtnBox">
-            <Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
+              <Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
             </Col>
           </Row>
-
+          	<div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
+                <Icon type="chevron-down" color="#ed3f14"></Icon>
+                <Icon type="chevron-down" color="#ed3f14"></Icon>
+            </div>
         </Form>
       </div>
 
@@ -122,6 +125,7 @@ import { EventBus } from "@/tools";
 export default {
     data() {
         return {
+            isShowMoreShow:false,
             delOnoff: false,
             modifyOnoff: false,
             modifyName:"",
@@ -162,8 +166,9 @@ export default {
                                             this.$router.push({
                                                 path: "/iteration/iteration",
                                                 query: {
-                                                    iterationName:
-                                                        params.row.name
+                                                    iterationName:params.row.name,
+                                                    startTime:params.row.startTime,
+                                                    endTime:params.row.startTime
                                                 }
                                             });
                                         }
@@ -205,8 +210,9 @@ export default {
                                             this.$router.push({
                                                 path: "/development",
                                                 query: {
-                                                    iterationName:
-                                                        params.row.name
+                                                    iterationName:params.row.name,
+                                                    watchKanban:true
+
                                                 }
                                             });
                                         }
@@ -228,8 +234,9 @@ export default {
                                             this.$router.push({
                                                 path: "/iteration/iteration",
                                                 query: {
-                                                    iterationName:
-                                                        params.row.name
+                                                    iterationName:params.row.name,
+                                                    startTime:params.row.startTime,
+                                                    endTime:params.row.startTime
                                                 }
                                             });
                                         }
@@ -281,8 +288,8 @@ export default {
                                             this.$router.push({
                                                 path: "/development",
                                                 query: {
-                                                    iterationName:
-                                                        params.row.name
+                                                    iterationName:params.row.name,
+                                                    watchKanban:true
                                                 }
                                             });
                                         }

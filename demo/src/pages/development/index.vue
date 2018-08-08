@@ -39,7 +39,7 @@
               </FormItem>
               </Col>
             </Row>
-            <Row>
+            <Row v-if="isShowMoreShow">
               <Col span="3" style="text-align: center">
               <div class="searchName">任务状态</div>
               </Col>
@@ -70,7 +70,10 @@
             <Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
             </Col>
           </Row>
-
+          <div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
+              <Icon type="chevron-down" color="#ed3f14"></Icon>
+              <Icon type="chevron-down" color="#ed3f14"></Icon>
+          </div>
         </Form>
       </div>
       <div class="w80">
@@ -116,6 +119,7 @@ import developList from "@/pages/development/development";
 export default {
     data() {
         return {
+            isShowMoreShow:false,
             //search
             iterationName: "",
             iterationNumber: "",
@@ -126,9 +130,12 @@ export default {
             currentView: "developList"
         };
     },
-    created(){
-        if(this.$route.query.board){
-           this.currentView = kanbanboard
+    created() {
+        if (this.$route.query.board) {
+            this.currentView = kanbanboard;
+        }
+        if (this.$route.query.watchKanban) {
+            this.currentView = kanbanboard;
         }
     },
     mounted() {
@@ -136,7 +143,6 @@ export default {
         EventBus.$on("clickItem", this.clicked);
         EventBus.$on("search", this.searchHandle);
         EventBus.$on("addTask", this.addNewTask);
-
     },
     methods: {
         moveEnd(info) {
@@ -146,6 +152,12 @@ export default {
         clicked(info) {
             // 点击卡片方法
             console.log(" 点击卡片方法 ::: ", info);
+            this.$router.push({
+                path: "/development/detail",
+                // query: {
+                //     iterationName: params.row.name
+                // }
+            });
         },
         searchHandle(info) {
             // 查询方法
@@ -154,7 +166,7 @@ export default {
         addNewTask() {
             //点击跳转页面
             this.$router.push({
-              path: "/development/add"
+                path: "/development/add"
             });
         },
 
@@ -181,7 +193,7 @@ export default {
             let _cardList = [
                 {
                     taskId: "#US0001",
-                    taskName: "任务名1",
+                    taskName: "任务名1XXX",
                     description:
                         "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
                     userName: "user1",
@@ -196,7 +208,7 @@ export default {
                 },
                 {
                     taskId: "#US0002",
-                    taskName: "任务名2",
+                    taskName: "任务名2XXX",
                     description:
                         "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
                     userName: "user1",
@@ -209,7 +221,7 @@ export default {
                 },
                 {
                     taskId: "#US0003",
-                    taskName: "任务名3",
+                    taskName: "任务名3XXX",
                     description:
                         "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
                     userName: "user1",
@@ -222,7 +234,7 @@ export default {
                 },
                 {
                     taskId: "#US0004",
-                    taskName: "任务名4",
+                    taskName: "任务名4XXX",
                     description:
                         "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
                     userName: "user1",
@@ -235,7 +247,7 @@ export default {
                 },
                 {
                     taskId: "#US0005",
-                    taskName: "任务名5",
+                    taskName: "任务名5XXX",
                     description:
                         "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
                     userName: "user1",
@@ -248,7 +260,7 @@ export default {
                 },
                 {
                     taskId: "#US0006",
-                    taskName: "任务名6",
+                    taskName: "任务名6XXX",
                     description:
                         "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
                     userName: "user1",
@@ -261,7 +273,7 @@ export default {
                 },
                 {
                     taskId: "#US0007",
-                    taskName: "任务名7",
+                    taskName: "任务名7XXX",
                     description:
                         "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
                     userName: "user1",
@@ -274,7 +286,7 @@ export default {
                 },
                 {
                     taskId: "#US0008",
-                    taskName: "任务名8",
+                    taskName: "任务名8XXX",
                     description:
                         "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
                     userName: "user1",

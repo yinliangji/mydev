@@ -11,12 +11,12 @@
             </div>
 
               <p class="item-content">{{item.taskName}}</p>
-              <p class="item-content">{{item.description}}</p>
+              <!-- <p class="item-content">{{item.description}}</p> -->
               <p class="item-name">
                 <span class="user_name">
                     {{item.userName}}
                 </span>
-                <img :src="item.headPortrait" />
+                <img :src="item.headPortrait" class="user_nameImg"/>
 
               </p>
 
@@ -108,6 +108,7 @@
 
   }
 .card-wrap{
+  cursor: pointer;
   margin-right: 10px;
   margin-bottom: 10px;
 }
@@ -117,6 +118,7 @@
   }
   .circle-wrapper{
     text-align: left;
+     color: rgb(43, 174, 233);
   }
 
 
@@ -131,7 +133,8 @@
     display: inline-block;
 }
   .item-content {
-    text-align: center;
+    /* text-align: center; */
+    padding-top: 4px;
   }
 
   .item-name {
@@ -139,9 +142,11 @@
   }
   span.user_name{
     position: relative;
-    top: -5px;
+    top:8px;
   }
+  .user_nameImg{ position: relative;top:6px;}
   span.taskId{
     display: inline;
+
   }
 </style>

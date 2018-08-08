@@ -114,7 +114,7 @@ export default {
                                     on: {
                                         click: () => {
                                             //点击跳转页面
-                                            alert(params.row.taskName);
+                                            //alert(params.row.taskName);
                                             this.$router.push({
                                                 path: "/development/add",
                                                 query: {

@@ -13,24 +13,25 @@
               <Row>
                 <Col span="8">
                 <div class="taskrow clearfix">
-                  <div class="addTaskTableTitle">任务编号：</div>
+                  <div class="addTaskTableTitle">所属产品</div>
                   <div class="addTaskTableCon">U26263632</div>
                 </div>
                 </Col>
                 <Col span="8">
                 <div class="taskrow clearfix">
-                  <div class="addTaskTableTitle">任务名称：</div>
+                  <div class="addTaskTableTitle">所属项目</div>
                   <div class="addTaskTableCon">热点讨论</div>
                 </div>
                 </Col>
                 <Col span="8">
                 <div class="taskrow clearfix">
-                  <div class="addTaskTableTitle">任务状态：</div>
+                  <div class="addTaskTableTitle">用户故事</div>
                   <div class="addTaskTableCon">进行中</div>
                 </div>
                 </Col>
 
               </Row>
+
               <Row>
                 <Col span="8">
                 <div class="taskrow clearfix">
@@ -40,14 +41,24 @@
                 </Col>
                 <Col span="8">
                 <div class="taskrow clearfix">
-                  <div class="addTaskTableTitle">任务名称：</div>
+                  <div class="addTaskTableTitle">任务状态：</div>
                   <div class="addTaskTableCon">热点讨论</div>
                 </div>
                 </Col>
                 <Col span="8">
                 <div class="taskrow clearfix">
-                  <div class="addTaskTableTitle">任务状态：</div>
+                  <div class="addTaskTableTitle">责任人</div>
                   <div class="addTaskTableCon">进行中</div>
+                </div>
+                </Col>
+
+              </Row>
+               <Row>
+                <Col span="24">
+                <div class="taskrow clearfix">
+                  <div class="addTaskTableTitle">任务名称：</div>
+                  <div class="addTaskTableConThrough">我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。 使用栅格系统进行网页布局，可以。我们采用了24栅格系统，将区域进行24等分， 这样可以轻松应对大部分布局问题。
+                  </div>
                 </div>
                 </Col>
 
@@ -62,6 +73,7 @@
                 </Col>
 
               </Row>
+
               <Row>
                 <Col span="24">
                 <div class="taskrow clearfix">
@@ -126,7 +138,7 @@
             <Icon type="navicon-round" class="toggle" @click="toggleOnoff.part4=!toggleOnoff.part4"></Icon>
           </div> -->
             <div class="con" v-show="toggleOnoff.part4">
-              <Button type="success" @click="defectOnoff=true">添加缺陷</Button>
+              <!-- <Button type="success" @click="defectOnoff=true">添加缺陷</Button> -->
               <Table :columns="columns4" :data="data4" style="margin-top:6px"></Table>
               <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
             </div>

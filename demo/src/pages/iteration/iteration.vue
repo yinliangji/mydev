@@ -1,6 +1,6 @@
 <template>
   <div class="container-transfer">
-    <div class="clearfix" style="background: #f5f7f9; width:1106px;
+    <div class="clearfix" style="background: #f5f7f9;
     border: 1px solid #e8e8e8; margin-top:10px; position:relative; border-radius:2px">
       <goAgile :go="'/iteration'" :text="'返回迭代管理列表'" :Top="'10'" />
       <selectMenu></selectMenu>
@@ -48,8 +48,8 @@
           <Input v-model="storySearch" placeholder="搜索" style="width:130px" icon="android-search"></Input>
 
           <span style="margin:0 4px">故事类型：</span>
-          <Select v-model="storyType" style="width:130px">
-            <Option v-for="item in storyTypeArr" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <Select v-model="curStoryType" style="width:130px">
+            <Option v-for="item in storyTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
 
         </div>
@@ -79,26 +79,26 @@
 
       </div>
       <div class="transBodyC">
-        <Button :type="bgcolorL" long icon="chevron-left" @click="toLeft">向左移动</Button>
-        <Button :type="bgcolorR" long icon="chevron-right" @click="toRight">向右移动</Button>
+        <Button :type="bgcolorL" long icon="chevron-left" @click="toLeft" style="color:#fff">移动到左侧</Button>
+        <Button :type="bgcolorR" long icon="chevron-right" @click="toRight" style="color:#fff">移动到右侧</Button>
       </div>
       <div class="transBodyR">
         <div class="trans-top">
-          <span>迭代</span>
-          <Select v-model="model1" style="width:100px">
-            <Option v-for="item in optionList" :value="item.label" :key="item.value">
+          <span>迭代：</span>
+          <Select v-model="curIteration" style="width:90px">
+            <Option v-for="item in iterationList" :value="item.label" :key="item.value">
               {{ item.label }}
             </Option>
           </Select>
-          <span>故事类型</span>
-          <Select v-model="model1" style="width:100px">
-            <Option v-for="item in optionList" :value="item.label" :key="item.value">
+          <span>故事类型：</span>
+          <Select v-model="curStoryType" style="width:90px">
+            <Option v-for="item in storyTypeList" :value="item.label" :key="item.value">
               {{ item.label }}
             </Option>
           </Select>
-          <span>故事状态</span>
-          <Select v-model="model1" style="width:100px">
-            <Option v-for="item in optionList" :value="item.label" :key="item.value">
+          <span>故事状态：</span>
+          <Select v-model="curStoryStatus" style="width:90px">
+            <Option v-for="item in storyStatusList" :value="item.label" :key="item.value">
               {{ item.label }}
             </Option>
           </Select>
@@ -112,7 +112,7 @@
               <li v-for="item in dataR" :key="item.type">
                 <div class="tranHeader">
                   <Checkbox :label="item.type">{{item.bigName}}</Checkbox>
-                  <span style="margin:0 20px">{{item.stoyrType}} </span>
+                  <span style="margin:0 80px">{{item.stoyrType}} </span>
                   <span>{{item.stoyrStatus}}</span>
                   <Icon type="navicon-round" @click="item.isShow=!item.isShow"></Icon>
                 </div>
@@ -127,7 +127,7 @@
 
       </div>
     </div>
-    <div style="text-align:right;margin-right:30px;margin-top:10px">
+    <div style="text-align:center;margin-top:10px">
       <Button type="primary" @click="addIterationOk('formValidate')">确定</Button>
       <Button @click="closeSelf">关闭</Button>
     </div>
@@ -145,8 +145,9 @@ export default {
         return {
             sureInfo: "添加成功",
             storySearch: "",
-            storyType: "",
-            storyTypeArr: [
+            //故事类型
+            curStoryType: "",
+            storyTypeList: [
                 {
                     value: "New York",
                     label: "故事类型1"
@@ -162,6 +163,36 @@ export default {
                 {
                     value: "Ottawa",
                     label: "故事类型4"
+                }
+            ],
+            curIteration: "未规划",
+            iterationList: [
+                {
+                    value: "1",
+                    label: "迭代1"
+                },
+                {
+                    value: "2",
+                    label: "迭代2"
+                },
+                {
+                    value: "3",
+                    label: "迭代3"
+                },
+                {
+                    value: "4",
+                    label: "未规划"
+                }
+            ],
+            curStoryStatus:"",
+            storyStatusList: [
+                {
+                    value: "New York",
+                    label: "故事状态1"
+                },
+                {
+                    value: "London",
+                    label: "故事状态2"
                 }
             ],
             formValidate: {
@@ -201,25 +232,6 @@ export default {
             nowNum: 0,
             search: "",
             titleName: "",
-            optionList: [
-                {
-                    value: "1",
-                    label: "迭代1"
-                },
-                {
-                    value: "2",
-                    label: "迭代2"
-                },
-                {
-                    value: "3",
-                    label: "迭代3"
-                },
-                {
-                    value: "",
-                    label: "未规划"
-                }
-            ],
-            model1: "",
 
             indeterminate: true,
             checkAll: false,
@@ -232,7 +244,7 @@ export default {
             columns1: [
                 {
                     title: "任务名称",
-                    width: 260,
+
                     key: "smallName"
                 },
                 {
@@ -242,7 +254,7 @@ export default {
                 },
                 {
                     title: "状态",
-
+                    width: 100,
                     key: "status"
                 }
             ],
@@ -485,7 +497,7 @@ export default {
             }
         },
         dataL(val) {
-            alert("监控到了obj变化");
+            // alert("监控到了obj变化");
             this.checkAllGroupOnoff = [];
             val.forEach(element => {
                 this.checkAllGroupOnoff.push(element.type);
@@ -493,7 +505,7 @@ export default {
             this.checkAllGroup = [];
         },
         dataR(val) {
-            alert("监控到了obj2变化");
+            // alert("监控到了obj2变化");
             this.checkAllGroupOnoffR = [];
             val.forEach(element => {
                 this.checkAllGroupOnoffR.push(element.type);
@@ -511,6 +523,9 @@ export default {
     },
     mounted() {
         this.formValidate.taskName = this.$route.query.iterationName;
+        this.formValidate.startTime = this.$route.query.startTime;
+        this.formValidate.endTime = this.$route.query.endTime;
+
         this.$Message.config({
             top: 100,
             duration: 2
@@ -544,10 +559,14 @@ h3.Title {
     /* min-height: 50vh; */
     margin-top: 20px;
     /* display: flex; */
+    padding: 10px 0;
+    padding-left: 1%;
+    /* color: #fff; */
+
 }
 .transBodyL {
     /* flex-grow:1; */
-    width: 454px;
+    width: 42%;
     float: left;
     overflow: hidden;
     border: 1px solid #d8d8d8;
@@ -573,7 +592,8 @@ h3.Title {
     line-height: 40px;
 }
 .transBodyR {
-    width: 490px;
+    /* flex-grow:1; */
+    width: 43%;
     float: left;
     overflow: hidden;
     border: 1px solid #d8d8d8;
@@ -585,7 +605,6 @@ h3.Title {
     margin-bottom: 6px;
 }
 .addTaskTable {
-    width: 1106px;
     padding: 10px;
     border: 1px solid #d8d8d8;
     border-radius: 4px;

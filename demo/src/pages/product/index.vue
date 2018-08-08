@@ -333,7 +333,7 @@ export default {
 	        ],
 	        columns: [
 	        	{
-                    title: '事项编号',
+                    title: '编号',
                     key: 'num',
                     width: 85,
                     align: 'center'
@@ -360,7 +360,7 @@ export default {
                 },
 
                 {
-                    title: '事项类型',
+                    title: '类型',
                     key: 'describe',
                     width: 85,
                     align: 'center',

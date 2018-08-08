@@ -14,40 +14,39 @@ let AXIOS = axios.create(config);
 
 //AXIOS.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8'
 //AXIOS.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-//AXIOS.defaults.headers['Content-Type'] = 'multipart/form-data;charset=UTF-8'
+AXIOS.defaults.headers['Content-Type'] = 'multipart/form-data'
 
 AXIOS.interceptors.request.use( (config) => {
-	console.log("========AXIOS添加请求拦截器 config==========",config);
+	console.log("<========AXIOS添加【请求】拦截器 config==========",config,"====>");
 	return config;
 },(error) => {
     // 对请求错误做些什么
-    console.log("========AXIOS添加请求拦截器 error==========",error);
+    console.log("========AXIOS添加【请求】拦截器 error==========",error,"====>");
     return Promise.reject(error);
 });
 
 AXIOS.interceptors.response.use( (response) => {
-    console.log("========AXIOS添加响应拦截器 response==========",response);
+    console.log("========AXIOS添加 [响应] 拦截器 response==========",response,"====>");
     //return response
     if (response) {
         return response
     }else{
         alert("没有获得 response")
     }
-  
 },(error) => {
     // 对响应错误做点什么
-    console.log("========AXIOS添加响应拦截器 error==========",error);
+    console.log("========AXIOS添加 [响应] 拦截器 error==========",error,"====>");
     return Promise.reject(error);
 });
 
 export default {
-    demoAXIOS (url, data = {}, reset = {}) {/* demo */
+    demoPostAXIOS (url, data = {}, reset = {}) {/* demo */
         let _url = url?url:DemoURL_1;
         return AXIOS.post(_url,data,reset)
     },
-    demo2AXIOS (url, data = {}, reset = {}) {/* demo2 */
+    demoGetAXIOS (url, data = {}, reset = {}) {/* demo2 */
         let _url = url?url:DemoURL_1;
-        return AXIOS.post(_url,data,reset)
+        return AXIOS.get(_url,{params:data},reset)
     },
     defaultAXIOS (url, data = {}, reset = {}) {/* 敏捷项目列表 */
         if(!url){

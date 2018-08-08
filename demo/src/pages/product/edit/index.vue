@@ -1,6 +1,6 @@
 <template>
 	<div class="pageContent">
-        <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :Top="'5'" />
+        <goAgile :go="'/product'" :text="'返回用户故事列表'" :Top="'5'" />
         <Card>
             <div class="productAddBox">
 

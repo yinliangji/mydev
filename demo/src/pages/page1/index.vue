@@ -11,7 +11,7 @@
 <script>
 import Store from '@/vuex/store'
 import API from '@/api'
-const {demoAXIOS,projectAllAXIOS} = API;
+const {demoPostAXIOS} = API;
 
 export default {
 	name: 'page1',
@@ -27,7 +27,7 @@ export default {
 	},
 	mounted(){
 		//
-		demoAXIOS("",{x:1,y:2},{timeout:2000,method:'get'}).then((response) => {
+		demoPostAXIOS("",{x:1,y:2},{timeout:2000,method:'get'}).then((response) => {
 			console.log("page1+++++++++++++++++++++",response)
 		}).catch( (error) => {
 			console.log(error)

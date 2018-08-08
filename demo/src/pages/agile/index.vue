@@ -169,39 +169,32 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAll} = Common.restUrl;
+const {projectAll,projectDelete} = Common.restUrl;
 
 export default {
 	name: 'aglie',
     mounted(){
         this.tableDataAjaxFn(projectAll);
-
     },
     components: {
         AddItemPop,
     },
     computed: {
-        addtest() {
-            return this.$store.state["ADD_DATA_TEST"].data
-        },
+        // addtest() {
+        //     return this.$store.state["ADD_DATA_TEST"].data
+        // },
     },
     beforecreated(){
-        console.log("agile--beforecreated-------",this.addtest)
+        console.log("agile--beforecreated-------",this.tableData)
     },
     created(){
-        console.log("agile--created-------",this.addtest)
-        if(this.addtest){
-            this.tabRowAddFn()
-        }
+        console.log("agile--created-------",this.tableData)
     },
     beforeUpdate(){
-        console.log("agile--beforeUpdate-------",this.addtest)
+        console.log("agile--beforeUpdate-------",this.tableData)
     },
     updated(){
-        console.log("agile--updated-------",this.addtest)
-        if(this.addtest){
-            this.tabRowAddFn()
-        }
+        console.log("agile--updated-------",this.tableData)
     },
     data () {
         return {
@@ -419,9 +412,46 @@ export default {
             this.isAdd = false;
             this.tableDataRow = this.actionArr;
         },
-
+        tableDataDeleteAjaxFn(URL = "",ID = 0){
+            
+        },
         del () {
             this.modal_loading = true;
+
+            
+            let _arr = [];
+            for(let I=0;I<this.actionArr.length;I++){
+                _arr.push(this.actionArr[I].id)
+            }
+
+
+            defaultAXIOS(projectDelete,{idArray:_arr},{timeout:2000,method:'post'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======agile***response+++",response,myData,"+++agile***response======>");
+                if(myData.status == "success"){
+                    this.actionArr = [];
+                    this.modal_loading = false;
+                    this.modaDelete = false;
+                    this.$Message.config({
+                        top: 250,
+                        duration: 3
+                    });
+                    this.$Message.success('删除完成');
+                    this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+                }else{
+                    this.actionArr = [];
+                    this.modal_loading = false;
+                    this.modaDelete = false;
+                    this.showError('删除失败');
+                }
+                
+
+            }).catch( (error) => {
+                this.showError(error);
+            });
+
+            /*
             setTimeout(() => {
                 for(let i=0;i<this.tableData.length;i++){
                     for(let j=0;j<this.actionArr.length;j++){
@@ -440,6 +470,7 @@ export default {
                 });
                 this.$Message.success('删除完成');
             }, 1000);
+            */
         },
         cancel(){
           this.modaDelete = false;

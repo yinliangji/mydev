@@ -1,6 +1,6 @@
 <template>
 	<aside>
-		
+		<!-- this.$router.push({path: '/product', query: {board: true}}) -->
 		<!-- <MenuItem name="1-2">
 			<router-link to="/demand" />
 			<Icon type="ios-photos-outline"></Icon>
@@ -12,7 +12,7 @@
 			<span>项目详情</span>
 		</MenuItem>
 		<MenuItem name="1-3">
-			<router-link  to="/product" />
+			<router-link  :to="{path: '/product', query: {board: true}}" />
 			<Icon type="ios-list-outline"></Icon>
 			<span>用户故事</span>
 		</MenuItem>
@@ -22,7 +22,7 @@
 			<span>迭代管理</span>
 		</MenuItem>
 		<MenuItem name="1-5">
-			<router-link  to="/development" />
+			<router-link :to="{path: '/development', query: {board: true}}" />
 			<Icon type="ios-navigate"></Icon>
 			<span>开发任务管理</span>
 		</MenuItem>

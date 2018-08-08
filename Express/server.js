@@ -173,7 +173,16 @@ app.all('/project/detail/1', function(req, res) {
   res.end()
 });
 
+app.post('/project/delete', function(req, res) {
+  let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  
 
+  //res.json(mockDataList(req.body.myStatus,req.body.page,req.body.pageline));
+  res.json({status:"success"});
+  res.end()
+});
 
 
 app.all('/menu/getMenu', function(req, res) {

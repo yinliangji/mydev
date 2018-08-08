@@ -79,8 +79,8 @@
 
       </div>
       <div class="transBodyC">
-        <Button :type="bgcolorL" long icon="chevron-left" @click="toLeft" style="color:#fff">移动到左侧</Button>
-        <Button :type="bgcolorR" long icon="chevron-right" @click="toRight" style="color:#fff">移动到右侧</Button>
+        <Button :type="bgcolorL" long icon="chevron-left" @click="toLeft" >移动到左侧</Button>
+        <Button :type="bgcolorR" long icon="chevron-right" @click="toRight">移动到右侧</Button>
       </div>
       <div class="transBodyR">
         <div class="trans-top">

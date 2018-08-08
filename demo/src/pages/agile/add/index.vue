@@ -29,8 +29,8 @@
 
                     <FormItem label="项目类型" prop="prj_type">
                         <RadioGroup v-model="formValidate.prj_type">
-                            <Radio label="1">立研</Radio>
-                            <Radio label="2">自研</Radio>
+                            <Radio label="0">立研</Radio>
+                            <Radio label="1">自研</Radio>
                         </RadioGroup>
                     </FormItem>
 
@@ -316,7 +316,7 @@ export default {
             defDate:"",
             formValidate: {
                 prod_id:"",
-                prj_type:"1",
+                prj_type:"0",
                 prj_name:'',
                 start_time: '',
                 end_time: '',
@@ -602,8 +602,7 @@ export default {
         
         formItemReset(){
             this.resetData(); //this.formValidate.date = [];
-            this.formValidate.prj_type = "1";
-            
+            this.formValidate.prj_type = "0";
             this.formValidate.prj_name = "";
             this.formValidate.start_time = "";
             this.formValidate.end_time = "";
@@ -651,7 +650,6 @@ export default {
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
             let tempData = {
                 prj_type:this.formValidate.prj_type,
-                
                 prj_name: this.formValidate.prj_name,
                 start_time:_start_time,
                 end_time:_end_time,

@@ -156,11 +156,11 @@ export default {
     },
     mounted(){
     	if(this.$router.history.current.query.id){
+    		sessionStorage.setItem('id', this.$router.history.current.query.id);
     		this.tableDataAjaxFn(projectDetail,this.$router.history.current.query.id);
-    		window.detailId = this.$router.history.current.query.id;
     	}else{
-    		if(window.detailId){
-    			this.tableDataAjaxFn(projectDetail,window.detailId)
+    		if(sessionStorage.getItem('id')){
+    			this.tableDataAjaxFn(projectDetail,sessionStorage.getItem('id'))
     		}else{
     			this.tableDataAjaxFn(projectDetail,0)
     		}

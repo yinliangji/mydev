@@ -6,13 +6,26 @@
                 
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" class="fromBox">
 					<h3 class="Title">项目基本信息</h3>
+
+
+
+                    <FormItem label="所属产品" prop="prod_id">
+                                <Select v-model="formValidate.prod_id" placeholder="请选择所属产品">
+                                    <Option value="1">产品1</Option>
+                                    <Option value="2">产品2</Option>
+                                    <Option value="3">产品3</Option>
+                                </Select> 
+                                
+                            </FormItem> 
+
+
                     <FormItem label="项目名称" prop="prj_name">
                         <Input v-model="formValidate.prj_name" placeholder="请填写项目名称"></Input>
                     </FormItem>
 
-                    <FormItem label="项目编号" prop="prj_id">
+                   <!--  <FormItem label="项目编号" prop="prj_id">
                         <Input v-model="formValidate.prj_id" placeholder="请填写项目编号"></Input>
-                    </FormItem>
+                    </FormItem> -->
 
                     <FormItem label="项目类型" prop="prj_type">
                         <RadioGroup v-model="formValidate.prj_type">
@@ -302,8 +315,8 @@ export default {
             nowDate:"",
             defDate:"",
             formValidate: {
+                prod_id:"",
                 prj_type:"1",
-                prj_id:'',
                 prj_name:'',
                 start_time: '',
                 end_time: '',
@@ -320,7 +333,7 @@ export default {
 
 
 
-
+                prj_id:'',
                 date:[],
                 startTime: '',
                 endTime: '',
@@ -467,12 +480,13 @@ export default {
                
             ],
             ruleValidate: {
+                prod_id: [
+                    { required: false, message: 'Please select gender', trigger: 'change' }
+                ],
                 prj_type: [
                     { required: false, message: 'Please select gender', trigger: 'change' }
                 ],
-                prj_id: [
-                    { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
-                ],
+                
                 prj_name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
@@ -512,7 +526,9 @@ export default {
                
 
 
-               
+               prj_id: [
+                    { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
                 date: [
                     { required: true, type: 'array', validator: validateDate, trigger: ['blur','change'], }
                 ],
@@ -587,7 +603,7 @@ export default {
         formItemReset(){
             this.resetData(); //this.formValidate.date = [];
             this.formValidate.prj_type = "1";
-            this.formValidate.prj_id = "";
+            
             this.formValidate.prj_name = "";
             this.formValidate.start_time = "";
             this.formValidate.end_time = "";
@@ -599,10 +615,12 @@ export default {
             this.formValidate.managerGroup = [];
             this.formValidate.developerGroup = [];
             this.formValidate.testerGroup = [];
+            this.formValidate.prod_id = "";
+            
 
 
 
-
+            this.formValidate.prj_id = "";
             this.editTableData = false;
             this.formValidate.date = [];
             this.formValidate.startTime = "";
@@ -633,7 +651,7 @@ export default {
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
             let tempData = {
                 prj_type:this.formValidate.prj_type,
-                prj_id: this.formValidate.prj_id,
+                
                 prj_name: this.formValidate.prj_name,
                 start_time:_start_time,
                 end_time:_end_time,
@@ -644,9 +662,12 @@ export default {
                 managerGroup: this.formValidate.managerGroup.join(_join),
                 developerGroup: this.formValidate.developerGroup.join(_join),
                 testerGroup: this.formValidate.testerGroup.join(_join),
+                prod_id:this.formValidate.prod_id,
+
+
                
 
-
+                //prj_id: this.formValidate.prj_id,
                 //num: parseInt(Math.random()*100),
                 //manager:"经理",
                 //group:"group|group",

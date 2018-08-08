@@ -5,7 +5,7 @@
       <div class="row-wrapper">
         <Row :gutter="16" type="flex" justify="start" align="middle">
           <Col span="4" v-if="groupList.length > 0">
-            <div class="leftHeader">
+            <div class="centerHeader">
               {{groupList[0].text}}
             </div>
           </Col>
@@ -18,7 +18,7 @@
       <div class="row-wrapper" v-for="(itemGroup, index) in groupLists" v-if="groupList.length > 0">
         <Row :gutter="16" type="flex" justify="start" align="middle">
           <Col span="4" v-if="groupLists.length > 0">
-            <div class="leftHeader">
+            <div class="centerHeader">
               {{itemGroup.text}}
             </div>
           </Col>
@@ -124,5 +124,21 @@ export default {
   margin: auto;
   height: 32px;
   line-height: 32px;
+
+}
+
+.centerHeader {
+  width: 100px;
+  background: #33cccc;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  font-weight: 600;
+  margin: auto;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  font-size: 14px;
+
+  
 }
 </style>

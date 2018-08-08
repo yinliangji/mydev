@@ -270,7 +270,7 @@ export default {
                 {
                     title: '操作',
                     key: 'action',
-                    width: 125,
+                    width: 150,
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
@@ -302,7 +302,7 @@ export default {
                                         this.goProductFn(params.index)
                                     }
                                 }
-                            }, '故事'),
+                            }, '用户故事'),
                             h('Button', {
                                 props: {
                                     type: 'info',

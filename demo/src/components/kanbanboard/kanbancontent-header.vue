@@ -32,11 +32,13 @@
   background: #33cccc;
   height: 32px;
   line-height: 32px;
-  text-align: left;
+  text-align: center;
     text-indent: 10px;
 }
 
 .content-header .title{
   font-weight: 600;
+  font-size: 14px;
+
 }
 </style>

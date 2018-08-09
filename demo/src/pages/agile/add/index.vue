@@ -63,21 +63,16 @@
 
 
                     <!-- <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input> -->
-                    <FormItem label="填写模块" prop="modules">
-                        <Tag v-for="item in formValidate.modules" :key="item" :name="item" closable @on-close="handleClose">
+                    <FormItem label="填写模块" prop="modulesAdd">
+                        <Tag v-for="item in formValidate.modulesAdd" :key="item" :name="item" closable @on-close="handleClose">
                             {{ item}}
                         </Tag>
                         <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
                             添加模块
                         </Button>
                     </FormItem>
-
-
-
-
-
-                    <FormItem label="模块选择" prop="module">
-                        <Select v-model="formValidate.module" multiple >
+                    <FormItem label="模块选择" prop="modules">
+                        <Select v-model="formValidate.modules" multiple >
                             <Option v-for="item in moduleList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </FormItem>
@@ -319,8 +314,8 @@ export default {
                 end_time: '',
                 prj_desc: '',
                 prj_goal:"",
+                modulesAdd:[],
                 modules:[],
-                module:"",
                 allgroup:[],
                 managerGroup:[],
                 developerGroup:[],
@@ -505,6 +500,9 @@ export default {
                 modules: [
                     { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
                 ],
+                modulesAdd: [
+                    { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
+                ],
                 allgroup: [
                     { required: true, type: 'array',  message: '请选择内容，不能为空！', trigger: 'change' }
                 ],
@@ -523,7 +521,7 @@ export default {
                
 
 
-               prj_id: [
+                prj_id: [
                     { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
                 date: [
@@ -599,14 +597,14 @@ export default {
         
         formItemReset(){
             this.resetData(); //this.formValidate.date = [];
-            this.formValidate.prj_type = "0";
+            this.formValidate.prj_type = "1";
             this.formValidate.prj_name = "";
             this.formValidate.start_time = "";
             this.formValidate.end_time = "";
             this.formValidate.prj_desc = "";
             this.formValidate.prj_goal = "";
+            this.formValidate.modulesAdd = [];
             this.formValidate.modules = [];
-            this.formValidate.moudle = "";
             this.formValidate.allgroup = [];
             this.formValidate.managerGroup = [];
             this.formValidate.developerGroup = [];
@@ -633,16 +631,12 @@ export default {
         submitAddData(){
             let _modules = false;
             let _join = "|";
-            if(this.formValidate.module){
-                if(Array.isArray(this.formValidate.module)){
-                    this.formValidate.modules.push(...this.formValidate.module)
-                }else{
-                    this.formValidate.modules.push(this.formValidate.module)
-                }
-                _modules = this.formValidate.modules
+            if(Array.isArray(this.formValidate.modulesAdd)){
+                this.formValidate.modules.push(...this.formValidate.modulesAdd)
             }else{
-                _modules = this.formValidate.modules
+                this.formValidate.modules.push(this.formValidate.modulesAdd)
             }
+            _modules = this.formValidate.modules
             let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
             let tempData = {
@@ -652,7 +646,7 @@ export default {
                 end_time:_end_time,
                 prj_desc: this.formValidate.prj_desc,
                 prj_goal: this.formValidate.prj_goal,
-                modules:_modules.join("<=>"),
+                modules:_modules.join(_join),
                 allgroup: this.formValidate.allgroup.join(_join),
                 managerGroup: this.formValidate.managerGroup.join(_join),
                 developerGroup: this.formValidate.developerGroup.join(_join),
@@ -712,13 +706,13 @@ export default {
             this.$refs.formValidate.resetFields();
         },
         handleClose (event, name) {
-            const index = this.formValidate.modules.indexOf(name);
-            this.formValidate.modules.splice(index, 1);
+            const index = this.formValidate.modulesAdd.indexOf(name);
+            this.formValidate.modulesAdd.splice(index, 1);
         },
 
         submitModule () {
             setTimeout(() => {
-                this.formValidate.modules.push(this.formItem.businessName)
+                this.formValidate.modulesAdd.push(this.formItem.businessName)
                 this.modaAdd = false;
                 this.$Message.info('成功');
                 this.ModuleformItemReset();

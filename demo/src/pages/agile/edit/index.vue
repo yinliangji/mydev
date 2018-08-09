@@ -10,7 +10,7 @@
 
 
                     <FormItem label="所属产品" prop="prod_id">
-                                <Select v-model="formValidate.prod_id" placeholder="请选择所属产品">
+                                <Select  v-model="formValidate.prod_id" :value="formValidate.prod_id" placeholder="请选择所属产品">
                                     <Option value="1">产品1</Option>
                                     <Option value="2">产品2</Option>
                                     <Option value="3">产品3</Option>
@@ -29,8 +29,8 @@
 
                     <FormItem label="项目类型" prop="prj_type">
                         <RadioGroup v-model="formValidate.prj_type">
-                            <Radio label="0">立研</Radio>
-                            <Radio label="1">自研</Radio>
+                            <Radio label="1">立研</Radio>
+                            <Radio label="2">自研</Radio>
                         </RadioGroup>
                     </FormItem>
 
@@ -63,21 +63,16 @@
 
 
                     <!-- <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input> -->
-                    <FormItem label="填写模块" prop="modules">
-                        <Tag v-for="item in formValidate.modules" :key="item" :name="item" closable @on-close="handleClose">
+                    <FormItem label="填写模块" prop="modulesAdd">
+                        <Tag v-for="item in formValidate.modulesAdd" :key="item" :name="item" closable @on-close="handleClose">
                             {{ item}}
                         </Tag>
                         <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
                             添加模块
                         </Button>
                     </FormItem>
-
-
-
-
-
-                    <FormItem label="模块选择" prop="module">
-                        <Select v-model="formValidate.module" multiple >
+                    <FormItem label="模块选择" prop="modules">
+                        <Select v-model="formValidate.modules" multiple >
                             <Option v-for="item in moduleList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </FormItem>
@@ -277,16 +272,16 @@ export default {
         
     },
     beforecreated(){
-        console.log("agileAdd--beforecreated-------",this.formValidate.modules)
+        console.log("agileEdit--beforecreated-------",this.formValidate.modules)
     },
     created(){
-        console.log("agileAdd--created-------",this.formValidate.modules)
+        console.log("agileEdit--created-------",this.formValidate.modules)
     },
     beforeUpdate(){
-        console.log("agileAdd--beforeUpdate-------",this.formValidate.modules)
+        console.log("agileEdit--beforeUpdate-------",this.formValidate.modules)
     },
     updated(){
-        console.log("agileAdd--updated-------",this.formValidate.modules)
+        console.log("agileEdit--updated-------",this.formValidate.modules)
     },
 	computed: {
     },
@@ -307,15 +302,15 @@ export default {
             nowDate:"",
             defDate:"",
             formValidate: {
-                prod_id:"",
-                prj_type:"0",
+                prod_id:"3",
+                prj_type:"",
                 prj_name:'',
                 start_time: '',
                 end_time: '',
                 prj_desc: '',
                 prj_goal:"",
+                modulesAdd:[],
                 modules:[],
-                module:"",
                 allgroup:[],
                 managerGroup:[],
                 developerGroup:[],
@@ -500,6 +495,9 @@ export default {
                 modules: [
                     { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
                 ],
+                modulesAdd: [
+                    { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
+                ],
                 allgroup: [
                     { required: true, type: 'array',  message: '请选择内容，不能为空！', trigger: 'change' }
                 ],
@@ -518,7 +516,7 @@ export default {
                
 
 
-               prj_id: [
+                prj_id: [
                     { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
                 date: [
@@ -563,14 +561,20 @@ export default {
         }
 
         if(this.$router.history.current.query.id){
+            console.log(this.formValidate)
             defaultAXIOS(projectEdit,{id:this.$router.history.current.query.id},{timeout:2000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile edit get】***response+++",response,myData.data,"====>");
-                // for(var I in this.formValidate){
-                //     //this.formValidate[I] = myData.data[I]
-                //     //console.log(myData.data[I])
-                    
-                // }
+                let _temp = false;
+                for(var I in this.formValidate){
+                    _temp = myData.data[I]+"";
+                    if(_temp.indexOf("|") != -1){
+                       this.formValidate[I] = myData.data[I].split("|").filter(item=>item)
+                    }else{
+                        this.formValidate[I] = myData.data[I];
+                    }
+                }
+                console.log(this.formValidate)
 
             }).catch( (error) => {
                 console.log(error);
@@ -603,14 +607,14 @@ export default {
         
         formItemReset(){
             this.resetData(); //this.formValidate.date = [];
-            this.formValidate.prj_type = "0";
+            this.formValidate.prj_type = "1";
             this.formValidate.prj_name = "";
             this.formValidate.start_time = "";
             this.formValidate.end_time = "";
             this.formValidate.prj_desc = "";
             this.formValidate.prj_goal = "";
+            this.formValidate.modulesAdd = [];
             this.formValidate.modules = [];
-            this.formValidate.moudle = "";
             this.formValidate.allgroup = [];
             this.formValidate.managerGroup = [];
             this.formValidate.developerGroup = [];
@@ -637,16 +641,12 @@ export default {
         submitAddData(){
             let _modules = false;
             let _join = "|";
-            if(this.formValidate.module){
-                if(Array.isArray(this.formValidate.module)){
-                    this.formValidate.modules.push(...this.formValidate.module)
-                }else{
-                    this.formValidate.modules.push(this.formValidate.module)
-                }
-                _modules = this.formValidate.modules
+            if(Array.isArray(this.formValidate.modulesAdd)){
+                this.formValidate.modules.push(...this.formValidate.modulesAdd)
             }else{
-                _modules = this.formValidate.modules
+                this.formValidate.modules.push(this.formValidate.modulesAdd)
             }
+            _modules = this.formValidate.modules
             let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
             let tempData = {
@@ -656,7 +656,7 @@ export default {
                 end_time:_end_time,
                 prj_desc: this.formValidate.prj_desc,
                 prj_goal: this.formValidate.prj_goal,
-                modules:_modules.join("<=>"),
+                modules:_modules.join(_join),
                 allgroup: this.formValidate.allgroup.join(_join),
                 managerGroup: this.formValidate.managerGroup.join(_join),
                 developerGroup: this.formValidate.developerGroup.join(_join),
@@ -716,13 +716,13 @@ export default {
             this.$refs.formValidate.resetFields();
         },
         handleClose (event, name) {
-            const index = this.formValidate.modules.indexOf(name);
-            this.formValidate.modules.splice(index, 1);
+            const index = this.formValidate.modulesAdd.indexOf(name);
+            this.formValidate.modulesAdd.splice(index, 1);
         },
 
         submitModule () {
             setTimeout(() => {
-                this.formValidate.modules.push(this.formItem.businessName)
+                this.formValidate.modulesAdd.push(this.formItem.businessName)
                 this.modaAdd = false;
                 this.$Message.info('成功');
                 this.ModuleformItemReset();

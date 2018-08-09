@@ -178,9 +178,15 @@ export default {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======detail***response+++",response,myData,"+++detail***response======>");
+                let _temp = false;
                 if(myData.data && myData.data.id){
                 	for(var I in this.formValidate){
-                		this.formValidate[I] = myData.data[I]
+                		_temp = myData.data[I]+"";
+                		if(_temp.indexOf("|") != -1){
+	                    	this.formValidate[I] = myData.data[I].replace("|","、").replace("|","").replace(/、?$/g,"");
+	                    }else{
+	                        this.formValidate[I] = myData.data[I];
+	                    }
                 	}
                 }
             }).catch( (error) => {

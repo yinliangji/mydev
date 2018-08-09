@@ -13,6 +13,8 @@ CommonRest.restUrl={
 	"projectDeveloperGroup":process.env.BASE_URL+"/project/developerGroup/",/****express 敏捷项目添加开发组 get****/
 	"projectTesterGroup":process.env.BASE_URL+"/project/testerGroup/",/****express 敏捷项目添加测试组 get****/
 	"projectDelete":process.env.BASE_URL+"/project/delete/",/****express 敏捷项目添加测试组 post****/
+	"projectEdit":process.env.BASE_URL+"/project/edit/",/****express 敏捷项目编辑 post****/
+
 }
 CommonRest.UA = navigator.userAgent.toLowerCase();
 

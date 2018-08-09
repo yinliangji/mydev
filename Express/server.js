@@ -174,6 +174,14 @@ app.all('/project/detail/1', function(req, res) {
     res.end()
 });
 
+app.all('/project/edit', function(req, res) {
+    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(detail(req.body.myStatus));
+    res.end()
+});
+
 app.post('/project/delete', function(req, res) {
     let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);

@@ -403,14 +403,12 @@ export default {
                 this.error("请选择一项，进行编辑！")
                 return
             }
+            this.$router.push({path: '/agile/edit', query: {id:this.actionArr[0].id}})
+            this.actionArr = [];
 
-
-            this.$router.push('/agile/edit')
-            return;
-
-            this.isShowAddPop = true;
-            this.isAdd = false;
-            this.tableDataRow = this.actionArr;
+            // this.isShowAddPop = true;
+            // this.isAdd = false;
+            // this.tableDataRow = this.actionArr;
         },
         tableDataDeleteAjaxFn(URL = "",ID = 0){
             
@@ -515,16 +513,16 @@ export default {
         goDemandFn (index) {
             this.$router.push('/demand')
         },
-        goDevelopmentFn (index) {
+        goDevelopmentFn (I) {
             //this.$router.push('/development')
-            this.$router.push({path: '/development', query: {board: true}})
+            this.$router.push({path: '/development', query: {board: true,id: this.tableData[I].id}})
         },
-        goOverViewFn (index){
+        goOverViewFn (I){
             this.$router.push('/overView')
         },
-        goProductFn (index){
+        goProductFn (I){
             //this.$router.push('/product')
-            this.$router.push({path: '/product', query: {board: true}})
+            this.$router.push({path: '/product', query: {board: true,id: this.tableData[I].id}})
         },
         show (index) {
             this.$Modal.info({

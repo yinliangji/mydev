@@ -108,10 +108,10 @@ let detail = (val1 = 200,val2 = 1,val3 = 3)=>{
           "logic_sys_id":"logic_sys_id",
           "phycics_sys_id":"phycics_sys_id",
           "modules":"modules",
-          "allgroup":"allgroup、allgroup",
-          "managerGroup":"managerGroup、managerGroup",
-          "developerGroup":"developerGroup、developerGroup",
-          "testerGroup":"testerGroup、testerGroup",
+          "allgroup":"allgroup|allgroup|",
+          "managerGroup":"managerGroup|managerGroup|",
+          "developerGroup":"developerGroup|developerGroup|",
+          "testerGroup":"testerGroup|testerGroup|",
           "prod_id|+1":500,
           "prod_name|5-8":/[a-zA-Z]/,
           "__value2__page":val2,
@@ -173,6 +173,14 @@ app.all('/project/detail/1', function(req, res) {
   res.end()
 });
 
+app.all('/project/edit', function(req, res) {
+  let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  res.json(detail(req.body.myStatus));
+  res.end()
+});
+
 app.post('/project/delete', function(req, res) {
   let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
   console.log("req==>",req.body);
@@ -183,6 +191,8 @@ app.post('/project/delete', function(req, res) {
   res.json({status:"success"});
   res.end()
 });
+
+
 
 
 app.all('/menu/getMenu', function(req, res) {

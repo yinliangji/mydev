@@ -289,9 +289,6 @@ export default {
     },
     updated(){
         console.log("agileAdd--updated-------",this.formValidate.modules)
-        if(this.addtest){
-        	this.$router.push('/agile')
-        }
     },
 	computed: {
         addtest() {
@@ -635,7 +632,7 @@ export default {
         },
         submitAddData(){
             let _modules = false;
-            let _join = ";";
+            let _join = "|";
             if(this.formValidate.module){
                 if(Array.isArray(this.formValidate.module)){
                     this.formValidate.modules.push(...this.formValidate.module)

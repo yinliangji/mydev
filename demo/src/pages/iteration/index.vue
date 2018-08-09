@@ -125,6 +125,7 @@ import { EventBus } from "@/tools";
 export default {
     data() {
         return {
+            totalId:"",
             isShowMoreShow:false,
             delOnoff: false,
             modifyOnoff: false,
@@ -394,6 +395,9 @@ export default {
         };
     },
     mounted() {
+
+
+
         this.$Message.config({
             top: 150,
             duration: 2
@@ -448,6 +452,7 @@ export default {
         cancel() {
             this.delOnoff = false;
             this.modifyOnoff = false;
+
         },
         //添加按钮
         addIteration() {
@@ -465,8 +470,21 @@ export default {
             alert(i);
         }
     },
-    computed: {},
-    created() {},
+    computed: {
+
+    },
+    created() {
+      alert(this.$route.query.id)
+      this.totalId = this.$route.query.id;
+      this.$axios({
+        method: 'post',
+        url: process.env.BASE_URL+'/sprint/listSprint',
+        data: {}
+      }).then((parm)=>{
+        console.log("myHeader---->",parm);
+
+      }).catch((error)=>{})
+    },
 
     components: {}
 };

@@ -118,8 +118,10 @@ export default {
                                             this.$router.push({
                                                 path: "/development/add",
                                                 query: {
-                                                    iterationName:
-                                                        params.row.taskName
+                                                    iterationName:params.row.taskName,
+                                                    personLiable:params.row.personLiable,
+                                                    status:params.row.status,
+                                                    userNeed:params.row.userNeed
                                                 }
                                             });
                                         }

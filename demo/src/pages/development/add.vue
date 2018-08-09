@@ -19,19 +19,19 @@
             <Row>
               <Col span="6">
               <FormItem label="责任人" prop="person">
-                <Select v-model="formValidate.person" placeholder="责任人" style="width:150px">
-                  <Option value="beijing">责任人1</Option>
-                  <Option value="shanghai">责任人2</Option>
-                  <Option value="shenzhen">责任人3</Option>
+                <Select v-model="formValidate.person"  style="width:150px">
+                  <Option v-for="item in personList" :value="item.label" :key="item.value">
+                    {{ item.label }}
+                  </Option>
                 </Select>
               </FormItem>
               </Col>
               <Col span="6">
               <FormItem label="类型">
-                <Select v-model="formValidate.type" placeholder="类型" style="width:150px">
-                  <Option value="beijing">类型1</Option>
-                  <Option value="shanghai">类型2</Option>
-                  <Option value="shenzhen">类型3</Option>
+                <Select v-model="formValidate.type"  style="width:150px">
+                   <Option v-for="item in typeList" :value="item.label" :key="item.value">
+                    {{ item.label }}
+                  </Option>
                 </Select>
               </FormItem>
               </Col>
@@ -39,9 +39,9 @@
               <Col span="8">
               <FormItem label="所属用户故事" style="padding-left: 62px;">
                 <Select v-model="formValidate.story" style="width:150px">
-                  <Option value="beijing">所属用户故事1</Option>
-                  <Option value="shanghai">所属用户故事2</Option>
-                  <Option value="shenzhen">所属用户故事3</Option>
+                  <Option v-for="item in storyList" :value="item.label" :key="item.value">
+                    {{ item.label }}
+                  </Option>
                 </Select>
               </FormItem>
               </Col>
@@ -96,6 +96,41 @@ export default {
     data() {
         return {
             sureInfo: "添加成功",
+            personList: [
+                {
+                    value: "1",
+                    label: "user1"
+                },
+                {
+                    value: "2",
+                    label: "user2"
+                },
+                {
+                    value: "3",
+                    label: "user3"
+                }
+            ],
+            typeList:[
+               {
+                    value: "1",
+                    label: "类型1"
+                },
+                {
+                    value: "2",
+                    label: "类型2"
+                }
+            ],
+
+            storyList:[
+               {
+                    value: "1",
+                    label: "用户界面设计"
+                },
+                {
+                    value: "2",
+                    label: "所属用户故事2"
+                }
+            ],
             formValidate: {
                 taskName: "",
                 person: "",
@@ -154,6 +189,14 @@ export default {
     created() {},
     mounted() {
         this.formValidate.taskName = this.$route.query.iterationName;
+        // alert(this.$route.query.personLiable)
+        this.formValidate.person = this.$route.query.personLiable;
+        //alert(this.$route.query.userNeed)
+        this.formValidate.story = this.$route.query.userNeed;
+        // iterationName:params.row.taskName,
+        // personLiable:params.row.personLiable,
+        // status:params.row.status,
+        // userNeed:params.row.userNeed
         this.$Message.config({
             top: 100,
             duration: 2

@@ -4,120 +4,125 @@
         <Card>
             <div class="productAddBox">
 
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140" class="fromBox">
+                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140" >
                     <h3 class="Title">基本信息</h3>
-                    <Row>
-                        <Col span="12">
-                            <FormItem label="所属产品" >
-                                <span>xxxxx产品</span>
-                            </FormItem>
-                        </Col>
-                        <Col span="12">
-                            <FormItem label="所属项目" >
-                                <span>xxxx项目</span>
-                            </FormItem>
-                        </Col>
-                    </Row>
+                    <div class="fromBox">
+                        <Row>
+                            <Col span="12">
+                                <FormItem label="所属产品" >
+                                    <span>xxxxx产品</span>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem label="所属项目" >
+                                    <span>xxxx项目</span>
+                                </FormItem>
+                            </Col>
+                        </Row>
 
 
-                    <FormItem label="用户故事名称" prop="name">
-                        <Input v-model="formValidate.name" placeholder="请填用户故事名称"></Input>
-                    </FormItem>
-                    <!-- <FormItem label="业务模块" prop="business">
-                        <Select v-model="formValidate.business" multiple >
-                            <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </FormItem> -->
+                        <FormItem label="用户故事名称" prop="name">
+                            <Input v-model="formValidate.name" placeholder="请填用户故事名称"></Input>
+                        </FormItem>
+                        <!-- <FormItem label="业务模块" prop="business">
+                            <Select v-model="formValidate.business" multiple >
+                                <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                        </FormItem> -->
 
-                    <FormItem label="故事类型" prop="style">
-                        <Select v-model="formValidate.style" placeholder="请选择事项类型">
-                            <Option value="用户需求">用户需求</Option>
-                            <Option value="生产问题">生产问题</Option>
-                            <Option value="自主创新">自主创新</Option>
-                        </Select>
-                    </FormItem>
+                        <FormItem label="故事类型" prop="style">
+                            <Select v-model="formValidate.style" placeholder="请选择事项类型">
+                                <Option value="用户需求">用户需求</Option>
+                                <Option value="生产问题">生产问题</Option>
+                                <Option value="自主创新">自主创新</Option>
+                            </Select>
+                        </FormItem>
 
-                    <!-- <Row>
-                        <Col span="12">
-                           
-                        </Col>
-                        <Col span="12">
-                             <FormItem label="负责人" prop="person">
-                                <Select v-model="formValidate.person" placeholder="请选择负责人">
-                                    <Option value="谢呗5">谢呗5</Option>
-                                    <Option value="谢呗6">谢呗6</Option>
-                                    <Option value="谢呗7">谢呗7</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
-                    </Row> -->  
-                   
-                    <FormItem label="状态" prop="status">
-                        <RadioGroup v-model="formValidate.status">
-                            <Radio label="提出">提出</Radio>
-                            <Radio label="开发中">开发中</Radio>
-                            <Radio label="测试">测试</Radio>
-                            <Radio label="上线">上线</Radio>
-                        </RadioGroup>
-                    </FormItem>
+                        <!-- <Row>
+                            <Col span="12">
+                               
+                            </Col>
+                            <Col span="12">
+                                 <FormItem label="负责人" prop="person">
+                                    <Select v-model="formValidate.person" placeholder="请选择负责人">
+                                        <Option value="谢呗5">谢呗5</Option>
+                                        <Option value="谢呗6">谢呗6</Option>
+                                        <Option value="谢呗7">谢呗7</Option>
+                                    </Select>
+                                </FormItem>
+                            </Col>
+                        </Row> -->  
+                       
+                        <FormItem label="状态" prop="status">
+                            <RadioGroup v-model="formValidate.status">
+                                <Radio label="提出">提出</Radio>
+                                <Radio label="开发中">开发中</Radio>
+                                <Radio label="测试">测试</Radio>
+                                <Radio label="上线">上线</Radio>
+                            </RadioGroup>
+                        </FormItem>
 
-                    <FormItem label="优先级" prop="grade">
-                        <RadioGroup v-model="formValidate.grade">
-                            <Radio label="1">高</Radio>
-                            <Radio label="2">中</Radio>
-                            <Radio label="3">低</Radio>
-                           
-                        </RadioGroup>
-                    </FormItem>
+                        <FormItem label="优先级" prop="grade">
+                            <RadioGroup v-model="formValidate.grade">
+                                <Radio label="1">高</Radio>
+                                <Radio label="2">中</Radio>
+                                <Radio label="3">低</Radio>
+                               
+                            </RadioGroup>
+                        </FormItem>
 
-                    <FormItem label="故事描述">
-                        <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写故事描述"></Input>
-                    </FormItem>
+                        <FormItem label="故事描述">
+                            <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写故事描述"></Input>
+                        </FormItem>
+                    </div>
 
 
                     <h3 class="Title">计划效率相关</h3>
+                    <div class="fromBox">
+                        <FormItem label="所属迭代" prop="iteration">
+                            <Select v-model="formValidate.iteration" placeholder="请选所属迭代">
+                                <Option value="迭代1">迭代1</Option>
+                                <Option value="迭代2">迭代2</Option>
+                                <Option value="迭代3">迭代3</Option>
+                            </Select>
+                        </FormItem>
 
-                    <FormItem label="所属迭代" prop="iteration">
-                        <Select v-model="formValidate.iteration" placeholder="请选所属迭代">
-                            <Option value="迭代1">迭代1</Option>
-                            <Option value="迭代2">迭代2</Option>
-                            <Option value="迭代3">迭代3</Option>
-                        </Select>
-                    </FormItem>
-
-                    <FormItem label="工时(预计)" prop="manhour">
-                        <Input v-model="formValidate.manhour" placeholder="请填写工时(预计)" number style="width: 120px"></Input> 小时
-                    </FormItem>
+                        <FormItem label="工时(预计)" prop="manhour">
+                            <Input v-model="formValidate.manhour" placeholder="请填写工时(预计)" number style="width: 120px"></Input> 小时
+                        </FormItem>
+                    </div>
 
                     <h3 class="Title">需求相关</h3>
 
-                    <FormItem label="所属需求" prop="demand">
-                        <Select v-model="formValidate.demand" placeholder="请选择所属需求">
-                            <Option value="需求1">需求1</Option>
-                            <Option value="需求2">需求2</Option>
-                            <Option value="需求3">需求3</Option>
-                        </Select>
-                    </FormItem>
-                   <!--  <FormItem label="用户故事提出人" prop="introducer">
-                        <Select v-model="formValidate.introducer" placeholder="请选择用户故事提出人">
-                            <Option value="提出人1">提出人1</Option>
-                            <Option value="提出人2">提出人2</Option>
-                            <Option value="提出人3">提出人3</Option>
-                        </Select>
-                    </FormItem>
+                    <div class="fromBox">
+                        <FormItem label="所属需求" prop="demand">
+                            <Select v-model="formValidate.demand" placeholder="请选择所属需求">
+                                <Option value="需求1">需求1</Option>
+                                <Option value="需求2">需求2</Option>
+                                <Option value="需求3">需求3</Option>
+                            </Select>
+                        </FormItem>
+                       <!--  <FormItem label="用户故事提出人" prop="introducer">
+                            <Select v-model="formValidate.introducer" placeholder="请选择用户故事提出人">
+                                <Option value="提出人1">提出人1</Option>
+                                <Option value="提出人2">提出人2</Option>
+                                <Option value="提出人3">提出人3</Option>
+                            </Select>
+                        </FormItem>
 
-                    <FormItem label="提出人部门" prop="department">
-                        <Input v-model="formValidate.department" placeholder="请填提出人部门"></Input>
-                    </FormItem> -->
+                        <FormItem label="提出人部门" prop="department">
+                            <Input v-model="formValidate.department" placeholder="请填提出人部门"></Input>
+                        </FormItem> -->
 
-                    <!-- <Row>
-                        <Col span="12">
-                            
-                        </Col>
-                        <Col span="12">
-                             
-                        </Col>
-                    </Row> -->
+                        <!-- <Row>
+                            <Col span="12">
+                                
+                            </Col>
+                            <Col span="12">
+                                 
+                            </Col>
+                        </Row> -->
+                    </div>
 
                     <FormItem>
                         <Button type="primary" :loading="modal_add_loading" @click="submitAdd">

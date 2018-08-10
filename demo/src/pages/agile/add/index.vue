@@ -4,157 +4,160 @@
         <Card>
             <div class="aglieAddBox">
                 
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" class="fromBox">
+                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" >
 					<h3 class="Title">项目基本信息</h3>
 
 
-
-                    <FormItem label="所属产品" prop="prod_id">
-                        <Select v-model="formValidate.prod_id" placeholder="请选择所属产品">
-                            <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                            <!-- <Option value="1">产品1</Option>
-                            <Option value="2">产品2</Option>
-                            <Option value="3">产品3</Option> -->
-                        </Select> 
-                    </FormItem> 
-
-
-                    <FormItem label="项目名称" prop="prj_name">
-                        <Input v-model="formValidate.prj_name" placeholder="请填写项目名称"></Input>
-                    </FormItem>
-
-                   <!--  <FormItem label="项目编号" prop="prj_id">
-                        <Input v-model="formValidate.prj_id" placeholder="请填写项目编号"></Input>
-                    </FormItem> -->
-
-                    <FormItem label="项目类型" prop="prj_type">
-                        <RadioGroup v-model="formValidate.prj_type">
-                            <Radio label="0">立研</Radio>
-                            <Radio label="1">自研</Radio>
-                        </RadioGroup>
-                    </FormItem>
-
-                   <!--  <FormItem label="设置时间" prop="date">
-                        <DatePicker :value="formValidate.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择开始和结束日期" v-model="formValidate.date" split-panels  style="width: 300px"></DatePicker>
-                    </FormItem> -->
-
-					<Row>
-                        <Col span="12">
-                            <FormItem label="开始时间" prop="start_time">
-                        		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"  :value="formValidate.start_time" v-model="formValidate.start_time"></DatePicker>
-                    		</FormItem>
-                        </Col>
-                        <Col span="12">
-                             <FormItem label="结束时间" prop="end_time">
-                        		<DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择结束日期" v-model="formValidate.end_time" ></DatePicker>
-                    		</FormItem>
-                        </Col>
-                    </Row>
-
-                  
-					<FormItem label="项目描述" prop="prj_desc">
-                        <Input v-model="formValidate.prj_desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目描述"></Input>
-                    </FormItem>
+                    <div class="fromBox">
+                        <FormItem label="所属产品" prop="prod_id">
+                            <Select v-model="formValidate.prod_id" placeholder="请选择所属产品">
+                                <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <!-- <Option value="1">产品1</Option>
+                                <Option value="2">产品2</Option>
+                                <Option value="3">产品3</Option> -->
+                            </Select> 
+                        </FormItem> 
 
 
-                    <FormItem label="项目目标" prop="prj_goal">
-                        <Input v-model="formValidate.prj_goal" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目目标"></Input>
-                    </FormItem>
+                        <FormItem label="项目名称" prop="prj_name">
+                            <Input v-model="formValidate.prj_name" placeholder="请填写项目名称"></Input>
+                        </FormItem>
 
-                    <!-- <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input> -->
-                    <FormItem label="填写模块" prop="modulesAdd">
-                        <Tag v-for="item in formValidate.modulesAdd" :key="item" :name="item" closable @on-close="handleClose">
-                            {{ item}}
-                        </Tag>
-                        <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
-                            添加模块
-                        </Button>
-                    </FormItem>
-                    <FormItem label="模块选择" prop="modules">
-                        <Select v-model="formValidate.modules" multiple >
-                            <Option v-for="item in moduleList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </FormItem>
+                       <!--  <FormItem label="项目编号" prop="prj_id">
+                            <Input v-model="formValidate.prj_id" placeholder="请填写项目编号"></Input>
+                        </FormItem> -->
 
-                    <!-- <FormItem label="技术模块" prop="technology">
-                        <Select v-model="formValidate.technology" multiple >
-                            <Option v-for="item in technologyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </FormItem> -->
+                        <FormItem label="项目类型" prop="prj_type">
+                            <RadioGroup v-model="formValidate.prj_type">
+                                <Radio label="0">立研</Radio>
+                                <Radio label="1">自研</Radio>
+                            </RadioGroup>
+                        </FormItem>
+
+                       <!--  <FormItem label="设置时间" prop="date">
+                            <DatePicker :value="formValidate.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择开始和结束日期" v-model="formValidate.date" split-panels  style="width: 300px"></DatePicker>
+                        </FormItem> -->
+
+    					<Row>
+                            <Col span="12">
+                                <FormItem label="开始时间" prop="start_time">
+                            		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"  :value="formValidate.start_time" v-model="formValidate.start_time"></DatePicker>
+                        		</FormItem>
+                            </Col>
+                            <Col span="12">
+                                 <FormItem label="结束时间" prop="end_time">
+                            		<DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择结束日期" v-model="formValidate.end_time" ></DatePicker>
+                        		</FormItem>
+                            </Col>
+                        </Row>
+
+                      
+    					<FormItem label="项目描述" prop="prj_desc">
+                            <Input v-model="formValidate.prj_desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目描述"></Input>
+                        </FormItem>
+
+
+                        <FormItem label="项目目标" prop="prj_goal">
+                            <Input v-model="formValidate.prj_goal" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目目标"></Input>
+                        </FormItem>
+
+                        <!-- <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input> -->
+                        <FormItem label="填写模块" prop="modulesAdd">
+                            <Tag v-for="item in formValidate.modulesAdd" :key="item" :name="item" closable @on-close="handleClose">
+                                {{ item}}
+                            </Tag>
+                            <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
+                                添加模块
+                            </Button>
+                        </FormItem>
+                        <FormItem label="模块选择" prop="modules">
+                            <Select v-model="formValidate.modules" multiple >
+                                <Option v-for="item in moduleList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                        </FormItem>
+
+                        <!-- <FormItem label="技术模块" prop="technology">
+                            <Select v-model="formValidate.technology" multiple >
+                                <Option v-for="item in technologyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                        </FormItem> -->
+                    </div>
 					<h3 class="Title">成员信息</h3>
+                    <div class="fromBox">
 
-                    <Row>
-                        <Col span="12">
-							<FormItem label="总体组" prop="allgroup" ref="allgroupBox">
-		                        <!-- <Select v-model="formValidate.group" placeholder="请选择总体组">
-		                            <Option value="总体组1">总体组1</Option>
-		                            <Option value="总体组2">总体组2</Option>
-		                            <Option value="总体组3">总体组3</Option>
-		                        </Select> -->
-                                <Select v-model.lazy="formValidate.allgroup" filterable multiple placeholder="请选择总体组">
-                                    <Option v-for="item in allgroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                </Select>
-		                    </FormItem> 
-                        </Col>
-                        <Col span="12">
-	                        <FormItem label="项目经理" prop="managerGroup" ref="managerGroupBox">
-                                <Select v-model.lazy="formValidate.managerGroup" filterable multiple placeholder="请选择项目经理">
-                                    <Option v-for="item in managerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                </Select>
-		                        <!-- <Select v-model="formValidate.manager" placeholder="请选择项目经理">
-		                            <Option value="经理1">经理1</Option>
-		                            <Option value="经理2">经理2</Option>
-		                            <Option value="经理3">经理3</Option>
-		                        </Select> -->
-		                    </FormItem> 
-                        </Col>
-                    </Row>
-                   
-                    <Row>
-                        <Col span="12">
-							<FormItem label="开发组" prop="developerGroup" ref="developerGroupBox">
-                                <Select v-model.lazy="formValidate.developerGroup" filterable multiple placeholder="请选择开发组">
-                                    <Option v-for="item in developerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                </Select>
-                                <!-- <Select v-model="formValidate.developer" placeholder="请选择开发人员">
-                                    <Option value="开发人员1">开发人员1</Option>
-                                    <Option value="开发人员2">开发人员2</Option>
-                                    <Option value="开发人员3">开发人员3</Option>
-                                </Select> -->
-                            </FormItem>
-                        </Col>
-                        <Col span="12">
-                            <FormItem label="测试组" prop="testerGroup" ref="testerGroupBox">
-                                <Select v-model.lazy="formValidate.testerGroup" filterable multiple placeholder="请选择测试组">
-                                    <Option v-for="item in testerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                </Select>
-                                <!-- <Select v-model="formValidate.tester" placeholder="请选择测试人员">
-                                    <Option value="测试人员1">测试人员1</Option>
-                                    <Option value="测试人员2">测试人员2</Option>
-                                    <Option value="测试人员3">测试人员13</Option>
-                                </Select> -->
-                            </FormItem>
-                        </Col>
-                    </Row>
+                        <Row>
+                            <Col span="12">
+    							<FormItem label="总体组" prop="allgroup" ref="allgroupBox">
+    		                        <!-- <Select v-model="formValidate.group" placeholder="请选择总体组">
+    		                            <Option value="总体组1">总体组1</Option>
+    		                            <Option value="总体组2">总体组2</Option>
+    		                            <Option value="总体组3">总体组3</Option>
+    		                        </Select> -->
+                                    <Select v-model.lazy="formValidate.allgroup" filterable multiple placeholder="请选择总体组">
+                                        <Option v-for="item in allgroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select>
+    		                    </FormItem> 
+                            </Col>
+                            <Col span="12">
+    	                        <FormItem label="项目经理" prop="managerGroup" ref="managerGroupBox">
+                                    <Select v-model.lazy="formValidate.managerGroup" filterable multiple placeholder="请选择项目经理">
+                                        <Option v-for="item in managerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select>
+    		                        <!-- <Select v-model="formValidate.manager" placeholder="请选择项目经理">
+    		                            <Option value="经理1">经理1</Option>
+    		                            <Option value="经理2">经理2</Option>
+    		                            <Option value="经理3">经理3</Option>
+    		                        </Select> -->
+    		                    </FormItem> 
+                            </Col>
+                        </Row>
+                       
+                        <Row>
+                            <Col span="12">
+    							<FormItem label="开发组" prop="developerGroup" ref="developerGroupBox">
+                                    <Select v-model.lazy="formValidate.developerGroup" filterable multiple placeholder="请选择开发组">
+                                        <Option v-for="item in developerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select>
+                                    <!-- <Select v-model="formValidate.developer" placeholder="请选择开发人员">
+                                        <Option value="开发人员1">开发人员1</Option>
+                                        <Option value="开发人员2">开发人员2</Option>
+                                        <Option value="开发人员3">开发人员3</Option>
+                                    </Select> -->
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem label="测试组" prop="testerGroup" ref="testerGroupBox">
+                                    <Select v-model.lazy="formValidate.testerGroup" filterable multiple placeholder="请选择测试组">
+                                        <Option v-for="item in testerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select>
+                                    <!-- <Select v-model="formValidate.tester" placeholder="请选择测试人员">
+                                        <Option value="测试人员1">测试人员1</Option>
+                                        <Option value="测试人员2">测试人员2</Option>
+                                        <Option value="测试人员3">测试人员13</Option>
+                                    </Select> -->
+                                </FormItem>
+                            </Col>
+                        </Row>
                                 
 
-                    <!-- 
-                    
-                    <Row>
-                        <Col span="12">
-                                   
-                        </Col>
-                        <Col span="12">
-                            <FormItem label="维护人员" prop="maintainer">
-                                <Select v-model="formValidate.maintainer" placeholder="请选择维护人员">
-                                    <Option value="维护人员1">测试人员1</Option>
-                                    <Option value="维护人员2">测试人员2</Option>
-                                    <Option value="维护人员3">测试人员13</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
-                    </Row> 
-                	-->
+                        <!-- 
+                        
+                        <Row>
+                            <Col span="12">
+                                       
+                            </Col>
+                            <Col span="12">
+                                <FormItem label="维护人员" prop="maintainer">
+                                    <Select v-model="formValidate.maintainer" placeholder="请选择维护人员">
+                                        <Option value="维护人员1">测试人员1</Option>
+                                        <Option value="维护人员2">测试人员2</Option>
+                                        <Option value="维护人员3">测试人员13</Option>
+                                    </Select>
+                                </FormItem>
+                            </Col>
+                        </Row> 
+                    	-->
+                    </div>
                     <FormItem>
                     	<!-- <Button type="primary" @click="submitAdd">提交</Button> -->
     					<Button type="primary" :loading="modal_add_loading" @click="submitAdd">
@@ -522,12 +525,8 @@ export default {
         let managerGroupBoxDOM = this.$refs.managerGroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
         let developerGroupBoxDOM = this.$refs.developerGroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
         let testerGroupBoxDOM = this.$refs.testerGroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
-
         let DomArr = [allgroupBoxDOM,managerGroupBoxDOM,developerGroupBoxDOM,testerGroupBoxDOM] 
-
-
         for(var I=0;I<DomArr.length;I++){
-            //
             DomArr[I].addEventListener("keyup", function(event){
                 let _item = false;
                 let _URL = false;
@@ -559,8 +558,6 @@ export default {
                     2000
                 )();
             })
-            //
-
         }
         
         

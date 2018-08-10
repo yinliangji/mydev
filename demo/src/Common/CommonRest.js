@@ -3,24 +3,35 @@ export default class CommonRest {
     constructor() {}
 }
 CommonRest.restUrl = {
-	"DemoURL_1":process.env.BASE_URL+"/json.action",/****express demo json****/
-	"projectAll":process.env.BASE_URL+"/project/all",/****express 敏捷项目列表 get****/
-	"projectAdd":process.env.BASE_URL+"/project/add",/****express 敏捷项目添加 post****/
-	"projectDetail":process.env.BASE_URL+"/project/detail/",/****express 敏捷项目添加 post****/
-	"projectAllgroup":process.env.BASE_URL+"/project/allgroup/",/****express 敏捷项目添加总体组 get****/
-	"projectManagerGroup":process.env.BASE_URL+"/project/managerGroup/",/****express 敏捷项目添加项目经理 get****/
-	"projectDeveloperGroup":process.env.BASE_URL+"/project/developerGroup/",/****express 敏捷项目添加开发组 get****/
-	"projectTesterGroup":process.env.BASE_URL+"/project/testerGroup/",/****express 敏捷项目添加测试组 get****/
-	"projectDelete":process.env.BASE_URL+"/project/delete/",/****express 敏捷项目添加测试组 post****/
-	"projectEdit":process.env.BASE_URL+"/project/edit/",/****express 敏捷项目编辑 post****/
-	"projectGetProd":process.env.BASE_URL+"/project/get_prod/",/****express 敏捷项目获取所属产品 get****/
+    "DemoURL_1": process.env.BASE_URL + "/json.action",
+    /****express demo json****/
+    "projectAll": process.env.BASE_URL + "/project/all",
+    /****express 敏捷项目列表 get****/
+    "projectAdd": process.env.BASE_URL + "/project/add",
+    /****express 敏捷项目添加 post****/
+    "projectDetail": process.env.BASE_URL + "/project/detail/",
+    /****express 敏捷项目添加 post****/
+    "projectAllgroup": process.env.BASE_URL + "/project/allgroup/",
+    /****express 敏捷项目添加总体组 get****/
+    "projectManagerGroup": process.env.BASE_URL + "/project/managerGroup/",
+    /****express 敏捷项目添加项目经理 get****/
+    "projectDeveloperGroup": process.env.BASE_URL + "/project/developerGroup/",
+    /****express 敏捷项目添加开发组 get****/
+    "projectTesterGroup": process.env.BASE_URL + "/project/testerGroup/",
+    /****express 敏捷项目添加测试组 get****/
+    "projectDelete": process.env.BASE_URL + "/project/delete/",
+    /****express 敏捷项目添加测试组 post****/
+    "projectEdit": process.env.BASE_URL + "/project/edit/",
+    /****express 敏捷项目编辑 post****/
+    "projectGetProd": process.env.BASE_URL + "/project/get_prod/",
+    /****express 敏捷项目获取所属产品 get****/
     /****express 敏捷项目编辑 post****/
 
 
     // qhc迭代+开发任务
-    "iterationList": process.env.BASE_URL + "/sprint/listSprint",
-    "iterationAdd": process.env.BASE_URL + "/sprint/addSprint",
-
+    "iterationList": process.env.BASE_URL + "/sprint/listSprint", //迭代列表
+    "iterationAdd": process.env.BASE_URL + "/sprint/addSprint", //添加迭代
+    "iterationEdit": process.env.BASE_URL + "/sprint/editSprint", //编辑迭代
     /****express 敏捷项目编辑 post****/
 
 }

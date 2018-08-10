@@ -63,7 +63,7 @@ let mockDataList = (val1 = 200, val2 = 1, val3 = 3) => {
         "message": "mockDataList xxxxxxx",
         data: {
             "list|3-9": [{
-                "id": 1,
+                "id|+1": 1,
                 "prj_id": 1,
                 "prj_name|5-8": /[a-zA-Z]/,
                 "prj_manager": "项目经理",
@@ -207,24 +207,15 @@ let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {
         "status": val1,
         "message": "success",
         data: {
-            "list|3-9": [{
-                "id|+1": 1,
-                "prj_id": 1,
-                "sprint_id|5-8": /[0-9a-zA-Z]/,
-                "prj_manager": "项目经理",
-                "prj_desc": "项目描述",
-                "prj_goal": "项目目标",
-                "settle_time": "2018-01-01",
+            "rows|3-9": [{
+                "id": 1,
+                "prj_id|+1": 1,//所属项目
+                "sprint_id|5-8": /[0-9a-zA-Z]/,//迭代编号
+                "sprint_name|5-8": /[0-9a-zA-Z]/,//迭代名称
                 "start_time": "2018-10-10",
                 "end_time": "2018-12-10",
-                "prj_type|0-1": 0,
-                "logic_sys_id": "logic_sys_id",
-                "phycics_sys_id": "phycics_sys_id",
-                "modules": "modules",
-                "prod_id|+1": 500,
-                "prod_name|5-8": /[a-zA-Z]/,
-                "__value2__page": val2,
-                "__value3__pageline": val3,
+                "status": "进行中"
+               
 
             }],
             "total|3-9": 3,

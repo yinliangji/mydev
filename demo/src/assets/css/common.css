@@ -71,15 +71,25 @@
 */
 
 h3.Title {
+    font-family: "微软雅黑";
     margin-left: 0;
     text-align: left;
-    color: #495060;
+    /* color: #495060; */
+    color: #333;
     font-weight: 400;
     font-size: 16px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     margin-top: 10px;
     position: relative;
     padding-left: 1em;
+    font-size: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+h3 span {
+    padding-bottom: 8px;
+    border-bottom: 1px solid #21488a
 }
 
 h3.Title:before {
@@ -89,8 +99,9 @@ h3.Title:before {
     top: 0%;
     transform: translate(100%, -5%);
     width: 3px;
-    height: 100%;
-    background: #ed3f14;
+    height: 80%;
+    /* background: #ed3f14; */
+    background: #00bcd5;
     color: transparent;
     border-radius: 0%;
 }

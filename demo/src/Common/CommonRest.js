@@ -25,14 +25,14 @@ CommonRest.restUrl = {
     /****express 敏捷项目编辑 post****/
     "projectGetProd": process.env.BASE_URL + "/project/get_prod/",
     /****express 敏捷项目获取所属产品 get****/
-    /****express 敏捷项目编辑 post****/
+
 
 
     // qhc迭代+开发任务
-    "iterationList": process.env.BASE_URL + "/sprint/listSprint", //迭代列表
-    "iterationAdd": process.env.BASE_URL + "/sprint/addSprint", //添加迭代
-    "iterationEdit": process.env.BASE_URL + "/sprint/editSprint", //编辑迭代
-    /****express 敏捷项目编辑 post****/
+    "iterationList": process.env.BASE_URL + "/sprint/listSprint", //迭代列表get
+    "iterationAdd": process.env.BASE_URL + "/sprint/addSprint", //添加迭代post
+    "iterationEdit": process.env.BASE_URL + "/sprint/editSprint", //编辑迭代post
+
 
 }
 CommonRest.UA = navigator.userAgent.toLowerCase();

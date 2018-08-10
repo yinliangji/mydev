@@ -469,7 +469,7 @@ export default {
                               }
                           }).then(res => {
                               console.log(res);
-                              this.$Message.success(this.sureInfo);
+                              this.$Message.success("编辑成功");
                               //点击跳转页面
                               this.$router.push({
                                   path: "/iteration"

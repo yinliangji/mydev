@@ -8,7 +8,7 @@
 
     <div class="clearfix">
       <div class="infoGroup">
-        <h3 class="Title">项目名称：敏捷项目二期开发</h3>
+        <h3 class="Title"><span>项目名称：敏捷项目二期开发</span></h3>
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate">
           <div class="addTaskTable">
             <Row>
@@ -35,8 +35,8 @@
 
     </div>
 
-    <h3 class="Title">规划当前迭代：
-      <span style="color:red">{{formValidate.taskName}}</span>
+    <h3 class="Title"><span>规划当前迭代：</span>
+      <i style="color:red">{{formValidate.taskName}}</i>
     </h3>
     <div class="transBody">
 
@@ -67,7 +67,7 @@
                 <span style="margin:0 80px">{{item.stoyrType}} </span>
                 <span>{{item.stoyrStatus}}</span>
 
-                <Icon type="navicon-round" @click="item.isShow=!item.isShow"></Icon>
+                <Icon type="more" @click="item.isShow=!item.isShow" class="more"></Icon>
               </div>
               <div class="tranpanel" v-show="item.isShow">
 
@@ -114,7 +114,7 @@
                   <Checkbox :label="item.type">{{item.bigName}}</Checkbox>
                   <span style="margin:0 80px">{{item.stoyrType}} </span>
                   <span>{{item.stoyrStatus}}</span>
-                  <Icon type="navicon-round" @click="item.isShow=!item.isShow"></Icon>
+                  <Icon type="more" @click="item.isShow=!item.isShow"></Icon>
                 </div>
                 <div class="tranpanel" v-show="item.isShow">
                   <Table :columns="columns1" :data="item.list" size="small"></Table>
@@ -143,6 +143,7 @@
 export default {
     data() {
         return {
+            addOrModifyStatus:false,//默认为false是添加，当修改时改为true
             sureInfo: "添加成功",
             storySearch: "",
             //故事类型
@@ -435,12 +436,47 @@ export default {
                     if (!onoff) {
                         this.$Message.error("开始时间不能大于结束时间!");
                     } else {
-                        this.$Message.success(this.sureInfo);
-                        // this.$refs[name].resetFields();
-                        //点击跳转页面
-                        this.$router.push({
-                            path: "/iteration"
-                        });
+                        if(!addOrModifyStatus){
+                          //添加
+                          //走接口
+                          this.$axios({
+                              method: "post",
+                              url: iterationAdd,
+                              data: {
+                                  sprint_name: this.formValidate.taskName,
+                                  start_time: this.formValidate.startTime,
+                                  end_time:this.formValidate.endTime
+                              }
+                          }).then(res => {
+                              console.log(res);
+                              this.$Message.success(this.sureInfo);
+                              //点击跳转页面
+                              this.$router.push({
+                                  path: "/iteration"
+                              });
+                          });
+                        }else{
+                          this.$axios({
+                              method: "post",
+                              url: iterationEdit,
+                              data: {
+                                  sprint_name: this.formValidate.taskName,
+                                  start_time: this.formValidate.startTime,
+                                  end_time:this.formValidate.endTime
+                              }
+                          }).then(res => {
+                              console.log(res);
+                              this.$Message.success(this.sureInfo);
+                              //点击跳转页面
+                              this.$router.push({
+                                  path: "/iteration"
+                              });
+                          });
+                        }
+
+
+
+
                     }
                 } else {
                     this.$Message.error("请填写好必填内容!");
@@ -537,7 +573,7 @@ export default {
 <style scoped>
 h3.Title {
     margin-top: 30px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 .container-transfer {
     width: 100%;
@@ -570,7 +606,7 @@ h3.Title {
     float: left;
     overflow: hidden;
     border: 1px solid #d8d8d8;
-    border-radius: 4px;
+    border-radius: 2px;
 }
 .transBody h3 {
     height: 40px;
@@ -597,7 +633,7 @@ h3.Title {
     float: left;
     overflow: hidden;
     border: 1px solid #d8d8d8;
-    border-radius: 4px;
+    border-radius: 2px;
 }
 .trans-top {
     margin-top: 6px;
@@ -605,25 +641,36 @@ h3.Title {
     margin-bottom: 6px;
 }
 .addTaskTable {
-    padding: 10px;
-    border: 1px solid #d8d8d8;
-    border-radius: 4px;
+    padding:20px 10px 0;
+    border: 1px solid #e4e4e4;
+    border-radius: 2px;
+    background: #f9f9f9;
+
 }
 .taskrow {
     height: 30px;
 }
 .tranHeader {
-    margin: 10px;
+    padding: 10px;
 }
+.tranHeader .more{
+   padding:4px 8px; background:#f9f9f9;
+   position: relative;
+   top: -4px
+}
+.tranHeader:hover {
+    background:#f9f9f9
+}
+
 .tranHeader .ivu-icon {
     float: right;
     cursor: pointer;
 }
 .totalNum {
     margin-right: 10px;
-    color: #ff9900;
+    color: #00bcd5;
     font-weight: normal;
-    font-size: 16px;
+    font-size: 14px;
 }
 .infoGroup {
 }

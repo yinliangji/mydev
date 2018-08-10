@@ -13,51 +13,51 @@
         <Form>
           <Row>
             <Col span="12">
-              <Row>
-                <Col span="4">
-                <div class="searchName">迭代名称</div>
-                </Col>
-                <Col span="8">
-                <FormItem>
-                  <Input placeholder="输入迭代名称" v-model="iterationName"></Input>
-                </FormItem>
-                </Col>
-                <Col span="4">
-                <div class="searchName">迭代编号</div>
-                </Col>
-                <Col span="8">
-                <FormItem>
-                  <Input placeholder="输入迭代编号" v-model="iterationNumber"></Input>
-                </FormItem>
-                </Col>
-              </Row>
-              <Row v-if="isShowMoreShow">
-                <Col span="4">
-                <div class="searchName">开始时间</div>
-                </Col>
-                <Col span="8">
-                <FormItem>
-                  <DatePicker type="date" v-model="startTime" style="width: 180px"></DatePicker>
-                </FormItem>
-                </Col>
-                <Col span="4">
-                <div class="searchName">结束时间</div>
-                </Col>
-                <Col span="8">
-                <FormItem>
-                  <DatePicker type="date" v-model="endTime" style="width: 180px"></DatePicker>
-                </FormItem>
-                </Col>
-              </Row>
+            <Row>
+              <Col span="4">
+              <div class="searchName">迭代名称</div>
+              </Col>
+              <Col span="8">
+              <FormItem>
+                <Input placeholder="输入迭代名称" v-model="iterationName"></Input>
+              </FormItem>
+              </Col>
+              <Col span="4">
+              <div class="searchName">迭代编号</div>
+              </Col>
+              <Col span="8">
+              <FormItem>
+                <Input placeholder="输入迭代编号" v-model="iterationNumber"></Input>
+              </FormItem>
+              </Col>
+            </Row>
+            <Row v-if="isShowMoreShow">
+              <Col span="4">
+              <div class="searchName">开始时间</div>
+              </Col>
+              <Col span="8">
+              <FormItem>
+                <DatePicker type="date" v-model="start_time" style="width: 180px"></DatePicker>
+              </FormItem>
+              </Col>
+              <Col span="4">
+              <div class="searchName">结束时间</div>
+              </Col>
+              <Col span="8">
+              <FormItem>
+                <DatePicker type="date" v-model="end_time" style="width: 180px"></DatePicker>
+              </FormItem>
+              </Col>
+            </Row>
             </Col>
             <Col span="4" class="serchBtnBox">
-              <Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
+            <Button type="primary" icon="ios-search" class="serchBtn" @click="searchFn">查询</Button>
             </Col>
           </Row>
-          	<div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
-                <Icon type="chevron-down" color="#ed3f14"></Icon>
-                <Icon type="chevron-down" color="#ed3f14"></Icon>
-            </div>
+          <div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
+            <Icon type="chevron-down" color="#ed3f14"></Icon>
+            <Icon type="chevron-down" color="#ed3f14"></Icon>
+          </div>
         </Form>
       </div>
 
@@ -78,7 +78,7 @@
             </div>
             <div class="tableToggle" v-if="obj.isShow">
               <Table border :columns="column2" :data="obj.list"></Table>
-              <Page :total="200" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize" style="margin:6px 0; text-align:right">
+              <Page :total="totalPage" show-sizer show-total @on-change="changeCurrentPage" @on-page-size-change="changePageSize" style="margin:6px 0; text-align:right">
               </Page>
             </div>
 
@@ -121,20 +121,22 @@
 
 <script>
 import { EventBus } from "@/tools";
-
+import Common from "@/Common";
+const { iterationList } = Common.restUrl;
 export default {
     data() {
         return {
-            totalId:"",
-            isShowMoreShow:false,
+            totalPage: 100,
+            currentPage: 1,
+            pageSize: 10,
+            totalId: "",
+            isShowMoreShow: false,
             delOnoff: false,
             modifyOnoff: false,
-            modifyName:"",
-            startTime:"",
-            endTime:"",
+            modifyName: "",
             status: false,
-            startTime: "",
-            endTime: "",
+            start_time: "",
+            end_time: "",
             iterationName: "",
             iterationNumber: "",
             curSelelectList: [], // 当前选择得要规划得list
@@ -146,12 +148,12 @@ export default {
                 },
                 {
                     title: "迭代编号",
-                    key: "number"
+                    key: "sprint_id"
                 },
 
                 {
                     title: "迭代名称",
-                    key: "name",
+                    key: "sprint_name",
 
                     render: (h, params) => {
                         return h("div", [
@@ -169,26 +171,28 @@ export default {
                                             this.$router.push({
                                                 path: "/iteration/iteration",
                                                 query: {
-                                                    iterationName:params.row.name,
-                                                    startTime:params.row.startTime,
-                                                    endTime:params.row.startTime
+                                                    iterationName:
+                                                        params.row.sprint_name,
+                                                    startTime:
+                                                        params.row.start_time,
+                                                    endTime: params.row.end_time
                                                 }
                                             });
                                         }
                                     }
                                 },
-                                params.row.name
+                                params.row.sprint_name
                             )
                         ]);
                     }
                 },
                 {
                     title: "开始时间",
-                    key: "startTime"
+                    key: "start_time"
                 },
                 {
                     title: "结束时间",
-                    key: "endTime"
+                    key: "end_time"
                 },
                 {
                     title: "操作",
@@ -213,9 +217,9 @@ export default {
                                             this.$router.push({
                                                 path: "/development",
                                                 query: {
-                                                    iterationName:params.row.name,
-                                                    watchKanban:true
-
+                                                    iterationName:
+                                                        params.row.sprint_name,
+                                                    watchKanban: true
                                                 }
                                             });
                                         }
@@ -233,13 +237,16 @@ export default {
                                     on: {
                                         click: () => {
                                             //点击跳转页面
-                                            //alert(params.row.name);
+                                            //alert(params.row.sprint_name);
                                             this.$router.push({
                                                 path: "/iteration/iteration",
                                                 query: {
-                                                    iterationName:params.row.name,
-                                                    startTime:params.row.startTime,
-                                                    endTime:params.row.endTime
+                                                    iterationName:
+                                                        params.row.sprint_name,
+                                                    startTime:
+                                                        params.row.start_time,
+                                                    endTime: params.row.end_time,
+                                                    addOrModifyStatus:true
                                                 }
                                             });
                                         }
@@ -254,19 +261,19 @@ export default {
             column2: [
                 {
                     title: "迭代编号",
-                    key: "number"
+                    key: "sprint_id"
                 },
                 {
                     title: "迭代名称",
-                    key: "name"
+                    key: "sprint_name"
                 },
                 {
                     title: "开始时间",
-                    key: "startTime"
+                    key: "start_time"
                 },
                 {
                     title: "结束时间",
-                    key: "endTime"
+                    key: "end_time"
                 },
                 {
                     title: "操作",
@@ -291,8 +298,9 @@ export default {
                                             this.$router.push({
                                                 path: "/development",
                                                 query: {
-                                                    iterationName:params.row.name,
-                                                    watchKanban:true
+                                                    iterationName:
+                                                        params.row.sprint_name,
+                                                    watchKanban: true
                                                 }
                                             });
                                         }
@@ -310,14 +318,14 @@ export default {
                                     on: {
                                         click: () => {
                                             //点击跳转页面
-                                            //alert(params.row.name);此编辑要弹出询问是否编辑
+                                            //alert(params.row.sprint_name);此编辑要弹出询问是否编辑
                                             this.modifyOnoff = true;
-                                            this.modifyName=params.row.name;
-                                            this.startTime=params.row.startTime;
-                                            this.endTime=params.row.endTime
-
+                                            this.modifyName =
+                                                params.row.sprint_name;
+                                            this.startTime =
+                                                params.row.start_time;
+                                            this.endTime = params.row.end_time;
                                         }
-
                                     }
                                 },
                                 "编辑"
@@ -327,77 +335,50 @@ export default {
                 }
             ],
             Table1: {
-                type: 0, // 未规划
-                name: "未规划迭代",
                 list: [
-                    {
-                        id: 1,
-                        number: "001",
-                        name: "prj001",
-                        dec: "TPM敏捷管理系统",
-                        startTime: "2017-08-01",
-                        endTime: "2017-08-01"
-                    },
-                    {
-                        id: 2,
-                        number: "001",
-                        name: "prj002",
-                        dec: "TPM敏捷管理系统",
-                        startTime: "2017-08-01",
-                        endTime: "2017-08-02"
-                    },
-                    {
-                        id: 3,
-                        number: "001",
-                        name: "prj003",
-                        dec: "TPM敏捷管理系统",
-                        startTime: "2017-08-01",
-                        endTime: "2017-08-03"
-                    }
+                    // {
+                    //     id: 1,
+                    //     sprint_id: "001",
+                    //     sprint_name: "prj001",
+                    //     dec: "TPM敏捷管理系统",
+                    //     start_time: "2017-08-01",
+                    //     end_time: "2017-08-01"
+                    // },
+                    // {
+                    //     id: 2,
+                    //     number: "001",
+                    //     name: "prj002",
+                    //     dec: "TPM敏捷管理系统",
+                    //     startTime: "2017-08-01",
+                    //     endTime: "2017-08-02"
+                    // }
                 ]
             },
             obj: {
-                type: 1,
-                name: "TPM产品第一阶段1",
-                startTime: "2017-08-01",
-                endTime: "2017-08-01",
                 isShow: false,
                 list: [
-                    {
-                        type: 1,
-                        id: 4,
-                        number: "002",
-                        name: "1111",
-                        dec: "TPM敏捷管理系统1",
-                        startTime: "2017-08-01",
-                        endTime: "2018-05-01"
-                    },
-                    {
-                        type: 1,
-                        id: 5,
-                        number: "002",
-                        name: "2222",
-                        dec: "TPM敏捷管理系统1",
-                        startTime: "2017-08-01",
-                        endTime: "2018-05-01"
-                    },
-                    {
-                        type: 1,
-                        id: 6,
-                        number: "002",
-                        name: "33333",
-                        dec: "TPM敏捷管理系统1",
-                        startTime: "2017-08-01",
-                        endTime: "2018-05-01"
-                    }
+                    // {
+                    //     id: 1,
+                    //     sprint_id: "001",
+                    //     sprint_name: "prj001",
+                    //     dec: "TPM敏捷管理系统",
+                    //     start_time: "2017-08-01",
+                    //     end_time: "2017-08-01"
+                    // },
+                    // {
+                    //     type: 1,
+                    //     id: 5,
+                    //     number: "002",
+                    //     name: "2222",
+                    //     dec: "TPM敏捷管理系统1",
+                    //     startTime: "2017-08-01",
+                    //     endTime: "2018-05-01"
+                    // }
                 ]
             }
         };
     },
     mounted() {
-
-
-
         this.$Message.config({
             top: 150,
             duration: 2
@@ -426,7 +407,8 @@ export default {
                 for (let i = Table1Leg - 1; i >= 0; i--) {
                     for (let j = 0; j < selectLeg; j++) {
                         if (
-                            this.Table1.list[i].id == this.curSelelectList[j].id
+                            this.Table1.list[i].sprint_id ==
+                            this.curSelelectList[j].sprint_id
                         ) {
                             this.Table1.list.splice(i, 1);
                             continue; //结束当前本轮循环，开始新的一轮循环
@@ -443,8 +425,8 @@ export default {
                 path: "/iteration/iteration",
                 query: {
                     iterationName: this.modifyName,
-                    startTime:this.startTime,
-                    endTime:this.endTime
+                    startTime: this.start_time,
+                    endTime: this.end_time
                 }
             });
         },
@@ -452,7 +434,6 @@ export default {
         cancel() {
             this.delOnoff = false;
             this.modifyOnoff = false;
-
         },
         //添加按钮
         addIteration() {
@@ -463,27 +444,41 @@ export default {
         },
 
         //分页
+        //当前页数 page
         changeCurrentPage(i) {
-            alert(i);
+            //alert(i);
+            this.currentPage = i;
+            this.IterationList();
         },
+        //每页显示多少条limit
         changePageSize(i) {
-            alert(i);
+            // alert(i);
+            this.pageSize = i;
+            this.IterationList();
+        },
+        IterationList() {
+            this.$axios({
+                method: "get",
+                url: iterationList,
+                data: {
+                    data: "",
+                    page: this.currentPage,
+                    limit: this.pageSize
+                }
+            }).then(res => {
+                console.log(res.data.data.rows);
+                this.Table1.list = res.data.data.rows;
+                this.obj.list = res.data.data.rows;
+            });
+        },
+        searchFn() {
+            alert(sessionStorage.getItem("id"));
+            // this.totalId = this.$route.query.id;
         }
     },
-    computed: {
-
-    },
+    computed: {},
     created() {
-      alert(this.$route.query.id)
-      this.totalId = this.$route.query.id;
-      this.$axios({
-        method: 'post',
-        url: process.env.BASE_URL+'/sprint/listSprint',
-        data: {}
-      }).then((parm)=>{
-        console.log("myHeader---->",parm);
-
-      }).catch((error)=>{})
+        this.IterationList();
     },
 
     components: {}

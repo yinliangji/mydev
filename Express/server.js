@@ -91,6 +91,7 @@ let mockDataList = (val1 = 200, val2 = 1, val3 = 3) => {
 
 
 
+
 let detail = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": val1,
@@ -105,15 +106,15 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
             "settle_time": "2018-01-01",
             "start_time": "2018-10-10",
             "end_time": "2018-12-10",
-            "prj_type|0-1": 0,
+            "prj_type": "2",
             "logic_sys_id": "logic_sys_id",
             "phycics_sys_id": "phycics_sys_id",
-            "modules": "modules",
-            "allgroup": "allgroup、allgroup",
-            "managerGroup": "managerGroup、managerGroup",
-            "developerGroup": "developerGroup、developerGroup",
-            "testerGroup": "testerGroup、testerGroup",
-            "prod_id|+1": 500,
+            "modules": "模块1-1|模块2-2|",
+            "allgroup": "Canberra|London|",
+            "managerGroup": "Sydney|Ottawa|",
+            "developerGroup": "Paris|",
+            "testerGroup": "Canberra|",
+            "prod_id": "2",
             "prod_name|5-8": /[a-zA-Z]/,
             "__value2__page": val2,
             "__value3__pageline": val3,
@@ -174,6 +175,80 @@ app.all('/project/detail/1', function(req, res) {
     res.end()
 });
 
+let mockproductList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        data: {
+            "list|3-9": [{
+                "id|+1": 1,
+                "product_id|5-8": /[a-zA-Z]/,
+                "product_name": "product",
+                "__value2__page": val2,
+                "__value3__pageline": val3,
+            }],
+
+        },
+    })
+}
+
+
+
+app.all('/project/get_prod/', function(req, res) {
+    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(mockproductList(req.body.myStatus));
+    res.end()
+});
+
+
+
+let GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        data: {
+            "list": [{
+                    value: 'New York',
+                    label: 'New York人1'
+                },
+                {
+                    value: 'London',
+                    label: 'London人2'
+                },
+                {
+                    value: 'Sydney',
+                    label: 'Sydney人3'
+                },
+                {
+                    value: 'Ottawa',
+                    label: 'Ottawa人4'
+                },
+                {
+                    value: 'Paris',
+                    label: 'Paris人5'
+                },
+                {
+                    value: 'Canberra',
+                    label: 'Canberra人6'
+                }
+            ],
+
+        },
+    })
+}
+
+
+app.all('/project/allgroup/', function(req, res) {
+    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(GroupList(req.body.myStatus));
+    res.end()
+});
+
+
 app.all('/project/edit', function(req, res) {
     let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
@@ -209,13 +284,13 @@ let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {
         data: {
             "rows|3-9": [{
                 "id": 1,
-                "prj_id|+1": 1,//所属项目
-                "sprint_id|5-8": /[0-9a-zA-Z]/,//迭代编号
-                "sprint_name|5-8": /[0-9a-zA-Z]/,//迭代名称
+                "prj_id|+1": 1, //所属项目
+                "sprint_id|5-8": /[0-9a-zA-Z]/, //迭代编号
+                "sprint_name|5-8": /[0-9a-zA-Z]/, //迭代名称
                 "start_time": "2018-10-10",
                 "end_time": "2018-12-10",
                 "status": "进行中"
-               
+
 
             }],
             "total|3-9": 3,

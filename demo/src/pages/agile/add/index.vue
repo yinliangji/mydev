@@ -10,13 +10,13 @@
 
 
                     <FormItem label="所属产品" prop="prod_id">
-                                <Select v-model="formValidate.prod_id" placeholder="请选择所属产品">
-                                    <Option value="1">产品1</Option>
-                                    <Option value="2">产品2</Option>
-                                    <Option value="3">产品3</Option>
-                                </Select> 
-                                
-                            </FormItem> 
+                        <Select v-model="formValidate.prod_id" placeholder="请选择所属产品">
+                            <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            <!-- <Option value="1">产品1</Option>
+                            <Option value="2">产品2</Option>
+                            <Option value="3">产品3</Option> -->
+                        </Select> 
+                    </FormItem> 
 
 
                     <FormItem label="项目名称" prop="prj_name">
@@ -61,23 +61,17 @@
                         <Input v-model="formValidate.prj_goal" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目目标"></Input>
                     </FormItem>
 
-
                     <!-- <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input> -->
-                    <FormItem label="填写模块" prop="modules">
-                        <Tag v-for="item in formValidate.modules" :key="item" :name="item" closable @on-close="handleClose">
+                    <FormItem label="填写模块" prop="modulesAdd">
+                        <Tag v-for="item in formValidate.modulesAdd" :key="item" :name="item" closable @on-close="handleClose">
                             {{ item}}
                         </Tag>
                         <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
                             添加模块
                         </Button>
                     </FormItem>
-
-
-
-
-
-                    <FormItem label="模块选择" prop="module">
-                        <Select v-model="formValidate.module" multiple >
+                    <FormItem label="模块选择" prop="modules">
+                        <Select v-model="formValidate.modules" multiple >
                             <Option v-for="item in moduleList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </FormItem>
@@ -88,8 +82,6 @@
                         </Select>
                     </FormItem> -->
 					<h3 class="Title">成员信息</h3>
-
-					
 
                     <Row>
                         <Col span="12">
@@ -191,26 +183,9 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup} = Common.restUrl;
-
+const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd} = Common.restUrl;
 
 import Store from '@/vuex/store'
-Date.prototype.Format = function (fmt) { // author: meizz
-    var o = {
-        "M+": this.getMonth() + 1, // 月份
-        "d+": this.getDate(), // 日
-        "h+": this.getHours(), // 小时
-        "m+": this.getMinutes(), // 分
-        "s+": this.getSeconds(), // 秒
-        "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
-        "S": this.getMilliseconds() // 毫秒
-    };
-    if (/(y+)/.test(fmt))
-        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
-        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-            return fmt;
-}
 
 const validateDate = (rule, value, callback) => {
     if (!value || !value[0] || !value[1]) {
@@ -226,51 +201,6 @@ const validateDate = (rule, value, callback) => {
     }
 };
 
-let throttle = (func, wait, options) =>{
-    /* options的默认值
-     *  表示首次调用返回值方法时，会马上调用func；否则仅会记录当前时刻，当第二次调用的时间间隔超过wait时，才调用func。
-     *  options.leading = true;
-     * 表示当调用方法时，未到达wait指定的时间间隔，则启动计时器延迟调用func函数，若后续在既未达到wait指定的时间间隔和func函数又未被调用的情况下调用返回值方法，则被调用请求将被丢弃。
-     *  options.trailing = true; 
-     * 注意：当options.trailing = false时，效果与上面的简单实现效果相同
-     */
-    var context, args, result;
-    var timeout = null;
-    var previous = 0;
-    if (!options) options = {};
-    var later = function() {
-        previous = options.leading === false ? 0 : _.now();
-        timeout = null;
-        result = func.apply(context, args);
-        if (!timeout) context = args = null;
-    };
-    return function() {
-        var now = _.now();
-        if (!previous && options.leading === false) previous = now;
-        // 计算剩余时间
-        var remaining = wait - (now - previous);
-        context = this;
-        args = arguments;
-        // 当到达wait指定的时间间隔，则调用func函数
-        // 精彩之处：按理来说remaining <= 0已经足够证明已经到达wait的时间间隔，但这里还考虑到假如客户端修改了系统时间则马上执行func函数。
-        if (remaining <= 0 || remaining > wait) {
-            // 由于setTimeout存在最小时间精度问题，因此会存在到达wait的时间间隔，但之前设置的setTimeout操作还没被执行，因此为保险起见，这里先清理setTimeout操作
-            if (timeout) {
-              clearTimeout(timeout);
-              timeout = null;
-            }
-            previous = now;
-            result = func.apply(context, args);
-            if (!timeout) context = args = null;
-        } else if (!timeout && options.trailing !== false) {
-            // options.trailing=true时，延时执行func函数
-            timeout = setTimeout(later, remaining);
-        }
-        return result;
-    };
-};
-
-
 export default {
     props: {
         
@@ -279,16 +209,16 @@ export default {
         
     },
     beforecreated(){
-        console.log("agileAdd--beforecreated-------",this.formValidate.modules)
+        console.log("agileAdd--beforecreated-------",this.formValidate.prod_id)
     },
     created(){
-        console.log("agileAdd--created-------",this.formValidate.modules)
+        console.log("agileAdd--created-------",this.formValidate.prod_id)
     },
     beforeUpdate(){
-        console.log("agileAdd--beforeUpdate-------",this.formValidate.modules)
+        console.log("agileAdd--beforeUpdate-------",this.formValidate.prod_id)
     },
     updated(){
-        console.log("agileAdd--updated-------",this.formValidate.modules)
+        console.log("agileAdd--updated-------",this.formValidate.prod_id)
     },
 	computed: {
         addtest() {
@@ -298,6 +228,18 @@ export default {
 
     data () {
         let _this = this;
+        const validateDateEnd = (rule, value, callback) => {
+            if (value) {
+                let Timer = new Date(value).getTime() - new Date(this.formValidate.start_time).getTime();
+                if(Timer >= 0){
+                    callback()
+                }else{
+                    return callback(new Error('结束日期早于开始日期！'));
+                }
+            }else{
+                callback()  
+            }
+        };
         return {
             options3: {
                 disabledDate (date) {
@@ -319,8 +261,8 @@ export default {
                 end_time: '',
                 prj_desc: '',
                 prj_goal:"",
+                modulesAdd:[],
                 modules:[],
-                module:"",
                 allgroup:[],
                 managerGroup:[],
                 developerGroup:[],
@@ -342,6 +284,18 @@ export default {
                 moudle:"",
                 group:"",
             },
+            prod_idList: [
+                // {
+                //   "id":1 ,
+                //   "product_id":"x000001",
+                //   "product_name":"product",
+                 
+                // }
+                // {
+                //     value: 'New York1',
+                //     label: 'New York总体组人1'
+                // },
+            ],
             allgroupList: [
                 {
                     value: 'New York1',
@@ -478,7 +432,7 @@ export default {
             ],
             ruleValidate: {
                 prod_id: [
-                    { required: false, message: 'Please select gender', trigger: 'change' }
+                    { required: false,type: 'string', message: 'Please select gender', trigger: 'change' }
                 ],
                 prj_type: [
                     { required: false, message: 'Please select gender', trigger: 'change' }
@@ -487,12 +441,12 @@ export default {
                 prj_name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
-                start_time: [
-                    { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
-                ],
+                // start_time: [
+                //     { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
+                // ],
                 end_time: [//
-                    //{ required: false, type: 'date', validator: validateDate2, trigger: 'change' }
-                    { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
+                    { required: false, type: 'date', validator: validateDateEnd, trigger: 'change' }
+                    //{ required: false, type: 'date', message: 'Please select the date', trigger: 'change' }
                 ],
                 prj_desc: [
                     { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
@@ -503,6 +457,9 @@ export default {
                     //{ type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
                 ],
                 modules: [
+                    { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
+                ],
+                modulesAdd: [
                     { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
                 ],
                 allgroup: [
@@ -523,7 +480,7 @@ export default {
                
 
 
-               prj_id: [
+                prj_id: [
                     { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
                 date: [
@@ -546,7 +503,6 @@ export default {
                 ],
             },
             
-            
             editTableData:false,
             modal_add_loading:false,
             formItem: {
@@ -560,25 +516,50 @@ export default {
     mounted(){
         this.resetData();
 
-
-        
-        //this.$refs.allgroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0].style.background = 'red';
-
         let allgroupBoxDOM = this.$refs.allgroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
-        let allgroupBoxDOMThrottle = throttle(()=>{console.log(allgroupBoxDOM.value)},1500)        
-        allgroupBoxDOM.addEventListener("keyup", function(event){ 
-            allgroupBoxDOMThrottle();//queryData(this.value)
-            
-        })
+        let allgroupBoxDOMThrottle = Common.throttle(
+            ()=>{
+                console.log(allgroupBoxDOM.value)
+                this.projectAllgroupFn({
+                    VALUE:allgroupBoxDOM.value+"|"+this.formValidate.allgroup.join("|"),
+                });
+            }
+            ,
+            2000
+        );
 
-        function queryData(text){
-            console.log("搜索：" + text);
-        }
-        
-        //.$children[0].$sel.childNodes[0].childNodes[2].childNodes[3]
+        allgroupBoxDOM.addEventListener("keyup", function(event){ 
+            allgroupBoxDOMThrottle();
+        })
+        this.projectGetProdFn();
     },
     
     methods: {
+        projectAllgroupFn(params = {}){
+            defaultAXIOS(projectAllgroup,params,{timeout:5000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });   
+        },
+        projectGetProdFn(){
+            defaultAXIOS(projectGetProd,{},{timeout:5000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【agile product get】***response+++",response,myData.data.list,"====>");
+                let _tempObj = {};
+                for(var i=0;i<myData.data.list.length;i++){
+                    _tempObj.value = myData.data.list[i].id+"";
+                    _tempObj.label = myData.data.list[i].product_id+"";
+                    this.prod_idList.push(_tempObj);
+                    _tempObj = {}
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
         showError(ERR){
             alert(JSON.stringify(ERR))
         },
@@ -599,14 +580,14 @@ export default {
         
         formItemReset(){
             this.resetData(); //this.formValidate.date = [];
-            this.formValidate.prj_type = "0";
+            this.formValidate.prj_type = "1";
             this.formValidate.prj_name = "";
             this.formValidate.start_time = "";
             this.formValidate.end_time = "";
             this.formValidate.prj_desc = "";
             this.formValidate.prj_goal = "";
+            this.formValidate.modulesAdd = [];
             this.formValidate.modules = [];
-            this.formValidate.moudle = "";
             this.formValidate.allgroup = [];
             this.formValidate.managerGroup = [];
             this.formValidate.developerGroup = [];
@@ -633,16 +614,12 @@ export default {
         submitAddData(){
             let _modules = false;
             let _join = "|";
-            if(this.formValidate.module){
-                if(Array.isArray(this.formValidate.module)){
-                    this.formValidate.modules.push(...this.formValidate.module)
-                }else{
-                    this.formValidate.modules.push(this.formValidate.module)
-                }
-                _modules = this.formValidate.modules
+            if(Array.isArray(this.formValidate.modulesAdd)){
+                this.formValidate.modules.push(...this.formValidate.modulesAdd)
             }else{
-                _modules = this.formValidate.modules
+                this.formValidate.modules.push(this.formValidate.modulesAdd)
             }
+            _modules = this.formValidate.modules
             let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
             let tempData = {
@@ -652,7 +629,7 @@ export default {
                 end_time:_end_time,
                 prj_desc: this.formValidate.prj_desc,
                 prj_goal: this.formValidate.prj_goal,
-                modules:_modules.join("<=>"),
+                modules:_modules.join(_join),
                 allgroup: this.formValidate.allgroup.join(_join),
                 managerGroup: this.formValidate.managerGroup.join(_join),
                 developerGroup: this.formValidate.developerGroup.join(_join),
@@ -712,13 +689,13 @@ export default {
             this.$refs.formValidate.resetFields();
         },
         handleClose (event, name) {
-            const index = this.formValidate.modules.indexOf(name);
-            this.formValidate.modules.splice(index, 1);
+            const index = this.formValidate.modulesAdd.indexOf(name);
+            this.formValidate.modulesAdd.splice(index, 1);
         },
 
         submitModule () {
             setTimeout(() => {
-                this.formValidate.modules.push(this.formItem.businessName)
+                this.formValidate.modulesAdd.push(this.formItem.businessName)
                 this.modaAdd = false;
                 this.$Message.info('成功');
                 this.ModuleformItemReset();

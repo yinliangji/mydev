@@ -28,7 +28,7 @@ import '@/assets/css/common.css'
 
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts;
-
+/* 通用开始 */
 Vue.filter('FALSEINFO', value => { // 交易明细
   if (!value) {
     return "没有数据"
@@ -36,6 +36,23 @@ Vue.filter('FALSEINFO', value => { // 交易明细
   	return value;
   }
 })
+Date.prototype.Format = function (fmt) { // author: meizz
+    var o = {
+        "M+": this.getMonth() + 1, // 月份
+        "d+": this.getDate(), // 日
+        "h+": this.getHours(), // 小时
+        "m+": this.getMinutes(), // 分
+        "s+": this.getSeconds(), // 秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
+        "S": this.getMilliseconds() // 毫秒
+    };
+    if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+}
+/* 通用结束 */
 
 /* eslint-disable no-new */
 new Vue({

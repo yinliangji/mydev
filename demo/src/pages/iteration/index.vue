@@ -120,7 +120,6 @@
 </template>
 
 <script>
-import { EventBus } from "@/tools";
 import Common from "@/Common";
 const { iterationList } = Common.restUrl;
 export default {

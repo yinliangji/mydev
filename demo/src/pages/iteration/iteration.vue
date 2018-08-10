@@ -140,6 +140,9 @@
   </div>
 </template>
 <script>
+import Common from "@/Common";
+const { iterationAdd } = Common.restUrl;
+const { iterationEdit } = Common.restUrl;
 export default {
     data() {
         return {

@@ -236,23 +236,18 @@ export default {
 
     data () {
         let _this = this;
-
-
         const validateDateEnd = (rule, value, callback) => {
             if (value) {
                 let Timer = new Date(value).getTime() - new Date(this.formValidate.start_time).getTime();
-                console.log("=-=-=-=-=-=-=-=",Timer)
                 if(Timer >= 0){
                     callback()
                 }else{
                     return callback(new Error('结束日期早于开始日期！'));
                 }
-                
             }else{
                 callback()  
             }
         };
-
 
         return {
             options3: {

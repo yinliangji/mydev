@@ -89,35 +89,35 @@
 
                     <Row>
                         <Col span="12">
-							<FormItem label="总体组" prop="allgroup" ref="allgroupBox">
-		                        <!-- <Select v-model="formValidate.group" placeholder="请选择总体组">
-		                            <Option value="总体组1">总体组1</Option>
-		                            <Option value="总体组2">总体组2</Option>
-		                            <Option value="总体组3">总体组3</Option>
-		                        </Select> -->
-                                <Select v-model.lazy="formValidate.allgroup" filterable multiple>
+                            <FormItem label="总体组" prop="allgroup" ref="allgroupBox">
+                                <!-- <Select v-model="formValidate.group" placeholder="请选择总体组">
+                                    <Option value="总体组1">总体组1</Option>
+                                    <Option value="总体组2">总体组2</Option>
+                                    <Option value="总体组3">总体组3</Option>
+                                </Select> -->
+                                <Select v-model.lazy="formValidate.allgroup" filterable multiple placeholder="请选择总体组">
                                     <Option v-for="item in allgroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-		                    </FormItem> 
+                            </FormItem> 
                         </Col>
                         <Col span="12">
-	                        <FormItem label="项目经理" prop="managerGroup" ref="managerGroupBox">
-                                <Select v-model.lazy="formValidate.managerGroup" filterable multiple>
+                            <FormItem label="项目经理" prop="managerGroup">
+                                <Select v-model.lazy="formValidate.managerGroup" filterable multiple placeholder="请选择项目经理">
                                     <Option v-for="item in managerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-		                        <!-- <Select v-model="formValidate.manager" placeholder="请选择项目经理">
-		                            <Option value="经理1">经理1</Option>
-		                            <Option value="经理2">经理2</Option>
-		                            <Option value="经理3">经理3</Option>
-		                        </Select> -->
-		                    </FormItem> 
+                                <!-- <Select v-model="formValidate.manager" placeholder="请选择项目经理">
+                                    <Option value="经理1">经理1</Option>
+                                    <Option value="经理2">经理2</Option>
+                                    <Option value="经理3">经理3</Option>
+                                </Select> -->
+                            </FormItem> 
                         </Col>
                     </Row>
                     
                     <Row>
                         <Col span="12">
-							<FormItem label="开发组" prop="developerGroup" ref="developerGroupBox">
-                                <Select v-model.lazy="formValidate.developerGroup" filterable multiple>
+                            <FormItem label="开发组" prop="developerGroup">
+                                <Select v-model.lazy="formValidate.developerGroup" filterable multiple placeholder="请选择开发组">
                                     <Option v-for="item in developerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
                                 <!-- <Select v-model="formValidate.developer" placeholder="请选择开发人员">
@@ -128,8 +128,8 @@
                             </FormItem>
                         </Col>
                         <Col span="12">
-                            <FormItem label="测试组" prop="testerGroup" ref="testerGroupBox">
-                                <Select v-model.lazy="formValidate.testerGroup" filterable multiple>
+                            <FormItem label="测试组" prop="testerGroup">
+                                <Select v-model.lazy="formValidate.testerGroup" filterable multiple placeholder="请选择测试组">
                                     <Option v-for="item in testerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
                                 <!-- <Select v-model="formValidate.tester" placeholder="请选择测试人员">
@@ -526,10 +526,13 @@ export default {
         let allgroupBoxDOM = this.$refs.allgroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
         let allgroupBoxDOMThrottle = Common.throttle(
             ()=>{
-                console.log(allgroupBoxDOM.value)
-                this.projectAllgroupFn({
-                    VALUE:allgroupBoxDOM.value+"|"+this.formValidate.allgroup.join("|"),
-                });
+                this.projectGroupFn(
+                    projectAllgroup
+                    ,
+                    {VALUE:allgroupBoxDOM.value+"|"+this.formValidate.allgroup.join("|"),}
+                    ,
+                    "allgroupList"
+                );
             }
             ,
             2000
@@ -552,10 +555,11 @@ export default {
     },
     
     methods: {
-        projectAllgroupFn(params = {}){
-            defaultAXIOS(projectAllgroup,params,{timeout:5000,method:'get'}).then((response) => {
+        projectGroupFn(URL,params = {},ARR){
+            defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
+                this[ARR] = myData.data.list;
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);

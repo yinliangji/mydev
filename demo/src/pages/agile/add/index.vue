@@ -91,14 +91,14 @@
 		                            <Option value="总体组2">总体组2</Option>
 		                            <Option value="总体组3">总体组3</Option>
 		                        </Select> -->
-                                <Select v-model.lazy="formValidate.allgroup" filterable multiple>
+                                <Select v-model.lazy="formValidate.allgroup" filterable multiple placeholder="请选择总体组">
                                     <Option v-for="item in allgroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
 		                    </FormItem> 
                         </Col>
                         <Col span="12">
 	                        <FormItem label="项目经理" prop="managerGroup">
-                                <Select v-model.lazy="formValidate.managerGroup" filterable multiple>
+                                <Select v-model.lazy="formValidate.managerGroup" filterable multiple placeholder="请选择项目经理">
                                     <Option v-for="item in managerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
 		                        <!-- <Select v-model="formValidate.manager" placeholder="请选择项目经理">
@@ -113,7 +113,7 @@
                     <Row>
                         <Col span="12">
 							<FormItem label="开发组" prop="developerGroup">
-                                <Select v-model.lazy="formValidate.developerGroup" filterable multiple>
+                                <Select v-model.lazy="formValidate.developerGroup" filterable multiple placeholder="请选择开发组">
                                     <Option v-for="item in developerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
                                 <!-- <Select v-model="formValidate.developer" placeholder="请选择开发人员">
@@ -125,7 +125,7 @@
                         </Col>
                         <Col span="12">
                             <FormItem label="测试组" prop="testerGroup">
-                                <Select v-model.lazy="formValidate.testerGroup" filterable multiple>
+                                <Select v-model.lazy="formValidate.testerGroup" filterable multiple placeholder="请选择测试组">
                                     <Option v-for="item in testerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
                                 <!-- <Select v-model="formValidate.tester" placeholder="请选择测试人员">
@@ -297,108 +297,108 @@ export default {
                 // },
             ],
             allgroupList: [
-                {
-                    value: 'New York1',
-                    label: 'New York总体组人1'
-                },
-                {
-                    value: 'London',
-                    label: 'London总体组人2'
-                },
-                {
-                    value: 'Sydney',
-                    label: 'Sydney总体组人3'
-                },
-                {
-                    value: 'Ottawa',
-                    label: 'Ottawa总体组人4'
-                },
-                {
-                    value: 'Paris',
-                    label: 'Paris总体组人5'
-                },
-                {
-                    value: 'Canberra',
-                    label: 'Canberra总体组人6'
-                }
+                // {
+                //     value: 'New York1',
+                //     label: 'New York总体组人1'
+                // },
+                // {
+                //     value: 'London',
+                //     label: 'London总体组人2'
+                // },
+                // {
+                //     value: 'Sydney',
+                //     label: 'Sydney总体组人3'
+                // },
+                // {
+                //     value: 'Ottawa',
+                //     label: 'Ottawa总体组人4'
+                // },
+                // {
+                //     value: 'Paris',
+                //     label: 'Paris总体组人5'
+                // },
+                // {
+                //     value: 'Canberra',
+                //     label: 'Canberra总体组人6'
+                // }
             ],
             managerGroupList: [
-                {
-                    value: 'New York2',
-                    label: 'New York项目经理1'
-                },
-                {
-                    value: 'London',
-                    label: 'London项目经理2'
-                },
-                {
-                    value: 'Sydney',
-                    label: 'Sydney项目经理3'
-                },
-                {
-                    value: 'Ottawa',
-                    label: 'Ottawa项目经理4'
-                },
-                {
-                    value: 'Paris',
-                    label: 'Paris项目经理5'
-                },
-                {
-                    value: 'Canberra',
-                    label: 'Canberra项目经理6'
-                }
+                // {
+                //     value: 'New York2',
+                //     label: 'New York项目经理1'
+                // },
+                // {
+                //     value: 'London',
+                //     label: 'London项目经理2'
+                // },
+                // {
+                //     value: 'Sydney',
+                //     label: 'Sydney项目经理3'
+                // },
+                // {
+                //     value: 'Ottawa',
+                //     label: 'Ottawa项目经理4'
+                // },
+                // {
+                //     value: 'Paris',
+                //     label: 'Paris项目经理5'
+                // },
+                // {
+                //     value: 'Canberra',
+                //     label: 'Canberra项目经理6'
+                // }
             ],
             developerGroupList: [
-                {
-                    value: 'New York3',
-                    label: 'New York开发人员1'
-                },
-                {
-                    value: 'London',
-                    label: 'London开发人员2'
-                },
-                {
-                    value: 'Sydney',
-                    label: 'Sydney开发人员3'
-                },
-                {
-                    value: 'Ottawa',
-                    label: 'Ottawa开发人员4'
-                },
-                {
-                    value: 'Paris',
-                    label: 'Paris开发人员5'
-                },
-                {
-                    value: 'Canberra',
-                    label: 'Canberra开发人员6'
-                }
+                // {
+                //     value: 'New York3',
+                //     label: 'New York开发人员1'
+                // },
+                // {
+                //     value: 'London',
+                //     label: 'London开发人员2'
+                // },
+                // {
+                //     value: 'Sydney',
+                //     label: 'Sydney开发人员3'
+                // },
+                // {
+                //     value: 'Ottawa',
+                //     label: 'Ottawa开发人员4'
+                // },
+                // {
+                //     value: 'Paris',
+                //     label: 'Paris开发人员5'
+                // },
+                // {
+                //     value: 'Canberra',
+                //     label: 'Canberra开发人员6'
+                // }
             ],
             testerGroupList: [
-                {
-                    value: 'New York4',
-                    label: 'New York测试人员1'
-                },
-                {
-                    value: 'London',
-                    label: 'London测试人员2'
-                },
-                {
-                    value: 'Sydney',
-                    label: 'Sydney测试人员3'
-                },
-                {
-                    value: 'Ottawa',
-                    label: 'Ottawa测试人员4'
-                },
-                {
-                    value: 'Paris',
-                    label: 'Paris测试人员5'
-                },
-                {
-                    value: 'Canberra',
-                    label: 'Canberra测试人员6'
-                }
+                // {
+                //     value: 'New York4',
+                //     label: 'New York测试人员1'
+                // },
+                // {
+                //     value: 'London',
+                //     label: 'London测试人员2'
+                // },
+                // {
+                //     value: 'Sydney',
+                //     label: 'Sydney测试人员3'
+                // },
+                // {
+                //     value: 'Ottawa',
+                //     label: 'Ottawa测试人员4'
+                // },
+                // {
+                //     value: 'Paris',
+                //     label: 'Paris测试人员5'
+                // },
+                // {
+                //     value: 'Canberra',
+                //     label: 'Canberra测试人员6'
+                // }
             ],
             technologyList: [
                 {
@@ -517,28 +517,42 @@ export default {
         this.resetData();
 
         let allgroupBoxDOM = this.$refs.allgroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
-        let allgroupBoxDOMThrottle = Common.throttle(
-            ()=>{
-                console.log(allgroupBoxDOM.value)
-                this.projectAllgroupFn({
-                    VALUE:allgroupBoxDOM.value+"|"+this.formValidate.allgroup.join("|"),
-                });
+        
+        let _this = this;
+        allgroupBoxDOM.addEventListener("keyup", function(event){
+            let _item = false;
+            if(this.placeholder.indexOf("总体组")  != -1){
+                _item = "allgroupList"
+            }else if(this.placeholder.indexOf("项目经理")  != -1){
+                _item = "managerGroupList"
+            }else if(this.placeholder.indexOf("开发组")  != -1){
+                _item = "developerGroupList"
+            }else if(this.placeholder.indexOf("测试组")  != -1){
+                _item = "testerGroupList"
             }
-            ,
-            2000
-        );
-
-        allgroupBoxDOM.addEventListener("keyup", function(event){ 
-            allgroupBoxDOMThrottle();
+            Common.throttle(
+                ()=>{
+                    _this.projectGroupFn(
+                        projectAllgroup
+                        ,
+                        {VALUE:this.value+"|"+_this.formValidate.allgroup.join("|"),}
+                        ,
+                        "allgroupList"
+                    );
+                }
+                ,
+                2000
+            )();
         })
         this.projectGetProdFn();
     },
     
     methods: {
-        projectAllgroupFn(params = {}){
-            defaultAXIOS(projectAllgroup,params,{timeout:5000,method:'get'}).then((response) => {
+        projectGroupFn(URL,params = {},ARR){
+            defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
+                this[ARR] = myData.data.list;
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);

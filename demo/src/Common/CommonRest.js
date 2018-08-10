@@ -29,6 +29,12 @@ CommonRest.restUrl = {
     /****express 敏捷项目添加角色 get****/
 
 
+    "storyAll": process.env.BASE_URL + "/userstory/listUserstory/",
+    /****express 用户故事列表 get****/
+    "storyAdd": process.env.BASE_URL + "/userstory/addUserstory/",
+    /****express 用户故事列表 get****/
+
+
 
     // qhc迭代+开发任务
     "iterationList": process.env.BASE_URL + "/sprint/listSprint", //迭代列表get

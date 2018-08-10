@@ -156,6 +156,52 @@ app.all('/project/all', function(req, res) {
 });
 
 
+let listUserstoryList = (val1 = 200,val2 = 1,val3 = 3)=>{
+  return Mock.mock({
+      "status": val1,
+      "message":"mockDataList xxxxxxx",
+      "rows|3-5":[ {
+        "id":1 ,
+        "userstory_id":1,
+        "userstory_name|5-8":/[a-zA-Z]/,
+        "userstory_type":"产品需求",
+        "charger":"谢呗",
+        "userstory_status":"已完成",
+        "sprint_id":"迭代1",
+        "proi|1-3":1,
+        "manHours":"20 | 10",
+        "mission":"5 | 10",
+        "phycics_sys_id":"phycics_sys_id",
+        "icon":"/assets/images/user_02.png",
+       
+        "__value2__page":val2,
+        "__value3__pageline":val3,
+        
+      }],
+      "page_rows|3-9":3,
+      "per_page|3-9":3,
+  })
+}
+
+app.all('/userstory/listUserstory/', function(req, res) {
+  let resVal = listUserstoryList(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  res.json(listUserstoryList(req.body.myStatus,req.body.page,req.body.pageline));
+  res.end()
+});
+
+app.all('/userstory/addUserstory/', function(req, res) {
+  let resVal = listUserstoryList(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  res.json({status:200,message:"ok"});
+  res.end()
+});
+
+
+
+
 app.post('/project/add', function(req, res) {
   let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
   console.log("req==>",req.body);

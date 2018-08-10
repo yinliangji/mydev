@@ -136,9 +136,9 @@
 
 					<div class="tableContBox" v-if="currentView == 'developList'">
 						<Table border :columns="columns" :data="tableData"  />
-						<div class="pageBox">
-				    		<Page :total="100" show-elevator></Page>
-				    		<p>显示第1到第5条记录，总共90条记录</p>
+						<div class="pageBox" v-if="tableData.length">
+				    		<Page :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+				    		<p>总共{{tableDAtaTatol}}条记录</p>
 				    	</div>
 					</div>
 					<div class="listBox" v-else>
@@ -157,6 +157,12 @@
 import { EventBus } from "@/tools";
 import kanbanboard from "@/components/kanbanboard";
 import ADDorEDITpop from "./add_or_edit_pop";
+
+import API from '@/api'
+const {defaultAXIOS} = API;
+import Common from '@/Common';
+const {storyAll} = Common.restUrl;
+
 export default {
 	beforecreated(){
         console.log("product--beforecreated-------",this.addtest)
@@ -252,7 +258,8 @@ export default {
 	              bgColor: { background: "#b3ecec" },
 	              taskStateStr: "未开始",
 	              taskState: "01",
-	              headPortrait: require("@/assets/images/user_02.png")
+	              headPortrait: require("@/assets/images/user_02.png"),
+	              taskName:"",
 	            },
 	            {
 	              taskId: "#US0002",
@@ -263,7 +270,8 @@ export default {
 	              bgColor: { background: "#f8d6af" },
 	              taskStateStr: "设计开发",
 	              taskState: "02",
-	              headPortrait: require("@/assets/images/user_02.png")
+	              headPortrait: require("@/assets/images/user_02.png"),
+	              taskName:"",
 	            },
 	            {
 	              taskId: "#US0003",
@@ -274,7 +282,8 @@ export default {
 	              bgColor: { background: "#f8d6af" },
 	              taskStateStr: "测试",
 	              taskState: "02",
-	              headPortrait: require("@/assets/images/user_02.png")
+	              headPortrait: require("@/assets/images/user_02.png"),
+	              taskName:"",
 	            },
 	            // {
 	            //   taskId: "#US0004",
@@ -335,14 +344,14 @@ export default {
 	        columns: [
 	        	{
                     title: '编号',
-                    key: 'num',
+                    key: 'userstory_id',
                     width: 85,
                     align: 'center'
                 },
 
                 {
                     title: '用户故事名称',
-                    key: 'name',
+                    key: 'userstory_name',
                     render: (h, params) => {
                         return h(
                             'a',
@@ -355,20 +364,20 @@ export default {
                                     }
                                 }
                             },
-                            params.row.name
+                            params.row.userstory_name
                         );
                     }
                 },
 
                 {
                     title: '类型',
-                    key: 'describe',
+                    key: 'userstory_type',
                     width: 85,
                     align: 'center',
                 },
                 {
                     title: '负责人',
-                    key: 'person',
+                    key: 'charger',
                     width: 80,
                     align: 'center',
                     // render: (h, params) => {
@@ -389,7 +398,7 @@ export default {
                 },
                 {
                     title: '状态',
-                    key: 'status',
+                    key: 'userstory_status',
                     width: 85,
                     align: 'center',
                     render: (h, params) => {
@@ -398,7 +407,7 @@ export default {
                             {
                                 style:{
                                 	color:"white",
-                                	background:(function(S){if(S == "未开始"){return "#5cadff"}else if(S == "处理中"){return "#ff9900"}else if(S == "已完成"){return "#19be6b"}else{return "#1c2438"} })(params.row.status),
+                                	background:(function(S){if(S == "未开始"){return "#5cadff"}else if(S == "处理中"){return "#ff9900"}else if(S == "已完成"){return "#19be6b"}else{return "#1c2438"} })(params.row.userstory_status),
                                 	padding:'0.5em',
                                 	display:"inline-block",
                                 	borderRadius:"3px",
@@ -407,19 +416,19 @@ export default {
 
                                 //domProps:{href:"###"},
                             },
-                            params.row.status
+                            params.row.userstory_status
                         )
                     }
                 },
                 {
                     title: '所属迭代',
-                    key: 'Iteration',
+                    key: 'sprint_id',
                     width: 90,
                     align: 'center',
                 },
                 {
                     title: '优先级',
-                    key: 'priority',
+                    key: 'proi',
                     width: 80,
                     align: 'center',
                     render: (h, params) => {
@@ -439,7 +448,7 @@ export default {
                                 //domProps:{href:"###"},
                             },
                             //
-                            ((N) => {if (N == 1) {return "高"}else if (N == 2) {return "中"}else if (N == 3) {return "低"}else {return "无"}})(params.row.priority)
+                            ((N) => {if (N == 1) {return "高"}else if (N == 2) {return "中"}else if (N == 3) {return "低"}else {return "无"}})(params.row.proi)
                         )
                     }
 
@@ -524,43 +533,45 @@ export default {
                 }
             ],
 	        tableData: [
-                {
-					name: '用户故事1',
-					num: 18,
-					describe: '产品需求',
-					person:"谢呗",
-					status:"已完成",
-					Iteration:"迭代1",
-					priority:"1",
-					manHours:"20 | 10",
-					mission:"5 | 10",
-					icon: require("@/assets/images/user_02.png")
-                },
-                {
-					name: '用户故事2',
-					num: 24,
-					describe: '产品需求',
-					person:"谢呗2",
-					status:"处理中",
-					Iteration:"迭代2",
-					priority:"2",
-					manHours:"20 | 10",
-					mission:"5 | 10",
-					icon: require("@/assets/images/user_02.png")
-                },
-                {
-					name: '用户故事3',
-					num: 24,
-					describe: '产品需求',
-					person:"谢呗3",
-					status:"未开始",
-					Iteration:"迭代3",
-					priority:"3",
-					manHours:"20 | 10",
-					mission:"5 | 10",
-					icon: require("@/assets/images/user_02.png")
-                },
+     			//{
+					// userstory_name: '用户故事1',
+					// userstory_id: 18,
+					// userstory_type: '产品需求',
+					// charger:"谢呗",
+					// userstory_status:"已完成",
+					// sprint_id:"迭代1",
+					// proi:"1",
+					// manHours:"20 | 10",
+					// mission:"5 | 10",
+					// icon: require("@/assets/images/user_02.png")
+     			//},
+     			//{
+					// name: '用户故事2',
+					// num: 24,
+					// describe: '产品需求',
+					// person:"谢呗2",
+					// status:"处理中",
+					// Iteration:"迭代2",
+					// priority:"2",
+					// manHours:"20 | 10",
+					// mission:"5 | 10",
+					// icon: require("@/assets/images/user_02.png")
+     			//},
+     			//{
+					// name: '用户故事3',
+					// num: 24,
+					// describe: '产品需求',
+					// person:"谢呗3",
+					// status:"未开始",
+					// Iteration:"迭代3",
+					// priority:"3",
+					// manHours:"20 | 10",
+					// mission:"5 | 10",
+					// icon: require("@/assets/images/user_02.png")
+     			//},
             ],
+            tableDAtaTatol:0,
+            tableDAtaPageLine:3,
 		}
 	},
 	components: {
@@ -575,35 +586,111 @@ export default {
     },
 
 	mounted(){
-		for(let i=0;i<this.tableData.length;i++){
-			let statusNum = false;
-			let statusData = this.tableData[i].status;
-			if(statusData == "未开始"){
-				statusNum = "01";
-			}else if(statusData == "处理中"){
-				statusNum = "02";
-			}else if(statusData == "已完成"){
-				statusNum = "03";
-			}else{
-				statusNum = "04";
-			}
-			this.cardList[i].taskName = this.tableData[i].name
-			this.cardList[i].userName = this.tableData[i].person;
-			this.cardList[i].taskState = statusNum;
-			this.cardList[i].headPortrait = this.tableData[i].icon;
+		let ID = false;
+		if(localStorage.getItem('id') ){
+			ID = this.$router.history.current.query.id
+    	}else if(this.$router.history.current.query.id ){
+    		ID = this.$router.history.current.query.id
+    		localStorage.setItem('id', this.$router.history.current.query.id);
+    	}else{
+    		ID = 0;
+    	}
+    	this.tableDataAjaxFn(storyAll,1,3,"",ID);
 
+		EventBus.$on("moveEnd", this.moveEnd);
+        EventBus.$on("clickItem", this.clicked);
+        EventBus.$on("search", this.searchHandle);
+        EventBus.$on("addTask", this.addNewTask);
 
-			EventBus.$on("moveEnd", this.moveEnd);
-	        EventBus.$on("clickItem", this.clicked);
-	        EventBus.$on("search", this.searchHandle);
-	        EventBus.$on("addTask", this.addNewTask);
+        
 
+		// for(let i=0;i<this.tableData.length;i++){
+		// 	let statusNum = false;
+		// 	let statusData = this.tableData[i].status;
+		// 	if(statusData == "未开始"){
+		// 		statusNum = "01";
+		// 	}else if(statusData == "处理中"){
+		// 		statusNum = "02";
+		// 	}else if(statusData == "已完成"){
+		// 		statusNum = "03";
+		// 	}else{
+		// 		statusNum = "04";
+		// 	}
+		// 	this.cardList[i].taskName = this.tableData[i].name
+		// 	this.cardList[i].userName = this.tableData[i].person;
+		// 	this.cardList[i].taskState = statusNum;
+		// 	this.cardList[i].headPortrait = this.tableData[i].icon;
 
-
-		}
+		// }
 	},
 	methods:{
+		changeCurrentPage(i) {
+            this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"")
+        },
+        changePageSize(i) {
+        },
+        showError(ERR){
+            alert(ERR)
+        },
+        tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3,DATA = "",ID = 0){
+            defaultAXIOS(URL,{page:PAGE,limit:PAGELINE,data:DATA,id:ID},{timeout:20000,method:'get'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======agile***response+++",response,myData.list,"+++agile***response======>");
+                this.tableData = myData.rows;
+                this.tableDAtaTatol = myData.page_rows;
 
+                let _temp = {};
+				for(let i=0;i<this.tableData.length;i++){
+					_temp.taskName = this.tableData[i].userstory_name
+					_temp.userName = this.tableData[i].charger;
+					_temp.taskState = this.tableData[i].userstory_status;
+					_temp.headPortrait = this.tableData[i].icon ? this.tableData[i].icon : "/assets/images/user_02.png";
+					_temp.taskId = this.tableData[i].userstory_id;
+					_temp.description = "description";
+					_temp.userId = "userId_03";
+					_temp.groupId = "group_01";
+					_temp.bgColor = { background: "#f8d6af" };
+					_temp.taskStateStr = "测试";
+					this.cardList.push(_temp);
+					_temp = {};
+					
+
+				}
+				console.log("this.cardList-=-=-==-=",this.cardList)
+
+
+				//{
+					// userstory_name: '用户故事1',
+					// userstory_id: 18,
+					// userstory_type: '产品需求',
+					// charger:"谢呗",
+					// userstory_status:"已完成",
+					// sprint_id:"迭代1",
+					// proi:"1",
+					// manHours:"20 | 10",
+					// mission:"5 | 10",
+					// icon: require("@/assets/images/user_02.png")
+     			//},
+     			//{
+					// name: '用户故事2',
+					// num: 24,
+					// describe: '产品需求',
+					// person:"谢呗2",
+					// status:"处理中",
+					// Iteration:"迭代2",
+					// priority:"2",
+					// manHours:"20 | 10",
+					// mission:"5 | 10",
+					// icon: require("@/assets/images/user_02.png")
+     			//},
+
+
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
 		moveEnd(info) {
             // 移动卡片结束后
             console.log(" 移动卡片结束后 :::", info);

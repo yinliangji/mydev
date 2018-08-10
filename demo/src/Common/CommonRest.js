@@ -14,6 +14,7 @@ CommonRest.restUrl={
 	"projectTesterGroup":process.env.BASE_URL+"/project/testerGroup/",/****express 敏捷项目添加测试组 get****/
 	"projectDelete":process.env.BASE_URL+"/project/delete/",/****express 敏捷项目添加测试组 post****/
 	"projectEdit":process.env.BASE_URL+"/project/edit/",/****express 敏捷项目编辑 post****/
+	"projectGetProd":process.env.BASE_URL+"/project/get_prod/",/****express 敏捷项目获取所属产品 get****/
 
 }
 CommonRest.UA = navigator.userAgent.toLowerCase();
@@ -24,6 +25,8 @@ CommonRest.browser = {
 	"isAndroid":/Android/ig.test(CommonRest.UA) || /linux/ig.test(CommonRest.UA) ,
 	"isQQ":/\sQQ/ig.test(CommonRest.UA) ,
 }
+
+
 
 
 

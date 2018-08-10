@@ -169,7 +169,7 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAll,projectDelete} = Common.restUrl;
+const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup} = Common.restUrl;
 
 export default {
 	name: 'aglie',

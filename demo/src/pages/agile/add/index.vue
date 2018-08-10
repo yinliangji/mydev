@@ -10,13 +10,13 @@
 
 
                     <FormItem label="所属产品" prop="prod_id">
-                                <Select v-model="formValidate.prod_id" placeholder="请选择所属产品">
-                                    <Option value="1">产品1</Option>
-                                    <Option value="2">产品2</Option>
-                                    <Option value="3">产品3</Option>
-                                </Select> 
-                                
-                            </FormItem> 
+                        <Select v-model="formValidate.prod_id" placeholder="请选择所属产品">
+                            <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            <!-- <Option value="1">产品1</Option>
+                            <Option value="2">产品2</Option>
+                            <Option value="3">产品3</Option> -->
+                        </Select> 
+                    </FormItem> 
 
 
                     <FormItem label="项目名称" prop="prj_name">
@@ -61,7 +61,6 @@
                         <Input v-model="formValidate.prj_goal" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目目标"></Input>
                     </FormItem>
 
-
                     <!-- <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input> -->
                     <FormItem label="填写模块" prop="modulesAdd">
                         <Tag v-for="item in formValidate.modulesAdd" :key="item" :name="item" closable @on-close="handleClose">
@@ -83,8 +82,6 @@
                         </Select>
                     </FormItem> -->
 					<h3 class="Title">成员信息</h3>
-
-					
 
                     <Row>
                         <Col span="12">
@@ -186,26 +183,9 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup} = Common.restUrl;
-
+const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd} = Common.restUrl;
 
 import Store from '@/vuex/store'
-Date.prototype.Format = function (fmt) { // author: meizz
-    var o = {
-        "M+": this.getMonth() + 1, // 月份
-        "d+": this.getDate(), // 日
-        "h+": this.getHours(), // 小时
-        "m+": this.getMinutes(), // 分
-        "s+": this.getSeconds(), // 秒
-        "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
-        "S": this.getMilliseconds() // 毫秒
-    };
-    if (/(y+)/.test(fmt))
-        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
-        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-            return fmt;
-}
 
 const validateDate = (rule, value, callback) => {
     if (!value || !value[0] || !value[1]) {
@@ -221,49 +201,7 @@ const validateDate = (rule, value, callback) => {
     }
 };
 
-let throttle = (func, wait, options) =>{
-    /* options的默认值
-     *  表示首次调用返回值方法时，会马上调用func；否则仅会记录当前时刻，当第二次调用的时间间隔超过wait时，才调用func。
-     *  options.leading = true;
-     * 表示当调用方法时，未到达wait指定的时间间隔，则启动计时器延迟调用func函数，若后续在既未达到wait指定的时间间隔和func函数又未被调用的情况下调用返回值方法，则被调用请求将被丢弃。
-     *  options.trailing = true; 
-     * 注意：当options.trailing = false时，效果与上面的简单实现效果相同
-     */
-    var context, args, result;
-    var timeout = null;
-    var previous = 0;
-    if (!options) options = {};
-    var later = function() {
-        previous = options.leading === false ? 0 : _.now();
-        timeout = null;
-        result = func.apply(context, args);
-        if (!timeout) context = args = null;
-    };
-    return function() {
-        var now = _.now();
-        if (!previous && options.leading === false) previous = now;
-        // 计算剩余时间
-        var remaining = wait - (now - previous);
-        context = this;
-        args = arguments;
-        // 当到达wait指定的时间间隔，则调用func函数
-        // 精彩之处：按理来说remaining <= 0已经足够证明已经到达wait的时间间隔，但这里还考虑到假如客户端修改了系统时间则马上执行func函数。
-        if (remaining <= 0 || remaining > wait) {
-            // 由于setTimeout存在最小时间精度问题，因此会存在到达wait的时间间隔，但之前设置的setTimeout操作还没被执行，因此为保险起见，这里先清理setTimeout操作
-            if (timeout) {
-              clearTimeout(timeout);
-              timeout = null;
-            }
-            previous = now;
-            result = func.apply(context, args);
-            if (!timeout) context = args = null;
-        } else if (!timeout && options.trailing !== false) {
-            // options.trailing=true时，延时执行func函数
-            timeout = setTimeout(later, remaining);
-        }
-        return result;
-    };
-};
+
 
 
 export default {
@@ -274,16 +212,16 @@ export default {
         
     },
     beforecreated(){
-        console.log("agileAdd--beforecreated-------",this.formValidate.modules)
+        console.log("agileAdd--beforecreated-------",this.formValidate.prod_id)
     },
     created(){
-        console.log("agileAdd--created-------",this.formValidate.modules)
+        console.log("agileAdd--created-------",this.formValidate.prod_id)
     },
     beforeUpdate(){
-        console.log("agileAdd--beforeUpdate-------",this.formValidate.modules)
+        console.log("agileAdd--beforeUpdate-------",this.formValidate.prod_id)
     },
     updated(){
-        console.log("agileAdd--updated-------",this.formValidate.modules)
+        console.log("agileAdd--updated-------",this.formValidate.prod_id)
     },
 	computed: {
         addtest() {
@@ -337,6 +275,18 @@ export default {
                 moudle:"",
                 group:"",
             },
+            prod_idList: [
+                // {
+                //   "id":1 ,
+                //   "product_id":"x000001",
+                //   "product_name":"product",
+                 
+                // }
+                // {
+                //     value: 'New York1',
+                //     label: 'New York总体组人1'
+                // },
+            ],
             allgroupList: [
                 {
                     value: 'New York1',
@@ -473,7 +423,7 @@ export default {
             ],
             ruleValidate: {
                 prod_id: [
-                    { required: false, message: 'Please select gender', trigger: 'change' }
+                    { required: false,type: 'string', message: 'Please select gender', trigger: 'change' }
                 ],
                 prj_type: [
                     { required: false, message: 'Please select gender', trigger: 'change' }
@@ -563,7 +513,7 @@ export default {
         //this.$refs.allgroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0].style.background = 'red';
 
         let allgroupBoxDOM = this.$refs.allgroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
-        let allgroupBoxDOMThrottle = throttle(()=>{console.log(allgroupBoxDOM.value)},1500)        
+        let allgroupBoxDOMThrottle = Common.throttle(()=>{console.log(allgroupBoxDOM.value)},1500)        
         allgroupBoxDOM.addEventListener("keyup", function(event){ 
             allgroupBoxDOMThrottle();//queryData(this.value)
             
@@ -572,8 +522,23 @@ export default {
         function queryData(text){
             console.log("搜索：" + text);
         }
+
+        defaultAXIOS(projectGetProd,{},{timeout:5000,method:'get'}).then((response) => {
+            let myData = response.data;
+            console.log("<======【agile product get】***response+++",response,myData.data.list,"====>");
+            let _tempObj = {};
+            for(var i=0;i<myData.data.list.length;i++){
+                _tempObj.value = myData.data.list[i].id+"";
+                _tempObj.label = myData.data.list[i].product_id+"";
+                this.prod_idList.push(_tempObj);
+                _tempObj = {}
+            }
+        }).catch( (error) => {
+            console.log(error);
+            this.showError(error);
+        });
         
-        //.$children[0].$sel.childNodes[0].childNodes[2].childNodes[3]
+        
     },
     
     methods: {

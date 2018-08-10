@@ -90,6 +90,8 @@ let mockDataList = (val1 = 200,val2 = 1,val3 = 3)=>{
 
 
 
+
+
 let detail = (val1 = 200,val2 = 1,val3 = 3)=>{
   return Mock.mock({
       "status": val1,
@@ -172,6 +174,31 @@ app.all('/project/detail/1', function(req, res) {
   res.json(detail(req.body.myStatus));
   res.end()
 });
+
+let mockproductList = (val1 = 200,val2 = 1,val3 = 3)=>{
+  return Mock.mock({
+      "status": val1,
+      "message":"mockDataList xxxxxxx",
+      data:{
+        "list|3-9":[ {
+          "id|+1":1 ,
+          "product_id|5-8":/[a-zA-Z]/,
+          "product_name":"product",
+          "__value2__page":val2,
+          "__value3__pageline":val3,
+      }],
+      
+      },
+  })
+}
+app.all('/project/get_prod/', function(req, res) {
+  let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  res.json(mockproductList(req.body.myStatus));
+  res.end()
+});
+
 
 app.all('/project/edit', function(req, res) {
   let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);

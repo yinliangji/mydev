@@ -25,6 +25,8 @@ CommonRest.restUrl = {
     /****express 敏捷项目编辑 post****/
     "projectGetProd": process.env.BASE_URL + "/project/get_prod/",
     /****express 敏捷项目获取所属产品 get****/
+    "projectAddGroup": process.env.BASE_URL + "/project/addGroup/",
+    /****express 敏捷项目添加角色 get****/
 
 
 

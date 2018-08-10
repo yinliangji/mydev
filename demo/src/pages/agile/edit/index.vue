@@ -189,7 +189,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd} = Common.restUrl;
+const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup} = Common.restUrl;
 import Store from '@/vuex/store'
 
 const validateDate = (rule, value, callback) => {
@@ -306,6 +306,9 @@ export default {
                 //     value: 'New York1',
                 //     label: 'New York总体组人1'
                 // },
+            ],
+            AddGroupList:[
+
             ],
             allgroupList: [
                 {

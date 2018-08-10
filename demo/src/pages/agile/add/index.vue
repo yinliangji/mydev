@@ -84,6 +84,29 @@
                     </div>
 					<h3 class="Title">成员信息</h3>
                     <div class="fromBox">
+                        <Button type="success">添加角色</Button>
+                        <div class="newAddGroup">
+                            
+
+                            <Row v-for="(myItem,index) in AddGroupList" :key="index">
+                                <Col span="20">
+                                    <FormItem :label="myItem.myLabel" required :ref="myItem.myRef+index" :class="myItem.myRef+index">
+                                        <Select v-model="myItem.allgroup" filterable multiple :placeholder="'请选择'+myItem.myLabel">
+                                            <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2">
+                                                {{ item.label }}
+                                            </Option>
+                                        </Select>
+                                    </FormItem>
+                                </Col>
+                                <Col span="1">&nbsp;</Col>
+                                <Col span="3">
+                                    <Button type="error" long>删除</Button>
+                                </Col>
+                            </Row>
+
+                        </div>
+
+
 
                         <Row>
                             <Col span="12">
@@ -175,7 +198,6 @@
                 <FormItem label="模块名称">
                     <Input v-model="formItem.businessName" placeholder="请输入项目名称"></Input>
                 </FormItem>
-               
             </Form>
         </Modal>    
     </div>
@@ -186,8 +208,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd} = Common.restUrl;
-
+const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup} = Common.restUrl;
 import Store from '@/vuex/store'
 
 const validateDate = (rule, value, callback) => {
@@ -298,6 +319,23 @@ export default {
                 //     value: 'New York1',
                 //     label: 'New York总体组人1'
                 // },
+            ],
+            AddGroupList:[
+                {
+                    myRef:"selfRef",
+                    group:[],
+                    groupList:[
+                        {
+                            value: 'London',
+                            label: 'London总体组人2'
+                        },
+                        {
+                            value: 'Sydney',
+                            label: 'Sydney总体组人3'
+                        },
+                    ],
+                    myLabel:"12312313",
+                },
             ],
             allgroupList: [
                 // {

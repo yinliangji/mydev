@@ -201,9 +201,6 @@ const validateDate = (rule, value, callback) => {
     }
 };
 
-
-
-
 export default {
     props: {
         
@@ -494,7 +491,6 @@ export default {
                 ],
             },
             
-            
             editTableData:false,
             modal_add_loading:false,
             formItem: {
@@ -508,40 +504,50 @@ export default {
     mounted(){
         this.resetData();
 
-
-        
-        //this.$refs.allgroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0].style.background = 'red';
-
         let allgroupBoxDOM = this.$refs.allgroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
-        let allgroupBoxDOMThrottle = Common.throttle(()=>{console.log(allgroupBoxDOM.value)},1500)        
-        allgroupBoxDOM.addEventListener("keyup", function(event){ 
-            allgroupBoxDOMThrottle();//queryData(this.value)
-            
-        })
-
-        function queryData(text){
-            console.log("搜索：" + text);
-        }
-
-        defaultAXIOS(projectGetProd,{},{timeout:5000,method:'get'}).then((response) => {
-            let myData = response.data;
-            console.log("<======【agile product get】***response+++",response,myData.data.list,"====>");
-            let _tempObj = {};
-            for(var i=0;i<myData.data.list.length;i++){
-                _tempObj.value = myData.data.list[i].id+"";
-                _tempObj.label = myData.data.list[i].product_id+"";
-                this.prod_idList.push(_tempObj);
-                _tempObj = {}
+        let allgroupBoxDOMThrottle = Common.throttle(
+            ()=>{
+                console.log(allgroupBoxDOM.value)
+                this.projectAllgroupFn({
+                    VALUE:allgroupBoxDOM.value+"|"+this.formValidate.allgroup.join("|"),
+                });
             }
-        }).catch( (error) => {
-            console.log(error);
-            this.showError(error);
-        });
-        
-        
+            ,
+            2000
+        );
+
+        allgroupBoxDOM.addEventListener("keyup", function(event){ 
+            allgroupBoxDOMThrottle();
+        })
+        this.projectGetProdFn();
     },
     
     methods: {
+        projectAllgroupFn(params = {}){
+            defaultAXIOS(projectAllgroup,params,{timeout:5000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });   
+        },
+        projectGetProdFn(){
+            defaultAXIOS(projectGetProd,{},{timeout:5000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【agile product get】***response+++",response,myData.data.list,"====>");
+                let _tempObj = {};
+                for(var i=0;i<myData.data.list.length;i++){
+                    _tempObj.value = myData.data.list[i].id+"";
+                    _tempObj.label = myData.data.list[i].product_id+"";
+                    this.prod_idList.push(_tempObj);
+                    _tempObj = {}
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
         showError(ERR){
             alert(JSON.stringify(ERR))
         },

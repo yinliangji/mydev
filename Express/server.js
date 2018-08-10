@@ -110,7 +110,7 @@ let detail = (val1 = 200,val2 = 1,val3 = 3)=>{
           "logic_sys_id":"logic_sys_id",
           "phycics_sys_id":"phycics_sys_id",
           "modules":"模块1-1|模块2-2|",
-          "allgroup":"New York1|London|",
+          "allgroup":"Canberra|London|",
           "managerGroup":"Sydney|Ottawa|",
           "developerGroup":"Paris|",
           "testerGroup":"Canberra|",
@@ -191,11 +191,61 @@ let mockproductList = (val1 = 200,val2 = 1,val3 = 3)=>{
       },
   })
 }
+
+
+
 app.all('/project/get_prod/', function(req, res) {
   let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
   console.log("req==>",req.body);
   console.log("resVal==>",resVal);
   res.json(mockproductList(req.body.myStatus));
+  res.end()
+});
+
+
+
+let GroupList = (val1 = 200,val2 = 1,val3 = 3)=>{
+  return Mock.mock({
+      "status": val1,
+      "message":"mockDataList xxxxxxx",
+      data:{
+        "list":[
+            {
+                value: 'New York',
+                label: 'New York人1'
+            },
+            {
+                value: 'London',
+                label: 'London人2'
+            },
+            {
+                value: 'Sydney',
+                label: 'Sydney人3'
+            },
+            {
+                value: 'Ottawa',
+                label: 'Ottawa人4'
+            },
+            {
+                value: 'Paris',
+                label: 'Paris人5'
+            },
+            {
+                value: 'Canberra',
+                label: 'Canberra人6'
+            }
+        ],
+      
+      },
+  })
+}
+
+
+app.all('/project/allgroup/', function(req, res) {
+  let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  res.json(GroupList(req.body.myStatus));
   res.end()
 });
 

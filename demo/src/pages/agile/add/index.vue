@@ -228,6 +228,18 @@ export default {
 
     data () {
         let _this = this;
+        const validateDateEnd = (rule, value, callback) => {
+            if (value) {
+                let Timer = new Date(value).getTime() - new Date(this.formValidate.start_time).getTime();
+                if(Timer >= 0){
+                    callback()
+                }else{
+                    return callback(new Error('结束日期早于开始日期！'));
+                }
+            }else{
+                callback()  
+            }
+        };
         return {
             options3: {
                 disabledDate (date) {
@@ -433,8 +445,8 @@ export default {
                 //     { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
                 // ],
                 end_time: [//
-                    //{ required: false, type: 'date', validator: validateDate2, trigger: 'change' }
-                    { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
+                    { required: false, type: 'date', validator: validateDateEnd, trigger: 'change' }
+                    //{ required: false, type: 'date', message: 'Please select the date', trigger: 'change' }
                 ],
                 prj_desc: [
                     { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },

@@ -429,9 +429,9 @@ export default {
                 prj_name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
-                start_time: [
-                    { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
-                ],
+                // start_time: [
+                //     { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
+                // ],
                 end_time: [//
                     //{ required: false, type: 'date', validator: validateDate2, trigger: 'change' }
                     { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }

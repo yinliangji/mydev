@@ -97,7 +97,7 @@
 		                    </FormItem> 
                         </Col>
                         <Col span="12">
-	                        <FormItem label="项目经理" prop="managerGroup">
+	                        <FormItem label="项目经理" prop="managerGroup" ref="managerGroupBox">
                                 <Select v-model.lazy="formValidate.managerGroup" filterable multiple placeholder="请选择项目经理">
                                     <Option v-for="item in managerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
@@ -109,10 +109,10 @@
 		                    </FormItem> 
                         </Col>
                     </Row>
-                    
+                   
                     <Row>
                         <Col span="12">
-							<FormItem label="开发组" prop="developerGroup">
+							<FormItem label="开发组" prop="developerGroup" ref="developerGroupBox">
                                 <Select v-model.lazy="formValidate.developerGroup" filterable multiple placeholder="请选择开发组">
                                     <Option v-for="item in developerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
@@ -124,7 +124,7 @@
                             </FormItem>
                         </Col>
                         <Col span="12">
-                            <FormItem label="测试组" prop="testerGroup">
+                            <FormItem label="测试组" prop="testerGroup" ref="testerGroupBox">
                                 <Select v-model.lazy="formValidate.testerGroup" filterable multiple placeholder="请选择测试组">
                                     <Option v-for="item in testerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
@@ -516,34 +516,56 @@ export default {
     mounted(){
         this.resetData();
 
-        let allgroupBoxDOM = this.$refs.allgroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
-        
+
         let _this = this;
-        allgroupBoxDOM.addEventListener("keyup", function(event){
-            let _item = false;
-            if(this.placeholder.indexOf("总体组")  != -1){
-                _item = "allgroupList"
-            }else if(this.placeholder.indexOf("项目经理")  != -1){
-                _item = "managerGroupList"
-            }else if(this.placeholder.indexOf("开发组")  != -1){
-                _item = "developerGroupList"
-            }else if(this.placeholder.indexOf("测试组")  != -1){
-                _item = "testerGroupList"
-            }
-            Common.throttle(
-                ()=>{
-                    _this.projectGroupFn(
-                        projectAllgroup
-                        ,
-                        {VALUE:this.value+"|"+_this.formValidate.allgroup.join("|"),}
-                        ,
-                        "allgroupList"
-                    );
+        let allgroupBoxDOM = this.$refs.allgroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
+        let managerGroupBoxDOM = this.$refs.managerGroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
+        let developerGroupBoxDOM = this.$refs.developerGroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
+        let testerGroupBoxDOM = this.$refs.testerGroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
+
+        let DomArr = [allgroupBoxDOM,managerGroupBoxDOM,developerGroupBoxDOM,testerGroupBoxDOM] 
+
+
+        for(var I=0;I<DomArr.length;I++){
+            //
+            DomArr[I].addEventListener("keyup", function(event){
+                let _item = false;
+                let _URL = false;
+                if(this.placeholder.indexOf("总体组")  != -1){
+                    _item = "allgroupList";
+                    _URL = projectAllgroup;
+                }else if(this.placeholder.indexOf("项目经理")  != -1){
+                    _item = "managerGroupList";
+                    _URL = projectManagerGroup;
+                }else if(this.placeholder.indexOf("开发组")  != -1){
+                    _item = "developerGroupList";
+                    _URL = projectDeveloperGroup;
+                }else if(this.placeholder.indexOf("测试组")  != -1){
+                    _item = "testerGroupList";
+                    _URL = projectTesterGroup;
                 }
-                ,
-                2000
-            )();
-        })
+
+                Common.throttle(
+                    ()=>{
+                        _this.projectGroupFn(
+                            _URL
+                            ,
+                            {VALUE:this.value+"|"+_this.formValidate.allgroup.join("|"),}
+                            ,
+                            _item
+                        );
+                    }
+                    ,
+                    2000
+                )();
+            })
+            //
+
+        }
+        
+        
+        
+        
         this.projectGetProdFn();
     },
     

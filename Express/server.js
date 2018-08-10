@@ -248,6 +248,27 @@ app.all('/project/allgroup/', function(req, res) {
   res.json(GroupList(req.body.myStatus));
   res.end()
 });
+app.all('/project/managerGroup/', function(req, res) {
+  let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  res.json(GroupList(req.body.myStatus));
+  res.end()
+});
+app.all('/project/developerGroup/', function(req, res) {
+  let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  res.json(GroupList(req.body.myStatus));
+  res.end()
+});
+app.all('/project/testerGroup/', function(req, res) {
+  let resVal = mockDataList(req.body.myStatus,req.body.page,req.body.pageline);
+  console.log("req==>",req.body);
+  console.log("resVal==>",resVal);
+  res.json(GroupList(req.body.myStatus));
+  res.end()
+});
 
 
 app.all('/project/edit', function(req, res) {

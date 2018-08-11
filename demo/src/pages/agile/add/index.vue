@@ -84,14 +84,14 @@
                     </div>
 					<h3 class="Title">成员信息</h3>
                     <div class="fromBox">
-                        <Button type="success">添加角色</Button>
+                        <Button type="success" @click="addpart">添加角色</Button>
                         <div class="newAddGroup">
                             
 
                             <Row v-for="(myItem,index) in AddGroupList" :key="index">
                                 <Col span="20">
                                     <FormItem :label="myItem.myLabel" required :ref="myItem.myRef+index" :class="myItem.myRef+index">
-                                        <Select v-model="myItem.allgroup" filterable multiple :placeholder="'请选择'+myItem.myLabel">
+                                        <Select v-model="myItem.allgroup" :id="'sel'+index" filterable multiple :placeholder="'请填写或选择【'+myItem.myLabel+'】'">
                                             <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2">
                                                 {{ item.label }}
                                             </Option>
@@ -100,7 +100,7 @@
                                 </Col>
                                 <Col span="1">&nbsp;</Col>
                                 <Col span="3">
-                                    <Button type="error" long>删除</Button>
+                                    <Button type="error" long @click="groupDel(index)">删除</Button>
                                 </Col>
                             </Row>
 
@@ -193,6 +193,7 @@
                 </Form>
             </div>
         </Card>
+        
         <Modal ref="addPop" v-model="modaAdd" title="添加模块" @on-ok="submitModule"  ok-text="提交" :loading="modal_add_loading" visible="true">
             <Form :model="formItem" :label-width="80" >
                 <FormItem label="模块名称">
@@ -200,6 +201,18 @@
                 </FormItem>
             </Form>
         </Modal>    
+
+
+        <Modal ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart" on-cancel="partCancel"  ok-text="确定"  visible="true">
+            <Form  :label-width="80" >
+                <FormItem label="角色名称">
+                    <Input v-model="partName" placeholder="请输入角色名称（最多四个字）" maxlength="8"></Input>
+                </FormItem>
+            </Form>
+        </Modal>
+
+
+
     </div>
 </template>
 <script>
@@ -230,19 +243,48 @@ export default {
         
     },
     watch:{
+        AddGroupList(curVal,oldVal){
+            let _this = this;
+            this.$nextTick(()=>{
+                console.log(curVal[0].groupList,curVal,oldVal)
+
+                for(var i=0;i<curVal.length;i++){
+                    console.log(this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].childNodes[3])
+                    this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].childNodes[3].addEventListener("keyup", function(event){
+                        let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel",""));
+                        //
+                        Common.throttle(
+                            ()=>{
+                                _this.projectGroupFn(
+                                    projectAddGroup
+                                    ,
+                                    {VALUE:this.value+"|"+curVal[_num].group.join("|"),}
+                                    ,
+                                    _num
+                                );
+                            }
+                            ,
+                            2000
+                        )();
+                        //
+                    })
+                }
+              /*现在数据已经渲染完毕*/
+            })
+        },
         
     },
     beforecreated(){
-        console.log("agileAdd--beforecreated-------",this.formValidate.prod_id)
+        console.log("agileAdd--beforecreated-------",this.partName)
     },
     created(){
-        console.log("agileAdd--created-------",this.formValidate.prod_id)
+        console.log("agileAdd--created-------",this.partName)
     },
     beforeUpdate(){
-        console.log("agileAdd--beforeUpdate-------",this.formValidate.prod_id)
+        console.log("agileAdd--beforeUpdate-------",this.partName)
     },
     updated(){
-        console.log("agileAdd--updated-------",this.formValidate.prod_id)
+        console.log("agileAdd--updated-------",this.partName)
     },
 	computed: {
         addtest() {
@@ -319,23 +361,6 @@ export default {
                 //     value: 'New York1',
                 //     label: 'New York总体组人1'
                 // },
-            ],
-            AddGroupList:[
-                {
-                    myRef:"selfRef",
-                    group:[],
-                    groupList:[
-                        {
-                            value: 'London',
-                            label: 'London总体组人2'
-                        },
-                        {
-                            value: 'Sydney',
-                            label: 'Sydney总体组人3'
-                        },
-                    ],
-                    myLabel:"12312313",
-                },
             ],
             allgroupList: [
                 // {
@@ -551,6 +576,28 @@ export default {
                 businessName:"",
             },
             modaAdd: false,
+
+
+
+            AddGroupList:[
+                // {
+                //     myRef:"selfRef",
+                //     group:[],
+                //     groupList:[
+                //         {
+                //             value: 'London',
+                //             label: 'London总体组人2'
+                //         },
+                //         {
+                //             value: 'Sydney',
+                //             label: 'Sydney总体组人3'
+                //         },
+                //     ],
+                //     myLabel:"12312313",
+                // },
+            ],
+            partAdd: false,
+            partName:"",
             
         }
     },
@@ -605,11 +652,50 @@ export default {
     },
     
     methods: {
+        groupDel(I){
+            this.AddGroupList.splice(I, 1);
+        },
+        partCancel(){
+            this.partAdd = false;
+            this.partName = "";
+        },
+        addpart(){
+            this.partAdd = true;
+        },
+        submitPart(){
+            let _tempObj = {
+                myRef:"selfRef",
+                group:[],
+                groupList:[],
+                myLabel:"",
+            }
+            _tempObj.myLabel = this.partName;
+            this.AddGroupList.push(_tempObj);
+            this.partName = "";
+            _tempObj = null;
+
+            // this.$refs.selfRef0.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0].addEventListener("keyup", function(event){
+            //     console.log(this.value)
+            // })
+
+        },
+        partFn(){
+            console.log(this.$refs.selfRef0.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0])
+        },
+
+
+
+
         projectGroupFn(URL,params = {},ARR){
             defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
-                this[ARR] = myData.data.list;
+                if(typeof(ARR)  == "number"){
+                    this.AddGroupList[ARR].groupList = myData.data.list; 
+                }else{
+                    this[ARR] = myData.data.list;    
+                }
+                
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);

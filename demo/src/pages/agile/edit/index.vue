@@ -12,9 +12,7 @@
                         <FormItem label="所属产品" prop="prod_id">
                                     <Select  v-model="formValidate.prod_id" :value="formValidate.prod_id" placeholder="请选择所属产品">
                                         <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                        <!-- <Option value="1">产品1</Option>
-                                        <Option value="2">产品2</Option>
-                                        <Option value="3">产品3</Option> -->
+                                       
                                     </Select> 
                                     
                                 </FormItem> 
@@ -24,9 +22,7 @@
                             <Input v-model="formValidate.prj_name" placeholder="请填写项目名称"></Input>
                         </FormItem>
 
-                       <!--  <FormItem label="项目编号" prop="prj_id">
-                            <Input v-model="formValidate.prj_id" placeholder="请填写项目编号"></Input>
-                        </FormItem> -->
+                     
 
                         <FormItem label="项目类型" prop="prj_type">
                             <RadioGroup v-model="formValidate.prj_type">
@@ -35,9 +31,7 @@
                             </RadioGroup>
                         </FormItem>
 
-                       <!--  <FormItem label="设置时间" prop="date">
-                            <DatePicker :value="formValidate.date" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="选择开始和结束日期" v-model="formValidate.date" split-panels  style="width: 300px"></DatePicker>
-                        </FormItem> -->
+                       
 
     					<Row>
                             <Col span="12">
@@ -63,7 +57,6 @@
                         </FormItem>
 
 
-                        <!-- <Input v-model="formValidate.moudle" placeholder="请填写模块名称"></Input> -->
                         <FormItem label="填写模块" prop="modulesAdd">
                             <Tag v-for="item in formValidate.modulesAdd" :key="item" :name="item" closable @on-close="handleClose">
                                 {{ item}}
@@ -78,88 +71,45 @@
                             </Select>
                         </FormItem>
 
-                        <!-- <FormItem label="技术模块" prop="technology">
-                            <Select v-model="formValidate.technology" multiple >
-                                <Option v-for="item in technologyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                            </Select>
-                        </FormItem> -->
+                       
                     </div>
 					<h3 class="Title">编辑成员信息</h3>
 
 					
                     <div class="fromBox">
-                        <Row>
-                            <Col span="12">
-                                <FormItem label="总体组" prop="allgroup" ref="allgroupBox">
-                                    <!-- <Select v-model="formValidate.group" placeholder="请选择总体组">
-                                        <Option value="总体组1">总体组1</Option>
-                                        <Option value="总体组2">总体组2</Option>
-                                        <Option value="总体组3">总体组3</Option>
-                                    </Select> -->
-                                    <Select v-model.lazy="formValidate.allgroup" filterable multiple placeholder="请选择总体组">
-                                        <Option v-for="item in allgroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                    </Select>
-                                </FormItem> 
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="项目经理" prop="managerGroup" ref="managerGroupBox">
-                                    <Select v-model.lazy="formValidate.managerGroup" filterable multiple placeholder="请选择项目经理">
-                                        <Option v-for="item in managerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                    </Select>
-                                    <!-- <Select v-model="formValidate.manager" placeholder="请选择项目经理">
-                                        <Option value="经理1">经理1</Option>
-                                        <Option value="经理2">经理2</Option>
-                                        <Option value="经理3">经理3</Option>
-                                    </Select> -->
-                                </FormItem> 
-                            </Col>
-                        </Row>
-                       
-                        <Row>
-                            <Col span="12">
-                                <FormItem label="开发组" prop="developerGroup" ref="developerGroupBox">
-                                    <Select v-model.lazy="formValidate.developerGroup" filterable multiple placeholder="请选择开发组">
-                                        <Option v-for="item in developerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                    </Select>
-                                    <!-- <Select v-model="formValidate.developer" placeholder="请选择开发人员">
-                                        <Option value="开发人员1">开发人员1</Option>
-                                        <Option value="开发人员2">开发人员2</Option>
-                                        <Option value="开发人员3">开发人员3</Option>
-                                    </Select> -->
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="测试组" prop="testerGroup" ref="testerGroupBox">
-                                    <Select v-model.lazy="formValidate.testerGroup" filterable multiple placeholder="请选择测试组">
-                                        <Option v-for="item in testerGroupList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                    </Select>
-                                    <!-- <Select v-model="formValidate.tester" placeholder="请选择测试人员">
-                                        <Option value="测试人员1">测试人员1</Option>
-                                        <Option value="测试人员2">测试人员2</Option>
-                                        <Option value="测试人员3">测试人员13</Option>
-                                    </Select> -->
-                                </FormItem>
-                            </Col>
-                        </Row>
+                        
+
+
+
+                        <div class="newAddGroup">
+                            <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index">
+                                <Col span="20">
+                                    <FormItem 
+                                        :label="myItem.myLabel" 
+                                        :prop="'AddGroupList.'+index+'.group'"
+                                        :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                                         
+                                        :ref="myItem.myRef+index" 
+                                        :class="myItem.myRef+index"
+                                        >
+                                        <Select v-model.lazy="myItem.group" :id="'sel'+index" filterable multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
+                                            <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2">
+                                                {{ item.label }}
+                                            </Option>
+                                        </Select>
+                                    </FormItem>
+                                </Col>
+                                <Col span="1">&nbsp;</Col>
+                                <Col span="3">
+                                    <Button v-if="myItem.delBtn" type="error" long @click="groupDel(index)">删除</Button>
+                                </Col>
+                            </Row>
+                        </div>
+                        <div class="addpartBox">
+                            <Button type="success" @click="addpart">添加角色</Button>
+                        </div>
                                     
 
-                        <!-- 
-                        
-                        <Row>
-                            <Col span="12">
-                                       
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="维护人员" prop="maintainer">
-                                    <Select v-model="formValidate.maintainer" placeholder="请选择维护人员">
-                                        <Option value="维护人员1">测试人员1</Option>
-                                        <Option value="维护人员2">测试人员2</Option>
-                                        <Option value="维护人员3">测试人员13</Option>
-                                    </Select>
-                                </FormItem>
-                            </Col>
-                        </Row> 
-                    	-->
                     </div>
                     <FormItem>
                     	<!-- <Button type="primary" @click="submitAdd">提交</Button> -->
@@ -180,7 +130,32 @@
                 </FormItem>
                
             </Form>
-        </Modal>    
+        </Modal>  
+
+
+        <Modal ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart" on-cancel="partCancel"  ok-text="确定"  visible="true">
+            <Form  :label-width="80" >
+                <FormItem label="角色名称">
+                    <Input v-model="partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8"></Input>
+                </FormItem>
+            </Form>
+        </Modal>
+
+        <Modal v-model="modaDelete" width="300">
+            <p slot="header" style="color:#f60;text-align:center">
+                <Icon type="ios-information-circle"></Icon>
+                <span>删除确认</span>
+            </p>
+            <div style="text-align:center">
+                <p>删除无法恢复，是否继续？</p>
+            </div>
+            <div slot="footer">
+                <Button color="#1c2438" @click="delEnter">删除</Button>
+                <Button type="primary" @click="delCancel">取消</Button>
+            </div>
+        </Modal>
+
+
     </div>
 </template>
 <script>
@@ -219,6 +194,51 @@ export default {
     watch:{
         "formValidate.start_time":function(curVal,oldVal){
 
+        },
+        "formValidate.AddGroupList"(curVal,oldVal){
+            let _this = this;
+            this.$nextTick(()=>{
+                if(curVal){
+                    //
+                    for(var i=0;i<curVal.length;i++){
+                        console.log(this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].childNodes[3])
+                        this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].childNodes[3].addEventListener("keyup", function(event){
+                            let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel",""));
+                            //
+                            Common.throttle(
+                                ()=>{
+                                    let _URL = false;
+                                    if(curVal[_num].groupName == "allgroupList"){
+                                        _URL = projectAllgroup;
+                                    }else if(curVal[_num].groupName == "managerGroupList"){
+                                        _URL = projectManagerGroup;
+                                    }else if(curVal[_num].groupName == "developerGroupList"){
+                                        _URL = projectDeveloperGroup;
+                                    }else if(curVal[_num].groupName == "testerGroupList"){
+                                        _URL = projectTesterGroup;
+                                    }else{
+                                        _URL = projectAddGroup;
+                                    }
+                                    _this.projectGroupFn(
+                                        _URL
+                                        ,
+                                        {VALUE:this.value+"|"+curVal[_num].group.join("|"),}
+                                        ,
+                                        _num
+                                    );
+                                }
+                                ,
+                                2000
+                            )();
+                            //
+                        })
+                    }
+                    //
+                }
+
+                
+              /*现在数据已经渲染完毕*/
+            })
         },
     },
     beforecreated(){
@@ -274,6 +294,9 @@ export default {
                 prj_goal:"",
                 modulesAdd:[],
                 modules:[],
+                AddGroupList:[],
+
+
                 allgroup:[],
                 managerGroup:[],
                 developerGroup:[],
@@ -311,124 +334,18 @@ export default {
 
             ],
             allgroupList: [
-                {
-                    value: 'New York1',
-                    label: 'New York总体组人1'
-                },
-                {
-                    value: 'London',
-                    label: 'London总体组人2'
-                },
-                {
-                    value: 'Sydney',
-                    label: 'Sydney总体组人3'
-                },
-                {
-                    value: 'Ottawa',
-                    label: 'Ottawa总体组人4'
-                },
-                {
-                    value: 'Paris',
-                    label: 'Paris总体组人5'
-                },
-                {
-                    value: 'Canberra',
-                    label: 'Canberra总体组人6'
-                }
-            ],
-            managerGroupList: [
-                {
-                    value: 'New York2',
-                    label: 'New York项目经理1'
-                },
-                {
-                    value: 'London',
-                    label: 'London项目经理2'
-                },
-                {
-                    value: 'Sydney',
-                    label: 'Sydney项目经理3'
-                },
-                {
-                    value: 'Ottawa',
-                    label: 'Ottawa项目经理4'
-                },
-                {
-                    value: 'Paris',
-                    label: 'Paris项目经理5'
-                },
-                {
-                    value: 'Canberra',
-                    label: 'Canberra项目经理6'
-                }
-            ],
-            developerGroupList: [
-                {
-                    value: 'New York3',
-                    label: 'New York开发人员1'
-                },
-                {
-                    value: 'London',
-                    label: 'London开发人员2'
-                },
-                {
-                    value: 'Sydney',
-                    label: 'Sydney开发人员3'
-                },
-                {
-                    value: 'Ottawa',
-                    label: 'Ottawa开发人员4'
-                },
-                {
-                    value: 'Paris',
-                    label: 'Paris开发人员5'
-                },
-                {
-                    value: 'Canberra',
-                    label: 'Canberra开发人员6'
-                }
-            ],
-            testerGroupList: [
-                {
-                    value: 'New York4',
-                    label: 'New York测试人员1'
-                },
-                {
-                    value: 'London',
-                    label: 'London测试人员2'
-                },
-                {
-                    value: 'Sydney',
-                    label: 'Sydney测试人员3'
-                },
-                {
-                    value: 'Ottawa',
-                    label: 'Ottawa测试人员4'
-                },
-                {
-                    value: 'Paris',
-                    label: 'Paris测试人员5'
-                },
-                {
-                    value: 'Canberra',
-                    label: 'Canberra测试人员6'
-                }
-            ],
-            technologyList: [
-                {
-                    value: 'New York5',
-                    label: '技术模块1'
-                },
-                {
-                    value: 'London',
-                    label: '技术模块2'
-                },
-                {
-                    value: 'Sydney',
-                    label: '技术模块3'
-                },
                
             ],
+            managerGroupList: [
+               
+            ],
+            developerGroupList: [
+               
+            ],
+            testerGroupList: [
+               
+            ],
+            
             moduleList: [
                 {
                     value: '模块1-1',
@@ -523,56 +440,22 @@ export default {
                 businessName:"",
             },
             modaAdd: false,
+
+
+
+            partAdd: false,
+            partName:"",
+            modaDelete: false,
+            thisIndex:null,
+            myGroupName:"",
             
         }
     },
     mounted(){
-        
-        let _this = this;
-        let allgroupBoxDOM = this.$refs.allgroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
-        let managerGroupBoxDOM = this.$refs.managerGroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
-        let developerGroupBoxDOM = this.$refs.developerGroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
-        let testerGroupBoxDOM = this.$refs.testerGroupBox.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0];
-        let DomArr = [allgroupBoxDOM,managerGroupBoxDOM,developerGroupBoxDOM,testerGroupBoxDOM] 
-        for(var I=0;I<DomArr.length;I++){
-            DomArr[I].addEventListener("keyup", function(event){
-                let _item = false;
-                let _URL = false;
-                if(this.placeholder.indexOf("总体组")  != -1){
-                    _item = "allgroupList";
-                    _URL = projectAllgroup;
-                }else if(this.placeholder.indexOf("项目经理")  != -1){
-                    _item = "managerGroupList";
-                    _URL = projectManagerGroup;
-                }else if(this.placeholder.indexOf("开发组")  != -1){
-                    _item = "developerGroupList";
-                    _URL = projectDeveloperGroup;
-                }else if(this.placeholder.indexOf("测试组")  != -1){
-                    _item = "testerGroupList";
-                    _URL = projectTesterGroup;
-                }
-
-                Common.throttle(
-                    ()=>{
-                        _this.projectGroupFn(
-                            _URL
-                            ,
-                            {VALUE:this.value+"|"+_this.formValidate.allgroup.join("|"),}
-                            ,
-                            _item
-                        );
-                    }
-                    ,
-                    2000
-                )();
-            })
-        }
        
         this.projectGetProdFn();
-        
 
         if(this.$router.history.current.query.id){
-            console.log(this.formValidate)
             this.projectEditFn();
         }else{
             this.resetData();
@@ -581,11 +464,64 @@ export default {
     },
     
     methods: {
+        groupDel(I){
+            this.thisIndex = I;
+            this.modaDelete = true;
+            
+        },
+        partCancel(){
+            this.partAdd = false;
+            this.partName = "";
+        },
+        addpart(){
+            this.partAdd = true;
+        },
+        submitPart(){
+            let _tempObj = {
+                myRef:"selfRef",
+                group:[],
+                groupList:[],
+                myLabel:"",
+                delBtn:true,
+                groupName:"",
+                required:true,
+            }
+            _tempObj.myLabel = this.partName;
+            this.formValidate.AddGroupList.push(_tempObj);
+            this.partName = "";
+            _tempObj = null;
+
+            // this.$refs.selfRef0.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0].addEventListener("keyup", function(event){
+            //     console.log(this.value)
+            // })
+
+        },
+        partFn(){
+            console.log(this.$refs.selfRef0.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0])
+        },
+        delCancel(){
+          this.modaDelete = false;
+        },
+        delEnter(){
+            this.formValidate.AddGroupList.splice(this.thisIndex, 1);
+            this.thisIndex = null;
+            this.modaDelete = false;
+        },
+
+
+
+
+
         projectGroupFn(URL,params = {},ARR){
             defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
-                this[ARR] = myData.data.list;
+                if(typeof(ARR)  == "number"){
+                    this.formValidate.AddGroupList[ARR].groupList = myData.data.list; 
+                }else{
+                    this[ARR] = myData.data.list;    
+                }
+                
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);
@@ -613,13 +549,18 @@ export default {
                 console.log("<======【agile edit get】***response+++",response,myData.data,"====>");
                 let _temp = false;
                 for(var I in this.formValidate){
+
                     _temp = myData.data[I]+"";
                     if(_temp.indexOf("|") != -1){
-                       this.formValidate[I] = myData.data[I].split("|").filter(item=>item)
+                        //console.log("=-=-=-=-=-=--=-",I,this.formValidate[I] , myData.data[I].split("|").filter(item=>item))
+                        this.formValidate[I] = myData.data[I].split("|").filter(item=>item)
                     }else{
+                        //console.log("=-=-=-=-=-=--=-",I,this.formValidate[I] , myData.data[I])
                         this.formValidate[I] = myData.data[I];
                     }
                 }
+
+                
                 
 
             }).catch( (error) => {
@@ -655,15 +596,16 @@ export default {
             this.formValidate.prj_goal = "";
             this.formValidate.modulesAdd = [];
             this.formValidate.modules = [];
+
+            this.formValidate.prod_id = "";
+            this.formValidate.AddGroupList = [];
+            
+
+
             this.formValidate.allgroup = [];
             this.formValidate.managerGroup = [];
             this.formValidate.developerGroup = [];
             this.formValidate.testerGroup = [];
-            this.formValidate.prod_id = "";
-            
-
-
-
             this.formValidate.prj_id = "";
             this.editTableData = false;
             this.formValidate.date = [];
@@ -697,15 +639,16 @@ export default {
                 prj_desc: this.formValidate.prj_desc,
                 prj_goal: this.formValidate.prj_goal,
                 modules:_modules.join(_join),
-                allgroup: this.formValidate.allgroup.join(_join),
-                managerGroup: this.formValidate.managerGroup.join(_join),
-                developerGroup: this.formValidate.developerGroup.join(_join),
-                testerGroup: this.formValidate.testerGroup.join(_join),
+
                 prod_id:this.formValidate.prod_id,
+                AddGroupList:this.formValidate.AddGroupList,
 
 
                
-
+                // allgroup: this.formValidate.allgroup.join(_join),
+                // managerGroup: this.formValidate.managerGroup.join(_join),
+                // developerGroup: this.formValidate.developerGroup.join(_join),
+                // testerGroup: this.formValidate.testerGroup.join(_join),
                 //prj_id: this.formValidate.prj_id,
                 //num: parseInt(Math.random()*100),
                 //manager:"经理",
@@ -788,5 +731,9 @@ export default {
 }
 .fromBox {
 	width: 50%;
+}
+.addpartBox{
+    padding-bottom: 20px;
+    text-align: center;
 }
 </style>

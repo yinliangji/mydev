@@ -57,7 +57,7 @@
                         </FormItem>
 
 
-                        <FormItem label="填写模块" prop="modulesAdd">
+                        <FormItem label="填写模块" >
                             <Tag v-for="item in formValidate.modulesAdd" :key="item" :name="item" closable @on-close="handleClose">
                                 {{ item}}
                             </Tag>
@@ -197,12 +197,12 @@ export default {
         },
         "formValidate.AddGroupList"(curVal,oldVal){
             let _this = this;
-            this.$nextTick(()=>{
-                if(curVal){
+            if(curVal){
+                this.$nextTick(()=>{
                     //
                     for(var i=0;i<curVal.length;i++){
-                        console.log(this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].childNodes[3])
-                        this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].childNodes[3].addEventListener("keyup", function(event){
+                        let _DOM = this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].getElementsByClassName("ivu-select-input")[0];
+                        _DOM.addEventListener("keyup", function(event){
                             let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel",""));
                             //
                             Common.throttle(
@@ -234,11 +234,9 @@ export default {
                         })
                     }
                     //
-                }
-
-                
-              /*现在数据已经渲染完毕*/
-            })
+                /*现在数据已经渲染完毕*/
+                })
+            }
         },
     },
     beforecreated(){
@@ -449,6 +447,7 @@ export default {
             thisIndex:null,
             myGroupName:"",
             
+            
         }
     },
     mounted(){
@@ -496,9 +495,6 @@ export default {
             // })
 
         },
-        partFn(){
-            console.log(this.$refs.selfRef0.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0])
-        },
         delCancel(){
           this.modaDelete = false;
         },
@@ -508,16 +504,12 @@ export default {
             this.modaDelete = false;
         },
 
-
-
-
-
         projectGroupFn(URL,params = {},ARR){
             defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
                 if(typeof(ARR)  == "number"){
-                    this.formValidate.AddGroupList[ARR].groupList = myData.data.list; 
+                    this.formValidate.AddGroupList[ARR].groupList = myData.data.list;
                 }else{
                     this[ARR] = myData.data.list;    
                 }
@@ -549,13 +541,10 @@ export default {
                 console.log("<======【agile edit get】***response+++",response,myData.data,"====>");
                 let _temp = false;
                 for(var I in this.formValidate){
-
                     _temp = myData.data[I]+"";
                     if(_temp.indexOf("|") != -1){
-                        //console.log("=-=-=-=-=-=--=-",I,this.formValidate[I] , myData.data[I].split("|").filter(item=>item))
                         this.formValidate[I] = myData.data[I].split("|").filter(item=>item)
                     }else{
-                        //console.log("=-=-=-=-=-=--=-",I,this.formValidate[I] , myData.data[I])
                         this.formValidate[I] = myData.data[I];
                     }
                 }
@@ -598,7 +587,7 @@ export default {
             this.formValidate.modules = [];
 
             this.formValidate.prod_id = "";
-            this.formValidate.AddGroupList = [];
+            //this.formValidate.AddGroupList = this.defaultGroup;
             
 
 

@@ -114,8 +114,75 @@ let detail = (val1 = 200,val2 = 1,val3 = 3)=>{
           "managerGroup":"Sydney|Ottawa|",
           "developerGroup":"Paris|",
           "testerGroup":"Canberra|",
-          "prod_id":"2",
+          "prod_id":2,
           "prod_name|5-8":/[a-zA-Z]/,
+          AddGroupList:[
+              {
+                  myRef:"selfRef",
+                  group:["Canberra","London",],
+                  groupList:[
+                      {
+                          value: 'London',
+                          label: 'London人2'
+                      },
+                      {
+                          value: 'Canberra',
+                          label: 'Canberra人6'
+                      }
+                  ],
+                  myLabel:"总体组",
+                  delBtn:false,
+                  groupName:"allgroupList",
+                  required:true,
+              },
+              {
+                  myRef:"selfRef",
+                  group:["Sydney","Ottawa",],
+                  groupList:[
+                      {
+                          value: 'Sydney',
+                          label: 'Sydney人3'
+                      },
+                      {
+                          value: 'Ottawa',
+                          label: 'Ottawa人4'
+                      },
+                  ],
+                  myLabel:"项目经理",
+                  delBtn:false,
+                  groupName:"managerGroupList",
+                  required:false,
+              },
+              {
+                  myRef:"selfRef",
+                  group:["Paris",],
+                  groupList:[
+                      {
+                          value: 'Paris',
+                          label: 'Paris人5'
+                      },
+                  ],
+                  myLabel:"开发组",
+                  delBtn:true,
+                  groupName:"developerGroupList",
+                  required:false,
+              },
+              {
+                  myRef:"selfRef",
+                  group:["Canberra",],
+                  groupList:[
+                      {
+                          value: 'Canberra',
+                          label: 'Canberra人6'
+                      }
+                  ],
+                  myLabel:"测试组",
+                  delBtn:true,
+                  groupName:"testerGroupList",
+                  required:false,
+              },
+          ],
+          modulesAdd:"",
           "__value2__page":val2,
           "__value3__pageline":val3,
       },

@@ -185,43 +185,46 @@ export default {
     watch:{
         "formValidate.AddGroupList"(curVal,oldVal){
             let _this = this;
-            this.$nextTick(()=>{
-
-                for(var i=0;i<curVal.length;i++){
-                    console.log(this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].childNodes[3])
-                    this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].childNodes[3].addEventListener("keyup", function(event){
-                        let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel",""));
-                        //
-                        Common.throttle(
-                            ()=>{
-                                let _URL = false;
-                                if(curVal[_num].groupName == "allgroupList"){
-                                    _URL = projectAllgroup;
-                                }else if(curVal[_num].groupName == "managerGroupList"){
-                                    _URL = projectManagerGroup;
-                                }else if(curVal[_num].groupName == "developerGroupList"){
-                                    _URL = projectDeveloperGroup;
-                                }else if(curVal[_num].groupName == "testerGroupList"){
-                                    _URL = projectTesterGroup;
-                                }else{
-                                    _URL = projectAddGroup;
+            if(curVal){
+                this.$nextTick(()=>{
+                    //
+                    for(var i=0;i<curVal.length;i++){
+                        let _DOM = this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].getElementsByClassName("ivu-select-input")[0];
+                        _DOM.addEventListener("keyup", function(event){
+                            let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel",""));
+                            //
+                            Common.throttle(
+                                ()=>{
+                                    let _URL = false;
+                                    if(curVal[_num].groupName == "allgroupList"){
+                                        _URL = projectAllgroup;
+                                    }else if(curVal[_num].groupName == "managerGroupList"){
+                                        _URL = projectManagerGroup;
+                                    }else if(curVal[_num].groupName == "developerGroupList"){
+                                        _URL = projectDeveloperGroup;
+                                    }else if(curVal[_num].groupName == "testerGroupList"){
+                                        _URL = projectTesterGroup;
+                                    }else{
+                                        _URL = projectAddGroup;
+                                    }
+                                    _this.projectGroupFn(
+                                        _URL
+                                        ,
+                                        {VALUE:this.value+"|"+curVal[_num].group.join("|"),}
+                                        ,
+                                        _num
+                                    );
                                 }
-                                _this.projectGroupFn(
-                                    _URL
-                                    ,
-                                    {VALUE:this.value+"|"+curVal[_num].group.join("|"),}
-                                    ,
-                                    _num
-                                );
-                            }
-                            ,
-                            2000
-                        )();
-                        //
-                    })
-                }
-              /*现在数据已经渲染完毕*/
-            })
+                                ,
+                                2000
+                            )();
+                            //
+                        })
+                    }
+                    //
+                /*现在数据已经渲染完毕*/
+                })
+            }
         },
         
     },
@@ -422,13 +425,14 @@ export default {
             modaDelete: false,
             thisIndex:null,
             myGroupName:"",
+            defaultGroup:[],
             
         }
     },
     mounted(){
         this.resetData();
 
-        this.formValidate.AddGroupList = [
+        this.defaultGroup = [
             {
                 myRef:"selfRef",
                 group:[],
@@ -466,6 +470,7 @@ export default {
                 required:false,
             },
         ]
+        this.formValidate.AddGroupList = this.defaultGroup;
         
 
         
@@ -499,15 +504,8 @@ export default {
             this.formValidate.AddGroupList.push(_tempObj);
             this.partName = "";
             _tempObj = null;
-
-            // this.$refs.selfRef0.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0].addEventListener("keyup", function(event){
-            //     console.log(this.value)
-            // })
-
         },
-        partFn(){
-            console.log(this.$refs.selfRef0.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0])
-        },
+        
         delCancel(){
           this.modaDelete = false;
         },
@@ -583,7 +581,7 @@ export default {
             this.formValidate.developerGroup = [];
             this.formValidate.testerGroup = [];
             this.formValidate.prod_id = "";
-            this.formValidate.AddGroupList = [];
+            this.formValidate.AddGroupList = this.defaultGroup;
             
 
 

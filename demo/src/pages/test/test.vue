@@ -1,38 +1,59 @@
 <template>
-
-  <div id="myChart" :style="{width: '350px', height: '350px'}" ref="myChart2"></div>
+    <!-- <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+        <FormItem label="Name" prop="name">
+            <Input v-model="formValidate.name" placeholder="Enter your name"></Input>
+        </FormItem>
+       
+        <FormItem>
+            <Button type="primary" @click="handleSubmit('formValidate')">Submit</Button>
+           
+        </FormItem>
+    </Form> -->
+<Modal ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel"  ok-text="确定" :loading="formPartValidate.loading"  >
+    <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
+        <FormItem label="角色名称" prop="partName">
+            <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8"></Input>
+        </FormItem>
+    </Form>
+</Modal>
 </template>
 <script>
- export default {
-  name: 'hello',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  },
-  mounted(){
-    this.drawLine();
-  },
-  methods: {
-    drawLine(){
-        // 基于准备好的dom，初始化echarts实例
-        // let myChart = this.$echarts.init(document.getElementById('myChart'))
-         let myChart = this.$echarts.init(this.$refs.myChart2)
-        // 绘制图表
-        myChart.setOption({
-            title: { text: '迭代上线情况', x: "center" },
-            tooltip: {},
-            xAxis: {
-                data: ["5.1","6.1","7.1","8.1","9.1","10.1"]
+    export default {
+        data () {
+            const validatePart = (rule, value, callback) => {
+                return callback(new Error('请选择日期'));
+                
+            };
+            return {
+                partAdd:true,
+                formPartValidate: {
+                    loading:true,
+                    partName: '',
+                   
+                },
+                rulePartValidate: {
+                    partName: [
+                        { required: true, validator: validatePart,  trigger: 'blur' }
+                    ],
+                    
+                }
+            }
+        },
+        methods: {
+            submitPart (name) {
+                this.partAdd = true;
+                
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.$Message.success('Success!');
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+                })
             },
-            yAxis: {},
-            series: [{
-                name: '迭代',
-                type: 'bar',
-                data: [5, 20, 36, 10, 10, 20]
-            }]
-        });
+            partCancel (name) {
+                this.$refs[name].resetFields();
+            }
+        }
     }
-  }
-}
 </script>

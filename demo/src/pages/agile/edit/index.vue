@@ -133,10 +133,10 @@
         </Modal>  
 
 
-        <Modal ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart" on-cancel="partCancel"  ok-text="确定"  visible="true">
-            <Form  :label-width="80" >
-                <FormItem label="角色名称">
-                    <Input v-model="partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8"></Input>
+        <Modal ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
+            <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
+                <FormItem label="角色名称" prop="partName">
+                    <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8"></Input>
                 </FormItem>
             </Form>
         </Modal>
@@ -266,6 +266,23 @@ export default {
                 }
             }else{
                 callback()  
+            }
+        };
+
+        const validatePart = (rule, value, callback) => {
+            if(!value){
+                return callback(new Error('请填写内容！'));    
+            }else{
+                if(this.formValidate.AddGroupList.length){
+                    for(var i=0;i<this.formValidate.AddGroupList.length;i++){
+                        if(this.formValidate.AddGroupList[i].myLabel == (value+"")){
+                            return callback(new Error('填写内容重复，请从新填写！')); 
+                        }
+                    }
+                    callback()
+                }else{
+                    callback()
+                }
             }
         };
 
@@ -442,11 +459,19 @@ export default {
 
 
             partAdd: false,
-            partName:"",
             modaDelete: false,
             thisIndex:null,
             myGroupName:"",
-            
+            formPartValidate: {
+                loading:true,
+                partName: '',
+            },
+            rulePartValidate: {
+                partName: [
+                    { required: true, validator: validatePart,  trigger: 'blur' }
+                ],
+                
+            },
             
         }
     },
@@ -470,30 +495,39 @@ export default {
         },
         partCancel(){
             this.partAdd = false;
-            this.partName = "";
+            this.formPartValidate.partName = "";
+            this.$refs.addPartPopBox.resetFields();
         },
         addpart(){
             this.partAdd = true;
         },
-        submitPart(){
-            let _tempObj = {
-                myRef:"selfRef",
-                group:[],
-                groupList:[],
-                myLabel:"",
-                delBtn:true,
-                groupName:"",
-                required:true,
-            }
-            _tempObj.myLabel = this.partName;
-            this.formValidate.AddGroupList.push(_tempObj);
-            this.partName = "";
-            _tempObj = null;
-
-            // this.$refs.selfRef0.$children[0].$refs.reference.getElementsByClassName("ivu-select-input")[0].addEventListener("keyup", function(event){
-            //     console.log(this.value)
-            // })
-
+        submitPart(name){
+            this.$refs.addPartPopBox.validate((valid) => {
+                this.formPartValidate.loading = false;
+                this.$nextTick(() => {
+                  this.formPartValidate.loading = true;
+                });
+                if (valid) {
+                    this.formPartValidate.loading = true;
+                    this.$nextTick(() => {
+                      this.formPartValidate.loading = true;
+                    });
+                    let _tempObj = {
+                        myRef:"selfRef",
+                        group:[],
+                        groupList:[],
+                        myLabel:"",
+                        delBtn:true,
+                        groupName:"",
+                        required:true,
+                    }
+                    _tempObj.myLabel = this.formPartValidate.partName;
+                    this.formValidate.AddGroupList.push(_tempObj);
+                    this.formPartValidate.partName = "";
+                    _tempObj = null;
+                    this.partAdd = false;
+                } 
+            })
         },
         delCancel(){
           this.modaDelete = false;

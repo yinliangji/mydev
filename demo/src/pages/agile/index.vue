@@ -347,7 +347,8 @@ export default {
         changePageSize(i) {
         },
         showError(ERR){
-            alert(ERR)
+            alert(JSON.stringify(ERR))
+            //this.$Message.info(JSON.stringify(ERR));
         },
         tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3){
             defaultAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'get'}).then((response) => {
@@ -508,20 +509,22 @@ export default {
         },
         goAgileDetailFn (I,P) {
             console.log(this.tableData[I].id,I,P)
+            Common.setCookie("id",this.tableData[I].id); 
             this.$router.push({path: '/agile/detail', query: {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id}})
         },
         goDemandFn (index) {
+
             this.$router.push('/demand')
         },
         goDevelopmentFn (I) {
-            //this.$router.push('/development')
+            Common.setCookie("id",this.tableData[I].id); 
             this.$router.push({path: '/development', query: {board: true,id: this.tableData[I].id}})
         },
         goOverViewFn (I){
             this.$router.push('/overView')
         },
         goProductFn (I){
-            //this.$router.push('/product')
+            Common.setCookie("id",this.tableData[I].id);
             this.$router.push({path: '/product', query: {board: true,id: this.tableData[I].id}})
         },
         show (index) {

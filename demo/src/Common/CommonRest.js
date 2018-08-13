@@ -33,7 +33,7 @@ CommonRest.restUrl = {
     "projectEdit": process.env.BASE_URL + "/project/edit/",
     /****express 敏捷项目编辑 post****/
 
-    "projectGetProd": process.env.BASE_URL + "/project/get_prod/",
+    "projectGetProd": process.env.BASE_URL + "/get_prod/",
     /****express 敏捷项目获取所属产品 get****/
 
     "projectAddGroup": process.env.BASE_URL + "/project/addGroup/",
@@ -44,6 +44,9 @@ CommonRest.restUrl = {
     
     "storyAdd": process.env.BASE_URL + "/userstory/addUserstory/",
     /****express 用户故事列表 get****/
+
+    "addTeam": process.env.BASE_URL + "/rbac/getRoles/",
+    /****express 敏捷项目获取角色 get****/
 
 
 

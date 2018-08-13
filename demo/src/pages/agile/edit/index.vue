@@ -4,7 +4,7 @@
         <Card>
             <div class="aglieAddBox">
                 
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" >
+                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" >
 					<h3 class="Title">编辑项目基本信息</h3>
 
 
@@ -136,7 +136,12 @@
         <Modal ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
             <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
                 <FormItem label="角色名称" prop="partName">
-                    <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8"></Input>
+                    
+                    <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8" v-if="!formPartValidate.addGroupList.length"></Input>
+
+                    <Select v-model="formPartValidate.partName" placeholder="请选择角色" v-else>
+                        <Option v-for="(item,index) in formPartValidate.addGroupList" :value="item.value" :key="index">{{ item.label }}</Option>
+                    </Select>
                 </FormItem>
             </Form>
         </Modal>
@@ -164,7 +169,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup} = Common.restUrl;
+const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail} = Common.restUrl;
 import Store from '@/vuex/store'
 
 const validateDate = (rule, value, callback) => {
@@ -270,13 +275,14 @@ export default {
         };
 
         const validatePart = (rule, value, callback) => {
+            console.log(value)
             if(!value){
-                return callback(new Error('请填写内容！'));    
+                return callback(new Error('内容不能为空！'));    
             }else{
                 if(this.formValidate.AddGroupList.length){
                     for(var i=0;i<this.formValidate.AddGroupList.length;i++){
                         if(this.formValidate.AddGroupList[i].myLabel == (value+"")){
-                            return callback(new Error('填写内容重复，请从新填写！')); 
+                            return callback(new Error('内容重复！')); 
                         }
                     }
                     callback()
@@ -300,7 +306,7 @@ export default {
             nowDate:"",
             defDate:"",
             formValidate: {
-                prod_id:"3",
+                prod_id:"",
                 prj_type:"",
                 prj_name:'',
                 start_time: '',
@@ -465,6 +471,8 @@ export default {
             formPartValidate: {
                 loading:true,
                 partName: '',
+                addGroupList: [
+                ],
             },
             rulePartValidate: {
                 partName: [
@@ -476,11 +484,12 @@ export default {
         }
     },
     mounted(){
+        this.addTeamFn(addTeam)
        
         this.projectGetProdFn();
 
         if(this.$router.history.current.query.id){
-            this.projectEditFn();
+            this.projectEditFn(projectEdit,this.$router.history.current.query.id);
         }else{
             this.resetData();
         }
@@ -488,6 +497,141 @@ export default {
     },
     
     methods: {
+        addTeamFn(URL,params = {}){
+            defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
+                let _tempObj = {};
+                for(var i=0;i<myData.data.length;i++){
+                    _tempObj.value = myData.data[i].name;
+                    _tempObj.label = myData.data[i].cn_name;
+                    this.formPartValidate.addGroupList.push(_tempObj);
+                    _tempObj = {};
+                }
+            }).catch( (error) => {
+                console.log(error);
+                let _tempArr =[
+                    {
+                        cn_name:"ICDP超级管理员",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"平台级别角色",
+                        domain:"",
+                        id:1,
+                        name:"icdp_superAdmin",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP管理员",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"平台级别角色",
+                        domain:"",
+                        id:2,
+                        name:"icdp_adminTeam",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP配置管理员",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:3,
+                        name:"icdp_confAdmin",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP项目经理",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:4,
+                        name:"icdp_projManager",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP产品经理",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:5,
+                        name:"icdp_prodManager",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP小组长",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:6,
+                        name:"icdp_teamLeader",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP敏捷教练",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:7,
+                        name:"icdp_agileCoach",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP总体组",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:8,
+                        name:"icdp_generalTeam",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP测试组",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:9,
+                        name:"icdp_testTeam",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP开发组",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:10,
+                        name:"icdp_devTeam",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                ]
+                let _tempObj = {};
+                for(var i=0;i<_tempArr.length;i++){
+                    _tempObj.value = _tempArr[i].name;
+                    _tempObj.label = _tempArr[i].cn_name;
+                    this.formPartValidate.addGroupList.push(_tempObj);
+                    _tempObj = {};
+                }
+                this.showError(error);
+            });   
+        },
         groupDel(I){
             this.thisIndex = I;
             this.modaDelete = true;
@@ -517,11 +661,14 @@ export default {
                         group:[],
                         groupList:[],
                         myLabel:"",
+                        myValue:"",
                         delBtn:true,
                         groupName:"",
                         required:true,
                     }
-                    _tempObj.myLabel = this.formPartValidate.partName;
+                    _tempObj.myLabel = this.formPartValidate.addGroupList.length ? this.formPartValidate.addGroupList.filter((item)=>{return item.value == this.formPartValidate.partName})[0].label : this.formPartValidate.partName;
+                    _tempObj.myValue = this.formPartValidate.partName;
+                    
                     this.formValidate.AddGroupList.push(_tempObj);
                     this.formPartValidate.partName = "";
                     _tempObj = null;
@@ -556,11 +703,11 @@ export default {
         projectGetProdFn(){
             defaultAXIOS(projectGetProd,{},{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======【agile product get】***response+++",response,myData.data.list,"====>");
+                console.log("<======【agile product get】***response+++",response,myData,"====>");
                 let _tempObj = {};
-                for(var i=0;i<myData.data.list.length;i++){
-                    _tempObj.value = myData.data.list[i].id+"";
-                    _tempObj.label = myData.data.list[i].product_id+"";
+                for(var i=0;i<myData.data.length;i++){
+                    _tempObj.value = myData.data[i].pid+"";
+                    _tempObj.label = myData.data[i].product_name+"";
                     this.prod_idList.push(_tempObj);
                     _tempObj = {}
                 }
@@ -569,10 +716,10 @@ export default {
                 this.showError(error);
             });            
         },
-        projectEditFn(){
-            defaultAXIOS(projectEdit,{id:this.$router.history.current.query.id},{timeout:2000,method:'get'}).then((response) => {
+        projectEditFn(URL = "",ID = 0){
+            defaultAXIOS(URL,{id:ID},{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======【agile edit get】***response+++",response,myData.data,"====>");
+                console.log("<======【agile edit get】***response+++",response,myData,"====>");
                 let _temp = false;
                 for(var I in this.formValidate){
                     _temp = myData.data[I]+"";
@@ -593,6 +740,7 @@ export default {
         },
         showError(ERR){
             alert(JSON.stringify(ERR))
+            //this.$Message.info(JSON.stringify(ERR));
         },
         resetData(){
             //new Date().Format("yyyy-MM-dd HH:mm:ss");
@@ -682,7 +830,7 @@ export default {
                 // endTime:this.formValidate.endDate,
             }
 
-
+            //projectEdit
             defaultAXIOS(projectAdd,tempData,{timeout:2000,method:'post'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;

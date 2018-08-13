@@ -114,8 +114,68 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
             "managerGroup": "Sydney|Ottawa|",
             "developerGroup": "Paris|",
             "testerGroup": "Canberra|",
-            "prod_id": "2",
+            "prod_id": 2,
             "prod_name|5-8": /[a-zA-Z]/,
+            AddGroupList: [{
+                    myRef: "selfRef",
+                    group: ["Canberra", "London", ],
+                    groupList: [{
+                            value: 'London',
+                            label: 'London人2'
+                        },
+                        {
+                            value: 'Canberra',
+                            label: 'Canberra人6'
+                        }
+                    ],
+                    myLabel: "总体组",
+                    delBtn: false,
+                    groupName: "allgroupList",
+                    required: true,
+                },
+                {
+                    myRef: "selfRef",
+                    group: ["Sydney", "Ottawa", ],
+                    groupList: [{
+                            value: 'Sydney',
+                            label: 'Sydney人3'
+                        },
+                        {
+                            value: 'Ottawa',
+                            label: 'Ottawa人4'
+                        },
+                    ],
+                    myLabel: "项目经理",
+                    delBtn: false,
+                    groupName: "managerGroupList",
+                    required: false,
+                },
+                {
+                    myRef: "selfRef",
+                    group: ["Paris", ],
+                    groupList: [{
+                        value: 'Paris',
+                        label: 'Paris人5'
+                    }, ],
+                    myLabel: "开发组",
+                    delBtn: true,
+                    groupName: "developerGroupList",
+                    required: false,
+                },
+                {
+                    myRef: "selfRef",
+                    group: ["Canberra", ],
+                    groupList: [{
+                        value: 'Canberra',
+                        label: 'Canberra人6'
+                    }],
+                    myLabel: "测试组",
+                    delBtn: true,
+                    groupName: "testerGroupList",
+                    required: false,
+                },
+            ],
+            modulesAdd: "",
             "__value2__page": val2,
             "__value3__pageline": val3,
         },
@@ -154,6 +214,52 @@ app.all('/project/all', function(req, res) {
     res.json(mockDataList(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
+
+
+let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        "rows|3-5": [{
+            "id": 1,
+            "userstory_id": 1,
+            "userstory_name|5-8": /[a-zA-Z]/,
+            "userstory_type": "产品需求",
+            "charger": "谢呗",
+            "userstory_status": "已完成",
+            "sprint_id": "迭代1",
+            "proi|1-3": 1,
+            "manHours": "20 | 10",
+            "mission": "5 | 10",
+            "phycics_sys_id": "phycics_sys_id",
+            "icon": "/assets/images/user_02.png",
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        }],
+        "page_rows|3-9": 3,
+        "per_page|3-9": 3,
+    })
+}
+
+app.all('/userstory/listUserstory/', function(req, res) {
+    let resVal = listUserstoryList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(listUserstoryList(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+app.all('/userstory/addUserstory/', function(req, res) {
+    let resVal = listUserstoryList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json({ status: 200, message: "ok" });
+    res.end()
+});
+
+
 
 
 app.post('/project/add', function(req, res) {
@@ -241,6 +347,34 @@ let GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
 
 
 app.all('/project/allgroup/', function(req, res) {
+    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(GroupList(req.body.myStatus));
+    res.end()
+});
+app.all('/project/managerGroup/', function(req, res) {
+    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(GroupList(req.body.myStatus));
+    res.end()
+});
+app.all('/project/developerGroup/', function(req, res) {
+    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(GroupList(req.body.myStatus));
+    res.end()
+});
+app.all('/project/testerGroup/', function(req, res) {
+    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(GroupList(req.body.myStatus));
+    res.end()
+});
+app.all('/project/addGroup/', function(req, res) {
     let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);

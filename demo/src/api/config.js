@@ -12,16 +12,17 @@ const defaultSet = {
     // 这里可以在发送请求之前对请求数据做处理，比如form-data格式化等，这里可以使用开头引入的Qs（这个模块在安装axios的时候就已经安装了，不需要另外安装）
     console.log("<======== 发送请求之前 transformRequest =======",data,"====>")
 
-    let formData = new FormData();
-    for (var I in data){
-      formData.append(I, data[I]);
-    }
-    return formData;
-    //data = JSON.stringify(data)
+    // let formData = new FormData();
+    // for (var I in data){
+    //   formData.append(I, data[I]);
+    // }
+    //return formData;
+    
+    data = JSON.stringify(data)
     //data = JSON.parse(JSON.stringify(data))
     //data = Qs.stringify(data);
     //data = Qs.parse(data)
-    //return data;
+    return data;
     
   }],
 

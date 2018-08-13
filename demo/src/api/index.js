@@ -12,9 +12,9 @@ import * as errorCode from './error'
 const {DemoURL_1} = Common.restUrl;
 let AXIOS = axios.create(config);
 
-//AXIOS.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8'
+AXIOS.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8'
 //AXIOS.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-AXIOS.defaults.headers['Content-Type'] = 'multipart/form-data'
+//AXIOS.defaults.headers['Content-Type'] = 'multipart/form-data'
 
 AXIOS.interceptors.request.use( (config) => {
 	console.log("<========AXIOS添加【请求】拦截器 config==========",config,"====>");

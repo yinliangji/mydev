@@ -125,6 +125,7 @@ const { iterationList } = Common.restUrl;
 export default {
     data() {
         return {
+          idDelData:[],
             totalPage: 100,
             currentPage: 1,
             pageSize: 10,
@@ -398,8 +399,17 @@ export default {
         },
 
         delSure() {
+
+
             let Table1Leg = this.Table1.list.length;
             let selectLeg = this.curSelelectList.length;
+
+            for(var j = 0; j < selectLeg; j++){
+              this.idDelData.push(
+                this.curSelelectList[j].id
+              )
+            };
+            console.log(this.idDelData);
             if (Table1Leg == selectLeg) {
                 this.Table1.list = [];
             } else {
@@ -465,9 +475,10 @@ export default {
                     limit: this.pageSize
                 }
             }).then(res => {
-                console.log(res.data.data.rows);
-                this.Table1.list = res.data.data.rows;
-                this.obj.list = res.data.data.rows;
+                console.log("list===");
+                console.log(res.data.rows);
+                this.Table1.list = res.data.rows;
+                this.obj.list = res.data.rows;
             });
         },
         searchFn() {

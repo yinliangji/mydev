@@ -464,7 +464,7 @@ export default {
                               url: iterationEdit,
                               data: {
                                   sprint_name: this.formValidate.taskName,
-                                  start_time: this.formValidate.startTime,
+                                  start_time: this.formValidate.startTime.Format("yyyy-MM-dd"),
                                   end_time:this.formValidate.endTime
                               }
                           }).then(res => {
@@ -476,10 +476,6 @@ export default {
                               });
                           });
                         }
-
-
-
-
                     }
                 } else {
                     this.$Message.error("请填写好必填内容!");
@@ -559,12 +555,12 @@ export default {
         this.dataR.forEach(element => {
             this.checkAllGroupOnoffR.push(element.type);
         });
-    },
-    mounted() {
         this.formValidate.taskName = this.$route.query.iterationName;
         this.formValidate.startTime = this.$route.query.startTime;
         this.formValidate.endTime = this.$route.query.endTime;
-
+        this.addOrModifyStatus = this.$route.query.addOrModifyStatus;
+    },
+    mounted() {
         this.$Message.config({
             top: 100,
             duration: 2

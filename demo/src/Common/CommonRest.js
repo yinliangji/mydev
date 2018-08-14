@@ -41,7 +41,7 @@ CommonRest.restUrl = {
 
     "storyAll": process.env.BASE_URL + "/userstory/listUserstory/",
     /****express 用户故事列表 get****/
-    
+
     "storyAdd": process.env.BASE_URL + "/userstory/addUserstory/",
     /****express 用户故事列表 get****/
 
@@ -55,7 +55,8 @@ CommonRest.restUrl = {
     "iterationAdd": process.env.BASE_URL + "/sprint/addSprint", //添加迭代post
     "iterationEdit": process.env.BASE_URL + "/sprint/editSprint", //编辑迭代post
     "iterationDel": process.env.BASE_URL + "/sprint/delSprint", //编辑迭代post
-    "iterationDetail": process.env.BASE_URL + "/sprint/detailSprint", //编辑迭代get
+    "iterationDetail": process.env.BASE_URL + "/sprint/detailSprint", //get 没用
+    "projectListData": process.env.BASE_URL + "/get_prj", //get
     //开发任务
     //qhc end
 

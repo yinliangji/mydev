@@ -125,6 +125,7 @@ const { iterationList } = Common.restUrl;
 export default {
     data() {
         return {
+          itertionId:"",
           idDelData:[],
             totalPage: 100,
             currentPage: 1,
@@ -246,7 +247,8 @@ export default {
                                                     startTime:
                                                         params.row.start_time,
                                                     endTime: params.row.end_time,
-                                                    addOrModifyStatus:true
+                                                    addOrModifyStatus:true,
+                                                    id: params.row.id
                                                 }
                                             });
                                         }
@@ -322,9 +324,10 @@ export default {
                                             this.modifyOnoff = true;
                                             this.modifyName =
                                                 params.row.sprint_name;
-                                            this.startTime =
+                                            this.start_time =
                                                 params.row.start_time;
-                                            this.endTime = params.row.end_time;
+                                            this.end_time = params.row.end_time;
+                                            this.itertionId = params.row.id
                                         }
                                     }
                                 },
@@ -435,7 +438,8 @@ export default {
                 query: {
                     iterationName: this.modifyName,
                     startTime: this.start_time,
-                    endTime: this.end_time
+                    endTime: this.end_time,
+                    id:this.itertionId
                 }
             });
         },
@@ -469,21 +473,18 @@ export default {
             this.$axios({
                 method: "get",
                 url: iterationList,
-                data: {
+                params: {
                     data: "",
                     page: this.currentPage,
                     limit: this.pageSize
                 }
             }).then(res => {
-                console.log("list===");
-                console.log(res.data.rows);
                 this.Table1.list = res.data.rows;
                 this.obj.list = res.data.rows;
             });
         },
         searchFn() {
-            alert(sessionStorage.getItem("id"));
-            // this.totalId = this.$route.query.id;
+
         }
     },
     computed: {},

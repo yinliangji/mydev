@@ -347,8 +347,18 @@ export default {
         changePageSize(i) {
         },
         showError(ERR){
-            alert(JSON.stringify(ERR))
-            //this.$Message.info(JSON.stringify(ERR));
+            //alert(JSON.stringify(ERR))
+            this.$Notice.config({
+                top:100,
+                duration: 10000
+            });
+            let MET = ERR.config.method ? ERR.config.method : "method";
+            let URL = ERR.config.url ? ERR.config.url : "url";
+            this.$Notice.open({
+                title: MET+" | "+URL,
+                desc: JSON.stringify(ERR),
+                duration: 10000
+            });
         },
         tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3){
             defaultAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'get'}).then((response) => {
@@ -404,7 +414,7 @@ export default {
                 this.error("请选择一项，进行编辑！")
                 return
             }
-            this.$router.push({path: '/agile/edit', query: {id:this.actionArr[0].id}})
+            this.$router.push({path: '/agile/edit', query: {id:this.actionArr[0].id,prj_id:this.actionArr[0].prj_id}})
             this.actionArr = [];
 
             // this.isShowAddPop = true;

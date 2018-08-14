@@ -11,6 +11,7 @@
 <script>
 import Store from '@/vuex/store'
 import API from '@/api'
+import Promise from 'thenfail'
 const {demoPostAXIOS} = API;
 
 export default {

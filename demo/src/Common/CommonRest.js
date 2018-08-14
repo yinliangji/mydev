@@ -45,7 +45,7 @@ CommonRest.restUrl = {
     "storyAdd": process.env.BASE_URL + "/userstory/addUserstory/",
     /****express 用户故事列表 get****/
 
-    "addTeam": process.env.BASE_URL + "/rbac/getRoles/",
+    "addTeam": process.env.SUB_BASE_URL + "/rbac/getRoles/",
     /****express 敏捷项目获取角色 get****/
 
 

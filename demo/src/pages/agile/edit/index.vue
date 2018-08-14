@@ -9,8 +9,8 @@
 
 
                     <div class="fromBox">
-                        <FormItem label="所属产品" prop="prod_id">
-                                    <Select  v-model="formValidate.prod_id" :value="formValidate.prod_id" placeholder="请选择所属产品">
+                        <FormItem label="所属产品" prop="pid">
+                                    <Select  v-model="formValidate.pid" :value="formValidate.prod_id" placeholder="请选择所属产品">
                                         <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                        
                                     </Select> 
@@ -307,6 +307,7 @@ export default {
             defDate:"",
             formValidate: {
                 prod_id:"",
+                pid:"",
                 prj_type:"",
                 prj_name:'',
                 start_time: '',
@@ -322,12 +323,13 @@ export default {
                 managerGroup:[],
                 developerGroup:[],
                 testerGroup:[],
+                prj_id:'',
 
 
 
 
 
-                // prj_id:'',
+                
                 // date:[],
                 // startTime: '',
                 // endTime: '',
@@ -384,6 +386,9 @@ export default {
             ],
             ruleValidate: {
                 prod_id: [
+                    { required: false,type: 'string',  message: 'Please select gender', trigger: 'change' }
+                ],
+                pid: [
                     { required: false,type: 'string',  message: 'Please select gender', trigger: 'change' }
                 ],
                 prj_type: [
@@ -485,11 +490,12 @@ export default {
     },
     mounted(){
         this.addTeamFn(addTeam)
-       
-        this.projectGetProdFn();
 
-        if(this.$router.history.current.query.id){
-            this.projectEditFn(projectEdit,this.$router.history.current.query.id);
+        let ID = this.$router.history.current.query.id ? this.$router.history.current.query.id : 0;
+        let PRJ_ID = this.$router.history.current.query.prj_id ? this.$router.history.current.query.prj_id : "";
+        this.projectGetProdFn(projectGetProd,{id:ID,prj_id:PRJ_ID});
+        if(ID && PRJ_ID){
+            this.projectEditFn(projectEdit,{id:ID,prj_id:PRJ_ID});
         }else{
             this.resetData();
         }
@@ -502,12 +508,18 @@ export default {
                 let myData = response.data;
                 console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
                 let _tempObj = {};
-                for(var i=0;i<myData.data.length;i++){
-                    _tempObj.value = myData.data[i].name;
-                    _tempObj.label = myData.data[i].cn_name;
-                    this.formPartValidate.addGroupList.push(_tempObj);
-                    _tempObj = {};
+                let _DATA = myData.data.length ? myData.data : myData;
+                if(_DATA && Array.isArray(_DATA) && _DATA.length){
+                    for(var i=0;i<_DATA.length;i++){
+                        _tempObj.value = _DATA[i].name;
+                        _tempObj.label = _DATA[i].cn_name;
+                        this.formPartValidate.addGroupList.push(_tempObj);
+                        _tempObj = {};
+                    }
+                }else{
+                    this.showError("数据不对");
                 }
+                
             }).catch( (error) => {
                 console.log(error);
                 let _tempArr =[
@@ -700,8 +712,8 @@ export default {
                 this.showError(error);
             });   
         },
-        projectGetProdFn(){
-            defaultAXIOS(projectGetProd,{},{timeout:5000,method:'get'}).then((response) => {
+        projectGetProdFn(URL,Obj = {}){
+            defaultAXIOS(URL,Obj,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile product get】***response+++",response,myData,"====>");
                 let _tempObj = {};
@@ -716,8 +728,9 @@ export default {
                 this.showError(error);
             });            
         },
-        projectEditFn(URL = "",ID = 0){
-            defaultAXIOS(URL,{id:ID},{timeout:5000,method:'get'}).then((response) => {
+        projectEditFn(URL = "",IDPRJID = {}){
+
+            defaultAXIOS(URL,IDPRJID,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile edit get】***response+++",response,myData,"====>");
                 let _temp = false;
@@ -729,18 +742,26 @@ export default {
                         this.formValidate[I] = myData.data[I];
                     }
                 }
-
-                
-                
-
+                this.formValidate.prj_type = this.formValidate.prj_type+"";
+                this.formValidate.pid = this.formValidate.pid+"";
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);
             });
         },
         showError(ERR){
-            alert(JSON.stringify(ERR))
-            //this.$Message.info(JSON.stringify(ERR));
+            //alert(JSON.stringify(ERR))
+            this.$Notice.config({
+                top:100,
+                duration: 10000
+            });
+            let MET = ERR.config.method ? ERR.config.method : "method";
+            let URL = ERR.config.url ? ERR.config.url : "url";
+            this.$Notice.open({
+                title: MET+" | "+URL,
+                desc: JSON.stringify(ERR),
+                duration: 10000
+            });
         },
         resetData(){
             //new Date().Format("yyyy-MM-dd HH:mm:ss");
@@ -770,6 +791,7 @@ export default {
 
             this.formValidate.prod_id = "";
             //this.formValidate.AddGroupList = this.defaultGroup;
+            this.formValidate.prj_id = this.$router.history.current.query.id ? this.$router.history.current.query.id : "";
             
 
 
@@ -777,7 +799,7 @@ export default {
             this.formValidate.managerGroup = [];
             this.formValidate.developerGroup = [];
             this.formValidate.testerGroup = [];
-            this.formValidate.prj_id = "";
+            
             this.editTableData = false;
             this.formValidate.date = [];
             this.formValidate.startTime = "";
@@ -794,25 +816,37 @@ export default {
         submitAddData(){
             let _modules = false;
             let _join = "|";
-            if(Array.isArray(this.formValidate.modulesAdd)){
+            if(  Array.isArray(this.formValidate.modules) && Array.isArray(this.formValidate.modulesAdd)  ){
                 this.formValidate.modules.push(...this.formValidate.modulesAdd)
-            }else{
+            }else if(Array.isArray(this.formValidate.modules) && !Array.isArray(this.formValidate.modulesAdd)){
                 this.formValidate.modules.push(this.formValidate.modulesAdd)
+            }else if(!Array.isArray(this.formValidate.modules) && Array.isArray(this.formValidate.modulesAdd)){
+                this.formValidate.modules = this.formValidate.modulesAdd.join(_join);
+            }else{
+                this.formValidate.modules = this.formValidate.modules + this.formValidate.modulesAdd;
             }
-            _modules = this.formValidate.modules
+            if(Array.isArray(this.formValidate.modules)){
+                _modules = this.formValidate.modules.join(_join)
+            }else{
+                _modules = this.formValidate.modules
+            }
+            
             let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
             let tempData = {
+                id:this.$router.history.current.query.id,
                 prj_type:this.formValidate.prj_type,
                 prj_name: this.formValidate.prj_name,
                 start_time:_start_time,
                 end_time:_end_time,
                 prj_desc: this.formValidate.prj_desc,
                 prj_goal: this.formValidate.prj_goal,
-                modules:_modules.join(_join),
+                modules:_modules,
 
                 prod_id:this.formValidate.prod_id,
+                pid:this.formValidate.prod_id,
                 AddGroupList:this.formValidate.AddGroupList,
+                prj_id: this.formValidate.prj_id,
 
 
                
@@ -820,7 +854,7 @@ export default {
                 // managerGroup: this.formValidate.managerGroup.join(_join),
                 // developerGroup: this.formValidate.developerGroup.join(_join),
                 // testerGroup: this.formValidate.testerGroup.join(_join),
-                //prj_id: this.formValidate.prj_id,
+                
                 //num: parseInt(Math.random()*100),
                 //manager:"经理",
                 //group:"group|group",
@@ -831,14 +865,17 @@ export default {
             }
 
             //projectEdit
-            defaultAXIOS(projectAdd,tempData,{timeout:2000,method:'post'}).then((response) => {
+            defaultAXIOS(projectEdit,tempData,{timeout:2000,method:'post'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======[agile edit post]***response+++",response,myData,"=====>");
-                this.modal_add_loading = false;
-                this.formItemReset();
-                this.$refs.formValidate.resetFields();
-                this.$router.push('/agile');
+                if(myData.status == "success"){
+                    this.modal_add_loading = false;
+                    this.formItemReset();
+                    this.$refs.formValidate.resetFields();
+                    this.$router.push('/agile');
+                }
+                
             }).catch( (error) => {
                 console.log(error);
                 this.modal_add_loading = false;

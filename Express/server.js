@@ -94,7 +94,7 @@ let mockDataList = (val1 = 200, val2 = 1, val3 = 3) => {
 
 let detail = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
-        "status": val1,
+        "status": "success",
         "message": "detail xxxxxxx",
         data: {
             "id|+1": 1,
@@ -115,8 +115,10 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
             "developerGroup": "Paris|",
             "testerGroup": "Canberra|",
             "prod_id": "2",
+            "pid": "2",
             "prod_name|5-8": /[a-zA-Z]/,
-            AddGroupList: [{
+            AddGroupList: [
+                {
                     myRef: "selfRef",
                     group: ["Canberra", "London", ],
                     groupList: [{
@@ -288,7 +290,7 @@ let mockproductList = (val1 = 200, val2 = 1, val3 = 3) => {
         "data|5": [{
                 "pid|+1": 1,
                 "product_id|5-8": /[a-zA-Z]/,
-                "product_name": "product",
+                "product_name|5-8": /[a-zA-Z]/,
                 "__value2__page": val2,
                 "__value3__pageline": val3,
             }
@@ -380,7 +382,7 @@ app.all('/project/addGroup/', function(req, res) {
 
 
 app.all('/project/edit', function(req, res) {
-    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
     res.json(detail(req.body.myStatus));

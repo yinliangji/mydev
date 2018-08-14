@@ -24,8 +24,8 @@
 
                         <FormItem label="项目类型" prop="prj_type">
                             <RadioGroup v-model="formValidate.prj_type">
-                                <Radio label="0">立研</Radio>
-                                <Radio label="1">自研</Radio>
+                                <Radio label="1">立研</Radio>
+                                <Radio label="2">自研</Radio>
                             </RadioGroup>
                         </FormItem>
 
@@ -297,7 +297,7 @@ export default {
             defDate:"",
             formValidate: {
                 prod_id:"",
-                prj_type:"0",
+                prj_type:"1",
                 prj_name:'',
                 start_time: '',
                 end_time: '',
@@ -749,8 +749,20 @@ export default {
             });
         },
         showError(ERR){
-            alert(JSON.stringify(ERR))
+            //alert(JSON.stringify(ERR))
             //this.$Message.info(JSON.stringify(ERR));
+            this.$Notice.config({
+                top:100,
+                duration: 10000
+            });
+            let MET = ERR.config.method ? ERR.config.method : "method";
+            let URL = ERR.config.url ? ERR.config.url : "url";
+            this.$Notice.open({
+                title: MET+" | "+URL,
+                desc: JSON.stringify(ERR),
+                duration: 10000
+            });
+
         },
         resetData(){
             //new Date().Format("yyyy-MM-dd HH:mm:ss");
@@ -787,7 +799,7 @@ export default {
 
 
 
-            this.formValidate.prj_id = "";
+            this.formValidate.prj_id = this.$router.history.current.query.id ? this.$router.history.current.query.id : "";
             this.editTableData = false;
             this.formValidate.date = [];
             this.formValidate.startTime = "";
@@ -825,6 +837,7 @@ export default {
                 modules:_modules.join(_join),
                 
                 prod_id:this.formValidate.prod_id,
+                pid:this.formValidate.prod_id,
                 AddGroupList:this.formValidate.AddGroupList,
 
 

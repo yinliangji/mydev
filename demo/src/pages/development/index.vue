@@ -15,7 +15,7 @@
             <Col span="15">
             <Row>
               <Col span="3" style="text-align: center">
-              <div class="searchName">迭代名称</div>
+              <div class="searchName">任务名称</div>
               </Col>
               <Col span="5">
               <FormItem>
@@ -23,7 +23,7 @@
               </FormItem>
               </Col>
               <Col span="3" style="text-align: center">
-              <div class="searchName">迭代编号</div>
+              <div class="searchName">任务编号</div>
               </Col>
               <Col span="5">
               <FormItem>
@@ -31,7 +31,7 @@
               </FormItem>
               </Col>
               <Col span="3" style="text-align: center">
-              <div class="searchName">需求名称</div>
+              <div class="searchName">用户故事</div>
               </Col>
               <Col span="5">
               <FormItem>
@@ -228,7 +228,7 @@ export default {
                     userId: "userId_03",
                     groupId: "group_01",
                     bgColor: { background: "#f8d6af" },
-                    taskStateStr: "测试",
+                    taskStateStr: "设计开发",
                     taskState: "02",
                     headPortrait: require("@/assets/images/user_02.png")
                 },
@@ -241,7 +241,7 @@ export default {
                     userId: "userId_04",
                     groupId: "group_03",
                     bgColor: { background: "#f8d6af" },
-                    taskStateStr: "发布",
+                    taskStateStr: "未开始",
                     taskState: "01",
                     headPortrait: require("@/assets/images/user_02.png")
                 },
@@ -281,21 +281,21 @@ export default {
                     groupId: "group_01",
                     bgColor: { background: "#f8d6af" },
                     taskStateStr: "测试",
-                    taskState: "01",
+                    taskState: "05",
                     headPortrait: require("@/assets/images/user_02.png")
                 },
                 {
-                    taskId: "#US0008",
-                    taskName: "任务名8XXX",
+                    taskId: "",
+                    taskName: "",
                     description:
                         "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-                    userName: "user1",
+                    userName: "",
                     userId: "userId_08",
                     groupId: "group_01",
-                    bgColor: { background: "#f8d6af" },
+                    bgColor: { background: "#fff" },
                     taskStateStr: "测试",
-                    taskState: "05",
-                    headPortrait: require("@/assets/images/user_02.png")
+                    taskState: "03",
+                    headPortrait: ""
                 }
             ];
             return _cardList;

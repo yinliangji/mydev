@@ -30,13 +30,13 @@ import echarts from 'echarts'
 Vue.prototype.$echarts = echarts;
 /* 通用开始 */
 Vue.filter('FALSEINFO', value => { // 交易明细
-  if (!value) {
-    return "没有数据"
-  }else{
-  	return value;
-  }
+    if (!value) {
+        return "没有数据"
+    } else {
+        return value;
+    }
 })
-Date.prototype.Format = function (fmt) { // author: meizz
+Date.prototype.Format = function(fmt) { // author: meizz
     var o = {
         "M+": this.getMonth() + 1, // 月份
         "d+": this.getDate(), // 日
@@ -50,8 +50,25 @@ Date.prototype.Format = function (fmt) { // author: meizz
         fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
     for (var k in o)
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-            return fmt;
+    return fmt;
 }
+
+Vue.prototype.setCookie = function(cname, cvalue) {
+    document.cookie = cname + "=" + cvalue + "; ";
+}
+
+Vue.prototype.getCookie = function(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(";");
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0)
+            return c.substring(name.length, c.length);;
+    }
+    return "";
+}
+
+
 /* 通用结束 */
 
 /* eslint-disable no-new */

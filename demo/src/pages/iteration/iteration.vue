@@ -439,7 +439,8 @@ export default {
                     if (!onoff) {
                         this.$Message.error("开始时间不能大于结束时间!");
                     } else {
-                        if(!addOrModifyStatus){
+                        alert(this.getCookie("prj_id"))
+                        if(!this.addOrModifyStatus){
                           //添加
                           //走接口
                           this.$axios({
@@ -447,8 +448,9 @@ export default {
                               url: iterationAdd,
                               data: {
                                   sprint_name: this.formValidate.taskName,
-                                  start_time: this.formValidate.startTime,
-                                  end_time:this.formValidate.endTime
+                                  start_time: this.formValidate.startTime.Format("yyyy-MM-dd"),
+                                  end_time:this.formValidate.endTime.Format("yyyy-MM-dd"),
+                                  prj_id:this.getCookie("prj_id")
                               }
                           }).then(res => {
                               console.log(res);
@@ -465,7 +467,9 @@ export default {
                               data: {
                                   sprint_name: this.formValidate.taskName,
                                   start_time: this.formValidate.startTime.Format("yyyy-MM-dd"),
-                                  end_time:this.formValidate.endTime
+                                  end_time:this.formValidate.endTime.Format("yyyy-MM-dd"),
+                                  prj_id:this.getCookie("prj_id"),
+                                  id:this.$route.query.id
                               }
                           }).then(res => {
                               console.log(res);

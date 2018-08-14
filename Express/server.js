@@ -114,7 +114,7 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
             "managerGroup": "Sydney|Ottawa|",
             "developerGroup": "Paris|",
             "testerGroup": "Canberra|",
-            "prod_id": 2,
+            "prod_id": "2",
             "prod_name|5-8": /[a-zA-Z]/,
             AddGroupList: [{
                     myRef: "selfRef",
@@ -285,25 +285,21 @@ let mockproductList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": val1,
         "message": "mockDataList xxxxxxx",
-        data: {
-            "list|3-9": [{
-                "id|+1": 1,
+        "data|5": [{
+                "pid|+1": 1,
                 "product_id|5-8": /[a-zA-Z]/,
                 "product_name": "product",
                 "__value2__page": val2,
                 "__value3__pageline": val3,
-            }],
-
-        },
+            }
+        ],
     })
 }
 
 
 
-app.all('/project/get_prod/', function(req, res) {
-    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
-    console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
+app.all('/get_prod/', function(req, res) {
+    
     res.json(mockproductList(req.body.myStatus));
     res.end()
 });
@@ -412,6 +408,138 @@ app.all('/menu/getMenu', function(req, res) {
     res.json(menuGetMenu(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
+
+
+
+
+let addGroupList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        data: [
+            {
+                cn_name:"ICDP超级管理员",
+                create_tiem:"2018-08-13 11:05:01",
+                description:"平台级别角色",
+                domain:"",
+                id:1,
+                name:"icdp_superAdmin",
+                order:0,
+                reserve:false,
+                sub_name:"",
+            },
+            {
+                cn_name:"ICDP管理员",
+                create_tiem:"2018-08-13 11:05:01",
+                description:"平台级别角色",
+                domain:"",
+                id:2,
+                name:"icdp_adminTeam",
+                order:0,
+                reserve:false,
+                sub_name:"",
+            },
+            {
+                cn_name:"ICDP配置管理员",
+                create_tiem:"2018-08-13 11:05:01",
+                description:"项目级别角色",
+                domain:"",
+                id:3,
+                name:"icdp_confAdmin",
+                order:0,
+                reserve:false,
+                sub_name:"",
+            },
+            {
+                cn_name:"ICDP项目经理",
+                create_tiem:"2018-08-13 11:05:01",
+                description:"项目级别角色",
+                domain:"",
+                id:4,
+                name:"icdp_projManager",
+                order:0,
+                reserve:false,
+                sub_name:"",
+            },
+            {
+                cn_name:"ICDP产品经理",
+                create_tiem:"2018-08-13 11:05:01",
+                description:"项目级别角色",
+                domain:"",
+                id:5,
+                name:"icdp_prodManager",
+                order:0,
+                reserve:false,
+                sub_name:"",
+            },
+            {
+                cn_name:"ICDP小组长",
+                create_tiem:"2018-08-13 11:05:01",
+                description:"项目级别角色",
+                domain:"",
+                id:6,
+                name:"icdp_teamLeader",
+                order:0,
+                reserve:false,
+                sub_name:"",
+            },
+            {
+                cn_name:"ICDP敏捷教练",
+                create_tiem:"2018-08-13 11:05:01",
+                description:"项目级别角色",
+                domain:"",
+                id:7,
+                name:"icdp_agileCoach",
+                order:0,
+                reserve:false,
+                sub_name:"",
+            },
+            {
+                cn_name:"ICDP总体组",
+                create_tiem:"2018-08-13 11:05:01",
+                description:"项目级别角色",
+                domain:"",
+                id:8,
+                name:"icdp_generalTeam",
+                order:0,
+                reserve:false,
+                sub_name:"",
+            },
+            {
+                cn_name:"ICDP测试组",
+                create_tiem:"2018-08-13 11:05:01",
+                description:"项目级别角色",
+                domain:"",
+                id:9,
+                name:"icdp_testTeam",
+                order:0,
+                reserve:false,
+                sub_name:"",
+            },
+            {
+                cn_name:"ICDP开发组",
+                create_tiem:"2018-08-13 11:05:01",
+                description:"项目级别角色",
+                domain:"",
+                id:10,
+                name:"icdp_devTeam",
+                order:0,
+                reserve:false,
+                sub_name:"",
+            },
+        ],
+    })
+}
+
+app.all('/rbac/getRoles/', function(req, res) {
+    let resVal = addGroupList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    
+    res.json(addGroupList(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
 
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {

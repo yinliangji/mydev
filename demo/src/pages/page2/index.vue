@@ -32,6 +32,7 @@ export default {
 			,
 			(err)=>{
 				console.log("err1",err);
+				Promise.break
 			}
 		)
 		.then(
@@ -42,6 +43,7 @@ export default {
 			,
 			(err)=>{
 				console.log("err2",err);
+				Promise.break
 			}
 		)
 		.then(
@@ -67,8 +69,8 @@ export default {
 		        setTimeout(function(){
 		        	console.log('===================');
 		            console.log('异步任务1执行完成');
-		            //resolve('随便什么数据1');
-		            reject('错误数据1');
+		            resolve('随便什么数据1');
+		            //reject('错误数据1');
 		        }, 2000);
 		    });
 		  },
@@ -78,8 +80,8 @@ export default {
 		        setTimeout(function(){
 		        	console.log('===================');
 		            console.log('异步任务2执行完成');
-		            resolve('随便什么数据2');
-		            //reject('错误数据2');
+		            //resolve('随便什么数据2');
+		            reject('错误数据2');
 		        }, 2000);
 		    });
 		  },

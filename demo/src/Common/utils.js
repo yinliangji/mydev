@@ -35,7 +35,8 @@ export default class Utils extends CommonRest {
         var r = window.location.search.substr(1).match(reg)
         if (r != null) return unescape(r[2]); return null
     }
-
+    
+    //函数节流
     static throttle (func, wait, options) {
         /* options的默认值
          *  表示首次调用返回值方法时，会马上调用func；否则仅会记录当前时刻，当第二次调用的时间间隔超过wait时，才调用func。

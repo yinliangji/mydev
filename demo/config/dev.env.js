@@ -7,4 +7,5 @@ module.exports = merge(prodEnv, {
   BASE_URL: '"http://127.0.0.1:9090"',
   //SUB_BASE_URL: '"http://128.192.219.84:8006"',
   SUB_BASE_URL: '"http://127.0.0.1:9090"',
+  TEST_URL:'"http://127.0.0.1:9090"'
 })

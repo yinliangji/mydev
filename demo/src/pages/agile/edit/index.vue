@@ -281,7 +281,7 @@ export default {
             }else{
                 if(this.formValidate.AddGroupList.length){
                     for(var i=0;i<this.formValidate.AddGroupList.length;i++){
-                        if(this.formValidate.AddGroupList[i].myLabel == (value+"")){
+                        if(this.formValidate.AddGroupList[i].myValue == (value+"")){
                             return callback(new Error('内容重复！')); 
                         }
                     }
@@ -504,25 +504,7 @@ export default {
     
     methods: {
         addTeamFn(URL,params = {}){
-            defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
-                let _tempObj = {};
-                let _DATA = myData.data.length ? myData.data : myData;
-                if(_DATA && Array.isArray(_DATA) && _DATA.length){
-                    for(var i=0;i<_DATA.length;i++){
-                        _tempObj.value = _DATA[i].name;
-                        _tempObj.label = _DATA[i].cn_name;
-                        this.formPartValidate.addGroupList.push(_tempObj);
-                        _tempObj = {};
-                    }
-                }else{
-                    this.showError("数据不对");
-                }
-                
-            }).catch( (error) => {
-                console.log(error);
-                let _tempArr =[
+            let _tempArr =[
                     {
                         cn_name:"ICDP超级管理员",
                         create_tiem:"2018-08-13 11:05:01",
@@ -634,6 +616,48 @@ export default {
                         sub_name:"",
                     },
                 ]
+            defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
+                let _tempObj = {};
+
+
+
+                // let _DATA = myData.data.length ? myData.data : myData;
+                // if(_DATA && Array.isArray(_DATA) && _DATA.length){
+                //     for(var i=0;i<_DATA.length;i++){
+                //         _tempObj.value = _DATA[i].name;
+                //         _tempObj.label = _DATA[i].cn_name;
+                //         this.formPartValidate.addGroupList.push(_tempObj);
+                //         _tempObj = {};
+                //     }
+                // }else{
+                //     this.showError("数据不对");
+                // }
+
+
+                let _myDataArr = false;
+                if(Array.isArray(myData) && myData.length){
+                    _myDataArr = myData;
+                }else if(Array.isArray(myData.data) && myData.data.length){
+                    _myDataArr = myData.data;
+                }else{
+                    _myDataArr = _tempArr;
+                }
+                for(var i=0;i<_myDataArr.length;i++){
+                    _tempObj.value = _myDataArr[i].name;
+                    _tempObj.label = _myDataArr[i].cn_name;
+                    this.formPartValidate.addGroupList.push(_tempObj);
+                    _tempObj = {};
+                }
+
+
+
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+               
                 let _tempObj = {};
                 for(var i=0;i<_tempArr.length;i++){
                     _tempObj.value = _tempArr[i].name;
@@ -641,7 +665,7 @@ export default {
                     this.formPartValidate.addGroupList.push(_tempObj);
                     _tempObj = {};
                 }
-                this.showError(error);
+                
             });   
         },
         groupDel(I){
@@ -753,14 +777,25 @@ export default {
             //alert(JSON.stringify(ERR))
             this.$Notice.config({
                 top:100,
-                duration: 10000
+                duration: 60
             });
-            let MET = ERR.config.method ? ERR.config.method : "method";
-            let URL = ERR.config.url ? ERR.config.url : "url";
+
+            let MET = false;
+            let URL = false;
+            if(ERR && ERR.config){
+                MET = ERR.config.method ? ERR.config.method : "无method";
+                URL = ERR.config.url ? ERR.config.url : "无url";
+            }else if(ERR){
+                MET = ERR;
+                URL = ERR;
+            }else{
+                MET = "无";
+                URL = "无";
+            }
             this.$Notice.open({
                 title: MET+" | "+URL,
                 desc: JSON.stringify(ERR),
-                duration: 10000
+                duration: 60
             });
         },
         resetData(){
@@ -833,6 +868,9 @@ export default {
             
             let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
+
+            let _proj_role = JSON.stringify(Common.objInArr(this.formValidate.AddGroupList));
+
             let tempData = {
                 id:this.$router.history.current.query.id,
                 prj_type:this.formValidate.prj_type,
@@ -845,8 +883,9 @@ export default {
 
                 prod_id:this.formValidate.prod_id,
                 pid:this.formValidate.prod_id,
-                AddGroupList:this.formValidate.AddGroupList,
+                AddGroupList:JSON.stringify(this.formValidate.AddGroupList),
                 prj_id: this.formValidate.prj_id,
+                proj_role:_proj_role,
 
 
                
@@ -865,7 +904,7 @@ export default {
             }
 
             //projectEdit
-            defaultAXIOS(projectEdit,tempData,{timeout:2000,method:'post'}).then((response) => {
+            defaultAXIOS(projectEdit,tempData,{timeout:5000,method:'post'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======[agile edit post]***response+++",response,myData,"=====>");
@@ -874,6 +913,9 @@ export default {
                     this.formItemReset();
                     this.$refs.formValidate.resetFields();
                     this.$router.push('/agile');
+                }else{
+                    this.modal_add_loading = false;
+                    this.showError(myData.status);
                 }
                 
             }).catch( (error) => {
@@ -882,16 +924,7 @@ export default {
                 this.showError(error);
             });
 
-            /*
-            setTimeout(() => {
-            	this.modal_add_loading = false;
-            	Store.dispatch('ADD_DATA_TEST/incrementAsync', {
-		            msg: tempData
-		        })
-                this.formItemReset();
-                this.$refs.formValidate.resetFields();
-            },1000)
-            */
+           
         },
         submitAdd () {
             this.$refs.formValidate.validate((valid)=>{//验证

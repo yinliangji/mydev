@@ -271,7 +271,7 @@ app.post('/project/add', function(req, res) {
 
 
     //res.json(mockDataList(req.body.myStatus,req.body.page,req.body.pageline));
-    res.json({ returnReq: "1111111", returnRes: "2222222" });
+    res.json({ status: "success" });
     res.end()
 });
 
@@ -313,7 +313,8 @@ let GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
         "status": val1,
         "message": "mockDataList xxxxxxx",
         data: {
-            "list": [{
+            "list": [
+                {
                     value: 'New York',
                     label: 'New York人1'
                 },

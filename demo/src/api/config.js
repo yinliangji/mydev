@@ -2,7 +2,8 @@ import Qs from 'qs'
 const defaultSet = {
   method: 'post',
   url: 'json.action',
-  baseURL:process.env.TEST_URL,
+  //baseURL:process.env.TEST_URL,
+  baseURL:"",
   
   data: {
     defaultParams:Date.now(),

@@ -238,7 +238,7 @@ export default {
                 			
                 		}
                 	}
-                    this.HTML = Common.toTable(this.formValidate.person,this.table,3,11);
+                    this.HTML = Common.toTable(this.formValidate.person,this.table,3,11,true);
                 }
 
 

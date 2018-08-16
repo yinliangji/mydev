@@ -49,17 +49,19 @@ export default class Common extends Utils {
     }
 
     //数组变表格--不通用
-    static toTable(OBJ,TAB,ROWS = 3,thW = 11){
+    static toTable(OBJ,TAB,ROWS = 3,thW = 11,Col = false){
       let _tempArr = [];
       let rows = ROWS;
       let _SH = parseInt(OBJ.length/rows);
+      let _sn = false;
+      let Colspan = Col;
       for(var i=0;i<OBJ.length;i++){
         if(i/rows && Number.isInteger(i/rows)){
           TAB.push(_tempArr);
           _tempArr = []
           if( i >= _SH*rows){
             let _jn = OBJ.length -(OBJ.length-i);
-            let _sn = rows - (OBJ.length-i);
+            _sn = rows - (OBJ.length-i);
             let _demo = {
               "title":"&nbsp;",
               "member":[
@@ -71,7 +73,7 @@ export default class Common extends Utils {
                       "id":4,
                   },
               ],
-          }
+            }
             for(var j=_jn;j<OBJ.length;j++){
               _tempArr.push(OBJ[j]);
             }
@@ -87,24 +89,49 @@ export default class Common extends Utils {
           _tempArr.push(OBJ[i])
         }
       }
-        //console.log(  )
       
       let Element = "";
         let thWidth = thW;
       for(var tr =0;tr<TAB.length;tr++){
          Element += '<tr>';
          for(var thtd = 0;thtd<TAB[tr].length;thtd++){
-                Element += '<th width="'+thWidth+'%">'
-                Element += TAB[tr][thtd].title
-                Element += '</th>'
-                Element += thtd == rows-1 ? '<td>' : '<td width="'+(100-(thWidth*rows))/rows+'%">'
-                for(var td =0;td<TAB[tr][thtd].member.length;td++){
-                    Element += '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
-                }
-                Element += '</td>'
-           }  
+          if(tr == TAB.length-1 && _sn && Colspan){
+
+
+            if(thtd >_sn){
+              Element += '<td colspan="'+_sn*2+'">&nbsp;</td>'
+            }else{
+              Element += '<th>'
+              Element += TAB[tr][thtd].title
+              Element += '</th>'
+              Element += '<td>'
+              for(var td =0;td<TAB[tr][thtd].member.length;td++){
+                  Element += '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
+              }
+              Element += '</td>'
+            }
+            
+
+
+
+
+          }else{
+            Element += tr == 0 ? '<th width="'+thWidth+'%">' : '<th>'
+            Element += TAB[tr][thtd].title
+            Element += '</th>'
+            Element += tr == 0 ? thtd == rows-1 ? '<td>' : '<td width="'+(100-(thWidth*rows))/rows+'%">' : '<td>'
+            for(var td =0;td<TAB[tr][thtd].member.length;td++){
+                Element += TAB[tr][thtd].member[td].nick_name == "&nbsp;" ? TAB[tr][thtd].member[td].nick_name : '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
+            }
+            Element += '</td>'
+          }
+
+                
+          }  
          Element += '</tr>'; 
       }
       return Element;   
     }
 }
+
+

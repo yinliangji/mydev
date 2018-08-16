@@ -18,7 +18,12 @@ AXIOS.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8'
 
 AXIOS.interceptors.request.use( (config) => {
 	console.log("<========AXIOS添加【请求】拦截器 config==========",config,"====>");
-	return config;
+    if(config){
+        return config;
+    }else{
+        return Promise.reject("没有获得 config");
+    }
+	
 },(error) => {
     // 对请求错误做些什么
     console.log("========AXIOS添加【请求】拦截器 error==========",error,"====>");
@@ -31,7 +36,7 @@ AXIOS.interceptors.response.use( (response) => {
     if (response) {
         return response
     }else{
-        alert("没有获得 response")
+        return Promise.reject("没有获得 response");
     }
 },(error) => {
     // 对响应错误做点什么

@@ -17,7 +17,7 @@ const defaultSet = {
     // for (var I in data){
     //   formData.append(I, data[I]);
     // }
-    //return formData;
+    // data = formData;
     
     data = JSON.stringify(data)
     //data = JSON.parse(JSON.stringify(data))

@@ -51,8 +51,17 @@
 		            	<h3 class="Title">成员信息</h3>
 		            	<div class="tableBox">
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
-								<tbody>
-									<tr>
+								<tbody >
+									<tr v-for="(item,index) in formValidate.person" :key="index">
+										<th width="11%">{{item.title}}</th>
+										<td>
+											<span v-for="(item2,index2) in item.member" :key="index2">
+												{{item2.nick_name}}
+											</span>
+										</td>
+									</tr> 
+									
+									<!-- <tr>
 										<th width="11%">项目经理</th>
 										<td>{{formValidate.managerGroup | FALSEINFO}}</td>
 										<th width="11%">开发人员</th>
@@ -64,11 +73,11 @@
 									<tr>
 										<th>总体组</th>
 										<td>{{formValidate.allgroup | FALSEINFO}}</td>
-										<th>&nbsp;<!-- 维护人员 --></th>
-										<td>&nbsp;<!-- 李卓、赵筝、谢蓓、王昕亮、邢磊 --></td>
 										<th>&nbsp;</th>
 										<td>&nbsp;</td>
-									</tr>
+										<th>&nbsp;</th>
+										<td>&nbsp;</td>
+									</tr> -->
 								</tbody>
 							</table>
 		            	</div>
@@ -146,12 +155,15 @@ export default {
                 prj_desc: "",
                 prj_goal:"",
                 modules:"",
-                allgroup:"",
-                managerGroup:"",
-                developerGroup:"",
-                testerGroup:"",
                 prod_name:"",
+                person:[],
+                // allgroup:"",
+                // managerGroup:"",
+                // developerGroup:"",
+                // testerGroup:"",
             },
+            table:[],
+            HTML:"<div>aaaa</div>"
         }
     },
     mounted(){
@@ -171,7 +183,29 @@ export default {
     
     methods: {
     	showError(ERR){
-    		alert(ERR)
+    		//alert(ERR)
+    		this.$Notice.config({
+                top:100,
+                duration: 60
+            });
+
+            let MET = false;
+            let URL = false;
+            if(ERR && ERR.config){
+                MET = ERR.config.method ? ERR.config.method : "无method";
+                URL = ERR.config.url ? ERR.config.url : "无url";
+            }else if(ERR){
+                MET = ERR;
+                URL = ERR;
+            }else{
+                MET = "无";
+                URL = "无";
+            }
+            this.$Notice.open({
+                title: MET+" | "+URL,
+                desc: JSON.stringify(ERR),
+                duration: 60
+            });
     	},
      	tableDataAjaxFn(URL = "",ID = 0){
             defaultAXIOS(URL+ID,{},{timeout:2000,method:'get'}).then((response) => {
@@ -181,14 +215,102 @@ export default {
                 let _temp = false;
                 if(myData.data && myData.data.id){
                 	for(var I in this.formValidate){
-                		_temp = myData.data[I]+"";
-                		if(_temp.indexOf("|") != -1){
-	                    	this.formValidate[I] = myData.data[I].replace("|","、").replace("|","").replace(/、?$/g,"");
-	                    }else{
-	                        this.formValidate[I] = myData.data[I];
-	                    }
+                		//_temp = myData.data[I]+"";
+                		this.formValidate[I] = myData.data[I];
+                		console.log(this.formValidate[I])
+
+                	// if(_temp.indexOf("|") != -1){
+	                //    	this.formValidate[I] = myData.data[I].replace("|","、").replace("|","").replace(/、?$/g,"");
+	                //    }else{
+	                //        this.formValidate[I] = myData.data[I];
+	                //    }
                 	}
                 }
+
+
+                if(myData.person && myData.person.length){
+                	
+                	this.formValidate.person = myData.person;
+                	for(var J=0;J<this.formValidate.person.length;J++){
+                		for(var K=0;K<this.formValidate.person[J].member.length-1;K++){
+                			this.formValidate.person[J].member[K].nick_name = this.formValidate.person[J].member[K].nick_name+"、";
+                			
+                		}
+                	}
+
+
+                	let _tempArr = [];
+                	let rows = 3;
+                	let _SH = parseInt(this.formValidate.person.length/rows);
+                	for(var i=0;i<this.formValidate.person.length;i++){
+                		if(i/rows && Number.isInteger(i/rows)){
+                			this.table.push(_tempArr);
+                			_tempArr = []
+                			console.log("=-=-=-=-=-",i , _SH*rows,i >= _SH*rows,this.formValidate.person.length-i)
+                			if( i >= _SH*rows){
+                				let _jn = this.formValidate.person.length -(this.formValidate.person.length-i);
+                				let _sn = rows - (this.formValidate.person.length-i);
+                				let _demo = {
+					                "title":"&nbsp;",
+					                "member":[
+					                    {
+					                        "nick_name":"&nbsp;",
+					                        "prj_id":"",
+					                        "role_name":"",
+					                        "user_name":"",
+					                        "id":4,
+					                    },
+					                ],
+					            }
+                				for(var j=_jn;j<this.formValidate.person.length;j++){
+                					_tempArr.push(this.formValidate.person[j]);
+                				}
+                				for(var k=0;k<_sn;k++){
+                					_tempArr.push(_demo);
+                				}
+                				this.table.push(_tempArr);
+                				_tempArr = []
+                			}else{
+                				_tempArr.push(this.formValidate.person[i]);
+                			}
+                		}else{
+                			_tempArr.push(this.formValidate.person[i])
+                		}
+                	}
+                	console.log("this.table",this.table);
+                	let TR = "";
+                	let TH = "";
+                	let TD = "";
+                	for(var tr =0;tr<this.table.length;tr++){
+                		TR += "<tr>";
+                		for(var th = 0; th<this.table[tr].length;th++){
+                			TH += "<th>"
+                			TH += "<==="+JSON.stringify(this.table[tr])+"====>"
+                			// for(var th1 = 0;th1<this.table[tr].length;th1++){
+
+                			// }
+                			TH += "</th>"
+                			TH += "<td>"
+                			TH += "this.table[td]"
+                			TH += "</td>"
+                		}
+                		TR += TH; 
+                		
+                		
+                		TR += "</tr>"; 
+                	}
+                	console.log(TR)
+
+
+
+
+
+                }
+
+
+
+
+
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);

@@ -99,14 +99,16 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
         data: {
             "id|+1": 1,
             "prj_id|+1": 100,
+
             "prj_name|5-8": /[a-zA-Z]/,
             "prj_manager": "项目经理",
             "prj_desc": "项目描述",
             "prj_goal": "项目目标",
+            "prj_type": "2",
             "settle_time": "2018-01-01",
             "start_time": "2018-10-10",
             "end_time": "2018-12-10",
-            "prj_type": "2",
+            
             "logic_sys_id": "logic_sys_id",
             "phycics_sys_id": "phycics_sys_id",
             "modules": "模块1-1|模块2-2|",
@@ -181,6 +183,140 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
             "__value2__page": val2,
             "__value3__pageline": val3,
         },
+        person:[
+            {
+                "title":"产品经理",
+                "member":[
+                    {
+                        "nick_name":"李卓",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_prodManager",
+                        "user_name":"lizhuo.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+            {
+                "title":"项目经理",
+                "member":[
+                    {
+                        "nick_name":"谢蓓",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+            {
+                "title":"开发组",
+                "member":[
+                    {
+                        "nick_name":"奇慧超",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"qihuichao",
+                        "id":4,
+                    },
+                    {
+                        "nick_name":"黄永华",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"huangyonghua",
+                        "id":5,
+                    },
+                    {
+                        "nick_name":"来咧",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"lailie",
+                        "id":6,
+                    },
+                    {
+                        "nick_name":"殷良骥",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"yinliangji",
+                        "id":7,
+                    },
+                ],
+
+            },
+            {
+                "title":"项目经理22",
+                "member":[
+                    {
+                        "nick_name":"谢蓓22",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+            {
+                "title":"项目经理33",
+                "member":[
+                    {
+                        "nick_name":"谢蓓3333",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+            {
+                "title":"项目经理44",
+                "member":[
+                    {
+                        "nick_name":"谢蓓444",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+            {
+                "title":"项目经理55",
+                "member":[
+                    {
+                        "nick_name":"谢蓓2555",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+            {
+                "title":"项目经理66",
+                "member":[
+                    {
+                        "nick_name":"谢蓓6666",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+        ],
     })
 }
 
@@ -276,7 +412,7 @@ app.post('/project/add', function(req, res) {
 });
 
 app.all('/project/detail/1', function(req, res) {
-    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
     res.json(detail(req.body.myStatus));

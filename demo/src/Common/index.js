@@ -47,4 +47,64 @@ export default class Common extends Utils {
       }
 
     }
+
+    //数组变表格--不通用
+    static toTable(OBJ,TAB,ROWS = 3,thW = 11){
+      let _tempArr = [];
+      let rows = ROWS;
+      let _SH = parseInt(OBJ.length/rows);
+      for(var i=0;i<OBJ.length;i++){
+        if(i/rows && Number.isInteger(i/rows)){
+          TAB.push(_tempArr);
+          _tempArr = []
+          if( i >= _SH*rows){
+            let _jn = OBJ.length -(OBJ.length-i);
+            let _sn = rows - (OBJ.length-i);
+            let _demo = {
+              "title":"&nbsp;",
+              "member":[
+                  {
+                      "nick_name":"&nbsp;",
+                      "prj_id":"",
+                      "role_name":"",
+                      "user_name":"",
+                      "id":4,
+                  },
+              ],
+          }
+            for(var j=_jn;j<OBJ.length;j++){
+              _tempArr.push(OBJ[j]);
+            }
+            for(var k=0;k<_sn;k++){
+              _tempArr.push(_demo);
+            }
+            TAB.push(_tempArr);
+            _tempArr = []
+          }else{
+            _tempArr.push(OBJ[i]);
+          }
+        }else{
+          _tempArr.push(OBJ[i])
+        }
+      }
+        //console.log(  )
+      
+      let Element = "";
+        let thWidth = thW;
+      for(var tr =0;tr<TAB.length;tr++){
+         Element += '<tr>';
+         for(var thtd = 0;thtd<TAB[tr].length;thtd++){
+                Element += '<th width="'+thWidth+'%">'
+                Element += TAB[tr][thtd].title
+                Element += '</th>'
+                Element += thtd == rows-1 ? '<td>' : '<td width="'+(100-(thWidth*rows))/rows+'%">'
+                for(var td =0;td<TAB[tr][thtd].member.length;td++){
+                    Element += '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
+                }
+                Element += '</td>'
+           }  
+         Element += '</tr>'; 
+      }
+      return Element;   
+    }
 }

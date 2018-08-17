@@ -760,6 +760,9 @@ export default {
                 let _temp = false;
                 for(var I in this.formValidate){
                     _temp = myData.data[I]+"";
+                    if(I == "AddGroupList"){
+
+                    }else 
                     if(_temp.indexOf("|") != -1){
                         this.formValidate[I] = myData.data[I].split("|").filter(item=>item)
                     }else{
@@ -768,6 +771,90 @@ export default {
                 }
                 this.formValidate.prj_type = this.formValidate.prj_type+"";
                 this.formValidate.pid = this.formValidate.pid+"";
+
+
+                
+
+                let objVal = (Arr,Lab) => {
+                    for(var O = 0;O< Arr.length;O++ ){
+                        if(Arr[O].label ==Lab){
+                            return Arr[O].value
+                        }
+                    }
+                }
+
+                
+
+                 //     value: 'New York1',
+                //     label: 'New York总体组人1'
+                let groupList = (Arr)=>{
+                    let _demoObj = {};
+                    let _demoArr = [];
+                    if(Arr.length){
+                        for(var A=0;A<Arr.length;A++){
+                            _demoObj.value = Arr[A].user_name;
+                            _demoObj.label = Arr[A].nick_name;
+                            _demoArr.push(_demoObj);
+                            _demoObj = {};
+                        }
+                        return _demoArr;
+                    }else{
+                        return  [];
+                    }
+                }
+                let group = (Arr)=>{
+                  
+                    let _demoArr = [];
+                    if(Arr.length){
+                        for(var A=0;A<Arr.length;A++){
+                            _demoArr.push(Arr[A].user_name);
+                        }
+                        return _demoArr;
+                    }else{
+                        return  [];
+                    }
+                }
+
+
+                //let roleUserInfo = myData.data.role_user_info ?
+                if(myData.role_user_info && myData.role_user_info.length){
+                    
+
+                    
+                    
+                    for(var J=0;J< myData.role_user_info.length;J++){
+
+
+                        let _tempObj = {
+                            myRef:"selfRef",
+                            group:[],
+                            groupList:[],
+                            myLabel:"",
+                            myValue:"",
+                            delBtn:true,
+                            groupName:"",
+                            required:true,
+                        }
+
+                        _tempObj.myLabel = myData.role_user_info[J].title;
+                        _tempObj.myValue = objVal(this.formPartValidate.addGroupList,myData.role_user_info[J].title)
+                        _tempObj.groupList = groupList(myData.role_user_info[J].member);
+                        _tempObj.group = group(myData.role_user_info[J].member); 
+                        //_tempObj.groupList = [{"value":"lizhuo.zh","label":"李卓"}]; 
+                        //console.log(List(myData.role_user_info[J].member))
+                       
+                        
+                        this.formValidate.AddGroupList.push(_tempObj);
+                    }
+                    //
+                }
+                //console.log("this.formPartValidate.addGroupList",this.formPartValidate.addGroupList)
+
+
+
+
+
+
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);

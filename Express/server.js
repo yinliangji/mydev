@@ -315,7 +315,74 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                    
                 ],
 
+            },            
+        ],
+        role_user_info:[
+            {
+                "title":"产品经理",
+                "member":[
+                    {
+                        "nick_name":"李卓",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_prodManager",
+                        "user_name":"lizhuo.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
             },
+            {
+                "title":"项目经理",
+                "member":[
+                    {
+                        "nick_name":"谢蓓",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+            {
+                "title":"开发组",
+                "member":[
+                    {
+                        "nick_name":"奇慧超",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"qihuichao",
+                        "id":4,
+                    },
+                    {
+                        "nick_name":"黄永华",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"huangyonghua",
+                        "id":5,
+                    },
+                    {
+                        "nick_name":"来咧",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"lailie",
+                        "id":6,
+                    },
+                    {
+                        "nick_name":"殷良骥",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"yinliangji",
+                        "id":7,
+                    },
+                ],
+
+            },
+            
+           
+                
         ],
     })
 }
@@ -350,6 +417,14 @@ app.all('/project/all', function(req, res) {
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
     res.json(mockDataList(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+app.all('/get_prj', function(req, res) {
+    
+    res.json(
+        [{"id":1,"prj_name":"xxxxx"}]
+    );
     res.end()
 });
 

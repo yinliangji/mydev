@@ -10,12 +10,12 @@
                         <Row>
                             <Col span="12">
                                 <FormItem label="所属产品" >
-                                    <span>xxxxx产品</span>
+                                    <span>{{formValidate.product_name}}</span>
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem label="所属项目" >
-                                    <span>xxxx项目</span>
+                                    <span>{{formValidate.prj_name}}</span>
                                 </FormItem>
                             </Col>
                         </Row>
@@ -32,9 +32,9 @@
 
                         <FormItem label="故事类型" prop="userstory_type">
                             <Select v-model="formValidate.userstory_type" placeholder="请选择事项类型">
-                                <Option value="用户需求">用户需求</Option>
-                                <Option value="生产问题">生产问题</Option>
-                                <Option value="自主创新">自主创新</Option>
+                                <Option value="1">用户需求</Option>
+                                <Option value="2">生产问题</Option>
+                                <Option value="3">自主创新</Option>
                             </Select>
                         </FormItem>
 
@@ -55,10 +55,10 @@
                        
                         <FormItem label="状态" prop="userstory_status">
                             <RadioGroup v-model="formValidate.userstory_status">
-                                <Radio label="提出">提出</Radio>
-                                <Radio label="开发中">开发中</Radio>
-                                <Radio label="测试">测试</Radio>
-                                <Radio label="上线">上线</Radio>
+                                <Radio label="1">提出</Radio>
+                                <Radio label="2">开发中</Radio>
+                                <Radio label="3">测试</Radio>
+                                <Radio label="4">上线</Radio>
                             </RadioGroup>
                         </FormItem>
 
@@ -79,11 +79,12 @@
 
                     <h3 class="Title">计划效率相关</h3>
                     <div class="fromBox">
-                        <FormItem label="所属迭代" prop="sprint_id">
-                            <Select v-model="formValidate.sprint_id" placeholder="请选所属迭代">
-                                <Option value="迭代1">迭代1</Option>
+                        <FormItem label="所属迭代" prop="sprint">
+                            <Select v-model="formValidate.sprint" placeholder="请选所属迭代">
+                                <!-- <Option value="迭代1">迭代1</Option>
                                 <Option value="迭代2">迭代2</Option>
-                                <Option value="迭代3">迭代3</Option>
+                                <Option value="迭代3">迭代3</Option> -->
+                                <Option v-for="(item , index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
                         </FormItem>
 
@@ -95,8 +96,8 @@
                     <h3 class="Title">需求相关</h3>
 
                     <div class="fromBox">
-                        <FormItem label="所属需求" prop="demand">
-                            <Select v-model="formValidate.demand" placeholder="请选择所属需求">
+                        <FormItem label="所属需求" prop="req_id">
+                            <Select v-model="formValidate.req_id" placeholder="请选择所属需求">
                                 <Option value="需求1">需求1</Option>
                                 <Option value="需求2">需求2</Option>
                                 <Option value="需求3">需求3</Option>
@@ -144,7 +145,7 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAdd} = Common.restUrl;
+const {storyAdd,storyGetSprint} = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -187,16 +188,16 @@ const validateNumber2 = (rule, value, callback) => {
 };
 export default {
     beforecreated(){
-        console.log("productAdd--beforecreated-------",this.addtest)
+        console.log("productAdd--beforecreated-------",this.formValidate)
     },
     created(){
-        console.log("productAdd--created-------",this.addtest)
+        console.log("productAdd--created-------",this.formValidate)
     },
     beforeUpdate(){
-        console.log("productAdd--beforeUpdate-------",this.addtest)
+        console.log("productAdd--beforeUpdate-------",this.formValidate)
     },
     updated(){
-        console.log("productAdd--updated-------",this.addtest)
+        console.log("productAdd--updated-------",this.formValidate)
         if(this.addtest){
             this.$router.push('/product')
         }
@@ -219,7 +220,16 @@ export default {
                 userstory_status:"",
                 proi:"3",
                 userstory_desc: '',
-                sprint_id:"",
+                sprint:"",
+                prj_name:"",
+                product_name:"",
+                id:"",
+                prj_id:"",
+                prod_id:"",
+                req_id:"",
+                req_name:"",
+
+
 
 
 
@@ -231,7 +241,7 @@ export default {
                 manhour:"",
                 mission:"",
                 business:[],
-                demand:"",
+                
                 introducer:"",
                 department:"",
                 
@@ -249,6 +259,13 @@ export default {
                 time: '',
                 
             },
+            sprintList:[
+                // {
+                //     value: 'New York',
+                //     label: '业务模块1'
+                // },
+            ],
+
             businessList: [
                 {
                     value: 'New York',
@@ -275,7 +292,7 @@ export default {
                 userstory_type: [
                     { required: true, message: 'Please select the city', trigger: 'change' }
                 ],
-                demand: [
+                req_id: [
                     { required: true, message: 'Please select the city', trigger: 'change' }
                 ],
                 introducer: [
@@ -289,7 +306,7 @@ export default {
                     { required: true, message: 'Please select gender', trigger: 'change' }
                 ],
                 
-                sprint_id: [
+                sprint: [
                     { required: false, message: 'Please select the city', trigger: 'change' }
                 ],
 
@@ -308,9 +325,105 @@ export default {
             },
         }
     },
+    mounted(){
+        let ID = false;
+        let prj_ID = false;
+        let prod_ID = false;
+
+        if(this.$router.history.current.query.id){
+           ID = this.$router.history.current.query.id 
+        }else if(localStorage.getItem('id')){
+           ID = localStorage.getItem('id')
+        }else if(Common.getCookie("id")){
+            ID = Common.getCookie("id")
+        }else{
+           ID = false; 
+        }
+
+
+        if(this.$router.history.current.query.prj_id){
+           prj_ID = this.$router.history.current.query.prj_id 
+        }else if(localStorage.getItem('prj_id')){
+           prj_ID = localStorage.getItem('prj_id')
+        }else if(Common.getCookie("prj_id")){
+            prj_ID = Common.getCookie("prj_id")
+        }else{
+           prj_ID = false; 
+        }
+
+        if(this.$router.history.current.query.prod_id){
+           prod_ID = this.$router.history.current.query.prod_id 
+        }else if(localStorage.getItem('prod_id')){
+           prod_ID = localStorage.getItem('prod_id')
+        }else if(Common.getCookie("prod_id")){
+            prod_ID = Common.getCookie("prod_id")
+        }else{
+           prod_ID = false; 
+        }
+
+
+
+
+        if(prj_ID && prod_ID){
+            this.formValidate.prj_id = prj_ID;
+            this.formValidate.prod_id = prod_ID;
+            this.formValidate.id = ID;
+            this.getStoryAddFn(ID,prj_ID,prod_ID);
+            this.storyGetSprintFn(ID,prj_ID,prod_ID)
+        }else{
+            this.$router.push('/agile');
+        }
+    },
     methods:{
+        storyGetSprintFn(id,prj_id,prod_id){
+            defaultAXIOS(storyGetSprint,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======product get sprintlist***response+++",response,myData,"======>");
+
+
+                
+                if(myData.sprintlist && myData.sprintlist.length){
+                     //value: 'New York',
+                //     label: '业务模块1'
+                    let _tempObj = {};
+                    for(let i=0;i<myData.sprintlist.length;i++){
+                        _tempObj.value = myData.sprintlist[i].sprint+"";
+                        _tempObj.label = myData.sprintlist[i].sp_name+"";
+                        this.sprintList.push(_tempObj);
+                        _tempObj = {};
+                    }
+
+                    
+                }else{
+                    this.showError("没有数据");
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+        getStoryAddFn(id,prj_id,prod_id){
+            defaultAXIOS(storyAdd,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======product get***response+++",response,myData,"======>");
+                
+                if(myData[0].status == "success"){
+                    this.formValidate.prj_name = myData[0].prj_name;
+                    this.formValidate.product_name = myData[0].product_name;
+                }else{
+                    this.showError(myData);
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
         showError(ERR){
-            alert(JSON.stringify(ERR))
+            Common.ErrorShow(ERR,this);
         },
         editItem(I){
             //this.tableDataIndex = I;
@@ -324,10 +437,13 @@ export default {
             this.formValidate.userstory_status="";
             this.formValidate.proi="3";
             this.formValidate.userstory_desc="";
-            this.formValidate.sprint_id="";
+            this.formValidate.sprint="";
             this.formValidate.manhour="";
             this.formValidate.mission="";
+            this.formValidate.req_id="";
+            this.formValidate.req_name="";
 
+            
 
 
 
@@ -338,7 +454,7 @@ export default {
             
             
             this.formValidate.mission=[];
-            this.formValidate.demand="";
+            
             this.formValidate.introducer="";
             this.formValidate.department="";
             
@@ -351,13 +467,21 @@ export default {
                 userstory_status:this.formValidate.userstory_status,
                 "proi": this.formValidate.proi,
                 "userstory_desc":this.formValidate.userstory_desc,
-                sprint_id:this.formValidate.sprint_id,
+                sprint:this.formValidate.sprint,
                 manHours:"0 | "+this.formValidate.manhour,
                 mission:this.formValidate.mission + " | 0",
                 icon: "/assets/images/user_02.png",
+                id:this.formValidate.id,
+                prj_id:this.formValidate.prj_id,
+                prod_id:this.formValidate.prod_id,
+                product_name:this.formValidate.product_name,
+                prj_name:this.formValidate.prj_name,
+                req_id:this.formValidate.req_id,
+                req_name:this.formValidate.req_name,
+                
 
 
-                num: parseInt(Math.random()*100),
+                //num: parseInt(Math.random()*100),
                 // priority:this.formValidate.grade,
                 // icon: require("@/assets/images/user_02.png"),
                 // person:"谢蓓",
@@ -367,7 +491,7 @@ export default {
             defaultAXIOS(storyAdd,tempData,{timeout:20000,method:'post'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("<======agile add***response+++",response,myData,"+++agile add***response======>");
+                console.log("<======product add***response+++",response,myData,"======>");
                 this.modal_add_loading = false;
                 this.formItemReset();
                 this.$refs.formValidate.resetFields();

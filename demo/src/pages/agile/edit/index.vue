@@ -862,28 +862,7 @@ export default {
         },
         showError(ERR){
             //alert(JSON.stringify(ERR))
-            this.$Notice.config({
-                top:100,
-                duration: 60
-            });
-
-            let MET = false;
-            let URL = false;
-            if(ERR && ERR.config){
-                MET = ERR.config.method ? ERR.config.method : "无method";
-                URL = ERR.config.url ? ERR.config.url : "无url";
-            }else if(ERR){
-                MET = ERR;
-                URL = ERR;
-            }else{
-                MET = "无";
-                URL = "无";
-            }
-            this.$Notice.open({
-                title: MET+" | "+URL,
-                desc: JSON.stringify(ERR),
-                duration: 60
-            });
+            Common.ErrorShow(ERR,this);
         },
         resetData(){
             //new Date().Format("yyyy-MM-dd HH:mm:ss");

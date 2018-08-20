@@ -433,19 +433,53 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": val1,
         "message": "mockDataList xxxxxxx",
+        "prj_name":"prj_name_xxxxxx",
+        "product_name":"product_name_xxxxxxxx",
         "rows|3-5": [{
             "id": 1,
             "userstory_id": 1,
             "userstory_name|5-8": /[a-zA-Z]/,
-            "userstory_type": "产品需求",
+            "userstory_type|1-3": 1,
             "charger": "谢呗",
-            "userstory_status": "已完成",
-            "sprint_id": "迭代1",
+            "userstory_status|1-4": 1,
+            //"sprint_id": "迭代1",
             "proi|1-3": 1,
             "manHours": "20 | 10",
             "mission": "5 | 10",
             "phycics_sys_id": "phycics_sys_id",
             "icon": "/assets/images/user_02.png",
+
+            "actual_online_time":"",
+            "charger":"",
+            "created_time":"2018-08-20 16:16:37",
+            "last_chg_time":"",
+            "last_chgr":"",
+            "learn_concern":"",
+            "plan_online_time":"",
+            
+            
+            "proposer":"",
+            "proposer_department":"",
+            "req_id":"需求2",
+            "req_name":"",
+            "sprint": 26,
+            "sprint_name":26,
+            "userstory_desc":"故事描述123123",
+
+            "prj_id":"prj_name_xxxxxx",
+            "prj_name":"敏捷项目0000",
+            "prod_id":"product1",
+            "product_name":"product_name_xxxxxxxx",
+
+
+
+
+            
+           
+            
+            
+
+
 
             "__value2__page": val2,
             "__value3__pageline": val3,
@@ -468,12 +502,173 @@ app.all('/userstory/addUserstory/', function(req, res) {
     let resVal = listUserstoryList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
-    res.json({ status: 200, message: "ok" });
+    res.json([{ status: "success", message: "ok" ,"prj_name":"敏捷项目0000_xxxxxx","product_name":"product_name_xxxxxxxx",}]);
+    res.end()
+});
+
+app.all('/userstory/modifyUserstory/', function(req, res) {
+    let resVal = listUserstoryList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json([{ status: "success", message: "ok" ,}]);
     res.end()
 });
 
 
 
+
+let sprintList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        
+        "sprintlist|3-6": [{
+            "sprint|+1": 25,
+            "sp_name|+1": 25,
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        }],
+        "page_rows|3-9": 3,
+        "per_page|3-9": 3,
+    })
+}
+
+
+
+
+
+
+
+app.all('/sprint/getSprintsByPrj', function(req, res) {
+    let resVal = sprintList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(sprintList(req.body.myStatus));
+    res.end()
+});
+
+
+let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock([
+
+        {
+            conut:1,
+            userstory_status:"提出",
+            list:[
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                }
+            ]
+        },
+        {
+            conut:1,
+            userstory_status:"开发中",
+            list:[
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                }
+            ]
+        },
+        {
+            conut:1,
+            userstory_status:"测试",
+            list:[
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                }
+            ]
+        },
+        {
+            conut:1,
+            userstory_status:"上线",
+            list:[
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                },
+                {
+                    userstory_name:"userstory_namexxxxx",
+                    userstory_id:1212334,
+                    charger:"chargerxxxxxx"
+                }
+            ]
+        }
+
+    ])
+}
+
+
+app.all('/userstory/getUserStoryKanBan/', function(req, res) {
+    let resVal = kanbanList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(kanbanList(req.body.myStatus));
+    res.end()
+});
 
 app.post('/project/add', function(req, res) {
     let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);

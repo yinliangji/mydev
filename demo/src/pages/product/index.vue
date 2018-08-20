@@ -161,7 +161,7 @@ import ADDorEDITpop from "./add_or_edit_pop";
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAll} = Common.restUrl;
+const {storyAll,storyGetKanBan} = Common.restUrl;
 
 export default {
 	beforecreated(){
@@ -222,26 +222,28 @@ export default {
 		        // },
 			],
 			statusList:[
-				{
-				  stateStr: "提出",
-				  state: "01",
-				  taskNumber: "3"
-				},
-				{
-				  stateStr: "开发中",
-				  state: "02",
-				  taskNumber: "4"
-				},
-				{
-				  stateStr: "测试",
-				  state: "03",
-				  taskNumber: "5"
-				},
-				{
-				  stateStr: "上线",
-				  state: "04",
-				  taskNumber: "6"
-				},
+				// {
+				//   stateStr: "提出",
+				//   state: "01",
+				//   taskNumber: "3"
+				// },
+				// {
+				//   stateStr: "开发中",
+				//   state: "02",
+				//   taskNumber: "4"
+				// },
+				// {
+				//   stateStr: "测试",
+				//   state: "03",
+				//   taskNumber: "5"
+				// },
+				// {
+				//   stateStr: "上线",
+				//   state: "04",
+				//   taskNumber: "6"
+				// },
+
+
 				// {
 				//   stateStr: "上线",
 				//   state: "05",
@@ -249,17 +251,20 @@ export default {
 				// }
 			],
 			cardList:[
+				
 	            {
-	              taskId: "#US0001",
-	              description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-	              userName: "user1",
-	              userId: "userId_01",
-	              groupId: "group_01",
-	              bgColor: { background: "#b3ecec" },
-	              taskStateStr: "未开始",
-	              taskState: "01",
-	              headPortrait: require("@/assets/images/user_02.png"),
-	              taskName:"",
+
+	            	taskState: "01",	
+	             	taskId: "#US0001",
+	             	description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	             	userName: "user1",
+	             	userId: "userId_01",
+	             	groupId: "group_01",
+	             	bgColor: { background: "#b3ecec" },
+	             	taskStateStr: "未开始",
+	              
+	             	headPortrait: require("@/assets/images/user_02.png"),
+	             	taskName:"",
 	            },
 	            {
 	              taskId: "#US0002",
@@ -374,6 +379,16 @@ export default {
                     key: 'userstory_type',
                     width: 85,
                     align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'span',
+                            {},
+                            ((S)=>{
+                            	if(S== 1){return "用户需求"}else if(S==2){return "生产问题"}else if(S==3){return "自主创新"}else{return "未知"}
+                            })(params.row.userstory_type)
+                            //params.row.userstory_type//1 用户需求 2 生产问题 3自主创新 
+                        )
+                    }
                 },
                 {
                     title: '负责人',
@@ -407,22 +422,24 @@ export default {
                             {
                                 style:{
                                 	color:"white",
-                                	background:(function(S){if(S == "未开始"){return "#5cadff"}else if(S == "处理中"){return "#ff9900"}else if(S == "已完成"){return "#19be6b"}else{return "#1c2438"} })(params.row.userstory_status),
+                                	background:(function(S){if(S == 1){return "#5cadff"}else if(S == 2){return "#ff9900"}else if(S == 3){return "#19be6b"}else{return "#1c2438"} })(params.row.userstory_status),
                                 	padding:'0.5em',
                                 	display:"inline-block",
                                 	borderRadius:"3px",
 
                                 },
-
                                 //domProps:{href:"###"},
                             },
-                            params.row.userstory_status
+                            ((S)=>{
+                            	if(S== 1){return "提　出"}else if(S==2){return "开发中"}else if(S==3){return "测　试"}else if(S== 4){return "上　线"}else{return "未　知"}
+                            })(params.row.userstory_status)
+                            //params.row.userstory_status//1 提出 2 开发中 3测试 4上线
                         )
                     }
                 },
                 {
                     title: '所属迭代',
-                    key: 'sprint_id',
+                    key: 'sprint_name',
                     width: 90,
                     align: 'center',
                 },
@@ -587,15 +604,31 @@ export default {
 
 	mounted(){
 		let ID = false;
-		if(localStorage.getItem('id') ){
-			ID = this.$router.history.current.query.id
-    	}else if(this.$router.history.current.query.id ){
-    		ID = this.$router.history.current.query.id
-    		localStorage.setItem('id', this.$router.history.current.query.id);
-    	}else{
-    		ID = 0;
-    	}
+
+
+		if(this.$router.history.current.query.id){
+           ID = this.$router.history.current.query.id;
+           localStorage.setItem('id', this.$router.history.current.query.id); 
+        }else if(localStorage.getItem('id')){
+           ID = localStorage.getItem('id')
+        }else if(Common.getCookie("id")){
+           ID = Common.getCookie("id")
+        }else{
+            this.$router.push('/agile');
+        }
+
+
+
+		// if(localStorage.getItem('id') ){
+		// 	ID = this.$router.history.current.query.id
+  //   	}else if(this.$router.history.current.query.id ){
+  //   		ID = this.$router.history.current.query.id
+  //   		localStorage.setItem('id', this.$router.history.current.query.id);
+  //   	}else{
+  //   		ID = 0;
+  //   	}
     	this.tableDataAjaxFn(storyAll,1,3,"",ID);
+    	this.storyGetKanBanFn(storyGetKanBan,ID)
 
 		EventBus.$on("moveEnd", this.moveEnd);
         EventBus.$on("clickItem", this.clicked);
@@ -624,40 +657,131 @@ export default {
 		// }
 	},
 	methods:{
+		storyGetKanBanFn(URL = "",id){
+			defaultAXIOS(URL,{id},{timeout:20000,method:'get'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======product KanBanFn ***response+++",response,myData,"======>");
+                if(myData && myData.length){
+                	let _temp = {}
+                	for(let i=0;i<myData.length;i++){
+                		_temp.stateStr = myData[i].userstory_status;
+                		_temp.taskNumber = myData[i].conut+"";
+                		_temp.state = "0"+(i+1);
+                		this.statusList.push(_temp);
+                		_temp = {};
+                	}
+
+                	//
+             //    {
+	            //   taskId: "#US0001",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_01",
+	            //   groupId: "group_01",
+	            //   bgColor: { background: "#b3ecec" },
+	            //   taskStateStr: "未开始",
+	            //   taskState: "01",
+	            //   headPortrait: require("@/assets/images/user_02.png"),
+	            //   taskName:"",
+	            // },
+	            // 
+	            // 
+	            
+	            
+
+	            	let _arr = [];
+					let _Obj = {};
+					console.log(myData)
+					
+					for(let i=0;i<myData.length;i++){
+					
+						for(let j=0;j<myData[i].list.length;j++){
+							_Obj.taskState = "0"+(i+1);
+							_Obj.taskId = "#US"+myData[i].list[j].userstory_id;
+							_Obj.description = "description_"+ i +"_"+j;
+							_Obj.userName = myData[i].list[j].charger;
+							_Obj.userId = "userId_01";
+							_Obj.groupId = "group_01"
+							_Obj.bgColor = { background: "#b3ecec" };
+							_Obj.taskStateStr = myData[i].userstory_status;
+							_Obj.headPortrait = "/assets/images/user_02.png";
+							_Obj.taskName = "";
+							_arr.push(_Obj);
+							_Obj = {}
+						}
+						this.cardList.push(..._arr);
+						_arr = []
+					}
+
+
+                	
+                }else{
+                	this.showError("没有数据");
+                }
+
+
+                //cardList
+                //
+             //    {
+	            //   taskId: "#US0001",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_01",
+	            //   groupId: "group_01",
+	            //   bgColor: { background: "#b3ecec" },
+	            //   taskStateStr: "未开始",
+	            //   taskState: "01",
+	            //   headPortrait: require("@/assets/images/user_02.png"),
+	            //   taskName:"",
+	            // },
+
+                
+
+
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+
+		},
+
+
+
+
 		changeCurrentPage(i) {
             this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"")
         },
         changePageSize(i) {
         },
         showError(ERR){
-            alert(ERR)
+            Common.ErrorShow(ERR,this);
         },
+
         tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3,DATA = "",ID = 0){
             defaultAXIOS(URL,{page:PAGE,limit:PAGELINE,data:DATA,id:ID},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("<======agile***response+++",response,myData.list,"+++agile***response======>");
+                console.log("<======product***response+++",response,myData.list,"======>");
                 this.tableData = myData.rows;
                 this.tableDAtaTatol = myData.page_rows;
 
-                let _temp = {};
-				for(let i=0;i<this.tableData.length;i++){
-					_temp.taskName = this.tableData[i].userstory_name
-					_temp.userName = this.tableData[i].charger;
-					_temp.taskState = this.tableData[i].userstory_status;
-					_temp.headPortrait = this.tableData[i].icon ? this.tableData[i].icon : "/assets/images/user_02.png";
-					_temp.taskId = this.tableData[i].userstory_id;
-					_temp.description = "description";
-					_temp.userId = "userId_03";
-					_temp.groupId = "group_01";
-					_temp.bgColor = { background: "#f8d6af" };
-					_temp.taskStateStr = "测试";
-					this.cardList.push(_temp);
-					_temp = {};
-					
-
-				}
-				console.log("this.cardList-=-=-==-=",this.cardList)
+    //             let _temp = {};
+				// for(let i=0;i<this.tableData.length;i++){
+				// 	_temp.taskName = this.tableData[i].userstory_name
+				// 	_temp.userName = this.tableData[i].charger;
+				// 	_temp.taskState = this.tableData[i].userstory_status;
+				// 	_temp.headPortrait = this.tableData[i].icon ? this.tableData[i].icon : "/assets/images/user_02.png";
+				// 	_temp.taskId = this.tableData[i].userstory_id;
+				// 	_temp.description = "description";
+				// 	_temp.userId = "userId_03";
+				// 	_temp.groupId = "group_01";
+				// 	_temp.bgColor = { background: "#f8d6af" };
+				// 	_temp.taskStateStr = "测试";
+				// 	this.cardList.push(_temp);
+				// 	_temp = {};
+				// }
+				
 
 
 				//{
@@ -741,12 +865,14 @@ export default {
 		editItem(I){
 
 			console.log(I,this.tableData[I])
-			this.$router.push('/product/edit')
+
+			//this.$router.push('/product/edit')
+			this.$router.push({path: '/product/edit', query: {DATA: JSON.stringify(this.tableData[I])}})
             return;
 			//
-			this.isShowAddPop = true;
-            this.isAdd = false;
-            this.tableDataRow = this.tableData[I]
+			// this.isShowAddPop = true;
+            // this.isAdd = false;
+            // this.tableDataRow = this.tableData[I]
 		},
 		popCloseFn(){
 			this.isShowAddPop = false;

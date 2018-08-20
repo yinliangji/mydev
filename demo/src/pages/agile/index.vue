@@ -348,28 +348,7 @@ export default {
         },
         showError(ERR){
             //alert(JSON.stringify(ERR))
-            this.$Notice.config({
-                top:100,
-                duration: 60
-            });
-
-            let MET = false;
-            let URL = false;
-            if(ERR && ERR.config){
-                MET = ERR.config.method ? ERR.config.method : "无method";
-                URL = ERR.config.url ? ERR.config.url : "无url";
-            }else if(ERR){
-                MET = ERR;
-                URL = ERR;
-            }else{
-                MET = "无";
-                URL = "无";
-            }
-            this.$Notice.open({
-                title: MET+" | "+URL,
-                desc: JSON.stringify(ERR),
-                duration: 60
-            });
+            Common.ErrorShow(ERR,this);
         },
         tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3){
             defaultAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'get'}).then((response) => {
@@ -529,8 +508,16 @@ export default {
             this.$refs.selection.selectAll(status);
         },
         goAgileDetailFn (I,P) {
-            console.log(this.tableData[I].id,I,P)
-            Common.setCookie("id",this.tableData[I].id); 
+
+            Common.setCookie("id",this.tableData[I].id);
+            localStorage.setItem('id', this.tableData[I].id);
+
+            Common.setCookie("prj_id",this.tableData[I].prj_id);
+            localStorage.setItem('prj_id', this.tableData[I].prj_id);
+
+            Common.setCookie("prod_id",this.tableData[I].prod_id);
+            localStorage.setItem('prod_id', this.tableData[I].prod_id);
+
             this.$router.push({path: '/agile/detail', query: {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id}})
         },
         goDemandFn (index) {
@@ -545,8 +532,19 @@ export default {
             this.$router.push('/overView')
         },
         goProductFn (I){
+            
             Common.setCookie("id",this.tableData[I].id);
-            this.$router.push({path: '/product', query: {board: true,id: this.tableData[I].id}})
+            localStorage.setItem('id', this.tableData[I].id);
+
+            Common.setCookie("prj_id",this.tableData[I].prj_id);
+            localStorage.setItem('prj_id', this.tableData[I].prj_id);
+
+            Common.setCookie("prod_id",this.tableData[I].prod_id);
+            localStorage.setItem('prod_id', this.tableData[I].prod_id);
+
+
+
+            this.$router.push({path: '/product', query: {board: true,id: this.tableData[I].id,prj_id: this.tableData[I].prj_id,prod_id: this.tableData[I].prod_id}})
         },
         show (index) {
             this.$Modal.info({

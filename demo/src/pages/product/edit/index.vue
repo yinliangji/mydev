@@ -5,24 +5,24 @@
             <div class="productAddBox">
 
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140" >
-                    <h3 class="Title">编辑基本信息</h3>
+                    <h3 class="Title">基本信息</h3>
                     <div class="fromBox">
                         <Row>
                             <Col span="12">
                                 <FormItem label="所属产品" >
-                                    <span>xxxxx产品</span>
+                                    <span>{{formValidate.product_name}}</span>
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem label="所属项目" >
-                                    <span>xxxx项目</span>
+                                    <span>{{formValidate.prj_name}}</span>
                                 </FormItem>
                             </Col>
                         </Row>
 
 
-                        <FormItem label="用户故事名称" prop="name">
-                            <Input v-model="formValidate.name" placeholder="请填用户故事名称"></Input>
+                        <FormItem label="用户故事名称" prop="userstory_name">
+                            <Input v-model="formValidate.userstory_name" placeholder="请填用户故事名称"></Input>
                         </FormItem>
                         <!-- <FormItem label="业务模块" prop="business">
                             <Select v-model="formValidate.business" multiple >
@@ -30,11 +30,11 @@
                             </Select>
                         </FormItem> -->
 
-                        <FormItem label="故事类型" prop="style">
-                            <Select v-model="formValidate.style" placeholder="请选择故事类型">
-                                <Option value="用户需求">用户需求</Option>
-                                <Option value="生产问题">生产问题</Option>
-                                <Option value="自主创新">自主创新</Option>
+                        <FormItem label="故事类型" prop="userstory_type">
+                            <Select v-model="formValidate.userstory_type" placeholder="请选择事项类型">
+                                <Option value="1">用户需求</Option>
+                                <Option value="2">生产问题</Option>
+                                <Option value="3">自主创新</Option>
                             </Select>
                         </FormItem>
 
@@ -53,17 +53,17 @@
                             </Col>
                         </Row> -->  
                        
-                        <FormItem label="状态" prop="status">
-                            <RadioGroup v-model="formValidate.status">
-                                <Radio label="提出">提出</Radio>
-                                <Radio label="开发中">开发中</Radio>
-                                <Radio label="测试">测试</Radio>
-                                <Radio label="上线">上线</Radio>
+                        <FormItem label="状态" prop="userstory_status">
+                            <RadioGroup v-model="formValidate.userstory_status">
+                                <Radio label="1">提出</Radio>
+                                <Radio label="2">开发中</Radio>
+                                <Radio label="3">测试</Radio>
+                                <Radio label="4">上线</Radio>
                             </RadioGroup>
                         </FormItem>
 
-                        <FormItem label="优先级" prop="grade">
-                            <RadioGroup v-model="formValidate.grade">
+                        <FormItem label="优先级" prop="proi">
+                            <RadioGroup v-model="formValidate.proi">
                                 <Radio label="1">高</Radio>
                                 <Radio label="2">中</Radio>
                                 <Radio label="3">低</Radio>
@@ -72,17 +72,16 @@
                         </FormItem>
 
                         <FormItem label="故事描述">
-                            <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写故事描述"></Input>
+                            <Input v-model="formValidate.userstory_desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写故事描述"></Input>
                         </FormItem>
-
                     </div>
-                    <h3 class="Title">编辑计划效率相关</h3>
+
+
+                    <h3 class="Title">计划效率相关</h3>
                     <div class="fromBox">
-                        <FormItem label="所属迭代" prop="iteration">
-                            <Select v-model="formValidate.iteration" placeholder="请选所属迭代">
-                                <Option value="迭代1">迭代1</Option>
-                                <Option value="迭代2">迭代2</Option>
-                                <Option value="迭代3">迭代3</Option>
+                        <FormItem label="所属迭代" prop="sprint">
+                            <Select v-model="formValidate.sprint" placeholder="请选所属迭代">
+                                <Option v-for="(item , index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
                         </FormItem>
 
@@ -90,18 +89,18 @@
                             <Input v-model="formValidate.manhour" placeholder="请填写工时(预计)" number style="width: 120px"></Input> 小时
                         </FormItem>
                     </div>
-                    <h3 class="Title">编辑需求相关</h3>
+
+                    <h3 class="Title">需求相关</h3>
 
                     <div class="fromBox">
-
-                        <FormItem label="所属需求" prop="demand">
-                            <Select v-model="formValidate.demand" placeholder="请选择所属需求">
+                        <FormItem label="所属需求" prop="req_id">
+                            <Select v-model="formValidate.req_id" placeholder="请选择所属需求">
                                 <Option value="需求1">需求1</Option>
                                 <Option value="需求2">需求2</Option>
                                 <Option value="需求3">需求3</Option>
                             </Select>
                         </FormItem>
-                        <!-- <FormItem label="用户故事提出人" prop="introducer">
+                       <!--  <FormItem label="用户故事提出人" prop="introducer">
                             <Select v-model="formValidate.introducer" placeholder="请选择用户故事提出人">
                                 <Option value="提出人1">提出人1</Option>
                                 <Option value="提出人2">提出人2</Option>
@@ -138,6 +137,13 @@
 </template>
 <script>
 import Store from '@/vuex/store'
+
+
+import API from '@/api'
+const {defaultAXIOS} = API;
+import Common from '@/Common';
+const {storyEdit,storyGetSprint} = Common.restUrl;
+
 const validateNumber = (rule, value, callback) => {
     if (!value) {
         return callback(new Error('请填写内容，不能为空'));
@@ -179,16 +185,16 @@ const validateNumber2 = (rule, value, callback) => {
 };
 export default {
     beforecreated(){
-        console.log("productAdd--beforecreated-------",this.addtest)
+        console.log("productAdd--beforecreated-------",this.formValidate)
     },
     created(){
-        console.log("productAdd--created-------",this.addtest)
+        console.log("productAdd--created-------",this.formValidate)
     },
     beforeUpdate(){
-        console.log("productAdd--beforeUpdate-------",this.addtest)
+        console.log("productAdd--beforeUpdate-------",this.formValidate)
     },
     updated(){
-        console.log("productAdd--updated-------",this.addtest)
+        console.log("productAdd--updated-------",this.formValidate)
         if(this.addtest){
             this.$router.push('/product')
         }
@@ -206,33 +212,57 @@ export default {
             modal_add_loading: false,
             editTableData:false,
             formValidate: {
-                name: '',
-                style:"",
-                person:"",
-                status:"",
-                iteration:"",
-                grade:"3",
-                manhour:"",
-                mission:"",
-                business:[],
-                demand:"",
-                introducer:"",
-                department:"",
-                desc: '',
+                userstory_name: '',
+                userstory_type:"",
+                userstory_status:"",
+                proi:"",
+                userstory_desc: '',
+                sprint:"",
+                prj_name:"",
+                product_name:"",
+                id:"",
+                prj_id:"",
+                prod_id:"",
+                req_id:"",
+                req_name:"",
 
 
 
 
 
 
-                mail: '',
-                city: '',
-                gender: '',
-                interest: [],
-                date: '',
-                time: '',
+
+                // person:"",
+                
+                
+                
+                // manhour:"",
+                // mission:"",
+                // business:[],
+                // demand:"",
+                // introducer:"",
+                // department:"",
+                
+
+
+
+
+
+
+                // mail: '',
+                // city: '',
+                // gender: '',
+                // interest: [],
+                // date: '',
+                // time: '',
                 
             },
+            sprintList:[
+                // {
+                //     value: 'New York',
+                //     label: '业务模块1'
+                // },
+            ],
             businessList: [
                 {
                     value: 'New York',
@@ -249,17 +279,17 @@ export default {
                
             ],
             ruleValidate: {
-                name: [
+                userstory_name: [
                     { required: true, message: 'The name cannot be empty', trigger: 'blur' }
                 ],
                 department: [
                     { required: false, message: 'The name cannot be empty', trigger: 'blur' }
                 ],
 
-                style: [
+                userstory_type: [
                     { required: true, message: 'Please select the city', trigger: 'change' }
                 ],
-                demand: [
+                req_id: [
                     { required: true, message: 'Please select the city', trigger: 'change' }
                 ],
                 introducer: [
@@ -269,15 +299,15 @@ export default {
                 person: [
                     { required: true, message: 'Please select the city', trigger: 'change' }
                 ],
-                status: [
+                userstory_status: [
                     { required: true, message: 'Please select gender', trigger: 'change' }
                 ],
                 
-                iteration: [
+                sprint: [
                     { required: false, message: 'Please select the city', trigger: 'change' }
                 ],
 
-                grade: [
+                proi: [
                     { required: false, message: 'Please select gender', trigger: 'change' }
                 ],
                 manhour: [
@@ -292,7 +322,87 @@ export default {
             },
         }
     },
+    mounted(){
+        let ID = false;
+        // let prj_ID = false;
+        // let prod_ID = false;
+
+        if(this.$router.history.current.query.id){
+           ID = this.$router.history.current.query.id 
+        }else if(localStorage.getItem('id')){
+           ID = localStorage.getItem('id')
+        }else if(Common.getCookie("id")){
+            ID = Common.getCookie("id")
+        }else{
+           ID = false; 
+        }
+
+
+        
+
+
+
+
+        // if(prj_ID && prod_ID){
+        //     this.formValidate.prj_id = prj_ID;
+        //     this.formValidate.prod_id = prod_ID;
+        //     this.formValidate.id = ID;
+        //     this.getStoryAddFn(ID,prj_ID,prod_ID)
+        // }else{
+        //     this.$router.push('/agile');
+        // }
+       
+        if(this.$router.history.current.query.DATA){
+            this.getStoryEditFn(JSON.parse(this.$router.history.current.query.DATA))
+
+            this.storyGetSprintFn(ID,JSON.parse(this.$router.history.current.query.DATA).prj_id,JSON.parse(this.$router.history.current.query.DATA).prod_id)
+        }else{
+            this.$router.push('/product');
+        }
+    },
     methods:{
+        storyGetSprintFn(id,prj_id,prod_id){
+            defaultAXIOS(storyGetSprint,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======product get sprintlist***response+++",response,myData,"======>");
+
+
+                
+                if(myData.sprintlist && myData.sprintlist.length){
+                     //value: 'New York',
+                //     label: '业务模块1'
+                    let _tempObj = {};
+                    for(let i=0;i<myData.sprintlist.length;i++){
+                        _tempObj.value = myData.sprintlist[i].sprint+"";
+                        _tempObj.label = myData.sprintlist[i].sp_name+"";
+                        this.sprintList.push(_tempObj);
+                        _tempObj = {};
+                    }
+
+                    
+                }else{
+                    this.showError("没有数据");
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+        getStoryEditFn(DATA){
+            console.log("=-=-=-=-",DATA)
+            
+            for (let i in this.formValidate){
+                this.formValidate[i] = DATA[i]+"";
+            }
+            // .formValidate.prj_id:"",
+            //     prod_id:"",
+            
+        },
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
+        },
         editItem(I){
             //this.tableDataIndex = I;
             this.modaAdd = true;
@@ -300,45 +410,94 @@ export default {
         },
         formItemReset(){
 
-            this.formValidate.name='';
-            this.formValidate.style="";
-            this.formValidate.person="";
-            this.formValidate.status="";
-            this.formValidate.iteration="";
-            this.formValidate.grade="3";
+            this.formValidate.userstory_name='';
+            this.formValidate.userstory_type="";
+            this.formValidate.userstory_status="";
+            this.formValidate.proi="3";
+            this.formValidate.userstory_desc="";
+            this.formValidate.sprint="";
             this.formValidate.manhour="";
             this.formValidate.mission="";
-            this.formValidate.mission=[];
-            this.formValidate.demand="";
-            this.formValidate.introducer="";
-            this.formValidate.department="";
-            this.formValidate.desc="";
-            this.editTableData=false;
+            this.formValidate.product_name="";
+            this.formValidate.prj_name="";
+            this.formValidate.req_id="";
+            this.formValidate.req_name="";
+
+
+
+
+
+
+
+
+            // this.formValidate.person="";
+            
+            
+            
+            
+            // this.formValidate.mission=[];
+            // this.formValidate.demand="";
+            // this.formValidate.introducer="";
+            // this.formValidate.department="";
+            
+            // this.editTableData=false;
         },
         submitAddData(){
             let tempData = {
-                name: this.formValidate.name,
-                num: parseInt(Math.random()*100),
-                describe: '产品需求',
-                person:"谢蓓",
-                status:this.formValidate.status,
-                Iteration:this.formValidate.iteration,
-                priority:this.formValidate.grade,
+                userstory_name: this.formValidate.userstory_name,
+                userstory_type: this.formValidate.userstory_type,
+                userstory_status:this.formValidate.userstory_status,
+                "proi": this.formValidate.proi,
+                "userstory_desc":this.formValidate.userstory_desc,
+                sprint:this.formValidate.sprint,
                 manHours:"0 | "+this.formValidate.manhour,
                 mission:this.formValidate.mission + " | 0",
-                icon: require("@/assets/images/user_02.png"),
+                icon: "/assets/images/user_02.png",
+                id:this.formValidate.id,
+                prj_id:this.formValidate.prj_id,
+                prod_id:this.formValidate.prod_id,
+                product_name:this.formValidate.product_name,
+                prj_name:this.formValidate.prj_name,
+                req_id:this.formValidate.req_id,
+                req_name:this.formValidate.req_name,
+                        
+            
+
+
+                //num: parseInt(Math.random()*100),
+                // priority:this.formValidate.grade,
+                // icon: require("@/assets/images/user_02.png"),
+                // person:"谢蓓",
 
                 
             }
-            setTimeout(() => {
+            defaultAXIOS(storyEdit,tempData,{timeout:20000,method:'post'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======product add***response+++",response,myData,"======>");
+                if(myData[0].status == "success"){
+                    this.modal_add_loading = false;
+                    this.formItemReset();
+                    this.$refs.formValidate.resetFields();
+                    this.$router.push('/product');
+                }else{
+                    this.showError(myData);
+                }
+
+                
+            }).catch( (error) => {
+                console.log(error);
                 this.modal_add_loading = false;
-                // Store.dispatch('ADD_DATA_TEST/incrementAsync', {
-                //     msg: tempData
-                // })
-                this.formItemReset();
-                this.$refs.formValidate.resetFields();
-                this.$router.push('/product');
-            },1000)
+                this.showError(error);
+            });
+            // setTimeout(() => {
+            //     this.modal_add_loading = false;
+            //     Store.dispatch('ADD_DATA_TEST/incrementAsync', {
+            //         msg: tempData
+            //     })
+            //     this.formItemReset();
+            //     this.$refs.formValidate.resetFields();
+            // },1000)
         },
         submitAdd(){
             let IsStop = false;

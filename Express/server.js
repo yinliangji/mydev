@@ -477,13 +477,13 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             
             "proposer":"",
             "proposer_department":"",
-            "req_id":"需求2",
+            "req_id":"req_id_xxxxxx",
             "req_name":"",
             "sprint": 26,
             "sprint_name":26,
             "userstory_desc":"故事描述123123",
 
-            "prj_id":"prj_name_xxxxxx",
+            "prj_id":"prj_id_xxxxxx",
             "prj_name":"敏捷项目0000",
             "prod_id":"product1",
             "product_name":"product_name_xxxxxxxx",
@@ -751,13 +751,13 @@ let Userstorydetail = (val1 = 200, val2 = 1, val3 = 3) => {
             
             "proposer":"",
             "proposer_department":"",
-            "req_id":"需求2",
+            "req_id":"req_id_xxxxxx",
             "req_name":"",
             "sprint": 26,
             "sprint_name":26,
             "userstory_desc":"故事描述123123",
 
-            "prj_id":"prj_name_xxxxxx",
+            "prj_id":"prj_id_xxxxxx",
             "prj_name":"敏捷项目0000",
             "prod_id":"product1",
             "product_name":"product_name_xxxxxxxx",
@@ -930,15 +930,131 @@ app.all('/agile/getUsers/', function(req, res) {
 
 
 
-
+let storyGetReq = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        "data": [
+            {
+                comment: 'xxxxx',
+                id: 1,
+                prj:250,
+                prj_tyope:"1",
+                req_id:"prj_id_xxxxxx",
+                req_name:"装服务器",
+                req_submitter:"百某某",
+                settle_time:"2018-08-05",
+                status:"0",
+            },
+            {
+                comment: 'xxxxx',
+                id: 2,
+                prj:251,
+                prj_tyope:"1",
+                req_id:"req_id_xxxxxx",
+                req_name:"装服务器1",
+                req_submitter:"百某某1",
+                settle_time:"2018-08-05",
+                status:"0",
+            },
+                
+        ],
+    })
+}
 
 app.all('/getReq_fromPrj/', function(req, res) {
-    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    let resVal = storyGetReq(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
-    res.json(GroupList(req.body.myStatus));
+    res.json(storyGetReq(req.body.myStatus));
     res.end()
 });
+
+
+
+
+
+let Role = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock([
+                    {
+                        "nick_name":"奇慧超",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"qihuichao",
+                        "id":4,
+                    },
+                    {
+                        "nick_name":"黄永华",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"huangyonghua",
+                        "id":5,
+                    },
+                    {
+                        "nick_name":"来咧",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"lailie",
+                        "id":6,
+                    },
+                    {
+                        "nick_name":"殷良骥",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"yinliangji",
+                        "id":7,
+                    },
+    ])
+}
+
+
+
+
+app.all('/agile/getUsersByRole', function(req, res) {
+    let resVal = Role(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(Role(req.body.myStatus));
+    res.end()
+});
+
+
+let Condition = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock([
+        {
+            "value":"奇慧超",
+            
+            "key":4,
+        },
+        {
+            "value":"黄永华",
+            
+            "key":5,
+        },
+        {
+            "value":"来咧",
+            
+            "key":6,
+        },
+        {
+            "value":"殷良骥",
+           
+            "key":7,
+        },
+    ])
+}
+
+app.all('/userstory/getUserstoryCondition', function(req, res) {
+    let resVal = Condition(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(Condition(req.body.myStatus));
+    res.end()
+});
+
+
+
+
 
 
 app.all('/project/edit', function(req, res) {

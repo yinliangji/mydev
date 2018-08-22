@@ -98,11 +98,12 @@
                     <div class="fromBox">
                         <FormItem label="所属需求" prop="req_id">
                             <Select v-model="formValidate.req_id" placeholder="请选择所属需求">
-                                <Option value="需求1">需求1</Option>
-                                <Option value="需求2">需求2</Option>
-                                <Option value="需求3">需求3</Option>
+                                <Option v-for="(item , index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
                         </FormItem>
+
+
+                        
                        <!--  <FormItem label="用户故事提出人" prop="introducer">
                             <Select v-model="formValidate.introducer" placeholder="请选择用户故事提出人">
                                 <Option value="提出人1">提出人1</Option>
@@ -259,6 +260,13 @@ export default {
                 time: '',
                 
             },
+            req_idList:[
+                // {
+                //     value: 'New York',
+                //     label: '业务模块1'
+                // },
+               
+            ],
             sprintList:[
                 // {
                 //     value: 'New York',
@@ -368,15 +376,48 @@ export default {
             this.formValidate.prj_id = prj_ID;
             this.formValidate.prod_id = prod_ID;
             this.formValidate.id = ID;
-            this.getStoryAddFn(ID,prj_ID,prod_ID);
-            this.storyGetSprintFn(ID,prj_ID,prod_ID)
+            this.getStoryAddFn(storyAdd,ID,ID,prod_ID);
+            
+            this.storyGetSprintFn(storyGetSprint,ID,ID,prod_ID)
+            this.storyGetReqFn(storyGetReq,ID,ID,prod_ID)
+
+
         }else{
             this.$router.push('/agile');
         }
     },
     methods:{
-        storyGetSprintFn(id,prj_id,prod_id){
-            defaultAXIOS(storyGetSprint,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
+        storyGetReqFn(URL = "",id,prj_id,prod_id){
+            defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======product get storyGetReq***response+++",response,myData,"======>");
+
+
+                
+                if(myData.data && myData.data.length){
+                     //value: 'New York',
+                //     label: '业务模块1'
+                    let _tempObj = {};
+                    for(let i=0;i<myData.data.length;i++){
+                        _tempObj.value = myData.data[i].id+"";
+                        _tempObj.label = myData.data[i].req_name+"";
+                        this.req_idList.push(_tempObj);
+                        _tempObj = {};
+                    }
+
+                    
+                }else{
+                    this.showError("没有数据");
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+        storyGetSprintFn(URL = "",id,prj_id,prod_id){
+            defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product get sprintlist***response+++",response,myData,"======>");
@@ -404,8 +445,8 @@ export default {
                 this.showError(error);
             });
         },
-        getStoryAddFn(id,prj_id,prod_id){
-            defaultAXIOS(storyAdd,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
+        getStoryAddFn(URL = "",id,prj_id,prod_id){
+            defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product get***response+++",response,myData,"======>");

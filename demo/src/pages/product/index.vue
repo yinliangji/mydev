@@ -25,10 +25,10 @@
 						            <Col span="3" style="text-align: center">故事类型</Col>
 						            <Col span="5">
 						                <FormItem >
-                                            <Select  placeholder="请选择故事类型">
-                                                <Option value="用户需求">用户需求</Option>
-					                            <Option value="生产问题">生产问题</Option>
-					                            <Option value="自主创新">自主创新</Option>
+                                            <Select v-model="formValidate.userstory_type" placeholder="请选择故事类型">
+                                                <Option :value="0">请选择故事类型</Option>
+                                                <Option v-for="(item,index) in userstory_typeList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                                
                                             </Select>
                                         </FormItem>
 						            </Col>
@@ -37,31 +37,27 @@
 						        	<Col span="3" style="text-align: center">故事状态</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select  placeholder="请选择故事状态">
-                                                <Option value="提出">提出</Option>
-					                            <Option value="开发中">开发中</Option>
-					                            <Option value="测试">测试</Option>
-					                            <Option value="上线">上线</Option>
+						                    <Select v-model="formValidate.userstory_status" placeholder="请选择故事状态">
+						                    	<Option :value="0">请选择故事状态</Option>
+                                                <Option v-for="(item,index) in userstory_statusList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
 						            </Col>
 						            <Col span="3" style="text-align: center">所属需求</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select placeholder="请选择所属需求">
-					                            <Option value="需求1">需求1</Option>
-					                            <Option value="需求2">需求2</Option>
-					                            <Option value="需求3">需求3</Option>
+						                    <Select v-model="formValidate.req_id" placeholder="请选择所属需求">
+						                    	<Option :value="0">请选择所属需求</Option>
+					                            <Option v-for="(item,index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
 					                        </Select>
 						                </FormItem>
 						            </Col>
 						            <Col span="3" style="text-align: center">优先级</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select  placeholder="请选择优先级">
-                                                <Option value="高">高</Option>
-					                            <Option value="中">中</Option>
-					                            <Option value="低">低</Option>
+						                    <Select v-model="formValidate.proi"  placeholder="请选择优先级">
+						                    	<Option :value="0">请选择优先级</Option>
+                                                <Option v-for="(item,index) in proiList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
 						            </Col>
@@ -70,37 +66,34 @@
 						        	<Col span="3" style="text-align: center">负责人</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select  placeholder="请选择负责人">
-                                                <Option value="负责人1">负责人1</Option>
-					                            <Option value="负责人2">负责人2</Option>
-					                            <Option value="负责人3">负责人3</Option>
-					                            <Option value="负责人4">负责人4</Option>
+						                    <Select v-model="formValidate.charger" placeholder="请选择负责人">
+						                    	<Option :value="0">请选择负责人</Option>
+                                                <Option v-for="(item,index) in chargerList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
 						            </Col>
 						            <Col span="3" style="text-align: center">是否领导关心</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select placeholder="请选择是否领导关心">
-					                            <Option value="是">是</Option>
-					                            <Option value="否">否</Option>
+						                    <Select v-model="formValidate.learn_concern" placeholder="请选择是否领导关心">
+						                    	<Option :value="0">请选择是否领导关心</Option>
+					                            <Option v-for="(item,index) in learn_concernList" :value="item.value" :key="index">{{ item.label }}</Option>
 					                        </Select>
 						                </FormItem>
 						            </Col>
 						            <Col span="3" style="text-align: center">所属迭代</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select  placeholder="请选择迭代">
-                                                <Option value="迭代1">迭代1</Option>
-					                            <Option value="迭代2">迭代2</Option>
-					                            <Option value="迭代3">迭代3</Option>
+						                    <Select v-model="formValidate.sprint" placeholder="请选择迭代">
+						                    	<Option :value="0">请选择迭代</Option>
+                                                <Option v-for="(item,index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
 						            </Col>
 						        </Row>
 							</Col>
 							<Col span="9" style="text-align: left" class="serchBtnBox">
-								<Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
+								<Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
 							</Col>
 						</Row>
 						<div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
@@ -161,7 +154,7 @@ import ADDorEDITpop from "./add_or_edit_pop";
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAll,storyGetKanBan} = Common.restUrl;
+const {storyAll,storyGetKanBan,storyGetCondition} = Common.restUrl;
 
 export default {
 	beforecreated(){
@@ -589,6 +582,83 @@ export default {
             ],
             tableDAtaTatol:0,
             tableDAtaPageLine:3,
+
+            formValidate: {
+                userstory_name:"",//用户故事名称
+                userstory_id:"",//故事编号
+                userstory_type:0,//故事类型
+                userstory_status:0,//故事状态
+                req_id:0,//所属需求
+                proi:0,//优先级
+                charger:0,//负责人
+                learn_concern:0,//是否领导关心
+                sprint:0,//所属迭代
+
+            },
+
+
+
+
+            userstory_typeList:[
+            	// {
+             //        value: 1,
+             //        label: '用户需求'
+             //    },
+             //    {
+             //        value: 2,
+             //        label: '生产问题'
+             //    },
+             //    {
+             //        value: 3,
+             //        label: '自主创新'
+             //    },
+               
+            ],
+            userstory_statusList:[
+            	// {
+             //        value: 1,
+             //        label: '提出'
+             //    },
+             //    {
+             //        value: 2,
+             //        label: '开发'
+             //    },
+             //    {
+             //        value: 3,
+             //        label: '测试'
+             //    },
+             //    {
+             //        value: 4,
+             //        label: '上线'
+             //    },
+            ],
+            req_idList:[],
+            proiList:[
+            	// {
+             //        value: 1,
+             //        label: '高'
+             //    },
+             //    {
+             //        value: 2,
+             //        label: '中'
+             //    },
+             //    {
+             //        value: 3,
+             //        label: '低'
+             //    },
+            ],
+            chargerList:[],
+            learn_concernList:[
+            	// {
+             //        value: 1,
+             //        label: '是'
+             //    },
+             //    {
+             //        value: 2,
+             //        label: '否'
+             //    },
+            ],
+            sprintList:[],
 		}
 	},
 	components: {
@@ -621,14 +691,25 @@ export default {
 
 		// if(localStorage.getItem('id') ){
 		// 	ID = this.$router.history.current.query.id
-  //   	}else if(this.$router.history.current.query.id ){
-  //   		ID = this.$router.history.current.query.id
-  //   		localStorage.setItem('id', this.$router.history.current.query.id);
-  //   	}else{
-  //   		ID = 0;
-  //   	}
-    	this.tableDataAjaxFn(storyAll,1,3,"",ID);
-    	this.storyGetKanBanFn(storyGetKanBan,ID)
+		  //   	}else if(this.$router.history.current.query.id ){
+		  //   		ID = this.$router.history.current.query.id
+		  //   		localStorage.setItem('id', this.$router.history.current.query.id);
+		  //   	}else{
+		  //   		ID = 0;
+		  //   	}
+  		this.tableDataAjaxFn(storyAll,1,3,"",ID);
+    	this.storyGetKanBanFn(storyGetKanBan,ID);
+
+
+
+    	this.storyGetConditionFn(storyGetCondition,"userstory_type");
+    	this.storyGetConditionFn(storyGetCondition,"userstory_status");
+    	this.storyGetConditionFn(storyGetCondition,"req_id");
+    	this.storyGetConditionFn(storyGetCondition,"proi");
+    	this.storyGetConditionFn(storyGetCondition,"charger");
+    	this.storyGetConditionFn(storyGetCondition,"learn_concern");
+    	this.storyGetConditionFn(storyGetCondition,"sprint");
+    	
 
 		EventBus.$on("moveEnd", this.moveEnd);
         EventBus.$on("clickItem", this.clicked);
@@ -657,6 +738,31 @@ export default {
 		// }
 	},
 	methods:{
+		storyGetConditionFn(URL,condition){
+            defaultAXIOS(URL,{condition},{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======agile byRole***response+++",response,myData,"======>");
+                if(myData && myData.length){
+                    let _OBJ = {};
+                    for(let i=0;i<myData.length;i++){
+                        _OBJ.label = myData[i].value
+                        _OBJ.value = myData[i].key
+                        this[condition+"List"].push(_OBJ)
+                        _OBJ = {};
+                    }
+                }else{
+                    this.showError(URL+"****"+condition+"_没有数据");
+                }
+                
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+		serchAll(){
+            this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine,"",formValidate.userstory_name,formValidate.userstory_id,formValidate.userstory_type,formValidate.userstory_status,formValidate.req_id,formValidate.proi,formValidate.charger,formValidate.learn_concern,formValidate.sprint,);
+        },
 		storyGetKanBanFn(URL = "",id){
 			defaultAXIOS(URL,{id},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
@@ -666,14 +772,14 @@ export default {
                 	let _temp = {}
                 	for(let i=0;i<myData.length;i++){
                 		_temp.stateStr = myData[i].userstory_status;
-                		_temp.taskNumber = myData[i].count+"";
+                		_temp.taskNumber = Number(myData[i].count);
                 		_temp.state = "0"+(i+1);
                 		this.statusList.push(_temp);
                 		_temp = {};
                 	}
 
                 	//
-             //    {
+             	//    {
 	            //   taskId: "#US0001",
 	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
 	            //   userName: "user1",
@@ -689,7 +795,7 @@ export default {
 	            // 
 	            
 	            
-//   #f8d6af  #b3ecec   #f2e1f0 
+
 	            	let _arr = [];
 					let _Obj = {};
 					console.log("-=-=-=-myData",myData)
@@ -747,10 +853,6 @@ export default {
             });
 
 		},
-
-
-
-
 		changeCurrentPage(i) {
             this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"")
         },
@@ -760,8 +862,9 @@ export default {
             Common.ErrorShow(ERR,this);
         },
 
-        tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3,DATA = "",ID = 0){
-            defaultAXIOS(URL,{page:PAGE,limit:PAGELINE,data:DATA,id:ID},{timeout:20000,method:'get'}).then((response) => {
+
+        tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
+            defaultAXIOS(URL,{page,limit,data,id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product***response+++",response,myData.list,"======>");
@@ -887,8 +990,8 @@ export default {
             this.$router.push({path: '/development/add'})
         },
 		goDevelopmentFn (index) {
-            //this.$router.push('/development')
-            this.$router.push({path: '/development', query: {board: true,us_id:this.tableData[index].id}})
+            //this.$router.push('/development')userstory_name
+            this.$router.push({path: '/development', query: {board: true,us_name:this.tableData[index].userstory_name}})
         },
 		goProductDetailFn (index) {
             //alert(index)

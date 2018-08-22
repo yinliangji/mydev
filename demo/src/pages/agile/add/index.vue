@@ -197,9 +197,12 @@ export default {
                         let _DOM = this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].getElementsByClassName("ivu-select-input")[0];
                         _DOM.addEventListener("keyup", function(event){
                             let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel",""));
-                            //
+                            // Common.throttle2((TXT)=>{
+                            //     console.log(TXT)
+                            // }, null, 5000, this.value,6000)
                             Common.throttle(
                                 ()=>{
+                                    
                                     let _URL = false;
                                     if(curVal[_num].groupName == "allgroupList"){
                                         _URL = projectAllgroup;
@@ -223,8 +226,10 @@ export default {
                                 }
                                 ,
                                 2000
+                                ,
+                                {leading:true,trailing:true}
                             )();
-                            //
+                            
                         })
                     }
                     //

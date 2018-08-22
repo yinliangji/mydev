@@ -95,9 +95,7 @@
                     <div class="fromBox">
                         <FormItem label="所属需求" prop="req_id">
                             <Select v-model="formValidate.req_id" placeholder="请选择所属需求">
-                                <Option value="需求1">需求1</Option>
-                                <Option value="需求2">需求2</Option>
-                                <Option value="需求3">需求3</Option>
+                                <Option v-for="(item , index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
                         </FormItem>
                        <!--  <FormItem label="用户故事提出人" prop="introducer">
@@ -257,6 +255,13 @@ export default {
                 // time: '',
                 
             },
+            req_idList:[
+                // {
+                //     value: 'New York',
+                //     label: '业务模块1'
+                // },
+                
+            ],
             sprintList:[
                 // {
                 //     value: 'New York',
@@ -324,8 +329,8 @@ export default {
     },
     mounted(){
         let ID = false;
-        // let prj_ID = false;
-        // let prod_ID = false;
+        let prj_ID = false;
+        let prod_ID = false;
 
         if(this.$router.history.current.query.id){
            ID = this.$router.history.current.query.id 
@@ -337,32 +342,55 @@ export default {
            ID = false; 
         }
 
-
         
 
 
-
-
-        // if(prj_ID && prod_ID){
-        //     this.formValidate.prj_id = prj_ID;
-        //     this.formValidate.prod_id = prod_ID;
-        //     this.formValidate.id = ID;
-        //     this.getStoryAddFn(ID,prj_ID,prod_ID)
-        // }else{
-        //     this.$router.push('/agile');
-        // }
        
         if(this.$router.history.current.query.DATA){
             this.getStoryEditFn(JSON.parse(this.$router.history.current.query.DATA))
 
-            this.storyGetSprintFn(ID,JSON.parse(this.$router.history.current.query.DATA).prj_id,JSON.parse(this.$router.history.current.query.DATA).prod_id)
+            this.storyGetSprintFn(storyGetSprint,ID,ID,JSON.parse(this.$router.history.current.query.DATA).prod_id)
+
+            this.storyGetReqFn(storyGetReq,ID,ID,JSON.parse(this.$router.history.current.query.DATA).prod_id)
+
+
         }else{
             this.$router.push('/product');
         }
     },
     methods:{
-        storyGetSprintFn(id,prj_id,prod_id){
-            defaultAXIOS(storyGetSprint,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
+        storyGetReqFn(URL = "",id,prj_id,prod_id){
+            defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======product get storyGetReq***response+++",response,myData,"======>");
+
+
+                
+                if(myData.data && myData.data.length){
+                     //value: 'New York',
+                //     label: '业务模块1'
+                    let _tempObj = {};
+                    for(let i=0;i<myData.data.length;i++){
+                        _tempObj.value = myData.data[i].req_id+"";
+                        _tempObj.label = myData.data[i].req_name+"";
+                        this.req_idList.push(_tempObj);
+                        _tempObj = {};
+                    }
+                    console.log("this.req_idList",this.req_idList)
+
+                    
+                }else{
+                    this.showError("没有数据");
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+        storyGetSprintFn(URL = "",id,prj_id,prod_id){
+            defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product get sprintlist***response+++",response,myData,"======>");
@@ -391,11 +419,12 @@ export default {
             });
         },
         getStoryEditFn(DATA){
-            console.log("=-=-=-=-",DATA)
+            
             
             for (let i in this.formValidate){
                 this.formValidate[i] = DATA[i]+"";
             }
+            console.log("=-=-=-=-",this.formValidate)
             // .formValidate.prj_id:"",
             //     prod_id:"",
             

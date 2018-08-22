@@ -18,19 +18,19 @@
                                     <Col span="3" style="text-align: center">项目名称</Col>
                                     <Col span="5">
                                         <FormItem >
-                                            <Input  placeholder="输入项目名称"></Input>
+                                            <Input v-model="formValidate.prj_name" placeholder="输入项目名称"></Input>
                                         </FormItem>
                                     </Col>
                                     <Col span="3" style="text-align: center">项目编号</Col>
                                     <Col span="5">
                                         <FormItem >
-                                            <Input  placeholder="输入项目编号"></Input>
+                                            <Input v-model="formValidate.prj_id" placeholder="输入项目编号"></Input>
                                         </FormItem>
                                     </Col>
                                     <Col span="3" style="text-align: center">开始时间</Col>
                                     <Col span="5">
                                         <FormItem >
-                                            <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"></DatePicker>
+                                            <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期" v-model="formValidate.start_time"></DatePicker>
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -38,39 +38,28 @@
                                     <Col span="3" style="text-align: center">项目经理</Col>
                                     <Col span="5">
                                         <FormItem >
-                                            <Select  placeholder="请选择项目经理">
-                                                <Option value="经理1">经理1</Option>
-                                                <Option value="经理2">经理2</Option>
-                                                <Option value="经理3">经理3</Option>
+                                            <Select v-model="formValidate.icdp_projManager" placeholder="请选择项目经理">
+                                                <Option :value="0">请选择项目经理</Option>
+                                                <Option v-for="(item,index) in icdp_projManagerList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
                                         </FormItem>
                                     </Col>
-                                    <Col span="3" style="text-align: center">教练<!-- 项目状态 --></Col>
+                                    <Col span="3" style="text-align: center">教练</Col>
                                     <Col span="5">
-                                        <!-- <FormItem >
-                                            <Select  placeholder="请选项目状态">
-                                                <Option value="1">已提出</Option>
-                                                <Option value="2">开发中</Option>
-                                                <Option value="3">测试</Option>
-                                                <Option value="4">上线</Option>
-                                            </Select>
-                                        </FormItem> -->
+                                       
                                         <FormItem >
-                                            <Select  placeholder="请选教练">
-                                                <Option value="1">教练1</Option>
-                                                <Option value="2">教练2</Option>
-                                                <Option value="3">教练3</Option>
-                                                <Option value="4">教练4</Option>
+                                            <Select v-model="formValidate.icdp_agileCoach" placeholder="请选择教练">
+                                                <Option :value="0">请选择教练</Option>
+                                                <Option v-for="(item,index) in icdp_agileCoachList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
                                         </FormItem>
                                     </Col>
                                     <Col span="3" style="text-align: center">开发人员</Col>
                                     <Col span="5">
                                         <FormItem >
-                                            <Select  placeholder="请选择开发人员">
-                                                <Option value="开发人员1">开发人员1</Option>
-                                                <Option value="开发人员2">开发人员2</Option>
-                                                <Option value="开发人员3">开发人员3</Option>
+                                            <Select v-model="formValidate.icdp_devTeam" placeholder="请选择开发人员">
+                                                <Option :value="0">请选择开发人员</Option>
+                                                <Option v-for="(item,index) in icdp_devTeamList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
                                         </FormItem>
                                     </Col>
@@ -79,10 +68,9 @@
                                     <Col span="3" style="text-align: center">测试人员</Col>
                                     <Col span="5">
                                         <FormItem >
-                                            <Select  placeholder="请选择测试人员">
-                                                <Option value="测试人员1">测试人员1</Option>
-                                                <Option value="测试人员2">测试人员2</Option>
-                                                <Option value="测试人员3">测试人员3</Option>
+                                            <Select v-model="formValidate.icdp_testTeam" placeholder="请选择测试人员">
+                                                <Option :value="0">请选择测试人员</Option>
+                                                <Option v-for="(item,index) in icdp_testTeamList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
                                         </FormItem>
                                     </Col>
@@ -97,7 +85,7 @@
                                 </Row>
                             </Col>
                             <Col span="9" style="text-align: left" class="serchBtnBox">
-                                <Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
+                                <Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
                             </Col>
                         </Row>
                         <div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
@@ -169,12 +157,16 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup} = Common.restUrl;
+const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole} = Common.restUrl;
 
 export default {
 	name: 'aglie',
     mounted(){
         this.tableDataAjaxFn(projectAll);
+        this.byRoleFn(byRole,"icdp_projManager");
+        this.byRoleFn(byRole,"icdp_agileCoach");
+        this.byRoleFn(byRole,"icdp_devTeam");
+        this.byRoleFn(byRole,"icdp_testTeam");
     },
     components: {
         AddItemPop,
@@ -338,9 +330,47 @@ export default {
             tableDAtaTatol:0,
             tableDAtaPageLine:3,
             actionArr:[],
+            formValidate: {
+                prj_name:"",//项目名称
+                prj_id:"",//项目编号
+                start_time:"",//开始时间
+                icdp_projManager:0,//ICDP项目经理
+                icdp_agileCoach:0,//ICDP敏捷教练
+                icdp_devTeam:0,//ICDP开发组
+                icdp_testTeam:0,//ICDP测试组
+            },
+            icdp_projManagerList:[],
+            icdp_agileCoachList:[],
+            icdp_devTeamList:[],
+            icdp_testTeamList:[],
         }
     },
     methods: {
+        serchAll(){
+            this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine,this.formValidate.prj_name,this.formValidate.prj_id,this.formValidate.start_time,this.formValidate.icdp_projManager,this.formValidate.icdp_agileCoach,this.formValidate.icdp_devTeam,this.formValidate.icdp_testTeam);
+        },
+        byRoleFn(URL,roleName){
+            defaultAXIOS(URL,{roleName},{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======agile byRole***response+++",response,myData,"======>");
+                if(myData && myData.length){
+                    let _OBJ = {};
+                    for(let i=0;i<myData.length;i++){
+                        _OBJ.label = myData[i].nick_name
+                        _OBJ.value = myData[i].user_name
+                        this[roleName+"List"].push(_OBJ)
+                        _OBJ = {};
+                    }
+                }else{
+                    this.showError(URL+"****"+roleName+"_没有数据");
+                }
+                
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
         changeCurrentPage(i) {
             this.tableDataAjaxFn(projectAll,i,this.tableDAtaPageLine)
         },
@@ -350,8 +380,9 @@ export default {
             //alert(JSON.stringify(ERR))
             Common.ErrorShow(ERR,this);
         },
-        tableDataAjaxFn(URL = "",PAGE = 1,PAGELINE = 3){
-            defaultAXIOS(URL,{page:PAGE,pageline:PAGELINE},{timeout:2000,method:'get'}).then((response) => {
+
+        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = ""){
+            defaultAXIOS(URL,{page,pageline,prj_name,prj_id,start_time,icdp_projManager,icdp_agileCoach,icdp_devTeam,icdp_testTeam},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");
@@ -516,7 +547,7 @@ export default {
             localStorage.setItem('prj_id', this.tableData[I].prj_id);
 
             Common.setCookie("prod_id",this.tableData[I].prod_id);
-            localStorage.setItem('prod_id', this.tableData[I].prod_id);
+            localStorage.setItem('prod_id',this.tableData[I].prod_id);
 
             this.$router.push({path: '/agile/detail', query: {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id}})
         },
@@ -540,7 +571,7 @@ export default {
             localStorage.setItem('prj_id', this.tableData[I].prj_id);
 
             Common.setCookie("prod_id",this.tableData[I].prod_id);
-            localStorage.setItem('prod_id', this.tableData[I].prod_id);
+            localStorage.setItem('prod_id',this.tableData[I].prod_id);
 
 
 

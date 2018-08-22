@@ -16,7 +16,7 @@
         type: String
       },
       taskNumber: {
-        type: String
+        type: [String,Number]
       }
     },
     data(){

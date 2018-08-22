@@ -1,7 +1,7 @@
 <template>
 	<div class="pageContent">
 		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :top="'7'" />
-		<selectMenu></selectMenu>
+		<selectMenu @changeSelect="selectMenuFn"></selectMenu>
        
         <Card>
         	<Tabs value="name1">
@@ -183,6 +183,9 @@ export default {
     },
     
     methods: {
+        selectMenuFn(N){
+            this.tableDataAjaxFn(projectDetail,N)
+        },
     	showError(ERR){
     		//alert(ERR)
     		Common.ErrorShow(ERR,this);
@@ -197,7 +200,6 @@ export default {
                 	for(var I in this.formValidate){
                 		//_temp = myData.data[I]+"";
                 		this.formValidate[I] = myData.data[I];
-                		console.log(this.formValidate[I])
 
                 	// if(_temp.indexOf("|") != -1){
 	                //    	this.formValidate[I] = myData.data[I].replace("|","、").replace("|","").replace(/、?$/g,"");

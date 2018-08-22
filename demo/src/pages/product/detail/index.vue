@@ -16,23 +16,23 @@
 							  <tbody>
 							  	<tr>
 								  <th width="13%">所属产品</th>
-								  <td width="20%">xxxxxxx产品</td>
+								  <td width="20%">{{ formValidate.product_name | FALSEINFO}}</td>
 								  <th width="13%">所属项目</th>
-								  <td width="20%" >xxxxxxx项目</td>
+								  <td width="20%" >{{ formValidate.prj_name | FALSEINFO}}</td>
 								  <th width="13%">用户故事名称</th>
-								  <td>用户故事名称1</td>
+								  <td>{{ formValidate.userstory_name | FALSEINFO}}</td>
 								</tr>
 								<tr>
 								  <th width="13%">故事类型</th>
-								  <td width="20%">生产问题</td>
+								  <td width="20%">{{ formValidate.userstory_type | FALSEINFO}}</td>
 								  <th width="13%">故事状态</th>
-								  <td width="20%" >提出</td>
+								  <td width="20%" >{{ formValidate.userstory_status | FALSEINFO}}</td>
 								  <th width="13%">优先级</th>
-								  <td>高</td>
+								  <td>{{ formValidate.proi | FALSEINFO}}</td>
 								</tr>
 								<tr>
 								  <th>故事描述</th>
-								  <td colspan="5">TPM敏捷项目管理系统</td>
+								  <td colspan="5">{{ formValidate.userstory_desc | FALSEINFO}}</td>
 								</tr>
 								
 							  </tbody>
@@ -48,7 +48,7 @@
 							  <tbody>
 								<tr>
 								  <th width="13%">所属迭代</th>
-								  <td width="20%">迭代1</td>
+								  <td width="20%">{{ formValidate.sprint_name | FALSEINFO}}</td>
 								  <th width="13%">工时(预计)</th>
 								  <td width="20%" >1</td>
 								  <th width="13%">工时(实际)</th>
@@ -76,11 +76,11 @@
 							  <tbody>
 								<tr>
 								  <th width="13%">所属需求</th>
-								  <td width="20%">需求</td>
+								  <td width="20%">{{ formValidate.req_name | FALSEINFO}}</td>
 								  <th width="13%">需求提出人</th>
-								  <td width="20%" >提出人</td>
+								  <td width="20%" >{{ formValidate.proposer | FALSEINFO}}</td>
 								  <th width="13%">提出人部门</th>
-								  <td>部门1</td>
+								  <td>{{ formValidate.proposer_department | FALSEINFO}}</td>
 								</tr>
 							  </tbody>
 							</table>
@@ -114,22 +114,16 @@
 		</Card>
 
 
-		<Modal ref="addPop" v-model="modaAdd" title="添加模块" @on-ok="submitAdd"  ok-text="提交" :loading="modal_add_loading" visible="true">
-            <Form :model="formItem" :label-width="80" >
-                <FormItem label="模块名称" v-if="technologyORbusiness">
-                    <Input v-model="formItem.technologyName" placeholder="请输入项目名称"></Input>
-                </FormItem>
-                <FormItem label="模块名称" v-else>
-                    <Input v-model="formItem.businessName" placeholder="请输入项目名称"></Input>
-                </FormItem>
-               
-            </Form>
-        </Modal> 
+		
 
 
 	</div>
 </template>
 <script>
+import API from '@/api'
+const {defaultAXIOS} = API;
+import Common from '@/Common';
+const {storyGetDetail} = Common.restUrl;
 export default {
 	data () {
         return {
@@ -143,48 +137,86 @@ export default {
             },
         	count: ["技术模块1", "技术模块2", "技术模块3"],
         	count2: ["业务模块1", "业务模块2", "业务模块3"],
+        	formValidate: {
+				id: "",
+				userstory_id: "",
+				userstory_name: "",
+				userstory_type: "",
+				charger: "",
+				userstory_status: "",
+				proi: "",
+				manHours: "",
+				mission: "",
+				phycics_sys_id:"",
+				actual_online_time:"",
+				charger:"",
+				created_time:"",
+				last_chg_time:"",
+				last_chgr:"",
+				learn_concern:"",
+				plan_online_time:"",
+				proposer:"",
+				proposer_department:"",
+				req_id:"",
+				req_name:"",
+				sprint: "",
+				sprint_name:"",
+				userstory_desc:"",
+				prj_id:"",
+				prj_name:"",
+				prod_id:"",
+				product_name:"",        		
+            },
         }
     },
-     methods: {
-     	addItem(){
-            this.modaAdd = true;
-            this.technologyORbusiness = true;
-        },
-        addItem2(){
-            this.modaAdd = true;
-            this.technologyORbusiness = false;
-        },
-        formItemReset(){
-            this.$nextTick(() => {
-                this.formItem.name = "";
-                this.formItem.technologyName = "";
+    mounted(){
+    	if(this.$router.history.current.query.detail_id){
+    		this.storyGetDetailFn(storyGetDetail,this.$router.history.current.query.detail_id)
+    	}else{
+    		this.$router.push('/product')
+    	}
+    	
+    },
+    methods: {
+		showError(ERR){
+    		//alert(ERR)
+    		Common.ErrorShow(ERR,this);
+    	},
+     	storyGetDetailFn(URL = "",detail_id){
+            defaultAXIOS(URL,{detail_id},{timeout:5000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======product detail***response+++",response,myData,"======>");
+                if(Object.getOwnPropertyNames(myData).length >2){
+                	for(let i in myData){
+                		if(i == "proi"){
+                			this.formValidate[i] = ((N)=>{if(N == 1){return "高"}else if(N ==2){return "中"}else{return "低"}})(myData[i])
+                		}else{
+                			this.formValidate[i] = myData[i]
+                		}
+                		
+                	}
+                	console.log("this.formValidate",this.formValidate)
+
+                }else{
+                	this.showError("没有数据");
+                }
                 
+                
+
+
+                
+
+
+
+
+
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
             });
-        },
-        submitAdd () {
-            setTimeout(() => {
-            	this.technologyORbusiness ? this.count.push(this.formItem.technologyName) : this.count2.push(this.formItem.businessName)
-                this.modaAdd = false;
-                this.$Message.info('成功');
-                this.formItemReset();
-            },1000)
-            
-        },
-        handleAdd () {
-            if (this.count.length) {
-                this.count.push(this.count[this.count.length - 1] + 1);
-            } else {
-                this.count.push(0);
-            }
-        },
-        handleClose (event, name) {
-            const index = this.count.indexOf(name);
-            this.count.splice(index, 1);
-        },
-        handleClose2 (event, name) {
-            const index = this.count2.indexOf(name);
-            this.count2.splice(index, 1);
-        }
+        },        
+       
+       
     }
 }
 </script>

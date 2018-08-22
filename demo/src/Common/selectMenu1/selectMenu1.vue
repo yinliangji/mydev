@@ -2,9 +2,9 @@
   <div class="curPosition">
     <Icon type="navicon-round"></Icon>
 
-    <span>选择项目</span>
-    <Select v-model="model1" style="width:140px">
-      <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    <span>选择项目1111</span>
+    <Select v-model="curProject" style="width:140px" @on-change="changeCurProject">
+      <Option v-for="item in projectList" :value="item.id" :key="item.id">{{ item.prj_name }}</Option>
     </Select>
   </div>
 </template>
@@ -13,26 +13,34 @@
 export default {
     data() {
         return {
-            cityList: [
-                {
-                    value: "1",
-                    label: "敏捷项目管理系统"
-                },
-                {
-                    value: "2",
-                    label: "党群系统"
-                },
-                {
-                    value: "3",
-                    label: "高校行政平台"
-                },
-                {
-                    value: "4",
-                    label: "一体化研发平台"
-                }
+            projectList: [
+                // {
+                //     id: 1,
+                //     prj_name: "敏捷项目管理系统"
+                // },
+                // {
+                //     id: 2,
+                //     prj_name: "党群系统"
+                // },
+                // {
+                //     id: 3,
+                //     prj_name: "高校行政平台"
+                // },
+                // {
+                //     id: 4,
+                //     prj_name: "一体化研发平台"
+                // }
             ],
-            model1: ""
+            curProject: ""
         };
+    },
+    methods: {
+        changeCurProject(data){
+            alert(data)
+            //this.$emit("changeSelect",this.curProject);
+            //this.setCookie("prj_id",data)
+
+        },
     }
 };
 </script>

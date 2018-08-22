@@ -145,7 +145,7 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAdd,storyGetSprint} = Common.restUrl;
+const {storyAdd,storyGetSprint,storyGetReq} = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {

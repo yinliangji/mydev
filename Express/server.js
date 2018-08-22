@@ -422,9 +422,25 @@ app.all('/project/all', function(req, res) {
 
 app.all('/get_prj', function(req, res) {
     
-    res.json(
-        [{"id":1,"prj_name":"xxxxx"}]
-    );
+    res.json([
+        {
+                    id: 1,
+                    prj_name: "敏捷项目管理系统"
+                },
+                {
+                    id: 2,
+                    prj_name: "党群系统"
+                },
+                {
+                    id: 3,
+                    prj_name: "高校行政平台"
+                },
+                {
+                    id: 4,
+                    prj_name: "一体化研发平台"
+                }
+
+    ]);
     res.end()
 });
 
@@ -437,6 +453,7 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
         "product_name":"product_name_xxxxxxxx",
         "rows|3-5": [{
             "id": 1,
+            "detail_id": 1,
             "userstory_id": 1,
             "userstory_name|5-8": /[a-zA-Z]/,
             "userstory_type|1-3": 1,
@@ -554,106 +571,138 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock([
 
         {
-            conut:1,
+            count:1,
             userstory_status:"提出",
             list:[
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:1,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:2,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:3,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:2,
+                    id:1,
                 }
             ]
         },
         {
-            conut:1,
+            count:1,
             userstory_status:"开发中",
             list:[
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:2,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:3,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:1,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:1,
+                    id:1,
                 }
             ]
         },
         {
-            conut:1,
+            count:1,
             userstory_status:"测试",
             list:[
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:1,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:3,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:1,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:2,
+                    id:1,
                 }
             ]
         },
         {
-            conut:1,
+            count:1,
             userstory_status:"上线",
             list:[
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:3,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:1,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:3,
+                    id:1,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
                     userstory_id:1212334,
-                    charger:"chargerxxxxxx"
+                    charger:"chargerxxxxxx",
+                    proi:2,
+                    id:1,
                 }
             ]
         }
@@ -669,6 +718,76 @@ app.all('/userstory/getUserStoryKanBan/', function(req, res) {
     res.json(kanbanList(req.body.myStatus));
     res.end()
 });
+
+
+
+
+let Userstorydetail = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+            "status": val1,
+            "message": "mockDataList xxxxxxx",
+            "id": 1,
+            "detail_id": 1,
+            "userstory_id": 1,
+            "userstory_name|5-8": /[a-zA-Z]/,
+            "userstory_type|1-3": 1,
+            "charger": "谢呗",
+            "userstory_status|1-4": 1,
+            //"sprint_id": "迭代1",
+            "proi|1-3": 1,
+            "manHours": "20 | 10",
+            "mission": "5 | 10",
+            "phycics_sys_id": "phycics_sys_id",
+            "icon": "/assets/images/user_02.png",
+
+            "actual_online_time":"",
+            "charger":"",
+            "created_time":"2018-08-20 16:16:37",
+            "last_chg_time":"",
+            "last_chgr":"",
+            "learn_concern":"",
+            "plan_online_time":"",
+            
+            
+            "proposer":"",
+            "proposer_department":"",
+            "req_id":"需求2",
+            "req_name":"",
+            "sprint": 26,
+            "sprint_name":26,
+            "userstory_desc":"故事描述123123",
+
+            "prj_id":"prj_name_xxxxxx",
+            "prj_name":"敏捷项目0000",
+            "prod_id":"product1",
+            "product_name":"product_name_xxxxxxxx",
+
+
+
+
+            
+           
+            
+            
+
+
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        })
+}
+
+
+app.all('/userstory/getUserStoryDetail', function(req, res) {
+    let resVal = Userstorydetail(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    //res.json(Userstorydetail(req.body.myStatus));
+    res.json(Userstorydetail({}));
+    res.end()
+});
+
 
 app.post('/project/add', function(req, res) {
     let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
@@ -688,6 +807,28 @@ app.all('/project/detail/1', function(req, res) {
     res.json(detail(req.body.myStatus));
     res.end()
 });
+app.all('/project/detail/2', function(req, res) {
+    let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(detail(req.body.myStatus));
+    res.end()
+});
+app.all('/project/detail/3', function(req, res) {
+    let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(detail(req.body.myStatus));
+    res.end()
+});
+app.all('/project/detail/4', function(req, res) {
+    let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(detail(req.body.myStatus));
+    res.end()
+});
+
 
 let mockproductList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
@@ -779,7 +920,19 @@ app.all('/project/testerGroup/', function(req, res) {
     res.json(GroupList(req.body.myStatus));
     res.end()
 });
-app.all('/project/addGroup/', function(req, res) {
+app.all('/agile/getUsers/', function(req, res) {
+    let resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(GroupList(req.body.myStatus));
+    res.end()
+});
+
+
+
+
+
+app.all('/getReq_fromPrj/', function(req, res) {
     let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
@@ -940,7 +1093,7 @@ let addGroupList = (val1 = 200, val2 = 1, val3 = 3) => {
     })
 }
 
-app.all('/rbac/getRoles/', function(req, res) {
+app.all('/agile/getRoles/', function(req, res) {
     let resVal = addGroupList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);

@@ -50,6 +50,7 @@ export default {
         changeCurProject(data) {
             //alert(data)
             //sessionStorage.setItem("prj_id", data);
+            this.$emit("changeSelect",this.curProject);
             this.setCookie("prj_id", data)
         },
 

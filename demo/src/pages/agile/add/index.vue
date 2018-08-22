@@ -215,7 +215,8 @@ export default {
                                     _this.projectGroupFn(
                                         _URL
                                         ,
-                                        {VALUE:this.value+"|"+curVal[_num].group.join("|"),}
+                                        //{userName:this.value+"|"+curVal[_num].group.join("|"),}
+                                        {userName:this.value,}
                                         ,
                                         _num
                                     );

@@ -197,9 +197,8 @@ export default {
                         let _DOM = this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].getElementsByClassName("ivu-select-input")[0];
                         _DOM.addEventListener("keyup", function(event){
                             let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel",""));
-                            // Common.throttle2((TXT)=>{
-                            //     console.log(TXT)
-                            // }, null, 5000, this.value,6000)
+                            Common.throttle2((t)=>{console.log(t)}, null, 2000, this.value,5000);
+                            /*
                             Common.throttle(
                                 ()=>{
                                     
@@ -229,6 +228,7 @@ export default {
                                 ,
                                 {leading:true,trailing:true}
                             )();
+                            */
                             
                         })
                     }
@@ -732,8 +732,39 @@ export default {
             defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
+
+
+                let _Array = [
+                    {
+                        value: 'New York X L',
+                        label: 'New York X L人1'
+                    },
+                    {
+                        value: 'London',
+                        label: 'London人2'
+                    },
+                    {
+                        value: 'Sydney',
+                        label: 'Sydney人3'
+                    },
+                    {
+                        value: 'Ottawa',
+                        label: 'Ottawa人4'
+                    },
+                    {
+                        value: 'Paris',
+                        label: 'Paris人5'
+                    },
+                    {
+                        value: 'Canberra',
+                        label: 'Canberra人6'
+                    }
+                ]
+
                 if(typeof(ARR)  == "number"){
-                    this.formValidate.AddGroupList[ARR].groupList = myData.data.list; 
+                    //this.formValidate.AddGroupList[ARR].groupList = myData.data.list;
+                    this.formValidate.AddGroupList[ARR].groupList = _Array;
+                     
                 }
                 
             }).catch( (error) => {

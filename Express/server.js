@@ -896,6 +896,10 @@ let GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
 }
 
 
+
+
+
+
 app.all('/project/allgroup/', function(req, res) {
     let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
@@ -1105,6 +1109,14 @@ app.all('/auth/getPermissionfromUser', function(req, res) {
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
     res.json(getPermission(req.body.myStatus));
+    res.end()
+});
+
+app.all('/userstory/changeUserstoryStatus/', function(req, res) {
+    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json({});
     res.end()
 });
 

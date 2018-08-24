@@ -245,6 +245,31 @@ export default class Common extends Utils {
           duration: 60
       });
     }
+
+    static authIs(KEY){
+        let OBJ = this.prj_permission
+        if(this.identity == "SuperAdmin"){
+            return false
+        }else if(this.identity == "PlainAdmin"){
+            return false
+        }else{
+            if(KEY && KEY.length){
+                let _temp = true;
+                for(let i =0;i<KEY.length;i++){
+                    if(!(KEY[i].indexOf("_view") != -1)){
+                        if(OBJ.findIndex((item)=>{return item == KEY[i]}) != -1){
+                            _temp = false
+                        }
+                    }
+                }
+                return _temp
+
+            }else{
+                return true
+            }
+        }
+        
+    }
 }
 
 

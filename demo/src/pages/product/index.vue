@@ -110,7 +110,7 @@
 								<Button 
 									type="success"  
 									@click="addItem"
-									:disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
+									:disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
 									>
 									添加用户故事
 								</Button>
@@ -142,7 +142,7 @@
 				    	</div>
 					</div>
 					<div class="listBox" v-else>
-						<kanbanboard :cardList="cardList" :statusList="statusList" :groupList="groupList" />
+						<kanbanboard :cardList="cardLists" :statusList="statusLists" :groupList="groupList" />
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div>
 
@@ -161,7 +161,7 @@ import ADDorEDITpop from "./add_or_edit_pop";
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAll,storyGetKanBan,storyGetCondition,getPermission} = Common.restUrl;
+const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange} = Common.restUrl;
 
 export default {
 	beforecreated(){
@@ -512,7 +512,7 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
-                                domProps:{disabled:this.authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])},
+                                domProps:{disabled:this.authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])},
                                 on: {
                                     click: () => {
                                         //this.show(params.index)
@@ -528,7 +528,7 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
-                                domProps:{disabled:this.authIs(['icdp_projList_mng','icdp_projList_view'])},
+                                domProps:{disabled:this.authIs(['icdp_userStory_mng','icdp_userStory_view'])},
                                 on: {
                                     click: () => {
                                         this.goAddDevelopmentFn(params.index)
@@ -673,6 +673,10 @@ export default {
 
             prj_permission:[],
             identity:"",
+
+            cardListBase:[],
+            statusListBase:[],
+            groupList:[],
 		}
 	},
 	components: {
@@ -681,6 +685,12 @@ export default {
 
 	},
 	computed: {
+		cardLists(){
+			return this.cardListBase;
+		},
+		statusLists(){
+			return this.statusListBase;
+		},
         addtest() {
             return this.$store.state["ADD_DATA_TEST"].data
         },
@@ -690,27 +700,7 @@ export default {
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 
 
-		// if(this.$router.history.current.query.id){
-		  //          ID = this.$router.history.current.query.id;
-		  //          localStorage.setItem('id', this.$router.history.current.query.id); 
-		  //       }else if(localStorage.getItem('id')){
-		  //          ID = localStorage.getItem('id')
-		  //       }else if(Common.getCookie("id")){
-		  //          ID = Common.getCookie("id")
-		  //       }else{
-		  //           this.$router.push('/agile');
-		  //       }
-
-
-
-		// if(localStorage.getItem('id') ){
-		// 	ID = this.$router.history.current.query.id
-		  //   	}else if(this.$router.history.current.query.id ){
-		  //   		ID = this.$router.history.current.query.id
-		  //   		localStorage.setItem('id', this.$router.history.current.query.id);
-		  //   	}else{
-		  //   		ID = 0;
-		  //   	}
+		
 		this.getPermissionFn(getPermission)
   		this.tableDataAjaxFn(storyAll,1,3,"",ID);
     	this.storyGetKanBanFn(storyGetKanBan,ID);
@@ -733,26 +723,72 @@ export default {
 
         
 
-		// for(let i=0;i<this.tableData.length;i++){
-		// 	let statusNum = false;
-		// 	let statusData = this.tableData[i].status;
-		// 	if(statusData == "未开始"){
-		// 		statusNum = "01";
-		// 	}else if(statusData == "处理中"){
-		// 		statusNum = "02";
-		// 	}else if(statusData == "已完成"){
-		// 		statusNum = "03";
-		// 	}else{
-		// 		statusNum = "04";
-		// 	}
-		// 	this.cardList[i].taskName = this.tableData[i].name
-		// 	this.cardList[i].userName = this.tableData[i].person;
-		// 	this.cardList[i].taskState = statusNum;
-		// 	this.cardList[i].headPortrait = this.tableData[i].icon;
-
-		// }
+		
 	},
 	methods:{
+
+		changeStateNumber(info){
+			let _statusBase = this.statusListBase;
+			let toState = info.evt.to.getAttribute('state');
+
+			_statusBase.forEach((item,index)=>{
+				if(info.item.askStatus == item.state){
+					item.taskNumber = parseFloat(item.taskNumber) - 1
+				}
+				if(item.state == toState){
+					item.taskNumber = parseFloat(item.taskNumber) + 1
+				}
+			});
+			this.statusListBase = [];
+			this.statusListBase.push(..._statusBase)
+		},
+		changeMovedStatus(info){
+			let _params = {};
+			_params.taskId = info.item.taskId;
+			_params.ID = info.item.detail_id;
+			_params.taskStatus = info.evt.to.getAttribute('state');
+			defaultAXIOS(storySetChange,{id:_params.ID,usertory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======agile storySetChange***response+++",response,myData,"======>");
+                if(response.status != 200){
+                	this.showError("返回结果错误");
+                }
+                
+                
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+
+
+
+		},
+		moveEnd(info) {
+            // 移动卡片结束后
+            console.log(" 移动卡片结束后 :::", info);
+            this.changeStateNumber(info);
+            this.changeMovedStatus(info);
+        },
+        clicked(info) {
+            // 点击卡片方法
+            console.log(" 点击卡片方法 ::: ", info);
+            this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
+            // this.$router.push({
+            //   path: "/product/detail"
+            // });
+        },
+        searchHandle(info) {
+            // 查询方法
+            console.log("查询  ::: ", info);
+        },
+        addNewTask() {
+            //点击跳转页面
+            // this.$router.push({
+            //   path: "/development/add"
+            // });
+        },
+
 
 		authIs(KEY){
             let OBJ = this.prj_permission
@@ -862,12 +898,20 @@ export default {
         },
 		serchAll(){
 			let ID = this.getID()
-            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,);
+            
+            if(this.currentView == "kanbanboard"){
+            	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+            }else{
+            	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+            }
+
         },
-		storyGetKanBanFn(URL = "",id){
+		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
 			this.cardList = [];
 			this.statusList = [];
-			defaultAXIOS(URL,{id:id,prj_id:id},{timeout:20000,method:'get'}).then((response) => {
+			this.cardListBase=[],
+            this.statusListBase=[],
+			defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product KanBanFn ***response+++",response,myData,"======>");
@@ -879,50 +923,39 @@ export default {
                 		_temp.taskNumber = Number(myData[i].count);
                 		_temp.state = "0"+(i+1);
                 		this.statusList.push(_temp);
+                		this.statusListBase.push(_temp);
                 		_temp = {};
                 	}
 
-                	//
-             	//    {
-	            //   taskId: "#US0001",
-	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-	            //   userName: "user1",
-	            //   userId: "userId_01",
-	            //   groupId: "group_01",
-	            //   bgColor: { background: "#b3ecec" },
-	            //   taskStateStr: "未开始",
-	            //   taskState: "01",
-	            //   headPortrait: require("@/assets/images/user_02.png"),
-	            //   taskName:"",
-	            // },
-	            // 
-	            // 
-	            
+                	
 	            
 
 	            	let _arr = [];
 					let _Obj = {};
-					console.log("-=-=-=-myData",myData)
+					
 					
 					for(let i=0;i<myData.length;i++){
 
 					
 						for(let j=0;j<myData[i].list.length;j++){
-							_Obj.taskState = "0"+(i+1);
+							_Obj.taskStatus = "0"+(i+1);
 							_Obj.taskId = "#US"+myData[i].list[j].userstory_id;
 							_Obj.description = "description_"+ i +"_"+j;
 							_Obj.userName = myData[i].list[j].charger;
 							_Obj.userId = "userId_"+ i +"_"+j;
 							_Obj.groupId = "group_01"
-							_Obj.bgColor = { background: ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi) };
+							//_Obj.bgColor = { background: ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi) };
+							_Obj.bgcolor = ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi);
 							_Obj.taskStateStr = myData[i].userstory_status;
 							_Obj.headPortrait =   require("@/assets/images/user_02.png"); //"/assets/images/user_02.png";
-							_Obj.taskName = "";
+							_Obj.taskName = myData[i].list[j].userstory_name;
+							_Obj.nickName = myData[i].list[j].charger
 							_Obj.detail_id = myData[i].list[j].id
 							_arr.push(_Obj);
 							_Obj = {}
 						}
 						this.cardList.push(..._arr);
+						this.cardListBase.push(..._arr);
 						_arr = []
 					}
 					
@@ -936,7 +969,7 @@ export default {
 
                 //cardList
                 //
-             //    {
+             	//    {
 	            //   taskId: "#US0001",
 	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
 	            //   userName: "user1",
@@ -1026,29 +1059,7 @@ export default {
                 this.showError(error);
             });
         },
-		moveEnd(info) {
-            // 移动卡片结束后
-            console.log(" 移动卡片结束后 :::", info);
-        },
-        clicked(info) {
-            // 点击卡片方法
-            console.log(" 点击卡片方法 ::: ", info);
-            this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
-            // this.$router.push({
-            //   path: "/product/detail"
-            // });
-        },
-        searchHandle(info) {
-            // 查询方法
-            console.log("查询  ::: ", info);
-        },
-        addNewTask() {
-            //点击跳转页面
-            // this.$router.push({
-            //   path: "/development/add"
-            // });
-        },
-
+		
 
 		tabRowAddFn(){
             this.tableData.push(this.addtest);

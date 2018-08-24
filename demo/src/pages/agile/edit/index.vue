@@ -726,10 +726,40 @@ export default {
             defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
+
+                let _Array = [
+                    {
+                        value: 'New York X L',
+                        label: 'New York X L人1'
+                    },
+                    {
+                        value: 'London',
+                        label: 'London人2'
+                    },
+                    {
+                        value: 'Sydney',
+                        label: 'Sydney人3'
+                    },
+                    {
+                        value: 'Ottawa',
+                        label: 'Ottawa人4'
+                    },
+                    {
+                        value: 'Paris',
+                        label: 'Paris人5'
+                    },
+                    {
+                        value: 'Canberra',
+                        label: 'Canberra人6'
+                    }
+                ]
+
                 if(typeof(ARR)  == "number"){
-                    this.formValidate.AddGroupList[ARR].groupList = myData.data.list;
+                    this.formValidate.AddGroupList[ARR].groupList = _Array;
+                    //this.formValidate.AddGroupList[ARR].groupList = myData.data.list;
                 }else{
-                    this[ARR] = myData.data.list;    
+                    this[ARR] = _Array;    
+                    //this[ARR] = myData.data.list;    
                 }
                 
             }).catch( (error) => {

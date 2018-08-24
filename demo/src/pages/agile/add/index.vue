@@ -197,8 +197,8 @@ export default {
                         let _DOM = this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].getElementsByClassName("ivu-select-input")[0];
                         _DOM.addEventListener("keyup", function(event){
                             let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel",""));
-                            Common.throttle2((t)=>{console.log(t)}, null, 2000, this.value,5000);
-                            /*
+                            //Common.throttle2((t)=>{console.log(t)}, null, 2000, this.value,5000);
+                            
                             Common.throttle(
                                 ()=>{
                                     
@@ -228,7 +228,7 @@ export default {
                                 ,
                                 {leading:true,trailing:true}
                             )();
-                            */
+                            
                             
                         })
                     }

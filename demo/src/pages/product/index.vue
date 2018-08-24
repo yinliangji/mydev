@@ -1,7 +1,7 @@
 <template>
 	<div class="pageContent">
 		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :Top="'10'" />
-		<selectMenu></selectMenu>
+		<selectMenu @changeSelect="selectMenuFn"></selectMenu>
 		<Card>
 			<div class="productBox">
 				<h3 class="Title">用户故事</h3>
@@ -13,20 +13,20 @@
 						        	<Col span="3" style="text-align: center">用户故事名称</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Input  placeholder="输入用户故事名称"></Input>
+						                    <Input clearable v-model="formValidate.userstory_name" placeholder="输入用户故事名称"></Input>
 						                </FormItem>
 						            </Col>
 						            <Col span="3" style="text-align: center">故事编号</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Input  placeholder="输入故事编号"></Input>
+						                    <Input clearable v-model="formValidate.userstory_id" placeholder="输入故事编号"></Input>
 						                </FormItem>
 						            </Col>
 						            <Col span="3" style="text-align: center">故事类型</Col>
 						            <Col span="5">
 						                <FormItem >
-                                            <Select v-model="formValidate.userstory_type" placeholder="请选择故事类型">
-                                                <Option :value="0">请选择故事类型</Option>
+                                            <Select clearable v-model="formValidate.userstory_type" placeholder="请选择故事类型">
+                                                
                                                 <Option v-for="(item,index) in userstory_typeList" :value="item.value" :key="index">{{ item.label }}</Option>
                                                 
                                             </Select>
@@ -37,8 +37,8 @@
 						        	<Col span="3" style="text-align: center">故事状态</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select v-model="formValidate.userstory_status" placeholder="请选择故事状态">
-						                    	<Option :value="0">请选择故事状态</Option>
+						                    <Select clearable v-model="formValidate.userstory_status" placeholder="请选择故事状态">
+						                    	
                                                 <Option v-for="(item,index) in userstory_statusList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
@@ -46,8 +46,8 @@
 						            <Col span="3" style="text-align: center">所属需求</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select v-model="formValidate.req_id" placeholder="请选择所属需求">
-						                    	<Option :value="0">请选择所属需求</Option>
+						                    <Select clearable v-model="formValidate.req_id" placeholder="请选择所属需求">
+						                    	
 					                            <Option v-for="(item,index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
 					                        </Select>
 						                </FormItem>
@@ -55,8 +55,8 @@
 						            <Col span="3" style="text-align: center">优先级</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select v-model="formValidate.proi"  placeholder="请选择优先级">
-						                    	<Option :value="0">请选择优先级</Option>
+						                    <Select clearable v-model="formValidate.proi"  placeholder="请选择优先级">
+						                    	
                                                 <Option v-for="(item,index) in proiList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
@@ -66,8 +66,8 @@
 						        	<Col span="3" style="text-align: center">负责人</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select v-model="formValidate.charger" placeholder="请选择负责人">
-						                    	<Option :value="0">请选择负责人</Option>
+						                    <Select clearable v-model="formValidate.charger" placeholder="请选择负责人">
+						                    	
                                                 <Option v-for="(item,index) in chargerList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
@@ -75,8 +75,8 @@
 						            <Col span="3" style="text-align: center">是否领导关心</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select v-model="formValidate.learn_concern" placeholder="请选择是否领导关心">
-						                    	<Option :value="0">请选择是否领导关心</Option>
+						                    <Select clearable v-model="formValidate.learn_concern" placeholder="请选择是否领导关心">
+						                    	
 					                            <Option v-for="(item,index) in learn_concernList" :value="item.value" :key="index">{{ item.label }}</Option>
 					                        </Select>
 						                </FormItem>
@@ -84,8 +84,8 @@
 						            <Col span="3" style="text-align: center">所属迭代</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select v-model="formValidate.sprint" placeholder="请选择迭代">
-						                    	<Option :value="0">请选择迭代</Option>
+						                    <Select clearable v-model="formValidate.sprint" placeholder="请选择迭代">
+						                    	
                                                 <Option v-for="(item,index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
@@ -94,6 +94,7 @@
 							</Col>
 							<Col span="9" style="text-align: left" class="serchBtnBox">
 								<Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
+								<Button class="cancelSerchBtn" @click="cancelSerchAll">重填</Button>
 							</Col>
 						</Row>
 						<div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
@@ -106,7 +107,13 @@
 					<div class="tagBox">
 						<Row :gutter="10" align="middle">
 							<Col span="3" class="addBtnBox">
-								<Button type="success" @click="addItem">添加用户故事</Button>
+								<Button 
+									type="success"  
+									@click="addItem"
+									:disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
+									>
+									添加用户故事
+								</Button>
 							</Col>
 							<Col span="1" >
 								<img src="@/assets/images/product-list.png" @click="showList" class="cursor">
@@ -154,7 +161,7 @@ import ADDorEDITpop from "./add_or_edit_pop";
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAll,storyGetKanBan,storyGetCondition} = Common.restUrl;
+const {storyAll,storyGetKanBan,storyGetCondition,getPermission} = Common.restUrl;
 
 export default {
 	beforecreated(){
@@ -505,6 +512,7 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                domProps:{disabled:this.authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])},
                                 on: {
                                     click: () => {
                                         //this.show(params.index)
@@ -520,6 +528,7 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                domProps:{disabled:this.authIs(['icdp_projList_mng','icdp_projList_view'])},
                                 on: {
                                     click: () => {
                                         this.goAddDevelopmentFn(params.index)
@@ -531,6 +540,7 @@ export default {
                                     type: 'success',
                                     size: 'small'
                                 },
+
                                 on: {
                                     click: () => {
                                         //this.show(params.index)
@@ -586,13 +596,13 @@ export default {
             formValidate: {
                 userstory_name:"",//用户故事名称
                 userstory_id:"",//故事编号
-                userstory_type:0,//故事类型
-                userstory_status:0,//故事状态
-                req_id:0,//所属需求
-                proi:0,//优先级
-                charger:0,//负责人
-                learn_concern:0,//是否领导关心
-                sprint:0,//所属迭代
+                userstory_type:"",//故事类型
+                userstory_status:"",//故事状态
+                req_id:"",//所属需求
+                proi:"",//优先级
+                charger:"",//负责人
+                learn_concern:"",//是否领导关心
+                sprint:"",//所属迭代
 
             },
 
@@ -659,6 +669,10 @@ export default {
              //    },
             ],
             sprintList:[],
+
+
+            prj_permission:[],
+            identity:"",
 		}
 	},
 	components: {
@@ -673,19 +687,19 @@ export default {
     },
 
 	mounted(){
-		let ID = false;
+		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 
 
-		if(this.$router.history.current.query.id){
-           ID = this.$router.history.current.query.id;
-           localStorage.setItem('id', this.$router.history.current.query.id); 
-        }else if(localStorage.getItem('id')){
-           ID = localStorage.getItem('id')
-        }else if(Common.getCookie("id")){
-           ID = Common.getCookie("id")
-        }else{
-            this.$router.push('/agile');
-        }
+		// if(this.$router.history.current.query.id){
+		  //          ID = this.$router.history.current.query.id;
+		  //          localStorage.setItem('id', this.$router.history.current.query.id); 
+		  //       }else if(localStorage.getItem('id')){
+		  //          ID = localStorage.getItem('id')
+		  //       }else if(Common.getCookie("id")){
+		  //          ID = Common.getCookie("id")
+		  //       }else{
+		  //           this.$router.push('/agile');
+		  //       }
 
 
 
@@ -697,6 +711,7 @@ export default {
 		  //   	}else{
 		  //   		ID = 0;
 		  //   	}
+		this.getPermissionFn(getPermission)
   		this.tableDataAjaxFn(storyAll,1,3,"",ID);
     	this.storyGetKanBanFn(storyGetKanBan,ID);
 
@@ -738,15 +753,94 @@ export default {
 		// }
 	},
 	methods:{
+
+		authIs(KEY){
+            let OBJ = this.prj_permission
+            if(this.identity == "SuperAdmin"){
+                return false
+            }else if(this.identity == "PlainAdmin"){
+                return false
+            }else{
+                if(KEY && KEY.length){
+                    let _temp = true;
+                    for(let i =0;i<KEY.length;i++){
+                        if(!(KEY[i].indexOf("_view") != -1)){
+                            if(OBJ.findIndex((item)=>{return item == KEY[i]}) != -1){
+                                _temp = false
+                            }
+                        }
+                    }
+                    return _temp
+
+                }else{
+                    return true
+                }
+            }
+            
+        },
+
+        getPermissionFn(URL){
+            defaultAXIOS(URL,{},{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======agile getPermission***response+++",response,myData,"======>");
+                if(myData.prj_permission && myData.prj_permission.length){
+                    this.prj_permission = myData.prj_permission;
+                    this.identity = myData.identity
+                }else if(myData.permission && myData.permission.length){
+                    this.prj_permission = myData.permission;
+                    this.identity = myData.identity
+                }
+                else{
+                    this.showError("不能有任何动作");
+                }
+                
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+
+
+
+		getID(){
+			let ID = false;
+
+			if(this.$router.history.current.query.id){
+	           ID = this.$router.history.current.query.id;
+	           localStorage.setItem('id', this.$router.history.current.query.id); 
+	        }else if(localStorage.getItem('id')){
+	           ID = localStorage.getItem('id')
+	        }else if(Common.getCookie("id")){
+	           ID = Common.getCookie("id")
+	        }else{
+	        	ID = false;
+	            //this.$router.push('/agile');
+	        }
+	        return ID;
+
+		},
+
+
+		selectMenuFn(N){
+			let ID = N;
+			Common.setCookie("id",N);
+            localStorage.setItem('id', N);
+            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
+            this.storyGetKanBanFn(storyGetKanBan,ID);
+        },
+
 		storyGetConditionFn(URL,condition){
             defaultAXIOS(URL,{condition},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======agile byRole***response+++",response,myData,"======>");
-                if(myData && myData.length){
+                console.log("<======agile byRole***response+++",condition,response,myData,"======>");
+                if(myData && (myData=="success")){
+
+                }else if(myData && myData.length){
                     let _OBJ = {};
                     for(let i=0;i<myData.length;i++){
-                        _OBJ.label = myData[i].value
-                        _OBJ.value = myData[i].key
+                        _OBJ.label = (myData[i].value || myData[i].sprint_name)+""
+                        _OBJ.value = (myData[i].key || myData[i].sprint)+""
                         this[condition+"List"].push(_OBJ)
                         _OBJ = {};
                     }
@@ -760,15 +854,25 @@ export default {
                 this.showError(error);
             });
         },
+        cancelSerchAll(){
+            for(let i in this.formValidate){
+                this.formValidate[i] = "";
+            }
+            this.$refs.formValidate.resetFields();
+        },
 		serchAll(){
-            this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine,"",formValidate.userstory_name,formValidate.userstory_id,formValidate.userstory_type,formValidate.userstory_status,formValidate.req_id,formValidate.proi,formValidate.charger,formValidate.learn_concern,formValidate.sprint,);
+			let ID = this.getID()
+            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,);
         },
 		storyGetKanBanFn(URL = "",id){
-			defaultAXIOS(URL,{id},{timeout:20000,method:'get'}).then((response) => {
+			this.cardList = [];
+			this.statusList = [];
+			defaultAXIOS(URL,{id:id,prj_id:id},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product KanBanFn ***response+++",response,myData,"======>");
                 if(myData && myData.length){
+                	
                 	let _temp = {}
                 	for(let i=0;i<myData.length;i++){
                 		_temp.stateStr = myData[i].userstory_status;
@@ -801,6 +905,7 @@ export default {
 					console.log("-=-=-=-myData",myData)
 					
 					for(let i=0;i<myData.length;i++){
+
 					
 						for(let j=0;j<myData[i].list.length;j++){
 							_Obj.taskState = "0"+(i+1);
@@ -820,7 +925,7 @@ export default {
 						this.cardList.push(..._arr);
 						_arr = []
 					}
-					console.log("-=-=-=-this.cardList",this.cardList)
+					
 
 
                 	
@@ -854,7 +959,8 @@ export default {
 
 		},
 		changeCurrentPage(i) {
-            this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"")
+			let ID = this.getID()
+            this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID)
         },
         changePageSize(i) {
         },
@@ -864,14 +970,14 @@ export default {
 
 
         tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
-            defaultAXIOS(URL,{page,limit,data,id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
+            defaultAXIOS(URL,{page,limit,data,id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product***response+++",response,myData.list,"======>");
                 this.tableData = myData.rows;
                 this.tableDAtaTatol = myData.page_rows;
 
-    //             let _temp = {};
+    			//             let _temp = {};
 				// for(let i=0;i<this.tableData.length;i++){
 				// 	_temp.taskName = this.tableData[i].userstory_name
 				// 	_temp.userName = this.tableData[i].charger;
@@ -991,7 +1097,7 @@ export default {
         },
 		goDevelopmentFn (index) {
             //this.$router.push('/development')userstory_name
-            this.$router.push({path: '/development', query: {board: true,us_name:this.tableData[index].userstory_name}})
+            this.$router.push({path: '/development', query: {board: true,us_name:this.tableData[index].id}})
         },
 		goProductDetailFn (index) {
             //alert(index)
@@ -1031,6 +1137,12 @@ export default {
     left:0;
     top:50%;
     transform: translate(50%, -65%);
+}
+.cancelSerchBtn{
+    position: absolute;
+    left:0;
+    top:50%;
+    transform: translate(200%, -65%);
 }
 .tableBox{
 	padding-top: 20px;

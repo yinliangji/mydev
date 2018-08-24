@@ -46,6 +46,9 @@ CommonRest.restUrl = {
     /****express 敏捷项目获取角色 get****/
 
 
+    /*****************************************/
+
+
     "storyAll": process.env.BASE_URL + "/userstory/listUserstory/",
     /****express 用户故事列表 get****/
 
@@ -71,9 +74,10 @@ CommonRest.restUrl = {
     /****express 用户故事查询获取 get****/
 
     
+    /*****************************************/
 
-
-
+    "getPermission": process.env.BASE_URL + "/auth/getPermissionfromUser/",
+    /****express 用户故事查询获取 get****/
     
 
 

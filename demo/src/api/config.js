@@ -36,6 +36,7 @@ const defaultSet = {
    // 请求头信息
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
+    //"Cookie" : document.cookie + ';',
     //'Content-Type':'application/x-www-form-urlencoded; charset=utf-8',
     //multipart/form-data;charset=UTF-8 
     //application/x-www-form-urlencoded;charset=UTF-8 
@@ -48,6 +49,6 @@ const defaultSet = {
   responseType: 'json', // default
 
   // `withCredentials` 表示跨域请求时是否需要使用凭证
-  withCredentials: false, // 默认的
+  withCredentials: true, // 默认的
 }
 export default defaultSet

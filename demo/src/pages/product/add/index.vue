@@ -1,6 +1,6 @@
 <template>
 	<div class="pageContent">
-        <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :Top="'5'" />
+        <goAgile :go="'/product'" :text="'返回用户故事列表'" :Top="'5'" />
         <Card>
             <div class="productAddBox">
 
@@ -298,17 +298,17 @@ export default {
                 ],
 
                 userstory_type: [
-                    { required: true, message: 'Please select the city', trigger: 'change' }
+                    { required: true, message: 'Please select ', trigger: 'change' }
                 ],
                 req_id: [
-                    { required: true, message: 'Please select the city', trigger: 'change' }
+                    { required: true, message: 'Please select ', trigger: 'change' }
                 ],
                 introducer: [
-                    { required: false, message: 'Please select the city', trigger: 'change' }
+                    { required: false, message: 'Please select ', trigger: 'change' }
                 ],
 
                 person: [
-                    { required: true, message: 'Please select the city', trigger: 'change' }
+                    { required: true, message: 'Please select ', trigger: 'change' }
                 ],
                 userstory_status: [
                     { required: true, message: 'Please select gender', trigger: 'change' }
@@ -400,7 +400,7 @@ export default {
                 //     label: '业务模块1'
                     let _tempObj = {};
                     for(let i=0;i<myData.data.length;i++){
-                        _tempObj.value = myData.data[i].id+"";
+                        _tempObj.value = myData.data[i].req_id+"";
                         _tempObj.label = myData.data[i].req_name+"";
                         this.req_idList.push(_tempObj);
                         _tempObj = {};
@@ -429,7 +429,7 @@ export default {
                 //     label: '业务模块1'
                     let _tempObj = {};
                     for(let i=0;i<myData.sprintlist.length;i++){
-                        _tempObj.value = myData.sprintlist[i].sprint+"";
+                        _tempObj.value = myData.sprintlist[i].sp_id+"";
                         _tempObj.label = myData.sprintlist[i].sp_name+"";
                         this.sprintList.push(_tempObj);
                         _tempObj = {};
@@ -529,14 +529,20 @@ export default {
 
                 
             }
+            
             defaultAXIOS(storyAdd,tempData,{timeout:20000,method:'post'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product add***response+++",response,myData,"======>");
-                this.modal_add_loading = false;
-                this.formItemReset();
-                this.$refs.formValidate.resetFields();
-                this.$router.push('/product');
+                if(myData.status = "success"){
+                    this.modal_add_loading = false;
+                    this.formItemReset();
+                    this.$refs.formValidate.resetFields();
+                    this.$router.push('/product');
+                }else{
+                    this.modal_add_loading = false;
+                    this.showError(myData.status);
+                }
             }).catch( (error) => {
                 console.log(error);
                 this.modal_add_loading = false;

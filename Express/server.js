@@ -6,9 +6,11 @@ let app = express(); //实例化express
 let bodyParser = require('body-parser'); //body-parser中间件来解析请求体
 
 let allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
+    //res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8000');
+    res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
+    res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization,Cookie, Accept,X-Requested-With");
     if (req.method == "OPTIONS") {
         res.sendStatus("200"); /*让options请求快速返回*/
     } else {
@@ -85,6 +87,7 @@ let mockDataList = (val1 = 200, val2 = 1, val3 = 3) => {
             "total|3-9": 3,
             "per_page|3-9": 3,
         },
+       
     })
 }
 
@@ -541,6 +544,7 @@ let sprintList = (val1 = 200, val2 = 1, val3 = 3) => {
         
         "sprintlist|3-6": [{
             "sprint|+1": 25,
+            "sp_id|+1": 25,
             "sp_name|+1": 25,
 
             "__value2__page": val2,
@@ -1054,7 +1058,55 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
 
 
 
+let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "mockDataList xxxxxxx",
+        prj_permission:[
+            "icdp_pipeline_view",//0
+            "icdp_proj_level",//1
+            "icdp_userStory_mng",//2
+            "icdp_codeRepo_mng",//3
+            "icdp_devTask_view",//4
+            "icdp_projOverview_view",//5
+            "icdp_mainportal_view",//6
+            "icdp_sprint_mng",//7
+            "icdp_devTask_mng",//8
+            "icdp_userStory_view",//9
+            "icdp_projList_view",//10
+            "icdp_pipelineLf_view",//11
+            "icdp_agile_view",//12
+            "icdp_projDetail_view",//13
+            "icdp_workbench_view",//14
+            "icdp_sshkey_mng",//15
+            "icdp_codeRepo_view",//16
+            "icdp_sshkey_view",//17
+            "icdp_devWorkbench_view",//18
+            "icdp_mngrWorkbench_view",//19
+            "icdp_pipeline_mng",//20
+            //"icdp_projList_edit",//21
+            "icdp_sprint_view",//22
+            "icdp_codeRepoLf_view",//23
+            "icdp_projDetail_mng",//24
 
+            //========
+            //"icdp_projList_mng",//25
+            "icdp_projList_edit",//21
+        ],
+        identity:"PlainAdmin",
+        //PlainAdmin
+        //SuperAdmin
+        //Admin
+    })
+}
+
+app.all('/auth/getPermissionfromUser', function(req, res) {
+    let resVal = getPermission(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(getPermission(req.body.myStatus));
+    res.end()
+});
 
 
 app.all('/project/edit', function(req, res) {

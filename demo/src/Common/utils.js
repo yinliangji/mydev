@@ -37,7 +37,7 @@ export default class Utils extends CommonRest {
     }
     
     //函数节流
-    static throttle (func, wait, options) {
+    static throttle2 (func, wait, options) {
         /* options的默认值
          *  表示首次调用返回值方法时，会马上调用func；否则仅会记录当前时刻，当第二次调用的时间间隔超过wait时，才调用func。
          *  options.leading = true;
@@ -81,24 +81,33 @@ export default class Utils extends CommonRest {
         };
     };
 
-
-static throttle2(fn,context,delay,text,mustApplyTime){
-            clearTimeout(fn.timer);
-            fn._cur=Date.now();  //记录当前时间
-
-            if(!fn._start){      //若该函数是第一次调用，则直接设置_start,即开始时间，为_cur，即此刻的时间
-                fn._start=fn._cur;
-            }
-            if(fn._cur-fn._start>mustApplyTime){ 
-            //当前时间与上一次函数被执行的时间作差，与mustApplyTime比较，若大于，则必须执行一次函数，若小于，则重新设置计时器
-                fn.call(context,text);
-                fn._start=fn._cur;
-            }else{
-                fn.timer=setTimeout(()=>{
-                    fn.call(context,text);
-                },delay);
-            }
+    //函数节流
+    static throttle(fn, context, delay, text, mustApplyTime) {
+      return ()=>{
+        //
+        clearTimeout(context.timer);
+        let _exec = false;
+        if(context._now && Date.now() - context._now > delay){
+          console.log("context._now",Date.now() - context._now)
+          //_exec = true;
+          //fn.call(context, text,context);  
         }
+        context._now = Date.now();
+        context.timer = setTimeout(() => {
+          if (!_exec) {
+            fn.call(context, text, context);
+            _exec = false;
+          }
+
+        }, delay);
+        //      
+      }
+      
+
+     
+     
+      
+    }
 
 
 

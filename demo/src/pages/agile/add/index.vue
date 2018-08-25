@@ -90,7 +90,7 @@
                                         :ref="myItem.myRef+index" 
                                         :class="myItem.myRef+index"
                                         >
-                                        <Select v-model="myItem.group" :id="'sel'+index" filterable multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
+                                        <Select v-model="myItem.group" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
                                             <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2">
                                                 {{ item.label }}
                                             </Option>
@@ -191,17 +191,17 @@ export default {
         "formValidate.AddGroupList"(curVal,oldVal){
             let _this = this;
             if(curVal){
+                //Common.changeArr(this,curVal,Common,projectAddGroup)
+               
+                
                 this.$nextTick(()=>{
-                    //
+                    
                     for(var i=0;i<curVal.length;i++){
-                        let _DOM = this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].getElementsByClassName("ivu-select-input")[0];
+                        let _DOM = this.$refs[curVal[i].myRef+i][0].$el.getElementsByClassName("ivu-select-input")[0];
                         _DOM.addEventListener("keyup", function(event){
                             let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel",""));
-                            //Common.throttle2((t)=>{console.log(t)}, null, 2000, this.value,5000);
-                            
-                            Common.throttle(
-                                ()=>{
-                                    
+                            let exec = Common.throttle(
+                                (value,THIS)=>{
                                     let _URL = false;
                                     if(curVal[_num].groupName == "allgroupList"){
                                         _URL = projectAllgroup;
@@ -214,42 +214,74 @@ export default {
                                     }else{
                                         _URL = projectAddGroup;
                                     }
-                                    _this.projectGroupFn(
-                                        _URL
-                                        ,
-                                        //{userName:this.value+"|"+curVal[_num].group.join("|"),}
-                                        {userName:this.value,}
-                                        ,
-                                        _num
-                                    );
+                                    _this.inputLoad = true;
+                                    _this.projectGroupFn(_URL,{userName:value,},_num,THIS);
                                 }
+                                , 
+                                this
+                                , 
+                                1500
+                                ,
+                                this.value
                                 ,
                                 2000
-                                ,
-                                {leading:true,trailing:true}
-                            )();
-                            
-                            
+                            );
+                            exec();
                         })
                     }
-                    //
-                /*现在数据已经渲染完毕*/
                 })
+                
             }
         },
+        formValidate: {
+            handler(val, oldVal) {
+                if(val){
+                    //Common.inputArr(this,val)
+                    
+                    let ArrFn = (obj,arr)=>{
+                        let _OBJ = {}
+                        for(let k=0;k<arr.length;k++){
+                            if(arr[k] == obj.value){
+                               _OBJ.label = obj.label;
+                               _OBJ.value = obj.value;
+                            }
+                        }
+                        if(_OBJ.label && _OBJ.value){
+                            return _OBJ;    
+                        }else{
+                            return false;
+                        }
+                    }
+                    let _tempArr = []
+                    for(let i=0;i<val.AddGroupList.length;i++){
+                        for(let j=0;j<val.AddGroupList[i].groupList.length;j++){
+                            if(ArrFn(val.AddGroupList[i].groupList[j],val.AddGroupList[i].group)){
+                                _tempArr.push(ArrFn(val.AddGroupList[i].groupList[j],val.AddGroupList[i].group))
+                            }
+                        }
+                        this.$nextTick(()=>{
+                            document.getElementById("sel"+i).getElementsByClassName("ivu-select-input")[0].temp = _tempArr;
+                            _tempArr = [];  
+                        })
+                    }
+                    
+                }
+            },
+            deep: true
+        }
         
     },
     beforecreated(){
-        console.log("agileAdd--beforecreated-------",this.formPartValidate.partName,typeof(this.formPartValidate.partName))
+        console.log("agileAdd--beforecreated-------",this.formPartValidate)
     },
     created(){
-        console.log("agileAdd--created-------",this.formPartValidate.partName,typeof(this.formPartValidate.partName))
+        console.log("agileAdd--created-------",this.formPartValidate)
     },
     beforeUpdate(){
-        console.log("agileAdd--beforeUpdate-------",this.formPartValidate.partName,typeof(this.formPartValidate.partName))
+        console.log("agileAdd--beforeUpdate-------",this.formPartValidate)
     },
     updated(){
-        console.log("agileAdd--updated-------",this.formPartValidate.partName,typeof(this.formPartValidate.partName))
+        console.log("agileAdd--updated-------",this.formPartValidate)
     },
 	computed: {
         addtest() {
@@ -466,6 +498,8 @@ export default {
                 
             },
 
+            inputLoad:false,
+
 
 
 
@@ -521,6 +555,10 @@ export default {
     },
     
     methods: {
+        demoFn(query,a){
+            console.log(query,a)
+
+        },
         addTeamFn(URL,params = {}){
             let _tempArr =[
                     {
@@ -728,11 +766,13 @@ export default {
 
 
 
-        projectGroupFn(URL,params = {},ARR){
+        projectGroupFn(URL,params = {},ARR,thatEle){
             defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
-
+                this.inputLoad = false;
+                this.formValidate.AddGroupList[ARR].groupList = [];
+                
 
                 let _Array = [
                     {
@@ -762,13 +802,20 @@ export default {
                 ]
 
                 if(typeof(ARR)  == "number"){
+
+                    if(thatEle && thatEle.temp && thatEle.temp.length){
+                        this.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp)
+                    }
+
+                    
+                    this.formValidate.AddGroupList[ARR].groupList.push(...myData.data.list)
                     //this.formValidate.AddGroupList[ARR].groupList = myData.data.list;
-                    this.formValidate.AddGroupList[ARR].groupList = _Array;
-                     
+                    //this.formValidate.AddGroupList[ARR].groupList = _Array;
                 }
                 
             }).catch( (error) => {
                 console.log(error);
+                this.inputLoad = false;
                 this.showError(error);
             });   
         },

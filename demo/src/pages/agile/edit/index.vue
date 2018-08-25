@@ -92,7 +92,7 @@
                                         :ref="myItem.myRef+index" 
                                         :class="myItem.myRef+index"
                                         >
-                                        <Select v-model.lazy="myItem.group" :id="'sel'+index" filterable multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
+                                        <Select v-model.lazy="myItem.group" :id="'sel'+index" filterable multiple :loading="inputLoad" :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
                                             <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2">
                                                 {{ item.label }}
                                             </Option>
@@ -200,50 +200,20 @@ export default {
         "formValidate.start_time":function(curVal,oldVal){
 
         },
-        "formValidate.AddGroupList"(curVal,oldVal){
+         "formValidate.AddGroupList"(curVal,oldVal){
             let _this = this;
             if(curVal){
-                this.$nextTick(()=>{
-                    //
-                    for(var i=0;i<curVal.length;i++){
-                        let _DOM = this.$refs[curVal[i].myRef+i][0].$vnode.elm.childNodes[2].childNodes[0].childNodes[0].childNodes[2].getElementsByClassName("ivu-select-input")[0];
-                        _DOM.addEventListener("keyup", function(event){
-                            let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel",""));
-                            //
-                            Common.throttle(
-                                ()=>{
-                                    let _URL = false;
-                                    if(curVal[_num].groupName == "allgroupList"){
-                                        _URL = projectAllgroup;
-                                    }else if(curVal[_num].groupName == "managerGroupList"){
-                                        _URL = projectManagerGroup;
-                                    }else if(curVal[_num].groupName == "developerGroupList"){
-                                        _URL = projectDeveloperGroup;
-                                    }else if(curVal[_num].groupName == "testerGroupList"){
-                                        _URL = projectTesterGroup;
-                                    }else{
-                                        _URL = projectAddGroup;
-                                    }
-                                    _this.projectGroupFn(
-                                        _URL
-                                        ,
-                                        //{userName:this.value+"|"+curVal[_num].group.join("|"),}
-                                        {userName:this.value,}
-                                        ,
-                                        _num
-                                    );
-                                }
-                                ,
-                                2000
-                            )();
-                            //
-                        })
-                    }
-                    //
-                /*现在数据已经渲染完毕*/
-                })
+                Common.changeArr(this,curVal,Common,projectAddGroup)
             }
         },
+        formValidate: {
+            handler(val, oldVal) {
+                if(val){
+                    Common.inputArr(this,val)
+                }
+            },
+            deep: true
+        }
     },
     beforecreated(){
         console.log("agileEdit--beforecreated-------",this.formValidate.modules)
@@ -486,6 +456,9 @@ export default {
                 ],
                 
             },
+
+            inputLoad:false,
+
             
         }
     },
@@ -688,12 +661,13 @@ export default {
                 this.$nextTick(() => {
                   this.formPartValidate.loading = true;
                 });
+                let _tempObj = {}
                 if (valid) {
                     this.formPartValidate.loading = true;
                     this.$nextTick(() => {
                       this.formPartValidate.loading = true;
                     });
-                    let _tempObj = {
+                    _tempObj = {
                         myRef:"selfRef",
                         group:[],
                         groupList:[],
@@ -707,6 +681,7 @@ export default {
                     _tempObj.myValue = this.formPartValidate.partName;
                     
                     this.formValidate.AddGroupList.push(_tempObj);
+                    _tempObj = {}
                     this.formPartValidate.partName = "";
                     _tempObj = null;
                     this.partAdd = false;
@@ -722,11 +697,13 @@ export default {
             this.modaDelete = false;
         },
 
-        projectGroupFn(URL,params = {},ARR){
+        projectGroupFn(URL,params = {},ARR,thatEle){
             defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
-
+                this.inputLoad = false;
+                this.formValidate.AddGroupList[ARR].groupList = [];
+                this[ARR] = [];
                 let _Array = [
                     {
                         value: 'New York X L',
@@ -753,17 +730,27 @@ export default {
                         label: 'Canberra人6'
                     }
                 ]
+                console.log("thatEle.temp",thatEle,thatEle.temp)
 
                 if(typeof(ARR)  == "number"){
-                    this.formValidate.AddGroupList[ARR].groupList = _Array;
+                    if(thatEle && thatEle.temp && thatEle.temp.length){
+                        this.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp)
+                    }
+                    this.formValidate.AddGroupList[ARR].groupList.push(...myData.data.list)
+                    //this.formValidate.AddGroupList[ARR].groupList = _Array;
                     //this.formValidate.AddGroupList[ARR].groupList = myData.data.list;
                 }else{
-                    this[ARR] = _Array;    
+                    if(thatEle && thatEle.temp && thatEle.temp.length){
+                        this[ARR].groupList.push(...thatEle.temp)
+                    }
+                    this[ARR].groupList.push(...myData.data.list)
+                    //this[ARR] = _Array;    
                     //this[ARR] = myData.data.list;    
                 }
                 
             }).catch( (error) => {
                 console.log(error);
+                this.inputLoad = false;
                 this.showError(error);
             });   
         },
@@ -852,11 +839,11 @@ export default {
                     
 
                     
-                    
+                    let _tempObj = false;
                     for(var J=0;J< myData.role_user_info.length;J++){
 
 
-                        let _tempObj = {
+                        _tempObj = {
                             myRef:"selfRef",
                             group:[],
                             groupList:[],
@@ -876,6 +863,7 @@ export default {
                        
                         
                         this.formValidate.AddGroupList.push(_tempObj);
+                        _tempObj = false;
                     }
                     //
                 }

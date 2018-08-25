@@ -895,13 +895,55 @@ let GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
     })
 }
 
+let _GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        data: {
+            "list": [
+                {
+                    value: '_New York',
+                    label: '_New York人1'
+                },
+                {
+                    value: '_London',
+                    label: '_London人2'
+                },
+                {
+                    value: '_Sydney',
+                    label: '_Sydney人3'
+                },
+                {
+                    value: '_Ottawa',
+                    label: '_Ottawa人4'
+                },
+                {
+                    value: '_Paris',
+                    label: '_Paris人5'
+                },
+                {
+                    value: '_Canberra',
+                    label: '_Canberra人6'
+                }
+            ],
+
+        },
+    })
+}
 
 
+app.all('/agile/getUsers/', function(req, res) {
+    let resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(_GroupList(req.body.myStatus));
+    res.end()
+});
 
 
 
 app.all('/project/allgroup/', function(req, res) {
-    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
+    let resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
     res.json(GroupList(req.body.myStatus));
@@ -928,13 +970,7 @@ app.all('/project/testerGroup/', function(req, res) {
     res.json(GroupList(req.body.myStatus));
     res.end()
 });
-app.all('/agile/getUsers/', function(req, res) {
-    let resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
-    console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
-    res.json(GroupList(req.body.myStatus));
-    res.end()
-});
+
 
 
 
@@ -1097,7 +1133,7 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
             //"icdp_projList_mng",//25
             "icdp_projList_edit",//21
         ],
-        identity:"PlainAdmin",
+        identity:"SuperAdmin",
         //PlainAdmin
         //SuperAdmin
         //Admin

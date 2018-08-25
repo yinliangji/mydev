@@ -246,11 +246,11 @@ export default class Common extends Utils {
       });
     }
 
-    static authIs(KEY){
-        let OBJ = this.prj_permission
-        if(this.identity == "SuperAdmin"){
+    static auth(THIS,KEY){
+        let OBJ = THIS.prj_permission
+        if(THIS.identity == "SuperAdmin"){
             return false
-        }else if(this.identity == "PlainAdmin"){
+        }else if(THIS.identity == "PlainAdmin"){
             return false
         }else{
             if(KEY && KEY.length){
@@ -270,6 +270,82 @@ export default class Common extends Utils {
         }
         
     }
+
+
+    static inputArr(_this,val){
+      //
+      let ArrFn = (obj,arr)=>{
+        let _OBJ = {}
+        for(let k=0;k<arr.length;k++){
+            if(arr[k] == obj.value){
+               _OBJ.label = obj.label;
+               _OBJ.value = obj.value;
+            }
+        }
+        if(_OBJ.label && _OBJ.value){
+            return _OBJ;    
+        }else{
+            return false;
+        }
+      }
+      let _tempArr = []
+
+      for(let i=0;i<val.AddGroupList.length;i++){
+          for(let j=0;j<val.AddGroupList[i].groupList.length;j++){
+              if(ArrFn(val.AddGroupList[i].groupList[j],val.AddGroupList[i].group)){
+                  _tempArr.push(ArrFn(val.AddGroupList[i].groupList[j],val.AddGroupList[i].group))
+              }
+          }
+          console.log("-=-=-=-=-=-=-=-==-",i,_tempArr)
+          _this.$nextTick(()=>{
+              document.getElementById("sel"+i).getElementsByClassName("ivu-select-input")[0].temp = _tempArr;
+              _tempArr = [];  
+          })
+      }
+      //
+
+    }
+
+
+    static changeArr(_this, curVal, _Common, _projectAddGroup) {
+      _this.$nextTick(() => {
+
+        for (var i = 0; i < curVal.length; i++) {
+          let _DOM = _this.$refs[curVal[i].myRef + i][0].$el.getElementsByClassName("ivu-select-input")[0];
+          _DOM.addEventListener("keyup", function(event) {
+            let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel", ""));
+            let exec = _Common.throttle(
+              (value, THIS) => {
+                let _URL = _projectAddGroup;
+                // if(curVal[_num].groupName == "allgroupList"){
+                //     _URL = projectAllgroup;
+                // }else if(curVal[_num].groupName == "managerGroupList"){
+                //     _URL = projectManagerGroup;
+                // }else if(curVal[_num].groupName == "developerGroupList"){
+                //     _URL = projectDeveloperGroup;
+                // }else if(curVal[_num].groupName == "testerGroupList"){
+                //     _URL = projectTesterGroup;
+                // }else{
+                //     _URL = _projectAddGroup;
+                // }
+                _this.inputLoad = true;
+                _this.projectGroupFn(_URL, {
+                  userName: value,
+                }, _num, THIS);
+              },
+              this,
+              1500,
+              this.value,
+              2000
+            );
+            exec();
+          })
+        }
+      })
+    }
+
+
+
 }
 
 

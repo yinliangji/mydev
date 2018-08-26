@@ -191,9 +191,9 @@ export default {
         "formValidate.AddGroupList"(curVal,oldVal){
             let _this = this;
             if(curVal){
-                //Common.changeArr(this,curVal,Common,projectAddGroup)
+                Common.changeArr(this,curVal,Common,projectAddGroup)
                
-                
+                /*
                 this.$nextTick(()=>{
                     
                     for(var i=0;i<curVal.length;i++){
@@ -230,14 +230,15 @@ export default {
                         })
                     }
                 })
+                */
                 
             }
         },
         formValidate: {
             handler(val, oldVal) {
                 if(val){
-                    //Common.inputArr(this,val)
-                    
+                    Common.inputArr(this,val)
+                    /*
                     let ArrFn = (obj,arr)=>{
                         let _OBJ = {}
                         for(let k=0;k<arr.length;k++){
@@ -264,6 +265,8 @@ export default {
                             _tempArr = [];  
                         })
                     }
+                    */
+                    
                     
                 }
             },

@@ -288,22 +288,21 @@ export default class Common extends Utils {
             return false;
         }
       }
+
+      _this.$nextTick(()=>{
       let _tempArr = []
+        for(let i=0;i<val.AddGroupList.length;i++){
+            for(let j=0;j<val.AddGroupList[i].groupList.length;j++){
+                if(ArrFn(val.AddGroupList[i].groupList[j],val.AddGroupList[i].group)){
+                    _tempArr.push(ArrFn(val.AddGroupList[i].groupList[j],val.AddGroupList[i].group))
+                }
+            }
+            document.getElementById("sel"+i).getElementsByClassName("ivu-select-input")[0].temp = _tempArr;
+            _tempArr = [];  
+            
+        }
 
-      for(let i=0;i<val.AddGroupList.length;i++){
-          for(let j=0;j<val.AddGroupList[i].groupList.length;j++){
-              if(ArrFn(val.AddGroupList[i].groupList[j],val.AddGroupList[i].group)){
-                  _tempArr.push(ArrFn(val.AddGroupList[i].groupList[j],val.AddGroupList[i].group))
-              }
-          }
-          console.log("-=-=-=-=-=-=-=-==-",i,_tempArr)
-          _this.$nextTick(()=>{
-              document.getElementById("sel"+i).getElementsByClassName("ivu-select-input")[0].temp = _tempArr;
-              _tempArr = [];  
-          })
-      }
-      //
-
+      })
     }
 
 

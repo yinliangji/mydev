@@ -931,12 +931,67 @@ let _GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
     })
 }
 
+let GroupList_ = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        data: {
+            "list": [
+                {
+                    value: 'New York_',
+                    label: 'New York_人1'
+                },
+                {
+                    value: 'London_',
+                    label: 'London_人2'
+                },
+                {
+                    value: 'Sydney_',
+                    label: 'Sydney_人3'
+                },
+                {
+                    value: 'Ottawa_',
+                    label: 'Ottawa_人4'
+                },
+                {
+                    value: 'Paris_',
+                    label: 'Paris_人5'
+                },
+                {
+                    value: 'Canberra_',
+                    label: 'Canberra_人6'
+                }
+            ],
 
+        },
+    })
+}
+
+let trueorfalse = 0;
 app.all('/agile/getUsers/', function(req, res) {
-    let resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+
+    
+
+   // 
+
+    let resVal
+    let Json
+    if(trueorfalse == 0){
+        Json =  GroupList(req.body.myStatus)   
+        resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+    }else if(trueorfalse == 1){
+        Json =  _GroupList(req.body.myStatus) 
+        resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+
+    }else{
+        Json =  GroupList_(req.body.myStatus)   
+        resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+    }
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
-    res.json(_GroupList(req.body.myStatus));
+    trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
+    console.log(trueorfalse)
+    res.json(Json);
     res.end()
 });
 

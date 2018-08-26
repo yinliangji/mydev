@@ -661,13 +661,12 @@ export default {
                 this.$nextTick(() => {
                   this.formPartValidate.loading = true;
                 });
-                let _tempObj = {}
                 if (valid) {
                     this.formPartValidate.loading = true;
                     this.$nextTick(() => {
                       this.formPartValidate.loading = true;
                     });
-                    _tempObj = {
+                    let _tempObj = {
                         myRef:"selfRef",
                         group:[],
                         groupList:[],
@@ -681,7 +680,7 @@ export default {
                     _tempObj.myValue = this.formPartValidate.partName;
                     
                     this.formValidate.AddGroupList.push(_tempObj);
-                    _tempObj = {}
+                    
                     this.formPartValidate.partName = "";
                     _tempObj = null;
                     this.partAdd = false;

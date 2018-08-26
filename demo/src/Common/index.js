@@ -343,6 +343,48 @@ export default class Common extends Utils {
       })
     }
 
+    static  addPartPopBox(name,that){
+
+
+//
+      that.$refs[name].validate((valid) => {
+        that.formPartValidate.loading = false;
+        that.$nextTick(() => {
+          that.formPartValidate.loading = true;
+        });
+        if (valid) {
+          that.formPartValidate.loading = true;
+          that.$nextTick(() => {
+            that.formPartValidate.loading = true;
+          });
+          let _tempObj = {
+            myRef: "selfRef",
+            group: [],
+            groupList: [],
+            myLabel: "",
+            myValue: "",
+            delBtn: true,
+            groupName: "",
+            required: true,
+          }
+          _tempObj.myLabel = that.formPartValidate.addGroupList.length ? that.formPartValidate.addGroupList.filter((item) => {
+            return item.value == that.formPartValidate.partName
+          })[0].label : that.formPartValidate.partName;
+          _tempObj.myValue = that.formPartValidate.partName;
+
+          that.formValidate.AddGroupList.push(_tempObj);
+
+          that.formPartValidate.partName = "";
+          _tempObj = null;
+          that.partAdd = false;
+        }
+      })
+//
+
+
+
+    }
+
 
 
 }

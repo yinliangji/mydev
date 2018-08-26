@@ -656,6 +656,8 @@ export default {
             this.partAdd = true;
         },
         submitPart(name){
+            Common.addPartPopBox(name,this)
+            /*
             this.$refs.addPartPopBox.validate((valid) => {
                 this.formPartValidate.loading = false;
                 this.$nextTick(() => {
@@ -686,6 +688,8 @@ export default {
                     this.partAdd = false;
                 } 
             })
+            */
+
         },
         delCancel(){
           this.modaDelete = false;

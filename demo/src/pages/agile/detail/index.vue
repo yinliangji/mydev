@@ -191,7 +191,7 @@ export default {
     		Common.ErrorShow(ERR,this);
     	},
      	tableDataAjaxFn(URL = "",ID = 0){
-            defaultAXIOS(URL+ID,{},{timeout:2000,method:'get'}).then((response) => {
+            defaultAXIOS(URL+ID,{},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======detail***response+++",response,myData,"+++detail***response======>");

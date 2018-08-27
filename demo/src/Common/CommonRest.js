@@ -1,7 +1,12 @@
 "use strict"
+import CommonRestqhc from './CommonRestqhc';
+//export default class CommonRest extends CommonRestqhc
 export default class CommonRest {
-    constructor() {}
+    constructor() {
+    	//super()
+    }
 }
+
 CommonRest.restUrl = {
     "DemoURL_1": process.env.BASE_URL + "/json.action",
     /****express demo json****/
@@ -37,17 +42,21 @@ CommonRest.restUrl = {
     /****express 敏捷项目获取所属产品 get****/
 
     "projectAddGroup": process.env.SUB_BASE_URL + "/agile/getUsers/",
-    /****express 敏捷项目添加角色 get****/
+    /****express 敏捷项目添加角色人员 get****/
 
     "addTeam": process.env.SUB_BASE_URL + "/agile/getRoles/",
     /****express 敏捷项目获取角色 get****/
 
-    "byRole": process.env.SUB_BASE_URL + "/agile/getUsersByRole/",
-    /****express 敏捷项目获取角色 get****/
+    "byRole": process.env.BASE_URL + "/agile/getUsersByRole/",
+    /****express 敏捷项目搜索获取角色 get****/
 
+    "listModule": process.env.BASE_URL + "/module/listModule/",
+    /****express 敏捷项目获取模块 get****/
+
+    "publishUser": process.env.BASE_URL + "/auth/publishUser/",
+    /****express 敏捷项目添加获取默认角色 get****/
 
     /*****************************************/
-
 
     "storyAll": process.env.BASE_URL + "/userstory/listUserstory/",
     /****express 用户故事列表 get****/
@@ -76,28 +85,15 @@ CommonRest.restUrl = {
     "storySetChange": process.env.BASE_URL + "/userstory/changeUserstoryStatus/",
     /****express 用户故事看板拖动 get****/
 
-    
     /*****************************************/
 
     "getPermission": process.env.BASE_URL + "/auth/getPermissionfromUser/",
     /****express 用户故事查询获取 get****/
-    
-
-
-
-    // qhc迭代
-    "iterationList": process.env.BASE_URL + "/sprint/listSprint", //迭代列表get
-    "iterationAdd": process.env.BASE_URL + "/sprint/addSprint", //添加迭代post
-    "iterationEdit": process.env.BASE_URL + "/sprint/editSprint", //编辑迭代post
-    "iterationDel": process.env.BASE_URL + "/sprint/delSprint", //编辑迭代post
-    "iterationDetail": process.env.BASE_URL + "/sprint/detailSprint", //get 没用
-    "projectListData": process.env.BASE_URL + "/get_prj", //get
-    //开发任务
-    //qhc end
 
 }
-CommonRest.UA = navigator.userAgent.toLowerCase();
+Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);
 
+CommonRest.UA = navigator.userAgent.toLowerCase();
 CommonRest.browser = {
     "isWeixin": /micromessenger/ig.test(CommonRest.UA),
     "isIOS": !!CommonRest.UA.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/ig),

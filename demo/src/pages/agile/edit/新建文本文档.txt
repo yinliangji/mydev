@@ -1,0 +1,196 @@
+/*
+            let _tempArr =[
+                    {
+                        cn_name:"ICDP超级管理员",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"平台级别角色",
+                        domain:"",
+                        id:1,
+                        name:"icdp_superAdmin",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP管理员",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"平台级别角色",
+                        domain:"",
+                        id:2,
+                        name:"icdp_adminTeam",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP配置管理员",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:3,
+                        name:"icdp_confAdmin",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP项目经理",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:4,
+                        name:"icdp_projManager",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP产品经理",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:5,
+                        name:"icdp_prodManager",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP小组长",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:6,
+                        name:"icdp_teamLeader",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP敏捷教练",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:7,
+                        name:"icdp_agileCoach",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP总体组",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:8,
+                        name:"icdp_generalTeam",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP测试组",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:9,
+                        name:"icdp_testTeam",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                    {
+                        cn_name:"ICDP开发组",
+                        create_tiem:"2018-08-13 11:05:01",
+                        description:"项目级别角色",
+                        domain:"",
+                        id:10,
+                        name:"icdp_devTeam",
+                        order:0,
+                        reserve:false,
+                        sub_name:"",
+                    },
+                ]
+            defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
+                let _tempObj = {};
+
+
+
+                // let _DATA = myData.data.length ? myData.data : myData;
+                // if(_DATA && Array.isArray(_DATA) && _DATA.length){
+                //     for(var i=0;i<_DATA.length;i++){
+                //         _tempObj.value = _DATA[i].name;
+                //         _tempObj.label = _DATA[i].cn_name;
+                //         this.formPartValidate.addGroupList.push(_tempObj);
+                //         _tempObj = {};
+                //     }
+                // }else{
+                //     this.showError("数据不对");
+                // }
+
+
+                let _myDataArr = false;
+                if(Array.isArray(myData) && myData.length){
+                    _myDataArr = myData;
+                }else if(Array.isArray(myData.data) && myData.data.length){
+                    _myDataArr = myData.data;
+                }else{
+                    _myDataArr = _tempArr;
+                }
+                for(var i=0;i<_myDataArr.length;i++){
+                    _tempObj.value = _myDataArr[i].name;
+                    _tempObj.label = _myDataArr[i].cn_name;
+                    this.formPartValidate.addGroupList.push(_tempObj);
+                    _tempObj = {};
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+               
+                let _tempObj = {};
+                for(var i=0;i<_tempArr.length;i++){
+                    _tempObj.value = _tempArr[i].name;
+                    _tempObj.label = _tempArr[i].cn_name;
+                    this.formPartValidate.addGroupList.push(_tempObj);
+                    _tempObj = {};
+                }
+                
+            }); 
+            */ 
+
+
+/*
+            this.$refs.addPartPopBox.validate((valid) => {
+                this.formPartValidate.loading = false;
+                this.$nextTick(() => {
+                  this.formPartValidate.loading = true;
+                });
+                if (valid) {
+                    this.formPartValidate.loading = true;
+                    this.$nextTick(() => {
+                      this.formPartValidate.loading = true;
+                    });
+                    let _tempObj = {
+                        myRef:"selfRef",
+                        group:[],
+                        groupList:[],
+                        myLabel:"",
+                        myValue:"",
+                        delBtn:true,
+                        groupName:"",
+                        required:true,
+                    }
+                    _tempObj.myLabel = this.formPartValidate.addGroupList.length ? this.formPartValidate.addGroupList.filter((item)=>{return item.value == this.formPartValidate.partName})[0].label : this.formPartValidate.partName;
+                    _tempObj.myValue = this.formPartValidate.partName;
+                    
+                    this.formValidate.AddGroupList.push(_tempObj);
+                    
+                    this.formPartValidate.partName = "";
+                    _tempObj = null;
+                    this.partAdd = false;
+                } 
+            })
+            */

@@ -68,7 +68,7 @@ let mockDataList = (val1 = 200, val2 = 1, val3 = 3) => {
                 "id": 1,
                 "prj_id": 1,
                 "prj_name|5-8": /[a-zA-Z]/,
-                "prj_manager": "项目经理",
+                "manager|6-10": /[a-zA-Z0-9]/,
                 "prj_desc": "项目描述",
                 "prj_goal": "项目目标",
                 "settle_time": "2018-01-01",
@@ -104,7 +104,7 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
             "prj_id|+1": 100,
 
             "prj_name|5-8": /[a-zA-Z]/,
-            "prj_manager": "项目经理",
+            "manager|6-10": /[a-zA-Z0-9]/,
             "prj_desc": "项目描述",
             "prj_goal": "项目目标",
             "prj_type": "2",
@@ -114,7 +114,7 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
             
             "logic_sys_id": "logic_sys_id",
             "phycics_sys_id": "phycics_sys_id",
-            "modules": "模块1-1|模块2-2|",
+            "modules": "1|2|",
             "allgroup": "Canberra|London|",
             "managerGroup": "Sydney|Ottawa|",
             "developerGroup": "Paris|",
@@ -1212,6 +1212,10 @@ app.all('/userstory/changeUserstoryStatus/', function(req, res) {
 });
 
 
+
+
+
+
 app.all('/project/edit', function(req, res) {
     let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
@@ -1372,6 +1376,57 @@ app.all('/agile/getRoles/', function(req, res) {
     res.json(addGroupList(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
+
+
+
+
+let listModule = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        
+        "res": [
+            {
+                "physics_sys_id": 1,
+                "func_desc|5-8":/[a-zA-Z0-9]/,
+                "logic_sys_id":1,
+                "module_id":"mid0001",
+                "module_name":"模块1",
+                "prod":1,
+                "id":1,
+                "__value2__": val2,
+                "__value3__": val3,
+            },
+            {
+                "physics_sys_id": 2,
+                "func_desc|5-8":/[a-zA-Z0-9]/,
+                "logic_sys_id":2,
+                "module_id":"mid0002",
+                "module_name":"模块2",
+                "prod":2,
+                "id":2,
+                "__value2__": val2,
+                "__value3__": val3,
+            }
+        ],
+        
+    })
+}
+
+app.all('/module/listModule/', function(req, res) {
+    let resVal = listModule(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(listModule(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+app.all('/auth/publishUser/', function(req, res) {
+    res.json({nick_name:"谢蓓",user_name:"xiebei.zh"});
+    res.end()
+});
+
+
 
 
 /************qhc */

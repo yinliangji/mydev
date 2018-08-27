@@ -97,8 +97,8 @@
 								<Button class="cancelSerchBtn" @click="cancelSerchAll">重填</Button>
 							</Col>
 						</Row>
-						<div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
-                            <Icon type="chevron-down" color="#ed3f14"></Icon>
+						<div class="formValidateMoreBtnBox" :class="isShowMoreShow ?'arrUp':'arrDown'" @click="isShowMoreShow = !isShowMoreShow">
+                            <Icon type="chevron-down" color="#ed3f14"  ></Icon>
                             <Icon type="chevron-down" color="#ed3f14"></Icon>
                         </div>
 			        </FormItem>
@@ -161,7 +161,7 @@ import ADDorEDITpop from "./add_or_edit_pop";
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange} = Common.restUrl;
+const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail} = Common.restUrl;
 
 export default {
 	beforecreated(){
@@ -707,13 +707,13 @@ export default {
 
 
 
-    	this.storyGetConditionFn(storyGetCondition,"userstory_type");
-    	this.storyGetConditionFn(storyGetCondition,"userstory_status");
-    	this.storyGetConditionFn(storyGetCondition,"req_id");
-    	this.storyGetConditionFn(storyGetCondition,"proi");
-    	this.storyGetConditionFn(storyGetCondition,"charger");
-    	this.storyGetConditionFn(storyGetCondition,"learn_concern");
-    	this.storyGetConditionFn(storyGetCondition,"sprint");
+    	this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
+    	this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
+    	this.storyGetConditionFn(storyGetCondition,"req_id",ID);
+    	this.storyGetConditionFn(storyGetCondition,"proi",ID);
+    	this.storyGetConditionFn(storyGetCondition,"charger",ID);
+    	this.storyGetConditionFn(storyGetCondition,"learn_concern",ID);
+    	this.storyGetConditionFn(storyGetCondition,"sprint",ID);
     	
 
 		EventBus.$on("moveEnd", this.moveEnd);
@@ -819,6 +819,10 @@ export default {
 
 
 		getID(){
+
+
+			return Common.GETID(this,Common);
+			/*
 			let ID = false;
 
 			if(this.$router.history.current.query.id){
@@ -833,6 +837,7 @@ export default {
 	            //this.$router.push('/agile');
 	        }
 	        return ID;
+	        */
 
 		},
 
@@ -841,17 +846,31 @@ export default {
 			let ID = N;
 			Common.setCookie("id",N);
             localStorage.setItem('id', N);
-            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
-            this.storyGetKanBanFn(storyGetKanBan,ID);
+			defaultAXIOS(projectDetail+ID,{},{timeout:2000,method:'get'}).then((response) => {
+			    let myData = response.data;
+			    console.log("<======detail***response+++",response,myData,"+++detail***response======>");
+			    let DATA = myData.data ? myData.data : myData
+			    let prodId = DATA.prod_id?DATA.prod_id : DATA.prod 
+			    if(prodId){
+					Common.setCookie("prj_id",DATA.prj_id);
+		            localStorage.setItem('prj_id', DATA.prj_id);
+		            Common.setCookie("prod_id",prodId);
+		            localStorage.setItem('prod_id',prodId);
+			    }
+			}).catch( (error) => {
+			    console.log(error);
+			    this.showError(error);
+			});
+		    this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
+		    this.storyGetKanBanFn(storyGetKanBan,ID);
         },
 
-		storyGetConditionFn(URL,condition){
-            defaultAXIOS(URL,{condition},{timeout:20000,method:'get'}).then((response) => {
+		storyGetConditionFn(URL,condition,prj_id){
+            defaultAXIOS(URL,{condition,prj_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======agile byRole***response+++",condition,response,myData,"======>");
-                if(myData && (myData=="success")){
-
-                }else if(myData && myData.length){
+                
+                if(myData && myData.length){
                     let _OBJ = {};
                     for(let i=0;i<myData.length;i++){
                         _OBJ.label = (myData[i].value || myData[i].sprint_name)+""
@@ -859,6 +878,8 @@ export default {
                         this[condition+"List"].push(_OBJ)
                         _OBJ = {};
                     }
+                }else if(response.status == 200){
+
                 }else{
                     this.showError(URL+"****"+condition+"_没有数据");
                 }
@@ -972,7 +993,8 @@ export default {
 		},
 		changeCurrentPage(i) {
 			let ID = this.getID()
-            this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID)
+            //this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID)
+            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
         },
         changePageSize(i) {
         },
@@ -1190,6 +1212,14 @@ span.low {
 }
 .cursor {
 	cursor: pointer;
+}
+.arrUp{
+	transform: rotate(-180deg);
+	transform-origin: center center;
+}
+.arrDown{
+	transform: rotate(0deg);
+	transform-origin: center center;
 }
 </style>
 

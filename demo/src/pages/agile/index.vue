@@ -1,11 +1,5 @@
 <template>
 	<div class="pageContent">
-        <!-- <selectMenu></selectMenu> -->
-		<!-- <Breadcrumb :style="{margin: '16px 0'}">
-            <BreadcrumbItem>首页</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目管理</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目列表</BreadcrumbItem>
-        </Breadcrumb> -->
         <Card>
             <div class="aglieBox">
             	<h3 class="Title">敏捷项目列表</h3>
@@ -90,9 +84,9 @@
                             </Col>
                             
                         </Row>
-                        <div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
-                            <Icon type="chevron-down" color="#ed3f14"></Icon>
-                            <Icon type="chevron-down" color="#ed3f14"></Icon>
+                        <div class="formValidateMoreBtnBox" :class="isShowMoreShow ?'arrUp':'arrDown'" @click="isShowMoreShow = !isShowMoreShow">
+                            <Icon type="chevron-down" color="#ed3f14" ></Icon>
+                            <Icon type="chevron-down" color="#ed3f14" ></Icon>
                         </div>
 			        </FormItem>
 
@@ -264,7 +258,7 @@ export default {
                 },
                 {
                     title: '项目经理',
-                    key: 'prj_manager'
+                    key: 'manager'
                 },
                 {
                     title: '所属产品',
@@ -446,7 +440,8 @@ export default {
         },
 
         tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = ""){
-            defaultAXIOS(URL,{page,pageline,prj_name,prj_id,start_time,icdp_projManager,icdp_agileCoach,icdp_devTeam,icdp_testTeam},{timeout:20000,method:'get'}).then((response) => {
+            let timeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
+            defaultAXIOS(URL,{page,pageline,prj_name,prj_id,start_time:timeFromet,icdp_projManager,icdp_agileCoach,icdp_devTeam,icdp_testTeam},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");
@@ -620,7 +615,16 @@ export default {
             this.$router.push('/demand')
         },
         goDevelopmentFn (I) {
-            Common.setCookie("id",this.tableData[I].id); 
+            Common.setCookie("id",this.tableData[I].id);
+            localStorage.setItem('id', this.tableData[I].id);
+
+            Common.setCookie("prj_id",this.tableData[I].prj_id);
+            localStorage.setItem('prj_id', this.tableData[I].prj_id);
+
+            Common.setCookie("prod_id",this.tableData[I].prod_id);
+            localStorage.setItem('prod_id',this.tableData[I].prod_id);
+
+            
             this.$router.push({path: '/development', query: {board: true,id: this.tableData[I].id}})
         },
         goOverViewFn (I){
@@ -716,6 +720,14 @@ export default {
 	float:left;
 	line-height: 32px;
 	font-size:12px;
+}
+.arrUp{
+    transform: rotate(-180deg);
+    transform-origin: center center;
+}
+.arrDown{
+    transform: rotate(0deg);
+    transform-origin: center center;
 }
 </style>
 

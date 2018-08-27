@@ -120,9 +120,6 @@ export default class Common extends Utils {
       for(var tr =0;tr<TAB.length;tr++){
          Element += '<tr>';
          for(var thtd = 0;thtd<TAB[tr].length;thtd++){
-
-          console.log(TAB.length,TAB[tr].length)
-
           if( rows-_sn ==1 && Colspan){
 
             if(!_cols){
@@ -153,7 +150,6 @@ export default class Common extends Utils {
               }
               _cols = true;
             }else{
-              console.log("thtd,rows",thtd,rows)
               Element += '<th width="'+thWidth+'%">'
               Element += TAB[tr][thtd].title
               Element += '</th>'
@@ -166,27 +162,12 @@ export default class Common extends Utils {
 
 
           }else if(tr == TAB.length-1 && _sn && Colspan){
-
-            
-
-            
             if(thtd>= rows-_sn){//thtd >_sn
-              
-              console.log("_cols2_cols2_cols2",_cols2)
               if(!_cols2){
-                
                 Element += '<td colspan="'+_sn*2+'">&nbsp;</td>'
               }
               _cols2 = true;
-
-
-              
-
               //Element += '<td colspan="'+_sn*2+'">&nbsp;</td>'
-
-              
-
-              
             }else{
               Element += '<th>'
               Element += TAB[tr][thtd].title
@@ -197,10 +178,6 @@ export default class Common extends Utils {
               }
               Element += '</td>'
             }
-            
-
-
-
 
           }else{
             Element += tr == 0 ? '<th width="'+thWidth+'%">' : '<th>'
@@ -344,9 +321,6 @@ export default class Common extends Utils {
     }
 
     static  addPartPopBox(name,that){
-
-
-//
       that.$refs[name].validate((valid) => {
         that.formPartValidate.loading = false;
         that.$nextTick(() => {
@@ -377,16 +351,208 @@ export default class Common extends Utils {
           that.formPartValidate.partName = "";
           _tempObj = null;
           that.partAdd = false;
+
+
+          console.log("-=-=-=-=that.formValidate.AddGroupList",that.formValidate.AddGroupList)
+
         }
       })
-//
-
-
-
     }
 
+    static GETID(that,_Common){
+      let ID = false;
 
+      if(that.$router.history.current.query.id){
+             ID = that.$router.history.current.query.id;
+             localStorage.setItem('id', that.$router.history.current.query.id); 
+          }else if(localStorage.getItem('id')){
+             ID = localStorage.getItem('id')
+          }else if(_Common.getCookie("id")){
+             ID = _Common.getCookie("id")
+          }else{
+            ID = false;
+          }
+          return ID;
+    }
+
+    static Modulelist(FUN, that, URL, params) {
+      FUN(URL, params, {
+        timeout: 5000,
+        method: 'get'
+      }).then((response) => {
+        let myData = response.data;
+        console.log("<======【agile listModule get】***response+++", response, myData, "====>");
+
+        if (myData && myData.res && myData.res.length) {
+          console.log("myData.resmyData.resmyData.resmyData.res", myData.res)
+          let _temp = {};
+          for (let i = 0; i < myData.res.length; i++) {
+            _temp.label = myData.res[i].module_name;
+            _temp.value = myData.res[i].id + "";
+            that.moduleList.push(_temp);
+            _temp = {};
+          }
+        } else {
+          that.showError(URL + "_没有数据");
+        }
+
+      }).catch((error) => {
+        console.log(error);
+        that.showError(error);
+      });
+    }
+
+  static AddTeam(FUN, that, URL, params){
+    //
+    let _tempArr =[
+        {
+            cn_name:"ICDP超级管理员",
+            create_tiem:"2018-08-13 11:05:01",
+            description:"平台级别角色",
+            domain:"",
+            id:1,
+            name:"icdp_superAdmin",
+            order:0,
+            reserve:false,
+            sub_name:"",
+        },
+        {
+            cn_name:"ICDP管理员",
+            create_tiem:"2018-08-13 11:05:01",
+            description:"平台级别角色",
+            domain:"",
+            id:2,
+            name:"icdp_adminTeam",
+            order:0,
+            reserve:false,
+            sub_name:"",
+        },
+        {
+            cn_name:"ICDP配置管理员",
+            create_tiem:"2018-08-13 11:05:01",
+            description:"项目级别角色",
+            domain:"",
+            id:3,
+            name:"icdp_confAdmin",
+            order:0,
+            reserve:false,
+            sub_name:"",
+        },
+        {
+            cn_name:"ICDP项目经理",
+            create_tiem:"2018-08-13 11:05:01",
+            description:"项目级别角色",
+            domain:"",
+            id:4,
+            name:"icdp_projManager",
+            order:0,
+            reserve:false,
+            sub_name:"",
+        },
+        {
+            cn_name:"ICDP产品经理",
+            create_tiem:"2018-08-13 11:05:01",
+            description:"项目级别角色",
+            domain:"",
+            id:5,
+            name:"icdp_prodManager",
+            order:0,
+            reserve:false,
+            sub_name:"",
+        },
+        {
+            cn_name:"ICDP小组长",
+            create_tiem:"2018-08-13 11:05:01",
+            description:"项目级别角色",
+            domain:"",
+            id:6,
+            name:"icdp_teamLeader",
+            order:0,
+            reserve:false,
+            sub_name:"",
+        },
+        {
+            cn_name:"ICDP敏捷教练",
+            create_tiem:"2018-08-13 11:05:01",
+            description:"项目级别角色",
+            domain:"",
+            id:7,
+            name:"icdp_agileCoach",
+            order:0,
+            reserve:false,
+            sub_name:"",
+        },
+        {
+            cn_name:"ICDP总体组",
+            create_tiem:"2018-08-13 11:05:01",
+            description:"项目级别角色",
+            domain:"",
+            id:8,
+            name:"icdp_generalTeam",
+            order:0,
+            reserve:false,
+            sub_name:"",
+        },
+        {
+            cn_name:"ICDP测试组",
+            create_tiem:"2018-08-13 11:05:01",
+            description:"项目级别角色",
+            domain:"",
+            id:9,
+            name:"icdp_testTeam",
+            order:0,
+            reserve:false,
+            sub_name:"",
+        },
+        {
+            cn_name:"ICDP开发组",
+            create_tiem:"2018-08-13 11:05:01",
+            description:"项目级别角色",
+            domain:"",
+            id:10,
+            name:"icdp_devTeam",
+            order:0,
+            reserve:false,
+            sub_name:"",
+        },
+    ]
+    FUN(URL,params,{timeout:5000,method:'get'}).then((response) => {
+        let myData = response.data;
+        console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
+        let _tempObj = {};
+        
+        let _myDataArr = false;
+        if(Array.isArray(myData) && myData.length){
+            _myDataArr = myData;
+        }else if(Array.isArray(myData.data) && myData.data.length){
+            _myDataArr = myData.data;
+        }else{
+            _myDataArr = _tempArr;
+        }
+        for(var i=0;i<_myDataArr.length;i++){
+            _tempObj.value = _myDataArr[i].name;
+            _tempObj.label = _myDataArr[i].cn_name;
+            that.formPartValidate.addGroupList.push(_tempObj);
+            _tempObj = {};
+        }
+    }).catch( (error) => {
+        console.log(error);
+        that.showError(error);
+        
+        let _tempObj = {};
+        for(var i=0;i<_tempArr.length;i++){
+            _tempObj.value = _tempArr[i].name;
+            _tempObj.label = _tempArr[i].cn_name;
+            that.formPartValidate.addGroupList.push(_tempObj);
+            _tempObj = {};
+        }
+        
+    });   
+    //
+  }
 
 }
+
+  
 
 

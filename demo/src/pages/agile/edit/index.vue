@@ -58,7 +58,7 @@
 
 
                         <FormItem label="填写模块" >
-                            <Tag v-for="item in formValidate.modulesAdd" :key="item" :name="item" closable @on-close="handleClose">
+                            <Tag v-for="item in formValidate.createModule" :key="item" :name="item" closable @on-close="handleClose">
                                 {{ item}}
                             </Tag>
                             <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
@@ -117,7 +117,7 @@
     				        <span v-if="!modal_add_loading">提交</span>
     				        <span v-else>Loading...</span>
     				    </Button>
-                        <Button type="ghost" style="margin-left: 8px" @click="cancel">重填</Button>
+                        <Button type="ghost" style="margin-left: 8px" @click="cancel">返回</Button>
                     </FormItem>
                     
                 </Form>
@@ -169,7 +169,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail} = Common.restUrl;
+const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail,listModule} = Common.restUrl;
 import Store from '@/vuex/store'
 
 const validateDate = (rule, value, callback) => {
@@ -285,7 +285,7 @@ export default {
                 end_time: '',
                 prj_desc: '',
                 prj_goal:"",
-                modulesAdd:[],
+                createModule:[],
                 modules:[],
                 AddGroupList:[],
 
@@ -341,18 +341,11 @@ export default {
             ],
             
             moduleList: [
-                {
-                    value: '模块1-1',
-                    label: '模块1'
-                },
-                {
-                    value: '模块2-2',
-                    label: '模块2'
-                },
-                {
-                    value: '模块3-3',
-                    label: '模块3'
-                },
+                // {
+                //     value: '模块1-1',
+                //     label: '模块1'
+                // },
+               
                
             ],
             ruleValidate: {
@@ -387,7 +380,7 @@ export default {
                 modules: [
                     { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
                 ],
-                modulesAdd: [
+                createModule: [
                     { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
                 ],
                 allgroup: [
@@ -473,174 +466,21 @@ export default {
         }else{
             this.resetData();
         }
+
+        this.listModuleFn(listModule,((ID)=>{return ID?{id:ID}:{id:""}})(Common.GETID(this,Common)))
         
     },
     
     methods: {
+
+
+        listModuleFn(URL,params = {}){
+            Common.Modulelist(defaultAXIOS,this,URL,params)
+        },
+
         addTeamFn(URL,params = {}){
-            let _tempArr =[
-                    {
-                        cn_name:"ICDP超级管理员",
-                        create_tiem:"2018-08-13 11:05:01",
-                        description:"平台级别角色",
-                        domain:"",
-                        id:1,
-                        name:"icdp_superAdmin",
-                        order:0,
-                        reserve:false,
-                        sub_name:"",
-                    },
-                    {
-                        cn_name:"ICDP管理员",
-                        create_tiem:"2018-08-13 11:05:01",
-                        description:"平台级别角色",
-                        domain:"",
-                        id:2,
-                        name:"icdp_adminTeam",
-                        order:0,
-                        reserve:false,
-                        sub_name:"",
-                    },
-                    {
-                        cn_name:"ICDP配置管理员",
-                        create_tiem:"2018-08-13 11:05:01",
-                        description:"项目级别角色",
-                        domain:"",
-                        id:3,
-                        name:"icdp_confAdmin",
-                        order:0,
-                        reserve:false,
-                        sub_name:"",
-                    },
-                    {
-                        cn_name:"ICDP项目经理",
-                        create_tiem:"2018-08-13 11:05:01",
-                        description:"项目级别角色",
-                        domain:"",
-                        id:4,
-                        name:"icdp_projManager",
-                        order:0,
-                        reserve:false,
-                        sub_name:"",
-                    },
-                    {
-                        cn_name:"ICDP产品经理",
-                        create_tiem:"2018-08-13 11:05:01",
-                        description:"项目级别角色",
-                        domain:"",
-                        id:5,
-                        name:"icdp_prodManager",
-                        order:0,
-                        reserve:false,
-                        sub_name:"",
-                    },
-                    {
-                        cn_name:"ICDP小组长",
-                        create_tiem:"2018-08-13 11:05:01",
-                        description:"项目级别角色",
-                        domain:"",
-                        id:6,
-                        name:"icdp_teamLeader",
-                        order:0,
-                        reserve:false,
-                        sub_name:"",
-                    },
-                    {
-                        cn_name:"ICDP敏捷教练",
-                        create_tiem:"2018-08-13 11:05:01",
-                        description:"项目级别角色",
-                        domain:"",
-                        id:7,
-                        name:"icdp_agileCoach",
-                        order:0,
-                        reserve:false,
-                        sub_name:"",
-                    },
-                    {
-                        cn_name:"ICDP总体组",
-                        create_tiem:"2018-08-13 11:05:01",
-                        description:"项目级别角色",
-                        domain:"",
-                        id:8,
-                        name:"icdp_generalTeam",
-                        order:0,
-                        reserve:false,
-                        sub_name:"",
-                    },
-                    {
-                        cn_name:"ICDP测试组",
-                        create_tiem:"2018-08-13 11:05:01",
-                        description:"项目级别角色",
-                        domain:"",
-                        id:9,
-                        name:"icdp_testTeam",
-                        order:0,
-                        reserve:false,
-                        sub_name:"",
-                    },
-                    {
-                        cn_name:"ICDP开发组",
-                        create_tiem:"2018-08-13 11:05:01",
-                        description:"项目级别角色",
-                        domain:"",
-                        id:10,
-                        name:"icdp_devTeam",
-                        order:0,
-                        reserve:false,
-                        sub_name:"",
-                    },
-                ]
-            defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
-                let _tempObj = {};
-
-
-
-                // let _DATA = myData.data.length ? myData.data : myData;
-                // if(_DATA && Array.isArray(_DATA) && _DATA.length){
-                //     for(var i=0;i<_DATA.length;i++){
-                //         _tempObj.value = _DATA[i].name;
-                //         _tempObj.label = _DATA[i].cn_name;
-                //         this.formPartValidate.addGroupList.push(_tempObj);
-                //         _tempObj = {};
-                //     }
-                // }else{
-                //     this.showError("数据不对");
-                // }
-
-
-                let _myDataArr = false;
-                if(Array.isArray(myData) && myData.length){
-                    _myDataArr = myData;
-                }else if(Array.isArray(myData.data) && myData.data.length){
-                    _myDataArr = myData.data;
-                }else{
-                    _myDataArr = _tempArr;
-                }
-                for(var i=0;i<_myDataArr.length;i++){
-                    _tempObj.value = _myDataArr[i].name;
-                    _tempObj.label = _myDataArr[i].cn_name;
-                    this.formPartValidate.addGroupList.push(_tempObj);
-                    _tempObj = {};
-                }
-
-
-
-                
-            }).catch( (error) => {
-                console.log(error);
-                this.showError(error);
-               
-                let _tempObj = {};
-                for(var i=0;i<_tempArr.length;i++){
-                    _tempObj.value = _tempArr[i].name;
-                    _tempObj.label = _tempArr[i].cn_name;
-                    this.formPartValidate.addGroupList.push(_tempObj);
-                    _tempObj = {};
-                }
-                
-            });   
+            Common.AddTeam(defaultAXIOS,this,URL,params);
+             
         },
         groupDel(I){
             this.thisIndex = I;
@@ -657,38 +497,7 @@ export default {
         },
         submitPart(name){
             Common.addPartPopBox(name,this)
-            /*
-            this.$refs.addPartPopBox.validate((valid) => {
-                this.formPartValidate.loading = false;
-                this.$nextTick(() => {
-                  this.formPartValidate.loading = true;
-                });
-                if (valid) {
-                    this.formPartValidate.loading = true;
-                    this.$nextTick(() => {
-                      this.formPartValidate.loading = true;
-                    });
-                    let _tempObj = {
-                        myRef:"selfRef",
-                        group:[],
-                        groupList:[],
-                        myLabel:"",
-                        myValue:"",
-                        delBtn:true,
-                        groupName:"",
-                        required:true,
-                    }
-                    _tempObj.myLabel = this.formPartValidate.addGroupList.length ? this.formPartValidate.addGroupList.filter((item)=>{return item.value == this.formPartValidate.partName})[0].label : this.formPartValidate.partName;
-                    _tempObj.myValue = this.formPartValidate.partName;
-                    
-                    this.formValidate.AddGroupList.push(_tempObj);
-                    
-                    this.formPartValidate.partName = "";
-                    _tempObj = null;
-                    this.partAdd = false;
-                } 
-            })
-            */
+            
 
         },
         delCancel(){
@@ -783,18 +592,16 @@ export default {
                     _temp = myData.data[I]+"";
                     if(I == "AddGroupList"){
 
-                    }else 
-                    if(_temp.indexOf("|") != -1){
+                    }else if(_temp.indexOf("|") != -1){
                         this.formValidate[I] = myData.data[I].split("|").filter(item=>item)
                     }else{
                         this.formValidate[I] = myData.data[I];
                     }
+
                 }
+
                 this.formValidate.prj_type = this.formValidate.prj_type+"";
                 this.formValidate.pid = this.formValidate.pid+"";
-
-
-                
 
                 let objVal = (Arr,Lab) => {
                     for(var O = 0;O< Arr.length;O++ ){
@@ -909,7 +716,7 @@ export default {
             this.formValidate.end_time = "";
             this.formValidate.prj_desc = "";
             this.formValidate.prj_goal = "";
-            this.formValidate.modulesAdd = [];
+            this.formValidate.createModule = [];
             this.formValidate.modules = [];
 
             this.formValidate.prod_id = "";
@@ -937,8 +744,8 @@ export default {
             
         },
         submitAddData(){
-            let _modules = false;
             let _join = "|";
+            /*
             if(  Array.isArray(this.formValidate.modules) && Array.isArray(this.formValidate.modulesAdd)  ){
                 this.formValidate.modules.push(...this.formValidate.modulesAdd)
             }else if(Array.isArray(this.formValidate.modules) && !Array.isArray(this.formValidate.modulesAdd)){
@@ -948,11 +755,9 @@ export default {
             }else{
                 this.formValidate.modules = this.formValidate.modules + this.formValidate.modulesAdd;
             }
-            if(Array.isArray(this.formValidate.modules)){
-                _modules = this.formValidate.modules.join(_join)
-            }else{
-                _modules = this.formValidate.modules
-            }
+            */
+            let _modules = Array.isArray(this.formValidate.modules) ? this.formValidate.modules.join(_join) : this.formValidate.modules;
+            let _createModule = Array.isArray(this.formValidate.createModule) ? this.formValidate.createModule.join(_join) : this.formValidate.createModule;
             
             let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
@@ -968,7 +773,7 @@ export default {
                 prj_desc: this.formValidate.prj_desc,
                 prj_goal: this.formValidate.prj_goal,
                 modules:_modules,
-
+                createModule:_createModule,
                 prod_id:this.formValidate.prod_id,
                 pid:this.formValidate.prod_id,
                 AddGroupList:JSON.stringify(this.formValidate.AddGroupList),
@@ -1023,18 +828,18 @@ export default {
             })
         },
         cancel () {
-            //this.$Message.info('取消');
             this.formItemReset();
             this.$refs.formValidate.resetFields();
+            this.$router.push('/agile');
         },
         handleClose (event, name) {
-            const index = this.formValidate.modulesAdd.indexOf(name);
-            this.formValidate.modulesAdd.splice(index, 1);
+            const index = this.formValidate.createModule.indexOf(name);
+            this.formValidate.createModule.splice(index, 1);
         },
 
         submitModule () {
             setTimeout(() => {
-                this.formValidate.modulesAdd.push(this.formItem.businessName)
+                this.formValidate.createModule.push(this.formItem.businessName)
                 this.modaAdd = false;
                 this.$Message.info('成功');
                 this.ModuleformItemReset();

@@ -102,14 +102,21 @@ export default class Utils extends CommonRest {
         }, delay);
         //      
       }
-      
 
-     
-     
-      
     }
 
+    //去除数组某个值
+    static ArrDelVal(array = [],_return = false,VAL = ""){
+      for (var i = 0; i < array.length; i++) {
+        if (array[i] == VAL || typeof(array[i]) == "undefined") {
+          array.splice(i, 1);
+          i = i - 1;
+        }
 
+      }
+      if(_return){return array};
+      
+    }
 
 
     
@@ -165,7 +172,7 @@ export default class Utils extends CommonRest {
       }
       canvas.width = width;
       canvas.height = height;
-  //        铺底色
+      //        铺底色
       ctx.fillStyle = "#fff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       //如果图片像素大于100万则使用瓦片绘制
@@ -173,7 +180,7 @@ export default class Utils extends CommonRest {
       if ((count = width * height / 3000000) > 1) {
         console.log("超过100W像素");
         count = ~~(Math.sqrt(count) + 1); //计算要分成多少块瓦片
-  //            计算每块瓦片的宽和高
+        //            计算每块瓦片的宽和高
         let nw = ~~(width / count);
         let nh = ~~(height / count);
         tCanvas.width = nw;

@@ -7,18 +7,19 @@
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140" >
                     <h3 class="Title">基本信息</h3>
                     <div class="fromBox">
-                        <Row>
-                            <Col span="12">
-                                <FormItem label="所属产品" >
-                                    <span>{{formValidate.product_name}}</span>
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="所属项目" >
-                                    <span>{{formValidate.prj_name}}</span>
-                                </FormItem>
-                            </Col>
-                        </Row>
+                       
+                    <FormItem label="所属产品" >
+                        <span>{{formValidate.product_name}}</span>
+                    </FormItem>
+              
+                    <FormItem label="所属项目" >
+                        <span>{{formValidate.prj_name}}</span>
+                    </FormItem>
+
+                    <FormItem label="责任人" >
+                        <span>{{formValidate.charger}}</span>
+                    </FormItem>
+                           
 
 
                         <FormItem label="用户故事名称" prop="userstory_name">
@@ -32,9 +33,10 @@
 
                         <FormItem label="故事类型" prop="userstory_type">
                             <Select v-model="formValidate.userstory_type" placeholder="请选择事项类型">
-                                <Option value="1">用户需求</Option>
+                                <Option v-for="(item,index) in userstory_typeList" :key="index" :value="item.value">{{item.label}}</Option>
+                                <!-- <Option value="1">用户需求</Option>
                                 <Option value="2">生产问题</Option>
-                                <Option value="3">自主创新</Option>
+                                <Option value="3">自主创新</Option> -->
                             </Select>
                         </FormItem>
 
@@ -55,18 +57,22 @@
                        
                         <FormItem label="状态" prop="userstory_status">
                             <RadioGroup v-model="formValidate.userstory_status">
-                                <Radio label="1">提出</Radio>
+                                <Radio v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
+                                <!-- <Radio label="1">提出</Radio>
                                 <Radio label="2">开发中</Radio>
                                 <Radio label="3">测试</Radio>
-                                <Radio label="4">上线</Radio>
+                                <Radio label="4">上线</Radio> -->
                             </RadioGroup>
                         </FormItem>
 
                         <FormItem label="优先级" prop="proi">
                             <RadioGroup v-model="formValidate.proi">
-                                <Radio label="1">高</Radio>
+
+                                <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
+                            
+                                <!-- <Radio label="1">高</Radio>
                                 <Radio label="2">中</Radio>
-                                <Radio label="3">低</Radio>
+                                <Radio label="3">低</Radio> -->
                                
                             </RadioGroup>
                         </FormItem>
@@ -146,7 +152,7 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAdd,storyGetSprint,storyGetReq} = Common.restUrl;
+const {storyAdd,storyGetSprint,storyGetReq,storyGetCondition,publishUser } = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -172,8 +178,11 @@ const validateNumber2 = (rule, value, callback) => {
         return callback();
     }else if (!Number.isInteger(value)) {
         return callback(new Error('请填写数字'));
+    }else{
+        callback();
     }
     // 模拟异步验证效果
+    /*
     setTimeout(() => {
         if (!Number.isInteger(value)) {
             callback(new Error('请填写数字'));
@@ -186,19 +195,20 @@ const validateNumber2 = (rule, value, callback) => {
             // }
         }
     }, 1000);
+    */
 };
 export default {
     beforecreated(){
-        console.log("productAdd--beforecreated-------",this.formValidate)
+        console.log("productAdd--beforecreated-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
     },
     created(){
-        console.log("productAdd--created-------",this.formValidate)
+        console.log("productAdd--created-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
     },
     beforeUpdate(){
-        console.log("productAdd--beforeUpdate-------",this.formValidate)
+        console.log("productAdd--beforeUpdate-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
     },
     updated(){
-        console.log("productAdd--updated-------",this.formValidate)
+        console.log("productAdd--updated-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
         if(this.addtest){
             this.$router.push('/product')
         }
@@ -229,6 +239,9 @@ export default {
                 prod_id:"",
                 req_id:"",
                 req_name:"",
+                manhour:"",
+                charger:"",//一对
+                nick_name:"",//一对
 
 
 
@@ -239,7 +252,7 @@ export default {
                 
                 
                 
-                manhour:"",
+                
                 mission:"",
                 business:[],
                 
@@ -291,35 +304,35 @@ export default {
             ],
             ruleValidate: {
                 userstory_name: [
-                    { required: true, message: 'The name cannot be empty', trigger: 'blur' }
+                    { required: true, message: '请填写，不能为空', trigger: 'blur' }
                 ],
                 department: [
-                    { required: false, message: 'The name cannot be empty', trigger: 'blur' }
+                    { required: false, message: '请填写，不能为空', trigger: 'blur' }
                 ],
 
                 userstory_type: [
-                    { required: true, message: 'Please select ', trigger: 'change' }
+                    { required: true, message: '请选择 ', trigger: 'change' }
                 ],
                 req_id: [
-                    { required: true, message: 'Please select ', trigger: 'change' }
+                    { required: true, message: '请选择 ', trigger: 'change' }
                 ],
                 introducer: [
-                    { required: false, message: 'Please select ', trigger: 'change' }
+                    { required: false, message: '请选择 ', trigger: 'change' }
                 ],
 
                 person: [
-                    { required: true, message: 'Please select ', trigger: 'change' }
+                    { required: true, message: '请选择 ', trigger: 'change' }
                 ],
                 userstory_status: [
-                    { required: true, message: 'Please select gender', trigger: 'change' }
+                    { required: true, message: '请选择', trigger: 'change' }
                 ],
                 
                 sprint: [
-                    { required: false, message: 'Please select the city', trigger: 'change' }
+                    { required: false, message: '请选择', trigger: 'change' }
                 ],
 
                 proi: [
-                    { required: false, message: 'Please select gender', trigger: 'change' }
+                    { required: false, message: '请选择', trigger: 'change' }
                 ],
                 manhour: [
                     { required: false,type: 'number',validator: validateNumber2, message: 'Incorrect number format', trigger: 'blur' }
@@ -331,55 +344,71 @@ export default {
                     {required: true, validator: validateNumber, trigger: 'blur' }
                 ],
             },
+
+            proiList:[],
+            userstory_typeList:[],
+            userstory_statusList:[],
+
         }
     },
     mounted(){
-        let ID = false;
-        let prj_ID = false;
-        let prod_ID = false;
+        let ID = Common.GETID(this,Common);
+        let prj_ID = Common.GETprjid(this,Common);
+        let prod_ID = Common.GETprodid(this,Common);
 
-        if(this.$router.history.current.query.id){
-           ID = this.$router.history.current.query.id 
-        }else if(localStorage.getItem('id')){
-           ID = localStorage.getItem('id')
-        }else if(Common.getCookie("id")){
-            ID = Common.getCookie("id")
-        }else{
-           ID = false; 
-        }
-
-
-        if(this.$router.history.current.query.prj_id){
-           prj_ID = this.$router.history.current.query.prj_id 
-        }else if(localStorage.getItem('prj_id')){
-           prj_ID = localStorage.getItem('prj_id')
-        }else if(Common.getCookie("prj_id")){
-            prj_ID = Common.getCookie("prj_id")
-        }else{
-           prj_ID = false; 
-        }
-
-        if(this.$router.history.current.query.prod_id){
-           prod_ID = this.$router.history.current.query.prod_id 
-        }else if(localStorage.getItem('prod_id')){
-           prod_ID = localStorage.getItem('prod_id')
-        }else if(Common.getCookie("prod_id")){
-            prod_ID = Common.getCookie("prod_id")
-        }else{
-           prod_ID = false; 
-        }
+        // if(this.$router.history.current.query.id){
+        //    ID = this.$router.history.current.query.id 
+        // }else if(localStorage.getItem('id')){
+        //    ID = localStorage.getItem('id')
+        // }else if(Common.getCookie("id")){
+        //     ID = Common.getCookie("id")
+        // }else{
+        //    ID = false; 
+        // }
 
 
+        // if(this.$router.history.current.query.prj_id){
+        //    prj_ID = this.$router.history.current.query.prj_id 
+        // }else if(localStorage.getItem('prj_id')){
+        //    prj_ID = localStorage.getItem('prj_id')
+        // }else if(Common.getCookie("prj_id")){
+        //     prj_ID = Common.getCookie("prj_id")
+        // }else{
+        //    prj_ID = false; 
+        // }
+
+        // if(this.$router.history.current.query.prod_id){
+        //    prod_ID = this.$router.history.current.query.prod_id 
+        // }else if(localStorage.getItem('prod_id')){
+        //    prod_ID = localStorage.getItem('prod_id')
+        // }else if(Common.getCookie("prod_id")){
+        //     prod_ID = Common.getCookie("prod_id")
+        // }else{
+        //    prod_ID = false; 
+        // }
 
 
-        if(prj_ID && prod_ID){
+
+
+        if(prj_ID && prod_ID && ID){
             this.formValidate.prj_id = prj_ID;
             this.formValidate.prod_id = prod_ID;
             this.formValidate.id = ID;
             this.getStoryAddFn(storyAdd,ID,ID,prod_ID);
-            
             this.storyGetSprintFn(storyGetSprint,ID,ID,prod_ID)
             this.storyGetReqFn(storyGetReq,ID,ID,prod_ID)
+
+
+
+            this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
+            this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
+            this.storyGetConditionFn(storyGetCondition,"proi",ID);
+
+
+            this.publishUserFn(publishUser);
+
+            
+
 
 
         }else{
@@ -387,6 +416,15 @@ export default {
         }
     },
     methods:{
+
+
+        publishUserFn(URL,params = {}){
+            Common.PublishUser(defaultAXIOS,this,URL,params)
+        },
+
+        storyGetConditionFn(URL,condition,prj_id){
+            Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
+        },
         storyGetReqFn(URL = "",id,prj_id,prod_id){
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
@@ -509,7 +547,7 @@ export default {
                 "proi": this.formValidate.proi,
                 "userstory_desc":this.formValidate.userstory_desc,
                 sprint:this.formValidate.sprint,
-                manHours:"0 | "+this.formValidate.manhour,
+                manHours:this.formValidate.manhour,
                 mission:this.formValidate.mission + " | 0",
                 icon: "/assets/images/user_02.png",
                 id:this.formValidate.id,
@@ -519,6 +557,8 @@ export default {
                 prj_name:this.formValidate.prj_name,
                 req_id:this.formValidate.req_id,
                 req_name:this.formValidate.req_name,
+                charger:this.formValidate.nick_name,//一对
+                nick_name:this.formValidate.charger,//一对
                 
 
 

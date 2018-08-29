@@ -7,18 +7,19 @@
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140" >
                     <h3 class="Title">基本信息</h3>
                     <div class="fromBox">
-                        <Row>
-                            <Col span="12">
-                                <FormItem label="所属产品" >
-                                    <span>{{formValidate.product_name}}</span>
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="所属项目" >
-                                    <span>{{formValidate.prj_name}}</span>
-                                </FormItem>
-                            </Col>
-                        </Row>
+                       
+                        <FormItem label="所属产品" >
+                            <span>{{formValidate.product_name}}</span>
+                        </FormItem>
+                   
+                        <FormItem label="所属项目" >
+                            <span>{{formValidate.prj_name}}</span>
+                        </FormItem>
+
+                        <FormItem label="责任人" >
+                            <span>{{formValidate.charger}}</span>
+                        </FormItem>
+                    
 
 
                         <FormItem label="用户故事名称" prop="userstory_name">
@@ -32,9 +33,10 @@
 
                         <FormItem label="故事类型" prop="userstory_type">
                             <Select v-model="formValidate.userstory_type" placeholder="请选择事项类型">
-                                <Option value="1">用户需求</Option>
+                                <Option v-for="(item,index) in userstory_typeList" :key="index" :value="item.value">{{item.label}}</Option>
+                                <!-- <Option value="1">用户需求</Option>
                                 <Option value="2">生产问题</Option>
-                                <Option value="3">自主创新</Option>
+                                <Option value="3">自主创新</Option> -->
                             </Select>
                         </FormItem>
 
@@ -55,18 +57,20 @@
                        
                         <FormItem label="状态" prop="userstory_status">
                             <RadioGroup v-model="formValidate.userstory_status">
-                                <Radio label="1">提出</Radio>
+                                <Radio v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
+                                <!-- <Radio label="1">提出</Radio>
                                 <Radio label="2">开发中</Radio>
                                 <Radio label="3">测试</Radio>
-                                <Radio label="4">上线</Radio>
+                                <Radio label="4">上线</Radio> -->
                             </RadioGroup>
                         </FormItem>
 
                         <FormItem label="优先级" prop="proi">
                             <RadioGroup v-model="formValidate.proi">
-                                <Radio label="1">高</Radio>
+                                <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
+                                <!-- <Radio label="1">高</Radio>
                                 <Radio label="2">中</Radio>
-                                <Radio label="3">低</Radio>
+                                <Radio label="3">低</Radio> -->
                                
                             </RadioGroup>
                         </FormItem>
@@ -140,7 +144,7 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyEdit,storyGetSprint,storyGetReq} = Common.restUrl;
+const {storyEdit,storyGetSprint,storyGetReq,storyGetCondition,publishUser} = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -166,8 +170,11 @@ const validateNumber2 = (rule, value, callback) => {
         return callback();
     }else if (!Number.isInteger(value)) {
         return callback(new Error('请填写数字'));
+    }else{
+        callback();
     }
     // 模拟异步验证效果
+    /*
     setTimeout(() => {
         if (!Number.isInteger(value)) {
             callback(new Error('请填写数字'));
@@ -180,19 +187,20 @@ const validateNumber2 = (rule, value, callback) => {
             // }
         }
     }, 1000);
+    */
 };
 export default {
     beforecreated(){
-        console.log("productAdd--beforecreated-------",this.formValidate)
+        console.log("productAdd--beforecreated-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
     },
     created(){
-        console.log("productAdd--created-------",this.formValidate)
+        console.log("productAdd--created-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
     },
     beforeUpdate(){
-        console.log("productAdd--beforeUpdate-------",this.formValidate)
+        console.log("productAdd--beforeUpdate-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
     },
     updated(){
-        console.log("productAdd--updated-------",this.formValidate)
+        console.log("productAdd--updated-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
         if(this.addtest){
             this.$router.push('/product')
         }
@@ -223,6 +231,10 @@ export default {
                 prod_id:"",
                 req_id:"",
                 req_name:"",
+                manhour:"",
+
+                charger:"",//一对
+                nick_name:"",//一对
 
 
 
@@ -234,7 +246,7 @@ export default {
                 
                 
                 
-                // manhour:"",
+                
                 // mission:"",
                 // business:[],
                 // demand:"",
@@ -325,40 +337,57 @@ export default {
                     {required: true, validator: validateNumber, trigger: 'blur' }
                 ],
             },
+
+            proiList:[],
+            userstory_typeList:[],
+            userstory_statusList:[],
         }
     },
     mounted(){
-        let ID = false;
+        let ID = Common.GETID(this,Common);
         let prj_ID = false;
         let prod_ID = false;
 
-        if(this.$router.history.current.query.id){
-           ID = this.$router.history.current.query.id 
-        }else if(localStorage.getItem('id')){
-           ID = localStorage.getItem('id')
-        }else if(Common.getCookie("id")){
-            ID = Common.getCookie("id")
-        }else{
-           ID = false; 
-        }
+        // if(this.$router.history.current.query.id){
+        //    ID = this.$router.history.current.query.id 
+        // }else if(localStorage.getItem('id')){
+        //    ID = localStorage.getItem('id')
+        // }else if(Common.getCookie("id")){
+        //     ID = Common.getCookie("id")
+        // }else{
+        //    ID = false; 
+        // }
 
         
 
 
        
         if(this.$router.history.current.query.DATA){
+
+            console.log("this.$router.history.current.query.DATA",JSON.parse(this.$router.history.current.query.DATA))
+
             this.getStoryEditFn(JSON.parse(this.$router.history.current.query.DATA))
-
             this.storyGetSprintFn(storyGetSprint,ID,ID,JSON.parse(this.$router.history.current.query.DATA).prod_id)
+            this.storyGetReqFn(storyGetReq,ID,ID,JSON.parse(this.$router.history.current.query.DATA).prod_id);
 
-            this.storyGetReqFn(storyGetReq,ID,ID,JSON.parse(this.$router.history.current.query.DATA).prod_id)
 
+            this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
+            this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
+            this.storyGetConditionFn(storyGetCondition,"proi",ID);
+
+            this.publishUserFn(publishUser);
 
         }else{
             this.$router.push('/product');
         }
     },
     methods:{
+        publishUserFn(URL,params = {}){
+            Common.PublishUser(defaultAXIOS,this,URL,params)
+        },
+        storyGetConditionFn(URL,condition,prj_id){
+            Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
+        },
         storyGetReqFn(URL = "",id,prj_id,prod_id){
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
@@ -402,7 +431,7 @@ export default {
                 //     label: '业务模块1'
                     let _tempObj = {};
                     for(let i=0;i<myData.sprintlist.length;i++){
-                        _tempObj.value = myData.sprintlist[i].sprint+"";
+                        _tempObj.value = myData.sprintlist[i].sprint? myData.sprintlist[i].sprint+"" : myData.sprintlist[i].sp_id+"";
                         _tempObj.label = myData.sprintlist[i].sp_name+"";
                         this.sprintList.push(_tempObj);
                         _tempObj = {};
@@ -422,11 +451,15 @@ export default {
             
             
             for (let i in this.formValidate){
-                this.formValidate[i] = DATA[i]+"";
+                if(i == "manhour"){
+                    this.formValidate.manhour = DATA.manHours+""
+                }else{
+                    this.formValidate[i] = DATA[i]+"";
+                }
+                
             }
-            console.log("=-=-=-=-",this.formValidate)
-            // .formValidate.prj_id:"",
-            //     prod_id:"",
+           
+            
             
         },
         showError(ERR){
@@ -479,7 +512,7 @@ export default {
                 "proi": this.formValidate.proi,
                 "userstory_desc":this.formValidate.userstory_desc,
                 sprint:this.formValidate.sprint,
-                manHours:"0 | "+this.formValidate.manhour,
+                manHours:this.formValidate.manhour,
                 mission:this.formValidate.mission + " | 0",
                 icon: "/assets/images/user_02.png",
                 id:this.formValidate.id,
@@ -489,6 +522,8 @@ export default {
                 prj_name:this.formValidate.prj_name,
                 req_id:this.formValidate.req_id,
                 req_name:this.formValidate.req_name,
+                charger:this.formValidate.nick_name,//一对
+                nick_name:this.formValidate.charger,//一对
                         
             
 

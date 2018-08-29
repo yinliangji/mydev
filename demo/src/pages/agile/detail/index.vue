@@ -86,6 +86,15 @@
 		        </TabPane>
 		        
 		    </Tabs>
+
+
+           <!--  <Button 
+                type="warning" 
+                :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
+                @click="editItemFn"
+                >
+                编辑
+            </Button> -->
         	
             
            
@@ -133,7 +142,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectDetail} = Common.restUrl;
+const {projectDetail,listModule} = Common.restUrl;
 export default {
 	data () {
         return {
@@ -220,11 +229,42 @@ export default {
                 		}
                 	}
                     this.HTML = Common.toTable(this.formValidate.person,this.table,3,11,true);
+                    let _arr = this.formValidate.modules.split("|");
+                    Common.ArrDelVal(_arr);
+                    if(_arr.length){
+                        defaultAXIOS(listModule,{},{timeout:20000,method:'get'}).then((_response) => {
+                            let _myData = _response.data;
+                            console.log("<======_detail** listModule *_response+++",_response,_myData,"======>");
+                            let _myArrFn = (arr,obj)=>{
+                                if(arr.length){
+                                    for(let a=0;a<arr.length;a++){
+                                        if(arr[a] == obj.id){
+                                            return obj.module_name
+                                        }
+                                    }
+                                }else{
+                                    return false;
+                                }
+                            }
+                            if (_myData && _myData.res && _myData.res.length) {
+                                let _myArr = [];
+                                let _resTemp = {};
+                                for(let k=0;k<_myData.res.length;k++){
+                                    if(_myArrFn(_arr,_myData.res[k])){
+                                        _myArr.push("【"+_myArrFn(_arr,_myData.res[k])+"】")
+                                    }
+                                }
+                                this.formValidate.modules = _myArr.join("、")
+                              
+                            } else {
+                                that.showError(listModule + "_没有数据");
+                            }
+                        }).catch( (_error) => {
+                            console.log(_error);
+                            this.showError(_error);
+                        });
+                    }
                 }
-
-
-
-
 
             }).catch( (error) => {
                 console.log(error);

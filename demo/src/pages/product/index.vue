@@ -63,24 +63,7 @@
 						            </Col>
 						        </Row>
 						        <Row class="SerchBox"  v-if="isShowMoreShow">
-						        	<Col span="3" style="text-align: center">负责人</Col>
-						            <Col span="5">
-						                <FormItem >
-						                    <Select clearable v-model="formValidate.charger" placeholder="请选择负责人">
-						                    	
-                                                <Option v-for="(item,index) in chargerList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                            </Select>
-						                </FormItem>
-						            </Col>
-						            <Col span="3" style="text-align: center">是否领导关心</Col>
-						            <Col span="5">
-						                <FormItem >
-						                    <Select clearable v-model="formValidate.learn_concern" placeholder="请选择是否领导关心">
-						                    	
-					                            <Option v-for="(item,index) in learn_concernList" :value="item.value" :key="index">{{ item.label }}</Option>
-					                        </Select>
-						                </FormItem>
-						            </Col>
+						        	
 						            <Col span="3" style="text-align: center">所属迭代</Col>
 						            <Col span="5">
 						                <FormItem >
@@ -90,6 +73,27 @@
                                             </Select>
 						                </FormItem>
 						            </Col>
+
+
+									<Col span="3" style="text-align: center"><!-- 负责人 --></Col>
+						            <Col span="5">
+						                <!-- <FormItem >
+						                    <Select clearable v-model="formValidate.charger" placeholder="请选择负责人">
+						                    	
+                                                <Option v-for="(item,index) in chargerList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                            </Select>
+						                </FormItem> -->
+						            </Col>
+						            <Col span="3" style="text-align: center"><!-- 是否领导关心 --></Col>
+						            <Col span="5">
+						                <!-- <FormItem >
+						                    <Select clearable v-model="formValidate.learn_concern" placeholder="请选择是否领导关心">
+						                    	
+					                            <Option v-for="(item,index) in learn_concernList" :value="item.value" :key="index">{{ item.label }}</Option>
+					                        </Select>
+						                </FormItem> -->
+						            </Col>
+
 						        </Row>
 							</Col>
 							<Col span="9" style="text-align: left" class="serchBtnBox">
@@ -484,6 +488,7 @@ export default {
 				        ]);
 				    }
                 },
+                /*
                 {
                     title: '关联任务|已完成|全部',
                     key: 'mission',
@@ -497,6 +502,7 @@ export default {
 				        ]);
 				    }
                 },
+                */
                 {
                     title: '操作',
                     key: 'action',
@@ -605,10 +611,6 @@ export default {
                 sprint:"",//所属迭代
 
             },
-
-
-
-
             userstory_typeList:[
             	// {
              //        value: 1,
@@ -669,11 +671,8 @@ export default {
              //    },
             ],
             sprintList:[],
-
-
             prj_permission:[],
             identity:"",
-
             cardListBase:[],
             statusListBase:[],
             groupList:[],
@@ -753,16 +752,10 @@ export default {
                 if(response.status != 200){
                 	this.showError("返回结果错误");
                 }
-                
-                
-                
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);
             });
-
-
-
 		},
 		moveEnd(info) {
             // 移动卡片结束后
@@ -819,26 +812,7 @@ export default {
 
 
 		getID(){
-
-
 			return Common.GETID(this,Common);
-			/*
-			let ID = false;
-
-			if(this.$router.history.current.query.id){
-	           ID = this.$router.history.current.query.id;
-	           localStorage.setItem('id', this.$router.history.current.query.id); 
-	        }else if(localStorage.getItem('id')){
-	           ID = localStorage.getItem('id')
-	        }else if(Common.getCookie("id")){
-	           ID = Common.getCookie("id")
-	        }else{
-	        	ID = false;
-	            //this.$router.push('/agile');
-	        }
-	        return ID;
-	        */
-
 		},
 
 
@@ -866,17 +840,22 @@ export default {
         },
 
 		storyGetConditionFn(URL,condition,prj_id){
+			Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
+			/*
             defaultAXIOS(URL,{condition,prj_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======agile byRole***response+++",condition,response,myData,"======>");
-                
+                console.log("<======product condition***response+++",condition,response,myData,"======>");
                 if(myData && myData.length){
                     let _OBJ = {};
-                    for(let i=0;i<myData.length;i++){
-                        _OBJ.label = (myData[i].value || myData[i].sprint_name)+""
-                        _OBJ.value = (myData[i].key || myData[i].sprint)+""
-                        this[condition+"List"].push(_OBJ)
-                        _OBJ = {};
+                    if(this[condition+"List"]){
+                    	for(let i=0;i<myData.length;i++){
+	                        _OBJ.label = (myData[i].value || myData[i].sprint_name)+""
+	                        _OBJ.value = (myData[i].key || myData[i].sprint)+""
+	                        this[condition+"List"].push(_OBJ)
+	                        _OBJ = {};
+	                    }
+                    }else{
+                    	this.showError(URL+"****"+condition+"_没有this."+condition+"List");
                     }
                 }else if(response.status == 200){
 
@@ -884,11 +863,11 @@ export default {
                     this.showError(URL+"****"+condition+"_没有数据");
                 }
                 
-                
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);
             });
+            */
         },
         cancelSerchAll(){
             for(let i in this.formValidate){
@@ -994,7 +973,7 @@ export default {
 		changeCurrentPage(i) {
 			let ID = this.getID()
             //this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID)
-            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+            this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
         },
         changePageSize(i) {
         },
@@ -1105,7 +1084,9 @@ export default {
 		},
 		goAddDevelopmentFn (index) {
             //this.$router.push('/development')
-            this.$router.push({path: '/development/add'})
+            //this.$router.push({path: '/development/add'})
+
+            this.$router.push({path: '/development/add', query: {board: true,my_id:this.tableData[index].id}})
         },
 		goDevelopmentFn (index) {
             //this.$router.push('/development')userstory_name

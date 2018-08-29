@@ -59,7 +59,7 @@ let menuGetMenu = (val1 = 0, val2 = 0, val3 = 200) => {
 
 
 
-let mockDataList = (val1 = 200, val2 = 1, val3 = 3) => {
+let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": val1,
         "message": "mockDataList xxxxxxx",
@@ -1145,9 +1145,53 @@ let Condition = (val1 = 200, val2 = 1, val3 = 3) => {
 
 app.all('/userstory/getUserstoryCondition', function(req, res) {
     let resVal = Condition(req.body.myStatus, req.body.page, req.body.pageline);
-    console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
-    res.json(Condition(req.body.myStatus));
+    //console.log("req==>", req.body);
+    //console.log("resVal==>", resVal);
+    
+    console.log("res====>",res.req._parsedUrl.query,res.req._parsedUrl.query.indexOf("userstory_type"))
+    let obj = false;
+    if(res.req._parsedUrl.query.indexOf("userstory_type") != -1){
+        let _OBJ = [
+            {value:"用户需求",key:"1"},
+            {value:"生产问题",key:"2"},
+            {value:"自主创新",key:"3"},
+        ]
+        obj = (P)=>{
+            return _OBJ;
+        }
+        res.json(_OBJ);
+
+    }else if(res.req._parsedUrl.query.indexOf("userstory_status") != -1){
+        let _OBJ = [
+            {value:"提出",key:"1"},
+            {value:"开发中",key:"2"},
+            {value:"测试",key:"3"},
+            {value:"上线",key:"4"},
+        ]
+        obj = (P)=>{
+            return _OBJ;
+        }
+        res.json(_OBJ);
+
+    }else if(res.req._parsedUrl.query.indexOf("proi") != -1){
+        let _OBJ = [
+            {value:"高",key:"1"},
+            {value:"中",key:"2"},
+            {value:"低",key:"3"},
+            
+        ]
+        obj = (P)=>{
+            return _OBJ;
+        }
+        res.json(_OBJ);
+
+        
+    }else{
+        //obj = Condition;
+        res.json(Condition(req.body.myStatus));
+    }
+
+    
     res.end()
 });
 

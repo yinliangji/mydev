@@ -28,16 +28,37 @@
                                         </FormItem>
                                     </Col>
                                 </Row>
+
+                              
+
                                 <Row class="SerchBox" v-if="isShowMoreShow">
-                                    <Col span="3" style="text-align: center">项目经理</Col>
+                                    <Col span="3" style="text-align: center">结束时间</Col>
                                     <Col span="5">
                                         <FormItem >
+                                            <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择结束日期" v-model="formValidate.end_time"></DatePicker>
+                                        </FormItem>
+                                    </Col>
+                                    <Col span="3" style="text-align: center"><!-- 项目经理 --></Col>
+                                    <Col span="5">
+                                        <!-- <FormItem >
                                             <Select clearable v-model="formValidate.icdp_projManager" placeholder="请选择项目经理">
                                                 
                                                 <Option v-for="(item,index) in icdp_projManagerList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
-                                        </FormItem>
+                                        </FormItem> -->
                                     </Col>
+                                    
+                                    <Col span="3" style="text-align: center"><!-- 开发人员 --></Col>
+                                    <Col span="5">
+                                        <!-- <FormItem >
+                                            <Select clearable v-model="formValidate.icdp_devTeam" placeholder="请选择开发人员">
+                                               
+                                                <Option v-for="(item,index) in icdp_devTeamList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                            </Select>
+                                        </FormItem> -->
+                                    </Col>
+                                </Row>
+                                <!-- <Row class="SerchBox" v-if="isShowMoreShow">
                                     <Col span="3" style="text-align: center">教练</Col>
                                     <Col span="5">
                                        
@@ -48,17 +69,7 @@
                                             </Select>
                                         </FormItem>
                                     </Col>
-                                    <Col span="3" style="text-align: center">开发人员</Col>
-                                    <Col span="5">
-                                        <FormItem >
-                                            <Select clearable v-model="formValidate.icdp_devTeam" placeholder="请选择开发人员">
-                                               
-                                                <Option v-for="(item,index) in icdp_devTeamList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                            </Select>
-                                        </FormItem>
-                                    </Col>
-                                </Row>
-                                <Row class="SerchBox" v-if="isShowMoreShow">
+
                                     <Col span="3" style="text-align: center">测试人员</Col>
                                     <Col span="5">
                                         <FormItem >
@@ -68,15 +79,13 @@
                                             </Select>
                                         </FormItem>
                                     </Col>
+                                    
                                     <Col span="3" style="text-align: center">&nbsp;</Col>
                                     <Col span="5">
                                         &nbsp;
                                     </Col>
-                                    <Col span="3" style="text-align: center">&nbsp;</Col>
-                                    <Col span="5">
-                                        &nbsp;
-                                    </Col>
-                                </Row>
+                                </Row>  -->
+
                             </Col>
                             <Col span="9" style="text-align: left" class="serchBtnBox">
                                 <Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
@@ -84,10 +93,12 @@
                             </Col>
                             
                         </Row>
+
                         <div class="formValidateMoreBtnBox" :class="isShowMoreShow ?'arrUp':'arrDown'" @click="isShowMoreShow = !isShowMoreShow">
                             <Icon type="chevron-down" color="#ed3f14" ></Icon>
                             <Icon type="chevron-down" color="#ed3f14" ></Icon>
                         </div>
+                        
 			        </FormItem>
 
 			    </Form>
@@ -254,7 +265,17 @@ export default {
 
                 {
                     title: '项目描述',
-                    key: 'prj_desc'
+                    key: 'prj_desc',
+                    render: (h, params) => {
+                        return h(
+                            'p',
+                            {
+                                domProps:{title:"prj_desc"},
+                            },
+                            params.row.prj_name
+                        );
+                    }
+                    //
                 },
                 {
                     title: '项目经理',
@@ -353,6 +374,7 @@ export default {
                 prj_name:"",//项目名称
                 prj_id:"",//项目编号
                 start_time:"",//开始时间
+                end_time:"",//结束时间
                 icdp_projManager:"",//ICDP项目经理
                 icdp_agileCoach:"",//ICDP敏捷教练
                 icdp_devTeam:"",//ICDP开发组
@@ -403,7 +425,7 @@ export default {
         },
 
         serchAll(){
-            this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine,this.formValidate.prj_name,this.formValidate.prj_id,this.formValidate.start_time,this.formValidate.icdp_projManager,this.formValidate.icdp_agileCoach,this.formValidate.icdp_devTeam,this.formValidate.icdp_testTeam);
+            this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine,this.formValidate.prj_name,this.formValidate.prj_id,this.formValidate.start_time,this.formValidate.end_time,this.formValidate.icdp_projManager,this.formValidate.icdp_agileCoach,this.formValidate.icdp_devTeam,this.formValidate.icdp_testTeam);
         },
         byRoleFn(URL,roleName){
             defaultAXIOS(URL,{roleName},{timeout:20000,method:'get'}).then((response) => {
@@ -439,14 +461,19 @@ export default {
             Common.ErrorShow(ERR,this);
         },
 
-        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = ""){
-            let timeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
-            defaultAXIOS(URL,{page,pageline,prj_name,prj_id,start_time:timeFromet,icdp_projManager,icdp_agileCoach,icdp_devTeam,icdp_testTeam},{timeout:20000,method:'get'}).then((response) => {
+        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = ""){
+            let starttimeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
+            let endtimeFromet = end_time ? end_time.Format("yyyy-MM-dd") : "";
+            defaultAXIOS(URL,{page,pageline,prj_name,prj_id,start_time:starttimeFromet,end_time:endtimeFromet,icdp_projManager,icdp_agileCoach,icdp_devTeam,icdp_testTeam},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");
-                this.tableData = myData.data.list;
-                this.tableDAtaTatol = myData.data.total;
+                if(myData.status == "success"){
+                    this.tableData = myData.data.list;
+                    this.tableDAtaTatol = myData.data.total;
+                }else{
+                    this.showError(URL+"_错误");
+                }
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);
@@ -729,6 +756,7 @@ export default {
     transform: rotate(0deg);
     transform-origin: center center;
 }
+
 </style>
 
 

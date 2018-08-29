@@ -494,14 +494,6 @@ export default {
     },
     
     methods: {
-
-
-
-
-
-
-
-
         publishUserFn(URL,params = {},Arr=[]){
             defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
@@ -519,7 +511,7 @@ export default {
                 }
                 
                 for(let i=0;i<Arr.length;i++){
-                    if(Arr[i].label.indexOf("产品经理")  != -1){
+                    if(Arr[i].label.indexOf("项目经理")  != -1){
                         _tempObj.myLabel = Arr[i].label
                         _tempObj.myValue = Arr[i].value
                     }

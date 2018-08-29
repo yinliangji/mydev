@@ -50,18 +50,20 @@
 								  <th width="13%">所属迭代</th>
 								  <td width="20%">{{ formValidate.sprint_name | FALSEINFO}}</td>
 								  <th width="13%">工时(预计)</th>
-								  <td width="20%" >1</td>
+								  <td width="20%" >{{ formValidate.manHours | FALSEINFO}}</td>
 								  <th width="13%">工时(实际)</th>
-								  <td>10</td>
+								  <td>0</td>
 								</tr>
-								<tr>
+
+								<!-- <tr>
 								  <th>关联任务(已完成)</th>
-								  <td>任务</td>
+								  <td>无数据</td>
 								  <th>关联任务(全部)</th>
-								  <td>任务、任务、任务、任务</td>
+								  <td>无数据</td>
 								  <th>&nbsp;</th>
 								  <td>&nbsp;</td>
-								</tr>
+								</tr> -->
+								
 							  </tbody>
 							</table>
 		            	</div>
@@ -190,7 +192,12 @@ export default {
                 	for(let i in myData){
                 		if(i == "proi"){
                 			this.formValidate[i] = ((N)=>{if(N == 1){return "高"}else if(N ==2){return "中"}else{return "低"}})(myData[i])
-                		}else{
+                		}else if(i == "userstory_type"){
+                			this.formValidate[i] = ((N)=>{if(N == 1){return "用户需求"}else if(N ==2){return "生产问题"}else if(N ==3){return "自主创新"}else{return "未知"}})(myData[i])
+                		}else if(i == "userstory_status"){
+                			this.formValidate[i] = ((N)=>{if(N == 1){return "提出"}else if(N ==2){return "开发中"}else if(N ==3){return "测试"}else if(N ==4){return "上线"}else{return "未知"}})(myData[i])
+                		}
+                		else{
                 			this.formValidate[i] = myData[i]
                 		}
                 		

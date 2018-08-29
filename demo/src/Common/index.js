@@ -197,7 +197,7 @@ export default class Common extends Utils {
       return Element;   
     }
 
-    //
+    //错误提示
     static ErrorShow(ERR,THIS){
       THIS.$Notice.config({
           top:100,
@@ -222,7 +222,7 @@ export default class Common extends Utils {
           duration: 60
       });
     }
-
+    //权限判断--不通用
     static auth(THIS,KEY){
         let OBJ = THIS.prj_permission
         if(THIS.identity == "SuperAdmin"){
@@ -248,7 +248,7 @@ export default class Common extends Utils {
         
     }
 
-
+    //给输入框本身加已选择的数组temp --不通用
     static inputArr(_this,val){
       //
       let ArrFn = (obj,arr)=>{
@@ -282,7 +282,7 @@ export default class Common extends Utils {
       })
     }
 
-
+    //给输入框加函数节流--不通用
     static changeArr(_this, curVal, _Common, _projectAddGroup) {
       _this.$nextTick(() => {
 
@@ -320,6 +320,7 @@ export default class Common extends Utils {
       })
     }
 
+    //添加角色--不通用
     static  addPartPopBox(name,that){
       that.$refs[name].validate((valid) => {
         that.formPartValidate.loading = false;
@@ -351,14 +352,11 @@ export default class Common extends Utils {
           that.formPartValidate.partName = "";
           _tempObj = null;
           that.partAdd = false;
-
-
-          console.log("-=-=-=-=that.formValidate.AddGroupList",that.formValidate.AddGroupList)
-
         }
       })
     }
 
+    //获取id--不通用
     static GETID(that,_Common){
       let ID = false;
 
@@ -375,6 +373,39 @@ export default class Common extends Utils {
           return ID;
     }
 
+    //获取prj_id--不通用
+    static GETprjid(that,_Common){
+      let prj_ID = false;
+      
+      if(that.$router.history.current.query.prj_id){
+         prj_ID = that.$router.history.current.query.prj_id 
+      }else if(localStorage.getItem('prj_id')){
+         prj_ID = localStorage.getItem('prj_id')
+      }else if(_Common.getCookie("prj_id")){
+          prj_ID = _Common.getCookie("prj_id")
+      }else{
+         prj_ID = false; 
+      }
+      return prj_ID;
+    }
+
+    //获取prod_id--不通用
+    static GETprodid(that,_Common){
+      let prod_ID = false;
+      
+      if(that.$router.history.current.query.prod_id){
+         prod_ID = that.$router.history.current.query.prod_id 
+      }else if(localStorage.getItem('prod_id')){
+         prod_ID = localStorage.getItem('prod_id')
+      }else if(_Common.getCookie("prod_id")){
+          prod_ID = _Common.getCookie("prod_id")
+      }else{
+         prod_ID = false; 
+      }
+      return prod_ID;
+    }
+
+    //获取模块--不通用
     static Modulelist(FUN, that, URL, params) {
       FUN(URL, params, {
         timeout: 5000,
@@ -384,7 +415,6 @@ export default class Common extends Utils {
         console.log("<======【agile listModule get】***response+++", response, myData, "====>");
 
         if (myData && myData.res && myData.res.length) {
-          console.log("myData.resmyData.resmyData.resmyData.res", myData.res)
           let _temp = {};
           for (let i = 0; i < myData.res.length; i++) {
             _temp.label = myData.res[i].module_name;
@@ -402,154 +432,213 @@ export default class Common extends Utils {
       });
     }
 
-  static AddTeam(FUN, that, URL, params){
-    //
-    let _tempArr =[
-        {
-            cn_name:"ICDP超级管理员",
-            create_tiem:"2018-08-13 11:05:01",
-            description:"平台级别角色",
-            domain:"",
-            id:1,
-            name:"icdp_superAdmin",
-            order:0,
-            reserve:false,
-            sub_name:"",
-        },
-        {
-            cn_name:"ICDP管理员",
-            create_tiem:"2018-08-13 11:05:01",
-            description:"平台级别角色",
-            domain:"",
-            id:2,
-            name:"icdp_adminTeam",
-            order:0,
-            reserve:false,
-            sub_name:"",
-        },
-        {
-            cn_name:"ICDP配置管理员",
-            create_tiem:"2018-08-13 11:05:01",
-            description:"项目级别角色",
-            domain:"",
-            id:3,
-            name:"icdp_confAdmin",
-            order:0,
-            reserve:false,
-            sub_name:"",
-        },
-        {
-            cn_name:"ICDP项目经理",
-            create_tiem:"2018-08-13 11:05:01",
-            description:"项目级别角色",
-            domain:"",
-            id:4,
-            name:"icdp_projManager",
-            order:0,
-            reserve:false,
-            sub_name:"",
-        },
-        {
-            cn_name:"ICDP产品经理",
-            create_tiem:"2018-08-13 11:05:01",
-            description:"项目级别角色",
-            domain:"",
-            id:5,
-            name:"icdp_prodManager",
-            order:0,
-            reserve:false,
-            sub_name:"",
-        },
-        {
-            cn_name:"ICDP小组长",
-            create_tiem:"2018-08-13 11:05:01",
-            description:"项目级别角色",
-            domain:"",
-            id:6,
-            name:"icdp_teamLeader",
-            order:0,
-            reserve:false,
-            sub_name:"",
-        },
-        {
-            cn_name:"ICDP敏捷教练",
-            create_tiem:"2018-08-13 11:05:01",
-            description:"项目级别角色",
-            domain:"",
-            id:7,
-            name:"icdp_agileCoach",
-            order:0,
-            reserve:false,
-            sub_name:"",
-        },
-        {
-            cn_name:"ICDP总体组",
-            create_tiem:"2018-08-13 11:05:01",
-            description:"项目级别角色",
-            domain:"",
-            id:8,
-            name:"icdp_generalTeam",
-            order:0,
-            reserve:false,
-            sub_name:"",
-        },
-        {
-            cn_name:"ICDP测试组",
-            create_tiem:"2018-08-13 11:05:01",
-            description:"项目级别角色",
-            domain:"",
-            id:9,
-            name:"icdp_testTeam",
-            order:0,
-            reserve:false,
-            sub_name:"",
-        },
-        {
-            cn_name:"ICDP开发组",
-            create_tiem:"2018-08-13 11:05:01",
-            description:"项目级别角色",
-            domain:"",
-            id:10,
-            name:"icdp_devTeam",
-            order:0,
-            reserve:false,
-            sub_name:"",
-        },
-    ]
-    FUN(URL,params,{timeout:5000,method:'get'}).then((response) => {
-        let myData = response.data;
-        console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
-        let _tempObj = {};
-        
-        let _myDataArr = false;
-        if(Array.isArray(myData) && myData.length){
-            _myDataArr = myData;
-        }else if(Array.isArray(myData.data) && myData.data.length){
-            _myDataArr = myData.data;
-        }else{
-            _myDataArr = _tempArr;
-        }
-        for(var i=0;i<_myDataArr.length;i++){
-            _tempObj.value = _myDataArr[i].name;
-            _tempObj.label = _myDataArr[i].cn_name;
-            that.formPartValidate.addGroupList.push(_tempObj);
-            _tempObj = {};
-        }
-    }).catch( (error) => {
-        console.log(error);
-        that.showError(error);
-        
-        let _tempObj = {};
-        for(var i=0;i<_tempArr.length;i++){
-            _tempObj.value = _tempArr[i].name;
-            _tempObj.label = _tempArr[i].cn_name;
-            that.formPartValidate.addGroupList.push(_tempObj);
-            _tempObj = {};
-        }
-        
-    });   
-    //
-  }
+    //获取角色标题--不通用
+    static AddTeam(FUN, that, URL, params){
+      //
+      let _tempArr =[
+          {
+              cn_name:"ICDP超级管理员",
+              create_tiem:"2018-08-13 11:05:01",
+              description:"平台级别角色",
+              domain:"",
+              id:1,
+              name:"icdp_superAdmin",
+              order:0,
+              reserve:false,
+              sub_name:"",
+          },
+          {
+              cn_name:"ICDP管理员",
+              create_tiem:"2018-08-13 11:05:01",
+              description:"平台级别角色",
+              domain:"",
+              id:2,
+              name:"icdp_adminTeam",
+              order:0,
+              reserve:false,
+              sub_name:"",
+          },
+          {
+              cn_name:"ICDP配置管理员",
+              create_tiem:"2018-08-13 11:05:01",
+              description:"项目级别角色",
+              domain:"",
+              id:3,
+              name:"icdp_confAdmin",
+              order:0,
+              reserve:false,
+              sub_name:"",
+          },
+          {
+              cn_name:"ICDP项目经理",
+              create_tiem:"2018-08-13 11:05:01",
+              description:"项目级别角色",
+              domain:"",
+              id:4,
+              name:"icdp_projManager",
+              order:0,
+              reserve:false,
+              sub_name:"",
+          },
+          {
+              cn_name:"ICDP产品经理",
+              create_tiem:"2018-08-13 11:05:01",
+              description:"项目级别角色",
+              domain:"",
+              id:5,
+              name:"icdp_prodManager",
+              order:0,
+              reserve:false,
+              sub_name:"",
+          },
+          {
+              cn_name:"ICDP小组长",
+              create_tiem:"2018-08-13 11:05:01",
+              description:"项目级别角色",
+              domain:"",
+              id:6,
+              name:"icdp_teamLeader",
+              order:0,
+              reserve:false,
+              sub_name:"",
+          },
+          {
+              cn_name:"ICDP敏捷教练",
+              create_tiem:"2018-08-13 11:05:01",
+              description:"项目级别角色",
+              domain:"",
+              id:7,
+              name:"icdp_agileCoach",
+              order:0,
+              reserve:false,
+              sub_name:"",
+          },
+          {
+              cn_name:"ICDP总体组",
+              create_tiem:"2018-08-13 11:05:01",
+              description:"项目级别角色",
+              domain:"",
+              id:8,
+              name:"icdp_generalTeam",
+              order:0,
+              reserve:false,
+              sub_name:"",
+          },
+          {
+              cn_name:"ICDP测试组",
+              create_tiem:"2018-08-13 11:05:01",
+              description:"项目级别角色",
+              domain:"",
+              id:9,
+              name:"icdp_testTeam",
+              order:0,
+              reserve:false,
+              sub_name:"",
+          },
+          {
+              cn_name:"ICDP开发组",
+              create_tiem:"2018-08-13 11:05:01",
+              description:"项目级别角色",
+              domain:"",
+              id:10,
+              name:"icdp_devTeam",
+              order:0,
+              reserve:false,
+              sub_name:"",
+          },
+      ]
+      FUN(URL,params,{timeout:5000,method:'get'}).then((response) => {
+          let myData = response.data;
+          console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
+          let _tempObj = {};
+          
+          let _myDataArr = false;
+          if(Array.isArray(myData) && myData.length){
+              _myDataArr = myData;
+          }else if(Array.isArray(myData.data) && myData.data.length){
+              _myDataArr = myData.data;
+          }else{
+              _myDataArr = _tempArr;
+          }
+          for(var i=0;i<_myDataArr.length;i++){
+              _tempObj.value = _myDataArr[i].name;
+              _tempObj.label = _myDataArr[i].cn_name;
+              that.formPartValidate.addGroupList.push(_tempObj);
+              _tempObj = {};
+          }
+      }).catch( (error) => {
+          console.log(error);
+          that.showError(error);
+          
+          let _tempObj = {};
+          for(var i=0;i<_tempArr.length;i++){
+              _tempObj.value = _tempArr[i].name;
+              _tempObj.label = _tempArr[i].cn_name;
+              that.formPartValidate.addGroupList.push(_tempObj);
+              _tempObj = {};
+          }
+          
+      });   
+      //
+    }
+
+    //获取搜索下拉菜单--不通用
+    static GetCondition(FUN,that,URL, condition,prj_id){
+      //
+      FUN(URL,{condition,prj_id},{timeout:20000,method:'get'}).then((response) => {
+          let myData = response.data;
+          console.log("<======product condition***response+++",condition,response,myData,"======>");
+          if(myData){
+            //myData.length
+            if(Array.isArray(myData) && myData.length){
+              //
+              let _OBJ = {};
+              if(that[condition+"List"]){
+                for(let i=0;i<myData.length;i++){
+                    _OBJ.label = (myData[i].value || myData[i].sprint_name)+""
+                    _OBJ.value = (myData[i].key || myData[i].sprint)+""
+                    that[condition+"List"].push(_OBJ)
+                    _OBJ = {};
+                }
+              }else{
+                that.showError(URL+"****"+condition+"_没有this."+condition+"List");
+              }
+              //
+            }else if(myData.status && myData.status == "success"){
+
+            }else{
+              that.showError(URL+"****"+condition+JSON.stringify(myData));
+            }
+              
+          }else{
+              that.showError(URL+"****"+condition+"_错误");
+          }
+          
+      }).catch( (error) => {
+          console.log(error);
+          that.showError(error);
+      });
+      //
+    }
+
+    //添加默认负责人--不通用
+    static PublishUser(FUN,that,URL,params = {}){
+      //
+      FUN(URL,params,{timeout:5000,method:'get'}).then((response) => {
+          let myData = response.data;
+          console.log("<======【product publishUser get】***response+++",response,myData,"====>");
+          if(myData && myData.user_name){
+              that.formValidate.charger = myData.nick_name
+              that.formValidate.nick_name = myData.user_name
+          }else{
+              that.showError(URL+"_没有数据");
+          }
+      }).catch( (error) => {
+          console.log(error);
+          that.showError(error);
+      });   
+      //
+    }
 
 }
 

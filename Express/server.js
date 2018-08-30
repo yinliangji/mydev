@@ -1495,6 +1495,10 @@ app.all('/sprint/listSprint', function(req, res) {
     res.json(mockIterationList(req.body.myStatus));
     res.end()
 });
+app.all('/login_save', function(req, res) {
+    res.json({});
+    res.end()
+});
 /*************qhc */
 /**
  * 监听9090端口

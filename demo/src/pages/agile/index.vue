@@ -159,18 +159,18 @@
 
 
         <Modal v-model="modaDelete" width="300">
-        <p slot="header" style="color:#f60;text-align:center">
-          <Icon type="ios-information-circle"></Icon>
-          <span>删除确认</span>
-        </p>
-        <div style="text-align:center">
-          <p>删除无法恢复，是否继续？</p>
-        </div>
-        <div slot="footer">
-          <Button color="#1c2438"  :loading="modal_loading"  @click="del">删除</Button>
-          <Button type="primary" @click="cancel">取消</Button>
-        </div>
-      </Modal>
+            <p slot="header" style="color:#f60;text-align:center">
+              <Icon type="ios-information-circle"></Icon>
+              <span>删除确认</span>
+            </p>
+            <div style="text-align:center">
+              <p>删除无法恢复，是否继续？</p>
+            </div>
+            <div slot="footer">
+              <Button color="#1c2438"  :loading="modal_loading"  @click="del">删除</Button>
+              <Button type="primary" @click="cancel">取消</Button>
+            </div>
+        </Modal>
 
         <!-- <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" /> -->
 
@@ -195,17 +195,25 @@ export default {
         this.byRoleFn(byRole,"icdp_agileCoach");
         this.byRoleFn(byRole,"icdp_devTeam");
         this.byRoleFn(byRole,"icdp_testTeam");
+        
+        
+    },
+    watch:{
+        loginSave(curVal,oldVal){
+            console.log(curVal,oldVal)
+        }
     },
     components: {
         AddItemPop,
     },
     computed: {
-        // addtest() {
-        //     return this.$store.state["ADD_DATA_TEST"].data
-        // },
+        loginSave() {
+            return this.$store.state["LOGIN_SAVE"].logged
+        },
     },
     beforecreated(){
-        console.log("agile--beforecreated-------",this.tableData)
+        console.log("agile--beforecreated-------",this.tableData);
+        Common.delStorageAndCookie(Common,"detail_id")
 
     },
     created(){
@@ -389,9 +397,18 @@ export default {
             prj_permission:[],
             identity:"",
 
+            
+
         }
     },
     methods: {
+        demo(){
+            
+            Store.dispatch('LOGIN_SAVE/incrementAsync', {
+                isLogin: true
+            })
+            
+        },
 
         authIs(KEY){
             return Common.auth(this,KEY)

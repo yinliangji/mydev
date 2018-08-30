@@ -120,10 +120,12 @@
 								</Button>
 							</Col>
 							<Col span="1" >
-								<img src="@/assets/images/product-list.png" @click="showList" class="cursor">
+								<img :src="currentView == 'developList' ? developListImgCur : developListImg" 
+								@click="showList" class="cursor">
 							</Col>
 							<Col span="1" >
-								<img src="@/assets/images/product-kanban.png" @click="showTask" class="cursor">
+								<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
+								@click="showTask" class="cursor">
 							</Col>
 							<Col span="1" v-if="currentView == 'kanbanboard'">
 								<span class="high">高</span>
@@ -210,6 +212,17 @@ export default {
             isAdd:true,
             tableDataRow:false,
 			currentView: "developList",//developList//kanbanboard
+
+
+
+
+
+
+			developListImg:require("../../assets/images/product-list.png"),
+			developListImgCur:require("../../assets/images/product-listCur.png"),
+			kanbanboardImg:require("../../assets/images/product-kanban.png"),
+			kanbanboardImgCur:require("../../assets/images/product-kanbanCur.png"),
+
 			groupList:[
 		        // { text: "产品待办事项" },
 		        // {
@@ -825,8 +838,7 @@ export default {
 
 		selectMenuFn(N){
 			let ID = N;
-			Common.setCookie("id",N);
-            localStorage.setItem('id', N);
+			Common.setStorageAndCookie(Common,"id",N)
 			defaultAXIOS(projectDetail+ID,{},{timeout:2000,method:'get'}).then((response) => {
 			    let myData = response.data;
 			    console.log("<======detail***response+++",response,myData,"+++detail***response======>");

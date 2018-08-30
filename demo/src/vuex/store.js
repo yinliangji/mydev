@@ -77,10 +77,35 @@ const module_testAdd = {
 	},
 }
 
+
+const module_loginSave = {
+	namespaced: true,
+	state:{
+		logged:false,
+	},
+	mutations:{
+	    increment (state,payload) {
+	        state.logged = payload.Msg;
+	    }
+	},
+	getters:{
+		getFn:state=>{return state.logged},
+		getFn1:state=>{return state.logged},
+		getFns:(state, getters) => {return getters},
+
+	},
+	actions:{
+		incrementAsync (context,{isLogin}) {
+			context.commit({type: 'increment',Msg:isLogin})
+		}
+	},
+}
+
 export default new Vuex.Store({
 	modules: {
 	    IS_LOADING:module_globalLoading,
 	    IS_PAGELOADING:module_pageLoading,
 	    ADD_DATA_TEST:module_testAdd,
+	    LOGIN_SAVE:module_loginSave,
   	}
 });

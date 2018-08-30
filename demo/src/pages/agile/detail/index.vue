@@ -214,12 +214,7 @@ export default {
             this.$router.push({path: '/agile/edit', query: {id: Common.GETID(this,Common),prj_id:Common.GETprjid(this,Common)}})
         },
         selectMenuFn(N){
-            Common.setCookie("detail_id",N);
-            localStorage.setItem('detail_id', N);
-
-            Common.setCookie("id",N);
-            localStorage.setItem('id', N);
-            
+            Common.setStorageAndCookie(Common,"id",N)
             this.tableDataAjaxFn(projectDetail,N)
         },
     	showError(ERR){
@@ -234,24 +229,20 @@ export default {
                 let _temp = false;
                 if(myData.data && myData.data.id){
                 	for(var I in this.formValidate){
-                		//_temp = myData.data[I]+"";
                 		this.formValidate[I] = myData.data[I];
-
-                    	// if(_temp.indexOf("|") != -1){
-    	                //    	this.formValidate[I] = myData.data[I].replace("|","、").replace("|","").replace(/、?$/g,"");
-    	                //    }else{
-    	                //        this.formValidate[I] = myData.data[I];
-    	                //    }
+                        /*
+                        _temp = myData.data[I]+"";
+                        if(_temp.indexOf("|") != -1){
+                        	this.formValidate[I] = myData.data[I].replace("|","、").replace("|","").replace(/、?$/g,"");
+                        }else{
+                           this.formValidate[I] = myData.data[I];
+                        }
+                        */
                 	}
-                    Common.setCookie("prj_id",myData.data.prj_id);
-                    localStorage.setItem('prj_id', myData.data.prj_id);
+                    Common.setStorageAndCookie(Common,"prj_id",myData.data.prj_id);
+
                     this.$router.push({path: '/agile/detail', query: {id: ID,prj_id:myData.data.prj_id}})
                 }
-
-
-                
-
-
 
                 if(myData.person && myData.person.length){
                 	
@@ -266,43 +257,49 @@ export default {
                     let _arr = this.formValidate.modules.split("|");
                     Common.ArrDelVal(_arr);
                     if(_arr.length){
-                        defaultAXIOS(listModule,{},{timeout:20000,method:'get'}).then((_response) => {
-                            let _myData = _response.data;
-                            console.log("<======_detail** listModule *_response+++",_response,_myData,"======>");
-                            let _myArrFn = (arr,obj)=>{
-                                if(arr.length){
-                                    for(let a=0;a<arr.length;a++){
-                                        if(arr[a] == obj.module_id){
-                                            return obj.module_name
-                                        }
-                                    }
-                                }else{
-                                    return false;
-                                }
-                            }
-                            if (_myData && _myData.res && _myData.res.length) {
-                                let _myArr = [];
-                                let _resTemp = {};
-                                for(let k=0;k<_myData.res.length;k++){
-                                    if(_myArrFn(_arr,_myData.res[k])){
-                                        _myArr.push("【"+_myArrFn(_arr,_myData.res[k])+"】")
-                                    }
-                                }
-                                this.formValidate.modules = _myArr.join("、")
-                              
-                            } else {
-                                that.showError(listModule + "_没有数据");
-                            }
-                        }).catch( (_error) => {
-                            console.log(_error);
-                            this.showError(_error);
-                        });
+                        this.listModuleFn(listModule,{},_arr);
+                    }else{
+                        
                     }
                 }
 
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);
+                
+            });
+        },
+        listModuleFn(URL,params = {},_arr){
+            defaultAXIOS(URL,params,{timeout:20000,method:'get'}).then((_response) => {
+                let _myData = _response.data;
+                console.log("<======_detail** listModule *_response+++",_response,_myData,"======>");
+                let _myArrFn = (arr,obj)=>{
+                    if(arr.length){
+                        for(let a=0;a<arr.length;a++){
+                            if(arr[a] == obj.module_id){
+                                return obj.module_name
+                            }
+                        }
+                    }else{
+                        return false;
+                    }
+                }
+                if (_myData && _myData.res && _myData.res.length) {
+                    let _myArr = [];
+                    let _resTemp = {};
+                    for(let k=0;k<_myData.res.length;k++){
+                        if(_myArrFn(_arr,_myData.res[k])){
+                            _myArr.push("【"+_myArrFn(_arr,_myData.res[k])+"】")
+                        }
+                    }
+                    this.formValidate.modules = _myArr.join("、")
+                  
+                } else {
+                    that.showError(listModule + "_没有数据");
+                }
+            }).catch( (_error) => {
+                console.log(_error);
+                this.showError(_error);
             });
         },
      	addItem(){

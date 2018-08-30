@@ -510,7 +510,7 @@ export default {
         },
 
         projectGroupFn(URL,params = {},ARR,thatEle){
-            defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
+            defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
                 this.inputLoad = false;
@@ -519,14 +519,20 @@ export default {
 
                 if(typeof(ARR)  == "number"){
                     if(thatEle && thatEle.temp && thatEle.temp.length){
-                        this.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp)
+                        let _tempArr = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,myData.data.list);
+                        this.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp,..._tempArr);
+
+                    }else{
+                        this.formValidate.AddGroupList[ARR].groupList.push(...myData.data.list);
                     }
-                    this.formValidate.AddGroupList[ARR].groupList.push(...myData.data.list)
                 }else{
                     if(thatEle && thatEle.temp && thatEle.temp.length){
-                        this[ARR].groupList.push(...thatEle.temp)
+                        let _tempArr = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,myData.data.list);
+                        this[ARR].groupList.push(...thatEle.temp,..._tempArr);
+
+                    }else{
+                        this[ARR].groupList.push(...myData.data.list);
                     }
-                    this[ARR].groupList.push(...myData.data.list)
                 }
                 
             }).catch( (error) => {

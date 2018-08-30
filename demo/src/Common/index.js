@@ -356,69 +356,54 @@ export default class Common extends Utils {
       })
     }
 
-    //获取id--不通用
-    static GETID(that,_Common){
-      let ID = false;
+    //删除Storage和Cookie--不通用
+    static delStorageAndCookie(_Common,name){
+      let SC = false;
+      if(localStorage.getItem(name)){
+         SC = localStorage.removeItem(name)
+      }
+      if(_Common.getCookie(name)){
+         SC = _Common.getCookie(name)
+      }
 
-      if(that.$router.history.current.query.id){
-             ID = that.$router.history.current.query.id;
-             localStorage.setItem('id', that.$router.history.current.query.id); 
-          }else if(localStorage.getItem('id')){
-             ID = localStorage.getItem('id')
-          }else if(_Common.getCookie("id")){
-             ID = _Common.getCookie("id")
-          }else{
-            ID = false;
-          }
-          return ID;
+      if(!localStorage.getItem(name) && _Common.getCookie(name)){
+        SC = true;
+      }
+      return SC;
+    }
+
+    //设置Storage和Cookie--不通用
+    static setStorageAndCookie(_Common,name,value){
+      _Common.setCookie(name,value);
+      localStorage.setItem(name,value);
     }
 
     //获取id--不通用
-    static GETdetail_id(that,_Common){
-      let detailID = false;
+    static GETID(that,_Common){
+      let ID = getSCFn(that,_Common,"id");
+      return ID;
+    }
 
-      if(that.$router.history.current.query.detail_id){
-        detailID = that.$router.history.current.query.detail_id;
-        localStorage.setItem('detail_id', that.$router.history.current.query.detail_id); 
-      }else if(localStorage.getItem('detail_id')){
-         detailID = localStorage.getItem('detail_id')
-      }else if(_Common.getCookie("detail_id")){
-         detailID = _Common.getCookie("detail_id")
-      }else{
-        detailID = false;
-      }
+    
+
+
+    //获取detail_id--不通用
+    static GETdetail_id(that,_Common){
+      let detailID = getSCFn(that,_Common,"detail_id");
       return detailID;
     }
 
+
+
     //获取prj_id--不通用
     static GETprjid(that,_Common){
-      let prj_ID = false;
-      
-      if(that.$router.history.current.query.prj_id){
-         prj_ID = that.$router.history.current.query.prj_id 
-      }else if(localStorage.getItem('prj_id')){
-         prj_ID = localStorage.getItem('prj_id')
-      }else if(_Common.getCookie("prj_id")){
-          prj_ID = _Common.getCookie("prj_id")
-      }else{
-         prj_ID = false; 
-      }
+      let prj_ID = getSCFn(that,_Common,"prj_id");
       return prj_ID;
     }
 
     //获取prod_id--不通用
     static GETprodid(that,_Common){
-      let prod_ID = false;
-      
-      if(that.$router.history.current.query.prod_id){
-         prod_ID = that.$router.history.current.query.prod_id 
-      }else if(localStorage.getItem('prod_id')){
-         prod_ID = localStorage.getItem('prod_id')
-      }else if(_Common.getCookie("prod_id")){
-          prod_ID = _Common.getCookie("prod_id")
-      }else{
-         prod_ID = false; 
-      }
+      let prod_ID = getSCFn(that,_Common,"prod_id");
       return prod_ID;
     }
 
@@ -694,8 +679,29 @@ export default class Common extends Utils {
       //
     }
 
-}
+    static returnDelArr(arr,arrList){
+        for(let i= 0;i<arr.length;i++){
+            let INDEX = arrList.findIndex((item)=>{return item.value == arr[i] })
+            if(INDEX != -1){
+                arrList.splice(INDEX,1)
+            }
+        }
+        return arrList
+    }
 
+}
+function getSCFn(that,_Common,name){
+  let result = false;
+  if(that.$router.history.current.query[name]){
+     result = that.$router.history.current.query[name] 
+  }else if(localStorage.getItem(name)){
+     result = localStorage.getItem(name)
+  }else if(_Common.getCookie(name)){
+      result = _Common.getCookie(name)
+  }
+  return result
+
+}
   
 
 

@@ -1,10 +1,19 @@
 <template>
 	<div class="pageContent">
-		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :top="'7'" />
+		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'7'" />
 		<selectMenu @changeSelect="selectMenuFn"></selectMenu>
        
-        <Card>
+        <Card class="detailContBox">
+            <Button 
+                type="warning" 
+                 @click="editItemFn"
+                :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
+                class="editBtn"
+                >
+                编辑
+            </Button>
         	<Tabs value="name1">
+
 		        <TabPane label="项目基本信息" name="name1">
 		        	<div class="baseInfoBox">
 		            	<h3 class="Title">项目基本信息</h3>
@@ -88,14 +97,9 @@
 		    </Tabs>
 
 
-           <!--  <Button 
-                type="warning" 
-                :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
-                @click="editItemFn"
-                >
-                编辑
-            </Button> -->
+
         	
+               
             
            
             <!-- <div class="addModule">
@@ -142,7 +146,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectDetail,listModule} = Common.restUrl;
+const {projectDetail,listModule,getPermission} = Common.restUrl;
 export default {
 	data () {
         return {
@@ -173,33 +177,56 @@ export default {
                 // testerGroup:"",
             },
             table:[],
-            HTML:""
+            HTML:"",
+
+            prj_permission:[],
+            identity:"",
         }
     },
     mounted(){
+
     	if(this.$router.history.current.query.id){
     		localStorage.setItem('id', this.$router.history.current.query.id);
     		this.tableDataAjaxFn(projectDetail,this.$router.history.current.query.id);
     	}else{
     		if(localStorage.getItem('id')){
-    			this.tableDataAjaxFn(projectDetail,localStorage.getItem('id'))
+    			this.tableDataAjaxFn(projectDetail,Common.GETID(this,Common))
     		}else{
-    			this.tableDataAjaxFn(projectDetail,0)
+    			this.$router.push({path: '/agile'})
     		}
     		
     	}
+
+        this.getPermissionFn(getPermission)
+
+        
     	
     },
     
     methods: {
+        authIs(KEY){
+            return Common.auth(this,KEY)
+        },
+        getPermissionFn(URL){
+            Common.GetPermission(defaultAXIOS,this,URL);
+        },
+        editItemFn(){
+            this.$router.push({path: '/agile/edit', query: {id: Common.GETID(this,Common),prj_id:Common.GETprjid(this,Common)}})
+        },
         selectMenuFn(N){
+            Common.setCookie("detail_id",N);
+            localStorage.setItem('detail_id', N);
+
+            Common.setCookie("id",N);
+            localStorage.setItem('id', N);
+            
             this.tableDataAjaxFn(projectDetail,N)
         },
     	showError(ERR){
     		//alert(ERR)
     		Common.ErrorShow(ERR,this);
     	},
-     	tableDataAjaxFn(URL = "",ID = 0){
+     	tableDataAjaxFn(URL = "",ID = ""){
             defaultAXIOS(URL+ID,{},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
@@ -210,13 +237,20 @@ export default {
                 		//_temp = myData.data[I]+"";
                 		this.formValidate[I] = myData.data[I];
 
-                	// if(_temp.indexOf("|") != -1){
-	                //    	this.formValidate[I] = myData.data[I].replace("|","、").replace("|","").replace(/、?$/g,"");
-	                //    }else{
-	                //        this.formValidate[I] = myData.data[I];
-	                //    }
+                    	// if(_temp.indexOf("|") != -1){
+    	                //    	this.formValidate[I] = myData.data[I].replace("|","、").replace("|","").replace(/、?$/g,"");
+    	                //    }else{
+    	                //        this.formValidate[I] = myData.data[I];
+    	                //    }
                 	}
+                    Common.setCookie("prj_id",myData.data.prj_id);
+                    localStorage.setItem('prj_id', myData.data.prj_id);
+                    this.$router.push({path: '/agile/detail', query: {id: ID,prj_id:myData.data.prj_id}})
                 }
+
+
+                
+
 
 
                 if(myData.person && myData.person.length){
@@ -238,7 +272,7 @@ export default {
                             let _myArrFn = (arr,obj)=>{
                                 if(arr.length){
                                     for(let a=0;a<arr.length;a++){
-                                        if(arr[a] == obj.id){
+                                        if(arr[a] == obj.module_id){
                                             return obj.module_name
                                         }
                                     }
@@ -366,4 +400,13 @@ h4{
     }
 
 }
+.detailContBox{
+    position:relative;
+}
+.editBtn{
+    position:absolute;
+    right:20px;
+    top:10px;
+    z-index: 10;
+}  
 </style>

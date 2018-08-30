@@ -84,7 +84,7 @@
                     <h3 class="Title">计划效率相关</h3>
                     <div class="fromBox">
                         <FormItem label="所属迭代" prop="sprint">
-                            <Select v-model="formValidate.sprint" placeholder="请选所属迭代">
+                            <Select clearable v-model="formValidate.sprint" placeholder="请选所属迭代">
                                 <Option v-for="(item , index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
                         </FormItem>
@@ -452,7 +452,7 @@ export default {
             
             for (let i in this.formValidate){
                 if(i == "manhour"){
-                    this.formValidate.manhour = DATA.manHours+""
+                    this.formValidate.manhour = Number(DATA.manHours+"")
                 }else{
                     this.formValidate[i] = DATA[i]+"";
                 }

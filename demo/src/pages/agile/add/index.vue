@@ -1,6 +1,6 @@
 <template>
 	<div class="pageContent">
-        <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :Top="'5'" />
+        <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'5'" />
         <Card>
             <div class="aglieAddBox">
                 
@@ -585,21 +585,24 @@ export default {
                 console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
                 this.inputLoad = false;
                 this.formValidate.AddGroupList[ARR].groupList = [];
+
+                let _listArr = [];
+                _listArr.push(...myData.data.list);
                 
-
-             
-
                 if(typeof(ARR)  == "number"){
-
                     if(thatEle && thatEle.temp && thatEle.temp.length){
                         this.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp)
                     }
-
-                    
                     this.formValidate.AddGroupList[ARR].groupList.push(...myData.data.list)
-                    //this.formValidate.AddGroupList[ARR].groupList = myData.data.list;
-                   
                 }
+
+                
+                // if(typeof(ARR)  == "number"){
+                //     if(thatEle && thatEle.temp && thatEle.temp.length){
+                //         this.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp)
+                //     }
+                //     this.formValidate.AddGroupList[ARR].groupList.push(...myData.data.list)
+                // }
                 
             }).catch( (error) => {
                 console.log(error);
@@ -776,13 +779,10 @@ export default {
         },
 
         submitModule () {
-            setTimeout(() => {
-                this.formValidate.createModule.push(this.formItem.businessName)
-                this.modaAdd = false;
-                this.$Message.info('成功');
-                this.ModuleformItemReset();
-            },1000)
-            
+            this.formValidate.createModule.push(this.formItem.businessName)
+            this.modaAdd = false;
+            this.$Message.info('成功');
+            this.ModuleformItemReset();
         },
         addItem(){
             this.modaAdd = true;

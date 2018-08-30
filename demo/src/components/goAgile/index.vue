@@ -1,5 +1,5 @@
 <template>
-    <div class="goAgile" :style="{top: Top+'px'}">
+    <div class="goAgile" :style="{top: Top  +'px'}">
         <router-link  :to="togo" >
             <Button >
                 {{cont}}
@@ -25,8 +25,14 @@ export default {
         },
         Top: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
-            default: function() {
+            default() {
                 return 10;
+            }
+        },
+         TOP: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
             }
         },
         text: {

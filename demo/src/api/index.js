@@ -17,7 +17,7 @@ AXIOS.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8'
 //AXIOS.defaults.headers['Content-Type'] = 'multipart/form-data'
 
 AXIOS.interceptors.request.use( (config) => {
-	console.log("<========AXIOS添加【请求】拦截器 config==========",config,"====>");
+	//console.log("<========AXIOS添加【请求】拦截器 config==========",config,"====>");
     if(config){
         return config;
     }else{
@@ -31,7 +31,7 @@ AXIOS.interceptors.request.use( (config) => {
 });
 
 AXIOS.interceptors.response.use( (response) => {
-    console.log("========AXIOS添加 [响应] 拦截器 response==========",response,"====>");
+    //console.log("========AXIOS添加 [响应] 拦截器 response==========",response,"====>");
     //return response
     if (response) {
         return response

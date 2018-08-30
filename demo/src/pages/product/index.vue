@@ -1,6 +1,6 @@
 <template>
 	<div class="pageContent">
-		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :Top="'10'" />
+		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'10'" />
 		<selectMenu @changeSelect="selectMenuFn"></selectMenu>
 		<Card>
 			<div class="productBox">
@@ -138,15 +138,15 @@
 					</div>
 
 
-					<div class="tableContBox" v-if="currentView == 'developList'">
+					<div class="tableContBox" v-show="currentView == 'developList'">
 						<Table border :columns="columns" :data="tableData"  />
 						<div class="pageBox" v-if="tableData.length">
 				    		<Page :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
 				    		<p>总共{{tableDAtaTatol}}条记录</p>
 				    	</div>
 					</div>
-					<div class="listBox" v-else>
-						<kanbanboard :cardList="cardLists" :statusList="statusLists" :groupList="groupList" />
+					<div class="listBox" v-show="currentView == 'kanbanboard'">
+						<kanbanboard :cardList="cardLists" :statusList="statusLists" :groupList="groupList" :Group="false" />
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div>
 
@@ -729,24 +729,31 @@ export default {
 		changeStateNumber(info){
 			let _statusBase = this.statusListBase;
 			let toState = info.evt.to.getAttribute('state');
+			let fromState = info.evt.from.getAttribute('state');
 
-			_statusBase.forEach((item,index)=>{
-				if(info.item.askStatus == item.state){
-					item.taskNumber = parseFloat(item.taskNumber) - 1
-				}
-				if(item.state == toState){
-					item.taskNumber = parseFloat(item.taskNumber) + 1
-				}
-			});
-			this.statusListBase = [];
-			this.statusListBase.push(..._statusBase)
+			if(toState == fromState){
+				return;
+			}else{
+				_statusBase.forEach((item,index)=>{
+					if(info.item.askStatus == item.state){
+						item.taskNumber = parseFloat(item.taskNumber) - 1
+					}
+					if(item.state == toState){
+						item.taskNumber = parseFloat(item.taskNumber) + 1
+					}
+				});
+				this.statusListBase = [];
+				this.statusListBase.push(..._statusBase)
+			}
+
+			
 		},
 		changeMovedStatus(info){
 			let _params = {};
-			_params.taskId = info.item.taskId;
+			_params.taskId = info.evt.item.getAttribute('taskid');
 			_params.ID = info.item.detail_id;
 			_params.taskStatus = info.evt.to.getAttribute('state');
-			defaultAXIOS(storySetChange,{id:_params.ID,usertory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
+			defaultAXIOS(storySetChange,{id:_params.ID,userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======agile storySetChange***response+++",response,myData,"======>");
                 if(response.status != 200){
@@ -841,33 +848,6 @@ export default {
 
 		storyGetConditionFn(URL,condition,prj_id){
 			Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
-			/*
-            defaultAXIOS(URL,{condition,prj_id},{timeout:20000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======product condition***response+++",condition,response,myData,"======>");
-                if(myData && myData.length){
-                    let _OBJ = {};
-                    if(this[condition+"List"]){
-                    	for(let i=0;i<myData.length;i++){
-	                        _OBJ.label = (myData[i].value || myData[i].sprint_name)+""
-	                        _OBJ.value = (myData[i].key || myData[i].sprint)+""
-	                        this[condition+"List"].push(_OBJ)
-	                        _OBJ = {};
-	                    }
-                    }else{
-                    	this.showError(URL+"****"+condition+"_没有this."+condition+"List");
-                    }
-                }else if(response.status == 200){
-
-                }else{
-                    this.showError(URL+"****"+condition+"_没有数据");
-                }
-                
-            }).catch( (error) => {
-                console.log(error);
-                this.showError(error);
-            });
-            */
         },
         cancelSerchAll(){
             for(let i in this.formValidate){
@@ -877,12 +857,11 @@ export default {
         },
 		serchAll(){
 			let ID = this.getID()
+
+			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
             
-            if(this.currentView == "kanbanboard"){
-            	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-            }else{
-            	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-            }
+            if(this.currentView == "kanbanboard"){}else{}
 
         },
 		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
@@ -937,6 +916,7 @@ export default {
 						this.cardListBase.push(..._arr);
 						_arr = []
 					}
+					EventBus.$emit('storyBindSort');
 					
 
 
@@ -1086,7 +1066,7 @@ export default {
             //this.$router.push('/development')
             //this.$router.push({path: '/development/add'})
 
-            this.$router.push({path: '/development/add', query: {board: true,my_id:this.tableData[index].id}})
+            this.$router.push({path: '/development/add', query: {board: true,myid:this.tableData[index].id}})
         },
 		goDevelopmentFn (index) {
             //this.$router.push('/development')userstory_name

@@ -373,6 +373,23 @@ export default class Common extends Utils {
           return ID;
     }
 
+    //获取id--不通用
+    static GETdetail_id(that,_Common){
+      let detailID = false;
+
+      if(that.$router.history.current.query.detail_id){
+        detailID = that.$router.history.current.query.detail_id;
+        localStorage.setItem('detail_id', that.$router.history.current.query.detail_id); 
+      }else if(localStorage.getItem('detail_id')){
+         detailID = localStorage.getItem('detail_id')
+      }else if(_Common.getCookie("detail_id")){
+         detailID = _Common.getCookie("detail_id")
+      }else{
+        detailID = false;
+      }
+      return detailID;
+    }
+
     //获取prj_id--不通用
     static GETprjid(that,_Common){
       let prj_ID = false;
@@ -418,7 +435,7 @@ export default class Common extends Utils {
           let _temp = {};
           for (let i = 0; i < myData.res.length; i++) {
             _temp.label = myData.res[i].module_name;
-            _temp.value = myData.res[i].id + "";
+            _temp.value = myData.res[i].module_id + "";
             that.moduleList.push(_temp);
             _temp = {};
           }
@@ -585,7 +602,8 @@ export default class Common extends Utils {
     //获取搜索下拉菜单--不通用
     static GetCondition(FUN,that,URL, condition,prj_id){
       //
-      FUN(URL,{condition,prj_id},{timeout:20000,method:'get'}).then((response) => {
+      return FUN(URL,{condition,prj_id},{timeout:20000,method:'get'})
+      .then((response) => {
           let myData = response.data;
           console.log("<======product condition***response+++",condition,response,myData,"======>");
           if(myData){
@@ -600,23 +618,34 @@ export default class Common extends Utils {
                     that[condition+"List"].push(_OBJ)
                     _OBJ = {};
                 }
+
+                return Promise.resolve("true")
+                
               }else{
                 that.showError(URL+"****"+condition+"_没有this."+condition+"List");
+                
+                return Promise.reject("false");
               }
               //
             }else if(myData.status && myData.status == "success"){
-
+              return Promise.resolve("true")
             }else{
               that.showError(URL+"****"+condition+JSON.stringify(myData));
+              return Promise.reject("false");
             }
               
           }else{
               that.showError(URL+"****"+condition+"_错误");
+              return Promise.reject("false");
           }
+
+
           
-      }).catch( (error) => {
+      })
+      .catch( (error) => {
           console.log(error);
           that.showError(error);
+          return Promise.reject("false");
       });
       //
     }
@@ -637,6 +666,31 @@ export default class Common extends Utils {
           console.log(error);
           that.showError(error);
       });   
+      //
+    }
+
+    //获取权限--不通用
+    static GetPermission(FUN,that,URL,params = {}){
+      //
+      FUN(URL,{},{timeout:20000,method:'get'}).then((response) => {
+          let myData = response.data;
+          console.log("<======agile getPermission***response+++",response,myData,"======>");
+          if(myData.prj_permission && myData.prj_permission.length){
+              that.prj_permission = myData.prj_permission;
+              that.identity = myData.identity
+          }else if(myData.permission && myData.permission.length){
+              that.prj_permission = myData.permission;
+              that.identity = myData.identity
+          }
+          else{
+              that.showError("权限不足，不能有任何动作");
+          }
+          
+          
+      }).catch( (error) => {
+          console.log(error);
+          that.showError(error);
+      });
       //
     }
 

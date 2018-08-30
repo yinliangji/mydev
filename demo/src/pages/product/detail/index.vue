@@ -1,6 +1,6 @@
 <template>
 	<div class="pageContent">
-		<goAgile :go="'/product'" :text="'返回用户故事列表'" :top="'7'" />
+		<goAgile :go="'/product'" :text="'返回用户故事列表'" :TOP="'7'" />
 		<Breadcrumb :style="{margin: '16px 0'}">
             <BreadcrumbItem>首页</BreadcrumbItem>
             <BreadcrumbItem>用户故事</BreadcrumbItem>
@@ -55,14 +55,14 @@
 								  <td>0</td>
 								</tr>
 
-								<!-- <tr>
+								<tr>
 								  <th>关联任务(已完成)</th>
-								  <td>无数据</td>
+								  <td>{{ formValidate.complete_mission | FALSEINFO}}</td>
 								  <th>关联任务(全部)</th>
-								  <td>无数据</td>
+								  <td>{{ formValidate.mission | FALSEINFO}}</td>
 								  <th>&nbsp;</th>
 								  <td>&nbsp;</td>
-								</tr> -->
+								</tr>
 								
 							  </tbody>
 							</table>
@@ -125,7 +125,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyGetDetail} = Common.restUrl;
+const {storyGetDetail,storyGetCondition} = Common.restUrl;
 export default {
 	data () {
         return {
@@ -149,6 +149,7 @@ export default {
 				proi: "",
 				manHours: "",
 				mission: "",
+				complete_mission: "",
 				phycics_sys_id:"",
 				actual_online_time:"",
 				charger:"",
@@ -169,61 +170,138 @@ export default {
 				prod_id:"",
 				product_name:"",        		
             },
+            userstory_typeList:[],
+            userstory_statusList:[],
+            req_idList:[],
+            proiList:[],
         }
     },
     mounted(){
-    	if(this.$router.history.current.query.detail_id){
-    		this.storyGetDetailFn(storyGetDetail,this.$router.history.current.query.detail_id)
+    	let detailID = Common.GETdetail_id(this,Common)
+    	let ID = Common.GETID(this,Common)
+    	if(detailID && ID){
+    		let _type = this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
+	    	let _status = this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
+	    	let _proi = this.storyGetConditionFn(storyGetCondition,"proi",ID);
+	    	Promise.all([_type,_status,_proi]).then((REP)=>{
+	    		this.storyGetDetailFn(storyGetDetail,detailID)
+	    	},(ERR)=>{
+	    		console.log(ERR)
+	    		this.showError("没有 userstory_type,userstory_status,proi 其中之一")
+	    	})
     	}else{
     		this.$router.push('/product')
     	}
-    	
     },
     methods: {
 		showError(ERR){
-    		//alert(ERR)
     		Common.ErrorShow(ERR,this);
     	},
      	storyGetDetailFn(URL = "",detail_id){
-            defaultAXIOS(URL,{detail_id},{timeout:5000,method:'get'}).then((response) => {
+            defaultAXIOS(URL,{detail_id},{timeout:5000,method:'get'})
+            .then((response) => {
                 let myData = response.data;
                 console.log("<======product detail***response+++",response,myData,"======>");
+                let proiFn = (N,STR="")=>{
+                	let Lable = "未知"
+                	if(this[STR+"List"] && this[STR+"List"].length){
+                		for(let j=0;j<this[STR+"List"].length;j++){
+                			if(this[STR+"List"][j].value == N){
+                				Lable = this[STR+"List"][j].label
+                			}
+                		}
+                	}else{
+                		if(N == 1){
+                			Lable = "高"
+                		}else if(N ==2){
+                			Lable = "中"
+                		}else{
+                			Lable = "低"
+                		}
+                	}
+                	return Lable;
+                }
+                let typeFn = (N,STR="")=>{
+                	let Lable = "未知"
+                	if(this[STR+"List"] && this[STR+"List"].length){
+                		for(let j=0;j<this[STR+"List"].length;j++){
+                			if(this[STR+"List"][j].value == N){
+                				Lable = this[STR+"List"][j].label
+                			}
+                		}
+                	}else{
+                		if(N == 1){
+                			Lable =  "用户需求"
+                		}else if(N ==2){
+                			Lable =  "生产问题"
+                		}else if(N ==3){
+                			Lable =  "自主创新"
+                		}else{
+                			Lable =  "未知"
+                		}
+                	}
+                	return Lable;
+                }
+                let statusFn = (N,STR="")=>{
+                	let Lable = "未知"
+                	if(this[STR+"List"] && this[STR+"List"].length){
+                		for(let j=0;j<this[STR+"List"].length;j++){
+                			if(this[STR+"List"][j].value == N){
+                				Lable = this[STR+"List"][j].label
+                			}
+                		}
+                	}else{
+                		if(N == 1){
+                			Lable =   "提出"
+                		}else if(N ==2){
+                			Lable =   "开发中"
+                		}else if(N ==3){
+                			Lable =   "测试"
+                		}else if(N ==4){
+                			Lable =   "上线"
+                		}else{
+                			Lable =   "未知"
+                		}
+                	}
+                	return Lable;
+                }
+                //console.log(proiFn(1,"proi"))
+
                 if(Object.getOwnPropertyNames(myData).length >2){
                 	for(let i in myData){
                 		if(i == "proi"){
-                			this.formValidate[i] = ((N)=>{if(N == 1){return "高"}else if(N ==2){return "中"}else{return "低"}})(myData[i])
+                			this.formValidate[i] = proiFn(myData[i],i)
+                			//this.formValidate[i] = ((N)=>{if(N == 1){return "高"}else if(N ==2){return "中"}else{return "低"}})(myData[i])
                 		}else if(i == "userstory_type"){
-                			this.formValidate[i] = ((N)=>{if(N == 1){return "用户需求"}else if(N ==2){return "生产问题"}else if(N ==3){return "自主创新"}else{return "未知"}})(myData[i])
+                			this.formValidate[i] = typeFn(myData[i],i)
+                			//this.formValidate[i] = ((N)=>{if(N == 1){return "用户需求"}else if(N ==2){return "生产问题"}else if(N ==3){return "自主创新"}else{return "未知"}})(myData[i])
                 		}else if(i == "userstory_status"){
-                			this.formValidate[i] = ((N)=>{if(N == 1){return "提出"}else if(N ==2){return "开发中"}else if(N ==3){return "测试"}else if(N ==4){return "上线"}else{return "未知"}})(myData[i])
+                			this.formValidate[i] = statusFn(myData[i],i)
+                			//this.formValidate[i] = ((N)=>{if(N == 1){return "提出"}else if(N ==2){return "开发中"}else if(N ==3){return "测试"}else if(N ==4){return "上线"}else{return "未知"}})(myData[i])
                 		}
                 		else{
                 			this.formValidate[i] = myData[i]
                 		}
                 		
                 	}
-                	console.log("this.formValidate",this.formValidate)
 
                 }else{
                 	this.showError("没有数据");
                 }
-                
-                
 
-
-                
-
-
-
-
-
-            }).catch( (error) => {
+            })
+            .catch( (error) => {
                 console.log(error);
                 this.showError(error);
             });
+        },
+        storyGetConditionFn(URL,condition,prj_id){
+			return Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id).then((D)=>{
+				return Promise.resolve("resolve")
+			},(E)=>{
+				return Promise.reject("reject");
+			});
         },        
-       
-       
     }
 }
 </script>

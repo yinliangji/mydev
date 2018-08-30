@@ -1,6 +1,6 @@
 <template>
 	<div class="pageContent">
-        <goAgile :go="'/product'" :text="'返回用户故事列表'" :Top="'5'" />
+        <goAgile :go="'/product'" :text="'返回用户故事列表'" :TOP="'5'" />
         <Card>
             <div class="productAddBox">
 
@@ -86,7 +86,7 @@
                     <h3 class="Title">计划效率相关</h3>
                     <div class="fromBox">
                         <FormItem label="所属迭代" prop="sprint">
-                            <Select v-model="formValidate.sprint" placeholder="请选所属迭代">
+                            <Select clearable v-model="formValidate.sprint" placeholder="请选所属迭代">
                                 <!-- <Option value="迭代1">迭代1</Option>
                                 <Option value="迭代2">迭代2</Option>
                                 <Option value="迭代3">迭代3</Option> -->
@@ -228,7 +228,7 @@ export default {
             formValidate: {
                 userstory_name: '',
                 userstory_type:"",
-                userstory_status:"",
+                userstory_status:"1",
                 proi:"3",
                 userstory_desc: '',
                 sprint:"",

@@ -114,7 +114,7 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
             
             "logic_sys_id": "logic_sys_id",
             "phycics_sys_id": "phycics_sys_id",
-            "modules": "1|2|",
+            "modules": "mid0001|mid0002|",
             "allgroup": "Canberra|London|",
             "managerGroup": "Sydney|Ottawa|",
             "developerGroup": "Paris|",
@@ -464,8 +464,8 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             "userstory_status|1-4": 1,
             //"sprint_id": "迭代1",
             "proi|1-3": 1,
-            "manHours": "20 | 10",
-            "mission": "5 | 10",
+            "manHours": "10",
+            "mission": "10",
             "phycics_sys_id": "phycics_sys_id",
             "icon": "/assets/images/user_02.png",
 
@@ -1230,7 +1230,7 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
 
             //========
             //"icdp_projList_mng",//25
-            "icdp_projList_edit",//21
+            //"icdp_projList_edit",//21
         ],
         identity:"SuperAdmin",
         //PlainAdmin

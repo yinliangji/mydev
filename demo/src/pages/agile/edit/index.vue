@@ -1,6 +1,6 @@
 <template>
 	<div class="pageContent">
-        <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :Top="'5'" />
+        <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'5'" />
         <Card>
             <div class="aglieAddBox">
                 
@@ -516,48 +516,17 @@ export default {
                 this.inputLoad = false;
                 this.formValidate.AddGroupList[ARR].groupList = [];
                 this[ARR] = [];
-                let _Array = [
-                    {
-                        value: 'New York X L',
-                        label: 'New York X L人1'
-                    },
-                    {
-                        value: 'London',
-                        label: 'London人2'
-                    },
-                    {
-                        value: 'Sydney',
-                        label: 'Sydney人3'
-                    },
-                    {
-                        value: 'Ottawa',
-                        label: 'Ottawa人4'
-                    },
-                    {
-                        value: 'Paris',
-                        label: 'Paris人5'
-                    },
-                    {
-                        value: 'Canberra',
-                        label: 'Canberra人6'
-                    }
-                ]
-                console.log("thatEle.temp",thatEle,thatEle.temp)
 
                 if(typeof(ARR)  == "number"){
                     if(thatEle && thatEle.temp && thatEle.temp.length){
                         this.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp)
                     }
                     this.formValidate.AddGroupList[ARR].groupList.push(...myData.data.list)
-                    //this.formValidate.AddGroupList[ARR].groupList = _Array;
-                    //this.formValidate.AddGroupList[ARR].groupList = myData.data.list;
                 }else{
                     if(thatEle && thatEle.temp && thatEle.temp.length){
                         this[ARR].groupList.push(...thatEle.temp)
                     }
                     this[ARR].groupList.push(...myData.data.list)
-                    //this[ARR] = _Array;    
-                    //this[ARR] = myData.data.list;    
                 }
                 
             }).catch( (error) => {
@@ -838,13 +807,13 @@ export default {
         },
 
         submitModule () {
-            setTimeout(() => {
-                this.formValidate.createModule.push(this.formItem.businessName)
-                this.modaAdd = false;
-                this.$Message.info('成功');
-                this.ModuleformItemReset();
-            },1000)
-            
+            if(!this.formValidate.createModule){
+                this.formValidate.createModule = [];
+            }
+            this.formValidate.createModule.push(this.formItem.businessName)
+            this.modaAdd = false;
+            this.$Message.info('成功');
+            this.ModuleformItemReset();
         },
         addItem(){
             this.modaAdd = true;

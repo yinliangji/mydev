@@ -262,7 +262,7 @@ export default {
 
 
                 },
-
+                /*
                 {
                     title: '项目描述',
                     key: 'prj_desc',
@@ -277,6 +277,7 @@ export default {
                     }
                     //
                 },
+                */
                 {
                     title: '项目经理',
                     key: 'manager'
@@ -397,25 +398,7 @@ export default {
         },
 
         getPermissionFn(URL){
-            defaultAXIOS(URL,{},{timeout:20000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======agile getPermission***response+++",response,myData,"======>");
-                if(myData.prj_permission && myData.prj_permission.length){
-                    this.prj_permission = myData.prj_permission;
-                    this.identity = myData.identity
-                }else if(myData.permission && myData.permission.length){
-                    this.prj_permission = myData.permission;
-                    this.identity = myData.identity
-                }
-                else{
-                    this.showError("不能有任何动作");
-                }
-                
-                
-            }).catch( (error) => {
-                console.log(error);
-                this.showError(error);
-            });
+            Common.GetPermission(defaultAXIOS,this,URL);
         },
         cancelSerchAll(){
             for(let i in this.formValidate){
@@ -452,7 +435,7 @@ export default {
             });
         },
         changeCurrentPage(i) {
-            this.tableDataAjaxFn(projectAll,i,this.tableDAtaPageLine)
+            this.tableDataAjaxFn(projectAll,i,this.tableDAtaPageLine,this.formValidate.prj_name,this.formValidate.prj_id,this.formValidate.start_time,this.formValidate.end_time,this.formValidate.icdp_projManager,this.formValidate.icdp_agileCoach,this.formValidate.icdp_devTeam,this.formValidate.icdp_testTeam)
         },
         changePageSize(i) {
         },

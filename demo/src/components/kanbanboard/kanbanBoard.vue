@@ -43,7 +43,7 @@
                 :item = "value"
                 :Group = false
                 v-for="(value, keys) in cardList"
-                v-if=" value.taskState == items.state">
+                v-if=" value.taskStatus == items.state">
             </kanbanItem>
           </Col>
         </Row>

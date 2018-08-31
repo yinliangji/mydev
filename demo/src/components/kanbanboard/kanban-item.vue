@@ -2,7 +2,7 @@
   <div :id="item.userId" @click="itemClick(item)" class="card-wrapper"
         :groupId="item.groupId">
       <div class="card-wrap">
-          <Card :style="item.bgColor">
+          <Card :style="{'background':item.bgcolor}">
             <div class="circle-wrapper">
                 <p class="circle">
                     <Icon type="record" :size="12"></Icon>
@@ -91,7 +91,7 @@
           },
           onEnd: function(evt){
           console.log(evt);
-            EventBus.$emit('moveEnd', {evt,item: vm.item});
+            //EventBus.$emit('moveEnd', {evt,item: vm.item});
           }
         });
 

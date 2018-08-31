@@ -44,11 +44,11 @@
 								
 								<tr>
 								  <th>项目描述</th>
-								  <td colspan="5">{{formValidate.prj_desc | FALSEINFO}}</td>
+								  <td colspan="5" v-html="formValidate.prj_desc?'<pre>'+formValidate.prj_desc+'</pre>':'没有数据'"></td>
 								</tr>
 								<tr>
 								  <th>项目目标</th>
-								  <td colspan="5">{{formValidate.prj_goal | FALSEINFO}}</td>
+								  <td colspan="5" v-html="formValidate.prj_goal?'<pre>'+formValidate.prj_goal+'</pre>':'没有数据'"></td>
 								</tr>
 							  </tbody>
 							</table>

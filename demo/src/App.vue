@@ -10,7 +10,7 @@
         </Layout>
         <!-- 结束 -->
       </Content>
-      <!-- <MyFooter>===MyFooter</MyFooter> -->
+      <MyFooter />
     </Layout>
 </template>
 <script>
@@ -34,7 +34,6 @@ export default {
   },
   mounted: function(){
     let router = this.$router;
-    console.log("process.env.NODE_ENV-->",process.env.NODE_ENV,"<-- process.env.BASE_URL-->",process.env.BASE_URL,"<--",router)
   },
   watch: {
   },

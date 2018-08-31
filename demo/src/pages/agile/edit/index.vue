@@ -377,9 +377,9 @@ export default {
                     { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
                     //{ type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
                 ],
-                modules: [
-                    { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
-                ],
+                // modules: [
+                //     { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
+                // ],
                 createModule: [
                     { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
                 ],

@@ -1,13 +1,10 @@
 let express = require('express'); //引入express模块
 let Mock = require('mockjs'); //引入mock模块
-
 let app = express(); //实例化express
-
 let bodyParser = require('body-parser'); //body-parser中间件来解析请求体
-
 let allowCrossDomain = function(req, res, next) {
     //res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8000');
+    res.header('Access-Control-Allow-Origin', ''+res.req.headers.origin);
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
     res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization,Cookie, Accept,X-Requested-With");
@@ -16,8 +13,6 @@ let allowCrossDomain = function(req, res, next) {
     } else {
         next();
     }
-
-
 };
 
 let mockData = () => {

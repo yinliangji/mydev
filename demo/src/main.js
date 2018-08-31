@@ -28,6 +28,7 @@ import '@/assets/css/common.css'
 
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts;
+require('!style-loader!css-loader!less-loader!mytheme/myTheme.less')
 /* 通用开始 */
 Vue.filter('FALSEINFO', value => { // 交易明细
     if (!value) {
@@ -73,6 +74,9 @@ Vue.prototype.getCookie = function(cname) {
     return "";
 }
 
+if (process.env.NODE_ENV === 'production') {
+  console.log = function () { }
+}
 
 /* 通用结束 */
 

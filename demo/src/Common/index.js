@@ -216,11 +216,18 @@ export default class Common extends Utils {
           MET = "无";
           URL = "无";
       }
-      THIS.$Notice.open({
-          title: MET+" | "+URL,
-          desc: JSON.stringify(ERR),
-          duration: 60
-      });
+
+
+      if (process.env.NODE_ENV === 'production') {
+        console.log(MET+" | "+URL);
+        console.log(JSON.stringify(ERR));
+      }else{
+        THIS.$Notice.open({
+            title: MET+" | "+URL,
+            desc: JSON.stringify(ERR),
+            duration: 60
+        });
+      }
     }
     //权限判断--不通用
     static auth(THIS,KEY){

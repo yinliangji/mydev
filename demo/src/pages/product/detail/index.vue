@@ -32,7 +32,7 @@
 								</tr>
 								<tr>
 								  <th>故事描述</th>
-								  <td colspan="5">{{ formValidate.userstory_desc | FALSEINFO}}</td>
+								  <td colspan="5" v-html="formValidate.userstory_desc?'<pre>'+formValidate.userstory_desc+'</pre>':'没有数据'"></td>
 								</tr>
 								
 							  </tbody>
@@ -320,6 +320,8 @@ export default {
 	}
 	td{
 		padding-left:0.5em;
+		padding-top:0.5em;
+		padding-bottom:0.5em;
 		color:#495060;
 		font-size:12px;
 	}

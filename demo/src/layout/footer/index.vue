@@ -1,23 +1,29 @@
 <template>
-	<Footer>Footer <slot>Footer slot</slot></Footer>
+	<Footer>
+        
+        <MyFooterCont />
+    </Footer>
 </template>
 <script>
-	export default {
-
-	}
+import MyFooterCont from 'foot'
+export default {
+    components: {
+        MyFooterCont,
+    }
+}
 </script>
 <style lang="less" scoped>
 .ivu-layout-header {
-    background: red;
+    //background: red;
     padding: 0;
     height: 64px;
     line-height: normal;
 }
 .ivu-layout-footer {
-    background: yellow;
+    //background: yellow;
     padding: 0;
-    color: #495060;
-    font-size: 14px;
+    //color: #495060;
+    //font-size: 14px;
     height:64px;
 }
 </style>

@@ -735,8 +735,6 @@ export default {
         EventBus.$on("search", this.searchHandle);
         EventBus.$on("addTask", this.addNewTask);
 
-        EventBus.$on("storyMoveEnd", this.moveEnd);
-
         
 
 		
@@ -752,9 +750,7 @@ export default {
 				return;
 			}else{
 				_statusBase.forEach((item,index)=>{
-					//if(info.item.askStatus == item.state){
-					
-					if(info.evt.item.getAttribute('state') == item.state){
+					if(info.item.askStatus == item.state){
 						item.taskNumber = parseFloat(item.taskNumber) - 1
 					}
 					if(item.state == toState){
@@ -770,10 +766,8 @@ export default {
 		changeMovedStatus(info){
 			let _params = {};
 			_params.taskId = info.evt.item.getAttribute('taskid');
-			//_params.ID = info.item.detail_id;
-			_params.ID = info.evt.item.getAttribute('detailid');
+			_params.ID = info.item.detail_id;
 			_params.taskStatus = info.evt.to.getAttribute('state');
-
 			defaultAXIOS(storySetChange,{id:_params.ID,userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======agile storySetChange***response+++",response,myData,"======>");
@@ -816,7 +810,29 @@ export default {
         },
 
         getPermissionFn(URL){
+
         	Common.GetPermission(defaultAXIOS,this,URL);
+
+        	/*
+            defaultAXIOS(URL,{},{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======agile getPermission***response+++",response,myData,"======>");
+                if(myData.prj_permission && myData.prj_permission.length){
+                    this.prj_permission = myData.prj_permission;
+                    this.identity = myData.identity
+                }else if(myData.permission && myData.permission.length){
+                    this.prj_permission = myData.permission;
+                    this.identity = myData.identity
+                }
+                else{
+                    this.showError("不能有任何动作");
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+            */
+
         },
 
 		getID(){
@@ -860,11 +876,12 @@ export default {
 
 			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
             this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+
+
+            
+
             
             if(this.currentView == "kanbanboard"){}else{}
-
-            //this.$router.push({path: '/product', query: {URL:storyAll,page:1,limit:this.tableDAtaPageLine,data:"",ID:ID,userstory_name:this.formValidate.userstory_name,userstory_id:this.formValidate.userstory_id,userstory_type:this.formValidate.userstory_type,userstory_status:this.formValidate.userstory_status,req_id:this.formValidate.req_id,proi:this.formValidate.proi,charger:this.formValidate.charger,learn_concern:this.formValidate.learn_concern,sprint:this.formValidate.sprint}})
-            
 
         },
 		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){

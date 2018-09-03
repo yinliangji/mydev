@@ -556,7 +556,8 @@ export default class Common extends Utils {
               sub_name:"",
           },
       ]
-      FUN(URL,params,{timeout:5000,method:'get'}).then((response) => {
+      FUN(URL,params,{timeout:5000,method:'get'})
+      .then((response) => {
           let myData = response.data;
           console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
           let _tempObj = {};
@@ -575,7 +576,8 @@ export default class Common extends Utils {
               that.formPartValidate.addGroupList.push(_tempObj);
               _tempObj = {};
           }
-      }).catch( (error) => {
+      })
+      .catch( (error) => {
           console.log(error);
           that.showError(error);
           
@@ -695,6 +697,125 @@ export default class Common extends Utils {
         }
         return arrList
     }
+
+    static ProiFn = (N,STR="")=>{
+      let Lable = "未知"
+      if(this[STR+"List"] && this[STR+"List"].length){
+        for(let j=0;j<this[STR+"List"].length;j++){
+          if(this[STR+"List"][j].value == N){
+            Lable = this[STR+"List"][j].label
+          }
+        }
+      }else{
+        if(N == 1){
+          Lable = "高"
+        }else if(N ==2){
+          Lable = "中"
+        }else if(N ==3){
+          Lable = "低"
+        }else{
+          Lable = "未知"
+        }
+      }
+      return Lable;
+    }
+
+    static ProiColorFn = (N,STR="")=>{
+      let Lable = "#dddee1"
+      if(this[STR+"List"] && this[STR+"List"].length){
+        for(let j=0;j<this[STR+"List"].length;j++){
+          if(this[STR+"List"][j].value == N){
+            Lable = this[STR+"List"][j].label
+          }
+        }
+      }else{
+        if(N == 1){
+          Lable = "#ed3f14"
+        }else if(N ==2){
+          Lable = "#19be6b"
+        }else if(N ==3){
+          Lable = "#2d8cf0"
+        }else{
+          Lable = "#dddee1"
+        }
+      }
+      return Lable;
+    }
+
+    static TypeFn = (N,STR="")=>{
+      let Lable = "未知"
+      if(this[STR+"List"] && this[STR+"List"].length){
+        for(let j=0;j<this[STR+"List"].length;j++){
+          if(this[STR+"List"][j].value == N){
+            Lable = this[STR+"List"][j].label
+          }
+        }
+      }else{
+        if(N == 1){
+          Lable =  "用户需求"
+        }else if(N ==2){
+          Lable =  "生产问题"
+        }else if(N ==3){
+          Lable =  "自主创新"
+        }else{
+          Lable =  "未知"
+        }
+      }
+      return Lable;
+    }
+
+    static StatusFn = (N,STR="")=>{
+
+      let Lable = "未知"
+      if(this[STR+"List"] && this[STR+"List"].length){
+        for(let j=0;j<this[STR+"List"].length;j++){
+          if(this[STR+"List"][j].value == N){
+            Lable = this[STR+"List"][j].label
+          }
+        }
+      }else{
+        if(N == 1){
+          Lable =   "提　出"
+        }else if(N ==2){
+          Lable =   "开发中"
+        }else if(N ==3){
+          Lable =   "测　试"
+        }else if(N ==4){
+          Lable =   "上　线"
+        }else{
+          Lable =   "未　知"
+        }
+      }
+      return Lable;
+    }
+
+
+
+    static StatusColorFn = (N,STR="")=>{
+      let Lable = "#1c2438"
+      if(this[STR+"List"] && this[STR+"List"].length){
+        for(let j=0;j<this[STR+"List"].length;j++){
+          if(this[STR+"List"][j].value == N){
+            Lable = this[STR+"List"][j].label
+          }
+        }
+      }else{
+        if(N == 1){
+          Lable =   "#2b8cf0"
+        }else if(N ==2){
+          Lable =   "#ed3f14"
+        }else if(N ==3){
+          Lable =   "#ff9900"
+        }else if(N ==4){
+          Lable =   "#19be6b"
+        }else{
+          Lable =   "#1c2438"
+        }
+      }
+      return Lable;
+    }
+
+
 
 }
 function getSCFn(that,_Common,name){

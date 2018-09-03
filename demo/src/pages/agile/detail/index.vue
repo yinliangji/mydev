@@ -223,10 +223,11 @@ export default {
     	},
      	tableDataAjaxFn(URL = "",ID = ""){
             defaultAXIOS(URL+ID,{},{timeout:20000,method:'get'}).then((response) => {
-                //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======detail***response+++",response,myData,"+++detail***response======>");
                 let _temp = false;
+                this.table=[];
+                this.HTML = "";
                 if(myData.data && myData.data.id){
                 	for(var I in this.formValidate){
                 		this.formValidate[I] = myData.data[I];
@@ -366,6 +367,15 @@ h4{
 	height:26px;
 	line-height: 26px;
 }
+.detailContBox{
+    position:relative;
+}
+.editBtn{
+    position:absolute;
+    right:20px;
+    top:10px;
+    z-index: 10;
+}
 </style>
 <style lang="less" >
 .baseInfoTable{
@@ -381,6 +391,13 @@ h4{
         padding-bottom:0.5em;
         color:#495060;
         font-size:12px;
+        pre{
+            line-height:1.5em;
+            color:#495060;
+            font-size:12px;
+
+            font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","\5FAE\8F6F\96C5\9ED1",Arial,sans-serif;
+        }
         em{
             font-style: normal;
             display: inline-block;
@@ -397,13 +414,5 @@ h4{
     }
 
 }
-.detailContBox{
-    position:relative;
-}
-.editBtn{
-    position:absolute;
-    right:20px;
-    top:10px;
-    z-index: 10;
-}  
+  
 </style>

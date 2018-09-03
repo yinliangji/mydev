@@ -190,7 +190,7 @@ export default {
 	name: 'aglie',
     mounted(){
         this.getPermissionFn(getPermission)
-        this.tableDataAjaxFn(projectAll);
+        this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
         this.byRoleFn(byRole,"icdp_projManager");
         this.byRoleFn(byRole,"icdp_agileCoach");
         this.byRoleFn(byRole,"icdp_devTeam");
@@ -377,7 +377,7 @@ export default {
                
             ],
             tableDAtaTatol:0,
-            tableDAtaPageLine:3,
+            tableDAtaPageLine:5,
             actionArr:[],
             formValidate: {
                 prj_name:"",//项目名称
@@ -626,6 +626,10 @@ export default {
         },
         goAgileDetailFn (I,P) {
 
+            Common.setStorageAndCookie(Common,"id",this.tableData[I].id)
+            Common.setStorageAndCookie(Common,"prj_id",this.tableData[I].prj_id)
+            Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id)
+            /*
             Common.setCookie("id",this.tableData[I].id);
             localStorage.setItem('id', this.tableData[I].id);
 
@@ -634,6 +638,7 @@ export default {
 
             Common.setCookie("prod_id",this.tableData[I].prod_id);
             localStorage.setItem('prod_id',this.tableData[I].prod_id);
+            */
 
             this.$router.push({path: '/agile/detail', query: {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id}})
         },
@@ -642,6 +647,10 @@ export default {
             this.$router.push('/demand')
         },
         goDevelopmentFn (I) {
+            Common.setStorageAndCookie(Common,"id",this.tableData[I].id)
+            Common.setStorageAndCookie(Common,"prj_id",this.tableData[I].prj_id)
+            Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id)
+            /*
             Common.setCookie("id",this.tableData[I].id);
             localStorage.setItem('id', this.tableData[I].id);
 
@@ -650,6 +659,7 @@ export default {
 
             Common.setCookie("prod_id",this.tableData[I].prod_id);
             localStorage.setItem('prod_id',this.tableData[I].prod_id);
+            */
 
             
             this.$router.push({path: '/development', query: {board: true,id: this.tableData[I].id}})
@@ -658,7 +668,12 @@ export default {
             this.$router.push('/overView')
         },
         goProductFn (I){
-            
+
+            Common.setStorageAndCookie(Common,"id",this.tableData[I].id)
+            Common.setStorageAndCookie(Common,"prj_id",this.tableData[I].prj_id)
+            Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id)
+
+            /*
             Common.setCookie("id",this.tableData[I].id);
             localStorage.setItem('id', this.tableData[I].id);
 
@@ -667,6 +682,7 @@ export default {
 
             Common.setCookie("prod_id",this.tableData[I].prod_id);
             localStorage.setItem('prod_id',this.tableData[I].prod_id);
+            */
 
 
 

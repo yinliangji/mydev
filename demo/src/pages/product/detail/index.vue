@@ -202,6 +202,7 @@ export default {
             .then((response) => {
                 let myData = response.data;
                 console.log("<======product detail***response+++",response,myData,"======>");
+                /*
                 let proiFn = (N,STR="")=>{
                 	let Lable = "未知"
                 	if(this[STR+"List"] && this[STR+"List"].length){
@@ -265,19 +266,24 @@ export default {
                 	}
                 	return Lable;
                 }
+				*/
                 //console.log(proiFn(1,"proi"))
 
                 if(Object.getOwnPropertyNames(myData).length >2){
                 	for(let i in myData){
                 		if(i == "proi"){
-                			this.formValidate[i] = proiFn(myData[i],i)
-                			//this.formValidate[i] = ((N)=>{if(N == 1){return "高"}else if(N ==2){return "中"}else{return "低"}})(myData[i])
+                			//this.formValidate[i] = proiFn(myData[i],i)
+                			this.formValidate[i] = Common.ProiFn(myData[i],i)
+                			
                 		}else if(i == "userstory_type"){
-                			this.formValidate[i] = typeFn(myData[i],i)
-                			//this.formValidate[i] = ((N)=>{if(N == 1){return "用户需求"}else if(N ==2){return "生产问题"}else if(N ==3){return "自主创新"}else{return "未知"}})(myData[i])
+                			//this.formValidate[i] = typeFn(myData[i],i)
+                			this.formValidate[i] = Common.TypeFn(myData[i],i)
+
+                			
                 		}else if(i == "userstory_status"){
-                			this.formValidate[i] = statusFn(myData[i],i)
-                			//this.formValidate[i] = ((N)=>{if(N == 1){return "提出"}else if(N ==2){return "开发中"}else if(N ==3){return "测试"}else if(N ==4){return "上线"}else{return "未知"}})(myData[i])
+                			//this.formValidate[i] = statusFn(myData[i],i)
+                			this.formValidate[i] = Common.StatusFn(myData[i],i)
+                			
                 		}
                 		else{
                 			this.formValidate[i] = myData[i]
@@ -311,29 +317,6 @@ export default {
 .tableBox{
     padding-top: 0;
 }
-.baseInfoTable{
-	td,th{
-	box-sizing: border-box;
-    border: 1px solid #e9eaec;
-    height: 48px;
-    vertical-align:middle;
-	}
-	td{
-		padding-left:0.5em;
-		padding-top:0.5em;
-		padding-bottom:0.5em;
-		color:#495060;
-		font-size:12px;
-	}
-	th{
-		
-		font-size:14px;
-		font-weight: normal;
-		background-color: #2db7f5;
-    	color: #fff;
-	}
-
-}
 .addModule{
 	padding-top:30px;
 	padding-bottom:30px;
@@ -348,5 +331,36 @@ h4{
 	font-weight: normal;
 	height:26px;
 	line-height: 26px;
+}
+</style>
+<style lang="less" >
+.baseInfoTable{
+	td,th{
+	box-sizing: border-box;
+    border: 1px solid #e9eaec;
+    height: 48px;
+    vertical-align:middle;
+	}
+	td{
+		padding-left:0.5em;
+		padding-top:0.5em;
+		padding-bottom:0.5em;
+		color:#495060;
+		font-size:12px;
+		pre{
+            line-height:1.5em;
+            color:#495060;
+			font-size:12px;
+
+      		font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","\5FAE\8F6F\96C5\9ED1",Arial,sans-serif;
+
+        }
+	}
+	th{
+		font-size:14px;
+		font-weight: normal;
+		background-color: #2db7f5;
+    	color: #fff;
+	}
 }
 </style>

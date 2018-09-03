@@ -369,7 +369,7 @@ export default {
 	        	{
                     title: '编号',
                     key: 'userstory_id',
-                    width: 85,
+                    width: 110,
                     align: 'center'
                 },
 
@@ -402,17 +402,16 @@ export default {
                         return h(
                             'span',
                             {},
-                            ((S)=>{
-                            	if(S== 1){return "用户需求"}else if(S==2){return "生产问题"}else if(S==3){return "自主创新"}else{return "未知"}
-                            })(params.row.userstory_type)
+                            Common.TypeFn(params.row.userstory_type)
                             //params.row.userstory_type//1 用户需求 2 生产问题 3自主创新 
+                            //
                         )
                     }
                 },
                 {
                     title: '负责人',
                     key: 'charger',
-                    width: 80,
+                    width: 100,
                     align: 'center',
                     // render: (h, params) => {
                     //     return h(
@@ -441,7 +440,7 @@ export default {
                             {
                                 style:{
                                 	color:"white",
-                                	background:(function(S){if(S == 1){return "#5cadff"}else if(S == 2){return "#ff9900"}else if(S == 3){return "#19be6b"}else{return "#1c2438"} })(params.row.userstory_status),
+                                	background:Common.StatusColorFn(params.row.userstory_status),
                                 	padding:'0.5em',
                                 	display:"inline-block",
                                 	borderRadius:"3px",
@@ -449,10 +448,9 @@ export default {
                                 },
                                 //domProps:{href:"###"},
                             },
-                            ((S)=>{
-                            	if(S== 1){return "提　出"}else if(S==2){return "开发中"}else if(S==3){return "测　试"}else if(S== 4){return "上　线"}else{return "未　知"}
-                            })(params.row.userstory_status)
+                            Common.StatusFn(params.row.userstory_status)
                             //params.row.userstory_status//1 提出 2 开发中 3测试 4上线
+                            
                         )
                     }
                 },
@@ -473,18 +471,18 @@ export default {
                             {
                                 style:{
                                 	color:"white",
-                                	background:(function(S){if(S == "1"){return "#ed3f14"}else if(S == "2"){return "#19be6b"}else{return "#2d8cf0"} })(params.row.priority),
+                                	background:Common.ProiColorFn(params.row.proi),
                                 	display:"inline-block",
                                 	borderRadius:"50%",
-                                	height:"1.5em",
-                                	width:"1.5em",
-                                	lineHeight:"1.5em",
+                                	height:"2em",
+                                	width:"2em",
+                                	lineHeight:"2em",
                                 },
 
                                 //domProps:{href:"###"},
                             },
                             //
-                            ((N) => {if (N == 1) {return "高"}else if (N == 2) {return "中"}else if (N == 3) {return "低"}else {return "无"}})(params.row.proi)
+                            Common.ProiFn(params.row.proi)
                         )
                     }
 
@@ -612,7 +610,7 @@ export default {
      			//},
             ],
             tableDAtaTatol:0,
-            tableDAtaPageLine:3,
+            tableDAtaPageLine:5,
 
             formValidate: {
                 userstory_name:"",//用户故事名称
@@ -715,9 +713,10 @@ export default {
 
 
 		
-		this.getPermissionFn(getPermission)
-  		this.tableDataAjaxFn(storyAll,1,3,"",ID);
+		this.getPermissionFn(getPermission);
+  		this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
     	this.storyGetKanBanFn(storyGetKanBan,ID);
+
 
 
 
@@ -728,6 +727,8 @@ export default {
     	this.storyGetConditionFn(storyGetCondition,"charger",ID);
     	this.storyGetConditionFn(storyGetCondition,"learn_concern",ID);
     	this.storyGetConditionFn(storyGetCondition,"sprint",ID);
+
+
     	
 
 		EventBus.$on("moveEnd", this.moveEnd);

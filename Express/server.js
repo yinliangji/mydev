@@ -1467,6 +1467,30 @@ app.all('/auth/publishUser/', function(req, res) {
 
 
 
+let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "mockDataList xxxxxxx",
+        "data|3-5": [{
+            "req_id|+1": 1,
+            "req_submitter|5-8": /[a-zA-Z]/,
+            "req_name|5-8": /[a-zA-Z0-9]/,
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        }],
+        "total|3-9": 3,
+    })
+}
+
+app.all('/req/queryReq/', function(req, res) {
+    let resVal = reqList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(reqList(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
 
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {

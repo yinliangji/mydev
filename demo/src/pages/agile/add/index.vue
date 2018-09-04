@@ -5,7 +5,7 @@
             <div class="aglieAddBox">
                 
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" >
-					<h3 class="Title">项目基本信息</h3>
+					<h3 class="Title"><span>项目基本信息</span></h3>
 
 
                     <div class="fromBox">
@@ -70,7 +70,7 @@
 
                        
                     </div>
-					<h3 class="Title">成员信息</h3>
+					<h3 class="Title"><span>成员信息</span></h3>
                     <div class="fromBox">
                         
 

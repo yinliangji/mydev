@@ -2,7 +2,7 @@
 	<div class="pageContent">
         <Card>
             <div class="aglieBox">
-            	<h3 class="Title">敏捷项目列表</h3>
+            	<h3 class="Title"><span>敏捷项目列表</span></h3>
             	<Form ref="formValidate" class="formValidate">
 
 			        <FormItem >
@@ -709,40 +709,13 @@ export default {
 .crumbsBox{
 
 }
-.serchInputBox{
-    display: flex;
-}
-.serchBtnBox{
-    position: relative;
-}
-.SerchBox{
-    padding-bottom:10px;
-}
-.serchBtn{
-    position: absolute;
-    left:0;
-    top:50%;
-    transform: translate(50%, -65%);
-}
-
-
-.cancelSerchBtn{
-    position: absolute;
-    left:0;
-    top:50%;
-    transform: translate(200%, -65%);
-}
-
-.formValidate {
-	margin:0 auto;
-	width: 100%;
-	margin-left: 0;
-
-}
-
-
 .aglieBox{
 
+}
+.pageBox {
+    padding-bottom:20px;
+    padding-top:20px;
+    overflow: hidden;
 }
 .tableBox{
 	padding-top: 20px;
@@ -751,27 +724,7 @@ export default {
 	padding-top:0;
 	padding-bottom:10px;
 }
-.pageBox {
-	padding-bottom:20px;
-	padding-top:20px;
-	overflow: hidden;
-}
-.pageBox ul{
-	float: right;
-}
-.pageBox p{
-	float:left;
-	line-height: 32px;
-	font-size:12px;
-}
-.arrUp{
-    transform: rotate(-180deg);
-    transform-origin: center center;
-}
-.arrDown{
-    transform: rotate(0deg);
-    transform-origin: center center;
-}
+
 
 </style>
 

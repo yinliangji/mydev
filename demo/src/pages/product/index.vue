@@ -4,7 +4,7 @@
 		<selectMenu @changeSelect="selectMenuFn"></selectMenu>
 		<Card>
 			<div class="productBox">
-				<h3 class="Title">用户故事</h3>
+				<h3 class="Title"><span>用户故事</span></h3>
 				<Form ref="formValidate" class="formValidate">
 			        <FormItem >
 						<Row class="serchInputBox">
@@ -1089,27 +1089,7 @@ export default {
 <style lang="less" scoped>
 @import './style.less';
 @import './style.css';
-.serchInputBox{
-    display: flex;
-}
-.serchBtnBox{
-    position: relative;
-}
-.SerchBox{
-	padding-bottom:10px;
-}
-.serchBtn{
-	position: absolute;
-    left:0;
-    top:50%;
-    transform: translate(50%, -65%);
-}
-.cancelSerchBtn{
-    position: absolute;
-    left:0;
-    top:50%;
-    transform: translate(200%, -65%);
-}
+
 .tableBox{
 	padding-top: 20px;
 
@@ -1156,24 +1136,12 @@ span.low {
 	padding-top:20px;
 	overflow: hidden;
 }
-.pageBox ul{
-	float: right;
-}
-.pageBox p{
-	float:left;
-	line-height: 32px;
-	font-size:12px;
-}
+
+
 .cursor {
 	cursor: pointer;
 }
-.arrUp{
-	transform: rotate(-180deg);
-	transform-origin: center center;
-}
-.arrDown{
-	transform: rotate(0deg);
-	transform-origin: center center;
-}
+
+
 </style>
 

@@ -90,6 +90,15 @@ CommonRest.restUrl = {
     "getPermission": process.env.BASE_URL + "/auth/getPermissionfromUser/",
     /****express 用户故事查询获取 get****/
 
+    /*****************************************/
+
+
+    "reqAll": process.env.BASE_URL + "/req/queryReq/",
+    /****express 需求项目列表 get****/
+
+
+
+
 }
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);
 

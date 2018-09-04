@@ -5,7 +5,7 @@
             <div class="productAddBox">
 
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140" >
-                    <h3 class="Title">基本信息</h3>
+                    <h3 class="Title"><span>基本信息</span></h3>
                     <div class="fromBox">
                        
                         <FormItem label="所属产品" >
@@ -81,7 +81,7 @@
                     </div>
 
 
-                    <h3 class="Title">计划效率相关</h3>
+                    <h3 class="Title"><span>计划效率相关</span></h3>
                     <div class="fromBox">
                         <FormItem label="所属迭代" prop="sprint">
                             <Select clearable v-model="formValidate.sprint" placeholder="请选所属迭代">
@@ -94,7 +94,7 @@
                         </FormItem>
                     </div>
 
-                    <h3 class="Title">需求相关</h3>
+                    <h3 class="Title"><span>需求相关</span></h3>
 
                     <div class="fromBox">
                         <FormItem label="所属需求" prop="req_id">

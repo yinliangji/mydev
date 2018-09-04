@@ -10,7 +10,7 @@
         	<Tabs value="name1">
 		        <TabPane label="用户故事基本信息" name="name1">
 					<div class="baseInfoBox">
-		            	<h3 class="Title">用户故事基本信息</h3>
+		            	<h3 class="Title"><span>用户故事基本信息</span></h3>
 		            	<div class="tableBox">
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 							  <tbody>
@@ -42,7 +42,7 @@
 		        </TabPane>
 		        <TabPane label="计划效率相关" name="name2">
 		        	<div class="baseInfoBox">
-		            	<h3 class="Title">计划故事相关</h3>
+		            	<h3 class="Title"><span>计划故事相关</span></h3>
 		            	<div class="tableBox">
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 							  <tbody>
@@ -71,7 +71,7 @@
 		        </TabPane>
 		        <TabPane label="需求相关" name="name3">
 		        	<div class="baseInfoBox">
-		            	<h3 class="Title">需求相关</h3>
+		            	<h3 class="Title"><span>需求相关</span></h3>
 		            	<div class="tableBox">
 		            		<!-- -->
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">

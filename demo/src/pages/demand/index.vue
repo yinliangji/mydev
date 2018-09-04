@@ -1,64 +1,65 @@
 <template>
     <div class="pageContent">
-        <selectMenu></selectMenu>
-        <!-- <Breadcrumb :style="{margin: '16px 0'}">
-            <BreadcrumbItem>首页</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目管理</BreadcrumbItem>
-            <BreadcrumbItem>敏捷项目列表</BreadcrumbItem>
-        </Breadcrumb> -->
+        <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'10'" />
+        <selectMenu @changeSelect="selectMenuFn"></selectMenu>
         <Card>
             <div class="demandBox">
-                <h3 class="Title">需求项管理</h3>
+                <h3 class="Title"><span>需求项管理</span></h3>
                 <Form ref="formValidate" class="formValidate">
                     <FormItem >
-                        <Row>
+                        <Row class="serchInputBox">
                             <Col span="3" style="text-align: center">需求项名称</Col>
                             <Col span="4">
                                 <FormItem >
-                                    <Input  placeholder="输入项目名称"></Input>
+                                    <Input clearable v-model="formValidate.req_name" placeholder="输入需求项名称"></Input>
                                 </FormItem>
                             </Col>
                             <Col span="3" style="text-align: center">需求项编号</Col>
                             <Col span="4">
                                 <FormItem >
-                                    <Input  placeholder="输入项目编号"></Input>
+                                    <Input clearable v-model="formValidate.req_id" placeholder="输入需求项编号"></Input>
                                 </FormItem>
                             </Col>
-                            <Col span="3" style="text-align: center">需求项状态</Col>
+                            <Col span="3" style="text-align: left" class="serchBtnBox">
+                                <Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
+                                <Button class="cancelSerchBtn" @click="cancelSerchAll">重填</Button>
+                            </Col>
+                            <Col span="3" style="text-align: center"><!-- 提出人 --></Col>
                             <Col span="4">
-                                <FormItem >
-                                    <Input  placeholder="输入产品经理"></Input>
-                                </FormItem>
+                               <!--  <FormItem >
+                                    <Input clearable v-model="formValidate.req_submitter" placeholder="输入提出人"></Input>
+                                </FormItem> -->
                             </Col>
-                            <Col span="3" style="text-align: center">
-                                <Button type="primary" icon="ios-search">查询</Button>
-                            </Col>
+                            
                         </Row>
+                        <!--
                         <div class="formValidateMoreBtnBox">
                             <Icon type="chevron-down" color="#ed3f14"></Icon>
                         </div>
+                        -->
                     </FormItem>
                 </Form>
 
                 <div class="tableBox">
+                    <!--
                     <div class="tableBtnBox">
                         <Button type="success" @click="addItem2">添加</Button>
                         <Button type="warning" @click="editItemFn2">编辑</Button>
                         <Button type="error" @click="deleteTableItem">删除</Button>
-
                     </div>
+                    -->
                     <Table border ref="selection" :columns="columns" :data="tableData" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
-                    <div class="pageBox">
-                        <Page :total="100" show-elevator></Page>
-                        <p>显示第1到第5条记录，总共90条记录</p>
+                    <div class="pageBox" v-if="tableData.length">
+                        <Page :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize" show-elevator></Page>
+                        <p>总共{{tableDAtaTatol}}条记录</p>
                     </div>
                 </div>
 
             </div>
         </Card>
 
-
+        <!--
         <Modal v-model="modaDelete" width="360">
             <p slot="header" style="color:#f60;text-align:center">
                 <Icon type="information-circled"></Icon>
@@ -71,16 +72,22 @@
                 <Button type="error" size="large" long :loading="modal_loading" @click="del">删除</Button>
             </div>
         </Modal>
-
+        
         <ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  />
 
         <Addtablepop :isShow="isShowAddPop2" :isAdd="isAdd2" :addLoading="true" @popClose2="popCloseFn2" @tableDataAdd2="tableDataAddFn2" :tabDataRow="tableDataRow2" />
+        -->
 
     </div>
 </template>
 <script>
-import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 
+import API from '@/api'
+const {defaultAXIOS} = API;
+import Common from '@/Common';
+const {reqAll,getPermission,projectDetail} = Common.restUrl;
+
+import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 import Addtablepop from "./addtablepop";
 
 export default {
@@ -98,25 +105,21 @@ export default {
             modaDelete: false,
             modal_loading: false,
 
-          
-
-           
-
             columns: [
+                // {
+                //     type: 'selection',
+                //     width: 60,
+                //     align: 'center'
+                // },
                 {
-                    type: 'selection',
-                    width: 60,
-                    align: 'center'
-                },
-                {
-                    title: '需求项编号',
-                    key: 'num',
+                    title: '需求编号',
+                    key: 'req_id',
                     width: 100,
                     align: 'center',
                 },
                 {
-                    title: '需求项名称',
-                    key: 'name',
+                    title: '需求名称',
+                    key: 'req_name',
                     // render: (h, params) => {
                     //     return h(
                     //         'a',
@@ -134,76 +137,176 @@ export default {
                     // }
                 },
                 {
-                    title: '需求项完成进度',
-                    key: 'percent',
+                    title: '提出人',
+                    key: 'req_submitter',
                     align: 'center',
-                    width: 140,
+                    
                 },
 
-                {
-                    title: '操作产品待办事项',
-                    key: 'action',
-                    width: 140,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('Button', {
-                                props: {
-                                    type: 'primary',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.addItem(params.index)
-                                    }
-                                }
-                            }, '添加 '),
-                            h('Button', {
-                                props: {
-                                    type: 'info',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.toLIstFn(params.index)
-                                    }
-                                }
-                            }, '查看'),
+                // {
+                //     title: '操作产品待办事项',
+                //     key: 'action',
+                //     width: 140,
+                //     align: 'center',
+                //     render: (h, params) => {
+                //         return h('div', [
+                //             h('Button', {
+                //                 props: {
+                //                     type: 'primary',
+                //                     size: 'small'
+                //                 },
+                //                 style: {
+                //                     marginRight: '5px'
+                //                 },
+                //                 on: {
+                //                     click: () => {
+                //                         this.addItem(params.index)
+                //                     }
+                //                 }
+                //             }, '添加 '),
+                //             h('Button', {
+                //                 props: {
+                //                     type: 'info',
+                //                     size: 'small'
+                //                 },
+                //                 style: {
+                //                     marginRight: '5px'
+                //                 },
+                //                 on: {
+                //                     click: () => {
+                //                         this.toLIstFn(params.index)
+                //                     }
+                //                 }
+                //             }, '查看'),
 
-                        ]);
-                    }
-                }
+                //         ]);
+                //     }
+                // }
             ],
             tableData: [
-                {
-                    name: '项目名称1',
-                    num: 18,
-                    percent: '10%',
+                // {
+                //     req_name: '项目名称1',
+                //     req_id: 18,
+                //     req_submitter: '10%',
 
-                },
-                {
-                    name: 'Jim Green',
-                    num: 24,
-                    percent: '10%',
+                // },
+                // {
+                //     req_name: 'Jim Green',
+                //     req_id: 24,
+                //     req_submitter: '102%',
 
-                },
-                {
-                    name: 'Joe Black',
-                    num: 30,
-                    percent: '10%',
+                // },
+                // {
+                //     req_name: 'Joe Black',
+                //     req_id: 30,
+                //     req_submitter: '12%',
 
-                },
+                // },
             ],
+            tableDAtaTatol:0,
+            tableDAtaPageLine:5,
             actionArr:[],
+            formValidate: {
+                req_name:"",
+                req_id:"",
+                req_submitter:"",
+            },
+
+
+
         }
     },
+    mounted(){
+        let ID = Common.GETID(this,Common) ? Common.GETID(this,Common) : this.$router.push('/agile');
+        
+
+        this.getPermissionFn(getPermission);
+        this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
+    },
     methods: {
+        selectMenuFn(N){
+            let ID = N;
+            Common.setStorageAndCookie(Common,"id",ID)
+            this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
+        },
+        cancelSerchAll(){
+            for(let i in this.formValidate){
+                this.formValidate[i] = "";
+            }
+            this.$refs.formValidate.resetFields();
+        },
+        serchAll(){
+            let ID = Common.GETID(this,Common)
+            this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
+        },
+        changeCurrentPage(i) {
+            let ID = Common.GETID(this,Common)
+            this.tableDataAjaxFn(reqAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
+        },
+        changePageSize(i) {
+        },
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
+        },
+        getPrjidFn(URL,ID){
+            return defaultAXIOS(URL+ID,{},{timeout:2000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======detail**projectDetail*response+++",response,myData,"======>");
+                let DATA = myData.data ? myData.data : myData
+                let prodId = DATA.prod_id?DATA.prod_id : DATA.prod 
+                if(prodId){
+                    Common.setCookie("prj_id",DATA.prj_id);
+                    localStorage.setItem('prj_id', DATA.prj_id);
+                    Common.setCookie("prod_id",prodId);
+                    localStorage.setItem('prod_id',prodId);
+                    return Promise.resolve(DATA.prj_id);
+                }else{
+                    return Promise.reject("获取prj_id失败");
+                }
+            }).catch( (error) => {
+                console.log(error);
+                return Promise.reject("获取prj_id失败");
+            });
+        },
+        tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",req_name = "",req_id = "",req_submitter = ""){
+
+            this.getPrjidFn(projectDetail,id).then((prj_id)=>{
+
+                this.reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter)
+                .then(()=>{})
+                .catch((error)=>{
+                    console.log(error);
+                    this.showError(error);
+                })
+
+            }).catch((error)=>{
+                console.log(error);
+                this.showError(error);
+            })
+            
+        },
+        reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter){
+            return defaultAXIOS(URL,{page,limit,data,id,prj_id,req_name,req_id,req_submitter},{timeout:20000,method:'get'})
+            .then((response) => {
+                let myData = response.data;
+                console.log("<======demand**reqAll*response+++",response,myData.data,"======>");
+                if(myData.status == "success"){
+                    this.tableData = myData.data;
+                    this.tableDAtaTatol = myData.total;
+                }else{
+                    return Promise.reject(URL+"_错误");
+                }
+            })
+            .catch( (error) => {
+                console.log(error);
+                return Promise.reject(URL+"_错误");
+            });
+        },
+        getPermissionFn(URL){
+            Common.GetPermission(defaultAXIOS,this,URL);
+        },
+        
+        //*********
         del () {
             this.modal_loading = true;
             setTimeout(() => {
@@ -239,9 +342,6 @@ export default {
             });
             this.$Message.error(MSG);
         },
-
-
-
         editItemFn2(){
             this.$Message.config({
                 top: 250,
@@ -307,8 +407,6 @@ export default {
             this.isAdd = true;
             this.tableDataRow = false;
         },
-        //
-        
         linkFn (index) {
             this.$router.push('/baseinfo')
         },
@@ -336,12 +434,7 @@ export default {
 @import './style.less';
 @import './style.css';
 
-.formValidate {
-    margin:0 auto;
-    width: 80%;
-    margin-left: 0;
 
-}
 
 
 .tableBox{
@@ -356,14 +449,7 @@ export default {
     padding-top:20px;
     overflow: hidden;
 }
-.pageBox ul{
-    float: right;
-}
-.pageBox p{
-    float:left;
-    line-height: 32px;
-    font-size:12px;
-}
+
 </style>
 
 

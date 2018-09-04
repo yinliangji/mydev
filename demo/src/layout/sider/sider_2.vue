@@ -1,15 +1,16 @@
 <template>
 	<aside>
 		<!-- this.$router.push({path: '/product', query: {board: true}}) -->
-		<!-- <MenuItem name="1-2">
-			<router-link to="/demand" />
-			<Icon type="ios-photos-outline"></Icon>
-			<span>需求项管理</span>
-		</MenuItem> -->
+		
 		<MenuItem name="1-8">
 			<router-link to="/agile/detail" />
 			<Icon type="ios-photos-outline"></Icon>
 			<span>项目详情</span>
+		</MenuItem>
+		<MenuItem name="1-2">
+			<router-link to="/demand" />
+			<Icon type="ios-filing-outline"></Icon>
+			<span>项目需求</span>
 		</MenuItem>
 		<MenuItem name="1-3">
 			<router-link  :to="{path: '/product', query: {board: true}}" />

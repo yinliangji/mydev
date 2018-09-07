@@ -27,3 +27,13 @@ port:22
 
 
 git push origin head:refs/for/dev
+
+
+git add <files>
+git stash
+git pull origin dev
+git stash pop stash@{0}
+解决冲突 merge文件
+git add <files>
+git commit -m "xxxxxx"
+git push origin head:refs/for/dev

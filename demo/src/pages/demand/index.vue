@@ -41,13 +41,13 @@
                 </Form>
 
                 <div class="tableBox">
-                    <!--
+                    
                     <div class="tableBtnBox">
                         <Button type="success" @click="addItem2">添加</Button>
                         <Button type="warning" @click="editItemFn2">编辑</Button>
                         <Button type="error" @click="deleteTableItem">删除</Button>
                     </div>
-                    -->
+                    
                     <Table border ref="selection" :columns="columns" :data="tableData" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
                     <div class="pageBox" v-if="tableData.length">
@@ -59,7 +59,7 @@
             </div>
         </Card>
 
-        <!--
+        
         <Modal v-model="modaDelete" width="360">
             <p slot="header" style="color:#f60;text-align:center">
                 <Icon type="information-circled"></Icon>
@@ -69,14 +69,16 @@
                 <p>确认删除？请点击删除按钮</p>
             </div>
             <div slot="footer">
-                <Button type="error" size="large" long :loading="modal_loading" @click="del">删除</Button>
+                <Button type="error"   :loading="modal_loading" @click="del">删除</Button>
+                <Button type="primary" @click="cancel">取消</Button>
+
             </div>
         </Modal>
         
         <ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  />
 
         <Addtablepop :isShow="isShowAddPop2" :isAdd="isAdd2" :addLoading="true" @popClose2="popCloseFn2" @tableDataAdd2="tableDataAddFn2" :tabDataRow="tableDataRow2" />
-        -->
+        
 
     </div>
 </template>
@@ -85,7 +87,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAll,getPermission,projectDetail} = Common.restUrl;
+const {reqAll,getPermission,projectDetail,reqDelect} = Common.restUrl;
 
 import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 import Addtablepop from "./addtablepop";
@@ -106,15 +108,15 @@ export default {
             modal_loading: false,
 
             columns: [
-                // {
-                //     type: 'selection',
-                //     width: 60,
-                //     align: 'center'
-                // },
+                {
+                    type: 'selection',
+                    width: 60,
+                    align: 'center'
+                },
                 {
                     title: '需求编号',
                     key: 'req_id',
-                    width: 100,
+                    width: 150,
                     align: 'center',
                 },
                 {
@@ -137,7 +139,7 @@ export default {
                     // }
                 },
                 {
-                    title: '提出人',
+                    title: '提出部门',
                     key: 'req_submitter',
                     align: 'center',
                     
@@ -222,6 +224,7 @@ export default {
 
         this.getPermissionFn(getPermission);
         this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
+
     },
     methods: {
         selectMenuFn(N){
@@ -248,17 +251,19 @@ export default {
         showError(ERR){
             Common.ErrorShow(ERR,this);
         },
+        cancel(){
+          this.modaDelete = false;
+        },
         getPrjidFn(URL,ID){
             return defaultAXIOS(URL+ID,{},{timeout:2000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======detail**projectDetail*response+++",response,myData,"======>");
+                console.log("<======demand**projectDetail*response+++",response,myData,"======>");
                 let DATA = myData.data ? myData.data : myData
                 let prodId = DATA.prod_id?DATA.prod_id : DATA.prod 
-                if(prodId){
-                    Common.setCookie("prj_id",DATA.prj_id);
-                    localStorage.setItem('prj_id', DATA.prj_id);
-                    Common.setCookie("prod_id",prodId);
-                    localStorage.setItem('prod_id',prodId);
+                Common.setStorageAndCookie(Common,'prod_id',prodId);
+                let prjId = DATA.prj_id 
+                if(prjId){
+                    Common.setStorageAndCookie(Common,'prj_id',prjId);
                     return Promise.resolve(DATA.prj_id);
                 }else{
                     return Promise.reject("获取prj_id失败");
@@ -286,7 +291,7 @@ export default {
             
         },
         reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter){
-            return defaultAXIOS(URL,{page,limit,data,id,prj_id,req_name,req_id,req_submitter},{timeout:20000,method:'get'})
+            return defaultAXIOS(URL,{page,limit,data,id,prj_id:id,req_name,req_id,req_submitter},{timeout:20000,method:'get'})
             .then((response) => {
                 let myData = response.data;
                 console.log("<======demand**reqAll*response+++",response,myData.data,"======>");
@@ -309,6 +314,39 @@ export default {
         //*********
         del () {
             this.modal_loading = true;
+            let _arr = [];
+            console.log("")
+            for(let I=0;I<this.actionArr.length;I++){
+                _arr.push(this.actionArr[I].req_id)
+            }
+
+            defaultAXIOS(reqDelect,{idArray:_arr},{timeout:2000,method:'post'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======agile***response+++",response,myData,"+++agile***response======>");
+                if(myData.status == "success"){
+                    this.actionArr = [];
+                    this.modal_loading = false;
+                    this.modaDelete = false;
+                    this.$Message.config({
+                        top: 250,
+                        duration: 3
+                    });
+                    this.$Message.success('删除完成');
+                    //this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+                    this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));
+                }else{
+                    this.actionArr = [];
+                    this.modal_loading = false;
+                    this.modaDelete = false;
+                    this.showError('删除失败');
+                }
+                
+
+            }).catch( (error) => {
+                this.showError(error);
+            });
+            /*
             setTimeout(() => {
                 for(let i=0;i<this.tableData.length;i++){
                     for(let j=0;j<this.actionArr.length;j++){
@@ -327,6 +365,7 @@ export default {
                 });
                 this.$Message.success('删除完成');
             }, 1000);
+            */
         },
         deleteTableItem(){
             if(this.actionArr.length){
@@ -364,6 +403,7 @@ export default {
             this.tableDataRow2 = false;
             this.actionArr = [];
             this.$refs.selection.selectAll(false);
+            this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));
 
         },
         tableDataAddFn2(Data){

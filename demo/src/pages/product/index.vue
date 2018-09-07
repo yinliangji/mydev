@@ -22,16 +22,19 @@
 						                    <Input clearable v-model="formValidate.userstory_id" placeholder="输入故事编号"></Input>
 						                </FormItem>
 						            </Col>
-						            <Col span="3" style="text-align: center">故事类型</Col>
+
+									<Col span="3" style="text-align: center">所属迭代</Col>
 						            <Col span="5">
 						                <FormItem >
-                                            <Select clearable v-model="formValidate.userstory_type" placeholder="请选择故事类型">
-                                                
-                                                <Option v-for="(item,index) in userstory_typeList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                                
+						                    <Select clearable v-model="formValidate.sprint" placeholder="请选择迭代">
+						                    	
+                                                <Option v-for="(item,index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
-                                        </FormItem>
+						                </FormItem>
 						            </Col>
+
+
+						            
 						        </Row>
 						        <Row class="SerchBox"  v-if="isShowMoreShow">
 						        	<Col span="3" style="text-align: center">故事状态</Col>
@@ -64,16 +67,16 @@
 						        </Row>
 						        <Row class="SerchBox"  v-if="isShowMoreShow">
 						        	
-						            <Col span="3" style="text-align: center">所属迭代</Col>
+						            <Col span="3" style="text-align: center">故事类型</Col>
 						            <Col span="5">
 						                <FormItem >
-						                    <Select clearable v-model="formValidate.sprint" placeholder="请选择迭代">
-						                    	
-                                                <Option v-for="(item,index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                            <Select clearable v-model="formValidate.userstory_type" placeholder="请选择故事类型">
+                                                
+                                                <Option v-for="(item,index) in userstory_typeList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                                
                                             </Select>
-						                </FormItem>
+                                        </FormItem>
 						            </Col>
-
 
 									<Col span="3" style="text-align: center"><!-- 负责人 --></Col>
 						            <Col span="5">

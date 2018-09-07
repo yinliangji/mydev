@@ -419,25 +419,45 @@ app.all('/project/all', function(req, res) {
 });
 
 app.all('/get_prj', function(req, res) {
-    
     res.json([
         {
-                    id: 1,
-                    prj_name: "敏捷项目管理系统"
-                },
-                {
-                    id: 2,
-                    prj_name: "党群系统"
-                },
-                {
-                    id: 3,
-                    prj_name: "高校行政平台"
-                },
-                {
-                    id: 4,
-                    prj_name: "一体化研发平台"
-                }
+        id: 1,
+        prj_name: "敏捷项目管理系统"
+        },
+        {
+            id: 2,
+            prj_name: "党群系统"
+        },
+        {
+            id: 3,
+            prj_name: "高校行政平台"
+        },
+        {
+            id: 4,
+            prj_name: "一体化研发平台"
+        }
+    ]);
+    res.end()
+});
 
+app.all('/project/queryPrj_fromUser/', function(req, res) {
+    res.json([
+        {
+            id: 1,
+            prj_name: "敏捷项目管理系统"
+        },
+        {
+            id: 2,
+            prj_name: "党群系统"
+        },
+        {
+            id: 3,
+            prj_name: "高校行政平台"
+        },
+        {
+            id: 4,
+            prj_name: "一体化研发平台"
+        }
     ]);
     res.end()
 });
@@ -1475,6 +1495,7 @@ let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
             "req_id|+1": 1,
             "req_submitter|5-8": /[a-zA-Z]/,
             "req_name|5-8": /[a-zA-Z0-9]/,
+            "prj_type": 1,
 
             "__value2__page": val2,
             "__value3__pageline": val3,
@@ -1491,6 +1512,31 @@ app.all('/req/queryReq/', function(req, res) {
     res.json(reqList(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
+
+
+
+app.all('/req/getReq/', function(req, res) {
+    let D = false
+    if(res.req._parsedUrl.query.indexOf("debug=true") != -1){
+        D = {data:[{},{}], status: "success" }
+    }else{
+        D = {data:[], status: "success" }
+    }
+    res.json(D);
+    res.end()
+});
+
+app.all('/req/addReq/', function(req, res) {
+    res.json({ status: "success" });
+    res.end()
+});
+
+app.all('/req/delectReq/', function(req, res) {
+    res.json({ status: "success" });
+    res.end()
+});
+
+//addReq
 
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {

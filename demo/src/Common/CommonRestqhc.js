@@ -4,6 +4,7 @@ export default class CommonRestqhc {
 }
 CommonRestqhc.restUrl = {
 
+    "projectListDateNew": process.env.BASE_URL + "/project/queryPrj_fromUser/", //下拉菜单列表get
     // qhc迭代
     "iterationList": process.env.BASE_URL + "/sprint/listSprint", //迭代列表get
     "iterationAdd": process.env.BASE_URL + "/sprint/addSprint", //添加迭代post

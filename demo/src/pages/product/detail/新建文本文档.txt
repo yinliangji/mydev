@@ -1,0 +1,66 @@
+/*
+                let proiFn = (N,STR="")=>{
+                	let Lable = "未知"
+                	if(this[STR+"List"] && this[STR+"List"].length){
+                		for(let j=0;j<this[STR+"List"].length;j++){
+                			if(this[STR+"List"][j].value == N){
+                				Lable = this[STR+"List"][j].label
+                			}
+                		}
+                	}else{
+                		if(N == 1){
+                			Lable = "高"
+                		}else if(N ==2){
+                			Lable = "中"
+                		}else{
+                			Lable = "低"
+                		}
+                	}
+                	return Lable;
+                }
+                let typeFn = (N,STR="")=>{
+                	let Lable = "未知"
+                	if(this[STR+"List"] && this[STR+"List"].length){
+                		for(let j=0;j<this[STR+"List"].length;j++){
+                			if(this[STR+"List"][j].value == N){
+                				Lable = this[STR+"List"][j].label
+                			}
+                		}
+                	}else{
+                		if(N == 1){
+                			Lable =  "用户需求"
+                		}else if(N ==2){
+                			Lable =  "生产问题"
+                		}else if(N ==3){
+                			Lable =  "自主创新"
+                		}else{
+                			Lable =  "未知"
+                		}
+                	}
+                	return Lable;
+                }
+                let statusFn = (N,STR="")=>{
+                	let Lable = "未知"
+                	if(this[STR+"List"] && this[STR+"List"].length){
+                		for(let j=0;j<this[STR+"List"].length;j++){
+                			if(this[STR+"List"][j].value == N){
+                				Lable = this[STR+"List"][j].label
+                			}
+                		}
+                	}else{
+                		if(N == 1){
+                			Lable =   "提出"
+                		}else if(N ==2){
+                			Lable =   "开发中"
+                		}else if(N ==3){
+                			Lable =   "测试"
+                		}else if(N ==4){
+                			Lable =   "上线"
+                		}else{
+                			Lable =   "未知"
+                		}
+                	}
+                	return Lable;
+                }
+				*/
+                //console.log(proiFn(1,"proi"))

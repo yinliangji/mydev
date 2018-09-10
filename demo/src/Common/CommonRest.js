@@ -85,6 +85,9 @@ CommonRest.restUrl = {
     "storySetChange": process.env.BASE_URL + "/userstory/changeUserstoryStatus/",
     /****express 用户故事看板拖动 get****/
 
+    "getDefSpring": process.env.BASE_URL + "/userstory/getDefaultSpringIdByPrj/",
+    /****express 用户故事当前迭代 get****/
+
     /*****************************************/
 
     "getPermission": process.env.BASE_URL + "/auth/getPermissionfromUser/",

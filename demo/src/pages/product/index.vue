@@ -170,16 +170,10 @@ import ADDorEDITpop from "./add_or_edit_pop";
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail} = Common.restUrl;
-
+const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring} = Common.restUrl;
 export default {
-	beforecreated(){
-        console.log("product--beforecreated-------",this.addtest)
-    },
 	watch: {
 		'$route' (to, from) {
-
-
 			if(to.query.board && to.query.board == "true"){
 	        	this.currentView = "kanbanboard";
 	        }else{
@@ -187,6 +181,9 @@ export default {
 	        }
 		}
 	},
+	beforecreated(){
+        console.log("product--beforecreated-------",this.addtest)
+    },
     created(){
         console.log("product--created-------",this.addtest)
         if(this.addtest){
@@ -217,11 +214,6 @@ export default {
             isAdd:true,
             tableDataRow:false,
 			currentView: "developList",//developList//kanbanboard
-
-
-
-
-
 
 			developListImg:require("../../assets/images/product-list.png"),
 			developListImgCur:require("../../assets/images/product-listCur.png"),
@@ -713,15 +705,8 @@ export default {
 
 	mounted(){
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
-
-
 		
 		this.getPermissionFn(getPermission);
-  		this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
-    	this.storyGetKanBanFn(storyGetKanBan,ID);
-
-
-
 
     	this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
     	this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
@@ -730,23 +715,42 @@ export default {
     	this.storyGetConditionFn(storyGetCondition,"charger",ID);
     	this.storyGetConditionFn(storyGetCondition,"learn_concern",ID);
     	this.storyGetConditionFn(storyGetCondition,"sprint",ID);
+		
 
+        this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
+        	this.formValidate.sprint = sprint+"";
+        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+        	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+        },(error)=>{
+        	console.log(error);
+            this.showError(error);
+            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
+  			this.storyGetKanBanFn(storyGetKanBan,ID);
+        })
 
-    	
-
-		EventBus.$on("moveEnd", this.moveEnd);
+    	EventBus.$on("moveEnd", this.moveEnd);
         EventBus.$on("clickItem", this.clicked);
         EventBus.$on("search", this.searchHandle);
         EventBus.$on("addTask", this.addNewTask);
-
         EventBus.$on("storyMoveEnd", this.moveEnd);
-
-        
-
 		
 	},
 	methods:{
-
+		getDefSpringFn(URL,ID){
+			return defaultAXIOS(URL+ID,{},{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======agile getDefSpring***response+++",response,myData,"======>");
+                if(myData && myData.data && !isNaN(myData.data-0) ){
+                	return Promise.resolve(myData.data)
+                }else{
+                	return Promise.reject("无法获取当前迭代,data不存在");
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                return Promise.reject(error);
+            });
+		},
 		changeStateNumber(info){
 			let _statusBase = this.statusListBase;
 			let toState = info.evt.to.getAttribute('state');

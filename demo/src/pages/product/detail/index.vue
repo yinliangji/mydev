@@ -7,6 +7,14 @@
             <BreadcrumbItem>用户故事基本信息</BreadcrumbItem>
         </Breadcrumb>
         <Card>
+        	<Button 
+                type="warning" 
+                @click="editItemFn"
+                :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
+                class="editBtn"
+                >
+                编辑
+            </Button>
         	<Tabs value="name1">
 		        <TabPane label="用户故事基本信息" name="name1">
 					<div class="baseInfoBox">
@@ -125,7 +133,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyGetDetail,storyGetCondition} = Common.restUrl;
+const {storyGetDetail,storyGetCondition,getPermission} = Common.restUrl;
 export default {
 	data () {
         return {
@@ -174,9 +182,14 @@ export default {
             userstory_statusList:[],
             req_idList:[],
             proiList:[],
+            GetDetail:"",
+
+            prj_permission:[],
+            identity:"",
         }
     },
     mounted(){
+    	this.getPermissionFn(getPermission)
     	let detailID = Common.GETdetail_id(this,Common)
     	let ID = Common.GETID(this,Common)
     	if(detailID && ID){
@@ -192,8 +205,19 @@ export default {
     	}else{
     		this.$router.push('/product')
     	}
+
     },
     methods: {
+    	authIs(KEY){
+            return Common.auth(this,KEY)
+        },
+        getPermissionFn(URL){
+            Common.GetPermission(defaultAXIOS,this,URL);
+        },
+    	editItemFn(){
+    		//console.log("this.GetDetail",this.GetDetail)
+    		this.$router.push({path: '/product/edit', query: {DATA: JSON.stringify(this.GetDetail)}})
+    	},
 		showError(ERR){
     		Common.ErrorShow(ERR,this);
     	},
@@ -202,88 +226,19 @@ export default {
             .then((response) => {
                 let myData = response.data;
                 console.log("<======product detail***response+++",response,myData,"======>");
-                /*
-                let proiFn = (N,STR="")=>{
-                	let Lable = "未知"
-                	if(this[STR+"List"] && this[STR+"List"].length){
-                		for(let j=0;j<this[STR+"List"].length;j++){
-                			if(this[STR+"List"][j].value == N){
-                				Lable = this[STR+"List"][j].label
-                			}
-                		}
-                	}else{
-                		if(N == 1){
-                			Lable = "高"
-                		}else if(N ==2){
-                			Lable = "中"
-                		}else{
-                			Lable = "低"
-                		}
-                	}
-                	return Lable;
-                }
-                let typeFn = (N,STR="")=>{
-                	let Lable = "未知"
-                	if(this[STR+"List"] && this[STR+"List"].length){
-                		for(let j=0;j<this[STR+"List"].length;j++){
-                			if(this[STR+"List"][j].value == N){
-                				Lable = this[STR+"List"][j].label
-                			}
-                		}
-                	}else{
-                		if(N == 1){
-                			Lable =  "用户需求"
-                		}else if(N ==2){
-                			Lable =  "生产问题"
-                		}else if(N ==3){
-                			Lable =  "自主创新"
-                		}else{
-                			Lable =  "未知"
-                		}
-                	}
-                	return Lable;
-                }
-                let statusFn = (N,STR="")=>{
-                	let Lable = "未知"
-                	if(this[STR+"List"] && this[STR+"List"].length){
-                		for(let j=0;j<this[STR+"List"].length;j++){
-                			if(this[STR+"List"][j].value == N){
-                				Lable = this[STR+"List"][j].label
-                			}
-                		}
-                	}else{
-                		if(N == 1){
-                			Lable =   "提出"
-                		}else if(N ==2){
-                			Lable =   "开发中"
-                		}else if(N ==3){
-                			Lable =   "测试"
-                		}else if(N ==4){
-                			Lable =   "上线"
-                		}else{
-                			Lable =   "未知"
-                		}
-                	}
-                	return Lable;
-                }
-				*/
-                //console.log(proiFn(1,"proi"))
 
                 if(Object.getOwnPropertyNames(myData).length >2){
+                	this.GetDetail = myData;
                 	for(let i in myData){
                 		if(i == "proi"){
                 			//this.formValidate[i] = proiFn(myData[i],i)
                 			this.formValidate[i] = Common.ProiFn(myData[i],i)
-                			
                 		}else if(i == "userstory_type"){
                 			//this.formValidate[i] = typeFn(myData[i],i)
                 			this.formValidate[i] = Common.TypeFn(myData[i],i)
-
-                			
                 		}else if(i == "userstory_status"){
                 			//this.formValidate[i] = statusFn(myData[i],i)
                 			this.formValidate[i] = Common.StatusFn(myData[i],i)
-                			
                 		}
                 		else{
                 			this.formValidate[i] = myData[i]
@@ -331,6 +286,12 @@ h4{
 	font-weight: normal;
 	height:26px;
 	line-height: 26px;
+}
+.editBtn{
+    position:absolute;
+    right:20px;
+    top:10px;
+    z-index: 10;
 }
 </style>
 <style lang="less" >

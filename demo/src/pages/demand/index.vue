@@ -43,9 +43,24 @@
                 <div class="tableBox">
                     
                     <div class="tableBtnBox">
-                        <Button type="success" @click="addItem2">添加</Button>
-                        <Button type="warning" @click="editItemFn2">编辑</Button>
-                        <Button type="error" @click="deleteTableItem">删除</Button>
+                        <Button 
+                            type="success" 
+                            @click="addItem2"
+                            :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
+                        >添加
+                        </Button>
+                        <Button 
+                            type="warning" 
+                            @click="editItemFn2"
+                            :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])"
+                        >编辑
+                        </Button>
+                        <Button 
+                            type="error" 
+                            @click="deleteTableItem"
+                            :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
+                        >删除
+                        </Button>
                     </div>
                     
                     <Table border ref="selection" :columns="columns" :data="tableData" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
@@ -214,11 +229,15 @@ export default {
                 req_submitter:"",
             },
 
+            prj_permission:[],
+            identity:"",
+
 
 
         }
     },
     mounted(){
+        this.getPermissionFn(getPermission)
         let ID = Common.GETID(this,Common) ? Common.GETID(this,Common) : this.$router.push('/agile');
         
 
@@ -227,6 +246,12 @@ export default {
 
     },
     methods: {
+        authIs(KEY){
+            return Common.auth(this,KEY)
+        },
+        getPermissionFn(URL){
+            Common.GetPermission(defaultAXIOS,this,URL);
+        },
         selectMenuFn(N){
             let ID = N;
             Common.setStorageAndCookie(Common,"id",ID)
@@ -398,12 +423,14 @@ export default {
             this.tableDataRow2 = this.actionArr;
         },
         popCloseFn2(){
+
             this.isShowAddPop2 = false;
             this.isAdd2 = true;
             this.tableDataRow2 = false;
             this.actionArr = [];
             this.$refs.selection.selectAll(false);
             this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));
+            console.log(this.isShowAddPop2,this.isAdd2,this.tableDataRow2)
 
         },
         tableDataAddFn2(Data){

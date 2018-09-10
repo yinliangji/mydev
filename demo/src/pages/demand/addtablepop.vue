@@ -7,7 +7,7 @@
                 </Select> 
             </FormItem>
             <FormItem label="需求名称" prop="req_name">
-                <Input v-model="formItem.req_name" placeholder="请输入项目名称"></Input>
+                <Input v-model="formItem.req_name" placeholder="请输入需求名称"></Input>
             </FormItem>
             
             <FormItem label="需求类型" prop="prj_type">
@@ -16,8 +16,13 @@
                     <Radio label="2">自研</Radio>
                 </RadioGroup>
             </FormItem>
-            <FormItem label="需求编号" prop="req_id"  >
-                <Input v-model="formItem.req_id" :disabled="formItem.prj_type  == 2 ? false : true" placeholder="请输入项目名称"></Input>
+            <FormItem label="需求编号" prop="req_id" v-show="formItem.prj_type  == 2 ? false : true" >
+                <Input v-model="formItem.req_id"  :disabled="formItem.prj_type  == 1 ? false : true" placeholder="请输入需求编号"></Input>
+                <p v-show="formItem.prj_type  != 2 ? false : true">【需求编号】自动生成</p>
+            </FormItem>
+            <FormItem label="需求编号" v-show="formItem.prj_type  != 2 ? false : true">
+                <p >【需求编号】自动生成</p>
+                <!-- v-if="formItem.prj_type  == 2 ? false : true" -->
             </FormItem>
             <FormItem label="提出部门" prop="req_submitter">
                 <Input v-model="formItem.req_submitter" placeholder="请输入提出部门"></Input>
@@ -31,7 +36,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,projectListDateNew} = Common.restUrl;
+const {reqAdd,reqGet,projectListDataNew} = Common.restUrl;
 
 export default {
     props: {
@@ -73,7 +78,7 @@ export default {
     },
     created(){
         console.log("demand--created--",this.formItem);
-        this.checkMenuListFn(projectListDateNew);
+        this.checkMenuListFn(projectListDataNew);
 
     },
     beforeUpdate(){
@@ -84,7 +89,7 @@ export default {
     },
     data () {
         const req_idCheck = (rule, value, callback) => {
-            if(this.formItem.prj_type  != 2){
+            if(this.formItem.prj_type  != 1){
                 callback()
             }else{
                 //
@@ -119,7 +124,7 @@ export default {
                     { required: true,validator: req_idCheck,  trigger: 'blur' }//message: '编号为空或重复！',
                 ],
                 req_submitter: [
-                    { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
+                    { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
             },
             prj_idList:[
@@ -156,6 +161,7 @@ export default {
             let tempData = {
                 req_name: this.formItem.req_name,
                 req_id: this.formItem.req_id,
+                //req_id:this.formItem.prj_type == 2 ? "" : this.formItem.req_id,
                 req_submitter:this.formItem.req_submitter,
                 prj_type:this.formItem.prj_type,
                 prj_id:this.formItem.prj_id,
@@ -184,12 +190,14 @@ export default {
                     this.$emit("popClose2",true);
                     
                 }else{
+                    this.modaAdd = true;
                     this.modal_add_loading = false;
                     this.showError(myData.status);
                 }
                 
             }).catch( (error) => {
                 console.log(error);
+                
                 this.modal_add_loading = false;
                 this.showError(error);
             });
@@ -270,12 +278,13 @@ export default {
             .then((response) => {
                 let myData = response.data;
                 console.log("<======demand projectListDateNew***response+++",response,myData,"======>");
-                if(Array.isArray(myData) && myData.length){
+                let _newData = myData.data ? myData.data : myData;
+                if(Array.isArray(_newData) && _newData.length){
                     //
                     let _tempObj = {};
-                    for(let i=0;i<myData.length;i++){
-                        _tempObj.value = myData[i].id+"";
-                        _tempObj.label = myData[i].prj_name+"";
+                    for(let i=0;i<_newData.length;i++){
+                        _tempObj.value = _newData[i].id+"";
+                        _tempObj.label = _newData[i].prj_name+"";
                         this.prj_idList.push(_tempObj);
                         _tempObj = {}
                     }

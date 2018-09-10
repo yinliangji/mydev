@@ -2,7 +2,9 @@ let express = require('express'); //引入express模块
 let Mock = require('mockjs'); //引入mock模块
 let app = express(); //实例化express
 let bodyParser = require('body-parser'); //body-parser中间件来解析请求体
+let myNumber = false;
 let allowCrossDomain = function(req, res, next) {
+    console.log(res.req)
     //res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Origin', ''+res.req.headers.origin);
     res.header('Access-Control-Allow-Credentials', true);
@@ -985,10 +987,6 @@ let GroupList_ = (val1 = 200, val2 = 1, val3 = 3) => {
 let trueorfalse = 0;
 app.all('/agile/getUsers/', function(req, res) {
 
-    
-
-   // 
-
     let resVal
     let Json
     if(trueorfalse == 0){
@@ -1527,7 +1525,7 @@ app.all('/req/getReq/', function(req, res) {
 });
 
 app.all('/req/addReq/', function(req, res) {
-    res.json({ status: "success" });
+    res.json({ status: "fial" });
     res.end()
 });
 
@@ -1536,7 +1534,12 @@ app.all('/req/delectReq/', function(req, res) {
     res.end()
 });
 
-//addReq
+
+
+app.all('/userstory/getDefaultSpringIdByPrj/1', function(req, res) {
+    res.json({ status: "success",data:"7" });
+    res.end()
+});
 
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {

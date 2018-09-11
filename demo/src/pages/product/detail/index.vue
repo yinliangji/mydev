@@ -193,10 +193,12 @@ export default {
     	let detailID = Common.GETdetail_id(this,Common)
     	let ID = Common.GETID(this,Common)
     	if(detailID && ID){
-    		let _type = this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
-	    	let _status = this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
+
+    		//let _type = this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
+	    	//let _status = this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
 	    	let _proi = this.storyGetConditionFn(storyGetCondition,"proi",ID);
-	    	Promise.all([_type,_status,_proi]).then((REP)=>{
+
+	    	Promise.all([_proi]).then((REP)=>{
 	    		this.storyGetDetailFn(storyGetDetail,detailID)
 	    	},(ERR)=>{
 	    		console.log(ERR)
@@ -257,11 +259,14 @@ export default {
             });
         },
         storyGetConditionFn(URL,condition,prj_id){
-			return Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id).then((D)=>{
-				return Promise.resolve("resolve")
-			},(E)=>{
-				return Promise.reject("reject");
-			});
+
+        	return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","proi"]);
+
+			// return Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id).then((D)=>{
+			// 	return Promise.resolve("resolve")
+			// },(E)=>{
+			// 	return Promise.reject("reject");
+			// });
         },        
     }
 }

@@ -371,8 +371,8 @@ export default {
             this.storyGetReqFn(storyGetReq,ID,ID,JSON.parse(this.$router.history.current.query.DATA).prod_id);
 
 
-            this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
-            this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
+            //this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
+            //this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
             this.storyGetConditionFn(storyGetCondition,"proi",ID);
 
             this.publishUserFn(publishUser);
@@ -386,7 +386,8 @@ export default {
             Common.PublishUser(defaultAXIOS,this,URL,params)
         },
         storyGetConditionFn(URL,condition,prj_id){
-            Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
+            return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","proi"]);
+            //Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
         },
         storyGetReqFn(URL = "",id,prj_id,prod_id){
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {

@@ -356,37 +356,7 @@ export default {
         let prj_ID = Common.GETprjid(this,Common);
         let prod_ID = Common.GETprodid(this,Common);
 
-        // if(this.$router.history.current.query.id){
-        //    ID = this.$router.history.current.query.id 
-        // }else if(localStorage.getItem('id')){
-        //    ID = localStorage.getItem('id')
-        // }else if(Common.getCookie("id")){
-        //     ID = Common.getCookie("id")
-        // }else{
-        //    ID = false; 
-        // }
-
-
-        // if(this.$router.history.current.query.prj_id){
-        //    prj_ID = this.$router.history.current.query.prj_id 
-        // }else if(localStorage.getItem('prj_id')){
-        //    prj_ID = localStorage.getItem('prj_id')
-        // }else if(Common.getCookie("prj_id")){
-        //     prj_ID = Common.getCookie("prj_id")
-        // }else{
-        //    prj_ID = false; 
-        // }
-
-        // if(this.$router.history.current.query.prod_id){
-        //    prod_ID = this.$router.history.current.query.prod_id 
-        // }else if(localStorage.getItem('prod_id')){
-        //    prod_ID = localStorage.getItem('prod_id')
-        // }else if(Common.getCookie("prod_id")){
-        //     prod_ID = Common.getCookie("prod_id")
-        // }else{
-        //    prod_ID = false; 
-        // }
-
+        
 
 
 
@@ -394,6 +364,7 @@ export default {
             this.formValidate.prj_id = prj_ID;
             this.formValidate.prod_id = prod_ID;
             this.formValidate.id = ID;
+
             this.getStoryAddFn(storyAdd,ID,ID,prod_ID);
             this.storyGetSprintFn(storyGetSprint,ID,ID,prod_ID)
             this.storyGetReqFn(storyGetReq,ID,ID,prod_ID)
@@ -401,8 +372,8 @@ export default {
 
 
             this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
-            this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
-            this.storyGetConditionFn(storyGetCondition,"proi",ID);
+            //this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
+            //this.storyGetConditionFn(storyGetCondition,"proi",ID);
 
 
             this.publishUserFn(publishUser);
@@ -423,7 +394,8 @@ export default {
         },
 
         storyGetConditionFn(URL,condition,prj_id){
-            Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
+            return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","proi"]);
+            //Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
         },
         storyGetReqFn(URL = "",id,prj_id,prod_id){
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
@@ -488,10 +460,13 @@ export default {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product get***response+++",response,myData,"======>");
+
                 
-                if(myData[0].status == "success"){
-                    this.formValidate.prj_name = myData[0].prj_name;
-                    this.formValidate.product_name = myData[0].product_name;
+                let _data = Array.isArray(myData) ? myData[0] : myData
+                
+                if(_data.status == "success"){
+                    this.formValidate.prj_name = _data.prj_name;
+                    this.formValidate.product_name = _data.product_name;
                 }else{
                     this.showError(myData);
                 }

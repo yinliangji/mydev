@@ -539,7 +539,77 @@ app.all('/userstory/addUserstory/', function(req, res) {
     let resVal = listUserstoryList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
-    res.json([{ status: "success", message: "ok" ,"prj_name":"敏捷项目0000_xxxxxx","product_name":"product_name_xxxxxxxx",}]);
+    let _data = 
+        { 
+            status: "success", 
+            message: "ok" ,
+            "prj_name":"敏捷项目0000_xxxxxx",
+            "product_name":"product_name_xxxxxxxx",
+            getReq_fromPrj:[
+                {
+                    comment: 'xxxxx',
+                    id: 1,
+                    prj:250,
+                    prj_tyope:"1",
+                    req_id:"prj_id_xxxxxx",
+                    req_name:"装服务器",
+                    req_submitter:"百某某",
+                    settle_time:"2018-08-05",
+                    status:"0",
+                },
+                {
+                    comment: 'xxxxx',
+                    id: 2,
+                    prj:251,
+                    prj_tyope:"1",
+                    req_id:"req_id_xxxxxx",
+                    req_name:"装服务器1",
+                    req_submitter:"百某某1",
+                    settle_time:"2018-08-05",
+                    status:"0",
+                },
+            ],
+            getSprintsByPrj:[
+                {
+                    "sprint": 25,
+                    "sp_id": 25,
+                    "sp_name": 25,
+                },
+                {
+                    "sprint": 26,
+                    "sp_id": 26,
+                    "sp_name": 26,
+                },
+                {
+                    "sprint": 27,
+                    "sp_id": 27,
+                    "sp_name": 27,
+                },
+            ],
+            userstory_type:[
+                {value:"用户需求",key:"1"},
+                {value:"生产问题",key:"2"},
+                {value:"自主创新",key:"3"},
+            ]
+            ,
+            userstory_status:[
+                {value:"提出",key:"1"},
+                {value:"开发中",key:"2"},
+                {value:"测试",key:"3"},
+                {value:"上线",key:"4"},
+            ],
+            proi:[
+                {value:"高",key:"1"},
+                {value:"中",key:"2"},
+                {value:"低",key:"3"},
+            ],
+
+
+
+
+        }
+    
+    res.json(_data);
     res.end()
 });
 
@@ -1162,7 +1232,60 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
     //console.log("resVal==>", resVal);
     
     console.log("res====>",res.req._parsedUrl.query,res.req._parsedUrl.query.indexOf("userstory_type"))
+    
+
+    let OBJECT = 
+        {
+            userstory_type:[
+                {value:"用户需求",key:"1"},
+                {value:"生产问题",key:"2"},
+                {value:"自主创新",key:"3"},
+            ]
+            ,
+            userstory_status:[
+                {value:"提出",key:"1"},
+                {value:"开发中",key:"2"},
+                {value:"测试",key:"3"},
+                {value:"上线",key:"4"},
+            ],
+            proi:[
+                {value:"高",key:"1"},
+                {value:"中",key:"2"},
+                {value:"低",key:"3"},
+            ],
+            req_id:[
+                {"value":"奇慧超","key":4,},
+                {"value":"黄永华","key":5,},
+                {"value":"来咧","key":6,},
+                {"value":"殷良骥","key":7,},
+            ],
+            charger:[
+                {"value":"奇慧超","key":4,},
+                {"value":"黄永华","key":5,},
+                {"value":"来咧","key":6,},
+                {"value":"殷良骥","key":7,},
+            ],
+            learn_concern:[
+                {"value":"奇慧超","key":4,},
+                {"value":"黄永华","key":5,},
+                {"value":"来咧","key":6,},
+                {"value":"殷良骥","key":7,},
+            ],
+            sprint:[
+                {"value":"奇慧超","key":4,},
+                {"value":"黄永华","key":5,},
+                {"value":"来咧","key":6,},
+                {"value":"殷良骥","key":7,},
+            ],
+            
+        }
+    
+    res.json(OBJECT);
+    res.end();
+    return
+
     let obj = false;
+
     if(res.req._parsedUrl.query.indexOf("userstory_type") != -1){
         let _OBJ = [
             {value:"用户需求",key:"1"},
@@ -1200,7 +1323,6 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
 
         
     }else{
-        //obj = Condition;
         res.json(Condition(req.body.myStatus));
     }
 
@@ -1538,6 +1660,18 @@ app.all('/req/delectReq/', function(req, res) {
 
 app.all('/userstory/getDefaultSpringIdByPrj/1', function(req, res) {
     res.json({ status: "success",data:"7" });
+    res.end()
+});
+app.all('/userstory/getDefaultSpringIdByPrj/2', function(req, res) {
+    res.json({ status: "success",data:"6" });
+    res.end()
+});
+app.all('/userstory/getDefaultSpringIdByPrj/3', function(req, res) {
+    res.json({ status: "success",data:"5" });
+    res.end()
+});
+app.all('/userstory/getDefaultSpringIdByPrj/4', function(req, res) {
+    res.json({ status: "success",data:"4" });
     res.end()
 });
 

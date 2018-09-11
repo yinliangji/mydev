@@ -605,6 +605,7 @@ export default class Common extends Utils {
             if(Array.isArray(myData) && myData.length){
               //
               let _OBJ = {};
+              that[condition+"List"] = [];
               if(that[condition+"List"]){
                 for(let i=0;i<myData.length;i++){
                     _OBJ.label = (myData[i].value || myData[i].sprint_name)+""
@@ -613,7 +614,7 @@ export default class Common extends Utils {
                     _OBJ = {};
                 }
 
-                return Promise.resolve("true")
+                return Promise.resolve(that[condition+"List"])
                 
               }else{
                 that.showError(URL+"****"+condition+"_没有this."+condition+"List");
@@ -643,6 +644,53 @@ export default class Common extends Utils {
       });
       //
     }
+
+    //获取搜索下拉菜单全部--不通用
+    static GetConditionAll(FUN,that,URL, condition,prj_id,all){
+      //
+      return FUN(URL,{condition,prj_id},{timeout:20000,method:'get'})
+      .then((response) => {
+          let myData = response.data;
+          console.log("<======product condition***response+++",condition,response,myData,"======>");
+          if(myData){
+            let objFn = (arr)=>{
+              let _OBJ = {};
+              let _arr = [];
+              for(let i=0;i<arr.length;i++){
+                _OBJ.label = (arr[i].value || arr[i].sprint_name || arr[i].nick_name)+"";
+                _OBJ.value = (arr[i].key || arr[i].sprint || arr[i].user_name)+"";
+                _arr.push(_OBJ);
+                _OBJ = {};
+              }
+              return _arr;
+            }
+            for(let i=0;i<all.length;i++){
+              if(that[all[i]+"List"]){
+                that[all[i]+"List"] = [];
+                that[all[i]+"List"] = objFn(myData[all[i]]);
+              }else{
+                return Promise.reject("没有"+all[i]+"List");
+              }
+              
+            }
+            return Promise.resolve("true")
+            
+          }else{
+              return Promise.reject("false");
+          }
+
+
+          
+      })
+      .catch( (error) => {
+          console.log(error);
+          that.showError(error);
+          return Promise.reject("false");
+      });
+      //
+    }
+
+
 
     //添加默认负责人--不通用
     static PublishUser(FUN,that,URL,params = {}){

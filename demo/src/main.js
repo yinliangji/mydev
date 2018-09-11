@@ -74,8 +74,8 @@ Vue.prototype.getCookie = function(cname) {
     return "";
 }
 
-if (process.env.NODE_ENV === 'production') {
-  console.log = function () { }
+if (process.env.NODE_ENV === 'production' && window.location.href.indexOf("debug=true") != -1) {
+    console.log = function () { }
 }
 
 /* 通用结束 */

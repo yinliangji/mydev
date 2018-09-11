@@ -708,25 +708,14 @@ export default {
 		
 		this.getPermissionFn(getPermission);
 
-    	this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
-    	this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
-    	this.storyGetConditionFn(storyGetCondition,"req_id",ID);
-    	this.storyGetConditionFn(storyGetCondition,"proi",ID);
-    	this.storyGetConditionFn(storyGetCondition,"charger",ID);
-    	this.storyGetConditionFn(storyGetCondition,"learn_concern",ID);
-    	this.storyGetConditionFn(storyGetCondition,"sprint",ID);
+
+		this.getInfoFn(ID);
+		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
+
 		
 
-        this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
-        	this.formValidate.sprint = sprint+"";
-        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-        	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-        },(error)=>{
-        	console.log(error);
-            this.showError(error);
-            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
-  			this.storyGetKanBanFn(storyGetKanBan,ID);
-        })
+		
+
 
     	EventBus.$on("moveEnd", this.moveEnd);
         EventBus.$on("clickItem", this.clicked);
@@ -736,20 +725,67 @@ export default {
 		
 	},
 	methods:{
+		getInfoFn(ID){
+			
+	    this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
+        	this.formValidate.sprint = sprint+"";
+
+        	
+        	let aaa =  this.sprintList.find((item)=>{
+        		return item.value == this.formValidate.sprint
+        	}) 
+        	console.log("==-=-=-=-=-=-",aaa)
+        	console.log("=-=-=-=-=this.formValidate.sprint",this.formValidate.sprint,typeof this.formValidate.sprint,this.sprintList)
+
+        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+        	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+        },(error)=>{
+        	console.log(error);
+            this.showError(error);
+            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
+  			this.storyGetKanBanFn(storyGetKanBan,ID);
+        })
+
+	     
+
+
+		},
 		getDefSpringFn(URL,ID){
-			return defaultAXIOS(URL+ID,{},{timeout:20000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======agile getDefSpring***response+++",response,myData,"======>");
-                if(myData && myData.data && !isNaN(myData.data-0) ){
-                	return Promise.resolve(myData.data)
-                }else{
-                	return Promise.reject("无法获取当前迭代,data不存在");
-                }
-                
-            }).catch( (error) => {
-                console.log(error);
-                return Promise.reject(error);
-            });
+
+
+			// let _userstory_type = this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
+			//   	let _userstory_status =this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
+			//   	let _req_id =this.storyGetConditionFn(storyGetCondition,"req_id",ID);
+			//   	let _proi =this.storyGetConditionFn(storyGetCondition,"proi",ID);
+			//   	let _charger =this.storyGetConditionFn(storyGetCondition,"charger",ID);
+			//   	let _learn_concern = this.storyGetConditionFn(storyGetCondition,"learn_concern",ID);
+	    	let _sprint = this.storyGetConditionFn(storyGetCondition,"sprint",ID);
+
+	    	return Promise.all([_sprint]).then((REP)=>{
+	    		//
+			    return defaultAXIOS(URL+ID,{},{timeout:20000,method:'get'}).then((response) => {
+	                let myData = response.data;
+	                console.log("<======agile getDefSpring***response+++",response,myData,"======>");
+	                if(myData && myData.data && !isNaN(myData.data-0) ){
+	                	return Promise.resolve(myData.data)
+	                }else{
+	                	return Promise.resolve("")
+	                	//return Promise.reject("无法获取当前迭代,data不存在");
+	                }
+	                
+	            }).catch( (error) => {
+	                console.log(error);
+	                return Promise.reject(error);
+	            });
+	    		//
+	    	},(ERR)=>{
+	    		console.log(ERR)
+	    		this.showError(ERR+"没有 userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint 其中之一");
+	    		return Promise.reject(error);
+	    	})
+
+
+			
 		},
 		changeStateNumber(info){
 			let _statusBase = this.statusListBase;
@@ -841,21 +877,28 @@ export default {
 			    let DATA = myData.data ? myData.data : myData
 			    let prodId = DATA.prod_id?DATA.prod_id : DATA.prod 
 			    if(prodId){
-					Common.setCookie("prj_id",DATA.prj_id);
-		            localStorage.setItem('prj_id', DATA.prj_id);
-		            Common.setCookie("prod_id",prodId);
-		            localStorage.setItem('prod_id',prodId);
+
+					//Common.setCookie("prj_id",DATA.prj_id);
+		            //localStorage.setItem('prj_id', DATA.prj_id);
+		            //Common.setCookie("prod_id",prodId);
+		            //localStorage.setItem('prod_id',prodId);
+		            Common.setStorageAndCookie(Common,'prod_id',prodId);
+
 			    }
+			    this.getInfoFn(ID);
 			}).catch( (error) => {
 			    console.log(error);
 			    this.showError(error);
 			});
-		    this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
-		    this.storyGetKanBanFn(storyGetKanBan,ID);
+
+			
+		    //this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
+		    //this.storyGetKanBanFn(storyGetKanBan,ID);
         },
 
 		storyGetConditionFn(URL,condition,prj_id){
-			Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
+			return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
+			//return Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
         },
         cancelSerchAll(){
             for(let i in this.formValidate){
@@ -908,7 +951,7 @@ export default {
 					
 						for(let j=0;j<myData[i].list.length;j++){
 							_Obj.taskStatus = "0"+(i+1);
-							_Obj.taskId = "#US"+myData[i].list[j].userstory_id;
+							_Obj.taskId = ""+myData[i].list[j].userstory_id;
 							_Obj.description = "description_"+ i +"_"+j;
 							_Obj.userName = myData[i].list[j].charger;
 							_Obj.userId = "userId_"+ i +"_"+j;

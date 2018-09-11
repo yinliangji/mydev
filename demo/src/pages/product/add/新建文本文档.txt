@@ -1,0 +1,30 @@
+// if(this.$router.history.current.query.id){
+        //    ID = this.$router.history.current.query.id 
+        // }else if(localStorage.getItem('id')){
+        //    ID = localStorage.getItem('id')
+        // }else if(Common.getCookie("id")){
+        //     ID = Common.getCookie("id")
+        // }else{
+        //    ID = false; 
+        // }
+
+
+        // if(this.$router.history.current.query.prj_id){
+        //    prj_ID = this.$router.history.current.query.prj_id 
+        // }else if(localStorage.getItem('prj_id')){
+        //    prj_ID = localStorage.getItem('prj_id')
+        // }else if(Common.getCookie("prj_id")){
+        //     prj_ID = Common.getCookie("prj_id")
+        // }else{
+        //    prj_ID = false; 
+        // }
+
+        // if(this.$router.history.current.query.prod_id){
+        //    prod_ID = this.$router.history.current.query.prod_id 
+        // }else if(localStorage.getItem('prod_id')){
+        //    prod_ID = localStorage.getItem('prod_id')
+        // }else if(Common.getCookie("prod_id")){
+        //     prod_ID = Common.getCookie("prod_id")
+        // }else{
+        //    prod_ID = false; 
+        // }

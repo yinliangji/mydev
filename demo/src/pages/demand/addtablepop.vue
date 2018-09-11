@@ -1,10 +1,13 @@
 <template>
     <Modal ref="addPop" v-model="modaAdd" :title="ADDorEDIT?'添加':'编辑'" @on-ok="submitAdd"  ok-text="提交" :loading="modal_add_loading" @on-cancel="cancel" visible="true">
         <Form :model="formItem" :label-width="80" :rules="ruleValidate" ref="formValidate">
-            <FormItem label="所属项目" prop="prj_id">
+            <!-- <FormItem label="所属项目" prop="prj_id">
                 <Select v-model="formItem.prj_id" placeholder="请选择所属项目">
                     <Option v-for="(item,index) in prj_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select> 
+            </FormItem> -->
+            <FormItem label="所属项目" >
+                <p>{{formItem.prj_name}}</p>
             </FormItem>
             <FormItem label="需求名称" prop="req_name">
                 <Input v-model="formItem.req_name" placeholder="请输入需求名称"></Input>
@@ -71,6 +74,7 @@ export default {
             this.editTableData = this.tabDataRow;
             this.modaAdd = this.isShow;
             !this.ADDorEDIT && this.editFn(this.editTableData)
+            this.ADDorEDIT && this.checkMenuListFn(projectListDataNew);
         },
     },
     beforecreated(){
@@ -115,7 +119,9 @@ export default {
                 prj_type:"2",
                 req_submitter:"",
                 prj_id:"",
+                prj_name:"",
             },
+
             ruleValidate: {
                 req_name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
@@ -283,6 +289,10 @@ export default {
                     //
                     let _tempObj = {};
                     for(let i=0;i<_newData.length;i++){
+                        if(Common.GETID(this,Common) == _newData[i].id){
+                            this.formItem.prj_id = _newData[i].id+"";
+                            this.formItem.prj_name = _newData[i].prj_name+"";
+                        }
                         _tempObj.value = _newData[i].id+"";
                         _tempObj.label = _newData[i].prj_name+"";
                         this.prj_idList.push(_tempObj);

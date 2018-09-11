@@ -24,12 +24,12 @@
                                 <Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
                                 <Button class="cancelSerchBtn" @click="cancelSerchAll">重填</Button>
                             </Col>
-                            <Col span="3" style="text-align: center"><!-- 提出人 --></Col>
+                            <!-- <Col span="3" style="text-align: center">提出人 </Col>
                             <Col span="4">
-                               <!--  <FormItem >
+                               <FormItem >
                                     <Input clearable v-model="formValidate.req_submitter" placeholder="输入提出人"></Input>
-                                </FormItem> -->
-                            </Col>
+                                </FormItem>
+                            </Col> -->
                             
                         </Row>
                         <!--

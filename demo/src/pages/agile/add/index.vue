@@ -9,8 +9,8 @@
 
 
                     <div class="fromBox">
-                        <FormItem label="所属产品" prop="prod_id">
-                            <Select v-model="formValidate.prod_id" placeholder="请选择所属产品">
+                        <FormItem label="所属产品" prop="pid">
+                            <Select v-model="formValidate.pid" placeholder="请选择所属产品">
                                 <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
                         </FormItem> 
@@ -284,6 +284,7 @@ export default {
                 createModule:[],
                 modules:[],
                 AddGroupList:[],
+                pid:"",
 
 
 
@@ -331,6 +332,9 @@ export default {
             ruleValidate: {
                 prod_id: [
                     { required: false,type: 'string', message: 'Please select gender', trigger: 'change' }
+                ],
+                pid: [
+                    { required: false,type: 'string',  message: 'Please select gender', trigger: 'change' }
                 ],
                 prj_type: [
                     { required: false, message: 'Please select gender', trigger: 'change' }
@@ -516,12 +520,23 @@ export default {
                         _tempObj.myValue = Arr[i].value
                     }
                 }
-                let _ARRobj = {}
-                _ARRobj.label = myData.nick_name
-                _ARRobj.value = myData.user_name
 
-                _tempObj.group.push(myData.user_name)
-                _tempObj.groupList.push(_ARRobj)
+                let _ARRobj = {}
+                if(myData.nick_name && myData.user_name){
+                    _ARRobj.label = myData.nick_name
+                    _ARRobj.value = myData.user_name
+                    _tempObj.group.push(myData.user_name)
+                    _tempObj.groupList.push(_ARRobj)
+                }else{
+                    _ARRobj.label = Common.getCookie("username") 
+                    _ARRobj.value = Common.getCookie("nickname")
+                    _tempObj.group.push(Common.getCookie("nickname"))
+                    _tempObj.groupList.push(_ARRobj)
+
+                }
+                
+
+                
                 this.formValidate.AddGroupList.push(_tempObj);
             }).catch( (error) => {
                 console.log(error);
@@ -656,6 +671,7 @@ export default {
             this.formValidate.testerGroup = [];
             this.formValidate.prod_id = "";
             this.formValidate.AddGroupList = this.defaultGroup;
+            this.formValidate.pid = "";
             
 
 
@@ -713,6 +729,7 @@ export default {
                 pid:this.formValidate.prod_id,
                 AddGroupList:JSON.stringify(this.formValidate.AddGroupList),
                 proj_role:_proj_role,
+                pid:this.formValidate.pid,
 
 
 

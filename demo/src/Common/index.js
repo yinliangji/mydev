@@ -53,6 +53,7 @@ export default class Common extends Utils {
       let _tempArr = [];
       let rows = ROWS;
       let _SH = parseInt(OBJ.length/rows);
+
       let _sn = false;
       let Colspan = Col;
       let _demo = {
@@ -82,14 +83,20 @@ export default class Common extends Utils {
 
           }
         }
+        console.log("1111111111111111")
         TAB.push(_tempArr)
       }else{
         //
         for(var i=0;i<OBJ.length;i++){
+
+          console.log(i/rows,Number.isInteger(i/rows))
           if(i/rows && Number.isInteger(i/rows)){
+
+            console.log("222222222222",i)
             TAB.push(_tempArr);
             _tempArr = []
             if( i >= _SH*rows){
+              console.log("444444")
               let _jn = OBJ.length -(OBJ.length-i);
               _sn = rows - (OBJ.length-i);
               
@@ -99,13 +106,25 @@ export default class Common extends Utils {
               for(var k=0;k<_sn;k++){
                 _tempArr.push(_demo);
               }
+              console.log("33333333333333")
               TAB.push(_tempArr);
               _tempArr = []
             }else{
+              console.log("222222222222------",i,_SH*rows,OBJ[i])
               _tempArr.push(OBJ[i]);
             }
+
           }else{
+            console.log("222222222222+++++",i,OBJ[i])
+
             _tempArr.push(OBJ[i])
+            if(i+1 == rows*_SH){
+              console.log("0000000000")
+              TAB.push(_tempArr);
+              _tempArr = []
+            }else{
+
+            }
           }
         }
         //
@@ -116,29 +135,27 @@ export default class Common extends Utils {
       let thWidth = thW;
       let _cols2 = false;
       let _cols = false;
+
+
+      console.log("《=======TAB",TAB,"TAB=======》")
       
       for(var tr =0;tr<TAB.length;tr++){
          Element += '<tr>';
          for(var thtd = 0;thtd<TAB[tr].length;thtd++){
-          if( rows-_sn ==1 && Colspan){
-
-            if(!_cols){
-
-              Element += '<th width="'+thWidth+'%">'
-              Element += TAB[tr][thtd].title
-              Element += '</th>'
-              Element += '<td>'
-              for(var td =0;td<TAB[tr][thtd].member.length;td++){
-                  Element += '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
-              }
-              Element += '</td>'
 
 
-            }
+          //测试开始
+          // Element += '<th width="'+thWidth+'%">'
+          // Element += TAB[tr][thtd].title;
+          // Element += '</th>'
+          // Element += '<td>'
+          //   for(var td =0;td<TAB[tr][thtd].member.length;td++){
+          //       Element += TAB[tr][thtd].member[td].nick_name == "&nbsp;" ? TAB[tr][thtd].member[td].nick_name : '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
+          //   }
+          // Element += '</td>'
+          // 测试结束
 
-              _cols = true;
-
-          }else
+         
 
           if(TAB.length == 1 && _sn && Colspan ){
 
@@ -179,7 +196,30 @@ export default class Common extends Utils {
               Element += '</td>'
             }
 
-          }else{
+          }
+          /*
+          else
+          if( rows-_sn ==1 && Colspan){
+
+            if(!_cols){
+
+              Element += '<th width="'+thWidth+'%">'
+              Element += TAB[tr][thtd].title
+              Element += '</th>'
+              Element += '<td>'
+              for(var td =0;td<TAB[tr][thtd].member.length;td++){
+                  Element += '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
+              }
+              Element += '</td>'
+
+
+            }
+
+              _cols = true;
+
+          }
+          */
+          else{
             Element += tr == 0 ? '<th width="'+thWidth+'%">' : '<th>'
             Element += TAB[tr][thtd].title
             Element += '</th>'
@@ -189,9 +229,10 @@ export default class Common extends Utils {
             }
             Element += '</td>'
           }
+          
 
                 
-          }  
+        }  
          Element += '</tr>'; 
       }
       return Element;   
@@ -218,7 +259,7 @@ export default class Common extends Utils {
       }
 
 
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV === 'production' && window.location.href.indexOf("debug=true") == -1) {
         console.log(MET+" | "+URL);
         console.log(JSON.stringify(ERR));
       }else{

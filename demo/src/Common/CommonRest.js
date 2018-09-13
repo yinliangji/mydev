@@ -88,10 +88,13 @@ CommonRest.restUrl = {
     "getDefSpring": process.env.BASE_URL + "/userstory/getDefaultSpringIdByPrj/",
     /****express 用户故事当前迭代 get****/
 
+    "getMissionChange": process.env.BASE_URL + "/userstoryEvo/list/",
+    /****express 用户故事当前迭代 get****/
+
     /*****************************************/
 
     "getPermission": process.env.BASE_URL + "/auth/getPermissionfromUser/",
-    /****express 用户故事查询获取 get****/
+    /****express 权限获取 get****/
 
     /*****************************************/
 
@@ -105,7 +108,7 @@ CommonRest.restUrl = {
     "reqGet": process.env.BASE_URL + "/req/getReq/",
     /****express 需求项目列表 get****/
 
-    "reqDelect": process.env.BASE_URL + "/req/delectReq/",
+    "reqDelect": process.env.BASE_URL + "/req/deleteReq/",
     /****express 需求项目列表 get****/
 
 

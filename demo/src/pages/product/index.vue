@@ -731,11 +731,7 @@ export default {
         	this.formValidate.sprint = sprint+"";
 
         	
-        	let aaa =  this.sprintList.find((item)=>{
-        		return item.value == this.formValidate.sprint
-        	}) 
-        	console.log("==-=-=-=-=-=-",aaa)
-        	console.log("=-=-=-=-=this.formValidate.sprint",this.formValidate.sprint,typeof this.formValidate.sprint,this.sprintList)
+        	
 
         	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
         	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
@@ -797,8 +793,8 @@ export default {
 			}else{
 				_statusBase.forEach((item,index)=>{
 					//if(info.item.askStatus == item.state){
-					
-					if(info.evt.item.getAttribute('state') == item.state){
+					//if(info.evt.item.getAttribute('state') == item.state){
+					if(fromState == item.state){
 						item.taskNumber = parseFloat(item.taskNumber) - 1
 					}
 					if(item.state == toState){
@@ -883,6 +879,7 @@ export default {
 		            //Common.setCookie("prod_id",prodId);
 		            //localStorage.setItem('prod_id',prodId);
 		            Common.setStorageAndCookie(Common,'prod_id',prodId);
+		            Common.setStorageAndCookie(Common,'prj_id',DATA.prj_id);
 
 			    }
 			    this.getInfoFn(ID);

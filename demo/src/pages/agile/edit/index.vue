@@ -10,7 +10,7 @@
 
                     <div class="fromBox">
                         <FormItem label="所属产品" prop="pid">
-                                    <Select  v-model="formValidate.pid" :value="formValidate.prod_id" placeholder="请选择所属产品">
+                                    <Select  v-model="formValidate.pid"  placeholder="请选择所属产品">
                                         <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                        
                                     </Select> 
@@ -685,6 +685,7 @@ export default {
         
         formItemReset(){
             this.resetData(); //this.formValidate.date = [];
+            this.formValidate.pid = "";
             this.formValidate.prj_type = "1";
             this.formValidate.prj_name = "";
             this.formValidate.start_time = "";
@@ -754,6 +755,7 @@ export default {
                 AddGroupList:JSON.stringify(this.formValidate.AddGroupList),
                 prj_id: this.formValidate.prj_id,
                 proj_role:_proj_role,
+                pid:this.formValidate.pid,
 
 
                

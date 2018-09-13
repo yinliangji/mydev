@@ -46,19 +46,19 @@
                         <Button 
                             type="success" 
                             @click="addItem2"
-                            :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
+                            :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
                         >添加
                         </Button>
                         <Button 
                             type="warning" 
                             @click="editItemFn2"
-                            :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])"
+                            :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_edit','icdp_prjrequirement_view'])"
                         >编辑
                         </Button>
                         <Button 
                             type="error" 
                             @click="deleteTableItem"
-                            :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
+                            :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
                         >删除
                         </Button>
                     </div>

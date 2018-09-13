@@ -10,7 +10,7 @@
         	<Button 
                 type="warning" 
                 @click="editItemFn"
-                :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
+                :disabled="authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])" 
                 class="editBtn"
                 >
                 编辑
@@ -98,6 +98,22 @@
 		            	</div>
 		            </div>
 		        </TabPane>
+		        <TabPane label="用户故事变更记录" name="name4">
+		        	<div class="baseInfoBox">
+		            	<h3 class="Title"><span>用户故事变更记录</span></h3>
+		            	<div class="tableBox">
+		            		<!-- -->
+		            		<div class="tableContBox">
+								<Table border :columns="columns" :data="tableData"  />
+								<div class="pageBox" v-if="tableData.length">
+						    		<Page :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+						    		<p>总共{{tableDAtaTatol}}条记录</p>
+						    	</div>
+							</div>
+		            		<!-- -->
+		            	</div>
+		            </div>
+		        </TabPane>
 		    </Tabs>
 		  
             <!-- <div class="addModule">
@@ -133,7 +149,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyGetDetail,storyGetCondition,getPermission} = Common.restUrl;
+const {storyGetDetail,storyGetCondition,getPermission,getMissionChange} = Common.restUrl;
 export default {
 	data () {
         return {
@@ -186,6 +202,33 @@ export default {
 
             prj_permission:[],
             identity:"",
+
+            tableDAtaTatol:0,
+            tableDAtaPageLine:5,
+            columns: [
+	        	{
+                    title: '状态',
+                    key: 'userstory_status',
+                    align: 'center'
+                },
+                {
+                    title: '变更时间',
+                    key: 'change_time',
+                    align: 'center',
+                    
+                },
+                {
+                    title: '操作者',
+                    key: 'operator_name',
+                    align: 'center',
+                },
+                {
+                    title: '用户故事',
+                    key: 'userstory_id',
+                    align: 'center',
+                },
+            ],
+            tableData: [],
         }
     },
     mounted(){
@@ -199,17 +242,48 @@ export default {
 	    	let _proi = this.storyGetConditionFn(storyGetCondition,"proi",ID);
 
 	    	Promise.all([_proi]).then((REP)=>{
-	    		this.storyGetDetailFn(storyGetDetail,detailID)
+	    		this.storyGetDetailFn(storyGetDetail,detailID).then((TASKID)=>{
+	    			this.getMissionChangeFn(getMissionChange,TASKID,1,this.tableDAtaPageLine)
+	    		},(error)=>{
+	    			console.log(error)
+	    			this.showError(error)
+	    		})
 	    	},(ERR)=>{
 	    		console.log(ERR)
 	    		this.showError("没有 userstory_type,userstory_status,proi 其中之一")
 	    	})
+
+	    	
+
+
     	}else{
     		this.$router.push('/product')
     	}
 
     },
     methods: {
+    	changeCurrentPage(i) {
+    		let TASKID = this.formValidate.id
+            this.getMissionChangeFn(getMissionChange,TASKID,i,this.tableDAtaPageLine)
+        },
+        changePageSize(i) {
+        },
+    	getMissionChangeFn(URL = "",userstory_id = "",page = "",limit = "",data = ""){
+            defaultAXIOS(URL,{userstory_id,page,limit,data},{timeout:5000,method:'get'})
+            .then((response) => {
+                let myData = response.data;
+                console.log("<======product getMissionChange***response+++",response,myData,"======>");
+                this.tableData = myData.rows;
+                this.tableDAtaTatol = myData.total;
+
+                
+
+            })
+            .catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
     	authIs(KEY){
             return Common.auth(this,KEY)
         },
@@ -224,7 +298,7 @@ export default {
     		Common.ErrorShow(ERR,this);
     	},
      	storyGetDetailFn(URL = "",detail_id){
-            defaultAXIOS(URL,{detail_id},{timeout:5000,method:'get'})
+            return defaultAXIOS(URL,{detail_id},{timeout:5000,method:'get'})
             .then((response) => {
                 let myData = response.data;
                 console.log("<======product detail***response+++",response,myData,"======>");
@@ -247,15 +321,19 @@ export default {
                 		}
                 		
                 	}
+                	
+                	return Promise.resolve(myData.id)
 
                 }else{
-                	this.showError("没有数据");
+                	return Promise.reject("没有数据");
+                	//this.showError("没有数据");
                 }
 
             })
             .catch( (error) => {
                 console.log(error);
-                this.showError(error);
+                return Promise.reject(error);
+                //this.showError(error);
             });
         },
         storyGetConditionFn(URL,condition,prj_id){
@@ -297,6 +375,11 @@ h4{
     right:20px;
     top:10px;
     z-index: 10;
+}
+.pageBox {
+	padding-bottom:20px;
+	padding-top:20px;
+	overflow: hidden;
 }
 </style>
 <style lang="less" >

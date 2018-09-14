@@ -10,7 +10,7 @@
 
                     <div class="fromBox">
                         <FormItem label="所属产品" prop="pid">
-                            <Select v-model="formValidate.pid" placeholder="请选择所属产品">
+                            <Select clearable v-model="formValidate.pid" placeholder="请选择所属产品">
                                 <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
                         </FormItem> 

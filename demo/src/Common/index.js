@@ -50,10 +50,10 @@ export default class Common extends Utils {
 
     //数组变表格--不通用
     static toTable(OBJ,TAB,ROWS = 3,thW = 11,Col = false){
+      console.log("《=======【OBJ】",OBJ,"OBJ=======》")
       let _tempArr = [];
       let rows = ROWS;
       let _SH = parseInt(OBJ.length/rows);
-
       let _sn = false;
       let Colspan = Col;
       let _demo = {
@@ -64,7 +64,7 @@ export default class Common extends Utils {
                 "prj_id":"",
                 "role_name":"",
                 "user_name":"",
-                "id":4,
+                "id":"",
             },
         ],
       }
@@ -83,43 +83,29 @@ export default class Common extends Utils {
 
           }
         }
-        console.log("1111111111111111")
         TAB.push(_tempArr)
       }else{
-        //
         for(var i=0;i<OBJ.length;i++){
-
-          console.log(i/rows,Number.isInteger(i/rows))
           if(i/rows && Number.isInteger(i/rows)){
-
-            console.log("222222222222",i)
-            TAB.push(_tempArr);
-            _tempArr = []
+            _tempArr.length && TAB.push(_tempArr);_tempArr = [];
+            
             if( i >= _SH*rows){
-              console.log("444444")
               let _jn = OBJ.length -(OBJ.length-i);
               _sn = rows - (OBJ.length-i);
-              
               for(var j=_jn;j<OBJ.length;j++){
                 _tempArr.push(OBJ[j]);
               }
               for(var k=0;k<_sn;k++){
                 _tempArr.push(_demo);
               }
-              console.log("33333333333333")
               TAB.push(_tempArr);
               _tempArr = []
             }else{
-              console.log("222222222222------",i,_SH*rows,OBJ[i])
               _tempArr.push(OBJ[i]);
             }
-
           }else{
-            console.log("222222222222+++++",i,OBJ[i])
-
             _tempArr.push(OBJ[i])
             if(i+1 == rows*_SH){
-              console.log("0000000000")
               TAB.push(_tempArr);
               _tempArr = []
             }else{
@@ -127,8 +113,6 @@ export default class Common extends Utils {
             }
           }
         }
-        //
-
       }
       
       let Element = "";
@@ -136,55 +120,59 @@ export default class Common extends Utils {
       let _cols2 = false;
       let _cols = false;
 
-
-      console.log("《=======TAB",TAB,"TAB=======》")
+      console.log("《=======【TAB】",TAB,"TAB=======》")
       
       for(var tr =0;tr<TAB.length;tr++){
          Element += '<tr>';
          for(var thtd = 0;thtd<TAB[tr].length;thtd++){
 
-
-          //测试开始
-          // Element += '<th width="'+thWidth+'%">'
-          // Element += TAB[tr][thtd].title;
-          // Element += '</th>'
-          // Element += '<td>'
-          //   for(var td =0;td<TAB[tr][thtd].member.length;td++){
-          //       Element += TAB[tr][thtd].member[td].nick_name == "&nbsp;" ? TAB[tr][thtd].member[td].nick_name : '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
-          //   }
-          // Element += '</td>'
-          // 测试结束
-
-         
+          if(false){
+            Element += '<th>'
+            Element += TAB[tr][thtd].title;
+            Element += '</th>'
+            Element += '<td>'
+              for(var td =0;td<TAB[tr][thtd].member.length;td++){
+                  Element += TAB[tr][thtd].member[td].nick_name == "&nbsp;" ? TAB[tr][thtd].member[td].nick_name : '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
+              }
+            Element += '</td>'
+          }else
 
           if(TAB.length == 1 && _sn && Colspan ){
-
-        
-
-            if( thtd>= rows-_sn ){
+            if(rows-_sn ==1){
               if(!_cols){
-                Element += '<td colspan="'+_sn*2+'">&nbsp;</td>'
+                Element += '<th width="'+thWidth+'%">'
+                Element += TAB[tr][thtd].title
+                Element += '</th>'
+                Element += '<td>'
+                for(var td =0;td<TAB[tr][thtd].member.length;td++){
+                    Element += '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
+                }
+                Element += '</td>'
               }
               _cols = true;
             }else{
-              Element += '<th width="'+thWidth+'%">'
-              Element += TAB[tr][thtd].title
-              Element += '</th>'
-              Element += thtd+1 == rows ? '<td>' : '<td width="'+(100-(thWidth*rows))/rows+'%">'
-              for(var td =0;td<TAB[tr][thtd].member.length;td++){
-                  Element += '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
+              if( thtd>= rows-_sn ){
+                if(!_cols){
+                  Element += '<td colspan="'+_sn*2+'">&nbsp;</td>'
+                }
+                _cols = true;
+              }else{
+                Element += '<th width="'+thWidth+'%">'
+                Element += TAB[tr][thtd].title
+                Element += '</th>'
+                Element += thtd+1 == rows ? '<td>' : '<td width="'+(100-(thWidth*rows))/rows+'%">'
+                for(var td =0;td<TAB[tr][thtd].member.length;td++){
+                    Element += '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
+                }
+                Element += '</td>'
               }
-              Element += '</td>'
             }
-
-
           }else if(tr == TAB.length-1 && _sn && Colspan){
             if(thtd>= rows-_sn){//thtd >_sn
               if(!_cols2){
                 Element += '<td colspan="'+_sn*2+'">&nbsp;</td>'
               }
               _cols2 = true;
-              //Element += '<td colspan="'+_sn*2+'">&nbsp;</td>'
             }else{
               Element += '<th>'
               Element += TAB[tr][thtd].title
@@ -196,30 +184,7 @@ export default class Common extends Utils {
               Element += '</td>'
             }
 
-          }
-          /*
-          else
-          if( rows-_sn ==1 && Colspan){
-
-            if(!_cols){
-
-              Element += '<th width="'+thWidth+'%">'
-              Element += TAB[tr][thtd].title
-              Element += '</th>'
-              Element += '<td>'
-              for(var td =0;td<TAB[tr][thtd].member.length;td++){
-                  Element += '<em>'+TAB[tr][thtd].member[td].nick_name+'</em>';
-              }
-              Element += '</td>'
-
-
-            }
-
-              _cols = true;
-
-          }
-          */
-          else{
+          }else{
             Element += tr == 0 ? '<th width="'+thWidth+'%">' : '<th>'
             Element += TAB[tr][thtd].title
             Element += '</th>'
@@ -229,9 +194,6 @@ export default class Common extends Utils {
             }
             Element += '</td>'
           }
-          
-
-                
         }  
          Element += '</tr>'; 
       }
@@ -787,8 +749,8 @@ export default class Common extends Utils {
         return arrList
     }
 
-    static ProiFn = (N,STR="")=>{
-      let Lable = "未知"
+    static ProiFn(N,STR=""){
+      let Lable = "无"
       if(this[STR+"List"] && this[STR+"List"].length){
         for(let j=0;j<this[STR+"List"].length;j++){
           if(this[STR+"List"][j].value == N){
@@ -803,13 +765,13 @@ export default class Common extends Utils {
         }else if(N ==3){
           Lable = "低"
         }else{
-          Lable = "未知"
+          Lable = "无"
         }
       }
       return Lable;
     }
 
-    static ProiColorFn = (N,STR="")=>{
+    static ProiColorFn(N,STR=""){
       let Lable = "#dddee1"
       if(this[STR+"List"] && this[STR+"List"].length){
         for(let j=0;j<this[STR+"List"].length;j++){
@@ -831,7 +793,7 @@ export default class Common extends Utils {
       return Lable;
     }
 
-    static TypeFn = (N,STR="")=>{
+    static TypeFn(N,STR=""){
       let Lable = "未知"
       if(this[STR+"List"] && this[STR+"List"].length){
         for(let j=0;j<this[STR+"List"].length;j++){
@@ -853,7 +815,7 @@ export default class Common extends Utils {
       return Lable;
     }
 
-    static StatusFn = (N,STR="")=>{
+    static StatusFn(N,STR=""){
 
       let Lable = "未知"
       if(this[STR+"List"] && this[STR+"List"].length){
@@ -880,7 +842,7 @@ export default class Common extends Utils {
 
 
 
-    static StatusColorFn = (N,STR="")=>{
+    static StatusColorFn(N,STR=""){
       let Lable = "#1c2438"
       if(this[STR+"List"] && this[STR+"List"].length){
         for(let j=0;j<this[STR+"List"].length;j++){
@@ -919,6 +881,3 @@ function getSCFn(that,_Common,name){
   return result
 
 }
-  
-
-

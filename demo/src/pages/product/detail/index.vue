@@ -15,27 +15,27 @@
                 >
                 编辑
             </Button>
-        	<Tabs value="name1">
+        	<Tabs value="name1" type="card" :capture-focus="false">
 		        <TabPane label="用户故事基本信息" name="name1">
 					<div class="baseInfoBox">
-		            	<h3 class="Title"><span>用户故事基本信息</span></h3>
+		            	<!-- <h3 class="Title"><span>用户故事基本信息</span></h3> -->
 		            	<div class="tableBox">
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 							  <tbody>
 							  	<tr>
-								  <th width="13%">所属产品</th>
+								  <th width="11%">所属产品</th>
 								  <td width="20%">{{ formValidate.product_name | FALSEINFO}}</td>
-								  <th width="13%">所属项目</th>
+								  <th width="11%">所属项目</th>
 								  <td width="20%" >{{ formValidate.prj_name | FALSEINFO}}</td>
-								  <th width="13%">用户故事名称</th>
+								  <th width="11%">用户故事名称</th>
 								  <td>{{ formValidate.userstory_name | FALSEINFO}}</td>
 								</tr>
 								<tr>
-								  <th width="13%">故事类型</th>
+								  <th width="11%">故事类型</th>
 								  <td width="20%">{{ formValidate.userstory_type | FALSEINFO}}</td>
-								  <th width="13%">故事状态</th>
+								  <th width="11%">故事状态</th>
 								  <td width="20%" >{{ formValidate.userstory_status | FALSEINFO}}</td>
-								  <th width="13%">优先级</th>
+								  <th width="11%">优先级</th>
 								  <td>{{ formValidate.proi | FALSEINFO}}</td>
 								</tr>
 								<tr>
@@ -50,16 +50,16 @@
 		        </TabPane>
 		        <TabPane label="计划效率相关" name="name2">
 		        	<div class="baseInfoBox">
-		            	<h3 class="Title"><span>计划故事相关</span></h3>
+		            	<!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
 		            	<div class="tableBox">
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 							  <tbody>
 								<tr>
-								  <th width="13%">所属迭代</th>
+								  <th width="11%">所属迭代</th>
 								  <td width="20%">{{ formValidate.sprint_name | FALSEINFO}}</td>
-								  <th width="13%">工时(预计)</th>
+								  <th width="11%">工时(预计)</th>
 								  <td width="20%" >{{ formValidate.manHours | FALSEINFO}}</td>
-								  <th width="13%">工时(实际)</th>
+								  <th width="11%">工时(实际)</th>
 								  <td>0</td>
 								</tr>
 
@@ -79,17 +79,17 @@
 		        </TabPane>
 		        <TabPane label="需求相关" name="name3">
 		        	<div class="baseInfoBox">
-		            	<h3 class="Title"><span>需求相关</span></h3>
+		            	<!-- <h3 class="Title"><span>需求相关</span></h3> -->
 		            	<div class="tableBox">
 		            		<!-- -->
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 							  <tbody>
 								<tr>
-								  <th width="13%">所属需求</th>
+								  <th width="11%">所属需求</th>
 								  <td width="20%">{{ formValidate.req_name | FALSEINFO}}</td>
-								  <th width="13%">需求提出人</th>
+								  <th width="11%">需求提出人</th>
 								  <td width="20%" >{{ formValidate.proposer | FALSEINFO}}</td>
-								  <th width="13%">提出人部门</th>
+								  <th width="11%">提出人部门</th>
 								  <td>{{ formValidate.proposer_department | FALSEINFO}}</td>
 								</tr>
 							  </tbody>
@@ -100,7 +100,7 @@
 		        </TabPane>
 		        <TabPane label="用户故事变更记录" name="name4">
 		        	<div class="baseInfoBox">
-		            	<h3 class="Title"><span>用户故事变更记录</span></h3>
+		            	<!-- <h3 class="Title"><span>用户故事变更记录</span></h3> -->
 		            	<div class="tableBox">
 		            		<!-- -->
 		            		<div class="tableContBox">
@@ -380,36 +380,5 @@ h4{
 	padding-bottom:20px;
 	padding-top:20px;
 	overflow: hidden;
-}
-</style>
-<style lang="less" >
-.baseInfoTable{
-	td,th{
-	box-sizing: border-box;
-    border: 1px solid #e9eaec;
-    height: 48px;
-    vertical-align:middle;
-	}
-	td{
-		padding-left:0.5em;
-		padding-top:0.5em;
-		padding-bottom:0.5em;
-		color:#495060;
-		font-size:12px;
-		pre{
-            line-height:1.5em;
-            color:#495060;
-			font-size:12px;
-
-      		font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","\5FAE\8F6F\96C5\9ED1",Arial,sans-serif;
-
-        }
-	}
-	th{
-		font-size:14px;
-		font-weight: normal;
-		background-color: #2db7f5;
-    	color: #fff;
-	}
 }
 </style>

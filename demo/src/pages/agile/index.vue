@@ -191,12 +191,12 @@ export default {
     mounted(){
         this.getPermissionFn(getPermission)
         this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+        /* 搜索条件 以后加上
         this.byRoleFn(byRole,"icdp_projManager");
         this.byRoleFn(byRole,"icdp_agileCoach");
         this.byRoleFn(byRole,"icdp_devTeam");
         this.byRoleFn(byRole,"icdp_testTeam");
-        
-        
+        */
     },
     watch:{
         loginSave(curVal,oldVal){
@@ -288,7 +288,13 @@ export default {
                 */
                 {
                     title: '项目经理',
-                    key: 'manager'
+                    key: 'manager',
+                    render: (h, params) => {
+                        return h(
+                            'span',
+                            params.row.manager.replace(/\|/g,"、")
+                        );
+                    }
                 },
                 {
                     title: '所属产品',

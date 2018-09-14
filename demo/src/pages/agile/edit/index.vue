@@ -10,12 +10,10 @@
 
                     <div class="fromBox">
                         <FormItem label="所属产品" prop="pid">
-                                    <Select  v-model="formValidate.pid"  placeholder="请选择所属产品">
-                                        <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                       
-                                    </Select> 
-                                    
-                                </FormItem> 
+                            <Select clearable v-model="formValidate.pid"  placeholder="请选择所属产品">
+                                <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select> 
+                        </FormItem> 
 
 
                         <FormItem label="项目名称" prop="prj_name">
@@ -576,7 +574,8 @@ export default {
                 }
 
                 this.formValidate.prj_type = this.formValidate.prj_type+"";
-                this.formValidate.pid = this.formValidate.pid+"";
+
+                this.formValidate.pid = this.formValidate.pid ? this.formValidate.pid+"" : "";
 
                 let objVal = (Arr,Lab) => {
                     for(var O = 0;O< Arr.length;O++ ){
@@ -733,12 +732,15 @@ export default {
             }
             */
             let _modules = Array.isArray(this.formValidate.modules) ? this.formValidate.modules.join(_join) : this.formValidate.modules;
+
             let _createModule = Array.isArray(this.formValidate.createModule) ? this.formValidate.createModule.join(_join) : this.formValidate.createModule;
             
             let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
 
             let _proj_role = JSON.stringify(Common.objInArr(this.formValidate.AddGroupList));
+
+            let _pid = this.formValidate.pid ? this.formValidate.pid : ""
 
             let tempData = {
                 id:this.$router.history.current.query.id,
@@ -755,7 +757,7 @@ export default {
                 AddGroupList:JSON.stringify(this.formValidate.AddGroupList),
                 prj_id: this.formValidate.prj_id,
                 proj_role:_proj_role,
-                pid:this.formValidate.pid,
+                pid:_pid,
 
 
                

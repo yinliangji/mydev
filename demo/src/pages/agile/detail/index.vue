@@ -12,11 +12,11 @@
                 >
                 编辑
             </Button>
-        	<Tabs value="name1">
+        	<Tabs value="name1" type="card" >
 
 		        <TabPane label="项目基本信息" name="name1">
 		        	<div class="baseInfoBox">
-		            	<h3 class="Title"><span>项目基本信息</span></h3>
+		            	<!-- <h3 class="Title"><span>项目基本信息</span></h3> -->
 		            	<div class="tableBox">
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 							  <tbody>
@@ -57,7 +57,7 @@
 		        </TabPane>
 		        <TabPane label="成员信息" name="name2">
 		        	<div class="baseInfoBox">
-		            	<h3 class="Title"><span>成员信息</span></h3>
+		            	<!-- <h3 class="Title"><span>成员信息</span></h3> -->
 		            	<div class="tableBox">
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 								<tbody v-html="HTML">
@@ -377,42 +377,5 @@ h4{
     z-index: 10;
 }
 </style>
-<style lang="less" >
-.baseInfoTable{
-    td,th{
-    box-sizing: border-box;
-    border: 1px solid #e9eaec;
-    height: 48px;
-    vertical-align:middle;
-    }
-    td{
-        padding-left:0.5em;
-        padding-top:0.5em;
-        padding-bottom:0.5em;
-        color:#495060;
-        font-size:12px;
-        pre{
-            line-height:1.5em;
-            color:#495060;
-            font-size:12px;
 
-            font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","\5FAE\8F6F\96C5\9ED1",Arial,sans-serif;
-        }
-        em{
-            font-style: normal;
-            display: inline-block;
-            padding-top:0.25em;
-            padding-bottom:0.25em;
-        }
-    }
-    th{
-        
-        font-size:14px;
-        font-weight: normal;
-        background-color: #2db7f5;
-        color: #fff;
-    }
-
-}
   
-</style>

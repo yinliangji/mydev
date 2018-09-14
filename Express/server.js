@@ -64,13 +64,13 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
             "list|3-9": [{
                 "id": 1,
                 "prj_id": 1,
-                "prj_name|5-8": /[a-zA-Z]/,
-                "manager|6-10": /[a-zA-Z0-9]/,
+                "prj_name|5-8": /[a-zA-Z0-9]/,
+                "manager": /([a-zA-Z]{5,8})\|([a-zA-Z]{5,8})/,
                 "prj_desc": "项目描述",
                 "prj_goal": "项目目标",
-                "settle_time": "2018-01-01",
-                "start_time": "2018-10-10",
-                "end_time": "2018-12-10",
+                "settle_time": "@date(yyyy-MM-dd)",
+                "start_time": "@date(yyyy-MM-dd)",
+                "end_time": "@date(yyyy-MM-dd)",
                 "prj_type|0-1": 0,
                 "logic_sys_id": "logic_sys_id",
                 "phycics_sys_id": "phycics_sys_id",
@@ -194,7 +194,7 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             "icon": "/assets/images/user_02.png",
 
             "actual_online_time":"",
-            "charger":"",
+           
             "created_time":"2018-08-20 16:16:37",
             "last_chg_time":"",
             "last_chgr":"",
@@ -1380,12 +1380,12 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
 
             "prj_name|5-8": /[a-zA-Z]/,
             "manager|6-10": /[a-zA-Z0-9]/,
-            "prj_desc": "项目描述",
+            "prj_desc": "@title",
             "prj_goal": "项目目标",
             "prj_type": "2",
-            "settle_time": "2018-01-01",
-            "start_time": "2018-10-10",
-            "end_time": "2018-12-10",
+            "settle_time": "@date(yyyy-MM-dd)",
+            "start_time": "@date(yyyy-MM-dd)",
+            "end_time": "@date(yyyy-MM-dd)",
             
             "logic_sys_id": "logic_sys_id",
             "phycics_sys_id": "phycics_sys_id",
@@ -1461,7 +1461,22 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
             "__value2__page": val2,
             "__value3__pageline": val3,
         },
-        person:[
+        "person|0-10":[
+            {
+                "title|+1":["ICDP超级管理员","ICDP管理员","ICDP配置管理员","ICDP项目经理","ICDP产品经理","ICDP小组长","ICDP敏捷教练","ICDP总体组","ICDP开发组"],
+                "member|1-10":[
+                    {
+                        "nick_name|1":'@cname',
+                        "prj_id|5-10":/[a-zA-Z0-9]/,
+                        "role_name":/[a-zA-Z]{5,8}/,
+                        "user_name":'@name',
+                        "id|+1":100,
+                    },
+                ]
+            }
+        ],
+        person_:[
+
             {
                 "title":"产品经理",
                 "member":[
@@ -1474,9 +1489,8 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                     },
                    
                 ],
-
             },
-  
+
             {
                 "title":"项目经理",
                 "member":[
@@ -1489,7 +1503,6 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                     },
                    
                 ],
-
             },
 
             {
@@ -1524,11 +1537,10 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                         "id":7,
                     },
                 ],
-
             },
 
             {
-                "title":"项目经理22",
+                "title":"超级管理员",
                 "member":[
                     {
                         "nick_name":"谢蓓22",
@@ -1539,12 +1551,10 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                     },
                    
                 ],
-
             },
-
-            
+              
             {
-                "title":"项目经理33",
+                "title":"管理员",
                 "member":[
                     {
                         "nick_name":"谢蓓3333",
@@ -1555,11 +1565,10 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                     },
                    
                 ],
-
             },
 
             {
-                "title":"项目经理44",
+                "title":"配置管理员",
                 "member":[
                     {
                         "nick_name":"谢蓓444",
@@ -1570,11 +1579,10 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                     },
                    
                 ],
-
             },
 
             {
-                "title":"项目经理55",
+                "title":"小组长",
                 "member":[
                     {
                         "nick_name":"谢蓓2555",
@@ -1585,11 +1593,10 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                     },
                    
                 ],
-
             },
 
             {
-                "title":"项目经理66",
+                "title":"敏捷教练",
                 "member":[
                     {
                         "nick_name":"谢蓓6666",
@@ -1600,13 +1607,13 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                     },
                    
                 ],
-
             },
+
             {
-                "title":"项目经理66",
+                "title":"测试组",
                 "member":[
                     {
-                        "nick_name":"谢蓓6666",
+                        "nick_name":"谢蓓777",
                         "prj_id":"prj00010",
                         "role_name":"icdp_projManager",
                         "user_name":"xiebei.zh",
@@ -1614,13 +1621,13 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                     },
                    
                 ],
-
             },
+
             {
-                "title":"项目经理66",
+                "title":"总体组",
                 "member":[
                     {
-                        "nick_name":"谢蓓6666",
+                        "nick_name":"谢蓓888",
                         "prj_id":"prj00010",
                         "role_name":"icdp_projManager",
                         "user_name":"xiebei.zh",
@@ -1628,7 +1635,6 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                     },
                    
                 ],
-
             },
 /*
             */         

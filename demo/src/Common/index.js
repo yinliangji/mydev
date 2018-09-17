@@ -366,6 +366,115 @@ export default class Common extends Utils {
       })
     }
 
+
+
+
+    static objCopyArr (Arr1 = [],Arr2 = []){
+
+      
+      let _arr = [];
+      let arrFn = (val,arr)=>{
+        
+        
+        for(let i=0;i<arr.length;i++){
+           
+          if(val &&  Array.isArray(arr) && arr.length){
+             if(val == arr[i].value){
+              return arr[i];
+            }
+          }else{
+            return false;
+          }
+           
+        }
+        
+      }
+      if(Array.isArray(Arr1) && Array.isArray(Arr2)){
+        if(Arr1.length){
+          for(let j=0;j<Arr1.length;j++){
+            arrFn(Arr1[j],Arr2) && _arr.push(arrFn(Arr1[j],Arr2))
+          }
+        }
+      }else{
+        return false;
+      }
+      return _arr;
+    }
+
+
+
+    //给输入框加函数节流2--不通用
+    static changeArr2(_this, curVal, _Common, _projectAddGroup) {
+      _this.$nextTick(() => {
+
+        for (var i = 0; i < curVal.length; i++) {
+          let _DOM = _this.$refs[curVal[i].myReftemp + i][0].$el.getElementsByClassName("ivu-select-input")[0];
+         
+          
+          _DOM.addEventListener("keyup", function(event) {
+            let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel", ""));
+            let exec = _Common.throttle(
+              (value, THIS) => {
+                let _URL = _projectAddGroup;
+                
+                _this.inputLoad = true;
+                _this.projectGroupFn2(_URL, {
+                  userName: value,
+                }, _num, THIS);
+              },
+              this,
+              1500,
+              this.value,
+              2000
+            );
+            exec();
+          })
+          
+        }
+      })
+    }
+
+
+    //添加角色2--不通用
+    static  addPartPopBox2(name,that){
+      that.$refs[name].validate((valid) => {
+        that.formPartValidate.loading = false;
+        that.$nextTick(() => {
+          that.formPartValidate.loading = true;
+        });
+        if (valid) {
+          that.formPartValidate.loading = true;
+          that.$nextTick(() => {
+            that.formPartValidate.loading = true;
+          });
+          let _tempObj = {
+            myRef: "selfRef",
+            group: [],
+            groupList: [],
+            myLabel: "",
+            myValue: "",
+            delBtn: true,
+            groupName: "",
+            required: true,
+            modaAdd:false,//添加角色修改
+            grouptemp:[],//修改添加角色
+            groupListtemp: [],//修改添加角色
+            myReftemp: "selfRefRole",//修改添加角色
+          }
+          _tempObj.myLabel = that.formPartValidate.addGroupList.length ? that.formPartValidate.addGroupList.filter((item) => {
+            return item.value == that.formPartValidate.partName
+          })[0].label : that.formPartValidate.partName;
+          _tempObj.myValue = that.formPartValidate.partName;
+
+          that.formValidate.AddGroupList.push(_tempObj);
+
+          that.formPartValidate.partName = "";
+          _tempObj = null;
+          that.partAdd = false;
+        }
+      })
+    }
+
     //删除Storage和Cookie--不通用
     static delStorageAndCookie(_Common,name){
       let SC = false;

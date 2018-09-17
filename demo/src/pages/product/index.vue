@@ -146,7 +146,7 @@
 					<div class="tableContBox" v-show="currentView == 'developList'">
 						<Table border :columns="columns" :data="tableData"  />
 						<div class="pageBox" v-if="tableData.length">
-				    		<Page :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+				    		<Page :current="tableDAtaPageCurrent" :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
 				    		<p>总共{{tableDAtaTatol}}条记录</p>
 				    	</div>
 					</div>
@@ -405,7 +405,7 @@ export default {
                 },
                 {
                     title: '负责人',
-                    key: 'charger',
+                    key: 'nick_name',
                     width: 100,
                     align: 'center',
                     // render: (h, params) => {
@@ -606,7 +606,7 @@ export default {
             ],
             tableDAtaTatol:0,
             tableDAtaPageLine:5,
-
+            tableDAtaPageCurrent:1,
             formValidate: {
                 userstory_name:"",//用户故事名称
                 userstory_id:"",//故事编号
@@ -735,11 +735,13 @@ export default {
 
         	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
         	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+        	this.tableDAtaPageCurrent = 1;
         },(error)=>{
         	console.log(error);
             this.showError(error);
             this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
   			this.storyGetKanBanFn(storyGetKanBan,ID);
+  			this.tableDAtaPageCurrent = 1;
         })
 
 	     
@@ -908,6 +910,7 @@ export default {
 
 			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
             this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+            this.tableDAtaPageCurrent = 1;
             
             if(this.currentView == "kanbanboard"){}else{}
 
@@ -954,7 +957,7 @@ export default {
 							_Obj.userId = "userId_"+ i +"_"+j;
 							_Obj.groupId = "group_01"
 							//_Obj.bgColor = { background: ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi) };
-							_Obj.bgcolor = ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi);
+							_Obj.bgcolor = ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else if(C==3){return '#f2e1f0'}else{return '#ffffff'}})(myData[i].list[j].proi);
 							_Obj.taskStateStr = myData[i].userstory_status;
 							_Obj.headPortrait =   require("@/assets/images/user_02.png"); //"/assets/images/user_02.png";
 							_Obj.taskName = myData[i].list[j].userstory_name;
@@ -1005,6 +1008,7 @@ export default {
 			let ID = this.getID()
             //this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID)
             this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+            this.tableDAtaPageCurrent = i;
         },
         changePageSize(i) {
         },
@@ -1021,48 +1025,7 @@ export default {
                 this.tableData = myData.rows;
                 this.tableDAtaTatol = myData.page_rows;
 
-    			//             let _temp = {};
-				// for(let i=0;i<this.tableData.length;i++){
-				// 	_temp.taskName = this.tableData[i].userstory_name
-				// 	_temp.userName = this.tableData[i].charger;
-				// 	_temp.taskState = this.tableData[i].userstory_status;
-				// 	_temp.headPortrait = this.tableData[i].icon ? this.tableData[i].icon : "/assets/images/user_02.png";
-				// 	_temp.taskId = this.tableData[i].userstory_id;
-				// 	_temp.description = "description";
-				// 	_temp.userId = "userId_03";
-				// 	_temp.groupId = "group_01";
-				// 	_temp.bgColor = { background: "#f8d6af" };
-				// 	_temp.taskStateStr = "测试";
-				// 	this.cardList.push(_temp);
-				// 	_temp = {};
-				// }
-				
-
-
-				//{
-					// userstory_name: '用户故事1',
-					// userstory_id: 18,
-					// userstory_type: '产品需求',
-					// charger:"谢呗",
-					// userstory_status:"已完成",
-					// sprint_id:"迭代1",
-					// proi:"1",
-					// manHours:"20 | 10",
-					// mission:"5 | 10",
-					// icon: require("@/assets/images/user_02.png")
-     			//},
-     			//{
-					// name: '用户故事2',
-					// num: 24,
-					// describe: '产品需求',
-					// person:"谢呗2",
-					// status:"处理中",
-					// Iteration:"迭代2",
-					// priority:"2",
-					// manHours:"20 | 10",
-					// mission:"5 | 10",
-					// icon: require("@/assets/images/user_02.png")
-     			//},
+    			
 
 
             }).catch( (error) => {

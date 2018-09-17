@@ -134,11 +134,8 @@
                     <!-- <Button @click="handleSelectAll(true)" v-if="!allSelectTableRome">设置全选</Button>
                     <Button @click="handleSelectAll(false)" v-else>全部取消</Button> -->
 
-
-
-
 			    	<div class="pageBox" v-if="tableData.length">
-			    		<Page :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+			    		<Page :current="tableDAtaPageCurrent" :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
 			    		<p>总共{{tableDAtaTatol}}条记录</p>
 			    	</div>
 			    </div>
@@ -191,6 +188,7 @@ export default {
     mounted(){
         this.getPermissionFn(getPermission)
         this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+        this.tableDAtaPageCurrent = 1;
         /* 搜索条件 以后加上
         this.byRoleFn(byRole,"icdp_projManager");
         this.byRoleFn(byRole,"icdp_agileCoach");
@@ -382,8 +380,10 @@ export default {
                 // },
                
             ],
+
             tableDAtaTatol:0,
             tableDAtaPageLine:5,
+            tableDAtaPageCurrent:1,
             actionArr:[],
             formValidate: {
                 prj_name:"",//项目名称
@@ -432,6 +432,7 @@ export default {
 
         serchAll(){
             this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine,this.formValidate.prj_name,this.formValidate.prj_id,this.formValidate.start_time,this.formValidate.end_time,this.formValidate.icdp_projManager,this.formValidate.icdp_agileCoach,this.formValidate.icdp_devTeam,this.formValidate.icdp_testTeam);
+            this.tableDAtaPageCurrent = 1;
         },
         byRoleFn(URL,roleName){
             defaultAXIOS(URL,{roleName},{timeout:20000,method:'get'}).then((response) => {
@@ -458,9 +459,11 @@ export default {
             });
         },
         changeCurrentPage(i) {
-            this.tableDataAjaxFn(projectAll,i,this.tableDAtaPageLine,this.formValidate.prj_name,this.formValidate.prj_id,this.formValidate.start_time,this.formValidate.end_time,this.formValidate.icdp_projManager,this.formValidate.icdp_agileCoach,this.formValidate.icdp_devTeam,this.formValidate.icdp_testTeam)
+            this.tableDataAjaxFn(projectAll,i,this.tableDAtaPageLine,this.formValidate.prj_name,this.formValidate.prj_id,this.formValidate.start_time,this.formValidate.end_time,this.formValidate.icdp_projManager,this.formValidate.icdp_agileCoach,this.formValidate.icdp_devTeam,this.formValidate.icdp_testTeam);
+            this.tableDAtaPageCurrent = i;
         },
         changePageSize(i) {
+
         },
         showError(ERR){
             //alert(JSON.stringify(ERR))
@@ -561,6 +564,7 @@ export default {
                     });
                     this.$Message.success('删除完成');
                     this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+                    this.tableDAtaPageCurrent = 1;
                 }else{
                     this.actionArr = [];
                     this.modal_loading = false;

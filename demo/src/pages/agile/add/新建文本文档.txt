@@ -246,3 +246,18 @@
                         })
                     }
                     */
+
+
+
+
+/*
+            if(  Array.isArray(this.formValidate.modules) && Array.isArray(this.formValidate.modulesAdd)  ){
+                this.formValidate.modules.push(...this.formValidate.modulesAdd)
+            }else if(Array.isArray(this.formValidate.modules) && !Array.isArray(this.formValidate.modulesAdd)){
+                this.formValidate.modules.push(this.formValidate.modulesAdd)
+            }else if(!Array.isArray(this.formValidate.modules) && Array.isArray(this.formValidate.modulesAdd)){
+                this.formValidate.modules = this.formValidate.modulesAdd.join(_join);
+            }else{
+                this.formValidate.modules = this.formValidate.modules + this.formValidate.modulesAdd;
+            }
+            */

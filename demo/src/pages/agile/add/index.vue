@@ -74,7 +74,7 @@
                        
                     </div>
 					<h3 class="Title"><span>成员信息</span></h3>
-                    <div class="fromBox">
+                    <div class="fromBox fromBox2">
                         
 
 
@@ -84,11 +84,7 @@
                         </div>
                         <div class="newAddGroup">
                             <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index">
-                                <Col span="18">
-
-
-
-                                    
+                                <Col span="20">
                                     <FormItem 
                                         :label="myItem.myLabel" 
                                         :prop="'AddGroupList.'+index+'.group'"
@@ -96,9 +92,9 @@
                                          
                                         :ref="myItem.myRef+index" 
                                         :class="myItem.myRef+index"
-                                    >
-                                        <div >
-                                            <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" closable @on-close="handleClose">
+                                        >
+                                        <div :id="'roleBox_'+index">
+                                            <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" closable @on-close="roleClose">
                                                 {{ item.label}}
                                             </Tag>
                                             <Button 
@@ -106,41 +102,26 @@
                                                 type="dashed" 
                                                 size="small" 
                                                 @click="addRole(index)"
-                                            >
-                                                添加角色
+                                                >
+                                                添加人员
                                             </Button>
-
-    
                                             <Modal 
                                                 :ref="myItem.myReftemp+index" 
                                                 :class="myItem.myReftemp+index" 
                                                 v-model="formValidate.AddGroupList[index].modaAdd" 
-                                                :title="'添加'+formValidate.AddGroupList[index].myLabel" 
+                                                :title="'添加'+formValidate.AddGroupList[index].myLabel+'人员'" 
                                                 @on-ok="submitRole(index)"  
                                                 ok-text="添加"
-                                            >
-
-
-
-
+                                                @on-cancel="cancelRole(index)"
+                                                >
                                                 <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
                                                     <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
                                                         {{ item.label }}
                                                     </Option>
                                                 </Select>
-
-
-
-
-                                                
                                             </Modal>
-
-
                                         </div>
                                     </FormItem>
-                                    <!---->
-
-
 
                                     <!--
                                     <FormItem 
@@ -161,8 +142,8 @@
 
                                 </Col>
                                 <Col span="1">&nbsp;</Col>
-                                <Col span="5">
-                                    <Button v-if="myItem.delBtn" type="error" long @click="groupDel(index)">删除角色</Button>
+                                <Col span="3">
+                                    <Button v-if="myItem.delBtn"  type="error" long  @click="groupDel(index)">删除角色</Button>
                                 </Col>
                             </Row>
                         </div>
@@ -254,14 +235,15 @@ export default {
         "formValidate.AddGroupList"(curVal,oldVal){
             let _this = this;
             if(curVal){
-                //Common.changeArr(this,curVal,Common,projectAddGroup)
-                Common.changeArr2(this,curVal,Common,projectAddGroup)
+                //Common.changeArr(this,curVal,Common,projectAddGroup)//下拉样子
+                Common.changeArr2(this,curVal,Common,projectAddGroup)//修改添加角色
             }
         },
         formValidate: {
             handler(val, oldVal) {
                 if(val){
-                    //Common.inputArr(this,val)
+                    //Common.inputArr(this,val)//下拉样子
+                    Common.inputArr2(this,val)//修改添加角色
                 }
             },
             deep: true
@@ -564,59 +546,41 @@ export default {
     
     methods: {
         /* 修改添加角色 */
+        cancelRole(i){
+            Common.CancelRole(this,i)
+        },
+        roleClose (event, name) {
+            Common.RoleClose(this,event, name)
+        },
         addRole(i){
-            this.formValidate.AddGroupList[i].modaAdd = true
+            Common.AddRole(this,i)
         },
         submitRole(i){
-            console.log(this.formValidate.AddGroupList[i])
-            let List = this.formValidate.AddGroupList;
-            let List2 = Common.objCopyArr(List[i].grouptemp,List[i].groupListtemp)
+            Common.SubmitRole(this,i,Common);
+        },
+        
+        projectGroupFn2(URL,params = {},ARR,thatEle){
+            Common.ProjectGroup2(defaultAXIOS,this,URL,params,ARR,thatEle);
+        },
+        addSelectEleList(ARR,thatEle,dataList){
+            if(typeof(ARR)  == "number"){
+                if(thatEle && thatEle.temp && thatEle.temp.length){
+                    let _tempArr = Common.returnDelArr(this.formValidate.AddGroupList[ARR].grouptemp,dataList);
 
-            if(List[i].grouptemp && Array.isArray(List[i].grouptemp) && List[i].grouptemp.length && List2 && Array.isArray(List2) && List2.length){
-                List[i].group.push(...List[i].grouptemp)
-                List[i].groupList.push(...List2)
+                    let _tempArr2 = [];
+                    _tempArr2.push(...thatEle.temp,..._tempArr);
+                    let _tempArr3 = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,_tempArr2);
+                   
+                    this.formValidate.AddGroupList[ARR].groupListtemp.push(..._tempArr3);
+
+                }else{
+                    let _tempArr4 = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,dataList);
+                    this.formValidate.AddGroupList[ARR].groupListtemp.push(..._tempArr4);
+                }
+            }else{
+                this.showError("addSelectEleList的参数ARR不是数字");
             }
 
-            List[i].grouptemp = [];
-            List[i].groupListtemp = [];
-                
-
-
-            
-
-
-
-
-
-            
-
-            
-
-
-            
-            // this.formValidate.createModule.push(this.formItem.businessName)
-            // this.modaAdd = false;
-            // this.$Message.info('成功');
-            // this.ModuleformItemReset();
-           
-        },
-        projectGroupFn2(URL,params = {},ARR,thatEle){
-            defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
-                this.inputLoad = false;
-                this.formValidate.AddGroupList[ARR].groupListtemp = [];
-
-
-                if(typeof(ARR)  == "number"){
-                    this.formValidate.AddGroupList[ARR].groupListtemp.push(...myData.data.list);
-                }
-                
-            }).catch( (error) => {
-                console.log(error);
-                this.inputLoad = false;
-                this.showError(error);
-            });   
         },
         /* 修改添加角色 */
         publishUserFn(URL,params = {},Arr=[]){
@@ -633,7 +597,7 @@ export default {
                     delBtn: false,
                     groupName: "",
                     required: true,
-                    modaAdd:true,//修改添加角色
+                    modaAdd:false,//修改添加角色
                     grouptemp:[],//修改添加角色
                     groupListtemp: [],//修改添加角色
                     myReftemp: "selfRefRole",//修改添加角色
@@ -703,7 +667,7 @@ export default {
             this.partAdd = true;
         },
         submitPart(name){
-        	//Common.addPartPopBox(name,this);
+        	//Common.addPartPopBox(name,this);//下拉样子
             Common.addPartPopBox2(name,this); //修改添加角色
         	
         },
@@ -766,7 +730,6 @@ export default {
             });
         },
         showError(ERR){
-            //alert(JSON.stringify(ERR))
             Common.ErrorShow(ERR,this);
 
         },
@@ -823,17 +786,7 @@ export default {
         submitAddData(){
            
             let _join = "|";
-            /*
-            if(  Array.isArray(this.formValidate.modules) && Array.isArray(this.formValidate.modulesAdd)  ){
-                this.formValidate.modules.push(...this.formValidate.modulesAdd)
-            }else if(Array.isArray(this.formValidate.modules) && !Array.isArray(this.formValidate.modulesAdd)){
-                this.formValidate.modules.push(this.formValidate.modulesAdd)
-            }else if(!Array.isArray(this.formValidate.modules) && Array.isArray(this.formValidate.modulesAdd)){
-                this.formValidate.modules = this.formValidate.modulesAdd.join(_join);
-            }else{
-                this.formValidate.modules = this.formValidate.modules + this.formValidate.modulesAdd;
-            }
-            */
+            
 
             let _modules = Array.isArray(this.formValidate.modules) ? this.formValidate.modules.join(_join) : this.formValidate.modules;
             let _createModule = Array.isArray(this.formValidate.createModule) ? this.formValidate.createModule.join(_join) : this.formValidate.createModule;
@@ -944,9 +897,12 @@ export default {
 .fromBox {
 	width: 50%;
 }
+.fromBox2 {
+    width: 70%;
+}
 .addpartBox{
     padding-bottom: 20px;
-    text-align: center;
+    text-align: left;
 }
 </style>
 

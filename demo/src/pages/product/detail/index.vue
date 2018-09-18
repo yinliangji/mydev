@@ -7,14 +7,19 @@
             <BreadcrumbItem>用户故事基本信息</BreadcrumbItem>
         </Breadcrumb>
         <Card>
-        	<Button 
-                type="warning" 
-                @click="editItemFn"
-                :disabled="authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])" 
-                class="editBtn"
-                >
-                编辑
-            </Button>
+        	<div class="editBtn">
+	        	<Button 
+	                type="warning" 
+	                @click="editItemFn"
+	                :disabled="authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])" 
+	                class="editBtn"
+	                shape="circle"
+	                long
+	                size="small"
+	                >
+	                编辑
+	            </Button>
+            </div>
         	<Tabs value="name1" type="card" :capture-focus="false">
 		        <TabPane label="用户故事基本信息" name="name1">
 					<div class="baseInfoBox">
@@ -372,9 +377,10 @@ h4{
 }
 .editBtn{
     position:absolute;
-    right:20px;
-    top:10px;
+    right:10px;
+    top:6px;
     z-index: 10;
+    width: 62px;
 }
 .pageBox {
 	padding-bottom:20px;

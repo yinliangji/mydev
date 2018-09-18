@@ -74,14 +74,54 @@
 					<h3 class="Title"><span>编辑成员信息</span></h3>
 
 					
-                    <div class="fromBox">
+                    <div class="fromBox fromBox2">
                         
 
 
-
+                        <div class="addpartBox">
+                            <Button type="success" @click="addpart">添加角色</Button>
+                        </div>
                         <div class="newAddGroup">
                             <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index">
                                 <Col span="20">
+                                    <FormItem 
+                                        :label="myItem.myLabel" 
+                                        :prop="'AddGroupList.'+index+'.group'"
+                                        :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                                         
+                                        :ref="myItem.myRef+index" 
+                                        :class="myItem.myRef+index"
+                                        >
+                                        <div :id="'roleBox_'+index">
+                                            <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" closable @on-close="roleClose">
+                                                {{ item.label}}
+                                            </Tag>
+                                            <Button 
+                                                icon="ios-plus-empty" 
+                                                type="dashed" 
+                                                size="small" 
+                                                @click="addRole(index)"
+                                                >
+                                                添加人员
+                                            </Button>
+                                            <Modal 
+                                                :ref="myItem.myReftemp+index" 
+                                                :class="myItem.myReftemp+index" 
+                                                v-model="formValidate.AddGroupList[index].modaAdd" 
+                                                :title="'添加'+formValidate.AddGroupList[index].myLabel+'人员'" 
+                                                @on-ok="submitRole(index)"  
+                                                ok-text="添加"
+                                                @on-cancel="cancelRole(index)"
+                                                >
+                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
+                                                    <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
+                                                        {{ item.label }}
+                                                    </Option>
+                                                </Select>
+                                            </Modal>
+                                        </div>
+                                    </FormItem>
+                                    <!--
                                     <FormItem 
                                         :label="myItem.myLabel" 
                                         :prop="'AddGroupList.'+index+'.group'"
@@ -96,6 +136,7 @@
                                             </Option>
                                         </Select>
                                     </FormItem>
+                                    -->
                                 </Col>
                                 <Col span="1">&nbsp;</Col>
                                 <Col span="3">
@@ -103,9 +144,7 @@
                                 </Col>
                             </Row>
                         </div>
-                        <div class="addpartBox">
-                            <Button type="success" @click="addpart">添加角色</Button>
-                        </div>
+                        
                                     
 
                     </div>
@@ -201,13 +240,15 @@ export default {
          "formValidate.AddGroupList"(curVal,oldVal){
             let _this = this;
             if(curVal){
-                Common.changeArr(this,curVal,Common,projectAddGroup)
+                //Common.changeArr(this,curVal,Common,projectAddGroup)//下拉样子
+                Common.changeArr2(this,curVal,Common,projectAddGroup)//修改添加角色
             }
         },
         formValidate: {
             handler(val, oldVal) {
                 if(val){
-                    Common.inputArr(this,val)
+                    //Common.inputArr(this,val)//下拉样子
+                    Common.inputArr2(this,val)//修改添加角色
                 }
             },
             deep: true
@@ -471,7 +512,42 @@ export default {
     
     methods: {
 
+        /* 修改添加角色 */
+        cancelRole(i){
+            Common.CancelRole(this,i)
+        },
+        roleClose (event, name) {
+            Common.RoleClose(this,event, name)
+        },
+        addRole(i){
+            Common.AddRole(this,i)
+        },
+        submitRole(i){
+            Common.SubmitRole(this,i,Common);
+        },
+        
+        projectGroupFn2(URL,params = {},ARR,thatEle){
+            Common.ProjectGroup2(defaultAXIOS,this,URL,params,ARR,thatEle);
+        },
+        addSelectEleList(ARR,thatEle,dataList){
+            if(typeof(ARR)  == "number"){
+                if(thatEle && thatEle.temp && thatEle.temp.length){
+                    let _tempArr = Common.returnDelArr(this.formValidate.AddGroupList[ARR].grouptemp,dataList);
 
+                    let _tempArr2 = [];
+                    _tempArr2.push(...thatEle.temp,..._tempArr);
+                    let _tempArr3 = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,_tempArr2);
+                    this.formValidate.AddGroupList[ARR].groupListtemp.push(..._tempArr3);
+                }else{
+                    let _tempArr4 = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,dataList);
+                    this.formValidate.AddGroupList[ARR].groupListtemp.push(..._tempArr4);
+                }
+            }else{
+                this.showError("addSelectEleList的参数ARR不是数字");
+            }
+
+        },
+        /* 修改添加角色 */
         listModuleFn(URL,params = {}){
             Common.Modulelist(defaultAXIOS,this,URL,params)
         },
@@ -494,7 +570,8 @@ export default {
             this.partAdd = true;
         },
         submitPart(name){
-            Common.addPartPopBox(name,this)
+            //Common.addPartPopBox(name,this)//下拉样子
+            Common.addPartPopBox2(name,this); //修改添加角色
             
 
         },
@@ -636,6 +713,10 @@ export default {
                             delBtn:true,
                             groupName:"",
                             required:true,
+                            modaAdd:false,//修改添加角色
+                            grouptemp:[],//修改添加角色
+                            groupListtemp: [],//修改添加角色
+                            myReftemp: "selfRefRole",//修改添加角色
                         }
 
                         _tempObj.myLabel = myData.role_user_info[J].title;
@@ -643,7 +724,6 @@ export default {
                         _tempObj.groupList = groupList(myData.role_user_info[J].member);
                         _tempObj.group = group(myData.role_user_info[J].member); 
                         //_tempObj.groupList = [{"value":"lizhuo.zh","label":"李卓"}]; 
-                        //console.log(List(myData.role_user_info[J].member))
                        
                         
                         this.formValidate.AddGroupList.push(_tempObj);
@@ -651,7 +731,6 @@ export default {
                     }
                     //
                 }
-                //console.log("this.formPartValidate.addGroupList",this.formPartValidate.addGroupList)
 
 
 
@@ -664,7 +743,6 @@ export default {
             });
         },
         showError(ERR){
-            //alert(JSON.stringify(ERR))
             Common.ErrorShow(ERR,this);
         },
         resetData(){
@@ -720,17 +798,7 @@ export default {
         },
         submitAddData(){
             let _join = "|";
-            /*
-            if(  Array.isArray(this.formValidate.modules) && Array.isArray(this.formValidate.modulesAdd)  ){
-                this.formValidate.modules.push(...this.formValidate.modulesAdd)
-            }else if(Array.isArray(this.formValidate.modules) && !Array.isArray(this.formValidate.modulesAdd)){
-                this.formValidate.modules.push(this.formValidate.modulesAdd)
-            }else if(!Array.isArray(this.formValidate.modules) && Array.isArray(this.formValidate.modulesAdd)){
-                this.formValidate.modules = this.formValidate.modulesAdd.join(_join);
-            }else{
-                this.formValidate.modules = this.formValidate.modules + this.formValidate.modulesAdd;
-            }
-            */
+            
             let _modules = Array.isArray(this.formValidate.modules) ? this.formValidate.modules.join(_join) : this.formValidate.modules;
 
             let _createModule = Array.isArray(this.formValidate.createModule) ? this.formValidate.createModule.join(_join) : this.formValidate.createModule;
@@ -738,7 +806,8 @@ export default {
             let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
 
-            let _proj_role = JSON.stringify(Common.objInArr(this.formValidate.AddGroupList));
+            //let _proj_role = JSON.stringify(Common.objInArr(this.formValidate.AddGroupList));
+            let _proj_role = JSON.stringify(Common.CheeckRoleVal(this,Common.objInArr(this.formValidate.AddGroupList)));
 
             let _pid = this.formValidate.pid ? this.formValidate.pid : ""
 
@@ -845,8 +914,11 @@ export default {
 .fromBox {
 	width: 50%;
 }
+.fromBox2 {
+    width: 70%;
+}
 .addpartBox{
     padding-bottom: 20px;
-    text-align: center;
+    text-align: left;
 }
 </style>

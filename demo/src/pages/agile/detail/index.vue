@@ -4,14 +4,18 @@
 		<selectMenu @changeSelect="selectMenuFn"></selectMenu>
        
         <Card class="detailContBox">
-            <Button 
-                type="warning" 
-                 @click="editItemFn"
-                :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
-                class="editBtn"
-                >
-                编辑
-            </Button>
+            <div class="editBtn">
+                <Button 
+                    type="warning"
+                    @click="editItemFn"
+                    :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
+                    shape="circle"
+                    long
+                    size="small"
+                    >
+                    编辑
+                </Button>
+            </div>
         	<Tabs value="name1" type="card" >
 
 		        <TabPane label="项目基本信息" name="name1">
@@ -375,6 +379,7 @@ h4{
     right:20px;
     top:10px;
     z-index: 10;
+    width: 62px;
 }
 </style>
 

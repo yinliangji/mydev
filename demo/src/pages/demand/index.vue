@@ -66,7 +66,7 @@
                     <Table border ref="selection" :columns="columns" :data="tableData" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
                     <div class="pageBox" v-if="tableData.length">
-                        <Page :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize" show-elevator></Page>
+                        <Page :current="tableDAtaPageCurrent" :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize" show-elevator></Page>
                         <p>总共{{tableDAtaTatol}}条记录</p>
                     </div>
                 </div>
@@ -222,6 +222,7 @@ export default {
             ],
             tableDAtaTatol:0,
             tableDAtaPageLine:5,
+            tableDAtaPageCurrent:1,
             actionArr:[],
             formValidate: {
                 req_name:"",
@@ -243,6 +244,7 @@ export default {
 
         this.getPermissionFn(getPermission);
         this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
+        this.tableDAtaPageCurrent = 1;
 
     },
     methods: {
@@ -256,6 +258,7 @@ export default {
             let ID = N;
             Common.setStorageAndCookie(Common,"id",ID)
             this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
+            this.tableDAtaPageCurrent = 1;
         },
         cancelSerchAll(){
             for(let i in this.formValidate){
@@ -266,10 +269,12 @@ export default {
         serchAll(){
             let ID = Common.GETID(this,Common)
             this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
+            this.tableDAtaPageCurrent = 1;
         },
         changeCurrentPage(i) {
             let ID = Common.GETID(this,Common)
             this.tableDataAjaxFn(reqAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
+            this.tableDAtaPageCurrent = i;
         },
         changePageSize(i) {
         },
@@ -360,6 +365,7 @@ export default {
                     this.$Message.success('删除完成');
                     //this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
                     this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));
+                    this.tableDAtaPageCurrent = 1;
                 }else{
                     this.actionArr = [];
                     this.modal_loading = false;
@@ -430,7 +436,7 @@ export default {
             this.actionArr = [];
             this.$refs.selection.selectAll(false);
             this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));
-            console.log(this.isShowAddPop2,this.isAdd2,this.tableDataRow2)
+            this.tableDAtaPageCurrent = 1;
 
         },
         tableDataAddFn2(Data){

@@ -401,22 +401,50 @@ export default class Common extends Utils {
       return _arr;
     }
 
+    //给输入框本身加已选择的数组temp2 --不通用
+    static inputArr2(_this,val){
+      //
+      let ArrFn = (obj,arr)=>{
+        let _OBJ = {}
+        for(let k=0;k<arr.length;k++){
+            if(arr[k] == obj.value){
+               _OBJ.label = obj.label;
+               _OBJ.value = obj.value;
+            }
+        }
+        if(_OBJ.label && _OBJ.value){
+            return _OBJ;    
+        }else{
+            return false;
+        }
+      }
 
+      _this.$nextTick(()=>{
+      let _tempArr = []
+        for(let i=0;i<val.AddGroupList.length;i++){
+            for(let j=0;j<val.AddGroupList[i].groupListtemp.length;j++){
+                if(ArrFn(val.AddGroupList[i].groupListtemp[j],val.AddGroupList[i].grouptemp)){
+                    _tempArr.push(ArrFn(val.AddGroupList[i].groupListtemp[j],val.AddGroupList[i].grouptemp))
+                }
+            }
+            document.getElementById("sel"+i).getElementsByClassName("ivu-select-input")[0].temp = _tempArr;
+            _tempArr = [];  
+            
+        }
+
+      })
+    }
 
     //给输入框加函数节流2--不通用
     static changeArr2(_this, curVal, _Common, _projectAddGroup) {
       _this.$nextTick(() => {
-
         for (var i = 0; i < curVal.length; i++) {
           let _DOM = _this.$refs[curVal[i].myReftemp + i][0].$el.getElementsByClassName("ivu-select-input")[0];
-         
-          
           _DOM.addEventListener("keyup", function(event) {
             let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel", ""));
             let exec = _Common.throttle(
               (value, THIS) => {
                 let _URL = _projectAddGroup;
-                
                 _this.inputLoad = true;
                 _this.projectGroupFn2(_URL, {
                   userName: value,
@@ -429,7 +457,6 @@ export default class Common extends Utils {
             );
             exec();
           })
-          
         }
       })
     }
@@ -949,8 +976,6 @@ export default class Common extends Utils {
       return Lable;
     }
 
-
-
     static StatusColorFn(N,STR=""){
       let Lable = "#1c2438"
       if(this[STR+"List"] && this[STR+"List"].length){
@@ -973,6 +998,68 @@ export default class Common extends Utils {
         }
       }
       return Lable;
+    }
+    //角色添加弹出
+    static CancelRole(that,i){
+      let List = that.formValidate.AddGroupList;
+      List[i].grouptemp = [];
+      List[i].groupListtemp = [];
+    }
+    //角色取消
+    static RoleClose(that,event, name){
+      let I = Number(event.path[2].getAttribute("id").split("_")[1])
+      that.formValidate.AddGroupList[I].group.splice(name, 1);
+      that.formValidate.AddGroupList[I].groupList.splice(name, 1);
+    }
+    //弹出添加角色
+    static AddRole(that,i){
+      that.formValidate.AddGroupList[i].modaAdd = true
+    }
+    //提交添加角色
+    static SubmitRole(that,i,_Common){
+      let List = that.formValidate.AddGroupList;
+      let List2 = _Common.objCopyArr(List[i].grouptemp,List[i].groupListtemp)
+
+      if(List[i].grouptemp && Array.isArray(List[i].grouptemp) && List[i].grouptemp.length && List2 && Array.isArray(List2) && List2.length){
+          List[i].group.push(...List[i].grouptemp)
+          List[i].groupList.push(...List2)
+      }
+
+      List[i].grouptemp = [];
+      List[i].groupListtemp = [];
+    }
+    //角色添加下拉菜单人员
+    static ProjectGroup2(FUN,that,URL,params = {},ARR,thatEle){
+      FUN(URL,params,{timeout:60000,method:'get'}).then((response) => {
+          let myData = response.data;
+          console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
+          that.inputLoad = false;
+          that.formValidate.AddGroupList[ARR].groupListtemp = [];
+          that.addSelectEleList(ARR,thatEle,myData.data.list);
+          
+      }).catch( (error) => {
+          console.log(error);
+          that.inputLoad = false;
+          that.showError(error);
+      });  
+    }
+
+    //检查角色缺少 [value]
+    static CheeckRoleVal(that,Arr){
+      let List = that.formPartValidate.addGroupList;
+      if(Array.isArray(Arr) && Arr.length){
+          for(let i=0;i<Arr.length;i++){
+              if(Arr[i].title && !Arr[i].title.value){
+                  for(let j=0;j<List.length;j++){
+                      if(List[j].label.indexOf(Arr[i].title.label) != -1){
+                          Arr[i].title.value = List[j].value
+                      }
+                  }
+
+              }
+          }
+      }
+      return Arr
     }
 
 

@@ -17,6 +17,14 @@ let allowCrossDomain = function(req, res, next) {
     }
 };
 
+
+
+app.use(allowCrossDomain); //运用跨域的中间件
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+//app.use(bodyParser.text());//运用中间件，对请求体的文本进行解析
+app.use(express.static("static/vConsole"))
+
 let mockData = () => {
     return Mock.mock({
         "status": 200,
@@ -88,21 +96,6 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
     })
 }
 
-
-
-
-
-
-
-
-
-app.use(allowCrossDomain); //运用跨域的中间件
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-//app.use(bodyParser.text());//运用中间件，对请求体的文本进行解析
-app.use(express.static("static/vConsole"))
-
-
 app.all('/json.action', function(req, res) {
     let resVal = mockData2(req.body.firstName, req.body.lastName, req.body.myStatus);
     console.log("req==>", req.body);
@@ -117,6 +110,9 @@ app.all('/json.action', function(req, res) {
     //console.log("res==>",res); 
     res.end()
 });
+
+
+
 
 
 app.all('/project/all', function(req, res) {
@@ -1637,7 +1633,7 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                    
                 ],
             },
-/*
+            /*
             */         
         ],
         role_user_info:[
@@ -1766,11 +1762,55 @@ let missionChangeList = (val1 = 200, val2 = 1, val3 = 3) => {
 }
 
 
+
+
 app.all('/userstoryEvo/list/', function(req, res) {
     let resVal = missionChangeList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
     res.json(missionChangeList(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+let filedown = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "files|3-5":[{
+            created_time:"@date(yyyy-MM-dd)",
+            creater:"@cname",
+            "fileId|+1":280,
+            "fileName|5-10":/[a-zA-Z0-9]/,
+            file_path:"files/xxxxx/xxx.jpg",
+            filesize:"162M",
+            url:"/uploads/files/xxx.jpg",
+            
+        }],
+        "total|10-20": 1,
+    })
+}
+
+app.all('/uploadfiles/getuploadedfiles/', function(req, res) {
+    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(filedown(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+app.all('/uploadfiles/upload_file/', function(req, res) {
+    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json({status: "success",message: "success",});
+    res.end()
+});
+app.all('/uploadfiles/delete_file/', function(req, res) {
+    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json({status: "success",message: "delete success",});
     res.end()
 });
 

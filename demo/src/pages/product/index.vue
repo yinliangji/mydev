@@ -408,6 +408,12 @@ export default {
                     key: 'nick_name',
                     width: 100,
                     align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'span',
+                            Common.FileterStr2(params.row.nick_name)
+                        );
+                    }
                     // render: (h, params) => {
                     //     return h(
                     //         'a',

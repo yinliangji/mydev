@@ -120,6 +120,28 @@ export default class Common extends Utils {
       let _cols2 = false;
       let _cols = false;
 
+      if(TAB && Array.isArray(TAB) && TAB.length){
+        for(let i=0;i<TAB.length;i++){
+          if(TAB[i] && Array.isArray(TAB[i]) && TAB[i].length){
+            for(let j=0;j<TAB[i].length;j++){
+              if(TAB[i][j].member && Array.isArray(TAB[i][j].member) && TAB[i][j].member.length){
+                for(let k=0;k<TAB[i][j].member.length;k++){
+                  if(TAB[i][j].member[k].nick_name.indexOf("-") != -1){
+                    TAB[i][j].member[k].nick_name = TAB[i][j].member[k].nick_name.split("-")[0];
+                  }
+                  if(TAB[i][j].member[k].nick_name.indexOf("、") == -1){
+                    TAB[i][j].member[k].nick_name = TAB[i][j].member[k].nick_name+"、";
+                  }
+                  if(k== TAB[i][j].member.length-1 && TAB[i][j].member[k].nick_name.indexOf("、") != -1){
+                    TAB[i][j].member[k].nick_name = TAB[i][j].member[k].nick_name.replace("、","");
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
       console.log("《=======【TAB】",TAB,"TAB=======》")
       
       for(var tr =0;tr<TAB.length;tr++){
@@ -368,38 +390,7 @@ export default class Common extends Utils {
 
 
 
-
-    static objCopyArr (Arr1 = [],Arr2 = []){
-
-      
-      let _arr = [];
-      let arrFn = (val,arr)=>{
-        
-        
-        for(let i=0;i<arr.length;i++){
-           
-          if(val &&  Array.isArray(arr) && arr.length){
-             if(val == arr[i].value){
-              return arr[i];
-            }
-          }else{
-            return false;
-          }
-           
-        }
-        
-      }
-      if(Array.isArray(Arr1) && Array.isArray(Arr2)){
-        if(Arr1.length){
-          for(let j=0;j<Arr1.length;j++){
-            arrFn(Arr1[j],Arr2) && _arr.push(arrFn(Arr1[j],Arr2))
-          }
-        }
-      }else{
-        return false;
-      }
-      return _arr;
-    }
+    
 
     //给输入框本身加已选择的数组temp2 --不通用
     static inputArr2(_this,val){
@@ -530,16 +521,11 @@ export default class Common extends Utils {
       return ID;
     }
 
-    
-
-
     //获取detail_id--不通用
     static GETdetail_id(that,_Common){
       let detailID = getSCFn(that,_Common,"detail_id");
       return detailID;
     }
-
-
 
     //获取prj_id--不通用
     static GETprjid(that,_Common){
@@ -829,8 +815,6 @@ export default class Common extends Utils {
       //
     }
 
-
-
     //添加默认负责人--不通用
     static PublishUser(FUN,that,URL,params = {}){
       //
@@ -999,23 +983,51 @@ export default class Common extends Utils {
       }
       return Lable;
     }
-    //角色添加弹出
+    //角色添加弹出--不通用
     static CancelRole(that,i){
       let List = that.formValidate.AddGroupList;
       List[i].grouptemp = [];
       List[i].groupListtemp = [];
     }
-    //角色取消
+    //角色取消--不通用
     static RoleClose(that,event, name){
       let I = Number(event.path[2].getAttribute("id").split("_")[1])
       that.formValidate.AddGroupList[I].group.splice(name, 1);
       that.formValidate.AddGroupList[I].groupList.splice(name, 1);
     }
-    //弹出添加角色
+    //弹出添加角色--不通用
     static AddRole(that,i){
       that.formValidate.AddGroupList[i].modaAdd = true
     }
-    //提交添加角色
+
+
+    //从数组里拷贝数值一样的对象--不通用
+    static objCopyArr (Arr1 = [],Arr2 = []){
+      let _arr = [];
+      let arrFn = (val,arr)=>{
+        for(let i=0;i<arr.length;i++){
+          if(val &&  Array.isArray(arr) && arr.length){
+             if(val == arr[i].value){
+              return arr[i];
+            }
+          }else{
+            return false;
+          }
+        }
+        
+      }
+      if(Array.isArray(Arr1) && Array.isArray(Arr2)){
+        if(Arr1.length){
+          for(let j=0;j<Arr1.length;j++){
+            arrFn(Arr1[j],Arr2) && _arr.push(arrFn(Arr1[j],Arr2))
+          }
+        }
+      }else{
+        return false;
+      }
+      return _arr;
+    }
+    //提交添加角色--不通用
     static SubmitRole(that,i,_Common){
       let List = that.formValidate.AddGroupList;
       let List2 = _Common.objCopyArr(List[i].grouptemp,List[i].groupListtemp)
@@ -1028,7 +1040,7 @@ export default class Common extends Utils {
       List[i].grouptemp = [];
       List[i].groupListtemp = [];
     }
-    //角色添加下拉菜单人员
+    //角色添加下拉菜单人员--不通用
     static ProjectGroup2(FUN,that,URL,params = {},ARR,thatEle){
       FUN(URL,params,{timeout:60000,method:'get'}).then((response) => {
           let myData = response.data;
@@ -1044,7 +1056,7 @@ export default class Common extends Utils {
       });  
     }
 
-    //检查角色缺少 [value]
+    //检查角色缺少 [value]--不通用
     static CheeckRoleVal(that,Arr){
       let List = that.formPartValidate.addGroupList;
       if(Array.isArray(Arr) && Arr.length){
@@ -1062,8 +1074,48 @@ export default class Common extends Utils {
       return Arr
     }
 
+    //
+    static FileterStr(STR = ""){
+      return fileterStr(STR)
+    }
+    //
+    static FileterStr2(STR = ""){
+      return fileterStr2(STR)
+    }
 
 
+
+}
+function fileterStr(STR){
+  let strArr = "";
+  if(STR){
+    strArr = STR.indexOf("|") != -1 ? STR.split("|") : STR;
+    if(strArr && Array.isArray(strArr) && strArr.length){
+      for(let i=0;i<strArr.length;i++){
+        if(strArr[i].indexOf("-") != -1){
+          strArr[i] = strArr[i].split("-")[0];
+        }
+      }
+      strArr = strArr.join("、")
+    }
+
+  }else{
+    return STR  
+  }
+  return strArr
+}
+function fileterStr2(STR){
+  let strArr = "";
+  if(STR){
+    if(STR.indexOf("-") != -1){
+      strArr = STR.split("-")[0];
+    }else{
+      return STR  
+    }
+  }else{
+    return STR  
+  }
+  return strArr
 }
 function getSCFn(that,_Common,name){
   let result = false;

@@ -290,7 +290,7 @@ export default {
                     render: (h, params) => {
                         return h(
                             'span',
-                            params.row.manager.replace(/\|/g,"、")
+                            Common.FileterStr(params.row.manager)//params.row.manager.replace(/\|/g,"、")
                         );
                     }
                 },

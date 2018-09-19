@@ -56,6 +56,15 @@ CommonRest.restUrl = {
     "publishUser": process.env.BASE_URL + "/auth/publishUser/",
     /****express 敏捷项目添加获取默认角色 get****/
 
+    "fileDownList": process.env.BASE_URL + "/uploadfiles/getuploadedfiles/",
+    /****express 敏捷项目详情文件下载列表 get****/
+
+    "fileUpload": process.env.BASE_URL + "/uploadfiles/upload_file/",
+    /****express 敏捷项目详情文件上传 get****/
+
+    "fileDelete": process.env.BASE_URL + "/uploadfiles/delete_file/",
+    /****express 敏捷项目详情文件删除 get****/
+
     /*****************************************/
 
     "storyAll": process.env.BASE_URL + "/userstory/listUserstory/",

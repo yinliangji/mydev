@@ -338,11 +338,16 @@ h3.Title:before {
 /* 详情表格 */
 .baseInfoTable td, .baseInfoTable th{
     box-sizing: border-box;
-    /*border: 1px solid #e9eaec;*/
+    
+    border: 1px solid #e9eaec;
+    height: 48px;
     
 
     vertical-align:middle;
+    box-sizing: border-box;
+    /*
     border: 1px solid white;
+    */
 }
 .baseInfoTable td{
     padding-left:0.5em;
@@ -360,17 +365,21 @@ h3.Title:before {
 }
 .baseInfoTable th{
     font-weight: normal;
-    font-size: 12px;
-    /*
+    
+    
     font-size:14px;
     background-color: #2db7f5;
     color: #fff;
-    */
-    color: #353336;
-    background-color:#edf6fb;
+    
+    
     text-align: right;
     padding-right: 18px;
-    box-sizing: border-box;
+    
+    /*
+    color: #353336;
+    background-color:#edf6fb;
+    font-size: 12px;
     height: 32px;
     min-height: 32px;
+    */
 }

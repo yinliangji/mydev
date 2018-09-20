@@ -109,13 +109,14 @@
                                     :action="actionUrl"
                                     name="file"
                                     :on-success="handleSuccess"
+                                    :on-error="handleError"
                                     :show-upload-list="false"
                                     class="UploadBtn"
                                     >
                                     <Button type="ghost" icon="ios-cloud-upload-outline">文件上传</Button>
                                 </Upload>
                                 <Table border :columns="columns" :data="tableData"  />
-                                <div class="pageBox" v-if="tableData.length">
+                                <div class="pageBox" v-if="false">
                                     <Page 
                                         :current="tableDAtaPageCurrent" 
                                         :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" 
@@ -393,7 +394,13 @@ export default {
             this.delIndex = "";
             this.delPath_file = "";
         },
-        handleSuccess(res,file){
+        handleError(res,file,list){
+            console.log("添加失败");
+            this.showError("添加失败");
+            return Promise.reject("添加失败");
+        },
+        handleSuccess(res,file,list){
+
             this.listUpFile(fileUpload,Common.GETID(this,Common),this.formValidate.prj_id).then(()=>{
                 this.$Notice.config({
                       top:100,
@@ -413,6 +420,8 @@ export default {
             
         },
         listUpFile(URL,id="",prj_id = ""){
+            return Promise.resolve("添加成功");
+
             return defaultAXIOS(URL,{id,taskId:prj_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======detail***fileUpload+++",response,myData,"======>");
@@ -424,15 +433,8 @@ export default {
                 }else{
                     return Promise.reject(false);
                 }
-                
-                // if(myData.status == "success" || (Array.isArray(myData.files) && myData.files.length)){
-                //     this.tableData = myData.files
-                //     this.tableDAtaTatol = myData.total;
-                // }
-              
             }).catch( (error) => {
                 console.log(error);
-                //this.showError(error);
                 return Promise.reject(false);
                 
             });
@@ -449,9 +451,11 @@ export default {
                 let myData = response.data;
                 console.log("<======detail***fileDown+++",response,myData,"======>");
                 
-                if(myData.status == "success" || (Array.isArray(myData.files) && myData.files.length)){
+                if(Array.isArray(myData.files)){
                     this.tableData = myData.files
                     this.tableDAtaTatol = myData.total;
+                }else{
+                    this.showError("不是数组");
                 }
 
               

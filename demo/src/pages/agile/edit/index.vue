@@ -16,18 +16,28 @@
                         </FormItem> 
 
 
-                        <FormItem label="项目名称" prop="prj_name">
-                            <Input v-model="formValidate.prj_name" placeholder="请填写项目名称"></Input>
-                        </FormItem>
+                        <Row>
+                            <Col span="12">
+                                <FormItem label="项目名称" prop="prj_name">
+                                    <Input v-model="formValidate.prj_name" placeholder="请填写项目名称"></Input>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem label="项目类型" prop="prj_type">
+                                    <RadioGroup v-model="formValidate.prj_type">
+                                        <Radio label="1">立研</Radio>
+                                        <Radio label="2">自研</Radio>
+                                    </RadioGroup>
+                                </FormItem>
+                            </Col>
+                        </Row>
+
+
+                        
 
                      
 
-                        <FormItem label="项目类型" prop="prj_type">
-                            <RadioGroup v-model="formValidate.prj_type">
-                                <Radio label="1">立研</Radio>
-                                <Radio label="2">自研</Radio>
-                            </RadioGroup>
-                        </FormItem>
+                        
 
                        
 
@@ -46,12 +56,12 @@
 
                       
     					<FormItem label="项目描述" prop="prj_desc">
-                            <Input v-model="formValidate.prj_desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目描述"></Input>
+                            <Input v-model="formValidate.prj_desc" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写项目描述"></Input>
                         </FormItem>
 
 
                         <FormItem label="项目目标" prop="prj_goal">
-                            <Input v-model="formValidate.prj_goal" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写项目目标"></Input>
+                            <Input v-model="formValidate.prj_goal" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写项目目标"></Input>
                         </FormItem>
 
 
@@ -912,10 +922,10 @@ export default {
 
 }
 .fromBox {
-	width: 50%;
+	width: 80%;
 }
 .fromBox2 {
-    width: 70%;
+    //width: 70%;
 }
 .addpartBox{
     padding-bottom: 20px;

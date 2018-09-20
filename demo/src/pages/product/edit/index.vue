@@ -16,29 +16,43 @@
                             <span>{{formValidate.prj_name}}</span>
                         </FormItem>
 
-                        <FormItem label="责任人" >
-                            <span>{{formValidate.charger}}</span>
-                        </FormItem>
-                    
-
-
                         <FormItem label="用户故事名称" prop="userstory_name">
                             <Input v-model="formValidate.userstory_name" placeholder="请填用户故事名称"></Input>
                         </FormItem>
+
+                        <Row>
+                            <Col span="12">
+                                <FormItem label="责任人" >
+                                    <!-- <span>{{formValidate.charger}}</span> -->
+                                    <Select filterable v-model="formValidate.nick_name" placeholder="请选择事项类型">
+                                        <Option v-for="(item,index) in chargerList" :key="index" :value="item.value">{{item.label}}</Option>
+                                    </Select>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                               <FormItem label="故事类型" prop="userstory_type">
+                                    <Select v-model="formValidate.userstory_type" placeholder="请选择事项类型">
+                                        <Option v-for="(item,index) in userstory_typeList" :key="index" :value="item.value">{{item.label}}</Option>
+                                        <!-- <Option value="1">用户需求</Option>
+                                        <Option value="2">生产问题</Option>
+                                        <Option value="3">自主创新</Option> -->
+                                    </Select>
+                                </FormItem>
+                            </Col>
+                        </Row>
+
+                        
+                    
+
+
+                        
                         <!-- <FormItem label="业务模块" prop="business">
                             <Select v-model="formValidate.business" multiple >
                                 <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                         </FormItem> -->
 
-                        <FormItem label="故事类型" prop="userstory_type">
-                            <Select v-model="formValidate.userstory_type" placeholder="请选择事项类型">
-                                <Option v-for="(item,index) in userstory_typeList" :key="index" :value="item.value">{{item.label}}</Option>
-                                <!-- <Option value="1">用户需求</Option>
-                                <Option value="2">生产问题</Option>
-                                <Option value="3">自主创新</Option> -->
-                            </Select>
-                        </FormItem>
+                        
 
                         <!-- <Row>
                             <Col span="12">
@@ -54,44 +68,64 @@
                                 </FormItem>
                             </Col>
                         </Row> -->  
-                       
-                        <FormItem label="状态" prop="userstory_status">
-                            <RadioGroup v-model="formValidate.userstory_status">
-                                <Radio v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
-                                <!-- <Radio label="1">提出</Radio>
-                                <Radio label="2">开发中</Radio>
-                                <Radio label="3">测试</Radio>
-                                <Radio label="4">上线</Radio> -->
-                            </RadioGroup>
-                        </FormItem>
 
-                        <FormItem label="优先级" prop="proi">
-                            <RadioGroup v-model="formValidate.proi">
-                                <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
-                                <!-- <Radio label="1">高</Radio>
-                                <Radio label="2">中</Radio>
-                                <Radio label="3">低</Radio> -->
-                               
-                            </RadioGroup>
-                        </FormItem>
+
+                        <Row>
+                            <Col span="12">
+                                <FormItem label="状态" prop="userstory_status">
+                                    <RadioGroup v-model="formValidate.userstory_status">
+                                        <Radio v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
+                                        <!-- <Radio label="1">提出</Radio>
+                                        <Radio label="2">开发中</Radio>
+                                        <Radio label="3">测试</Radio>
+                                        <Radio label="4">上线</Radio> -->
+                                    </RadioGroup>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                               <FormItem label="优先级" prop="proi">
+                                    <RadioGroup v-model="formValidate.proi">
+                                        <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
+                                        <!-- <Radio label="1">高</Radio>
+                                        <Radio label="2">中</Radio>
+                                        <Radio label="3">低</Radio> -->
+                                       
+                                    </RadioGroup>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                       
+                        
+
+                        
 
                         <FormItem label="故事描述">
-                            <Input v-model="formValidate.userstory_desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请填写故事描述"></Input>
+                            <Input v-model="formValidate.userstory_desc" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写故事描述"></Input>
                         </FormItem>
                     </div>
 
 
                     <h3 class="Title"><span>计划效率相关</span></h3>
                     <div class="fromBox">
-                        <FormItem label="所属迭代" prop="sprint">
-                            <Select clearable v-model="formValidate.sprint" placeholder="请选所属迭代">
-                                <Option v-for="(item , index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
-                            </Select>
-                        </FormItem>
 
-                        <FormItem label="工时(预计)" prop="manhour">
-                            <Input v-model="formValidate.manhour" placeholder="请填写工时(预计)" number style="width: 120px"></Input> 小时
-                        </FormItem>
+                        <Row>
+                            <Col span="12">
+                                <FormItem label="所属迭代" prop="sprint">
+                                    <Select clearable v-model="formValidate.sprint" placeholder="请选所属迭代">
+                                        <Option v-for="(item , index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                    </Select>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                               <FormItem label="工时(预计)" prop="manhour">
+                                    <Input v-model="formValidate.manhour" placeholder="请填写工时(预计)" number style="width: 120px"></Input> 小时
+                                </FormItem>
+                            </Col>
+                        </Row>
+
+                        
+
+                        
                     </div>
 
                     <h3 class="Title"><span>需求相关</span></h3>
@@ -341,6 +375,8 @@ export default {
             proiList:[],
             userstory_typeList:[],
             userstory_statusList:[],
+
+            chargerList:[],
         }
     },
     mounted(){
@@ -363,12 +399,11 @@ export default {
 
        
         if(this.$router.history.current.query.DATA){
-
-            console.log("this.$router.history.current.query.DATA",JSON.parse(this.$router.history.current.query.DATA))
-
-            this.getStoryEditFn(JSON.parse(this.$router.history.current.query.DATA))
-            this.storyGetSprintFn(storyGetSprint,ID,ID,JSON.parse(this.$router.history.current.query.DATA).prod_id)
-            this.storyGetReqFn(storyGetReq,ID,ID,JSON.parse(this.$router.history.current.query.DATA).prod_id);
+            
+            let _DATA = JSON.parse(this.$router.history.current.query.DATA)
+            this.getStoryEditFn(_DATA)
+            this.storyGetSprintFn(storyGetSprint,ID,ID,_DATA.prod_id)
+            this.storyGetReqFn(storyGetReq,ID,ID,_DATA.prod_id);
 
 
             //this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
@@ -377,29 +412,38 @@ export default {
 
             this.publishUserFn(publishUser);
 
+
+
         }else{
             this.$router.push('/product');
         }
     },
     methods:{
         publishUserFn(URL,params = {}){
-            Common.PublishUser(defaultAXIOS,this,URL,params)
+            
+            let dataJson = JSON.parse(this.$router.history.current.query.DATA)
+            Common.AddChargerMenu(this,"charger",{charger:dataJson.nick_name,nick_name:dataJson.charger});
+            this.formValidate.nick_name = "";
+            setTimeout(()=>{
+                this.formValidate.nick_name = dataJson.charger;
+            },1)
+            
+            //return Common.PublishUser(defaultAXIOS,this,URL,params)
         },
         storyGetConditionFn(URL,condition,prj_id){
-            return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","proi"]);
+            return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","proi","charger"]);
             //Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
         },
         storyGetReqFn(URL = "",id,prj_id,prod_id){
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
-                //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product get storyGetReq***response+++",response,myData,"======>");
 
 
                 
                 if(myData.data && myData.data.length){
-                     //value: 'New York',
-                //     label: '业务模块1'
+                    //value: 'New York',
+                    // label: '业务模块1'
                     let _tempObj = {};
                     for(let i=0;i<myData.data.length;i++){
                         _tempObj.value = myData.data[i].req_id+"";
@@ -584,6 +628,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .fromBox {
-    width: 50%;
+    width: 80%;
 }
 </style>

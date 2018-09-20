@@ -782,7 +782,7 @@ export default class Common extends Utils {
               let _OBJ = {};
               let _arr = [];
               for(let i=0;i<arr.length;i++){
-                _OBJ.label = (arr[i].value || arr[i].sprint_name || arr[i].nick_name)+"";
+                _OBJ.label = (arr[i].value || arr[i].sprint_name || arr[i].nick_name || arr[i].key)+"";
                 _OBJ.value = (arr[i].key || arr[i].sprint || arr[i].user_name)+"";
                 _arr.push(_OBJ);
                 _OBJ = {};
@@ -814,22 +814,40 @@ export default class Common extends Utils {
       });
       //
     }
+    //添加责任人下拉菜单
+    static AddChargerMenu(THIS,List,chargerObj){
+      
+      let _temp={label:chargerObj.charger,value:chargerObj.nick_name};
+      if(THIS[List+"List"].length){
+          let checkVal = THIS[List+"List"].findIndex((item)=>{
+              return item.value == _temp.value
+          })
+          if(checkVal == -1){THIS[List+"List"].push(_temp);} 
+      }else{
+          THIS[List+"List"].push(_temp)
+      }
+    }
 
     //添加默认负责人--不通用
     static PublishUser(FUN,that,URL,params = {}){
       //
-      FUN(URL,params,{timeout:5000,method:'get'}).then((response) => {
+      return FUN(URL,params,{timeout:5000,method:'get'}).then((response) => {
           let myData = response.data;
           console.log("<======【product publishUser get】***response+++",response,myData,"====>");
           if(myData && myData.user_name){
               that.formValidate.charger = myData.nick_name
               that.formValidate.nick_name = myData.user_name
+
+              return Promise.resolve({charger:myData.nick_name,nick_name:myData.user_name})
+
           }else{
               that.showError(URL+"_没有数据");
+              return Promise.reject(URL+"_没有数据");
           }
       }).catch( (error) => {
           console.log(error);
           that.showError(error);
+          return Promise.reject(error);
       });   
       //
     }

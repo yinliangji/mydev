@@ -75,14 +75,14 @@
 						            </Col>
 
 
-									<Col span="3" style="text-align: center"><!-- 负责人 --></Col>
+									<Col span="3" style="text-align: center">负责人</Col>
 						            <Col span="5">
-						                <!-- <FormItem >
+						                <FormItem >
 						                    <Select clearable v-model="formValidate.charger" placeholder="请选择负责人">
 						                    	
                                                 <Option v-for="(item,index) in chargerList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
-						                </FormItem> -->
+						                </FormItem>
 						            </Col>
 						            <Col span="3" style="text-align: center"><!-- 是否领导关心 --></Col>
 						            <Col span="5">

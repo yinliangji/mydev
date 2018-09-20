@@ -8,28 +8,43 @@
                 <Form ref="formValidate" class="formValidate">
                     <FormItem >
                         <Row class="serchInputBox">
-                            <Col span="3" style="text-align: center">需求项名称</Col>
-                            <Col span="4">
-                                <FormItem >
-                                    <Input clearable v-model="formValidate.req_name" placeholder="输入需求项名称"></Input>
-                                </FormItem>
+                            <Col span="20">
+                                <Row class="SerchBox">
+                                    <Col span="3" style="text-align: center">需求项名称</Col>
+                                    <Col span="9">
+                                        <FormItem >
+                                            <Input clearable v-model="formValidate.req_name" placeholder="输入需求项名称"></Input>
+                                        </FormItem>
+                                    </Col>
+                                    <Col span="3" style="text-align: center">需求项编号</Col>
+                                    <Col span="9">
+                                        <FormItem >
+                                            <Input clearable v-model="formValidate.req_id" placeholder="输入需求项编号"></Input>
+                                        </FormItem>
+                                    </Col>
+                                   <!--  <Col span="3" style="text-align: left" class="serchBtnBox">
+                                        <Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
+                                        <Button class="cancelSerchBtn" @click="cancelSerchAll">重填</Button>
+                                    </Col> -->
+                                    <!-- <Col span="3" style="text-align: center">提出人 </Col>
+                                    <Col span="4">
+                                       <FormItem >
+                                            <Input clearable v-model="formValidate.req_submitter" placeholder="输入提出人"></Input>
+                                        </FormItem>
+                                    </Col> -->
+
+
+                                    
+                                </Row>
                             </Col>
-                            <Col span="3" style="text-align: center">需求项编号</Col>
-                            <Col span="4">
-                                <FormItem >
-                                    <Input clearable v-model="formValidate.req_id" placeholder="输入需求项编号"></Input>
-                                </FormItem>
+                            <Col span="4" style="text-align: left" class="serchBtnBox">
+                                <Button type="primary" icon="ios-search" class="_serchBtn" @click="serchAll">
+                                    查询
+                                </Button>
+                                <Button class="_cancelSerchBtn" @click="cancelSerchAll">
+                                    重填
+                                </Button>
                             </Col>
-                            <Col span="3" style="text-align: left" class="serchBtnBox">
-                                <Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
-                                <Button class="cancelSerchBtn" @click="cancelSerchAll">重填</Button>
-                            </Col>
-                            <!-- <Col span="3" style="text-align: center">提出人 </Col>
-                            <Col span="4">
-                               <FormItem >
-                                    <Input clearable v-model="formValidate.req_submitter" placeholder="输入提出人"></Input>
-                                </FormItem>
-                            </Col> -->
                             
                         </Row>
                         <!--

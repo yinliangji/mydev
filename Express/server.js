@@ -180,8 +180,10 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             "userstory_id": 1,
             "userstory_name|5-8": /[a-zA-Z]/,
             "userstory_type|1-3": 1,
-            "charger": "@name",
-            "nick_name":"@cname",
+            "charger": "xiebei.zh",
+            "nick_name":"谢蓓",
+            //"charger": "@name",
+            //"nick_name":"@cname",
             "userstory_status|1-4": 1,
             //"sprint_id": "迭代1",
             "proi|1-3": 1,
@@ -927,6 +929,11 @@ let Condition = (val1 = 200, val2 = 1, val3 = 3) => {
            
             "key":7,
         },
+        {
+            "value":"谢蓓",
+           
+            "key":"xiebei.zh",
+        },
     ])
 }
 
@@ -968,6 +975,7 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
                 {"value":"黄永华","key":5,},
                 {"value":"来咧","key":6,},
                 {"value":"殷良骥","key":7,},
+                {"value":"谢蓓","key":"xiebei.zh",},
             ],
             learn_concern:[
                 {"value":"奇慧超","key":4,},

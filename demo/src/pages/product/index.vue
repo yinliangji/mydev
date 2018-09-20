@@ -8,26 +8,25 @@
 				<Form ref="formValidate" class="formValidate">
 			        <FormItem >
 						<Row class="serchInputBox">
-							<Col span="15">
+							<Col span="20">
 								<Row class="SerchBox">
-						        	<Col span="3" style="text-align: center">用户故事名称</Col>
-						            <Col span="5">
+						        	<Col span="2" style="text-align: center">故事名称</Col>
+						            <Col span="6">
 						                <FormItem >
 						                    <Input clearable v-model="formValidate.userstory_name" placeholder="输入用户故事名称"></Input>
 						                </FormItem>
 						            </Col>
-						            <Col span="3" style="text-align: center">故事编号</Col>
-						            <Col span="5">
+						            <Col span="2" style="text-align: center">故事编号</Col>
+						            <Col span="6">
 						                <FormItem >
 						                    <Input clearable v-model="formValidate.userstory_id" placeholder="输入故事编号"></Input>
 						                </FormItem>
 						            </Col>
 
-									<Col span="3" style="text-align: center">所属迭代</Col>
-						            <Col span="5">
+									<Col span="2" style="text-align: center">所属迭代</Col>
+						            <Col span="6">
 						                <FormItem >
-						                    <Select clearable v-model="formValidate.sprint" placeholder="请选择迭代">
-						                    	
+						                    <Select clearable filterable v-model="formValidate.sprint"  placeholder="请选择迭代">
                                                 <Option v-for="(item,index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
@@ -37,8 +36,8 @@
 						            
 						        </Row>
 						        <Row class="SerchBox"  v-if="isShowMoreShow">
-						        	<Col span="3" style="text-align: center">故事状态</Col>
-						            <Col span="5">
+						        	<Col span="2" style="text-align: center">故事状态</Col>
+						            <Col span="6">
 						                <FormItem >
 						                    <Select clearable v-model="formValidate.userstory_status" placeholder="请选择故事状态">
 						                    	
@@ -46,17 +45,16 @@
                                             </Select>
 						                </FormItem>
 						            </Col>
-						            <Col span="3" style="text-align: center">所属需求</Col>
-						            <Col span="5">
+						            <Col span="2" style="text-align: center">所属需求</Col>
+						            <Col span="6">
 						                <FormItem >
-						                    <Select clearable v-model="formValidate.req_id" placeholder="请选择所属需求">
-						                    	
+						                    <Select clearable filterable v-model="formValidate.req_id" placeholder="请选择所属需求">
 					                            <Option v-for="(item,index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
 					                        </Select>
 						                </FormItem>
 						            </Col>
-						            <Col span="3" style="text-align: center">优先级</Col>
-						            <Col span="5">
+						            <Col span="2" style="text-align: center">优先级</Col>
+						            <Col span="6">
 						                <FormItem >
 						                    <Select clearable v-model="formValidate.proi"  placeholder="请选择优先级">
 						                    	
@@ -67,8 +65,8 @@
 						        </Row>
 						        <Row class="SerchBox"  v-if="isShowMoreShow">
 						        	
-						            <Col span="3" style="text-align: center">故事类型</Col>
-						            <Col span="5">
+						            <Col span="2" style="text-align: center">故事类型</Col>
+						            <Col span="6">
 						                <FormItem >
                                             <Select clearable v-model="formValidate.userstory_type" placeholder="请选择故事类型">
                                                 
@@ -78,17 +76,16 @@
                                         </FormItem>
 						            </Col>
 
-									<Col span="3" style="text-align: center"><!-- 负责人 --></Col>
-						            <Col span="5">
-						                <!-- <FormItem >
-						                    <Select clearable v-model="formValidate.charger" placeholder="请选择负责人">
-						                    	
+									<Col span="2" style="text-align: center">负责人</Col>
+						            <Col span="6">
+						                <FormItem >
+						                    <Select clearable filterable v-model="formValidate.charger" placeholder="请选择负责人">
                                                 <Option v-for="(item,index) in chargerList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
-						                </FormItem> -->
+						                </FormItem>
 						            </Col>
-						            <Col span="3" style="text-align: center"><!-- 是否领导关心 --></Col>
-						            <Col span="5">
+						            <Col span="2" style="text-align: center"><!-- 是否领导关心 --></Col>
+						            <Col span="6">
 						                <!-- <FormItem >
 						                    <Select clearable v-model="formValidate.learn_concern" placeholder="请选择是否领导关心">
 						                    	
@@ -99,7 +96,7 @@
 
 						        </Row>
 							</Col>
-							<Col span="9" style="text-align: left" class="serchBtnBox">
+							<Col span="4" style="text-align: left" class="serchBtnBox">
 								<Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
 								<Button class="cancelSerchBtn" @click="cancelSerchAll">重填</Button>
 							</Col>

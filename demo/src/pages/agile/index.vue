@@ -7,22 +7,22 @@
 
 			        <FormItem >
 			            <Row class="serchInputBox">
-                            <Col span="15">
+                            <Col span="20">
                                 <Row class="SerchBox">
-                                    <Col span="3" style="text-align: center">项目名称</Col>
-                                    <Col span="5">
+                                    <Col span="2" style="text-align: center">项目名称</Col>
+                                    <Col span="6">
                                         <FormItem >
                                             <Input clearable v-model="formValidate.prj_name" placeholder="输入项目名称"></Input>
                                         </FormItem>
                                     </Col>
-                                    <Col span="3" style="text-align: center">项目编号</Col>
-                                    <Col span="5">
+                                    <Col span="2" style="text-align: center">项目编号</Col>
+                                    <Col span="6">
                                         <FormItem >
                                             <Input clearable v-model="formValidate.prj_id" placeholder="输入项目编号"></Input>
                                         </FormItem>
                                     </Col>
-                                    <Col span="3" style="text-align: center">开始时间</Col>
-                                    <Col span="5">
+                                    <Col span="2" style="text-align: center">开始时间</Col>
+                                    <Col span="6">
                                         <FormItem >
                                             <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期" v-model="formValidate.start_time"></DatePicker>
                                         </FormItem>
@@ -32,14 +32,14 @@
                               
 
                                 <Row class="SerchBox" v-if="isShowMoreShow">
-                                    <Col span="3" style="text-align: center">结束时间</Col>
-                                    <Col span="5">
+                                    <Col span="2" style="text-align: center">结束时间</Col>
+                                    <Col span="6">
                                         <FormItem >
                                             <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择结束日期" v-model="formValidate.end_time"></DatePicker>
                                         </FormItem>
                                     </Col>
-                                    <Col span="3" style="text-align: center"><!-- 项目经理 --></Col>
-                                    <Col span="5">
+                                    <Col span="2" style="text-align: center"><!-- 项目经理 --></Col>
+                                    <Col span="6">
                                         <!-- <FormItem >
                                             <Select clearable v-model="formValidate.icdp_projManager" placeholder="请选择项目经理">
                                                 
@@ -48,8 +48,8 @@
                                         </FormItem> -->
                                     </Col>
                                     
-                                    <Col span="3" style="text-align: center"><!-- 开发人员 --></Col>
-                                    <Col span="5">
+                                    <Col span="2" style="text-align: center"><!-- 开发人员 --></Col>
+                                    <Col span="6">
                                         <!-- <FormItem >
                                             <Select clearable v-model="formValidate.icdp_devTeam" placeholder="请选择开发人员">
                                                
@@ -87,7 +87,7 @@
                                 </Row>  -->
 
                             </Col>
-                            <Col span="9" style="text-align: left" class="serchBtnBox">
+                            <Col span="4" style="text-align: left" class="serchBtnBox">
                                 <Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
                                 <Button class="cancelSerchBtn" @click="cancelSerchAll">重填</Button>
                             </Col>

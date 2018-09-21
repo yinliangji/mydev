@@ -157,6 +157,18 @@
 			</div>
 		</Card>
 		<!-- <ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  /> -->
+		<Modal v-model="cardpop" width="500" @on-cancel="cardpopClose">
+            <p slot="header" style="color:#f60;text-align:center">
+                <Icon type="information-circled"></Icon>
+                <span>还有任务未完成</span>
+            </p>
+            <div class="cardpoplist">
+                <p v-for="(item,index) in cardpopList" :key="index">还有【{{item.task_name}}】任务未完成，还在【{{item.task_statusCN}}】阶段</p>
+            </div>
+            <div slot="footer">
+                <Button type="error" size="large" long  @click="cardpopEnter">确认</Button>
+            </div>
+        </Modal>
 	</div>
 </template>
 <script>
@@ -687,6 +699,9 @@ export default {
             cardListBase:[],
             statusListBase:[],
             groupList:[],
+
+            cardpop:false,
+            cardpopList:[],
 		}
 	},
 	components: {
@@ -728,27 +743,30 @@ export default {
 		
 	},
 	methods:{
+		cardpopClose(){
+			this.cardpopList = [];
+		},
+		cardpopEnter(){
+			this.cardpop = false;
+		},
 		getInfoFn(ID){
 			
-	    this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
-        	this.formValidate.sprint = sprint+"";
+		    this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
+	        	this.formValidate.sprint = sprint+"";
 
-        	
-        	
+	        	
+	        	
 
-        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-        	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-        	this.tableDAtaPageCurrent = 1;
-        },(error)=>{
-        	console.log(error);
-            this.showError(error);
-            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
-  			this.storyGetKanBanFn(storyGetKanBan,ID);
-  			this.tableDAtaPageCurrent = 1;
-        })
-
-	     
-
+	        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+	        	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+	        	this.tableDAtaPageCurrent = 1;
+	        },(error)=>{
+	        	console.log(error);
+	            this.showError(error);
+	            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
+	  			this.storyGetKanBanFn(storyGetKanBan,ID);
+	  			this.tableDAtaPageCurrent = 1;
+	        })
 
 		},
 		getDefSpringFn(URL,ID){
@@ -822,9 +840,35 @@ export default {
 			defaultAXIOS(storySetChange,{id:_params.ID,userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======agile storySetChange***response+++",response,myData,"======>");
-                if(response.status != 200){
-                	this.showError("返回结果错误");
+                if(myData.status.indexOf("success") == -1){
+                	this.showError(storySetChange+"|返回结果错误");
+                }else{
+                	this.cardpopList = [];
+                	
+                	if(myData.no_complete_task_list && Array.isArray(myData.no_complete_task_list) && myData.no_complete_task_list.length){
+                		this.cardpop = true;
+                		this.cardpopList = myData.no_complete_task_list;
+                		let statusFn = (Num)=>{
+                			let Status = "未知";
+                			if(Num == 1){
+                				Status = "未开始";
+                			}else if(Num == 2){
+                				Status = "设计开发";
+                			}else if(Num == 3){
+                				Status = "测试";
+                			}else if(Num == 4){
+                				Status = "发布";
+                			}else if(Num == 5){
+                				Status = "上线";
+                			}
+                			return Status
+                		}
+                		this.cardpopList.forEach((item)=>{
+                			item.task_statusCN = statusFn(item.task_status);
+                		})
+                	}
                 }
+                
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);
@@ -1155,6 +1199,13 @@ span.low {
 	cursor: pointer;
 }
 
-
+.cardpoplist{
+	text-align:left
+}
+.cardpoplist p {
+	border-bottom: #ccc solid 1px;
+	padding-top:0.5em;
+	padding-bottom:0.5em;
+}
 </style>
 

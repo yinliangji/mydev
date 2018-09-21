@@ -1,6 +1,15 @@
 <template>
-  <div :id="item.userId" @click="itemClick(item)" class="card-wrapper"
-        :groupId="item.groupId">
+  <div 
+    :id="item.userId" 
+    @click="itemClick(item)" 
+    class="card-wrapper"
+    
+    :groupId="item.groupId"
+    :state="item.taskStatus"
+    :taskid="item.taskId"
+    :detailid="item.detail_id"
+
+    >
       <div class="card-wrap">
           <Card :style="{'background':item.bgcolor}">
             <div class="circle-wrapper">
@@ -90,8 +99,8 @@
 
           },
           onEnd: function(evt){
-          console.log(evt);
-            //EventBus.$emit('moveEnd', {evt,item: vm.item});
+            console.log(evt);
+            EventBus.$emit('moveEnd', {evt/*,item: vm.item*/});
           }
         });
 

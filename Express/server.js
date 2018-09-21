@@ -4,7 +4,7 @@ let app = express(); //实例化express
 let bodyParser = require('body-parser'); //body-parser中间件来解析请求体
 let myNumber = false;
 let allowCrossDomain = function(req, res, next) {
-    console.log(res.req)
+    //console.log(res.req)
     //res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Origin', ''+res.req.headers.origin);
     res.header('Access-Control-Allow-Credentials', true);
@@ -1098,11 +1098,52 @@ app.all('/auth/getPermissionfromUser', function(req, res) {
     res.end()
 });
 
+
+
+let changeUserstoryStatus = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "changeUserstoryStatus xxxxxxx",
+        "no_complete_task_list|0-5":[
+            {
+                charger:"mahuachao.sc",
+                comment:"<pre></pre>",
+                create_time:"2018-09-18",
+                design_desc:"<pre></pre>",
+                fin_time:null,
+                "id|+1":1,
+                nick_name:"麻花超-中国建设银行",
+                "prj_id|+1":401,
+                relay_module_rec:"<pre></pre>",
+                "sprint_id|+1":301,
+                task_desc:"<pre></pre>",
+                task_id:"TS-PJ800010-8",
+                task_name:"@title",
+                task_status:1,
+                task_type:1,
+                test_req:"<pre></pre>",
+                "us_id|+1":501,
+            }
+        ],
+        "__value2__": val1,
+        "__value2__": val2,
+        "__value3__": val3,
+        
+    })
+}
+
 app.all('/userstory/changeUserstoryStatus/', function(req, res) {
-    let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
-    console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
-    res.json({});
+    let resVal = changeUserstoryStatus(req.body.myStatus, req.body.page, req.body.pageline);
+    //console.log("resVal==>", resVal);
+    console.log("req.body==>", req.body);
+    console.log("req==userstory/changeUserstoryStatus==>", req._parsedUrl.query);
+    if(req._parsedUrl.query.indexOf("userstory_status=4") != -1){
+        res.json(changeUserstoryStatus(req.body.myStatus, req.body.page, req.body.pageline));
+    }else{
+        res.json({status:"success",no_complete_task_list:[]});
+    }
+    
+    
     res.end()
 });
 

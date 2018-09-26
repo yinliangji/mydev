@@ -65,6 +65,12 @@ CommonRest.restUrl = {
     "fileDelete": process.env.BASE_URL + "/uploadfiles/delete_file/",
     /****express 敏捷项目详情文件删除 get****/
 
+    "logicSystem": process.env.BASE_URL + "/system/loglist/",
+    /****express 敏捷项目逻辑子系统 get****/
+
+    "phySystem": process.env.BASE_URL + "/system/phylist/",
+    /****express 敏捷项目物理子系统 get****/
+
     /*****************************************/
 
     "storyAll": process.env.BASE_URL + "/userstory/listUserstory/",

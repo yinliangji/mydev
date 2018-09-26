@@ -321,15 +321,15 @@ h3.Title:before {
     font-size: 14px;
     border-bottom:1px #aae5d1 solid;
 
-    background: #19b16b;
+    background: #01babc;
     color: white;
 }
 .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab-active {
     position: relative;
     z-index: 10;
     border-color: #aae5d1;
-    border-top:#19b16b solid 2px;
-    color: #19b16b;
+    border-top:#01babc solid 2px;
+    color: #01babc;
     background: white;
     border-bottom-width: 0;
 }

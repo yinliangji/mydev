@@ -394,6 +394,7 @@ export default class Common extends Utils {
 
     //给输入框本身加已选择的数组temp2 --不通用
     static inputArr2(_this,val){
+
       //
       let ArrFn = (obj,arr)=>{
         let _OBJ = {}
@@ -435,11 +436,18 @@ export default class Common extends Utils {
             let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel", ""));
             let exec = _Common.throttle(
               (value, THIS) => {
-                let _URL = _projectAddGroup;
+                let _URL;
+                let _param = {};
+
+                if(curVal[_num].groupName){
+                  _URL = curVal[_num].groupName;
+                  _param = {name: value,}
+                }else {
+                  _URL = _projectAddGroup;
+                  _param = {userName: value,}
+                }
                 _this.inputLoad = true;
-                _this.projectGroupFn2(_URL, {
-                  userName: value,
-                }, _num, THIS);
+                _this.projectGroupFn2(_URL,_param, _num,THIS);
               },
               this,
               1500,

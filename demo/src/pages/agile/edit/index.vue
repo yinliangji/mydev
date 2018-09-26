@@ -81,6 +81,77 @@
 
                        
                     </div>
+
+                    
+                    <h3 class="Title"><span>关联子系统</span></h3>
+                    <div class="fromBox fromBox2">
+                        <div class="newAddGroup">
+                            <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index<2">
+                                <Col span="20">
+                                    <FormItem 
+                                        :label="myItem.myLabel" 
+                                        :prop="'AddGroupList.'+index+'.group'"
+                                        :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                                         
+                                        :ref="myItem.myRef+index" 
+                                        :class="myItem.myRef+index"
+                                        >
+                                        <div :id="'roleBox_'+index">
+                                            <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" closable @on-close="roleClose">
+                                                {{ item.label}}
+                                            </Tag>
+                                            <Button 
+                                                icon="ios-plus-empty" 
+                                                type="dashed" 
+                                                size="small" 
+                                                @click="addRole(index)"
+                                                >
+                                                添加系统
+                                            </Button>
+                                            <Modal 
+                                                :ref="myItem.myReftemp+index" 
+                                                :class="myItem.myReftemp+index" 
+                                                v-model="formValidate.AddGroupList[index].modaAdd" 
+                                                :title="'添加'+formValidate.AddGroupList[index].myLabel+''" 
+                                                @on-ok="submitRole(index)"  
+                                                ok-text="添加"
+                                                @on-cancel="cancelRole(index)"
+                                                >
+                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
+                                                    <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
+                                                        {{ item.label }}
+                                                    </Option>
+                                                </Select>
+                                            </Modal>
+                                        </div>
+                                    </FormItem>
+
+                                    <!--
+                                    <FormItem 
+                                        :label="myItem.myLabel" 
+                                        :prop="'AddGroupList.'+index+'.group'"
+                                        :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                                         
+                                        :ref="myItem.myRef+index" 
+                                        :class="myItem.myRef+index"
+                                        >
+                                        <Select v-model="myItem.group" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
+                                            <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2">
+                                                {{ item.label }}
+                                            </Option>
+                                        </Select>
+                                    </FormItem>
+                                    -->
+
+                                </Col>
+                                <Col span="1">&nbsp;</Col>
+                                <Col span="3">
+                                    <Button v-if="myItem.delBtn"  type="error" long  @click="groupDel(index)">删除角色</Button>
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
+
 					<h3 class="Title"><span>编辑成员信息</span></h3>
 
 					
@@ -92,7 +163,7 @@
                             <Button type="success" @click="addpart">添加角色</Button>
                         </div>
                         <div class="newAddGroup">
-                            <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index">
+                            <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index>1">
                                 <Col span="20">
                                     <FormItem 
                                         :label="myItem.myLabel" 
@@ -216,7 +287,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail,listModule} = Common.restUrl;
+const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail,listModule,logicSystem,phySystem} = Common.restUrl;
 import Store from '@/vuex/store'
 
 const validateDate = (rule, value, callback) => {
@@ -648,6 +719,32 @@ export default {
                 let myData = response.data;
                 console.log("<======【agile edit get】***response+++",response,myData,"====>");
                 let _temp = false;
+                let _log = {
+                    myRef:"selfRef",
+                    group:[],
+                    groupList:[],
+                    myLabel:"逻辑子系统",
+                    delBtn:false,
+                    groupName:logicSystem,
+                    required:false,
+                    modaAdd:false,//修改添加角色
+                    grouptemp:[],//修改添加角色
+                    groupListtemp: [],//修改添加角色
+                    myReftemp: "selfRefRole",//修改添加角色
+                }
+                let phy = {
+                    myRef:"selfRef",
+                    group:[],
+                    groupList:[],
+                    myLabel:"物理子系统",
+                    delBtn:false,
+                    groupName:phySystem,
+                    required:false,
+                    modaAdd:false,//修改添加角色
+                    grouptemp:[],//修改添加角色
+                    groupListtemp: [],//修改添加角色
+                    myReftemp: "selfRefRole",//修改添加角色
+                }
                 for(var I in this.formValidate){
                     _temp = myData.data[I]+"";
                     if(I == "AddGroupList"){
@@ -659,6 +756,41 @@ export default {
                     }
 
                 }
+                let addsystem = (_obj,_myData)=>{
+                    if(_myData && Array.isArray(_myData)){
+                        _obj.groupList = _myData;
+                        if(_myData.length){
+                            _obj.group = _myData.map((item)=>{
+                                return item.value
+                            })
+                        }
+                        
+                        this.formValidate.AddGroupList.unshift(_obj)
+                    }
+                }
+                addsystem(phy,myData.phySystem)
+                addsystem(_log,myData.logicSystem)
+
+                
+
+                
+                let checkSystem = (arr,lab)=>{
+                    let check = arr.findIndex(
+                        (item)=>item.myLabel === lab
+                    )
+                    if(check != -1){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                    
+                }
+                setTimeout(()=>{
+                    !checkSystem(this.formValidate.AddGroupList,"逻辑子系统") && this.formValidate.AddGroupList.unshift(_log);
+                    !checkSystem(this.formValidate.AddGroupList,"物理子系统") && this.formValidate.AddGroupList.unshift(phy);
+                },1)
+
+                
 
                 this.formValidate.prj_type = this.formValidate.prj_type+"";
 
@@ -816,8 +948,17 @@ export default {
             let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
 
-            //let _proj_role = JSON.stringify(Common.objInArr(this.formValidate.AddGroupList));
-            let _proj_role = JSON.stringify(Common.CheeckRoleVal(this,Common.objInArr(this.formValidate.AddGroupList)));
+            //let _proj_role = JSON.stringify(Common.CheeckRoleVal(this,Common.objInArr(this.formValidate.AddGroupList)));
+
+            let _proj_role_ = Common.CheeckRoleVal(this,Common.objInArr(this.formValidate.AddGroupList));
+            let _System = _proj_role_.splice(0, 2);
+            //console.log(_System[0].member,_System[1].member)
+            
+            let _logicSystem = JSON.stringify(_System[0].member.map((item)=>{return item.value}));
+            let _phySystem = JSON.stringify(_System[1].member.map((item)=>{return item.value}));
+            let _proj_role = JSON.stringify(_proj_role_);
+
+
 
             let _pid = this.formValidate.pid ? this.formValidate.pid : ""
 
@@ -837,6 +978,9 @@ export default {
                 prj_id: this.formValidate.prj_id,
                 proj_role:_proj_role,
                 pid:_pid,
+
+                logicSystem:_logicSystem,//子系统
+                phySystem:_phySystem,//子系统
 
 
                

@@ -784,6 +784,52 @@ app.all('/agile/getUsers/', function(req, res) {
     res.end()
 });
 
+app.all('/system/loglist/', function(req, res) {
+
+    let resVal
+    let Json
+    if(trueorfalse == 0){
+        Json =  GroupList(req.body.myStatus)   
+        resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+    }else if(trueorfalse == 1){
+        Json =  _GroupList(req.body.myStatus) 
+        resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+
+    }else{
+        Json =  GroupList_(req.body.myStatus)   
+        resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+    }
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
+    console.log(trueorfalse)
+    res.json(Json);
+    res.end()
+});
+
+app.all('/system/phylist/', function(req, res) {
+
+    let resVal
+    let Json
+    if(trueorfalse == 0){
+        Json =  GroupList(req.body.myStatus)   
+        resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+    }else if(trueorfalse == 1){
+        Json =  _GroupList(req.body.myStatus) 
+        resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+
+    }else{
+        Json =  GroupList_(req.body.myStatus)   
+        resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+    }
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
+    console.log(trueorfalse)
+    res.json(Json);
+    res.end()
+});
+
 
 
 app.all('/project/allgroup/', function(req, res) {
@@ -1748,9 +1794,22 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                 ],
 
             },
-            
-           
-                
+        ],
+        logicSystem:[
+            {
+                value: 'Canberra',
+                label: 'Canberra人6'
+            },
+            {
+                value: 'London',
+                label: 'London人2'
+            },
+        ],
+        phySystem:[
+            {
+                value: 'London',
+                label: 'London人2'
+            },
         ],
     })
 }

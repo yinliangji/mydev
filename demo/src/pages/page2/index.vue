@@ -28,9 +28,7 @@ export default {
 			(data)=>{
 				console.log("data1",data);
 				return this.runAsync2()
-			}
-			,
-			(err)=>{
+			},(err)=>{
 				console.log("err1",err);
 				Promise.break
 			}
@@ -39,9 +37,7 @@ export default {
 			(data)=>{
 				console.log("data2",data);
 				return this.runAsync3()
-			}
-			,
-			(err)=>{
+			},(err)=>{
 				console.log("err2",err);
 				Promise.break
 			}
@@ -49,9 +45,7 @@ export default {
 		.then(
 			(data)=>{
 				console.log("data3",data);
-			}
-			,
-			(err)=>{
+			},(err)=>{
 				console.log("err3",err);
 			}
 		)

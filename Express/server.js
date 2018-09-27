@@ -228,8 +228,8 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             "__value3__pageline": val3,
 
         }],
-        "page_rows|3-9": 3,
-        "per_page|3-9": 3,
+        "page_rows|9-16": 3,
+        "per_page|9-16": 3,
     })
 }
 

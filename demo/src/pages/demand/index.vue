@@ -169,6 +169,17 @@ export default {
                     // }
                 },
                 {
+                    title: '需求类型',
+                    key: 'prj_type',
+                    align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'span',
+                            Common.PrjTypeFn(params.row.prj_type)
+                        );
+                    }
+                },
+                {
                     title: '提出部门',
                     key: 'req_submitter',
                     align: 'center',

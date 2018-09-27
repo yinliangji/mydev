@@ -272,7 +272,7 @@ const router = new Router({
             name: 'test',
             components: {
                 Cont: resolve => {
-                    require(["../pages/test/test"], resolve)
+                    require(["../pages/test/"], resolve)
                 },
                 Aside: resolve => {
                     require(["../layout/sider/sider_all"], resolve)
@@ -283,10 +283,8 @@ const router = new Router({
           path: '/page1',
           name:'Page1',
           components: {
-            Cont:resolve => {require(["../pages/page1/"], resolve)}
-          },
-          Aside: resolve => {
-                require(["../layout/sider/sider_all"], resolve)
+                Cont:resolve => {require(["../pages/page1/"], resolve)},
+                Aside: resolve => {require(["../layout/sider/sider_all"], resolve)},
             }
         },
         {

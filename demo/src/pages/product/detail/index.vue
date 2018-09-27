@@ -237,6 +237,17 @@ export default {
         }
     },
     mounted(){
+    	let allSession = Common.GetSession("userstorySerch") ? JSON.parse(Common.GetSession("userstorySerch")) : {};
+    	allSession.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent") : 1;
+    	Common.SetSession("allSession",JSON.stringify(allSession));
+
+    	Common.RemoveSession("tableDAtaPageCurrent");
+    	Common.RemoveSession("userstorySerch");
+
+    	
+
+    	
+
     	this.getPermissionFn(getPermission)
     	let detailID = Common.GETdetail_id(this,Common)
     	let ID = Common.GETID(this,Common)

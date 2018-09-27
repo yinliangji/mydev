@@ -522,6 +522,11 @@ export default class Common extends Utils {
       _Common.setCookie(name,value);
       localStorage.setItem(name,value);
     }
+    //获取Storage和Cookie--不通用
+    static getStorageAndCookie(that,_Common,name){
+      let value = getSCFn(that,_Common,name);
+      return value;
+    }
 
     //获取id--不通用
     static GETID(that,_Common){
@@ -862,27 +867,38 @@ export default class Common extends Utils {
 
     //获取权限--不通用
     static GetPermission(FUN,that,URL,params = {}){
-      //
-      FUN(URL,{},{timeout:20000,method:'get'}).then((response) => {
-          let myData = response.data;
-          console.log("<======agile getPermission***response+++",response,myData,"======>");
-          if(myData.prj_permission && myData.prj_permission.length){
-              that.prj_permission = myData.prj_permission;
-              that.identity = myData.identity
-          }else if(myData.permission && myData.permission.length){
-              that.prj_permission = myData.permission;
-              that.identity = myData.identity
-          }
-          else{
-              that.showError("权限不足，不能有任何动作");
-          }
-          
-          
-      }).catch( (error) => {
-          console.log(error);
-          that.showError(error);
-      });
-      //
+      
+      if(timer){clearInterval(timer)}
+      let time = 0;
+      let timer = setInterval(()=>{
+
+        if(super.getCookie("username")){
+          clearInterval(timer);
+          //
+          FUN(URL,{},{timeout:20000,method:'get'}).then((response) => {
+              let myData = response.data;
+              console.log("<======agile getPermission***response+++",response,myData,"======>");
+              if(myData.prj_permission && myData.prj_permission.length){
+                  that.prj_permission = myData.prj_permission;
+                  that.identity = myData.identity
+              }else if(myData.permission && myData.permission.length){
+                  that.prj_permission = myData.permission;
+                  that.identity = myData.identity
+              }
+              else{
+                  that.showError("权限不足，不能有任何动作");
+              }
+          }).catch( (error) => {
+              console.log(error);
+              that.showError(error);
+          });
+          //
+        }else if(time > 60){
+          toLoginPage();
+        }
+        time ++
+      },500)
+      
     }
 
     static returnDelArr(arr,arrList){
@@ -894,7 +910,7 @@ export default class Common extends Utils {
         }
         return arrList
     }
-
+    //翻译优先级--不通用
     static ProiFn(N,STR=""){
       let Lable = "无"
       if(this[STR+"List"] && this[STR+"List"].length){
@@ -916,7 +932,7 @@ export default class Common extends Utils {
       }
       return Lable;
     }
-
+    //翻译优先级颜色--不通用
     static ProiColorFn(N,STR=""){
       let Lable = "#dddee1"
       if(this[STR+"List"] && this[STR+"List"].length){
@@ -938,7 +954,7 @@ export default class Common extends Utils {
       }
       return Lable;
     }
-
+    //翻译故事类型--不通用
     static TypeFn(N,STR=""){
       let Lable = "未知"
       if(this[STR+"List"] && this[STR+"List"].length){
@@ -960,7 +976,7 @@ export default class Common extends Utils {
       }
       return Lable;
     }
-
+    //翻译故事状态--不通用
     static StatusFn(N,STR=""){
 
       let Lable = "未知"
@@ -985,7 +1001,7 @@ export default class Common extends Utils {
       }
       return Lable;
     }
-
+    //翻译状态颜色--不通用
     static StatusColorFn(N,STR=""){
       let Lable = "#1c2438"
       if(this[STR+"List"] && this[STR+"List"].length){
@@ -1009,6 +1025,22 @@ export default class Common extends Utils {
       }
       return Lable;
     }
+    //翻译需求类型--不通用
+    static PrjTypeFn(STR=""){
+      let Lable = "未知"
+      if(STR){
+        if(STR == 1){
+          Lable = "立研"
+        }else if(STR == 2){
+          Lable = "自研"
+        }
+      }else{
+        return Lable;
+      }
+      return Lable;
+      
+    }
+
     //角色添加弹出--不通用
     static CancelRole(that,i){
       let List = that.formValidate.AddGroupList;
@@ -1109,6 +1141,24 @@ export default class Common extends Utils {
       return fileterStr2(STR)
     }
 
+    static SetSession(Key,Value){
+      return sessionStorage.setItem(Key,Value);
+    }
+    static GetSession(Key){
+      return sessionStorage.getItem(Key);
+    }
+    static RemoveSession(Key){
+      sessionStorage.removeItem(Key);
+    }
+    static ClearSession(Key){
+      sessionStorage.clear();
+    }
+    static LengthSession(){
+      return sessionStorage.length;
+    }
+
+    
+
 
 
 }
@@ -1154,4 +1204,14 @@ function getSCFn(that,_Common,name){
   }
   return result
 
+}
+function toLoginPage(){
+  let HostName = document.location.hostname;
+  if(HostName == "128.196.63.30"){
+    window.location.href="http://128.192.184.4:8020/icdp?apptype=app03"
+  }else if(HostName == "128.196.0.127"){
+    window.location.href="http://128.194.224.146:8000/icdp?apptype=app03"
+  }else{
+    window.location.href="http://127.0.0.1:1000/"
+  }
 }

@@ -35,6 +35,21 @@
 				<Icon type="clipboard"></Icon>
 				<span>项目概览</span>
 			</MenuItem>
+			<MenuItem name="1-8">
+				<router-link  to="/test" />
+				<Icon type="ios-navigate"></Icon>
+				<span>test</span>
+			</MenuItem>
+			<MenuItem name="1-9">
+				<router-link  to="/page1" />
+				<Icon type="ios-navigate"></Icon>
+				<span>page1</span>
+			</MenuItem>
+			<MenuItem name="1-10">
+				<router-link  to="/page2" />
+				<Icon type="ios-navigate"></Icon>
+				<span>page2</span>
+			</MenuItem>
 	</aside>
 </template>
 <script>

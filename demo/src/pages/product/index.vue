@@ -188,7 +188,20 @@ export default {
 	        }else{
 	        	this.currentView = "developList";
 	        }
-		}
+		},
+		formValidate: {
+            handler(val, oldVal) {
+            	Common.SetSession("userstorySerch",JSON.stringify(val))
+                // for(let I in val){
+                // 	Common.SetSession(I,val[I]);
+                // }
+
+            },
+            deep: true
+        },
+        tableDAtaPageCurrent(val, oldVal){
+        	Common.SetSession("tableDAtaPageCurrent",val);
+        },
 	},
 	beforecreated(){
         console.log("product--beforecreated-------",this.addtest)
@@ -203,6 +216,21 @@ export default {
         }else{
         	this.currentView = "developList";
         }
+
+        if(Common.GetSession("allSession")){
+        	let _allSession = JSON.parse(Common.GetSession("allSession"));
+
+        	for(let I in this.formValidate){
+        		if(I != "sprint"){
+        			this.formValidate[I] = _allSession[I]
+        		}
+        	}
+        	alert(_allSession.tableDAtaPageCurrent - 0)
+
+        	this.tableDAtaPageCurrent =_allSession.tableDAtaPageCurrent - 0;
+        	
+        }
+
     },
     beforeUpdate(){
         console.log("product--beforeUpdate-------",this.addtest)
@@ -212,8 +240,6 @@ export default {
         if(this.addtest){
             this.tabRowAddFn()
         }
-
-
     },
 	data() {
 		return {
@@ -722,11 +748,9 @@ export default {
     },
 
 	mounted(){
+		Common.RemoveSession("allSession");
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
-		
 		this.getPermissionFn(getPermission);
-
-
 		this.getInfoFn(ID);
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
 
@@ -1051,20 +1075,11 @@ export default {
             });
 
 		},
-		changeCurrentPage(i) {
-			let ID = this.getID()
-            //this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID)
-            this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-            this.tableDAtaPageCurrent = i;
-        },
-        changePageSize(i) {
-        },
-        showError(ERR){
-            Common.ErrorShow(ERR,this);
-        },
+		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
 
 
-        tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
+
+
             defaultAXIOS(URL,{page,limit,data,id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
@@ -1080,6 +1095,20 @@ export default {
                 this.showError(error);
             });
         },
+		changeCurrentPage(i) {
+			let ID = this.getID()
+            //this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID)
+            this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+            this.tableDAtaPageCurrent = i;
+        },
+        changePageSize(i) {
+        },
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
+        },
+
+
+        
 		
 
 		tabRowAddFn(){

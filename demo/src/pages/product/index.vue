@@ -204,10 +204,10 @@ export default {
         },
 	},
 	beforecreated(){
-        console.log("product--beforecreated-------",this.addtest)
+        console.log("product--beforecreated-------",this.formValidate)
     },
     created(){
-        console.log("product--created-------",this.addtest)
+        
         if(this.addtest){
             this.tabRowAddFn()
         }
@@ -225,18 +225,23 @@ export default {
         			this.formValidate[I] = _allSession[I]
         		}
         	}
-        	alert(_allSession.tableDAtaPageCurrent - 0)
-
         	this.tableDAtaPageCurrent =_allSession.tableDAtaPageCurrent - 0;
-        	
         }
+
+        if(this.formValidate.userstory_status || this.formValidate.req_id || this.formValidate.proi || this.formValidate.userstory_type || this.formValidate.charger){
+        	this.isShowMoreShow = true;	
+        }else{
+        	this.isShowMoreShow = false;
+        }
+
+        console.log("product--created-------",this.formValidate)
 
     },
     beforeUpdate(){
-        console.log("product--beforeUpdate-------",this.addtest)
+        console.log("product--beforeUpdate-------",this.formValidate)
     },
     updated(){
-        console.log("product--updated-------",this.addtest)
+        console.log("product--updated-------",this.formValidate)
         if(this.addtest){
             this.tabRowAddFn()
         }
@@ -783,13 +788,19 @@ export default {
 
 	        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
 	        	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-	        	this.tableDAtaPageCurrent = 1;
+	        	this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent")-0 : 1;
+	        	
+	        	
+
+
+
+
 	        },(error)=>{
 	        	console.log(error);
 	            this.showError(error);
 	            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
 	  			this.storyGetKanBanFn(storyGetKanBan,ID);
-	  			this.tableDAtaPageCurrent = 1;
+	  			this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent")-0 : 1;
 	        })
 
 		},
@@ -955,7 +966,16 @@ export default {
 		            Common.setStorageAndCookie(Common,'prj_id',DATA.prj_id);
 
 			    }
+			    this.tableDAtaPageCurrent = 1;
+			    for(let I in this.formValidate){
+			    	if(I != "sprint"){
+			    		this.formValidate[I] = "";
+			    	}
+			    }
 			    this.getInfoFn(ID);
+
+
+
 			}).catch( (error) => {
 			    console.log(error);
 			    this.showError(error);
@@ -1083,7 +1103,7 @@ export default {
             defaultAXIOS(URL,{page,limit,data,id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("<======product***response+++",response,myData.list,"======>");
+                console.log("<======product***response+++",response,myData,"======>");
                 this.tableData = myData.rows;
                 this.tableDAtaTatol = myData.page_rows;
 
@@ -1149,9 +1169,11 @@ export default {
             this.tableDataRow = false;
 		},
 		goAddDevelopmentFn (index) {
+			Common.DelectUserstorySession(Common)
             this.$router.push({path: '/development/add', query: {board: true,myid:this.tableData[index].id}})
         },
 		goDevelopmentFn (index) {
+			Common.DelectUserstorySession(Common)
             this.$router.push({path: '/development', query: {board: true,us_name:this.tableData[index].id}})
         },
 		goProductDetailFn (index) {

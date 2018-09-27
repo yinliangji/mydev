@@ -7,6 +7,7 @@
 	</Sider>
 </template>
 <script>
+import Common from '@/Common';
 export default {
 	name: 'sider',
 	data(){
@@ -36,6 +37,11 @@ export default {
 			//设置菜单展开子菜单的数组name
 		},
 		side_menu(param){
+
+			if(param.indexOf("product") == -1){
+				Common.DelectUserstorySession(Common)
+			}
+
 			let ON = this.pathActive[param][0];
 			if(this.OpenNames.indexOf(ON) == -1){
 				this.OpenNames.push(ON);

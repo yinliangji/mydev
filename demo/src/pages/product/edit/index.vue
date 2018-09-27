@@ -380,6 +380,8 @@ export default {
         }
     },
     mounted(){
+        Common.UserstorySession(Common);          
+
         let ID = Common.GETID(this,Common);
         let prj_ID = false;
         let prod_ID = false;

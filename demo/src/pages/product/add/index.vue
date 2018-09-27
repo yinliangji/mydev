@@ -383,13 +383,11 @@ export default {
         }
     },
     mounted(){
+        Common.UserstorySession(Common);
+
         let ID = Common.GETID(this,Common);
         let prj_ID = Common.GETprjid(this,Common);
         let prod_ID = Common.GETprodid(this,Common);
-
-        
-
-
 
         if(prj_ID && prod_ID && ID){
             this.formValidate.prj_id = prj_ID;
@@ -400,17 +398,8 @@ export default {
             this.storyGetSprintFn(storyGetSprint,ID,ID,prod_ID)
             this.storyGetReqFn(storyGetReq,ID,ID,prod_ID)
 
-
-
-            
-            
-
-
             this.publishUserFn(publishUser).then((chargerObj)=>{
 
-
-             
-                
                 //this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
                 //this.storyGetConditionFn(storyGetCondition,"proi",ID);
                 this.storyGetConditionFn(storyGetCondition,"userstory_type",ID).then(()=>{
@@ -431,9 +420,6 @@ export default {
                 console.log(error);
                 this.showError(error);
             })
-
-            
-
 
 
         }else{
@@ -607,6 +593,9 @@ export default {
                     this.modal_add_loading = false;
                     this.formItemReset();
                     this.$refs.formValidate.resetFields();
+                    
+                    Common.DelectUserstorySession(Common)
+
                     this.$router.push('/product');
                 }else{
                     this.modal_add_loading = false;

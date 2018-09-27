@@ -1169,11 +1169,11 @@ export default {
             this.tableDataRow = false;
 		},
 		goAddDevelopmentFn (index) {
-			Common.DelectUserstorySession(Common)
+			//Common.DelectUserstorySession(Common)
             this.$router.push({path: '/development/add', query: {board: true,myid:this.tableData[index].id}})
         },
 		goDevelopmentFn (index) {
-			Common.DelectUserstorySession(Common)
+			//Common.DelectUserstorySession(Common)
             this.$router.push({path: '/development', query: {board: true,us_name:this.tableData[index].id}})
         },
 		goProductDetailFn (index) {

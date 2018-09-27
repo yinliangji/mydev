@@ -37,10 +37,19 @@ export default {
 			//设置菜单展开子菜单的数组name
 		},
 		side_menu(param){
-
-			if(param.indexOf("product") == -1){
+			//增加搜索条件和分页
+			if(param.indexOf("product") != -1 || param.indexOf("development") != -1){
+				if(param.indexOf("development") != -1){
+					if(this.$router.history.current.query.us_name || this.$router.history.current.query.myid){
+						Common.UserstorySession(Common);
+					}else{
+						Common.DelectUserstorySession(Common)
+					}
+				}
+			}else{
 				Common.DelectUserstorySession(Common)
 			}
+			//增加搜索条件和分页 
 
 			let ON = this.pathActive[param][0];
 			if(this.OpenNames.indexOf(ON) == -1){

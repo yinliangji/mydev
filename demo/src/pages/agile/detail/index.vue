@@ -528,7 +528,7 @@ export default {
                 if(myData.data && myData.data.id){
                     Common.setStorageAndCookie(Common,"prj_id",myData.data.prj_id);
                     this.$router.push({path: '/agile/detail', query: {id: ID,prj_id:myData.data.prj_id}});
-                    this.actionUrl = fileUpload+"?taskId="+this.formValidate.prj_id;
+                    this.actionUrl = fileUpload+"?taskId="+this.formValidate.prj_id+"&type=1&id="+Common.GETID(this,Common);
                     return Promise.resolve(this.formValidate.prj_id)
 
                 }else{

@@ -95,8 +95,8 @@
                         </Row>
 
                         <div class="formValidateMoreBtnBox" :class="isShowMoreShow ?'arrUp':'arrDown'" @click="isShowMoreShow = !isShowMoreShow">
-                            <Icon type="chevron-down" color="#ed3f14" ></Icon>
-                            <Icon type="chevron-down" color="#ed3f14" ></Icon>
+                            <Icon type="chevron-down" color="#fff" ></Icon>
+                            <Icon type="chevron-down" color="#fff" ></Icon>
                         </div>
                         
 			        </FormItem>
@@ -417,7 +417,10 @@ export default {
         },
 
         authIs(KEY){
-            return Common.auth(this,KEY)
+            return Common.auth(this,KEY);
+        },
+        authAdminIs(KEY){
+            return Common.AdminAuth(this,KEY);
         },
 
         getPermissionFn(URL){

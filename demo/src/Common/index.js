@@ -256,27 +256,39 @@ export default class Common extends Utils {
     }
     //权限判断--不通用
     static auth(THIS,KEY){
-        let OBJ = THIS.prj_permission
-        if(THIS.identity == "SuperAdmin"){
-            return false
-        }else if(THIS.identity == "PlainAdmin"){
-            return false
-        }else{
-            if(KEY && KEY.length){
-                let _temp = true;
-                for(let i =0;i<KEY.length;i++){
-                    if(!(KEY[i].indexOf("_view") != -1)){
-                        if(OBJ.findIndex((item)=>{return item == KEY[i]}) != -1){
-                            _temp = false
-                        }
-                    }
-                }
-                return _temp
+      let OBJ = THIS.prj_permission
+      if(THIS.identity == "SuperAdmin"){
+          return false
+      }else if(THIS.identity == "PlainAdmin"){
+          return false
+      }else{
+          if(KEY && Array.isArray(KEY) && KEY.length){
+              let _temp = true;
+              for(let i =0;i<KEY.length;i++){
+                  if(!(KEY[i].indexOf("_view") != -1)){
+                      if(OBJ.findIndex((item)=>{return item == KEY[i]}) != -1){
+                          _temp = false
+                      }
+                  }
+              }
+              return _temp
 
-            }else{
-                return true
-            }
-        }
+          }else{
+              return true
+          }
+      }
+        
+    }
+
+    static AdminAuth(THIS,KEY){
+      let OBJ = THIS.prj_permission
+      if(THIS.identity == "SuperAdmin"){
+          return THIS.identity
+      }else if(THIS.identity == "PlainAdmin"){
+          return THIS.identity
+      }else{
+          return false
+      }
         
     }
 
@@ -878,16 +890,20 @@ export default class Common extends Utils {
           FUN(URL,{},{timeout:20000,method:'get'}).then((response) => {
               let myData = response.data;
               console.log("<======agile getPermission***response+++",response,myData,"======>");
-              if(myData.prj_permission && myData.prj_permission.length){
+              if(myData.status =="success"){
+                if(myData.prj_permission && Array.isArray(myData.prj_permission) && myData.prj_permission.length){
                   that.prj_permission = myData.prj_permission;
                   that.identity = myData.identity
-              }else if(myData.permission && myData.permission.length){
+                }else if(myData.permission && Array.isArray(myData.permission) && myData.permission.length){
                   that.prj_permission = myData.permission;
                   that.identity = myData.identity
+                }
+              }else if(myData.status =="redirect"){
+                toLoginPage();
+              }else{
+                that.showError("权限不足，不能有任何动作");
               }
-              else{
-                  that.showError("权限不足，不能有任何动作");
-              }
+              
           }).catch( (error) => {
               console.log(error);
               that.showError(error);
@@ -1156,19 +1172,50 @@ export default class Common extends Utils {
     static LengthSession(){
       return sessionStorage.length;
     }
-    //设置用户故事分页和搜索还原
+    //设置用户故事分页和搜索还原--不通用
     static UserstorySession(_Common){
       let allSession = _Common.GetSession("userstorySerch") ? JSON.parse(_Common.GetSession("userstorySerch")) : {};
       allSession.tableDAtaPageCurrent = _Common.GetSession("tableDAtaPageCurrent") ? _Common.GetSession("tableDAtaPageCurrent") : 1;
       _Common.SetSession("allSession",JSON.stringify(allSession));
       _Common.RemoveSession("tableDAtaPageCurrent");
-      _Common.RemoveSession("userstorySerch");  
+      _Common.RemoveSession("userstorySerch");
+      _Common.RemoveSession("oldAllSession");
+      _Common.RemoveSession("userstorySerchTemp");
+        
     }
-    //删除用户故事分页和搜索还原
+    //删除用户故事分页和搜索还原--不通用
     static DelectUserstorySession(_Common){
+      _Common.RemoveSession("userstorySerchTemp");
       _Common.RemoveSession("allSession");
       _Common.RemoveSession("userstorySerch");
       _Common.RemoveSession("tableDAtaPageCurrent");
+      _Common.RemoveSession("oldAllSession");
+    }
+    //用户故事分页和搜索跳转还原--不通用
+    static GoUserstorySession(_Common,that){
+      if(_Common.GetSession("userstorySerch")){
+
+      }else if(_Common.GetSession("allSession")){
+        _Common.SetSession("userstorySerch",_Common.GetSession("allSession"));
+        _Common.RemoveSession("allSession");
+      }else{
+        let _temp = {
+                  userstory_name:"",//用户故事名称
+                  userstory_id:"",//故事编号
+                  userstory_type:"",//故事类型
+                  userstory_status:"",//故事状态
+                  req_id:"",//所属需求
+                  proi:"",//优先级
+                  charger:"",//负责人
+                  learn_concern:"",//是否领导关心
+                  sprint:"",//所属迭代
+              }
+              _temp.sprint = that.formValidate.sprint;
+              _Common.SetSession("userstorySerch",JSON.stringify(_temp));
+              _Common.RemoveSession("allSession");
+
+              
+      }
     }
 
     

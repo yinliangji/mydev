@@ -380,7 +380,12 @@ export default {
         }
     },
     mounted(){
-        Common.UserstorySession(Common);          
+        
+        if(!this.$router.history.current.query.fromEdit){
+            console.log("Common.UserstorySession(Common)")
+            Common.UserstorySession(Common);
+        }
+                
 
         let ID = Common.GETID(this,Common);
         let prj_ID = false;

@@ -299,7 +299,7 @@ export default {
         },
     	editItemFn(){
     		//console.log("this.GetDetail",this.GetDetail)
-    		this.$router.push({path: '/product/edit', query: {DATA: JSON.stringify(this.GetDetail)}})
+    		this.$router.push({path: '/product/edit', query: {fromEdit:true,DATA: JSON.stringify(this.GetDetail)}})
     	},
 		showError(ERR){
     		Common.ErrorShow(ERR,this);

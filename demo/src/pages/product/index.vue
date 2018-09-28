@@ -102,8 +102,8 @@
 							</Col>
 						</Row>
 						<div class="formValidateMoreBtnBox" :class="isShowMoreShow ?'arrUp':'arrDown'" @click="isShowMoreShow = !isShowMoreShow">
-                            <Icon type="chevron-down" color="#ed3f14"  ></Icon>
-                            <Icon type="chevron-down" color="#ed3f14"></Icon>
+                            <Icon type="chevron-down" color="#fff"  ></Icon>
+                            <Icon type="chevron-down" color="#fff"></Icon>
                         </div>
 			        </FormItem>
 			    </Form>
@@ -191,7 +191,9 @@ export default {
 		},
 		formValidate: {
             handler(val, oldVal) {
-            	Common.SetSession("userstorySerch",JSON.stringify(val))
+            	Common.SetSession("userstorySerchTemp",JSON.stringify(val))
+
+
                 // for(let I in val){
                 // 	Common.SetSession(I,val[I]);
                 // }
@@ -217,15 +219,18 @@ export default {
         	this.currentView = "developList";
         }
 
+        Common.RemoveSession("userstorySerchTemp");
         if(Common.GetSession("allSession")){
         	let _allSession = JSON.parse(Common.GetSession("allSession"));
 
         	for(let I in this.formValidate){
+        		this.formValidate[I] = _allSession[I]
         		if(I != "sprint"){
-        			this.formValidate[I] = _allSession[I]
+        			//this.formValidate[I] = _allSession[I]
         		}
         	}
         	this.tableDAtaPageCurrent =_allSession.tableDAtaPageCurrent - 0;
+        	//Common.SetSession("oldAllSession",Common.GetSession("allSession"));
         }
 
         if(this.formValidate.userstory_status || this.formValidate.req_id || this.formValidate.proi || this.formValidate.userstory_type || this.formValidate.charger){
@@ -753,10 +758,12 @@ export default {
     },
 
 	mounted(){
-		Common.RemoveSession("allSession");
+		
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 		this.getPermissionFn(getPermission);
 		this.getInfoFn(ID);
+
+		//Common.RemoveSession("allSession");
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
 
 		
@@ -779,12 +786,11 @@ export default {
 			this.cardpop = false;
 		},
 		getInfoFn(ID){
-			
+			let _myAllSession = Common.GetSession("allSession");
 		    this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
-	        	this.formValidate.sprint = sprint+"";
-
-	        	
-	        	
+		    	if(!_myAllSession){
+		    		this.formValidate.sprint = sprint+"";
+		    	}
 
 	        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
 	        	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
@@ -997,7 +1003,11 @@ export default {
             this.$refs.formValidate.resetFields();
         },
 		serchAll(){
-			let ID = this.getID()
+			let ID = this.getID();
+
+			Common.RemoveSession("allSession");
+			Common.SetSession("userstorySerch",Common.GetSession("userstorySerchTemp"));
+			Common.RemoveSession("userstorySerchTemp");
 
 			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
             this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
@@ -1156,6 +1166,7 @@ export default {
    			// this.isAdd = true;
 		},
 		editItem(I){
+			Common.GoUserstorySession(Common,this);
 			this.$router.push({path: '/product/edit', query: {DATA: JSON.stringify(this.tableData[I])}})
             return;
 			//
@@ -1169,14 +1180,15 @@ export default {
             this.tableDataRow = false;
 		},
 		goAddDevelopmentFn (index) {
-			//Common.DelectUserstorySession(Common)
+			Common.GoUserstorySession(Common,this);
             this.$router.push({path: '/development/add', query: {board: true,myid:this.tableData[index].id}})
         },
 		goDevelopmentFn (index) {
-			//Common.DelectUserstorySession(Common)
+			Common.GoUserstorySession(Common,this);
             this.$router.push({path: '/development', query: {board: true,us_name:this.tableData[index].id}})
         },
 		goProductDetailFn (index) {
+			Common.GoUserstorySession(Common,this);
             this.$router.push({path: '/product/detail', query: {detail_id: this.tableData[index].id}})
         },
         show (index) {

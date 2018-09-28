@@ -1093,6 +1093,8 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
 let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": "success",
+        //"status": "fail",
+        //"status": "redirect",
         "message": "mockDataList xxxxxxx",
         prj_permission:[
             "icdp_pipeline_view",//0
@@ -1105,7 +1107,7 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
             "icdp_sprint_mng",//7
             "icdp_devTask_mng",//8
             "icdp_userStory_view",//9
-            "icdp_projList_view",//10
+            
             "icdp_pipelineLf_view",//11
             "icdp_agile_view",//12
             "icdp_projDetail_view",//13
@@ -1116,20 +1118,21 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
             "icdp_devWorkbench_view",//18
             "icdp_mngrWorkbench_view",//19
             "icdp_pipeline_mng",//20
-            //"icdp_projList_edit",//21
+            
             "icdp_sprint_view",//22
             "icdp_codeRepoLf_view",//23
             "icdp_projDetail_mng",//24
 
+            "icdp_projList_view",//10
             //========
             //"icdp_projList_mng",//25
-            //"icdp_projList_edit",//21
+            "icdp_projList_edit",//21
             //=======
             "icdp_prjrequirement_mng",
             "icdp_prjrequirement_view",
             "icdp_prjrequirement_edit",
         ],
-        identity:"SuperAdmin",
+        identity:"PlainAdmin",
         //PlainAdmin
         //SuperAdmin
         //Admin

@@ -89,8 +89,8 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
                 "__value3__pageline": val3,
 
             }],
-            "total|3-9": 3,
-            "per_page|3-9": 3,
+            "total|19-29": 3,
+            "per_page|9-19": 3,
         },
        
     })
@@ -1922,6 +1922,36 @@ app.all('/uploadfiles/delete_file/', function(req, res) {
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
     res.json({status: "success",message: "delete success",});
+    res.end()
+});
+
+
+app.all('/importITM/xxxxx/', function(req, res) {
+    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json({status: "success",message: "import success",});
+    res.end()
+});
+
+
+let getITMtable = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "data":{
+            name:"@title",
+            "num|1-100":1,
+            "desc|5-10":/[a-zA-Z0-9]/,
+        },
+    })
+}
+
+app.all('/getITMtable/xxxxx/', function(req, res) {
+    let resVal = getITMtable(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(getITMtable(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
 

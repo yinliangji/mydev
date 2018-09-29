@@ -184,18 +184,32 @@
             :class="myItem.myReftemp+index" 
             v-model="myItem.modaAdd" 
             :title="'添加'+myItem.myLabel+''" 
-            @on-ok="submitRole(index,myItem.myRef+index)"  
+            :loading="modal_add_loading"
+
+            @on-ok="submitRole(index,myItem.myRef+index,'formITMitem'+index)"  
             ok-text="添加"
-            @on-cancel="cancelRole(index,myItem.myRef+index)"
+            @on-cancel="cancelRole(index,myItem.myRef+index,'formITMitem'+index)"
             @on-visible-change="changeRole"
+
             >
             <!-- :prop="myItem.grouptemp" -->
             <!-- :prop="'ITMitem.AddGroupList.'+index+'.grouptemp'" -->
-            <Form :label-width="80">
+            <table class="ITMtable">
+                <tr>
+                    <th>项目名称</th><td><p>{{ ITMtable.name | FALSEINFO}}</p></td>
+                </tr>
+                <tr>
+                    <th>项目编号</th><td><p>{{ ITMtable.num | FALSEINFO}}</p></td>
+                </tr>
+                <tr>
+                    <th>项目描述</th><td><p>{{ ITMtable.desc | FALSEINFO}}</p></td>
+                </tr>
+            </table>
+            <Form :label-width="80"  :ref="'formITMitem'+index" :model="ITMitem">
                 <FormItem 
                     :label="myItem.myLabel"
-                    :prop="myItem.grouptemp"
-                    :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                    :prop="'AddGroupList.'+index+'.grouptemp'"
+                    :rules="{required: true, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
                      
                     :ref="myItem.myRef+index" 
                     :class="myItem.myRef+index"
@@ -203,6 +217,7 @@
                     <Select 
                         @on-query-change="queryChange"
                         @on-change="selChange"
+                        @on-open-change="openChange"
                         v-model="myItem.grouptemp" 
                         :id="'sel'+index" 
                         filterable 
@@ -215,24 +230,12 @@
                         </Option>
                     </Select>
                 </FormItem>
-            </Form>
+            </Form>           
                 
             
-            <table>
-                <tr>
-                    <th>111</th><td>222</td>
-                </tr>
-                <tr>
-                    <th>111</th><td>222</td>
-                </tr>
-                <tr>
-                    <th>111</th><td>222</td>
-                </tr>
-                <tr>
-                    <th>111</th><td>222</td>
-                </tr>
-            </table>
+            
         </Modal>
+         
         
 
         <!-- <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" /> -->
@@ -247,7 +250,7 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission,projectAddGroup} = Common.restUrl;
+const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission,projectAddGroup,importITM,getITMtable} = Common.restUrl;
 
 export default {
 	name: 'aglie',
@@ -276,7 +279,7 @@ export default {
             handler(val, oldVal) {
                 if(val){
                     if(val.AddGroupList[0].grouptemp.length == 1){
-                        console.log(val.AddGroupList[0].grouptemp[0])
+                        //console.log(val.AddGroupList[0].grouptemp[0])
                     }
                     Common.inputArr2(this,val)//修改添加角色
                 }
@@ -295,19 +298,19 @@ export default {
         },
     },
     beforecreated(){
-        console.log("agile--beforecreated-------",this.tableData);
+        console.log("agile--beforecreated-------",this.tableData,this.ITMitem);
         Common.delStorageAndCookie(Common,"detail_id")
 
     },
     created(){
-        console.log("agile--created-------",this.tableData)
+        console.log("agile--created-------",this.tableData,this.ITMitem)
         
     },
     beforeUpdate(){
-        console.log("agile--beforeUpdate-------",this.tableData)
+        console.log("agile--beforeUpdate-------",this.tableData,this.ITMitem)
     },
     updated(){
-        console.log("agile--updated-------",this.tableData)
+        console.log("agile--updated-------",this.tableData,this.ITMitem)
     },
     data () {
         return {
@@ -488,35 +491,123 @@ export default {
             prj_permission:[],
             identity:"",
 
+
+
             ITMitem:{
                 AddGroupList:[],
             },
+            ITMtable:{
+                name:"",
+                num:"",
+                desc:"",
+            },
             inputLoad:false,
+            modal_add_loading:true,
             
 
         }
     },
     methods: {
+        cleanITM(){
+            this.ITMitem.AddGroupList = [];
+            for(let I in this.ITMtable){
+                this.ITMtable[I] = "";
+            }
+        },
+        openChange(isShow){
+            //console.log(isShow)
+        },
         selChange(val){
-            console.log("val=====selChange===>",this.ITMitem.AddGroupList[0],"val,val[val.length-1]");
             let _val = val[val.length-1];
             this.ITMitem.AddGroupList[0].grouptemp = [];
-            this.ITMitem.AddGroupList[0].grouptemp.push(_val)
+            this.ITMitem.AddGroupList[0].grouptemp.push(_val);
+            //console.log(_val)
+            Common.throttle(
+                (value, THIS) => {
+                    console.log(value);
+                    THIS.getITMtableFn(getITMtable,{xxxxx:value})
+                },
+                this,
+                1500,
+                _val,
+                2000
+            )();
+            //
+        },
+        getITMtableFn(URL,params = {}){
+            defaultAXIOS(URL,params,{timeout:5000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======agile ITMtable***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    for(let I in this.ITMtable){
+                        this.ITMtable[I] = myData.data[I];
+                    }
+                    
+                }else{
+                    this.showError(URL+"错误");
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
         },
         queryChange(val){
-            console.log("val=====queryChange===>",val)
         },
         changeRole(is){
         },
-        cancelRole(){
+        cancelRole(i,name,fromName){
+            this.$refs[fromName][i].resetFields();
+        },
+        submitRole(i,name,fromName){
+            this.$refs[fromName][i].validate((valid)=>{//验证
+                this.modal_add_loading = false;
+                this.$nextTick(() => {
+                  this.modal_add_loading = true;
+                });
+                if(valid){
+                    this.modal_add_loading = true;
+                    this.$nextTick(() => {
+                      this.modal_add_loading = true;
+                    });
+                    this.submitAddData(i,fromName,this.ITMitem.AddGroupList[i],this,this.ITMitem.AddGroupList[i].grouptemp);
+                }
+            })
             
         },
-        submitRole(i,name){
-            console.log(i,name)
-            
+        submitAddData(i,fromName,obj,that,group){
+            console.log(obj,"=-=-=-=-=-=-",that.ITMitem.AddGroupList[i],group)
+            let tempData = {
+                xxxxx:JSON.stringify(group),
+            }
+            //
+            defaultAXIOS(importITM,tempData,{timeout:5000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======agile ITMAdd***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    that.$refs[fromName][i].resetFields();
+                    that.modal_add_loading = false;
+                    obj.modaAdd = false;
+                    that.tableDataAjaxFn(projectAll,1,that.tableDAtaPageLine);
+                    that.tableDAtaPageCurrent = 1;
+                    //this.$emit("popClose2",true);
+                    
+                }else{
+                    obj.modaAdd = true;
+                    that.modal_add_loading = false;
+                    that.showError(importITM+"错误");
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                that.modal_add_loading = false;
+                that.showError(error);
+            });
+            //
+
         },
         outinITM(){
-            this.ITMitem.AddGroupList = [];
+            this.cleanITM();
             if(!this.ITMitem.AddGroupList.length){
                 this.ITMitem.AddGroupList.push({
                     myRef:"selfRef",
@@ -556,7 +647,7 @@ export default {
             }
 
         },
-
+        /* ====== */
         demo(){
             
             Store.dispatch('LOGIN_SAVE/incrementAsync', {
@@ -887,7 +978,56 @@ export default {
 	padding-bottom:10px;
 }
 
+/* ------ITM---- */
+.ITMtable {
+    width:100%;
+    margin-bottom:10px;
+}
+.ITMtable td, .ITMtable th{
+    box-sizing: border-box;
+    
+    border: 1px solid #e9eaec;
+    height: 1.5em;
 
+    
+
+    vertical-align:middle;
+    box-sizing: border-box;
+    /*
+    border: 1px solid white;
+    */
+}
+.ITMtable td{
+    padding-left:0.5em;
+    padding-top:0.5em;
+    padding-bottom:0.5em;
+    color:#495060;
+    font-size:12px;
+    line-height: 1.5em;
+}
+.ITMtable td p {
+    width:100%;
+     word-wrap: break-word; 
+     word-break:break-all;
+         height: 1.5em;
+    overflow: hidden;
+
+}
+.ITMtable th{
+    font-weight: normal;
+    
+    
+    font-size:14px;
+    background-color: #2db7f5;
+    color: #fff;
+    
+    
+    text-align: right;
+    padding-right: 18px;
+    width:20%;
+    
+
+}
 </style>
 
 

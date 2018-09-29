@@ -71,6 +71,15 @@ CommonRest.restUrl = {
     "phySystem": process.env.BASE_URL + "/system/phylist/",
     /****express 敏捷项目物理子系统 get****/
 
+    "importITM": process.env.BASE_URL + "/importITM/xxxxx/",
+    /****express 敏捷项目列表ITM post****/
+
+    "getITMtable": process.env.BASE_URL + "/getITMtable/xxxxx/",
+    /****express 敏捷项目列表ITM post****/
+
+
+
+
     /*****************************************/
 
     "storyAll": process.env.BASE_URL + "/userstory/listUserstory/",

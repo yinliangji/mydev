@@ -560,43 +560,7 @@ export default {
     
     methods: {
         /* 修改添加角色 */
-        cancelRole(i){
-            Common.CancelRole(this,i)
-        },
-        roleClose (event, name) {
-            Common.RoleClose(this,event, name)
-        },
-        addRole(i){
-            Common.AddRole(this,i)
-        },
-        submitRole(i){
-            Common.SubmitRole(this,i,Common);
-        },
         
-        projectGroupFn2(URL,params = {},ARR,thatEle){
-            console.log(URL)
-            Common.ProjectGroup2(defaultAXIOS,this,URL,params,ARR,thatEle);
-        },
-        addSelectEleList(ARR,thatEle,dataList){
-            if(typeof(ARR)  == "number"){
-                if(thatEle && thatEle.temp && thatEle.temp.length){
-                    let _tempArr = Common.returnDelArr(this.formValidate.AddGroupList[ARR].grouptemp,dataList);
-
-                    let _tempArr2 = [];
-                    _tempArr2.push(...thatEle.temp,..._tempArr);
-                    let _tempArr3 = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,_tempArr2);
-                   
-                    this.formValidate.AddGroupList[ARR].groupListtemp.push(..._tempArr3);
-
-                }else{
-                    let _tempArr4 = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,dataList);
-                    this.formValidate.AddGroupList[ARR].groupListtemp.push(..._tempArr4);
-                }
-            }else{
-                this.showError("addSelectEleList的参数ARR不是数字");
-            }
-
-        },
         /* 修改添加角色 */
         publishUserFn(URL,params = {},Arr=[]){
             defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {

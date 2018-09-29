@@ -51,7 +51,7 @@
                         <Col span="12">
                             <FormItem label="状态" prop="userstory_status">
                                 <RadioGroup v-model="formValidate.userstory_status">
-                                    <Radio v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
+                                    <Radio :disabled="item.value == formValidate.userstory_status ? false : true" v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
                                     <!-- <Radio label="1">提出</Radio>
                                     <Radio label="2">开发中</Radio>
                                     <Radio label="3">测试</Radio>

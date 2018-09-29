@@ -322,7 +322,7 @@ export default {
             let _this = this;
             if(curVal){
                 //Common.changeArr(this,curVal,Common,projectAddGroup)//下拉样子
-                Common.changeArr2(this,curVal,Common,projectAddGroup)//修改添加角色
+                Common.changeArr2(this,curVal,Common,projectAddGroup,this.projectGroupFn2)//修改添加角色
             }
         },
         formValidate: {

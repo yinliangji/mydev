@@ -124,7 +124,15 @@
                             :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
                             @click="deleteTableItem"
                             >
-                            删除</Button>
+                            删除
+                        </Button>
+                        <Button 
+                            type="info" 
+                            :disabled="false"
+                            @click="outinITM" 
+                            >
+                            从ITM导入项目 功能制作中，不能点！！！
+                        </Button>
 					</div>
 			    	<Table border  ref="selection" :columns="columns" :data="tableData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
@@ -169,6 +177,64 @@
             </div>
         </Modal>
 
+       
+        <Modal 
+            v-for="(myItem,index) in ITMitem.AddGroupList" :key="index"
+            :ref="myItem.myReftemp+index" 
+            :class="myItem.myReftemp+index" 
+            v-model="myItem.modaAdd" 
+            :title="'添加'+myItem.myLabel+''" 
+            @on-ok="submitRole(index,myItem.myRef+index)"  
+            ok-text="添加"
+            @on-cancel="cancelRole(index,myItem.myRef+index)"
+            @on-visible-change="changeRole"
+            >
+            <!-- :prop="myItem.grouptemp" -->
+            <!-- :prop="'ITMitem.AddGroupList.'+index+'.grouptemp'" -->
+            <Form :label-width="80">
+                <FormItem 
+                    :label="myItem.myLabel"
+                    :prop="myItem.grouptemp"
+                    :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                     
+                    :ref="myItem.myRef+index" 
+                    :class="myItem.myRef+index"
+                    >
+                    <Select 
+                        @on-query-change="queryChange"
+                        @on-change="selChange"
+                        v-model="myItem.grouptemp" 
+                        :id="'sel'+index" 
+                        filterable 
+                        multiple
+                        :loading="inputLoad" 
+                        :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'"
+                        >
+                        <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
+                            {{ item.label }}
+                        </Option>
+                    </Select>
+                </FormItem>
+            </Form>
+                
+            
+            <table>
+                <tr>
+                    <th>111</th><td>222</td>
+                </tr>
+                <tr>
+                    <th>111</th><td>222</td>
+                </tr>
+                <tr>
+                    <th>111</th><td>222</td>
+                </tr>
+                <tr>
+                    <th>111</th><td>222</td>
+                </tr>
+            </table>
+        </Modal>
+        
+
         <!-- <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" /> -->
 
 	</div>
@@ -181,7 +247,7 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission} = Common.restUrl;
+const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission,projectAddGroup} = Common.restUrl;
 
 export default {
 	name: 'aglie',
@@ -199,7 +265,26 @@ export default {
     watch:{
         loginSave(curVal,oldVal){
             console.log(curVal,oldVal)
-        }
+        },
+        "ITMitem.AddGroupList"(curVal,oldVal){
+            let _this = this;
+            if(curVal){
+                Common.changeArr2(this,curVal,Common,projectAddGroup,this.projectGroupFn2)//修改添加角色
+            }
+        },
+        ITMitem: {
+            handler(val, oldVal) {
+                if(val){
+                    if(val.AddGroupList[0].grouptemp.length == 1){
+                        console.log(val.AddGroupList[0].grouptemp[0])
+                    }
+                    Common.inputArr2(this,val)//修改添加角色
+                }
+            },
+            deep: true
+        },
+       
+        
     },
     components: {
         AddItemPop,
@@ -403,11 +488,75 @@ export default {
             prj_permission:[],
             identity:"",
 
+            ITMitem:{
+                AddGroupList:[],
+            },
+            inputLoad:false,
             
 
         }
     },
     methods: {
+        selChange(val){
+            console.log("val=====selChange===>",this.ITMitem.AddGroupList[0],"val,val[val.length-1]");
+            let _val = val[val.length-1];
+            this.ITMitem.AddGroupList[0].grouptemp = [];
+            this.ITMitem.AddGroupList[0].grouptemp.push(_val)
+        },
+        queryChange(val){
+            console.log("val=====queryChange===>",val)
+        },
+        changeRole(is){
+        },
+        cancelRole(){
+            
+        },
+        submitRole(i,name){
+            console.log(i,name)
+            
+        },
+        outinITM(){
+            this.ITMitem.AddGroupList = [];
+            if(!this.ITMitem.AddGroupList.length){
+                this.ITMitem.AddGroupList.push({
+                    myRef:"selfRef",
+                    group:[],
+                    groupList:[],
+                    myLabel:"ITM项目",
+                    delBtn:false,
+                    groupName:"",
+                    required:true,
+                    modaAdd:true,//修改添加角色
+                    grouptemp:[],//修改添加角色
+                    groupListtemp: [],//修改添加角色
+                    myReftemp: "selfRefRole",//修改添加角色
+                })
+            }
+        },
+        projectGroupFn2(URL,params = {},ARR,thatEle){
+            Common.ProjectGroup2(defaultAXIOS,this,URL,params,ARR,thatEle,this.ITMitem,this.addSelectEleList);
+        },
+        addSelectEleList(ARR,thatEle,dataList){
+            if(typeof(ARR)  == "number"){
+                if(thatEle && thatEle.temp && thatEle.temp.length){
+                    let _tempArr = Common.returnDelArr(this.ITMitem.AddGroupList[ARR].grouptemp,dataList);
+
+                    let _tempArr2 = [];
+                    _tempArr2.push(...thatEle.temp,..._tempArr);
+                    let _tempArr3 = Common.returnDelArr(this.ITMitem.AddGroupList[ARR].group,_tempArr2);
+                   
+                    this.ITMitem.AddGroupList[ARR].groupListtemp.push(..._tempArr3);
+
+                }else{
+                    let _tempArr4 = Common.returnDelArr(this.ITMitem.AddGroupList[ARR].group,dataList);
+                    this.ITMitem.AddGroupList[ARR].groupListtemp.push(..._tempArr4);
+                }
+            }else{
+                this.showError("addSelectEleList的参数ARR不是数字");
+            }
+
+        },
+
         demo(){
             
             Store.dispatch('LOGIN_SAVE/incrementAsync', {

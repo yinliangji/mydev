@@ -148,7 +148,13 @@
 				    	</div>
 					</div>
 					<div class="listBox" v-show="currentView == 'kanbanboard'">
-						<kanbanboard :cardList="cardLists" :statusList="statusLists" :groupList="groupList" :Group="false" />
+						<kanbanboard
+							:sortdisabled="true" 
+							:cardList="cardLists" 
+							:statusList="statusLists" 
+							:groupList="groupList" 
+							:Group="false" 
+							/>
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div>
 

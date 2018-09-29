@@ -1482,8 +1482,8 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
             "start_time": "@date(yyyy-MM-dd)",
             "end_time": "@date(yyyy-MM-dd)",
             
-            "logic_sys_id": "logic_sys_id",
-            "phycics_sys_id": "phycics_sys_id",
+            "logic_sys_id": "logic_sys_id|logic_sys_id2",
+            "physics_sys_id": "phycics_sys_id|phycics_sys_id2",
             "modules": "mid0001|mid0002|",
             "allgroup": "Canberra|London|",
             "managerGroup": "Sydney|Ottawa|",

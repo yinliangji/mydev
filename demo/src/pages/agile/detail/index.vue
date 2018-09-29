@@ -41,10 +41,16 @@
 								  <td>{{formValidate.end_time | FALSEINFO}}</td>
 								</tr>
 
-								<tr>
-								  <th>所属模块</th>
-								  <td colspan="5">{{formValidate.modules | FALSEINFO}}</td>
-								</tr>
+                                <tr>
+                                  <th>所属模块</th>
+                                  <td>{{formValidate.modules | FALSEINFO}}</td>
+                                  <th>逻辑子系统</th>
+                                  <td>{{formValidate.logic_sys_id | FALSEINFO}}</td>
+                                  <th>物理子系统</th>
+                                  <td>{{formValidate.physics_sys_id | FALSEINFO}}</td>
+                                </tr>
+
+								
 								
 								<tr>
 								  <th>项目描述</th>
@@ -223,6 +229,8 @@ export default {
                 modules:"",
                 prod_name:"",
                 person:[],
+                logic_sys_id:"",
+                physics_sys_id:"",
                 // allgroup:"",
                 // managerGroup:"",
                 // developerGroup:"",
@@ -502,7 +510,17 @@ export default {
                 this.HTML = "";
                 if(myData.data && myData.data.id){
                 	for(var I in this.formValidate){
-                		this.formValidate[I] = myData.data[I];
+                        if(I == "logic_sys_id" || I == "physics_sys_id"){
+                            if(myData.data[I] && myData.data[I].indexOf("|") != -1){
+                                this.formValidate[I] = myData.data[I].replace(/\|/g,"、");
+                            }else if(myData.data[I] && myData.data[I].indexOf(",") != -1){
+                                this.formValidate[I] = myData.data[I].replace(/\,/g,"、");
+                            }else{
+                                this.formValidate[I] = myData.data[I]
+                            }
+                        }else{
+                            this.formValidate[I] = myData.data[I]
+                        }
                 	}
                 }
 
@@ -518,6 +536,7 @@ export default {
                     this.HTML = Common.toTable(this.formValidate.person,this.table,3,11,true);
                     let _arr = this.formValidate.modules.split("|");
                     Common.ArrDelVal(_arr);
+
                     if(_arr.length){
                         this.listModuleFn(listModule,{},_arr);
                     }else{

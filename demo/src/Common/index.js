@@ -440,7 +440,7 @@ export default class Common extends Utils {
     }
 
     //给输入框加函数节流2--不通用
-    static changeArr2(_this, curVal, _Common, _projectAddGroup) {
+    static changeArr2(_this, curVal, _Common, _projectAddGroup,FUN) {
       _this.$nextTick(() => {
         for (var i = 0; i < curVal.length; i++) {
           let _DOM = _this.$refs[curVal[i].myReftemp + i][0].$el.getElementsByClassName("ivu-select-input")[0];
@@ -459,7 +459,7 @@ export default class Common extends Utils {
                   _param = {userName: value,}
                 }
                 _this.inputLoad = true;
-                _this.projectGroupFn2(_URL,_param, _num,THIS);
+                FUN ? FUN(_URL,_param, _num,THIS) : _this.projectGroupFn2(_URL,_param, _num,THIS);
               },
               this,
               1500,
@@ -1115,13 +1115,16 @@ export default class Common extends Utils {
       List[i].groupListtemp = [];
     }
     //角色添加下拉菜单人员--不通用
-    static ProjectGroup2(FUN,that,URL,params = {},ARR,thatEle){
+    static ProjectGroup2(FUN,that,URL,params = {},ARR,thatEle,OBJECT,selElemFUN){
       FUN(URL,params,{timeout:60000,method:'get'}).then((response) => {
           let myData = response.data;
           console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
           that.inputLoad = false;
-          that.formValidate.AddGroupList[ARR].groupListtemp = [];
-          that.addSelectEleList(ARR,thatEle,myData.data.list);
+
+          let OBJ = OBJECT ? OBJECT : that.formValidate
+          OBJ.AddGroupList[ARR].groupListtemp = [];
+          selElemFUN?selElemFUN(ARR,thatEle,myData.data.list) : that.addSelectEleList(ARR,thatEle,myData.data.list);
+          
           
       }).catch( (error) => {
           console.log(error);
@@ -1273,6 +1276,7 @@ function toLoginPage(){
   }else if(HostName == "128.196.0.127"){
     window.location.href="http://128.194.224.146:8000/icdp?apptype=app03"
   }else{
-    window.location.href="http://127.0.0.1:1000/"
+    alert('window.location.href="http://127.0.0.1:1000/"')
   }
 }
+window.toLoginPage = toLoginPage;

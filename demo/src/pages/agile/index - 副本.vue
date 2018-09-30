@@ -178,24 +178,79 @@
         </Modal>
 
        
-        
+        <Modal 
+            v-for="(myItem,index) in ITMitem.AddGroupList" :key="index"
+            :ref="myItem.myReftemp+index" 
+            :class="myItem.myReftemp+index" 
+            v-model="myItem.modaAdd" 
+            :title="'添加'+myItem.myLabel+''" 
+            :loading="modal_add_loading"
+
+            @on-ok="submitRole(index,myItem.myRef+index,'formITMitem'+index)"  
+            ok-text="添加"
+            @on-cancel="cancelRole(index,myItem.myRef+index,'formITMitem'+index)"
+            @on-visible-change="changeRole"
+
+            >
+            <!-- :prop="myItem.grouptemp" -->
+            <!-- :prop="'ITMitem.AddGroupList.'+index+'.grouptemp'" -->
+            <table class="ITMtable">
+                <tr>
+                    <th>项目名称</th><td><p>{{ ITMtable.name | FALSEINFO}}</p></td>
+                </tr>
+                <tr>
+                    <th>项目编号</th><td><p>{{ ITMtable.num | FALSEINFO}}</p></td>
+                </tr>
+                <tr>
+                    <th>项目描述</th><td><p>{{ ITMtable.desc | FALSEINFO}}</p></td>
+                </tr>
+            </table>
+            <Form :label-width="80"  :ref="'formITMitem'+index" :model="ITMitem">
+                <FormItem 
+                    :label="myItem.myLabel"
+                    :prop="'AddGroupList.'+index+'.grouptemp'"
+                    :rules="{required: true, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                     
+                    :ref="myItem.myRef+index" 
+                    :class="myItem.myRef+index"
+                    >
+                    <Select 
+                        @on-query-change="queryChange"
+                        @on-change="selChange"
+                        @on-open-change="openChange"
+                        v-model="myItem.grouptemp" 
+                        :id="'sel'+index" 
+                        filterable 
+                        multiple
+                        :loading="inputLoad" 
+                        :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'"
+                        >
+                        <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
+                            {{ item.label }}
+                        </Option>
+                    </Select>
+                </FormItem>
+            </Form>           
+                
+            
+            
+        </Modal>
          
         
-        <ItmPop :isShow="isShowItm" @itmClose="itmCloseFn" />
+
         <!-- <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" /> -->
 
 	</div>
 </template>
 <script>
 import AddItemPop from "./additempop";
-import ItmPop from "./itmpop";
 import Store from '@/vuex/store'
 
 
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission,projectAddGroup} = Common.restUrl;
+const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission,projectAddGroup,importITM,getITMtable} = Common.restUrl;
 
 export default {
 	name: 'aglie',
@@ -236,7 +291,6 @@ export default {
     },
     components: {
         AddItemPop,
-        ItmPop,
     },
     computed: {
         loginSave() {
@@ -437,25 +491,162 @@ export default {
             prj_permission:[],
             identity:"",
 
-            isShowItm:false,
+
+
+            ITMitem:{
+                AddGroupList:[],
+            },
+            ITMtable:{
+                name:"",
+                num:"",
+                desc:"",
+            },
+            inputLoad:false,
+            modal_add_loading:true,
             
 
         }
     },
     methods: {
-        itmCloseFn(is,tab){
-            this.isShowItm = is;
-            if(tab){
-                this.cancelSerchAll();
-                this.tableDAtaPageCurrent = 1;
-                this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
-                
+        cleanITM(){
+            this.ITMitem.AddGroupList = [];
+            for(let I in this.ITMtable){
+                this.ITMtable[I] = "";
             }
         },
-        outinITM(){
-            this.isShowItm = true;
+        openChange(isShow){
+            //console.log(isShow)
         },
-        
+        selChange(val){
+            let _val = val[val.length-1];
+            this.ITMitem.AddGroupList[0].grouptemp = [];
+            this.ITMitem.AddGroupList[0].grouptemp.push(_val);
+            //console.log(_val)
+            Common.throttle(
+                (value, THIS) => {
+                    console.log(value);
+                    THIS.getITMtableFn(getITMtable,{xxxxx:value})
+                },
+                this,
+                1500,
+                _val,
+                2000
+            )();
+            //
+        },
+        getITMtableFn(URL,params = {}){
+            defaultAXIOS(URL,params,{timeout:5000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======agile ITMtable***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    for(let I in this.ITMtable){
+                        this.ITMtable[I] = myData.data[I];
+                    }
+                    
+                }else{
+                    this.showError(URL+"错误");
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+        queryChange(val){
+        },
+        changeRole(is){
+        },
+        cancelRole(i,name,fromName){
+            this.$refs[fromName][i].resetFields();
+        },
+        submitRole(i,name,fromName){
+            this.$refs[fromName][i].validate((valid)=>{//验证
+                this.modal_add_loading = false;
+                this.$nextTick(() => {
+                  this.modal_add_loading = true;
+                });
+                if(valid){
+                    this.modal_add_loading = true;
+                    this.$nextTick(() => {
+                      this.modal_add_loading = true;
+                    });
+                    this.submitAddData(i,fromName,this.ITMitem.AddGroupList[i],this,this.ITMitem.AddGroupList[i].grouptemp);
+                }
+            })
+            
+        },
+        submitAddData(i,fromName,obj,that,group){
+            console.log(obj,"=-=-=-=-=-=-",that.ITMitem.AddGroupList[i],group)
+            let tempData = {
+                xxxxx:JSON.stringify(group),
+            }
+            //
+            defaultAXIOS(importITM,tempData,{timeout:5000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======agile ITMAdd***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    that.$refs[fromName][i].resetFields();
+                    that.modal_add_loading = false;
+                    obj.modaAdd = false;
+                    that.tableDataAjaxFn(projectAll,1,that.tableDAtaPageLine);
+                    that.tableDAtaPageCurrent = 1;
+                    //this.$emit("popClose2",true);
+                    
+                }else{
+                    obj.modaAdd = true;
+                    that.modal_add_loading = false;
+                    that.showError(importITM+"错误");
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                that.modal_add_loading = false;
+                that.showError(error);
+            });
+            //
+
+        },
+        outinITM(){
+            this.cleanITM();
+            if(!this.ITMitem.AddGroupList.length){
+                this.ITMitem.AddGroupList.push({
+                    myRef:"selfRef",
+                    group:[],
+                    groupList:[],
+                    myLabel:"ITM项目",
+                    delBtn:false,
+                    groupName:"",
+                    required:true,
+                    modaAdd:true,//修改添加角色
+                    grouptemp:[],//修改添加角色
+                    groupListtemp: [],//修改添加角色
+                    myReftemp: "selfRefRole",//修改添加角色
+                })
+            }
+        },
+        projectGroupFn2(URL,params = {},ARR,thatEle){
+            Common.ProjectGroup2(defaultAXIOS,this,URL,params,ARR,thatEle,this.ITMitem,this.addSelectEleList);
+        },
+        addSelectEleList(ARR,thatEle,dataList){
+            if(typeof(ARR)  == "number"){
+                if(thatEle && thatEle.temp && thatEle.temp.length){
+                    let _tempArr = Common.returnDelArr(this.ITMitem.AddGroupList[ARR].grouptemp,dataList);
+
+                    let _tempArr2 = [];
+                    _tempArr2.push(...thatEle.temp,..._tempArr);
+                    let _tempArr3 = Common.returnDelArr(this.ITMitem.AddGroupList[ARR].group,_tempArr2);
+                   
+                    this.ITMitem.AddGroupList[ARR].groupListtemp.push(..._tempArr3);
+
+                }else{
+                    let _tempArr4 = Common.returnDelArr(this.ITMitem.AddGroupList[ARR].group,dataList);
+                    this.ITMitem.AddGroupList[ARR].groupListtemp.push(..._tempArr4);
+                }
+            }else{
+                this.showError("addSelectEleList的参数ARR不是数字");
+            }
+
+        },
         /* ====== */
         demo(){
             
@@ -518,6 +709,7 @@ export default {
 
         },
         showError(ERR){
+            //alert(JSON.stringify(ERR))
             Common.ErrorShow(ERR,this);
         },
 

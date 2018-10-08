@@ -77,6 +77,8 @@ CommonRest.restUrl = {
     "getITMtable": process.env.BASE_URL + "/getITMtable/xxxxx/",
     /****express 敏捷项目列表ITM post****/
 
+    "importITM2": process.env.BASE_URL + "/importITM/xxxxx/",
+    /****express 敏捷项目列表ITM post****/
 
 
 

@@ -14,7 +14,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,projectListDataNew} = Common.restUrl;
+const {importITM2} = Common.restUrl;
 
 export default {
     props: {

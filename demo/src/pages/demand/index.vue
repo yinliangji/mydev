@@ -76,6 +76,13 @@
                             :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
                         >删除
                         </Button>
+                        <Button 
+                            type="info" 
+                            :disabled="false"
+                            @click="outinITM"
+                            >
+                            从ITM导入项目 功能制作中，不能点！！！
+                        </Button>
                     </div>
                     
                     <Table border ref="selection" :columns="columns" :data="tableData" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
@@ -104,6 +111,8 @@
 
             </div>
         </Modal>
+
+        <ITMpop :isShow="isShowITMPop" @popClose3="itmPopClose" />
         
         <ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  />
 
@@ -121,7 +130,7 @@ const {reqAll,getPermission,projectDetail,reqDelect} = Common.restUrl;
 
 import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 import Addtablepop from "./addtablepop";
-
+import ITMpop from "./itmpop2";
 export default {
     name: 'demand',
     data () {
@@ -259,21 +268,35 @@ export default {
             prj_permission:[],
             identity:"",
 
+            isShowITMPop:false,
+
 
 
         }
     },
     mounted(){
-        this.getPermissionFn(getPermission)
+        this.getPermissionFn(getPermission);
         let ID = Common.GETID(this,Common) ? Common.GETID(this,Common) : this.$router.push('/agile');
         
-
         this.getPermissionFn(getPermission);
         this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
         this.tableDAtaPageCurrent = 1;
 
     },
+    beforeUpdate(){
+        console.log("demand--beforeUpdate--","this.isShowITMPop==>",this.isShowITMPop)
+    },
+    updated(){
+        console.log("demand--updated--","this.isShowITMPop==>",this.isShowITMPop)
+    },
     methods: {
+        itmPopClose(is){
+            this.isShowITMPop = is;
+        },
+        outinITM(){
+            
+            this.isShowITMPop = true;
+        },
         authIs(KEY){
             return Common.auth(this,KEY)
         },
@@ -308,7 +331,7 @@ export default {
             Common.ErrorShow(ERR,this);
         },
         cancel(){
-          this.modaDelete = false;
+            this.modaDelete = false;
         },
         getPrjidFn(URL,ID){
             return defaultAXIOS(URL+ID,{},{timeout:2000,method:'get'}).then((response) => {
@@ -526,6 +549,7 @@ export default {
     components: {
         ADDorEDITpop,
         Addtablepop,
+        ITMpop,
     },
 }
 </script>

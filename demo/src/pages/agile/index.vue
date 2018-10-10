@@ -128,7 +128,7 @@
                         </Button>
                         <Button 
                             type="info" 
-                            :disabled="false"
+                            :disabled="authIsAdmin(['SuperAdmin'])"
                             @click="outinITM" 
                             >
                             从ITM导入项目 功能制作中，不能点！！！
@@ -455,7 +455,9 @@ export default {
         outinITM(){
             this.isShowItm = true;
         },
-        
+        authIsAdmin(KEY){
+            return Common.AdminAuth(this,KEY)
+        },
         /* ====== */
         demo(){
             

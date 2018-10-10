@@ -22,6 +22,8 @@ export default {
 				defect:["1","1-6"],
 				overView:["1","1-7"],
 				'agile/detail':["1","1-8"],
+				'documents':["1","1-9"],
+				'dataSynchro':["1","1-10"],
 
 			},
 			OpenNames:[],//["1"]
@@ -100,6 +102,8 @@ export default {
 			let page6 = "defect";
 			let page7 = "overView";
 			let page8 = "agile/detail";
+			let page9 = "documents";
+			let page10 = "dataSynchro";
 
 
 			if(to.path.indexOf(page8)!= -1){
@@ -118,6 +122,10 @@ export default {
 				this.side_menu(page6)
 			}else if(to.path.indexOf(page7)!= -1){
 				this.side_menu(page7)
+			}else if(to.path.indexOf(page9)!= -1){
+				this.side_menu(page9)
+			}else if(to.path.indexOf(page10)!= -1){
+				this.side_menu(page10)
 			}
 		}
 	},

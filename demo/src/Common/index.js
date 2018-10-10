@@ -281,15 +281,18 @@ export default class Common extends Utils {
     }
 
     static AdminAuth(THIS,KEY){
-      let OBJ = THIS.prj_permission
-      if(THIS.identity == "SuperAdmin"){
-          return THIS.identity
-      }else if(THIS.identity == "PlainAdmin"){
-          return THIS.identity
+      let OBJ = THIS.prj_permission;
+      if(KEY && Array.isArray(KEY) && KEY.length){
+        let _temp = true;
+        for(let i =0;i<KEY.length;i++){
+          if(THIS.identity && THIS.identity.indexOf(KEY[i]) != -1){
+              _temp = false;
+          }
+        }
+        return _temp
       }else{
-          return false
+        return false;
       }
-        
     }
 
     //给输入框本身加已选择的数组temp --不通用

@@ -1,7 +1,6 @@
 <template>
 	<aside>
 		<!-- this.$router.push({path: '/product', query: {board: true}}) -->
-		
 		<MenuItem name="1-8">
 			<router-link to="/agile/detail" />
 			<Icon type="ios-photos-outline"></Icon>
@@ -32,6 +31,11 @@
 			<router-link  to="/overView" />
 			<Icon type="clipboard"></Icon>
 			<span>项目概览</span>
+		</MenuItem>
+		<MenuItem name="1-9">
+			<router-link  to="/documents" />
+			<Icon type="document-text"></Icon>
+			<span>附件管理</span>
 		</MenuItem>
 	</aside>
 			

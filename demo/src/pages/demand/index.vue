@@ -78,10 +78,10 @@
                         </Button>
                         <Button 
                             type="info" 
-                            :disabled="false"
+                            :disabled="authIsAdmin(['SuperAdmin'])"
                             @click="outinITM"
                             >
-                            从ITM导入项目 功能制作中，不能点！！！
+                            从ITM同步同步需求项 功能制作中，不能点！！！
                         </Button>
                     </div>
                     
@@ -290,8 +290,14 @@ export default {
         console.log("demand--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
-        itmPopClose(is){
+        itmPopClose(is,isCancel){
             this.isShowITMPop = is;
+            if(!isCancel){
+                let ID = Common.GETID(this,Common)
+                this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
+                this.tableDAtaPageCurrent = 1;
+            }
+            
         },
         outinITM(){
             
@@ -300,6 +306,10 @@ export default {
         authIs(KEY){
             return Common.auth(this,KEY)
         },
+        authIsAdmin(KEY){
+            return Common.AdminAuth(this,KEY)
+        },
+
         getPermissionFn(URL){
             Common.GetPermission(defaultAXIOS,this,URL);
         },

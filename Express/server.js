@@ -1132,7 +1132,7 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
             "icdp_prjrequirement_view",
             "icdp_prjrequirement_edit",
         ],
-        identity:"PlainAdmin",
+        identity:"SuperAdmin",
         //PlainAdmin
         //SuperAdmin
         //Admin

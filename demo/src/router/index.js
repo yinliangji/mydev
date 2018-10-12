@@ -280,6 +280,18 @@ const router = new Router({
             },
         },
         {
+            path: '/test2',
+            name: 'test2',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/test2/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_all"], resolve)
+                }
+            },
+        },
+        {
           path: '/page1',
           name:'Page1',
           components: {

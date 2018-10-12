@@ -189,6 +189,7 @@ const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,pr
 export default {
 	watch: {
 		'$route' (to, from) {
+			
 			if(to.query.board && to.query.board == "true"){
 	        	this.currentView = "kanbanboard";
 	        }else{
@@ -215,15 +216,11 @@ export default {
         console.log("product--beforecreated-------",this.formValidate)
     },
     created(){
-        
+        this.isKanbanboard();
         if(this.addtest){
             this.tabRowAddFn()
         }
-        if(this.$route.query.board && this.$route.query.board == "true"){
-        	this.currentView = "kanbanboard";
-        }else{
-        	this.currentView = "developList";
-        }
+
 
         Common.RemoveSession("userstorySerchTemp");
         if(Common.GetSession("allSession")){
@@ -253,6 +250,7 @@ export default {
     },
     updated(){
         console.log("product--updated-------",this.formValidate)
+
         if(this.addtest){
             this.tabRowAddFn()
         }
@@ -772,11 +770,6 @@ export default {
 		//Common.RemoveSession("allSession");
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
 
-		
-
-		
-
-
     	EventBus.$on("moveEnd", this.moveEnd);
         EventBus.$on("clickItem", this.clicked);
         EventBus.$on("search", this.searchHandle);
@@ -785,6 +778,15 @@ export default {
 		
 	},
 	methods:{
+		isKanbanboard(){
+			if(Common.GetSession("CurView")){
+				this.currentView = Common.GetSession("CurView");
+			}else if(this.$route.query.board && (this.$route.query.board == "true" || this.$route.query.board === true)){
+	        	this.currentView = "kanbanboard";
+	        }else{
+	        	this.currentView = "developList";
+	        }
+		},
 		cardpopClose(){
 			this.cardpopList = [];
 		},
@@ -801,11 +803,6 @@ export default {
 	        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
 	        	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
 	        	this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent")-0 : 1;
-	        	
-	        	
-
-
-
 
 	        },(error)=>{
 	        	console.log(error);
@@ -1204,10 +1201,14 @@ export default {
             })
         },
 		showList() {
-			this.currentView = "developList";
+			let CurView = "developList";
+			this.currentView = CurView;
+			Common.SetSession("CurView",CurView)
 		},
 		showTask(){
-			this.currentView = "kanbanboard";
+			let CurView = "kanbanboard"
+			this.currentView = CurView;
+			Common.SetSession("CurView",CurView)
 		},
 	}
 }

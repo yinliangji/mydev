@@ -50,6 +50,11 @@
 				<Icon type="ios-navigate"></Icon>
 				<span>page2</span>
 			</MenuItem>
+			<MenuItem name="1-11">
+				<router-link  to="/test2" />
+				<Icon type="ios-navigate"></Icon>
+				<span>旧函数节流查询</span>
+			</MenuItem>
 	</aside>
 </template>
 <script>

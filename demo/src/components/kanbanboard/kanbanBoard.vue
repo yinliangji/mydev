@@ -37,7 +37,7 @@
       <!--无分组-->
       <div class="row-wrapper" v-if="groupList.length == 0">
         <Row :gutter="16" type="flex" justify="start" align="middle">
-          <Col span="4" v-for="(items, index) in statusList"  :key="index">
+          <Col span="4" v-for="(items, index) in statusList"  :key="index" class="kanbanItemBox">
             <kanbanItem
                 :key="keys"
                 :item = "value"
@@ -138,7 +138,8 @@ export default {
   line-height: 32px;
   text-align: center;
   font-size: 14px;
-
+}
+.kanbanItemBox{
   
 }
 </style>

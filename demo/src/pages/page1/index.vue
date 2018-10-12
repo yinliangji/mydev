@@ -34,6 +34,18 @@
 	            <Button type="ghost" @click="handleReset('formDynamic')" style="margin-left: 8px">Reset</Button>
 	        </FormItem>
 	    </Form>
+	    <Transfer
+        :data="data3"
+        :target-keys="targetKeys3"
+        :list-style="listStyle"
+        :render-format="render3"
+        :operations="['To left','To right']"
+        filterable
+        @on-change="handleChange3">
+        <div :style="{float: 'right', margin: '5px'}">
+            <Button type="ghost" size="small" @click="reloadMockData">Refresh</Button>
+        </div>
+    </Transfer>
 	</div>
 </template>
 <script>

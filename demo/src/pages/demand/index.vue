@@ -58,31 +58,49 @@
                 <div class="tableBox">
                     
                     <div class="tableBtnBox">
-                        <Button 
-                            type="success" 
-                            @click="addItem2"
-                            :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
-                        >添加
-                        </Button>
-                        <Button 
-                            type="warning" 
-                            @click="editItemFn2"
-                            :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_edit','icdp_prjrequirement_view'])"
-                        >编辑
-                        </Button>
-                        <Button 
-                            type="error" 
-                            @click="deleteTableItem"
-                            :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
-                        >删除
-                        </Button>
-                        <Button 
-                            type="info" 
-                            :disabled="authIsAdmin(['SuperAdmin'])"
-                            @click="outinITM"
-                            >
-                            从ITM同步同步需求项 功能制作中，不能点！！！
-                        </Button>
+                        <Row>
+                            <Col span="14">
+                                <Button 
+                                    type="success" 
+                                    @click="addItem2"
+                                    :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
+                                >添加
+                                </Button>
+                                <Button 
+                                    type="warning" 
+                                    @click="editItemFn2"
+                                    :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_edit','icdp_prjrequirement_view'])"
+                                >编辑
+                                </Button>
+                                <Button 
+                                    type="error" 
+                                    @click="deleteTableItem"
+                                    :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
+                                >删除
+                                </Button>
+                                
+                            </Col>
+                            <Col span="10">
+                                <Button 
+                                    type="primary"
+                                    @click="toBusiness"
+                                    size="small"
+                                    style="float: right;margin-left:5px"
+                                    >
+                                    业务功能总览
+                                </Button>
+                                <Button 
+                                    type="info" 
+                                    :disabled="authIsAdmin(['SuperAdmin'])"
+                                    @click="outinITM"
+                                    size="small"
+                                    style="float: right"
+                                    >
+                                    从ITM同步同步需求项
+                                </Button>
+                            </Col>
+                        </Row>
+                        
                     </div>
                     
                     <Table border ref="selection" :columns="columns" :data="tableData" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
@@ -192,48 +210,53 @@ export default {
                     title: '提出部门',
                     key: 'req_submitter',
                     align: 'center',
-                    
+                },
+                {
+                    title: '需求项下用户故事上线情况',
+                    width: 190,
+                    key: 'on_line',
+                    align: 'center',
                 },
 
-                // {
-                //     title: '操作产品待办事项',
-                //     key: 'action',
-                //     width: 140,
-                //     align: 'center',
-                //     render: (h, params) => {
-                //         return h('div', [
-                //             h('Button', {
-                //                 props: {
-                //                     type: 'primary',
-                //                     size: 'small'
-                //                 },
-                //                 style: {
-                //                     marginRight: '5px'
-                //                 },
-                //                 on: {
-                //                     click: () => {
-                //                         this.addItem(params.index)
-                //                     }
-                //                 }
-                //             }, '添加 '),
-                //             h('Button', {
-                //                 props: {
-                //                     type: 'info',
-                //                     size: 'small'
-                //                 },
-                //                 style: {
-                //                     marginRight: '5px'
-                //                 },
-                //                 on: {
-                //                     click: () => {
-                //                         this.toLIstFn(params.index)
-                //                     }
-                //                 }
-                //             }, '查看'),
+                {
+                    title: ' 需求项分析',
+                    key: 'action',
+                    width: 230,
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.addItem(params.index)
+                                    }
+                                }
+                            }, '查看用户故事 '),
+                            h('Button', {
+                                props: {
+                                    type: 'info',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.toLIstFn(params.index)
+                                    }
+                                }
+                            }, '查看业务功能'),
 
-                //         ]);
-                //     }
-                // }
+                        ]);
+                    }
+                }
             ],
             tableData: [
                 // {
@@ -290,6 +313,9 @@ export default {
         console.log("demand--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
+        toBusiness(){
+            this.$router.push({path: '/demand/business/', query: {}})
+        },
         itmPopClose(is,isCancel){
             this.isShowITMPop = is;
             if(!isCancel){

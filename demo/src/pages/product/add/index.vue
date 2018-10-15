@@ -28,7 +28,6 @@
                                     <Option v-for="(item,index) in chargerList" :key="index" :value="item.value">{{item.label}}</Option>
                                 </Select>
                             </FormItem>
-
                         </Col>
                         <Col span="12">
                             <FormItem label="故事类型" prop="userstory_type">
@@ -128,13 +127,17 @@
                         
                     </div>
 
-                    <h3 class="Title"><span>需求相关</span></h3>
+                    <h3 class="Title"><span>需求分析相关</span></h3>
 
                     <div class="fromBox">
-                        <FormItem label="所属需求" prop="req_id">
+                        <FormItem label="所属需求项" prop="req_id">
                             <Select v-model="formValidate.req_id" placeholder="请选择所属需求">
                                 <Option v-for="(item , index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
+                        </FormItem>
+
+                        <FormItem label="关联业务功能" >
+                            <Trans />
                         </FormItem>
 
 
@@ -176,6 +179,7 @@
 </template>
 <script>
 import Store from '@/vuex/store'
+import Trans from './trans'
 
 
 import API from '@/api'
@@ -630,6 +634,10 @@ export default {
             this.$router.push('/product');
             
         },
+    },
+    components: {
+       Trans,
+
     },
 }
 </script>

@@ -377,6 +377,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:1,
                     id:1,
+                    req_id:5,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
@@ -384,6 +385,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:2,
                     id:1,
+                    req_id:5,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
@@ -391,6 +393,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:3,
                     id:1,
+                    req_id:5,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
@@ -398,6 +401,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:2,
                     id:1,
+                    req_id:5,
                 }
             ]
         },
@@ -411,6 +415,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:2,
                     id:1,
+                    req_id:5,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
@@ -418,6 +423,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:3,
                     id:1,
+                    req_id:5,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
@@ -425,6 +431,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:1,
                     id:1,
+                    req_id:5,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
@@ -432,6 +439,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:1,
                     id:1,
+                    req_id:6,
                 }
             ]
         },
@@ -445,6 +453,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:1,
                     id:1,
+                    req_id:5,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
@@ -452,21 +461,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:3,
                     id:1,
+                    req_id:5,
                 },
-                {
-                    userstory_name:"userstory_namexxxxx",
-                    userstory_id:1212334,
-                    charger:"chargerxxxxxx",
-                    proi:1,
-                    id:1,
-                },
-                {
-                    userstory_name:"userstory_namexxxxx",
-                    userstory_id:1212334,
-                    charger:"chargerxxxxxx",
-                    proi:2,
-                    id:1,
-                }
+               
             ]
         },
         {
@@ -479,6 +476,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:3,
                     id:1,
+                    req_id:6,
                 },
                 {
                     userstory_name:"userstory_namexxxxx",
@@ -486,21 +484,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     charger:"chargerxxxxxx",
                     proi:1,
                     id:1,
+                    req_id:5,
                 },
-                {
-                    userstory_name:"userstory_namexxxxx",
-                    userstory_id:1212334,
-                    charger:"chargerxxxxxx",
-                    proi:3,
-                    id:1,
-                },
-                {
-                    userstory_name:"userstory_namexxxxx",
-                    userstory_id:1212334,
-                    charger:"chargerxxxxxx",
-                    proi:2,
-                    id:1,
-                }
+               
             ]
         }
 
@@ -1422,6 +1408,8 @@ let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
             "req_submitter|5-8": /[a-zA-Z]/,
             "req_name|5-8": /[a-zA-Z0-9]/,
             "prj_type": 1,
+            on_line:"1 | 5",
+
 
             "__value2__page": val2,
             "__value3__pageline": val3,

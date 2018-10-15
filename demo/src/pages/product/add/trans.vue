@@ -1,8 +1,29 @@
 <template>
     <div class="transBody">
-
-        <div class="transBodyLK" style="float:left;width:45%;">
-            <div style="margin-bottom:10px;">本次迭代的用户故事</div>
+        <Row style="padding-bottom:10px;">
+            <Col span="3">
+                已有业务功能
+            </Col>
+            <Col span="17">
+                <!-- <Input placeholder="输入【已有业务功能】查询" ></Input> -->
+                <Select v-modle="reqserch" filterable multiple placeholder="输入【已有业务功能】查询">
+                    <Option v-for="(item ,index) in reqserchList" :value="item.value" :key="index">
+                        {{item.label}}
+                    </Option>
+                </Select>
+            </Col>
+            <Col span="1">
+                &nbsp;
+            </Col>
+            <Col span="2">
+                <Button type="primary"  icon="ios-search">查询</Button>
+            </Col>
+            <Col span="1">
+                &nbsp;
+            </Col>
+        </Row>
+        <div class="transBodyLK" style="float:left;width:44%;">
+            <!-- <div style="margin-bottom:10px;">&nbsp;</div> -->
             <div class="transBodyL">
 
                 <div style="padding:6px;">
@@ -14,20 +35,19 @@
                       <div class="userStoryStatus" >
                           操作
                       </div>
-                      <div class="userStoryName" style="float:right;">
-                          故事名称
+                      <div class="userStoryName" >
+                          名称
                       </div>
                     </div>
                     <ul>
                         <li v-for="item in dataL" :key="item.id" class="storyBottom">
                             <div class="tranHeader">
                                 <span class="userStoryStatus" >编辑</span>
-                                <Checkbox :label="item.id" style="width:80%;">{{item.userstory_name}}</Checkbox>
+                                <Checkbox :label="item.id" style="width:70%;">{{item.userstory_name}}</Checkbox>
                             </div>
                         </li>
                     </ul>
                 </CheckboxGroup>
-
             </div>
         </div>
         <div class="transBodyC">
@@ -38,8 +58,28 @@
                 <Icon type="chevron-right"></Icon>
             </Button>
         </div>
-        <div class="transBodyRK" style="float:left;width:45%;">
-            <div style="margin-bottom:10px;">其他用户故事</div>    
+        <div class="transBodyRK" style="float:left;width:43%;">
+            <!-- <div style="margin-bottom:10px;">
+                <Row>
+                    <Col span="7">
+                        已有业务功能
+                    </Col>
+                    <Col span="13">
+                        
+                        <Select v-modle="reqserch" filterable multiple>
+                            <Option v-for="(item ,index) in reqserchList" :value="item.value" :key="index">
+                                {{item.label}}
+                            </Option>
+                        </Select>
+                    </Col>
+                    <Col span="1">
+                        &nbsp;
+                    </Col>
+                    <Col span="3">
+                        <Button type="primary" shape="circle" icon="ios-search"></Button>
+                    </Col>
+                </Row>
+            </div>     -->
             <div class="transBodyR">
                 <div class="transBodyRcon">
                     <div style="padding:8px 0;">
@@ -52,15 +92,15 @@
                             <div class="userStoryStatus" >
                                 操作
                             </div>
-                            <div class="userStoryName" style="float:right;">
-                                故事名称
+                            <div class="userStoryName" >
+                                名称
                             </div>
                         </div>
                         <ul>
                             <li v-for="item in dataR" :key="item.id" class="storyBottom">
                                 <div class="tranHeader">
                                     <span class="userStoryStatus">查看</span>
-                                    <Checkbox :label="item.id" style="width:80%;">{{item.userstory_name}}</Checkbox>
+                                    <Checkbox :label="item.id" style="width:70%;">{{item.userstory_name}}</Checkbox>
                                 </div>
                             </li>
                         </ul>
@@ -74,6 +114,13 @@
     export default {
         data () {
             return {
+                reqserch:"",
+                reqserchList:[
+                    {
+                        value:"x1",
+                        label:"x1"
+                    }
+                ],
                 proproName:"",
                 isShowMngAllBtn:false,
                 toLeftOnoff:true,
@@ -246,7 +293,8 @@
 .userStoryTitle{
     height:40px;
     line-height:40px;
-    border:1px solid #d8d8d8; 
+    border:1px solid #d8d8d8;
+    border-right:none; 
     border-left:0;
 }
 .transBodyL .userStoryTitle .userStoryName{
@@ -289,12 +337,12 @@
 .transBody {
     overflow: hidden;
    
-    margin-top: 10px;
+    margin-top: 0px;
    
     padding: 10px 0 10px 10px;
-    border:1px solid #aae5d1;
+    border:1px solid #dddee1;
     border-radius:2px;
-    background:#edf6fb;
+    background:none;
     
    
 
@@ -335,7 +383,7 @@
     width: 100%;
     float: left;
     overflow: hidden;
-    border: 1px solid #aae5d1;
+    border: 1px solid #d8d8d8;
     border-radius: 2px;
 
     min-height:40vh;
@@ -363,10 +411,12 @@
 }
 .tranHeader {
     padding: 10px;
-    background: #aae5d1;
-    border-bottom:1px solid #aae5d1;
+    background: #dddee1;
+    border-bottom:none;
     font-size:12px;
     padding-right:0;
+    padding-top:3px;
+    padding-bottom: 3px;
 }
 /*
 .tranHeader .more{

@@ -148,7 +148,9 @@
 				    	</div>
 					</div>
 					<div class="listBox" v-show="currentView == 'kanbanboard'">
+						<!-- :groupList="[]"  -->
 						<kanbanboard
+							:idDisabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
 							:sortdisabled="true" 
 							:cardList="cardLists" 
 							:statusList="statusLists" 
@@ -270,7 +272,7 @@ export default {
 			kanbanboardImgCur:require("../../assets/images/product-kanbanCur.png"),
 
 			groupList:[
-		        // { text: "产品待办事项" },
+		        { text: "所属需求" },
 		        // {
 		        //   text: "用户登录1",
 		        //   groupId: "group_01"
@@ -738,7 +740,7 @@ export default {
             identity:"",
             cardListBase:[],
             statusListBase:[],
-            groupList:[],
+            
 
             cardpop:false,
             cardpopList:[],
@@ -800,16 +802,23 @@ export default {
 		    		this.formValidate.sprint = sprint+"";
 		    	}
 
+		    	this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent") - 0 : 1;
+
 	        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-	        	this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-	        	this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent")-0 : 1;
+	        	this.tableDataAjaxFn(storyAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+
+	        		console.log(Common.GetSession("tableDAtaPageCurrent"),"=========")
+	        	
 
 	        },(error)=>{
 	        	console.log(error);
 	            this.showError(error);
-	            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
+
+	            this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent") - 0 : 1;
+	            
+	            this.tableDataAjaxFn(storyAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID);
 	  			this.storyGetKanBanFn(storyGetKanBan,ID);
-	  			this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent")-0 : 1;
+	  			
 	        })
 
 		},
@@ -1033,8 +1042,15 @@ export default {
                 console.log("<======product KanBanFn ***response+++",response,myData,"======>");
                 if(myData && myData.length){
                 	
-                	let _temp = {}
+                	let _temp = {};
+                	let reqArr = [];
                 	for(let i=0;i<myData.length;i++){
+                		if(myData[i].list && myData[i].list.length){
+                			for(let j=0;j<myData[i].list.length;j++){
+                				reqArr.push(myData[i].list[j].req_id)
+                			}
+                		}
+                		//
                 		_temp.stateStr = myData[i].userstory_status;
                 		_temp.taskNumber = Number(myData[i].count);
                 		_temp.state = "0"+(i+1);
@@ -1043,7 +1059,19 @@ export default {
                 		_temp = {};
                 	}
 
-                	
+                	let reqArr2 = Array.from(new Set(reqArr));
+                	let checkreqName = (val)=>{
+
+                		let _temp = this.req_idList.find((item)=>{
+                			return val == item.value
+                		})
+                		return {text:_temp.label,groupId:val+""}
+                	}
+                	this.groupList = [];
+                	this.groupList.push({text:"所属需求"});
+                	for(let k=0;k<reqArr2.length;k++){
+                		this.groupList.push(checkreqName(reqArr2[k]))
+                	}
 	            
 
 	            	let _arr = [];
@@ -1059,7 +1087,7 @@ export default {
 							_Obj.description = "description_"+ i +"_"+j;
 							_Obj.userName = myData[i].list[j].charger;
 							_Obj.userId = "userId_"+ i +"_"+j;
-							_Obj.groupId = "group_01"
+							_Obj.groupId = myData[i].list[j].req_id+"";
 							//_Obj.bgColor = { background: ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi) };
 							_Obj.bgcolor = ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else if(C==3){return '#f2e1f0'}else{return '#ffffff'}})(myData[i].list[j].proi);
 							_Obj.taskStateStr = myData[i].userstory_status;
@@ -1074,7 +1102,7 @@ export default {
 						this.cardListBase.push(..._arr);
 						_arr = []
 					}
-					EventBus.$emit('storyBindSort');
+					//EventBus.$emit('storyBindSort');
 					
 
 

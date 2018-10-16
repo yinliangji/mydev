@@ -21,7 +21,9 @@
                     <ul>
                         <li v-for="(item,index) in dataL" :key="item.id" class="storyBottom">
                             <div class="tranHeader">
-                                <span class="userStoryStatus" style="cursor:pointer;" @click="modify('edit',index)">编辑</span>
+                                <span class="userStoryStatus">
+                                    <Button type="warning" shape="circle" size="small" @click="modify('edit',index)">编辑</Button>
+                                </span>
                                 <Checkbox :label="item.id" style="width:70%;">{{item.userstory_name}}</Checkbox>
                             </div>
                         </li>
@@ -78,8 +80,10 @@
                         <ul>
                             <li v-for="(item,index) in dataR" :key="item.id" class="storyBottom">
                                 <div class="tranHeader">
-                                    <span class="userStoryStatus" style="cursor:pointer;" @click="modify('view',index)">查看</span>
-                                    <Checkbox :label="item.id" style="width:70%;">{{item.userstory_name}}</Checkbox>
+                                    <span class="userStoryStatus">
+                                        <Button type="info" shape="circle" size="small" @click="modify('view',index)">查看</Button>
+                                    </span>
+                                    <Checkbox :label="item.id" class="translist"><em>{{item.userstory_name}}</em></Checkbox>
                                 </div>
                             </li>
                         </ul>
@@ -197,7 +201,7 @@ export default {
     },
     methods: {
         modify(v,i){
-            console.log(v,i)
+            this.$emit("modifyfn",v,i,true);
         },
         selfAddItemFn(Group = [],GroupList = [],datal = [],datar = []){
             let Fn1 = (val,arr)=>{
@@ -262,7 +266,7 @@ export default {
             } 
             
         },
-        //--检查搜索
+        //
         toLeft() {
             
             this.checkAllGroupR.forEach(element => {
@@ -329,9 +333,7 @@ export default {
         },
         TransDataGroupList(){
             this.selfDataGroupList = this.TransDataGroupList;
-            
         },
-        
         //--检查搜索结束
         checkAllGroup(val) {
             console.log(val);
@@ -359,6 +361,7 @@ export default {
                 this.checkAllGroupOnoff.push(element.id);
             });
             this.checkAllGroup = [];
+            this.$emit("dataLfn",val)
         },
         dataR(val) {
             this.checkAllGroupOnoffR = [];
@@ -366,7 +369,9 @@ export default {
                 this.checkAllGroupOnoffR.push(element.id);
             });
             this.checkAllGroupR = [];
+            this.$emit("dataRfn",val)
         },
+        
     },
     created() {
         this.dataL.forEach(element => {
@@ -444,7 +449,7 @@ export default {
     padding: 10px 0 10px 10px;
     border:none;
     border-radius:2px;
-    background:#f5f5f5;
+    background:#e9eaec;
     
    
 
@@ -513,12 +518,13 @@ export default {
 }
 .tranHeader {
     padding: 10px;
-    background: #dddee1;
+    background: #f5f5f5;
     border-bottom:none;
     font-size:12px;
     padding-right:0;
-    padding-top:3px;
-    padding-bottom: 3px;
+    padding-top:6px;
+    padding-bottom: 6px;
+    overflow: hidden;
 }
 /*
 .tranHeader .more{
@@ -545,7 +551,12 @@ export default {
 }
 .ivu-checkbox{margin-right:6px;}
 .storyBottom{
-    border-top:2px white solid;
+    border-top:2px dotted  #d8d8d8;
 }
-
+.translist{
+    display:block;margin-right:80px;padding-top:5px;
+}
+.translist em{
+    padding-left:0.5em;
+}
 </style>

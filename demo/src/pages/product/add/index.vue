@@ -177,6 +177,9 @@
                                     :TransDataGroupList = "formValidate.AddGroupList[0].groupList" 
                                     :isPopsAdd = "isPopsAdd"
                                     :popsItem = "popsItem"
+                                    @dataLfn="leftData"
+                                    @dataRfn="rightData"
+                                    @modifyfn="modifyData"
                                     />
                             </Row>
 
@@ -472,6 +475,15 @@ export default {
     },
     methods:{
         //查询搜索开始
+        modifyData(v,i,is){
+            console.log(v,i,is);
+        },
+        leftData(D){
+            console.log(D,"leftData")
+        },
+        rightData(D){
+            console.log(D,"rightData")
+        },
         selectQueryChange(item){
             console.log(item,"selectQueryChange")
         },
@@ -505,7 +517,7 @@ export default {
                 myValue: "xmjl",
                 delBtn: false,
                 groupName: "",
-                required: true,
+                required: false,
                 modaAdd:false,//修改添加角色
                 grouptemp:[],//修改添加角色
                 groupListtemp: [],//修改添加角色

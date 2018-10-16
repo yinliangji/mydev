@@ -91,6 +91,9 @@
                 </div>
             </div>
         </div>
+        <div  class="bottomAddBtnBox">
+            <Button type="success" @click="modify('add',-1)">添加</Button>
+        </div>
     </div>
 </template>
 <script>
@@ -200,6 +203,7 @@ export default {
         }
     },
     methods: {
+
         modify(v,i){
             this.$emit("modifyfn",v,i,true);
         },
@@ -558,5 +562,9 @@ export default {
 }
 .translist em{
     padding-left:0.5em;
+}
+.bottomAddBtnBox{
+    clear:both;
+    padding-top:10px;
 }
 </style>

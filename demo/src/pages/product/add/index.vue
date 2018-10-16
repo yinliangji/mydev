@@ -136,8 +136,54 @@
                             </Select>
                         </FormItem>
 
-                        <FormItem label="关联业务功能" >
-                            <Trans />
+
+                        <div class="transBox">
+                            <label class="transBoxTitle">关联业务功能</label>
+                            <Row>
+                                
+                                <Col span="24">
+                                    <!-- 搜索选择开始 -->
+                                    <div v-for="(myItem,index) in formValidate.AddGroupList" :key="index" >
+                                        
+                                        <FormItem 
+                                            :label-width="100"
+                                            :label="myItem.myLabel" 
+                                            :prop="'AddGroupList.'+index+'.group'"
+                                            :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                                             
+                                            :ref="myItem.myRef+index" 
+                                            :class="myItem.myRef+index"
+                                            >
+                                            <Select
+                                                @on-change="selectChange" 
+                                                @on-query-change="selectQueryChange"
+                                                v-model="myItem.group" 
+                                                :id="'sel'+index" 
+                                                filterable 
+                                                :loading="inputLoad"  
+                                                multiple 
+                                                :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'"
+                                                >
+                                                <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2">
+                                                    {{ item.label }}
+                                                </Option>
+                                            </Select>
+                                        </FormItem>
+                                    </div>
+                                    <!-- 搜索选择结束 -->
+                                </Col>
+                                <Trans 
+                                    :TransDataGroup = "formValidate.AddGroupList[0].group" 
+                                    :TransDataGroupList = "formValidate.AddGroupList[0].groupList" 
+                                    :isPopsAdd = "isPopsAdd"
+                                    :popsItem = "popsItem"
+                                    />
+                            </Row>
+
+                        </div>
+                        
+                        <FormItem label="" >
+                            &nbsp;
                         </FormItem>
 
 
@@ -185,7 +231,7 @@ import Trans from './trans'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAdd,storyGetSprint,storyGetReq,storyGetCondition,publishUser } = Common.restUrl;
+const {storyAdd,storyGetSprint,storyGetReq,storyGetCondition,publishUser,projectAddGroup } = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -236,16 +282,16 @@ export default {
     },
     created(){
         console.log("productAdd--created-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
+        this.addCheckSerch();
     },
     beforeUpdate(){
         console.log("productAdd--beforeUpdate-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
     },
     updated(){
         console.log("productAdd--updated-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
-        if(this.addtest){
-            this.$router.push('/product')
-        }
-       
+        //console.log(this.formValidate.AddGroupList[0].group,"======7777")
+        
+
     },
     computed: {
         addtest() {
@@ -275,36 +321,23 @@ export default {
                 manhour:"",
                 charger:"",//一对
                 nick_name:"",//一对
-
+                AddGroupList:[],//搜索查询
 
 
 
 
 
                 person:"",
-                
-                
-                
-                
                 mission:"",
                 business:[],
-                
                 introducer:"",
                 department:"",
-                
-
-
-
-
-
-
                 mail: '',
                 city: '',
                 gender: '',
                 interest: [],
                 date: '',
                 time: '',
-                
             },
             req_idList:[
                 // {
@@ -384,6 +417,13 @@ export default {
 
             chargerList:[],
 
+            //查询搜索开始
+            inputLoad:false,
+            isPopsAdd:false,
+            popsItem:false,
+            //查询搜索结束
+            
+
         }
     },
     mounted(){
@@ -425,13 +465,77 @@ export default {
                 this.showError(error);
             })
 
-
+            
         }else{
             this.$router.push('/agile');
         }
     },
     methods:{
+        //查询搜索开始
+        selectQueryChange(item){
+            console.log(item,"selectQueryChange")
+        },
+        selectChange(item){
+            console.log(item,"selectChange");
+            let _G = this.formValidate.AddGroupList[0].group;
+            let _GT = this.formValidate.AddGroupList[0].grouptemp;
+            let fn = (val,arr)=>{
+                return arr.findIndex((item)=>{
+                    return val == item
+                })
+            }
+            let FN = (arr,arr2)=>{
+                for(let i=0;i<arr.length;i++){
+                    if(fn(arr[i],arr2) == -1){
+                        return arr[i];
+                    }
+                }
+            }
+            this.isPopsAdd = _G.length > _GT.length ? "+" : "-";
+            this.popsItem = _G.length > _GT.length ? FN(_G,_GT) : FN(_GT,_G);
+            
+            this.formValidate.AddGroupList[0].grouptemp = this.formValidate.AddGroupList[0].group;
+        },
+        addCheckSerch(URL,params = {},Arr=[]){
+            let _tempObj = {
+                myRef: "selfRef",
+                group: [],
+                groupList: [],
+                myLabel: "已有业务功能",
+                myValue: "xmjl",
+                delBtn: false,
+                groupName: "",
+                required: true,
+                modaAdd:false,//修改添加角色
+                grouptemp:[],//修改添加角色
+                groupListtemp: [],//修改添加角色
+                myReftemp: "selfRefRole",//修改添加角色
+            }
+            this.formValidate.AddGroupList.push(_tempObj);  
+        },
+        
+        projectGroupFn(URL,params = {},ARR,thatEle){
+            defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【checkSearch Allgroup】***response+++",response,myData,"====>");
+                this.inputLoad = false;
+                this.formValidate.AddGroupList[ARR].groupList = [];
+                if(typeof(ARR)  == "number"){
+                    if(thatEle && thatEle.temp && thatEle.temp.length){
+                        let _tempArr = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,myData.data.list);
+                        this.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp,..._tempArr);
 
+                    }else{
+                        this.formValidate.AddGroupList[ARR].groupList.push(...myData.data.list);
+                    }
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.inputLoad = false;
+                this.showError(error);
+            });   
+        },
+        //查询搜索结束
 
         publishUserFn(URL,params = {}){
             return Common.PublishUser(defaultAXIOS,this,URL,params)
@@ -446,8 +550,6 @@ export default {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product get storyGetReq***response+++",response,myData,"======>");
-
-
                 
                 if(myData.data && myData.data.length){
                      //value: 'New York',
@@ -637,12 +739,52 @@ export default {
     },
     components: {
        Trans,
-
+    },
+    watch:{
+        //查询搜索开始
+        "formValidate.AddGroupList"(curVal,oldVal){
+            let _this = this;
+            if(curVal){
+                Common.changeArr(this,curVal,Common,projectAddGroup)//下拉样子
+            }
+        },
+        formValidate: {
+            handler(val, oldVal) {
+                if(val){
+                    Common.inputArr(this,val)//下拉样子
+                }
+            },
+            deep: true
+        },
+        
+        //查询搜索结束
     },
 }
 </script>
 <style lang="less" scoped>
 .fromBox {
     width: 80%;
+}
+@transTitle-width: 140px;
+.transBox {
+    position:relative;
+    margin-left:@transTitle-width;
+    border: 1px solid #dddee1;
+}
+.transBoxTitle{
+    position:absolute;
+    width:@transTitle-width;
+    top:0;
+    left:-(@transTitle-width);
+    text-align:right;
+    font-size: 12px;
+    color: #495060;
+    padding: 10px 12px 10px 0;
+}
+.selfRef0 {
+    margin:0;
+    padding-top:10px;
+    padding-bottom: 10px;
+    padding-right:10px;
 }
 </style>

@@ -1,27 +1,6 @@
 <template>
     <div class="transBody">
-        <Row style="padding-bottom:10px;">
-            <Col span="3">
-                已有业务功能
-            </Col>
-            <Col span="17">
-                <!-- <Input placeholder="输入【已有业务功能】查询" ></Input> -->
-                <Select v-modle="reqserch" filterable multiple placeholder="输入【已有业务功能】查询">
-                    <Option v-for="(item ,index) in reqserchList" :value="item.value" :key="index">
-                        {{item.label}}
-                    </Option>
-                </Select>
-            </Col>
-            <Col span="1">
-                &nbsp;
-            </Col>
-            <Col span="2">
-                <Button type="primary"  icon="ios-search">查询</Button>
-            </Col>
-            <Col span="1">
-                &nbsp;
-            </Col>
-        </Row>
+        
         <div class="transBodyLK" style="float:left;width:44%;">
             <!-- <div style="margin-bottom:10px;">&nbsp;</div> -->
             <div class="transBodyL">
@@ -40,9 +19,9 @@
                       </div>
                     </div>
                     <ul>
-                        <li v-for="item in dataL" :key="item.id" class="storyBottom">
+                        <li v-for="(item,index) in dataL" :key="item.id" class="storyBottom">
                             <div class="tranHeader">
-                                <span class="userStoryStatus" >编辑</span>
+                                <span class="userStoryStatus" style="cursor:pointer;" @click="modify('edit',index)">编辑</span>
                                 <Checkbox :label="item.id" style="width:70%;">{{item.userstory_name}}</Checkbox>
                             </div>
                         </li>
@@ -97,9 +76,9 @@
                             </div>
                         </div>
                         <ul>
-                            <li v-for="item in dataR" :key="item.id" class="storyBottom">
+                            <li v-for="(item,index) in dataR" :key="item.id" class="storyBottom">
                                 <div class="tranHeader">
-                                    <span class="userStoryStatus">查看</span>
+                                    <span class="userStoryStatus" style="cursor:pointer;" @click="modify('view',index)">查看</span>
                                     <Checkbox :label="item.id" style="width:70%;">{{item.userstory_name}}</Checkbox>
                                 </div>
                             </li>
@@ -111,179 +90,302 @@
     </div>
 </template>
 <script>
-    export default {
-        data () {
-            return {
-                reqserch:"",
-                reqserchList:[
-                    {
-                        value:"x1",
-                        label:"x1"
-                    }
-                ],
-                proproName:"",
-                isShowMngAllBtn:false,
-                toLeftOnoff:true,
-                toRightOnoff:true,
-                addOrModifyStatus:false,//默认为false是添加，当修改时改为true
-                sureInfo: "添加成功",
-                storySearch: "",
-                //
-                curStoryType: "",
-                curStoryTypeL:"",
-                storyTypeList: [],
-
-                curIteration: "",
-                iterationList: [],
-                curStoryStatus:"",
-                curStoryStatusL:"",
-                storyStatusList: [],
-                curreqName:"",
-                reqList:[],
-
-                bgcolorL: "ghost",
-                bgcolorR: "ghost",
-                nowNum: 0,
-                search: "",
-                titleName: "",
-
-                indeterminate: true,
-                checkAll: false,
-                checkAllR: false,
-                checkAllGroup: [], //v-model的控制多选框组是否打钩的
-                checkAllGroupR: [],
-                checkAllGroupOnoff: [], //全选按钮
-                checkAllGroupOnoffR: [],
-                //
-                dataL: [
-                    {
-                        id:1,
-                        userstory_name:"故事1",
-                        isShow:false,
-                        list:[],
-                    },
-                    {
-                        id:2,
-                        userstory_name:"故事2",
-                        isShow:false,
-                        list:[],
-                    },
-                ],
-                dataR: [
-                    {
-                        id:3,
-                        userstory_name:"故事3",
-                        isShow:false,
-                        list:[],
-                    },
-                    {
-                        id:4,
-                        userstory_name:"故事4",
-                        isShow:false,
-                        list:[],
-                    },
-                ],
+import Common from '@/Common';
+export default {
+    props: {
+        TransDataGroup: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
             }
         },
-        methods: {
-            toLeft() {
-                
-                this.checkAllGroupR.forEach(element => {
-                    this.dataL.push(this.dataR.find(n => n.id == element));
-                    this.dataR.splice(this.dataR.findIndex(n => n.id == element),1);
-                });
-                this.checkAll = false;
-                this.checkAllR = false;
+        TransDataGroupList: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
+        isPopsAdd: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
+        popsItem: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
+    },
+    data () {
+        return {
+            reqserch:"",
+            reqserchList:[
+                {
+                    value:"x1",
+                    label:"x1"
+                }
+            ],
+            selfDataGroup:[],
+            selfDataGroupList:[],
+            //
+            proproName:"",
+            isShowMngAllBtn:false,
+            toLeftOnoff:true,
+            toRightOnoff:true,
+            addOrModifyStatus:false,//默认为false是添加，当修改时改为true
+            sureInfo: "添加成功",
+            storySearch: "",
+            //
+            curStoryType: "",
+            curStoryTypeL:"",
+            storyTypeList: [],
+
+            curIteration: "",
+            iterationList: [],
+            curStoryStatus:"",
+            curStoryStatusL:"",
+            storyStatusList: [],
+            curreqName:"",
+            reqList:[],
+
+            bgcolorL: "ghost",
+            bgcolorR: "ghost",
+            nowNum: 0,
+            search: "",
+            titleName: "",
+
+            indeterminate: true,
+            checkAll: false,
+            checkAllR: false,
+            checkAllGroup: [], //v-model的控制多选框组是否打钩的
+            checkAllGroupR: [],
+            checkAllGroupOnoff: [], //全选按钮
+            checkAllGroupOnoffR: [],
+            //
+            dataL: [
+                // {
+                //     id:1,
+                //     userstory_name:"故事1",
+                //     isShow:false,
+                //     list:[],
+                // },
+                // {
+                //     id:2,
+                //     userstory_name:"故事2",
+                //     isShow:false,
+                //     list:[],
+                // },
+            ],
+            dataR: [
+                // {
+                //     id:3,
+                //     userstory_name:"故事3",
+                //     isShow:false,
+                //     list:[],
+                // },
+                // {
+                //     id:4,
+                //     userstory_name:"故事4",
+                //     isShow:false,
+                //     list:[],
+                // },
+            ],
             
-            },
-            toRight() {
-                this.checkAllGroup.forEach(element => {
-                    this.dataR.push(this.dataL.find(n => n.id == element));
-                    this.dataL.splice(this.dataL.findIndex(n => n.id == element),1);
-                });
-                this.checkAll = false;
-                this.checkAllR = false;
-            },
-            handleCheckAll() {
-                if (this.checkAll) {
-                    this.checkAllGroup = [];
-                } else {
-                    this.checkAllGroup = this.checkAllGroupOnoff;
-                }
-                this.checkAll = !this.checkAll;
-            },
-            handleCheckAllR() {
-                if (this.checkAllR) {
-                    this.checkAllGroupR = [];
-                } else {
-                    this.checkAllGroupR = this.checkAllGroupOnoffR;
-                }
-                this.checkAllR = !this.checkAllR;
-            },
-            checkAllGroupChange(data) {
-                if (data.length < this.dataL.length) {
-                    this.checkAll = false;
-                } else {
-                    this.checkAll = true;
-                }
-            },
-            checkAllGroupChangeR(data) {
-                if (data.length < this.dataR.length) {
-                    this.checkAllR = false;
-                } else {
-                    this.checkAllR = true;
-                }
-            },
+        }
+    },
+    methods: {
+        modify(v,i){
+            console.log(v,i)
         },
-        watch: {
-            checkAllGroup(val) {
-                console.log(val);
-                if (val.length > 0) {
-                    this.bgcolorR = "info";
-                    this.toRightOnoff = false;
-                } else {
-                    this.bgcolorR = "ghost";
-                    this.toRightOnoff = true;
-                }
-            },
-            checkAllGroupR(val) {
-                console.log(val);
-                if (val.length > 0) {
-                    this.bgcolorL = "info";
-                    this.toLeftOnoff = false;
-                } else {
-                    this.bgcolorL = "ghost";
-                    this.toLeftOnoff = true;
-                }
-            },
-            dataL(val) {
-                this.checkAllGroupOnoff = [];
-                val.forEach(element => {
-                    this.checkAllGroupOnoff.push(element.id);
+        selfAddItemFn(Group = [],GroupList = [],datal = [],datar = []){
+            let Fn1 = (val,arr)=>{
+                let _obj = {
+                    id:false,
+                    userstory_name:false,
+                    isShow:false,
+                    list:[],
+                };
+                let _temp = arr.find((item)=>{
+                    return val == item.value
                 });
+                _obj.id = val;
+                _obj.userstory_name = _temp.label;
+                
+                let _checkR = (obj)=>{
+                    return datar.findIndex((item)=>{
+                        return obj.id == item.id 
+                    })
+                }
+                let _checkL = (obj)=>{
+                    return datal.findIndex((item)=>{
+                        return obj.id == item.id 
+                    })
+                }
+
+                
+                if(_checkR(_obj)  == -1){
+                    datar.push(_obj)
+                }
+                
+            }
+            for(let i=0;i<Group.length;i++){
+                Fn1(Group[i],GroupList)
+            }
+        },
+        selfChangeItem(value = "",List = [],data = []){
+            let Fn1 = (val,arr)=>{
+                let _obj = {
+                    id:false,
+                    userstory_name:false,
+                    isShow:false,
+                    list:[],
+                };
+                let _temp = arr.find((item)=>{
+                    return val == item.value
+                });
+                _obj.id = val;
+                _obj.userstory_name = _temp.label;
+                data.push(_obj);
+            }
+            Fn1(value,List)
+        },
+        selfChangeItem2(value = "",datar = [],datal = []){
+            let Index = datar.findIndex(item => value == item.id)
+            let Index2 = datal.findIndex(item => value == item.id);
+            if(Index != -1){
+                datar.splice(Index,1)
+            }
+            if(Index2 != -1){
+                datal.splice(Index2,1)
+            } 
+            
+        },
+        //--检查搜索
+        toLeft() {
+            
+            this.checkAllGroupR.forEach(element => {
+                this.dataL.push(this.dataR.find(n => n.id == element));
+                this.dataR.splice(this.dataR.findIndex(n => n.id == element),1);
+            });
+            this.checkAll = false;
+            this.checkAllR = false;
+        },
+        toRight() {
+            this.checkAllGroup.forEach(element => {
+                this.dataR.push(this.dataL.find(n => n.id == element));
+                this.dataL.splice(this.dataL.findIndex(n => n.id == element),1);
+            });
+            this.checkAll = false;
+            this.checkAllR = false;
+        },
+        handleCheckAll() {
+            if (this.checkAll) {
                 this.checkAllGroup = [];
-            },
-            dataR(val) {
-                this.checkAllGroupOnoffR = [];
-                val.forEach(element => {
-                    this.checkAllGroupOnoffR.push(element.id);
-                });
-                this.checkAllGroupR = [];
-            },
+            } else {
+                this.checkAllGroup = this.checkAllGroupOnoff;
+            }
+            this.checkAll = !this.checkAll;
         },
-        created() {
-            this.dataL.forEach(element => {
+        handleCheckAllR() {
+            if (this.checkAllR) {
+                this.checkAllGroupR = [];
+            } else {
+                this.checkAllGroupR = this.checkAllGroupOnoffR;
+            }
+            this.checkAllR = !this.checkAllR;
+        },
+        checkAllGroupChange(data) {
+            if (data.length < this.dataL.length) {
+                this.checkAll = false;
+            } else {
+                this.checkAll = true;
+            }
+        },
+        checkAllGroupChangeR(data) {
+            if (data.length < this.dataR.length) {
+                this.checkAllR = false;
+            } else {
+                this.checkAllR = true;
+            }
+        },
+    },
+    watch: {
+        //--检查搜索开始
+        
+        TransDataGroup(){
+            this.selfDataGroup = this.TransDataGroup;
+            setTimeout(()=>{
+                if(this.isPopsAdd == "+"){
+                    this.selfChangeItem(this.popsItem,this.TransDataGroupList,this.dataR);
+                }else if(this.isPopsAdd == "-"){
+                    this.selfChangeItem2(this.popsItem,this.dataR,this.dataL)
+                }
+                //this.dataL = [];
+                //this.dataR = [];
+                //this.selfAddItemFn(this.TransDataGroup,this.TransDataGroupList,this.dataL,this.dataR)
+            },1)
+        },
+        TransDataGroupList(){
+            this.selfDataGroupList = this.TransDataGroupList;
+            
+        },
+        
+        //--检查搜索结束
+        checkAllGroup(val) {
+            console.log(val);
+            if (val.length > 0) {
+                this.bgcolorR = "info";
+                this.toRightOnoff = false;
+            } else {
+                this.bgcolorR = "ghost";
+                this.toRightOnoff = true;
+            }
+        },
+        checkAllGroupR(val) {
+            console.log(val);
+            if (val.length > 0) {
+                this.bgcolorL = "info";
+                this.toLeftOnoff = false;
+            } else {
+                this.bgcolorL = "ghost";
+                this.toLeftOnoff = true;
+            }
+        },
+        dataL(val) {
+            this.checkAllGroupOnoff = [];
+            val.forEach(element => {
                 this.checkAllGroupOnoff.push(element.id);
             });
-            this.dataR.forEach(element => {
+            this.checkAllGroup = [];
+        },
+        dataR(val) {
+            this.checkAllGroupOnoffR = [];
+            val.forEach(element => {
                 this.checkAllGroupOnoffR.push(element.id);
             });
-            
+            this.checkAllGroupR = [];
         },
-        mounted(){
+    },
+    created() {
+        this.dataL.forEach(element => {
+            this.checkAllGroupOnoff.push(element.id);
+        });
+        this.dataR.forEach(element => {
+            this.checkAllGroupOnoffR.push(element.id);
+        });
+    },
+    beforeUpdate(){
+        console.log("trans--beforeUpdate-------",this.selfDataGroup,this.selfDataGroupList,this.formValidate)
+    },
+    updated(){
+        console.log("trans--updated-------",this.selfDataGroup,this.selfDataGroupList,this.formValidate)
+    },
+    mounted(){
 
-        },
-    }
+    },
+}
 
 
 </script>
@@ -340,9 +442,9 @@
     margin-top: 0px;
    
     padding: 10px 0 10px 10px;
-    border:1px solid #dddee1;
+    border:none;
     border-radius:2px;
-    background:none;
+    background:#f5f5f5;
     
    
 
@@ -445,4 +547,5 @@
 .storyBottom{
     border-top:2px white solid;
 }
+
 </style>

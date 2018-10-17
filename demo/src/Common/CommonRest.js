@@ -117,6 +117,12 @@ CommonRest.restUrl = {
     "getMissionChange": process.env.BASE_URL + "/userstoryEvo/list/",
     /****express 用户故事当前迭代 get****/
 
+    "userstoryAddGroup": process.env.SUB_BASE_URL + "/agile/search_busfunc/",
+    /****express 添加用户故事添加已有业务功能 get****/
+
+    "userstoryGetDetail": process.env.SUB_BASE_URL + "/agile/detail/",
+    /****express 用户故事获取已有业务功能详情 get****/
+
     /*****************************************/
 
     "getPermission": process.env.BASE_URL + "/auth/getPermissionfromUser/",

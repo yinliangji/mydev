@@ -19,12 +19,14 @@
                       </div>
                     </div>
                     <ul>
-                        <li v-for="(item,index) in dataL" :key="item.id" class="storyBottom">
+                        <li v-for="(item,index) in dataL" :key="item.bfunc_id" class="storyBottom">
                             <div class="tranHeader">
                                 <span class="userStoryStatus">
                                     <Button type="warning" shape="circle" size="small" @click="modify('edit',index)">编辑</Button>
                                 </span>
-                                <Checkbox :label="item.id" style="width:70%;">{{item.userstory_name}}</Checkbox>
+                                <Checkbox :label="item.bfunc_id" class="translist">
+                                    <em>{{item.bfunc_name}}</em>
+                                </Checkbox>
                             </div>
                         </li>
                     </ul>
@@ -78,12 +80,14 @@
                             </div>
                         </div>
                         <ul>
-                            <li v-for="(item,index) in dataR" :key="item.id" class="storyBottom">
+                            <li v-for="(item,index) in dataR" :key="item.bfunc_id" class="storyBottom">
                                 <div class="tranHeader">
                                     <span class="userStoryStatus">
                                         <Button type="info" shape="circle" size="small" @click="modify('view',index)">查看</Button>
                                     </span>
-                                    <Checkbox :label="item.id" class="translist"><em>{{item.userstory_name}}</em></Checkbox>
+                                    <Checkbox :label="item.bfunc_id" class="translist">
+                                        <em>{{item.bfunc_name}}</em>
+                                    </Checkbox>
                                 </div>
                             </li>
                         </ul>
@@ -92,7 +96,7 @@
             </div>
         </div>
         <div  class="bottomAddBtnBox">
-            <Button type="success" @click="modify('add',-1)">添加</Button>
+            <Button type="success" @click="modify('add',-1)">新增业务功能</Button>
         </div>
     </div>
 </template>
@@ -174,13 +178,13 @@ export default {
             dataL: [
                 // {
                 //     id:1,
-                //     userstory_name:"故事1",
+                //     bfunc_name:"故事1",
                 //     isShow:false,
                 //     list:[],
                 // },
                 // {
                 //     id:2,
-                //     userstory_name:"故事2",
+                //     bfunc_name:"故事2",
                 //     isShow:false,
                 //     list:[],
                 // },
@@ -188,13 +192,13 @@ export default {
             dataR: [
                 // {
                 //     id:3,
-                //     userstory_name:"故事3",
+                //     bfunc_name:"故事3",
                 //     isShow:false,
                 //     list:[],
                 // },
                 // {
                 //     id:4,
-                //     userstory_name:"故事4",
+                //     bfunc_name:"故事4",
                 //     isShow:false,
                 //     list:[],
                 // },
@@ -210,25 +214,32 @@ export default {
         selfAddItemFn(Group = [],GroupList = [],datal = [],datar = []){
             let Fn1 = (val,arr)=>{
                 let _obj = {
-                    id:false,
-                    userstory_name:false,
-                    isShow:false,
+                    bfunc_id:"",
+                    bfunc_name:"",
+                    bfunc_status:"",
+                    sys_id:"",
+                    bfunc_desc:"",
+                    isShow:"",
                     list:[],
+                    who:"",
+                    
                 };
                 let _temp = arr.find((item)=>{
                     return val == item.value
                 });
-                _obj.id = val;
-                _obj.userstory_name = _temp.label;
+
+                _obj.bfunc_id = val;
+                _obj.bfunc_name = _temp.label;
+                _obj.who = _temp.who;
                 
                 let _checkR = (obj)=>{
                     return datar.findIndex((item)=>{
-                        return obj.id == item.id 
+                        return obj.bfunc_id == item.bfunc_id 
                     })
                 }
                 let _checkL = (obj)=>{
                     return datal.findIndex((item)=>{
-                        return obj.id == item.id 
+                        return obj.bfunc_id == item.bfunc_id 
                     })
                 }
 
@@ -245,23 +256,29 @@ export default {
         selfChangeItem(value = "",List = [],data = []){
             let Fn1 = (val,arr)=>{
                 let _obj = {
-                    id:false,
-                    userstory_name:false,
-                    isShow:false,
+                    bfunc_id:"",
+                    bfunc_name:"",
+                    bfunc_status:"",
+                    sys_id:"",
+                    bfunc_desc:"",
+                    isShow:"",
                     list:[],
+                    who:"",
                 };
                 let _temp = arr.find((item)=>{
                     return val == item.value
                 });
-                _obj.id = val;
-                _obj.userstory_name = _temp.label;
+                console.log(_temp,"_temp_temp_temp_temp_temp_temp_temp")
+                _obj.who = _temp.who;
+                _obj.bfunc_id = val;
+                _obj.bfunc_name = _temp.label;
                 data.push(_obj);
             }
             Fn1(value,List)
         },
         selfChangeItem2(value = "",datar = [],datal = []){
-            let Index = datar.findIndex(item => value == item.id)
-            let Index2 = datal.findIndex(item => value == item.id);
+            let Index = datar.findIndex(item => value == item.bfunc_id)
+            let Index2 = datal.findIndex(item => value == item.bfunc_id);
             if(Index != -1){
                 datar.splice(Index,1)
             }
@@ -274,16 +291,16 @@ export default {
         toLeft() {
             
             this.checkAllGroupR.forEach(element => {
-                this.dataL.push(this.dataR.find(n => n.id == element));
-                this.dataR.splice(this.dataR.findIndex(n => n.id == element),1);
+                this.dataL.push(this.dataR.find(n => n.bfunc_id == element));
+                this.dataR.splice(this.dataR.findIndex(n => n.bfunc_id == element),1);
             });
             this.checkAll = false;
             this.checkAllR = false;
         },
         toRight() {
             this.checkAllGroup.forEach(element => {
-                this.dataR.push(this.dataL.find(n => n.id == element));
-                this.dataL.splice(this.dataL.findIndex(n => n.id == element),1);
+                this.dataR.push(this.dataL.find(n => n.bfunc_id == element));
+                this.dataL.splice(this.dataL.findIndex(n => n.bfunc_id == element),1);
             });
             this.checkAll = false;
             this.checkAllR = false;
@@ -362,7 +379,7 @@ export default {
         dataL(val) {
             this.checkAllGroupOnoff = [];
             val.forEach(element => {
-                this.checkAllGroupOnoff.push(element.id);
+                this.checkAllGroupOnoff.push(element.bfunc_id);
             });
             this.checkAllGroup = [];
             this.$emit("dataLfn",val)
@@ -370,7 +387,7 @@ export default {
         dataR(val) {
             this.checkAllGroupOnoffR = [];
             val.forEach(element => {
-                this.checkAllGroupOnoffR.push(element.id);
+                this.checkAllGroupOnoffR.push(element.bfunc_id);
             });
             this.checkAllGroupR = [];
             this.$emit("dataRfn",val)
@@ -379,10 +396,10 @@ export default {
     },
     created() {
         this.dataL.forEach(element => {
-            this.checkAllGroupOnoff.push(element.id);
+            this.checkAllGroupOnoff.push(element.bfunc_id);
         });
         this.dataR.forEach(element => {
-            this.checkAllGroupOnoffR.push(element.id);
+            this.checkAllGroupOnoffR.push(element.bfunc_id);
         });
     },
     beforeUpdate(){
@@ -558,13 +575,15 @@ export default {
     border-top:2px dotted  #d8d8d8;
 }
 .translist{
-    display:block;margin-right:80px;padding-top:5px;
+    display:block;
+    margin-right:80px;
+    padding-top:5px;
 }
-.translist em{
-    padding-left:0.5em;
-}
+
+
 .bottomAddBtnBox{
     clear:both;
     padding-top:10px;
 }
 </style>
+

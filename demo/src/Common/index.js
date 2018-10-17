@@ -330,7 +330,7 @@ export default class Common extends Utils {
     }
 
     //给输入框加函数节流--不通用
-    static changeArr(_this, curVal, _Common, _projectAddGroup) {
+    static changeArr(_this, curVal, _Common, _projectAddGroup,_params = {}) {
       _this.$nextTick(() => {
 
         for (var i = 0; i < curVal.length; i++) {
@@ -351,10 +351,9 @@ export default class Common extends Utils {
                 // }else{
                 //     _URL = _projectAddGroup;
                 // }
+                
                 _this.inputLoad = true;
-                _this.projectGroupFn(_URL, {
-                  userName: value,
-                }, _num, THIS);
+                _this.projectGroupFn(_URL, Object.assign(_params,{userName: value,}), _num, THIS);
               },
               this,
               1500,

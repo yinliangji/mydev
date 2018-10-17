@@ -646,27 +646,33 @@ let GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
             "list": [
                 {
                     value: 'New York',
-                    label: 'New York人1'
+                    label: 'New York人1',
+                    who:"icdp",
                 },
                 {
                     value: 'London',
-                    label: 'London人2'
+                    label: 'London人2',
+                    who:"icdp",
                 },
                 {
                     value: 'Sydney',
-                    label: 'Sydney人3'
+                    label: 'Sydney人3',
+                    who:"icdp",
                 },
                 {
                     value: 'Ottawa',
-                    label: 'Ottawa人4'
+                    label: 'Ottawa人4',
+                    who:"icdp",
                 },
                 {
                     value: 'Paris',
-                    label: 'Paris人5'
+                    label: 'Paris人5',
+                    who:"icdp",
                 },
                 {
                     value: 'Canberra',
-                    label: 'Canberra人6'
+                    label: 'Canberra人6',
+                    who:"icdp",
                 }
             ],
 
@@ -682,27 +688,33 @@ let _GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
             "list": [
                 {
                     value: '_New York',
-                    label: '_New York人1'
+                    label: '_New York人1',
+                    who:"_icdp",
                 },
                 {
                     value: '_London',
-                    label: '_London人2'
+                    label: '_London人2',
+                    who:"_icdp",
                 },
                 {
                     value: '_Sydney',
-                    label: '_Sydney人3'
+                    label: '_Sydney人3',
+                    who:"_icdp",
                 },
                 {
                     value: '_Ottawa',
-                    label: '_Ottawa人4'
+                    label: '_Ottawa人4',
+                    who:"_icdp",
                 },
                 {
                     value: '_Paris',
-                    label: '_Paris人5'
+                    label: '_Paris人5',
+                    who:"_icdp",
                 },
                 {
                     value: '_Canberra',
-                    label: '_Canberra人6'
+                    label: '_Canberra人6',
+                    who:"_icdp",
                 }
             ],
 
@@ -718,27 +730,33 @@ let GroupList_ = (val1 = 200, val2 = 1, val3 = 3) => {
             "list": [
                 {
                     value: 'New York_',
-                    label: 'New York_人1'
+                    label: 'New York_人1',
+                    who:"icdp_",
                 },
                 {
                     value: 'London_',
-                    label: 'London_人2'
+                    label: 'London_人2',
+                    who:"icdp_",
                 },
                 {
                     value: 'Sydney_',
-                    label: 'Sydney_人3'
+                    label: 'Sydney_人3',
+                    who:"icdp_",
                 },
                 {
                     value: 'Ottawa_',
-                    label: 'Ottawa_人4'
+                    label: 'Ottawa_人4',
+                    who:"icdp_",
                 },
                 {
                     value: 'Paris_',
-                    label: 'Paris_人5'
+                    label: 'Paris_人5',
+                    who:"icdp_",
                 },
                 {
                     value: 'Canberra_',
-                    label: 'Canberra_人6'
+                    label: 'Canberra_人6',
+                    who:"icdp_",
                 }
             ],
 
@@ -793,6 +811,7 @@ app.all('/system/loglist/', function(req, res) {
     res.end()
 });
 
+
 app.all('/system/phylist/', function(req, res) {
 
     let resVal
@@ -816,7 +835,28 @@ app.all('/system/phylist/', function(req, res) {
     res.end()
 });
 
+app.all('/agile/search_busfunc/', function(req, res) {
 
+    let resVal
+    let Json
+    if(trueorfalse == 0){
+        Json =  GroupList(req.body.myStatus)   
+        resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+    }else if(trueorfalse == 1){
+        Json =  _GroupList(req.body.myStatus) 
+        resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+
+    }else{
+        Json =  GroupList_(req.body.myStatus)   
+        resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+    }
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
+    console.log(trueorfalse)
+    res.json(Json);
+    res.end()
+});
 
 app.all('/project/allgroup/', function(req, res) {
     let resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
@@ -1940,6 +1980,52 @@ app.all('/getITMtable/xxxxx/', function(req, res) {
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
     res.json(getITMtable(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+
+let userstoryGetDetail = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+       
+        
+
+        "data": {
+            "bfunc_desc|5-8": /[a-zA-Z]/,
+            "bfunc_id": 1,
+            "req_submitter|5-8": /[a-zA-Z]/,
+            "bfunc_name|5-8": /[a-zA-Z0-9]/,
+            "bfunc_type": 1,
+            "bfunc_status": 1,
+            create_date:null,
+            create_person:"",
+            id:2,
+            logic_sys_name:"核心一行",
+            logic_sys_no:"z0250",
+            prj_id:"PH18-01",
+            remark1:"",
+            remark2:"",
+            req_id:"1641",
+            req_name:"继承ITM",
+            us_id:"US-PH18-01-0040",
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        },
+
+       
+    })
+}
+
+app.all('/agile/detail/', function(req, res) {
+    let resVal = userstoryGetDetail(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    
+    res.json(userstoryGetDetail(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
 

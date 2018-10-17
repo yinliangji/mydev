@@ -101,6 +101,22 @@ const router = new Router({
                 }
             },
         },
+
+        //
+        {
+            path: '/demand/business',
+            name: 'DemandBusiness',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/demand/business"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
+        //
+
         {
             path: '/demand/list',
             name: 'Demand_list',

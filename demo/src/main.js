@@ -22,6 +22,9 @@ Vue.use(goAgile);
 import selectMenu from './components/selectMenu'
 Vue.use(selectMenu);
 
+import businessFunction from './components/business'
+Vue.use(businessFunction);
+
 import '@/assets/css/normalize.css'
 import '@/assets/css/reset.css'
 import '@/assets/css/common.css'

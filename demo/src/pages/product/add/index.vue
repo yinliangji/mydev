@@ -224,6 +224,19 @@
                
             </div>
         </Card>
+        <businessFunction
+            @changeIsShow="changeIsShow"
+            @addBus="addBus"
+            @editBus="editBus"
+            :isShow="isShowonoff"
+            :title="titleName"
+            :typeList="typeList"
+            :statusList="statusList"
+            :logicList="logicList"
+            :isAddOrEdit="isAddOrEdit"
+            ref="busdata" 
+            :formData = "myFormData"
+        />
     </div>
 </template>
 <script>
@@ -234,7 +247,7 @@ import Trans from './trans'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAdd,storyGetSprint,storyGetReq,storyGetCondition,publishUser,projectAddGroup } = Common.restUrl;
+const {storyAdd,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail } = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -325,7 +338,7 @@ export default {
                 charger:"",//一对
                 nick_name:"",//一对
                 AddGroupList:[],//搜索查询
-
+                bfunc:[],//弹出业务窗口
 
 
 
@@ -425,6 +438,19 @@ export default {
             isPopsAdd:false,
             popsItem:false,
             //查询搜索结束
+            //弹出业务窗口开始
+            isShowonoff:false,
+            titleName:"",
+            typeList:[],
+            statusList:[],
+            logicList:[],
+            isAddOrEdit:true,
+            LeftData:false,
+            RightData:false,
+            myFormData:false,
+
+            
+            //弹出业务窗口结束
             
 
         }
@@ -474,15 +500,88 @@ export default {
         }
     },
     methods:{
+        //弹出业务窗口开始
+        changeIsShow(){
+            this.isShowonoff = false;
+        },
+        addBus(){
+        },
+        editBus(){
+        },
+        userstoryGetDetailFn(URL,params = {},val,index,is){
+            if(val == "add"){
+
+                this.myFormData = {
+                    bfunc_name:"",
+                    bfunc_type:"",
+                    logic_sys_no:"",
+                    bfunc_desc:"",
+                }
+
+                this.typeList = [{bfunc_type:"1",bfunc_type_name:"bfunc_type_name"}];
+                this.logicList = [{logic_sys_no:"1",logic_sys_name:"logic_sys_name"}];
+                this.titleName = val;
+                this.isShowonoff = is;
+                return;
+            }
+            defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【userstoryGetDetail productAdd】***response+++",response,myData,"====>");
+                this.myFormData = {
+                    bfunc_name:myData.data.bfunc_desc+"",
+                    bfunc_type:myData.data.bfunc_type+"",
+                    logic_sys_no:myData.data.logic_sys_no+"",
+                    bfunc_desc:myData.data.bfunc_desc+"",
+                }
+                this.typeList = [{bfunc_type:myData.data.bfunc_type+"",bfunc_type_name:"bfunc_type_name"}];
+                this.logicList = [{logic_sys_no:myData.data.logic_sys_no+"",logic_sys_name:"logic_sys_name"}];
+
+                this.titleName = val;
+                this.isShowonoff = is;
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });   
+        },
+        //弹出业务窗口结束
         //查询搜索开始
         modifyData(v,i,is){
             console.log(v,i,is);
+
+            //view edit add
+            let _param;
+            let val;
+            let check = (n,arr)=>{
+                return {busfunc_id:arr[n].bfunc_id,who:arr[n].who}  
+            }
+            if(v == "view"){
+                _param = check(i,this.RightData);
+                this.isAddOrEdit = false;
+                val = "查看业务功能";
+            }else if(v == "edit"){
+                _param = check(i,this.LeftData)
+                this.isAddOrEdit = false;
+                val = "编辑业务功能";
+
+            }else{
+                _param = {};
+                this.isAddOrEdit = true;
+                val = "新增业务功能";
+            }
+
+            this.userstoryGetDetailFn(userstoryGetDetail,_param,val,i,is)
+
+            
         },
         leftData(D){
             console.log(D,"leftData")
+            this.formValidate.bfunc = D;
+            this.LeftData = D;
         },
         rightData(D){
-            console.log(D,"rightData")
+            console.log(D,"rightData");
+            this.RightData = D;
         },
         selectQueryChange(item){
             console.log(item,"selectQueryChange")
@@ -532,13 +631,14 @@ export default {
                 console.log("<======【checkSearch Allgroup】***response+++",response,myData,"====>");
                 this.inputLoad = false;
                 this.formValidate.AddGroupList[ARR].groupList = [];
+                let _List = myData.data ? myData.data.list : myData.list;
                 if(typeof(ARR)  == "number"){
                     if(thatEle && thatEle.temp && thatEle.temp.length){
-                        let _tempArr = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,myData.data.list);
+                        let _tempArr = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,_List);
                         this.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp,..._tempArr);
 
                     }else{
-                        this.formValidate.AddGroupList[ARR].groupList.push(...myData.data.list);
+                        this.formValidate.AddGroupList[ARR].groupList.push(..._List);
                     }
                 }
             }).catch( (error) => {
@@ -654,6 +754,7 @@ export default {
             this.formValidate.mission="";
             this.formValidate.req_id="";
             this.formValidate.req_name="";
+            this.formValidate.bfunc = [];
 
             
 
@@ -673,6 +774,7 @@ export default {
             this.editTableData=false;
         },
         submitAddData(){
+            let _bfunc = this.formValidate.bfunc ? JSON.stringify(this.formValidate.bfunc) : "";
             let tempData = {
                 userstory_name: this.formValidate.userstory_name,
                 userstory_type: this.formValidate.userstory_type,
@@ -692,6 +794,7 @@ export default {
                 req_name:this.formValidate.req_name,
                 charger:this.formValidate.nick_name,//一对
                 nick_name:this.formValidate.charger,//一对
+                bfunc:_bfunc,
                 
 
 
@@ -757,7 +860,7 @@ export default {
         "formValidate.AddGroupList"(curVal,oldVal){
             let _this = this;
             if(curVal){
-                Common.changeArr(this,curVal,Common,projectAddGroup)//下拉样子
+                Common.changeArr(this,curVal,Common,userstoryAddGroup,{prj_id:Common.GETprjid(this,Common)})//下拉样子
             }
         },
         formValidate: {
@@ -799,4 +902,19 @@ export default {
     padding-bottom: 10px;
     padding-right:10px;
 }
+</style>
+<style >
+.translist>span{
+    float: left;
+} 
+.translist em{
+    display: block;
+    margin-left: 16px;
+    padding-top: 2px;
+    padding-left:0.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+    
+} 
 </style>

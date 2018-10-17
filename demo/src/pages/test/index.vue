@@ -38,7 +38,7 @@ export default {
         "formValidate.AddGroupList"(curVal,oldVal){
             let _this = this;
             if(curVal){
-                Common.changeArr(this,curVal,Common,projectAddGroup)//下拉样子
+                Common.changeArr(this,curVal,Common,projectAddGroup,{prj_id:Common.GETprjid(this,Common)})//下拉样子
             }
         },
         formValidate: {

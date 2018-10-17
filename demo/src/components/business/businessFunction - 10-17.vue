@@ -92,8 +92,6 @@ export default {
         	this.formValidate.bfunc_type = this.formData.bfunc_type+"";
         	this.formValidate.logic_sys_no = this.formData.logic_sys_no;
         	this.formValidate.businessDes = this.formData.bfunc_desc;
-            this.formValidate.bfunc_id = this.formData.bfunc_id;
-            this.formValidate.who = this.formData.who;
         },
     },
     computed: {
@@ -102,13 +100,11 @@ export default {
     	return {
     		isShowChild:false,
     		formValidate:{
-    			bfunc_id:"",
-                bfunc_name:"",
+    			bfunc_name:"",
     			logic_sys_no:"",
     			businessDes:"",
     			bfunc_type:"",
     			bfunc_status:"",
-                who:"",
     		},
     		ruleValidate:{
     			bfunc_name:[
@@ -131,10 +127,9 @@ export default {
     		this.$refs.formValidate.validate((val)=>{
     			if(val){
     				if(this.isAddOrEdit){
-
 		    			this.$emit('addBus')
 		    		}else{
-		    			this.$emit('editBus',this.formValidate)
+		    			this.$emit('editBus')
 		    		}
     			}else{
     				this.$Modal.error({

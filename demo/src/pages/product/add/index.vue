@@ -155,6 +155,8 @@
                                             :class="myItem.myRef+index"
                                             >
                                             <Select
+                                                :ref="myItem.myRef+index+'_sel'"
+                                                :class="myItem.myRef+index+'_sel'"
                                                 @on-change="selectChange" 
                                                 @on-query-change="selectQueryChange"
                                                 v-model="myItem.group" 
@@ -247,7 +249,7 @@ import Trans from './trans'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAdd,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail } = Common.restUrl;
+const {storyAdd,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no } = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -488,11 +490,11 @@ export default {
                     this.showError("GetConditionAll 失败");
                 })
 
-
             },(error)=>{
                 console.log(error);
                 this.showError(error);
             })
+
 
             
         }else{
@@ -501,42 +503,87 @@ export default {
     },
     methods:{
         //弹出业务窗口开始
+        //缺----展示 选择的下拉对 所属逻辑子系统搜素 bfunc_id who
         changeIsShow(){
             this.isShowonoff = false;
         },
-        addBus(){
+        addBus(D){
+            console.log(D)
+
         },
-        editBus(){
+        editBus(D){
+            
+            //D.bfunc_id
+            let _ArrL = this.formValidate.AddGroupList[0].groupList;
+            let Index = _ArrL.findIndex((item)=>{
+                return D.bfunc_id == item.value 
+            })
+            
+            this.$set(_ArrL[Index],"label", D.bfunc_name);
+
+            /*
+            //this.formValidate.AddGroupList[0].grouptemp = [];
+            //this.formValidate.AddGroupList[0].group = [];
+            
+            let _ArrG = this.formValidate.AddGroupList[0].group;
+            console.log(_ArrG,D.bfunc_id)
+            let IndexG = _ArrG.findIndex((item)=>{
+                return D.bfunc_id == item 
+            })
+            
+            
+            _ArrG.splice(IndexG,1,)
+            
+            let _ArrGT = this.formValidate.AddGroupList[0].grouptemp;
+            let IndexGT = _ArrGT.findIndex((item)=>{
+                return D.bfunc_id == item 
+            })
+            _ArrGT.splice(IndexGT,1,)
+            
+            //this.$refs.selfRef0_sel.toggleCollapse();
+            */
+            console.log(Index,_ArrL[Index],"editBus_editBus_editBus_editBus_")
+            //this.formValidate.AddGroupList[0].grouptemp = this.formValidate.AddGroupList[0].group;
+            //this.formValidate.AddGroupList[0].groupList
         },
         userstoryGetDetailFn(URL,params = {},val,index,is){
+            let Title;
+            if(val == "view"){
+                Title = "查看业务功能";
+            }else if(val == "edit"){
+                Title = "编辑业务功能";
+            }else{
+                Title = "新增业务功能";
+            }
             if(val == "add"){
-
                 this.myFormData = {
                     bfunc_name:"",
                     bfunc_type:"",
                     logic_sys_no:"",
                     bfunc_desc:"",
+                    bfunc_id:"temp_",
+                    who:"icdp",
                 }
-
-                this.typeList = [{bfunc_type:"1",bfunc_type_name:"bfunc_type_name"}];
-                this.logicList = [{logic_sys_no:"1",logic_sys_name:"logic_sys_name"}];
-                this.titleName = val;
+                this.titleName = Title;
                 this.isShowonoff = is;
                 return;
             }
             defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【userstoryGetDetail productAdd】***response+++",response,myData,"====>");
+
                 this.myFormData = {
                     bfunc_name:myData.data.bfunc_desc+"",
                     bfunc_type:myData.data.bfunc_type+"",
                     logic_sys_no:myData.data.logic_sys_no+"",
                     bfunc_desc:myData.data.bfunc_desc+"",
+                    bfunc_id:params.busfunc_id+"",
+                    who:params.who+"",
                 }
-                this.typeList = [{bfunc_type:myData.data.bfunc_type+"",bfunc_type_name:"bfunc_type_name"}];
-                this.logicList = [{logic_sys_no:myData.data.logic_sys_no+"",logic_sys_name:"logic_sys_name"}];
+                //this.typeList = [{bfunc_type:myData.data.bfunc_type+"",bfunc_type_name:"bfunc_type_name"}];
+                //this.logicList = [{logic_sys_no:myData.data.logic_sys_no+"",logic_sys_name:"logic_sys_name"}];
 
-                this.titleName = val;
+                this.titleName = Title;
                 this.isShowonoff = is;
                 
             }).catch( (error) => {
@@ -544,33 +591,76 @@ export default {
                 this.showError(error);
             });   
         },
+        userstoryGetBfunc_typeFn(URL,params = {}){
+            return defaultAXIOS(URL,params,{timeout:20000,method:'get'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======productAdd  userstoryGetBfunc_typeFn***+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    this.typeList = myData.data;
+                    return Promise.resolve(myData.data)
+                }else{
+                    this.showError(URL+"错误");
+                    return Promise.reject(false);
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+                return Promise.reject(false);
+            });
+        },
+        userstoryGetLogic_sys_noFn(URL,params = {}){
+            return  defaultAXIOS(URL,params,{timeout:20000,method:'get'}).then((response) => {
+                //alert(JSON.stringify(response))
+                let myData = response.data;
+                console.log("<======productAdd  userstoryGetLogic_sys_no***+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    this.logicList = myData.data;
+                    return Promise.resolve(myData.data)
+                }else{
+                    this.showError(URL+"错误");
+                    return Promise.reject(false);
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+                return Promise.reject(false);
+            });
+        },
         //弹出业务窗口结束
         //查询搜索开始
         modifyData(v,i,is){
-            console.log(v,i,is);
+            
 
             //view edit add
             let _param;
-            let val;
+           
             let check = (n,arr)=>{
                 return {busfunc_id:arr[n].bfunc_id,who:arr[n].who}  
             }
             if(v == "view"){
                 _param = check(i,this.RightData);
                 this.isAddOrEdit = false;
-                val = "查看业务功能";
             }else if(v == "edit"){
                 _param = check(i,this.LeftData)
                 this.isAddOrEdit = false;
-                val = "编辑业务功能";
-
             }else{
                 _param = {};
                 this.isAddOrEdit = true;
-                val = "新增业务功能";
+               
             }
+            let _type = this.userstoryGetBfunc_typeFn(userstoryGetBfunc_type);
+            let _logic = this.userstoryGetLogic_sys_noFn(userstoryGetLogic_sys_no);
+            Promise.all([_type,_logic]).then(()=>{
+                console.log(v,i,is);
+                this.userstoryGetDetailFn(userstoryGetDetail,_param,v,i,is)
+            },()=>{
+                this.showError(userstoryGetBfunc_type+"|"+userstoryGetLogic_sys_no);
+            })
 
-            this.userstoryGetDetailFn(userstoryGetDetail,_param,val,i,is)
+            
 
             
         },

@@ -1997,13 +1997,13 @@ let userstoryGetDetail = (val1 = 200, val2 = 1, val3 = 3) => {
             "bfunc_id": 1,
             "req_submitter|5-8": /[a-zA-Z]/,
             "bfunc_name|5-8": /[a-zA-Z0-9]/,
-            "bfunc_type": 1,
+            "bfunc_type": 2,
             "bfunc_status": 1,
             create_date:null,
             create_person:"",
             id:2,
             logic_sys_name:"核心一行",
-            logic_sys_no:"z0250",
+            logic_sys_no:2,
             prj_id:"PH18-01",
             remark1:"",
             remark2:"",
@@ -2028,6 +2028,62 @@ app.all('/agile/detail/', function(req, res) {
     res.json(userstoryGetDetail(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
+
+
+
+app.all('/agile/detail/', function(req, res) {
+    let resVal = userstoryGetDetail(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    
+    res.json(userstoryGetDetail(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+let userstoryGetBfunc_type = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "data":[
+            {bfunc_type:"1",bfunc_type_name:"bfunc_type_name1"},
+            {bfunc_type:"2",bfunc_type_name:"bfunc_type_name2"}
+        ],
+    })
+}
+
+app.all('/userstoryGetBfunc_type/xxxxxxxxxx/', function(req, res) {
+   
+    let resVal = userstoryGetBfunc_type(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(userstoryGetBfunc_type(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+let userstoryGetLogic_sys_no = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "data":[
+            {logic_sys_no:"1",logic_sys_name:"logic_sys_name1"},
+            {logic_sys_no:"2",logic_sys_name:"logic_sys_name2"}
+        ],
+    })
+}
+
+app.all('/userstoryGetLogic_sys_no/xxxxxxxxxx/', function(req, res) {
+   
+    let resVal = userstoryGetLogic_sys_no(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(userstoryGetLogic_sys_no(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+
 
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {

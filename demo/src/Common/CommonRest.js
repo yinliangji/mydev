@@ -123,6 +123,12 @@ CommonRest.restUrl = {
     "userstoryGetDetail": process.env.SUB_BASE_URL + "/agile/detail/",
     /****express 用户故事获取已有业务功能详情 get****/
 
+    "userstoryGetBfunc_type": process.env.SUB_BASE_URL + "/userstoryGetBfunc_type/xxxxxxxxxx/",
+    /****express 用户故事获取业务类型类型 get****/
+
+    "userstoryGetLogic_sys_no": process.env.SUB_BASE_URL + "/userstoryGetLogic_sys_no/xxxxxxxxxx/",
+    /****express 用户故事获取业务类型类型 get****/
+
     /*****************************************/
 
     "getPermission": process.env.BASE_URL + "/auth/getPermissionfromUser/",

@@ -1,6 +1,5 @@
 <template>
     <div class="transBody">
-        
         <div class="transBodyLK" style="float:left;width:44%;">
             <!-- <div style="margin-bottom:10px;">&nbsp;</div> -->
             <div class="transBodyL">
@@ -268,7 +267,7 @@ export default {
                 let _temp = arr.find((item)=>{
                     return val == item.value
                 });
-                console.log(_temp,"_temp_temp_temp_temp_temp_temp_temp")
+                
                 _obj.who = _temp.who;
                 _obj.bfunc_id = val;
                 _obj.bfunc_name = _temp.label;
@@ -338,7 +337,6 @@ export default {
     },
     watch: {
         //--检查搜索开始
-        
         TransDataGroup(){
             this.selfDataGroup = this.TransDataGroup;
             setTimeout(()=>{

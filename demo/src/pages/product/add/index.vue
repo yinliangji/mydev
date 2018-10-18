@@ -164,9 +164,10 @@
                                                 filterable 
                                                 :loading="inputLoad"  
                                                 multiple 
+                                                label-in-value
                                                 :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'"
                                                 >
-                                                <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2">
+                                                <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :label="item.label" :key="index2">
                                                     {{ item.label }}
                                                 </Option>
                                             </Select>
@@ -482,19 +483,36 @@ export default {
         
         //查询搜索开始
         modifyTagData(D){
-            let _ArrL = this.formValidate.AddGroupList[0].groupList;
+
+            let Root = this.formValidate.AddGroupList[0];
+            
+            let _ArrL = Root.groupList;
             let Index = _ArrL.findIndex((item)=>{
                 return D.bfunc_id == item.value 
             })
-            this.$set(_ArrL[Index],"label", D.bfunc_name);
-
+            if(Index >=0){
+                this.$set(_ArrL[Index],"label", D.bfunc_name);
+            }
             
-
-            let _ArrG = this.formValidate.AddGroupList[0].group;
+            
+            let _ArrG = Root.group;
             let IndexG = _ArrG.findIndex((item)=>{
                 return D.bfunc_id == item 
             })
-            document.getElementById("sel0").getElementsByClassName("ivu-tag")[IndexG].getElementsByClassName("ivu-tag-text")[0].innerHTML = D.bfunc_name;
+            if(IndexG>=0){
+                let Temp_IndexG = _ArrG[IndexG];
+                _ArrG.splice(IndexG,1,Temp_IndexG)
+            }
+
+            let _ArrGT = Root.grouptemp;
+            let IndexGT = _ArrGT.findIndex((item)=>{
+                return D.bfunc_id == item 
+            })
+            if(IndexGT>=0){
+                let Temp_IndexGT = _ArrGT[IndexGT];
+                _ArrGT.splice(IndexGT,1,Temp_IndexGT)
+            }
+            //document.getElementById("sel0").getElementsByClassName("ivu-tag")[IndexG].getElementsByClassName("ivu-tag-text")[0].innerHTML = D.bfunc_name;
         },
         modifyData(v,i,is){
             //view edit add
@@ -508,11 +526,11 @@ export default {
             
             this.RightData = D;
         },
-        selectQueryChange(item){
-            console.log(item,"selectQueryChange")
+        selectQueryChange(ITEM){
+            console.log(ITEM,"selectQueryChange")
         },
-        selectChange(item){
-            console.log(item,"selectChange");
+        selectChange(ITEM){
+            console.log(ITEM,"selectChange");
             let _G = this.formValidate.AddGroupList[0].group;
             let _GT = this.formValidate.AddGroupList[0].grouptemp;
             let fn = (val,arr)=>{
@@ -531,20 +549,24 @@ export default {
             this.popsItem = _G.length > _GT.length ? FN(_G,_GT) : FN(_GT,_G);
 
             ///////====>
-            let _GL = this.formValidate.AddGroupList[0].groupList;
-            let IndexGL = _GL.findIndex((item)=>{
-                return this.popsItem == item.value 
-            })
-            let IndexG = _G.findIndex((item)=>{
-                return this.popsItem == item 
-            })
-            setTimeout(()=>{
-                let _tagText = document.getElementById("sel0").getElementsByClassName("ivu-tag")[IndexG].getElementsByClassName("ivu-tag-text")[0];
-                if(_tagText.innerHTML != _GL[IndexGL].label){
-                    _tagText.innerHTML = _GL[IndexGL].label;
-                }
-                
-            },0)
+            let changeTag = ()=>{
+                let _GL = this.formValidate.AddGroupList[0].groupList;
+                let IndexGL = _GL.findIndex((item)=>{
+                    return this.popsItem == item.value 
+                })
+                let IndexG = _G.findIndex((item)=>{
+                    return this.popsItem == item 
+                })
+                setTimeout(()=>{
+                    if(IndexG>=0){
+                        let _tagText = document.getElementById("sel0").getElementsByClassName("ivu-tag")[IndexG].getElementsByClassName("ivu-tag-text")[0];
+                        if(_tagText.innerHTML != _GL[IndexGL].label){
+                            _tagText.innerHTML = _GL[IndexGL].label;
+                        }
+                    }
+                },0)
+            }
+            //changeTag();
             ///////<====
             this.formValidate.AddGroupList[0].grouptemp = this.formValidate.AddGroupList[0].group;
         },

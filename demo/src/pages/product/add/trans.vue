@@ -230,6 +230,7 @@ export default {
             RightData:false,
             myFormData:false,
             IsView:false,
+            list_logic_type:false,
             
             //弹出业务窗口结束
             
@@ -454,9 +455,8 @@ export default {
                 this.isAddOrEdit = true;
             }
             
-            let _type_logic = this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)});
-            Promise.all([_type_logic]).then(()=>{
-                console.log(v,i,true);
+            //let _type_logic = this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)});
+            Promise.all([this.list_logic_type]).then(()=>{
                 this.userstoryGetDetailFn(userstoryGetDetail,_param,v,i,true)
             },()=>{
                 this.showError(userstoryGetBfunc_type+"|"+userstoryGetLogic_sys_no);
@@ -540,6 +540,10 @@ export default {
                 datal.splice(Index2,1)
             } 
             
+        },
+        //
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
         },
         //
         toLeft() {
@@ -662,7 +666,7 @@ export default {
         console.log("trans--updated-------",this.selfDataGroup,this.selfDataGroupList,this.formValidate)
     },
     mounted(){
-
+        this.list_logic_type = this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)});
     },
 }
 

@@ -117,16 +117,16 @@ CommonRest.restUrl = {
     "getMissionChange": process.env.BASE_URL + "/userstoryEvo/list/",
     /****express 用户故事当前迭代 get****/
 
-    "userstoryAddGroup": process.env.SUB_BASE_URL + "/agile/search_busfunc/",
+    "userstoryAddGroup": process.env.BASE_URL + "/agile/search_busfunc/",
     /****express 添加用户故事添加已有业务功能 get****/
 
-    "userstoryGetDetail": process.env.SUB_BASE_URL + "/agile/detail/",
+    "userstoryGetDetail": process.env.BASE_URL + "/agile/detail/",
     /****express 用户故事获取已有业务功能详情 get****/
 
-    "userstoryGetBfunc_type": process.env.SUB_BASE_URL + "/userstoryGetBfunc_type/xxxxxxxxxx/",
+    "userstoryGetBfunc_type": process.env.BASE_URL + "/userstoryGetBfunc_type/xxxxxxxxxx/",
     /****express 用户故事获取业务类型类型 get****/
 
-    "userstoryGetLogic_sys_no": process.env.SUB_BASE_URL + "/userstoryGetLogic_sys_no/xxxxxxxxxx/",
+    "userstoryGetLogic_sys_no": process.env.BASE_URL + "/userstoryGetLogic_sys_no/xxxxxxxxxx/",
     /****express 用户故事获取业务类型类型 get****/
 
     /*****************************************/

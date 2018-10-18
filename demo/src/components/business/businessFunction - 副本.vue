@@ -1,26 +1,22 @@
 <template>
-	<Modal  v-model="isShowChild" :title="title" @on-ok="submitAdd" @on-cancel="cancel" :ok-text="isView?'关闭': '提交'" :loading="busLoading">
+	<Modal  v-model="isShowChild" :title="title" @on-ok="submitAdd" @on-cancel="cancel" ok-text="提交">
 		<Form :model="formValidate" :label-width="120" :rules="ruleValidate" ref="formValidate"   >
 			<FormItem label="业务功能名称" prop="bfunc_name">
-                <p v-if="isView">{{formValidate.bfunc_name}}</p>
-                <Input v-else v-model="formValidate.bfunc_name" placeholder="请输入业务功能名称"></Input>
+                <Input v-model="formValidate.bfunc_name" placeholder="请输入业务功能名称"></Input>
             </FormItem>
             <FormItem label="业务类型" >
-                <p v-if="isView">{{formValidate.bfunc_type}}</p>
-                <Select v-else v-model="formValidate.bfunc_type" clearable >
+                <Select v-model="formValidate.bfunc_type" clearable >
                     <Option v-for="(item,index) in typeList" :value="item.bfunc_type" :key="index">{{ item.bfunc_type_name }}</Option>
                 </Select>
             </FormItem>
             <FormItem label="所属逻辑子系统" prop="logic_sys_no">
-                <p v-if="isView">{{formValidate.logic_sys_no}}</p>
-                <Select v-else v-model="formValidate.logic_sys_no" clearable filterable >
+                <Select v-model="formValidate.logic_sys_no" clearable filterable >
                     <Option v-for="(item,index) in logicList" :value="item.logic_sys_no" :key="index">{{ item.logic_sys_name }}</Option>
                 </Select>
-                <Button v-if="!isView" type="primary" @click="linkToNew">ITM新建逻辑子系统</Button>
+                <Button type="primary" @click="linkToNew">ITM新建逻辑子系统</Button>
             </FormItem>
             <FormItem label="业务功能描述">
-                <p v-if="isView">{{formValidate.businessDes}}</p>
-                <Input v-else v-model="formValidate.businessDes" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
+                <Input v-model="formValidate.businessDes" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
             </FormItem>
 		</Form>
 	</Modal>
@@ -30,12 +26,6 @@ import Common from '@/Common';
 const {reqAdd,reqGet,projectListDataNew } = Common.restUrl;
 export default {
 	props: {
-        isView: {
-            type: Boolean,
-            default: function() {
-                return false;
-            }
-        },
 		title: {
             type: String,
             default: function() {
@@ -110,7 +100,6 @@ export default {
     },
     data(){
     	return {
-            busLoading:true,
     		isShowChild:false,
     		formValidate:{
     			bfunc_id:"",
@@ -139,48 +128,31 @@ export default {
     },
     methods:{
     	submitAdd(){
-            if(this.isView){
-                this.cancel();
-                return;
-            }
     		this.$refs.formValidate.validate((val)=>{
-                this.busLoading = false;
-                this.$nextTick(() => {
-                  this.busLoading = true;
-                });
     			if(val){
     				if(this.isAddOrEdit){
-		    			this.$emit('addBus',this.formValidate)
+
+		    			this.$emit('addBus')
 		    		}else{
 		    			this.$emit('editBus',this.formValidate)
 		    		}
-                    this.busLoading = true;
-                    this.$nextTick(() => {
-                      this.busLoading = true;
-                    });
-
-                    this.$emit('changeIsShow');
+    			}else{
+    				this.$Modal.error({
+    					title:"提示",
+    					content:"操作失败，请填写",
+    				})
     			}
 
     		})
     		
-    		
+    		this.$emit('changeisShow');
     	},
     	cancel(){
-            // this.formValidate.bfunc_id="";
-            // this.formValidate.bfunc_name="";
-            // this.formValidate.logic_sys_no="";
-            // this.formValidate.bfunc_status="";
-            // this.formValidate.who="";
-    		//
+    		this.$emit('changeIsShow');
+    		this.$refs.formValidate.resetFields();
     		this.formValidate.bfunc_type="";
     		this.formValidate.businessDes="";
-            this.$refs.formValidate.resetFields();
-            this.$emit('changeIsShow');
     	},
-        resetFields(){
-            this.$refs.formValidate.resetFields();
-        },
     	linkToNew(){
 
     	},

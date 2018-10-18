@@ -2003,7 +2003,7 @@ let userstoryGetDetail = (val1 = 200, val2 = 1, val3 = 3) => {
             create_person:"",
             id:2,
             logic_sys_name:"核心一行",
-            logic_sys_no:2,
+            logic_sys_no:"0011",
             prj_id:"PH18-01",
             remark1:"",
             remark2:"",
@@ -2082,6 +2082,30 @@ app.all('/userstoryGetLogic_sys_no/xxxxxxxxxx/', function(req, res) {
     res.end()
 });
 
+let selectBusFuncStatus = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "typeList":[
+            {bfunc_type:"1",bfunc_type_name:"优化"},
+            {bfunc_type:"2",bfunc_type_name:"新增"},
+            {bfunc_type:"3",bfunc_type_name:"重构"}
+        ],
+        logicList:[
+            {logic_sys_no:"Z0250",logic_sys_name:"核心银行业务处理系统"},
+            {logic_sys_no:"0011",logic_sys_name:"综合前端系统"}
+        ],
+    })
+}
+
+app.all('/agile/selectBusFuncStatus/', function(req, res) {
+   
+    let resVal = selectBusFuncStatus(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(selectBusFuncStatus(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
 
 
 

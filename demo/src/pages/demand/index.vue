@@ -235,7 +235,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.addItem(params.index)
+                                        this.goUserStory(params.index)
                                     }
                                 }
                             }, '查看用户故事 '),
@@ -249,7 +249,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.toLIstFn(params.index)
+                                        this.toBusiness(params.index)
                                     }
                                 }
                             }, '查看业务功能'),
@@ -313,6 +313,9 @@ export default {
         console.log("demand--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
+        goUserStory(){
+            this.$router.push('/product')
+        },
         toBusiness(){
             this.$router.push({path: '/demand/business/', query: {}})
         },

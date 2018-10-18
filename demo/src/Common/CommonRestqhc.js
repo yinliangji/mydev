@@ -13,6 +13,7 @@ CommonRestqhc.restUrl = {
     "iterationDetail": process.env.BASE_URL + "/sprint/detailSprint", //get 没用
     "projectListData": process.env.BASE_URL + "/get_prj", //get
     "downFile":process.env.BASE_URL,
+    "selbusinessList": process.env.BASE_URL + "/agile/selectBusFuncStatus", //get 
     //开发任务
     //qhc end
 

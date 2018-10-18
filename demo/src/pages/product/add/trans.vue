@@ -97,10 +97,27 @@
         <div  class="bottomAddBtnBox">
             <Button type="success" @click="modify('add',-1)">新增业务功能</Button>
         </div>
+        <businessFunction
+            :isView="IsView"
+            @changeIsShow="changeIsShow"
+            @addBus="addBus"
+            @editBus="editBus"
+            :isShow="isShowonoff"
+            :title="titleName"
+            :typeList="typeList"
+            :statusList="statusList"
+            :logicList="logicList"
+            :isAddOrEdit="isAddOrEdit"
+            ref="busdata" 
+            :formData = "myFormData"
+        />
     </div>
 </template>
 <script>
+import API from '@/api'
+const {defaultAXIOS} = API;
 import Common from '@/Common';
+const {userstoryGetBfunc_type,userstoryGetLogic_sys_no,userstoryGetDetail,selbusinessList } = Common.restUrl;
 export default {
     props: {
         TransDataGroup: {
@@ -202,13 +219,251 @@ export default {
                 //     list:[],
                 // },
             ],
+            //弹出业务窗口开始
+            isShowonoff:false,
+            titleName:"",
+            typeList:[],
+            statusList:[],
+            logicList:[],
+            isAddOrEdit:true,
+            LeftData:false,
+            RightData:false,
+            myFormData:false,
+            IsView:false,
+            
+            //弹出业务窗口结束
             
         }
     },
     methods: {
+        //弹出业务窗口开始
+        //缺----展示 选择的下拉对 所属逻辑子系统搜素 bfunc_id who
+        changeIsShow(){
+            this.isShowonoff = false;
+            this.IsView = false;
+        },
+        addBus(D){
+            this.IsView = false;
+            
+            let _temp = {};
+            _temp.bfunc_name = D.bfunc_name
+            _temp.bfunc_status = D.bfunc_status
+            _temp.bfunc_type = D.bfunc_type
+            _temp.bfunc_desc = D.businessDes
+            _temp.logic_sys_no = D.logic_sys_no
+            _temp.bfunc_id = D.bfunc_id
+            _temp.who = D.who
+            this.dataL.push(_temp)
 
+        },
+        editBus(D){
+
+            this.IsView = false;
+            let Index = this.dataL.findIndex((item)=>{
+                return D.bfunc_id == item.bfunc_id
+            })
+            this.$set(this.dataL[Index],"bfunc_name", D.bfunc_name);
+            this.$set(this.dataL[Index],"bfunc_status", D.bfunc_status);
+            this.$set(this.dataL[Index],"bfunc_type", D.bfunc_type);
+            this.$set(this.dataL[Index],"bfunc_desc", D.businessDes);
+            this.$set(this.dataL[Index],"logic_sys_no", D.logic_sys_no);
+
+            if(D.who != "new"){ 
+                this.$emit("modifyTagfn",D)
+            };
+            
+        },
+        userstoryGetDetailFn(URL,params = {},val,index,is){
+            let ckeckObj = (v,arr,txt,txt1)=>{
+
+                let I = arr.findIndex((item)=>{
+                    return v == item[txt]
+                })
+                return arr[I][txt1]+"";
+            }
+            let Title;
+            let fromdataObj;
+            if(val == "view"){
+                Title = "查看业务功能";
+                this.IsView = true;
+                fromdataObj = this.dataR[index];
+            }else if(val == "edit"){
+                Title = "编辑业务功能";
+                fromdataObj = this.dataL[index];
+            }else{
+                Title = "新增业务功能";
+            }
+            if(val == "add"){
+                if(!window.creatId){
+                    window.creatId = 1;
+                }else{
+                    window.creatId++;   
+                }
+                this.myFormData = {
+                    bfunc_name:"",
+                    bfunc_type:"",
+                    logic_sys_no:"",
+                    bfunc_desc:"",
+                    bfunc_id:"creatId_"+window.creatId,
+                    who:"new",
+                }
+                this.titleName = Title;
+                this.isShowonoff = is;
+                return;
+            }
+            if(val == "view" && fromdataObj.bfunc_id.indexOf("creatId_") != -1){
+
+                let _type2;
+                let _logic2;
+                _type2 = fromdataObj.bfunc_type ? ckeckObj(fromdataObj.bfunc_type,this.typeList,"bfunc_type","bfunc_type_name") : "";
+                _logic2 = fromdataObj.logic_sys_no ? ckeckObj(fromdataObj.logic_sys_no,this.logicList,"logic_sys_no","logic_sys_name") : "";
+
+                this.myFormData = {
+                    bfunc_name:fromdataObj.bfunc_name+"",
+                    bfunc_type:_type2,
+                    logic_sys_no:_logic2,
+                    bfunc_desc:fromdataObj.bfunc_desc+"",
+                    bfunc_id:fromdataObj.bfunc_id+"",
+                    who:fromdataObj.who+"",
+                }
+                this.titleName = Title;
+                this.isShowonoff = is;
+                return;
+            }
+            defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【userstoryGetDetail productAdd】***response+++",response,myData,"====>");
+
+                
+                
+                if(val == "view"){
+                    let _type = ckeckObj((fromdataObj.bfunc_type || myData.data.bfunc_type),this.typeList,"bfunc_type","bfunc_type_name");
+                    let _logic = ckeckObj((fromdataObj.logic_sys_no || myData.data.logic_sys_no),this.logicList,"logic_sys_no","logic_sys_name");
+                    this.myFormData = {
+                        bfunc_name:fromdataObj.bfunc_name || myData.data.bfunc_name+"",
+                        bfunc_type:_type,
+                        logic_sys_no:_logic,
+                        bfunc_desc:fromdataObj.bfunc_desc || myData.data.bfunc_desc+"",
+                        bfunc_id:fromdataObj.bfunc_id || params.busfunc_id+"",
+                        who:fromdataObj.who || params.who+"",
+                    }
+                }else{
+
+                    if(fromdataObj.bfunc_id.indexOf("creatId_") != -1){
+                        this.myFormData = {
+                            bfunc_name:fromdataObj.bfunc_name+"",
+                            bfunc_type:fromdataObj.bfunc_type+"",
+                            logic_sys_no:fromdataObj.logic_sys_no+"",
+                            bfunc_desc:fromdataObj.bfunc_desc+"",
+                            bfunc_id:fromdataObj.bfunc_id+"",
+                            who:fromdataObj.who+"",
+                        }
+
+                    }else{
+                        this.myFormData = {
+                            bfunc_name:fromdataObj.bfunc_name || myData.data.bfunc_name+"",
+                            bfunc_type:fromdataObj.bfunc_type || myData.data.bfunc_type+"",
+                            logic_sys_no:fromdataObj.logic_sys_no || myData.data.logic_sys_no+"",
+                            bfunc_desc:fromdataObj.bfunc_desc || myData.data.bfunc_desc+"",
+                            bfunc_id:fromdataObj.bfunc_id || params.busfunc_id+"",
+                            who:fromdataObj.who || params.who+"",
+                        }
+                    }
+
+                    
+                }
+                this.titleName = Title;
+                this.isShowonoff = is;
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });   
+        },
+        userstoryGetBfunc_typeFn(URL,params = {}){
+            return defaultAXIOS(URL,params,{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======productAdd  userstoryGetBfunc_typeFn***+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    //this.typeList = myData.data;
+                    return Promise.resolve(myData.data)
+                }else{
+                    this.showError(URL+"错误");
+                    return Promise.reject(false);
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+                return Promise.reject(false);
+            });
+        },
+        userstoryGetLogic_sys_noFn(URL,params = {}){
+            return  defaultAXIOS(URL,params,{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======productAdd  userstoryGetLogic_sys_no***+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    //this.logicList = myData.data;
+                    return Promise.resolve(myData.data)
+                }else{
+                    this.showError(URL+"错误");
+                    return Promise.reject(false);
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+                return Promise.reject(false);
+            });
+        },
+        selbusinessListFn(URL,params = {}){
+            return  defaultAXIOS(URL,params,{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======productAdd  userstoryGetLogic_sys_no***+++",response,myData,"======>");
+                if(myData.typeList && myData.logicList){
+                    this.typeList = myData.typeList;
+                    this.logicList = myData.logicList
+                    return Promise.resolve(myData)
+                }else{
+                    this.showError(URL+"错误");
+                    return Promise.reject(false);
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+                return Promise.reject(false);
+            });
+        },
+        //弹出业务窗口结束
         modify(v,i){
+            //this.myFormData = false;
+            //this.$refs.busdata.resetFields();
+            let _param;
+            let check = (n,arr)=>{
+                return {busfunc_id:arr[n].bfunc_id,who:arr[n].who}  
+            }
+            if(v == "view"){
+                _param = check(i,this.dataR);
+                this.isAddOrEdit = false;
+            }else if(v == "edit"){
+                _param = check(i,this.dataL)
+                this.isAddOrEdit = false;
+            }else{
+                _param = {};
+                this.isAddOrEdit = true;
+            }
+            
+            let _type_logic = this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)});
+            Promise.all([_type_logic]).then(()=>{
+                console.log(v,i,true);
+                this.userstoryGetDetailFn(userstoryGetDetail,_param,v,i,true)
+            },()=>{
+                this.showError(userstoryGetBfunc_type+"|"+userstoryGetLogic_sys_no);
+            })
+            //
             this.$emit("modifyfn",v,i,true);
+            
         },
         selfAddItemFn(Group = [],GroupList = [],datal = [],datar = []){
             let Fn1 = (val,arr)=>{

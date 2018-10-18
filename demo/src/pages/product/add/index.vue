@@ -140,8 +140,8 @@
                         <div class="transBox">
                             <label class="transBoxTitle">关联业务功能</label>
                             <Row>
-                                
-                                <Col span="24">
+                                <Col span="10">&nbsp;</Col>
+                                <Col span="14">
                                     <!-- 搜索选择开始 -->
                                     <div v-for="(myItem,index) in formValidate.AddGroupList" :key="index" >
                                         
@@ -182,6 +182,7 @@
                                     @dataLfn="leftData"
                                     @dataRfn="rightData"
                                     @modifyfn="modifyData"
+                                    @modifyTagfn="modifyTagData"
                                     />
                             </Row>
 
@@ -226,19 +227,7 @@
                
             </div>
         </Card>
-        <businessFunction
-            @changeIsShow="changeIsShow"
-            @addBus="addBus"
-            @editBus="editBus"
-            :isShow="isShowonoff"
-            :title="titleName"
-            :typeList="typeList"
-            :statusList="statusList"
-            :logicList="logicList"
-            :isAddOrEdit="isAddOrEdit"
-            ref="busdata" 
-            :formData = "myFormData"
-        />
+        
     </div>
 </template>
 <script>
@@ -440,19 +429,7 @@ export default {
             isPopsAdd:false,
             popsItem:false,
             //查询搜索结束
-            //弹出业务窗口开始
-            isShowonoff:false,
-            titleName:"",
-            typeList:[],
-            statusList:[],
-            logicList:[],
-            isAddOrEdit:true,
-            LeftData:false,
-            RightData:false,
-            myFormData:false,
-
             
-            //弹出业务窗口结束
             
 
         }
@@ -502,175 +479,33 @@ export default {
         }
     },
     methods:{
-        //弹出业务窗口开始
-        //缺----展示 选择的下拉对 所属逻辑子系统搜素 bfunc_id who
-        changeIsShow(){
-            this.isShowonoff = false;
-        },
-        addBus(D){
-            console.log(D)
-
-        },
-        editBus(D){
-            
-            //D.bfunc_id
+        
+        //查询搜索开始
+        modifyTagData(D){
             let _ArrL = this.formValidate.AddGroupList[0].groupList;
             let Index = _ArrL.findIndex((item)=>{
                 return D.bfunc_id == item.value 
             })
-            
             this.$set(_ArrL[Index],"label", D.bfunc_name);
 
-            /*
-            //this.formValidate.AddGroupList[0].grouptemp = [];
-            //this.formValidate.AddGroupList[0].group = [];
             
+
             let _ArrG = this.formValidate.AddGroupList[0].group;
-            console.log(_ArrG,D.bfunc_id)
             let IndexG = _ArrG.findIndex((item)=>{
                 return D.bfunc_id == item 
             })
-            
-            
-            _ArrG.splice(IndexG,1,)
-            
-            let _ArrGT = this.formValidate.AddGroupList[0].grouptemp;
-            let IndexGT = _ArrGT.findIndex((item)=>{
-                return D.bfunc_id == item 
-            })
-            _ArrGT.splice(IndexGT,1,)
-            
-            //this.$refs.selfRef0_sel.toggleCollapse();
-            */
-            console.log(Index,_ArrL[Index],"editBus_editBus_editBus_editBus_")
-            //this.formValidate.AddGroupList[0].grouptemp = this.formValidate.AddGroupList[0].group;
-            //this.formValidate.AddGroupList[0].groupList
+            document.getElementById("sel0").getElementsByClassName("ivu-tag")[IndexG].getElementsByClassName("ivu-tag-text")[0].innerHTML = D.bfunc_name;
         },
-        userstoryGetDetailFn(URL,params = {},val,index,is){
-            let Title;
-            if(val == "view"){
-                Title = "查看业务功能";
-            }else if(val == "edit"){
-                Title = "编辑业务功能";
-            }else{
-                Title = "新增业务功能";
-            }
-            if(val == "add"){
-                this.myFormData = {
-                    bfunc_name:"",
-                    bfunc_type:"",
-                    logic_sys_no:"",
-                    bfunc_desc:"",
-                    bfunc_id:"temp_",
-                    who:"icdp",
-                }
-                this.titleName = Title;
-                this.isShowonoff = is;
-                return;
-            }
-            defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======【userstoryGetDetail productAdd】***response+++",response,myData,"====>");
-
-                this.myFormData = {
-                    bfunc_name:myData.data.bfunc_desc+"",
-                    bfunc_type:myData.data.bfunc_type+"",
-                    logic_sys_no:myData.data.logic_sys_no+"",
-                    bfunc_desc:myData.data.bfunc_desc+"",
-                    bfunc_id:params.busfunc_id+"",
-                    who:params.who+"",
-                }
-                //this.typeList = [{bfunc_type:myData.data.bfunc_type+"",bfunc_type_name:"bfunc_type_name"}];
-                //this.logicList = [{logic_sys_no:myData.data.logic_sys_no+"",logic_sys_name:"logic_sys_name"}];
-
-                this.titleName = Title;
-                this.isShowonoff = is;
-                
-            }).catch( (error) => {
-                console.log(error);
-                this.showError(error);
-            });   
-        },
-        userstoryGetBfunc_typeFn(URL,params = {}){
-            return defaultAXIOS(URL,params,{timeout:20000,method:'get'}).then((response) => {
-                //alert(JSON.stringify(response))
-                let myData = response.data;
-                console.log("<======productAdd  userstoryGetBfunc_typeFn***+++",response,myData,"======>");
-                if(myData.status == "success"){
-                    this.typeList = myData.data;
-                    return Promise.resolve(myData.data)
-                }else{
-                    this.showError(URL+"错误");
-                    return Promise.reject(false);
-                }
-                
-            }).catch( (error) => {
-                console.log(error);
-                this.showError(error);
-                return Promise.reject(false);
-            });
-        },
-        userstoryGetLogic_sys_noFn(URL,params = {}){
-            return  defaultAXIOS(URL,params,{timeout:20000,method:'get'}).then((response) => {
-                //alert(JSON.stringify(response))
-                let myData = response.data;
-                console.log("<======productAdd  userstoryGetLogic_sys_no***+++",response,myData,"======>");
-                if(myData.status == "success"){
-                    this.logicList = myData.data;
-                    return Promise.resolve(myData.data)
-                }else{
-                    this.showError(URL+"错误");
-                    return Promise.reject(false);
-                }
-                
-            }).catch( (error) => {
-                console.log(error);
-                this.showError(error);
-                return Promise.reject(false);
-            });
-        },
-        //弹出业务窗口结束
-        //查询搜索开始
         modifyData(v,i,is){
-            
-
             //view edit add
-            let _param;
-           
-            let check = (n,arr)=>{
-                return {busfunc_id:arr[n].bfunc_id,who:arr[n].who}  
-            }
-            if(v == "view"){
-                _param = check(i,this.RightData);
-                this.isAddOrEdit = false;
-            }else if(v == "edit"){
-                _param = check(i,this.LeftData)
-                this.isAddOrEdit = false;
-            }else{
-                _param = {};
-                this.isAddOrEdit = true;
-               
-            }
-            let _type = this.userstoryGetBfunc_typeFn(userstoryGetBfunc_type);
-            let _logic = this.userstoryGetLogic_sys_noFn(userstoryGetLogic_sys_no);
-            Promise.all([_type,_logic]).then(()=>{
-                console.log(v,i,is);
-                this.userstoryGetDetailFn(userstoryGetDetail,_param,v,i,is)
-            },()=>{
-                this.showError(userstoryGetBfunc_type+"|"+userstoryGetLogic_sys_no);
-            })
-
-            
-
-            
         },
         leftData(D){
-            console.log(D,"leftData")
+            
             this.formValidate.bfunc = D;
             this.LeftData = D;
         },
         rightData(D){
-            console.log(D,"rightData");
+            
             this.RightData = D;
         },
         selectQueryChange(item){
@@ -694,7 +529,23 @@ export default {
             }
             this.isPopsAdd = _G.length > _GT.length ? "+" : "-";
             this.popsItem = _G.length > _GT.length ? FN(_G,_GT) : FN(_GT,_G);
-            
+
+            ///////====>
+            let _GL = this.formValidate.AddGroupList[0].groupList;
+            let IndexGL = _GL.findIndex((item)=>{
+                return this.popsItem == item.value 
+            })
+            let IndexG = _G.findIndex((item)=>{
+                return this.popsItem == item 
+            })
+            setTimeout(()=>{
+                let _tagText = document.getElementById("sel0").getElementsByClassName("ivu-tag")[IndexG].getElementsByClassName("ivu-tag-text")[0];
+                if(_tagText.innerHTML != _GL[IndexGL].label){
+                    _tagText.innerHTML = _GL[IndexGL].label;
+                }
+                
+            },0)
+            ///////<====
             this.formValidate.AddGroupList[0].grouptemp = this.formValidate.AddGroupList[0].group;
         },
         addCheckSerch(URL,params = {},Arr=[]){

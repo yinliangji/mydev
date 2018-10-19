@@ -402,10 +402,6 @@ export default class Common extends Utils {
       })
     }
 
-
-
-    
-
     //给输入框本身加已选择的数组temp2 --不通用
     static inputArr2(_this,val){
 
@@ -514,6 +510,123 @@ export default class Common extends Utils {
         }
       })
     }
+
+    //搜索--修改标签
+    static ModifyTagData(D,that){
+      let Root = that.formValidate.AddGroupList[0];
+            
+      let _ArrL = Root.groupList;
+      let Index = _ArrL.findIndex((item)=>{
+          return D.bfunc_id == item.value 
+      })
+      if(Index >=0){
+          that.$set(_ArrL[Index],"label", D.bfunc_name);
+      }
+      
+      
+      let _ArrG = Root.group;
+      let IndexG = _ArrG.findIndex((item)=>{
+          return D.bfunc_id == item 
+      })
+      if(IndexG>=0){
+          let Temp_IndexG = _ArrG[IndexG];
+          _ArrG.splice(IndexG,1,Temp_IndexG)
+      }
+
+      let _ArrGT = Root.grouptemp;
+      let IndexGT = _ArrGT.findIndex((item)=>{
+          return D.bfunc_id == item 
+      })
+      if(IndexGT>=0){
+          let Temp_IndexGT = _ArrGT[IndexGT];
+          _ArrGT.splice(IndexGT,1,Temp_IndexGT)
+      }
+    }
+    //搜索--添加菜单
+    static ProjectGroupFN(FUN, that, URL, params,ARR,thatEle){
+      FUN(URL,params,{timeout:60000,method:'get'}).then((response) => {
+          let myData = response.data;
+          console.log("<======【checkSearch Allgroup】***response+++",response,myData,"====>");
+          that.inputLoad = false;
+          that.formValidate.AddGroupList[ARR].groupList = [];
+          let _List = myData.data ? myData.data.list : myData.list;
+          if(typeof(ARR)  == "number"){
+              if(thatEle && thatEle.temp && thatEle.temp.length){
+                  let _tempArr = Common.returnDelArr(that.formValidate.AddGroupList[ARR].group,_List);
+                  that.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp,..._tempArr);
+
+              }else{
+                  that.formValidate.AddGroupList[ARR].groupList.push(..._List);
+              }
+          }
+      }).catch( (error) => {
+          console.log(error);
+          that.inputLoad = false;
+          that.showError(error);
+      });   
+    }
+    //搜索--添加搜索项
+    static AddCheckSerch(that,myLabel,myValue,required,delBtn,modaAdd,groupName){
+      let _tempObj = {
+          myRef: "selfRef",
+          group: [],
+          groupList: [],
+          myLabel: myLabel,
+          myValue: myValue,
+          delBtn: delBtn,
+          groupName: groupName,
+          required: required,
+          modaAdd:modaAdd,//修改添加角色
+          grouptemp:[],//修改添加角色
+          groupListtemp: [],//修改添加角色
+          myReftemp: "selfRefRole",//修改添加角色
+      }
+      that.formValidate.AddGroupList.push(_tempObj);
+    }
+    //搜搜--向穿梭增加删除项
+    static SelectChange(that){
+      let _G = that.formValidate.AddGroupList[0].group;
+      let _GT = that.formValidate.AddGroupList[0].grouptemp;
+      let fn = (val,arr)=>{
+          return arr.findIndex((item)=>{
+              return val == item
+          })
+      }
+      let FN = (arr,arr2)=>{
+          for(let i=0;i<arr.length;i++){
+              if(fn(arr[i],arr2) == -1){
+                  return arr[i];
+              }
+          }
+      }
+      that.isPopsAdd = _G.length > _GT.length ? "+" : "-";
+      that.popsItem = _G.length > _GT.length ? FN(_G,_GT) : FN(_GT,_G);
+
+      ///////====>
+      let changeTag = ()=>{
+          let _GL = this.formValidate.AddGroupList[0].groupList;
+          let IndexGL = _GL.findIndex((item)=>{
+              return this.popsItem == item.value 
+          })
+          let IndexG = _G.findIndex((item)=>{
+              return this.popsItem == item 
+          })
+          setTimeout(()=>{
+              if(IndexG>=0){
+                  let _tagText = document.getElementById("sel0").getElementsByClassName("ivu-tag")[IndexG].getElementsByClassName("ivu-tag-text")[0];
+                  if(_tagText.innerHTML != _GL[IndexGL].label){
+                      _tagText.innerHTML = _GL[IndexGL].label;
+                  }
+              }
+          },0)
+      }
+      //changeTag();
+      ///////<====
+      that.formValidate.AddGroupList[0].grouptemp = that.formValidate.AddGroupList[0].group;
+
+    }
+
+
 
     //删除Storage和Cookie--不通用
     static delStorageAndCookie(_Common,name){

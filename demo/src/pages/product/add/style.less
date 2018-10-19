@@ -9,3 +9,25 @@
 // .border(@width:1px, @color){
 // 	border: @width solid @color;
 // }
+@transTitle-width: 140px;
+.transBox {
+    position:relative;
+    margin-left:@transTitle-width;
+    border: 1px solid #dddee1;
+}
+.transBoxTitle{
+    position:absolute;
+    width:@transTitle-width;
+    top:0;
+    left:-(@transTitle-width);
+    text-align:right;
+    font-size: 12px;
+    color: #495060;
+    padding: 10px 12px 10px 0;
+}
+.selfRef0 {
+    margin:0;
+    padding-top:10px;
+    padding-bottom: 10px;
+    padding-right:10px;
+}

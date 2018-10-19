@@ -120,12 +120,6 @@ import Common from '@/Common';
 const {userstoryGetBfunc_type,userstoryGetLogic_sys_no,userstoryGetDetail,selbusinessList } = Common.restUrl;
 export default {
     props: {
-        toLeftData: {
-            type: [String,Number,Boolean,Function,Object,Array,Symbol],
-            default: function() {
-                return false;
-            }
-        },
         TransDataGroup: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
@@ -264,24 +258,18 @@ export default {
 
         },
         editBus(D){
+
             this.IsView = false;
             let Index = this.dataL.findIndex((item)=>{
                 return D.bfunc_id == item.bfunc_id
             })
-            if(D.who){
-                this.$set(this.dataL[Index],"bfunc_name", D.bfunc_name);
-                this.$set(this.dataL[Index],"bfunc_status", D.bfunc_status);
-                this.$set(this.dataL[Index],"bfunc_type", D.bfunc_type);
-                this.$set(this.dataL[Index],"bfunc_desc", D.businessDes);
-                this.$set(this.dataL[Index],"logic_sys_no", D.logic_sys_no);
-            }else{
-                this.dataL[Index].bfunc_name = D.bfunc_name;
-                this.dataL[Index].bfunc_status = D.bfunc_status;
-                this.dataL[Index].bfunc_type = D.bfunc_type;
-                this.dataL[Index].bfunc_desc = D.businessDes;
-                this.dataL[Index].logic_sys_no = D.logic_sys_no;
-            }
-            if(D.who != "new" || D.who !== ""){ 
+            this.$set(this.dataL[Index],"bfunc_name", D.bfunc_name);
+            this.$set(this.dataL[Index],"bfunc_status", D.bfunc_status);
+            this.$set(this.dataL[Index],"bfunc_type", D.bfunc_type);
+            this.$set(this.dataL[Index],"bfunc_desc", D.businessDes);
+            this.$set(this.dataL[Index],"logic_sys_no", D.logic_sys_no);
+
+            if(D.who != "new"){ 
                 this.$emit("modifyTagfn",D)
             };
             
@@ -304,7 +292,6 @@ export default {
             }else if(val == "edit"){
                 Title = "编辑业务功能";
                 fromdataObj = this.dataL[index];
-
             }else{
                 Title = "新增业务功能";
             }
@@ -345,7 +332,6 @@ export default {
                 this.isShowonoff = is;
                 return;
             }
-
             defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【userstoryGetDetail productAdd】***response+++",response,myData,"====>");
@@ -364,6 +350,7 @@ export default {
                         who:fromdataObj.who || params.who+"",
                     }
                 }else{
+
                     if(fromdataObj.bfunc_id.indexOf("creatId_") != -1){
 
                         this.myFormData = {
@@ -376,7 +363,6 @@ export default {
                         }
 
                     }else{
-
                         this.myFormData = {
                             bfunc_name:fromdataObj.bfunc_name || myData.data.bfunc_name+"",
                             bfunc_type:fromdataObj.bfunc_type || myData.data.bfunc_type+"",
@@ -612,11 +598,6 @@ export default {
         },
     },
     watch: {
-        toLeftData(){
-            if(this.toLeftData){
-                this.dataL.push(...this.toLeftData);
-            }
-        },
         //--检查搜索开始
         TransDataGroup(){
             this.selfDataGroup = this.TransDataGroup;

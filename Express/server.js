@@ -2089,11 +2089,12 @@ let selectBusFuncStatus = (val1 = 200, val2 = 1, val3 = 3) => {
         "typeList":[
             {bfunc_type:"1",bfunc_type_name:"优化"},
             {bfunc_type:"2",bfunc_type_name:"新增"},
-            {bfunc_type:"3",bfunc_type_name:"重构"}
+            {bfunc_type:"3",bfunc_type_name:"重构"},
         ],
         logicList:[
             {logic_sys_no:"Z0250",logic_sys_name:"核心银行业务处理系统"},
-            {logic_sys_no:"0011",logic_sys_name:"综合前端系统"}
+            {logic_sys_no:"0011",logic_sys_name:"综合前端系统"},
+            {logic_sys_no:"0020",logic_sys_name:"证券业务系统"},
         ],
     })
 }
@@ -2107,6 +2108,35 @@ app.all('/agile/selectBusFuncStatus/', function(req, res) {
     res.end()
 });
 
+
+let returnbfunc = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "data|2-5":[
+            {
+                "bfunc_name":"@name",
+                "bfunc_type|1":["1", "2", "3"],
+                "logic_sys_no|1":["Z0250", "0011", "0020"],
+                "bfunc_desc":/[a-zA-Z]{5,8}/,
+                "bfunc_id|+1":1,
+                "who":"",
+            },
+        ],
+        "__value2__": val2,
+        "__value3__": val3,
+        
+    })
+}
+
+app.all('/userstory/returnbfunc/', function(req, res) {
+   
+    let resVal = returnbfunc(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(returnbfunc(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
 
 
 /************qhc */

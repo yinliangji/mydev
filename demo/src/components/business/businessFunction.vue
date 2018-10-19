@@ -12,8 +12,9 @@
                 </Select>
             </FormItem>
             <FormItem label="所属逻辑子系统" prop="logic_sys_no">
+                <input id="demo" type="hidden" />
                 <p v-if="isView">{{formValidate.logic_sys_no}}</p>
-                <Select v-else v-model="formValidate.logic_sys_no" clearable filterable >
+                <Select ref="logicSelect" v-else v-model="formValidate.logic_sys_no" clearable filterable>
                     <Option v-for="(item,index) in logicList" :value="item.logic_sys_no" :key="index">{{ item.logic_sys_name }}</Option>
                 </Select>
                 <Button v-if="!isView" type="primary" @click="linkToNew">ITM新建逻辑子系统</Button>
@@ -96,20 +97,44 @@ export default {
     watch:{
         isShow() {
             this.isShowChild = this.isShow;
+            setTimeout(()=>{
+                if(this.isShow && this.isAddOrEdit){
+                    this.creatResetFields();
+                    this.$refs.logicSelect.clearSingleSelect();
+                }
+            },1)
+            setTimeout(()=>{
+                if(this.isShow && !this.isAddOrEdit){
+                    if(this.formValidate.logic_sys_no){
+                        let obj = this.logicList.find((item)=>{
+                            return item.logic_sys_no == this.formData.logic_sys_no 
+                        })
+                        this.$refs.logicSelect.setQuery(obj.logic_sys_name);
+                        setTimeout(()=>{
+                            document.getElementById("demo").click();
+                        },1)
+                    }
+                }
+                
+            },200)
         },
         formData(){
+            
         	this.formValidate.bfunc_name = this.formData.bfunc_name;
         	this.formValidate.bfunc_type = this.formData.bfunc_type+"";
         	this.formValidate.logic_sys_no = this.formData.logic_sys_no;
         	this.formValidate.businessDes = this.formData.bfunc_desc;
             this.formValidate.bfunc_id = this.formData.bfunc_id;
             this.formValidate.who = this.formData.who;
+
         },
+        
     },
     computed: {
     },
     data(){
     	return {
+            isFilterable:true,
             busLoading:true,
     		isShowChild:false,
     		formValidate:{
@@ -134,7 +159,8 @@ export default {
     			logic_sys_no:[
     				{ required: true, message: '请选择逻辑子系统', trigger: 'change' }
     			],
-    		}
+    		},
+            
     	}
     },
     methods:{
@@ -159,7 +185,9 @@ export default {
                       this.busLoading = true;
                     });
 
+                    
                     this.$emit('changeIsShow');
+                    //this.cancel();
     			}
 
     		})
@@ -176,21 +204,43 @@ export default {
     		this.formValidate.bfunc_type="";
     		this.formValidate.businessDes="";
             this.$refs.formValidate.resetFields();
+            
             this.$emit('changeIsShow');
     	},
         resetFields(){
             this.$refs.formValidate.resetFields();
         },
+        creatResetFields(){
+            this.formValidate.bfunc_name="";
+            this.formValidate.logic_sys_no="";
+            this.formValidate.bfunc_status="";
+            this.formValidate.bfunc_type="";
+            this.formValidate.businessDes="";
+            //
+            this.$refs.formValidate.resetFields();
+            //
+            
+        },
     	linkToNew(){
-
+            this.creatResetFields();
     	},
-    },
-    created(){
-
     },
     mounted(){
 
     },
+    beforecreated(){
+        console.log("businessFunction--beforecreated-------",this.formValidate)
+    },
+    created(){
+        console.log("businessFunction--created-------",this.formValidate)
+    },
+    beforeUpdate(){
+        console.log("businessFunction--beforeUpdate-------",this.formValidate)
+    },
+    updated(){
+        console.log("businessFunction--updated-------",this.formValidate)
+    },
+    
 }
 </script>
 <style lang="less" scoped>

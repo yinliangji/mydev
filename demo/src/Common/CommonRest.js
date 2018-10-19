@@ -127,7 +127,10 @@ CommonRest.restUrl = {
     /****express 用户故事获取业务类型类型 get****/
 
     "userstoryGetLogic_sys_no": process.env.BASE_URL + "/userstoryGetLogic_sys_no/xxxxxxxxxx/",
-    /****express 用户故事获取业务类型类型 get****/
+    /****express 用户故事获取业务类型 get****/
+
+    "userstoryGetReturnbfunc": process.env.BASE_URL + "/userstory/returnbfunc/",
+    /****express 用户故事获取业务类型-编辑用 get****/
 
     /*****************************************/
 

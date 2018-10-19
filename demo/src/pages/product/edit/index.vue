@@ -128,13 +128,70 @@
                         
                     </div>
 
-                    <h3 class="Title"><span>需求相关</span></h3>
+                    <h3 class="Title"><span>需求分析相关</span></h3>
 
                     <div class="fromBox">
-                        <FormItem label="所属需求" prop="req_id">
-                            <Select v-model="formValidate.req_id" placeholder="请选择所属需求">
+                        <FormItem label="所属需求项" prop="req_id">
+                            <Select v-model="formValidate.req_id" placeholder="请选择所属需求项">
                                 <Option v-for="(item , index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
+                        </FormItem>
+
+                        <div class="transBox">
+                            <label class="transBoxTitle">关联业务功能</label>
+                            <Row>
+                                <Col span="10">&nbsp;</Col>
+                                <Col span="14">
+                                    <!-- 搜索选择开始 -->
+                                    <div v-for="(myItem,index) in formValidate.AddGroupList" :key="index" >
+                                       
+                                        <FormItem 
+                                            :label-width="100"
+                                            :label="myItem.myLabel" 
+                                            :prop="'AddGroupList.'+index+'.group'"
+                                            :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                                             
+                                            :ref="myItem.myRef+index" 
+                                            :class="myItem.myRef+index"
+                                            >
+                                            <Select
+                                                :ref="myItem.myRef+index+'_sel'"
+                                                :class="myItem.myRef+index+'_sel'"
+                                                @on-change="selectChange" 
+                                                @on-query-change="selectQueryChange"
+                                                v-model="myItem.group" 
+                                                :id="'sel'+index" 
+                                                filterable 
+                                                :loading="inputLoad"  
+                                                multiple 
+                                                label-in-value
+                                                :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'"
+                                                >
+                                                <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :label="item.label" :key="index2">
+                                                    {{ item.label }}
+                                                </Option>
+                                            </Select>
+                                        </FormItem>
+                                    </div>
+                                    <!-- 搜索选择结束 -->
+                                </Col>
+                                <Trans 
+                                    :TransDataGroup = "formValidate.AddGroupList[0].group" 
+                                    :TransDataGroupList = "formValidate.AddGroupList[0].groupList" 
+                                    :isPopsAdd = "isPopsAdd"
+                                    :popsItem = "popsItem"
+                                    :toLeftData="toLeftData"
+                                    @dataLfn="leftData"
+                                    @dataRfn="rightData"
+                                    @modifyfn="modifyData"
+                                    @modifyTagfn="modifyTagData"
+                                    />
+                            </Row>
+
+                        </div>
+                        
+                        <FormItem label="" >
+                            &nbsp;
                         </FormItem>
                        <!--  <FormItem label="用户故事提出人" prop="introducer">
                             <Select v-model="formValidate.introducer" placeholder="请选择用户故事提出人">
@@ -173,12 +230,12 @@
 </template>
 <script>
 import Store from '@/vuex/store'
-
+import Trans from '@/pages/product/add/trans'
 
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyEdit,storyGetSprint,storyGetReq,storyGetCondition,publishUser} = Common.restUrl;
+const {storyEdit,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,userstoryGetReturnbfunc} = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -228,7 +285,8 @@ export default {
         console.log("productAdd--beforecreated-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
     },
     created(){
-        console.log("productAdd--created-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
+        console.log("productAdd--created-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList);
+        this.addCheckSerch();//搜索查询
     },
     beforeUpdate(){
         console.log("productAdd--beforeUpdate-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
@@ -252,6 +310,7 @@ export default {
             modal_add_loading: false,
             editTableData:false,
             formValidate: {
+                
                 userstory_name: '',
                 userstory_type:"",
                 userstory_status:"",
@@ -270,35 +329,8 @@ export default {
                 charger:"",//一对
                 nick_name:"",//一对
 
-
-
-
-
-
-
-                // person:"",
-                
-                
-                
-                
-                // mission:"",
-                // business:[],
-                // demand:"",
-                // introducer:"",
-                // department:"",
-                
-
-
-
-
-
-
-                // mail: '',
-                // city: '',
-                // gender: '',
-                // interest: [],
-                // date: '',
-                // time: '',
+                AddGroupList: [], //搜索查询
+                bfunc: [], //弹出业务窗口
                 
             },
             req_idList:[
@@ -377,12 +409,19 @@ export default {
             userstory_statusList:[],
 
             chargerList:[],
+            //查询搜索开始
+            inputLoad:false,
+            isPopsAdd:false,
+            popsItem:false,
+            //查询搜索结束
+            //穿梭开始
+            toLeftData:false,
+            //穿梭结束
         }
     },
     mounted(){
         
         if(!this.$router.history.current.query.fromEdit){
-            console.log("Common.UserstorySession(Common)")
             Common.UserstorySession(Common);
         }
                 
@@ -419,6 +458,11 @@ export default {
 
             this.publishUserFn(publishUser);
 
+            this.userstoryGetReturnbfuncFn(userstoryGetReturnbfunc,Common.GETID(this,Common),Common.GETprjid(this,Common),_DATA.userstory_id)
+
+
+
+
 
 
         }else{
@@ -426,6 +470,54 @@ export default {
         }
     },
     methods:{
+        //穿梭开始
+        userstoryGetReturnbfuncFn(URL = "",id,prj_id,us_id){
+            defaultAXIOS(URL,{id,prj_id,us_id},{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======product userstoryGetReturnbfunc***+++",response,myData,"======>");
+                if(myData.status = "success"){
+                    this.toLeftData = myData.data;
+                    for(let i=0;i<this.toLeftData.length;i++){
+                        for(let k in this.toLeftData[i]){
+                            this.toLeftData[i][k] = this.toLeftData[i][k]+"";
+                        }
+                    }
+                }else{
+                    this.showError(error);
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+        //穿梭结束
+        //查询搜索开始
+        modifyTagData(D){
+            Common.ModifyTagData(D,this)
+        },
+        modifyData(v,i,is){
+            //view edit add
+        },
+        leftData(D){
+            this.formValidate.bfunc = D;
+        },
+        rightData(D){
+        },
+        selectQueryChange(ITEM){
+            console.log(ITEM,"selectQueryChange")
+        },
+        selectChange(ITEM){
+            console.log(ITEM,"selectChange");
+            Common.SelectChange(this);
+        },
+        addCheckSerch(){
+            Common.AddCheckSerch(this,"已有业务功能","xxxxx",false,false,"");
+        },
+        projectGroupFn(URL,params = {},ARR,thatEle){
+            Common.ProjectGroupFN(defaultAXIOS,this,URL,params,ARR,thatEle);
+        },
+        //查询搜索结束
         publishUserFn(URL,params = {}){
             
             let dataJson = JSON.parse(this.$router.history.current.query.DATA)
@@ -500,19 +592,14 @@ export default {
             });
         },
         getStoryEditFn(DATA){
-            
-            
             for (let i in this.formValidate){
                 if(i == "manhour"){
                     this.formValidate.manhour = Number(DATA.manHours+"")
+                }else if(i == "AddGroupList" || i == "bfunc"){
                 }else{
                     this.formValidate[i] = DATA[i]+"";
                 }
-                
             }
-           
-            
-            
         },
         showError(ERR){
             Common.ErrorShow(ERR,this);
@@ -537,26 +624,11 @@ export default {
             this.formValidate.req_id="";
             this.formValidate.req_name="";
 
-
-
-
-
-
-
-
-            // this.formValidate.person="";
-            
-            
-            
-            
-            // this.formValidate.mission=[];
-            // this.formValidate.demand="";
-            // this.formValidate.introducer="";
-            // this.formValidate.department="";
-            
-            // this.editTableData=false;
+            this.formValidate.bfunc = [];
+          
         },
         submitAddData(){
+            let _bfunc = this.formValidate.bfunc ? JSON.stringify(this.formValidate.bfunc) : "";
             let tempData = {
                 userstory_name: this.formValidate.userstory_name,
                 userstory_type: this.formValidate.userstory_type,
@@ -576,16 +648,8 @@ export default {
                 req_name:this.formValidate.req_name,
                 charger:this.formValidate.nick_name,//一对
                 nick_name:this.formValidate.charger,//一对
-                        
+                bfunc:_bfunc,
             
-
-
-                //num: parseInt(Math.random()*100),
-                // priority:this.formValidate.grade,
-                // icon: require("@/assets/images/user_02.png"),
-                // person:"谢蓓",
-
-                
             }
             defaultAXIOS(storyEdit,tempData,{timeout:20000,method:'post'}).then((response) => {
                 //alert(JSON.stringify(response))
@@ -631,10 +695,47 @@ export default {
             
         },
     },
+    components: {
+       Trans,
+    },
+    watch:{
+        //查询搜索开始
+        "formValidate.AddGroupList"(curVal,oldVal){
+            let _this = this;
+            if(curVal){
+                Common.changeArr(this,curVal,Common,userstoryAddGroup,{prj_id:Common.GETprjid(this,Common)})//下拉样子
+            }
+        },
+        formValidate: {
+            handler(val, oldVal) {
+                if(val){
+                    Common.inputArr(this,val)//下拉样子
+                }
+            },
+            deep: true
+        },
+        //查询搜索结束
+    },
 }
 </script>
 <style lang="less" scoped>
 .fromBox {
     width: 80%;
 }
+@import '../add/style.less';
+</style>
+<style >
+.translist>span{
+    float: left;
+} 
+.translist em{
+    display: block;
+    margin-left: 16px;
+    padding-top: 2px;
+    padding-left:0.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+    
+} 
 </style>

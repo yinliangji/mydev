@@ -290,16 +290,13 @@ export default {
     },
     created(){
         console.log("productAdd--created-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
-        this.addCheckSerch();
+        this.addCheckSerch();//搜索查询
     },
     beforeUpdate(){
         console.log("productAdd--beforeUpdate-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
     },
     updated(){
         console.log("productAdd--updated-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
-        //console.log(this.formValidate.AddGroupList[0].group,"======7777")
-        
-
     },
     computed: {
         addtest() {
@@ -480,135 +477,30 @@ export default {
         }
     },
     methods:{
-        
         //查询搜索开始
         modifyTagData(D){
-
-            let Root = this.formValidate.AddGroupList[0];
-            
-            let _ArrL = Root.groupList;
-            let Index = _ArrL.findIndex((item)=>{
-                return D.bfunc_id == item.value 
-            })
-            if(Index >=0){
-                this.$set(_ArrL[Index],"label", D.bfunc_name);
-            }
-            
-            
-            let _ArrG = Root.group;
-            let IndexG = _ArrG.findIndex((item)=>{
-                return D.bfunc_id == item 
-            })
-            if(IndexG>=0){
-                let Temp_IndexG = _ArrG[IndexG];
-                _ArrG.splice(IndexG,1,Temp_IndexG)
-            }
-
-            let _ArrGT = Root.grouptemp;
-            let IndexGT = _ArrGT.findIndex((item)=>{
-                return D.bfunc_id == item 
-            })
-            if(IndexGT>=0){
-                let Temp_IndexGT = _ArrGT[IndexGT];
-                _ArrGT.splice(IndexGT,1,Temp_IndexGT)
-            }
-            //document.getElementById("sel0").getElementsByClassName("ivu-tag")[IndexG].getElementsByClassName("ivu-tag-text")[0].innerHTML = D.bfunc_name;
+            Common.ModifyTagData(D,this)
         },
         modifyData(v,i,is){
             //view edit add
         },
         leftData(D){
-            
             this.formValidate.bfunc = D;
-            this.LeftData = D;
         },
         rightData(D){
-            
-            this.RightData = D;
         },
         selectQueryChange(ITEM){
             console.log(ITEM,"selectQueryChange")
         },
         selectChange(ITEM){
             console.log(ITEM,"selectChange");
-            let _G = this.formValidate.AddGroupList[0].group;
-            let _GT = this.formValidate.AddGroupList[0].grouptemp;
-            let fn = (val,arr)=>{
-                return arr.findIndex((item)=>{
-                    return val == item
-                })
-            }
-            let FN = (arr,arr2)=>{
-                for(let i=0;i<arr.length;i++){
-                    if(fn(arr[i],arr2) == -1){
-                        return arr[i];
-                    }
-                }
-            }
-            this.isPopsAdd = _G.length > _GT.length ? "+" : "-";
-            this.popsItem = _G.length > _GT.length ? FN(_G,_GT) : FN(_GT,_G);
-
-            ///////====>
-            let changeTag = ()=>{
-                let _GL = this.formValidate.AddGroupList[0].groupList;
-                let IndexGL = _GL.findIndex((item)=>{
-                    return this.popsItem == item.value 
-                })
-                let IndexG = _G.findIndex((item)=>{
-                    return this.popsItem == item 
-                })
-                setTimeout(()=>{
-                    if(IndexG>=0){
-                        let _tagText = document.getElementById("sel0").getElementsByClassName("ivu-tag")[IndexG].getElementsByClassName("ivu-tag-text")[0];
-                        if(_tagText.innerHTML != _GL[IndexGL].label){
-                            _tagText.innerHTML = _GL[IndexGL].label;
-                        }
-                    }
-                },0)
-            }
-            //changeTag();
-            ///////<====
-            this.formValidate.AddGroupList[0].grouptemp = this.formValidate.AddGroupList[0].group;
+            Common.SelectChange(this);
         },
-        addCheckSerch(URL,params = {},Arr=[]){
-            let _tempObj = {
-                myRef: "selfRef",
-                group: [],
-                groupList: [],
-                myLabel: "已有业务功能",
-                myValue: "xmjl",
-                delBtn: false,
-                groupName: "",
-                required: false,
-                modaAdd:false,//修改添加角色
-                grouptemp:[],//修改添加角色
-                groupListtemp: [],//修改添加角色
-                myReftemp: "selfRefRole",//修改添加角色
-            }
-            this.formValidate.AddGroupList.push(_tempObj);  
+        addCheckSerch(){
+            Common.AddCheckSerch(this,"已有业务功能","xxxxx",false,false,"");
         },
-        
         projectGroupFn(URL,params = {},ARR,thatEle){
-            defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======【checkSearch Allgroup】***response+++",response,myData,"====>");
-                this.inputLoad = false;
-                this.formValidate.AddGroupList[ARR].groupList = [];
-                let _List = myData.data ? myData.data.list : myData.list;
-                if(typeof(ARR)  == "number"){
-                    if(thatEle && thatEle.temp && thatEle.temp.length){
-                        let _tempArr = Common.returnDelArr(this.formValidate.AddGroupList[ARR].group,_List);
-                        this.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp,..._tempArr);
-
-                    }else{
-                        this.formValidate.AddGroupList[ARR].groupList.push(..._List);
-                    }
-                }
-            }).catch( (error) => {
-                console.log(error);
-                this.inputLoad = false;
-                this.showError(error);
-            });   
+            Common.ProjectGroupFN(defaultAXIOS,this,URL,params,ARR,thatEle);
         },
         //查询搜索结束
 
@@ -758,15 +650,6 @@ export default {
                 charger:this.formValidate.nick_name,//一对
                 nick_name:this.formValidate.charger,//一对
                 bfunc:_bfunc,
-                
-
-
-                //num: parseInt(Math.random()*100),
-                // priority:this.formValidate.grade,
-                // icon: require("@/assets/images/user_02.png"),
-                // person:"谢蓓",
-
-                
             }
             
             defaultAXIOS(storyAdd,tempData,{timeout:20000,method:'post'}).then((response) => {
@@ -843,28 +726,7 @@ export default {
 .fromBox {
     width: 80%;
 }
-@transTitle-width: 140px;
-.transBox {
-    position:relative;
-    margin-left:@transTitle-width;
-    border: 1px solid #dddee1;
-}
-.transBoxTitle{
-    position:absolute;
-    width:@transTitle-width;
-    top:0;
-    left:-(@transTitle-width);
-    text-align:right;
-    font-size: 12px;
-    color: #495060;
-    padding: 10px 12px 10px 0;
-}
-.selfRef0 {
-    margin:0;
-    padding-top:10px;
-    padding-bottom: 10px;
-    padding-right:10px;
-}
+@import './style.less';
 </style>
 <style >
 .translist>span{

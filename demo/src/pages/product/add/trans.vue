@@ -468,6 +468,7 @@ export default {
                 _param = check(i,this.dataL)
                 this.isAddOrEdit = false;
             }else{
+                this.$refs.busdata.resetFields();//修改10-20
                 _param = {};
                 this.isAddOrEdit = true;
             }

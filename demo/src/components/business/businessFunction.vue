@@ -12,9 +12,9 @@
                 </Select>
             </FormItem>
             <FormItem label="所属逻辑子系统" prop="logic_sys_no">
-                <input id="demo" type="hidden" />
+                <input id="demo" type="hidden" /><!-- 修改10-20 -->
                 <p v-if="isView">{{formValidate.logic_sys_no}}</p>
-                <Select ref="logicSelect" v-else v-model="formValidate.logic_sys_no" clearable filterable>
+                <Select ref="logicSelect" v-else v-model="formValidate.logic_sys_no" clearable filterable id="logicSelect"><!-- 修改10-20 -->
                     <Option v-for="(item,index) in logicList" :value="item.logic_sys_no" :key="index">{{ item.logic_sys_name }}</Option>
                 </Select>
                 <Button v-if="!isView" type="primary" @click="linkToNew">ITM新建逻辑子系统</Button>
@@ -97,22 +97,30 @@ export default {
     watch:{
         isShow() {
             this.isShowChild = this.isShow;
+            /* //修改10-20
             setTimeout(()=>{
                 if(this.isShow && this.isAddOrEdit){
                     this.creatResetFields();
                     this.$refs.logicSelect.clearSingleSelect();
                 }
             },1)
+            */
             setTimeout(()=>{
                 if(this.isShow && !this.isAddOrEdit){
                     if(this.formValidate.logic_sys_no){
                         let obj = this.logicList.find((item)=>{
                             return item.logic_sys_no == this.formData.logic_sys_no 
                         })
+                        let dom = document.getElementById("logicSelect").getElementsByClassName("ivu-select-dropdown")[0];//修改10-20
+                        dom.setAttribute("hidden",true);//修改10-20
                         this.$refs.logicSelect.setQuery(obj.logic_sys_name);
                         setTimeout(()=>{
-                            document.getElementById("demo").click();
+                            document.getElementById("demo").click();//修改10-20
+                            setTimeout(()=>{
+                                dom.removeAttribute("hidden");     
+                            },500)
                         },1)
+                        
                     }
                 }
                 
@@ -209,6 +217,7 @@ export default {
     	},
         resetFields(){
             this.$refs.formValidate.resetFields();
+            this.$refs.logicSelect.clearSingleSelect();//修改10-20
         },
         creatResetFields(){
             this.formValidate.bfunc_name="";
@@ -222,7 +231,7 @@ export default {
             
         },
     	linkToNew(){
-            this.creatResetFields();
+            //this.creatResetFields();//修改10-20
     	},
     },
     mounted(){

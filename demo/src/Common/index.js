@@ -1125,6 +1125,8 @@ export default class Common extends Utils {
         }else if(N ==3){
           Lable =   "测　试"
         }else if(N ==4){
+          Lable =   "发　布"//"上　线"
+        }else if(N ==5){
           Lable =   "上　线"
         }else{
           Lable =   "未　知"

@@ -13,11 +13,20 @@
 	                @click="editItemFn"
 	                :disabled="authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])" 
 	                class="editBtn"
-	                shape="circle"
 	                long
 	                size="small"
 	                >
 	                编辑
+	            </Button>
+	            <Button 
+	                type="success" 
+	                @click="goDevelopmentFn"
+	                :disabled="false" 
+	                class="editBtn2"
+	                long
+	                size="small"
+	                >
+	                任务看板
 	            </Button>
             </div>
         	<Tabs value="name1" type="card" :capture-focus="false">
@@ -36,16 +45,19 @@
 								  <td>{{ formValidate.userstory_name | FALSEINFO}}</td>
 								</tr>
 								<tr>
-								  <th width="11%">故事类型</th>
-								  <td width="20%">{{ formValidate.userstory_type | FALSEINFO}}</td>
-								  <th width="11%">故事状态</th>
-								  <td width="20%" >{{ formValidate.userstory_status | FALSEINFO}}</td>
-								  <th width="11%">优先级</th>
+								  <th >故事类型</th>
+								  <td >{{ formValidate.userstory_type | FALSEINFO}}</td>
+								  <th >故事状态</th>
+								  <td >{{ formValidate.userstory_status | FALSEINFO}}</td>
+								  <th >优先级</th>
 								  <td>{{ formValidate.proi | FALSEINFO}}</td>
 								</tr>
 								<tr>
+								  <th>故事编号</th>
+								  <td >{{ formValidate.userstory_id | FALSEINFO}}</td>
 								  <th>故事描述</th>
-								  <td colspan="5" v-html="formValidate.userstory_desc?'<pre>'+formValidate.userstory_desc+'</pre>':'没有数据'"></td>
+								  <td colspan="3" v-html="formValidate.userstory_desc?'<pre>'+formValidate.userstory_desc+'</pre>':'没有数据'"></td>
+								  
 								</tr>
 								
 							  </tbody>
@@ -269,6 +281,9 @@ export default {
 
     },
     methods: {
+    	goDevelopmentFn () {
+            this.$router.push({path: '/development', query: {board: true,us_name:this.formValidate.id}});
+        },
     	changeCurrentPage(i) {
     		let TASKID = this.formValidate.id
             this.getMissionChangeFn(getMissionChange,TASKID,i,this.tableDAtaPageLine)
@@ -380,6 +395,13 @@ h4{
 .editBtn{
     position:absolute;
     right:10px;
+    top:6px;
+    z-index: 10;
+    width: 62px;
+}
+.editBtn2{
+    position:absolute;
+    right:80px;
     top:6px;
     z-index: 10;
     width: 62px;

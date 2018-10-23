@@ -629,6 +629,7 @@ export default {
             this.editTableData=false;
         },
         submitAddData(){
+            
             let _bfunc = this.formValidate.bfunc ? JSON.stringify(this.formValidate.bfunc) : "";
             let tempData = {
                 userstory_name: this.formValidate.userstory_name,

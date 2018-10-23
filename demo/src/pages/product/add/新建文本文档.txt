@@ -28,3 +28,25 @@
         // }else{
         //    prod_ID = false; 
         // }
+
+
+//logic_sys_name
+            let logic_sys_nameFn = (arr)=>{
+                let ckeckObj = (v,arr,txt,txt1)=>{
+                    let I = arr.findIndex((item)=>{
+                        return v == item[txt]
+                    })
+                    return arr[I][txt1]+"";
+                }
+
+                arr.forEach((item)=>{
+                    if(item.logic_sys_no){
+                        ckeckObj(item.logic_sys_no,this.logicList,"logic_sys_no","logic_sys_name")
+
+                    }else{
+                       item.logic_sys_name = "";
+                    }
+                })
+
+            }
+            logic_sys_nameFn(this.formValidate.bfunc)

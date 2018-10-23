@@ -184,7 +184,7 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             "nick_name":"谢蓓",
             //"charger": "@name",
             //"nick_name":"@cname",
-            "userstory_status|1-4": 1,
+            "userstory_status|1-6": 1,
             //"sprint_id": "迭代1",
             "proi|1-3": 1,
             "manHours": "10",

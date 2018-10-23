@@ -249,9 +249,13 @@ export default {
             this.isShowonoff = false;
             this.IsView = false;
         },
+        logic_sys_nameFn(val,arr){
+            return arr[arr.findIndex(item=>val == item.logic_sys_no)].logic_sys_name;
+        },
         addBus(D){
             this.IsView = false;
             
+            let _logic_sys_name = D.logic_sys_no ? this.logic_sys_nameFn(D.logic_sys_no,this.logicList): "";
             let _temp = {};
             _temp.bfunc_name = D.bfunc_name
             _temp.bfunc_status = D.bfunc_status
@@ -260,10 +264,13 @@ export default {
             _temp.logic_sys_no = D.logic_sys_no
             _temp.bfunc_id = D.bfunc_id
             _temp.who = D.who
+            _temp.logic_sys_name = _logic_sys_name
+            
             this.dataL.push(_temp)
 
         },
         editBus(D){
+            
             this.IsView = false;
             let Index = this.dataL.findIndex((item)=>{
                 return D.bfunc_id == item.bfunc_id
@@ -274,13 +281,19 @@ export default {
                 this.$set(this.dataL[Index],"bfunc_type", D.bfunc_type);
                 this.$set(this.dataL[Index],"bfunc_desc", D.businessDes);
                 this.$set(this.dataL[Index],"logic_sys_no", D.logic_sys_no);
+                
             }else{
                 this.dataL[Index].bfunc_name = D.bfunc_name;
                 this.dataL[Index].bfunc_status = D.bfunc_status;
                 this.dataL[Index].bfunc_type = D.bfunc_type;
                 this.dataL[Index].bfunc_desc = D.businessDes;
                 this.dataL[Index].logic_sys_no = D.logic_sys_no;
+                
             }
+
+            let _logic_sys_name = D.logic_sys_no ? this.logic_sys_nameFn(D.logic_sys_no,this.logicList): "";
+            this.dataL[Index].logic_sys_name = _logic_sys_name
+
             if(D.who != "new" || D.who !== ""){ 
                 this.$emit("modifyTagfn",D)
             };
@@ -321,17 +334,18 @@ export default {
                     bfunc_desc:"",
                     bfunc_id:"creatId_"+window.creatId,
                     who:"new",
+                    
                 }
                 this.titleName = Title;
                 this.isShowonoff = is;
+
                 return;
             }
             if(val == "view" && fromdataObj.bfunc_id.indexOf("creatId_") != -1){
 
-                let _type2;
-                let _logic2;
-                _type2 = fromdataObj.bfunc_type ? ckeckObj(fromdataObj.bfunc_type,this.typeList,"bfunc_type","bfunc_type_name") : "";
-                _logic2 = fromdataObj.logic_sys_no ? ckeckObj(fromdataObj.logic_sys_no,this.logicList,"logic_sys_no","logic_sys_name") : "";
+               
+                let _type2 = fromdataObj.bfunc_type ? ckeckObj(fromdataObj.bfunc_type,this.typeList,"bfunc_type","bfunc_type_name") : "";
+                let _logic2 = fromdataObj.logic_sys_no ? ckeckObj(fromdataObj.logic_sys_no,this.logicList,"logic_sys_no","logic_sys_name") : "";
 
                 this.myFormData = {
                     bfunc_name:fromdataObj.bfunc_name+"",
@@ -340,6 +354,7 @@ export default {
                     bfunc_desc:fromdataObj.bfunc_desc+"",
                     bfunc_id:fromdataObj.bfunc_id+"",
                     who:fromdataObj.who+"",
+                    
                 }
                 this.titleName = Title;
                 this.isShowonoff = is;
@@ -351,10 +366,10 @@ export default {
                 console.log("<======【userstoryGetDetail productAdd】***response+++",response,myData,"====>");
 
                 
-                
+                let _type = ckeckObj((fromdataObj.bfunc_type || myData.data.bfunc_type),this.typeList,"bfunc_type","bfunc_type_name");
+                let _logic = ckeckObj((fromdataObj.logic_sys_no || myData.data.logic_sys_no),this.logicList,"logic_sys_no","logic_sys_name");
+
                 if(val == "view"){
-                    let _type = ckeckObj((fromdataObj.bfunc_type || myData.data.bfunc_type),this.typeList,"bfunc_type","bfunc_type_name");
-                    let _logic = ckeckObj((fromdataObj.logic_sys_no || myData.data.logic_sys_no),this.logicList,"logic_sys_no","logic_sys_name");
                     this.myFormData = {
                         bfunc_name:fromdataObj.bfunc_name || myData.data.bfunc_name+"",
                         bfunc_type:_type,
@@ -362,10 +377,10 @@ export default {
                         bfunc_desc:fromdataObj.bfunc_desc || myData.data.bfunc_desc+"",
                         bfunc_id:fromdataObj.bfunc_id || params.busfunc_id+"",
                         who:fromdataObj.who || params.who+"",
+                        
                     }
                 }else{
                     if(fromdataObj.bfunc_id.indexOf("creatId_") != -1){
-
                         this.myFormData = {
                             bfunc_name:fromdataObj.bfunc_name+"",
                             bfunc_type:fromdataObj.bfunc_type+"",
@@ -373,10 +388,9 @@ export default {
                             bfunc_desc:fromdataObj.bfunc_desc+"",
                             bfunc_id:fromdataObj.bfunc_id+"",
                             who:fromdataObj.who+"",
+                            
                         }
-
                     }else{
-
                         this.myFormData = {
                             bfunc_name:fromdataObj.bfunc_name || myData.data.bfunc_name+"",
                             bfunc_type:fromdataObj.bfunc_type || myData.data.bfunc_type+"",
@@ -384,11 +398,11 @@ export default {
                             bfunc_desc:fromdataObj.bfunc_desc || myData.data.bfunc_desc+"",
                             bfunc_id:fromdataObj.bfunc_id || params.busfunc_id+"",
                             who:fromdataObj.who || params.who+"",
+                            
                         }
                     }
-
-                    
                 }
+
                 this.titleName = Title;
                 this.isShowonoff = is;
                 
@@ -483,7 +497,7 @@ export default {
             this.$emit("modifyfn",v,i,true);
             
         },
-        selfAddItemFn(Group = [],GroupList = [],datal = [],datar = []){
+        selfAddItemFn(Group = [],GroupList = [],datal = [],datar = []){//没用
             let Fn1 = (val,arr)=>{
                 let _obj = {
                     bfunc_id:"",
@@ -494,6 +508,7 @@ export default {
                     isShow:"",
                     list:[],
                     who:"",
+                    
                     
                 };
                 let _temp = arr.find((item)=>{
@@ -536,6 +551,7 @@ export default {
                     isShow:"",
                     list:[],
                     who:"",
+                    
                 };
                 let _temp = arr.find((item)=>{
                     return val == item.value
@@ -683,10 +699,10 @@ export default {
         });
     },
     beforeUpdate(){
-        console.log("trans--beforeUpdate-------",this.selfDataGroup,this.selfDataGroupList,this.formValidate)
+        console.log("trans--beforeUpdate-------",this.myFormData)
     },
     updated(){
-        console.log("trans--updated-------",this.selfDataGroup,this.selfDataGroupList,this.formValidate)
+        console.log("trans--updated-------",this.myFormData)
     },
     mounted(){
         this.list_logic_type = this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)});

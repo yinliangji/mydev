@@ -1041,6 +1041,28 @@ export default class Common extends Utils {
         }
         return arrList
     }
+    //翻译优先级颜色--不通用
+    static ProiColorFn(N,STR=""){
+      let Lable = "#dddee1"
+      if(this[STR+"List"] && this[STR+"List"].length){
+        for(let j=0;j<this[STR+"List"].length;j++){
+          if(this[STR+"List"][j].value == N){
+            Lable = this[STR+"List"][j].label
+          }
+        }
+      }else{
+        if(N == 1){
+          Lable = "#ed3f14"//高
+        }else if(N ==2){
+          Lable = "#19be6b"//中
+        }else if(N ==3){
+          Lable = "#2d8cf0"//低
+        }else{
+          Lable = "#dddee1"//无
+        }
+      }
+      return Lable;
+    }
     //翻译优先级--不通用
     static ProiFn(N,STR=""){
       let Lable = "无"
@@ -1059,28 +1081,6 @@ export default class Common extends Utils {
           Lable = "低"
         }else{
           Lable = "无"
-        }
-      }
-      return Lable;
-    }
-    //翻译优先级颜色--不通用
-    static ProiColorFn(N,STR=""){
-      let Lable = "#dddee1"
-      if(this[STR+"List"] && this[STR+"List"].length){
-        for(let j=0;j<this[STR+"List"].length;j++){
-          if(this[STR+"List"][j].value == N){
-            Lable = this[STR+"List"][j].label
-          }
-        }
-      }else{
-        if(N == 1){
-          Lable = "#ed3f14"
-        }else if(N ==2){
-          Lable = "#19be6b"
-        }else if(N ==3){
-          Lable = "#2d8cf0"
-        }else{
-          Lable = "#dddee1"
         }
       }
       return Lable;
@@ -1107,6 +1107,8 @@ export default class Common extends Utils {
       }
       return Lable;
     }
+    
+    
     //翻译故事状态--不通用
     static StatusFn(N,STR=""){
 
@@ -1145,15 +1147,17 @@ export default class Common extends Utils {
         }
       }else{
         if(N == 1){
-          Lable =   "#2b8cf0"
+          Lable = "#2b8cf0";//提　出
         }else if(N ==2){
-          Lable =   "#ed3f14"
+          Lable = "#ed3f14";//开发中
         }else if(N ==3){
-          Lable =   "#ff9900"
+          Lable = "#ff9900"//测　试
         }else if(N ==4){
-          Lable =   "#19be6b"
+          Lable = "#bbbec4"//发　布
+        }else if(N ==5){
+          Lable = "#19be6b"//上　线
         }else{
-          Lable =   "#1c2438"
+          Lable = "#1c2438"//未　知
         }
       }
       return Lable;

@@ -249,7 +249,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.toBusiness(params.index)
+                                        this.toBusiness(params.index,"fromlist")
                                     }
                                 }
                             }, '查看业务功能'),
@@ -316,8 +316,12 @@ export default {
         goUserStory(){
             this.$router.push('/product')
         },
-        toBusiness(){
-            this.$router.push({path: '/demand/business/', query: {}})
+        toBusiness(i,From){
+        	if(From && From == "fromlist"){
+        		this.$router.push({path: '/demand/business/', query: {req_id:this.tableData[i].req_id}})
+        	}else{
+        		this.$router.push({path: '/demand/business/', query: {}})
+        	}
         },
         itmPopClose(is,isCancel){
             this.isShowITMPop = is;
@@ -326,7 +330,6 @@ export default {
                 this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
                 this.tableDAtaPageCurrent = 1;
             }
-            
         },
         outinITM(){
             

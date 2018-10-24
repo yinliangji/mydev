@@ -45,10 +45,10 @@
                                             </Select>
 						                </FormItem>
 						            </Col>
-						            <Col span="2" style="text-align: center">所属需求</Col>
+						            <Col span="2" style="text-align: center">所属需求项</Col>
 						            <Col span="6">
 						                <FormItem >
-						                    <Select clearable filterable v-model="formValidate.req_id" placeholder="请选择所属需求">
+						                    <Select clearable filterable v-model="formValidate.req_id" placeholder="请选择所属需求项">
 					                            <Option v-for="(item,index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
 					                        </Select>
 						                </FormItem>
@@ -272,7 +272,7 @@ export default {
 			kanbanboardImgCur:require("../../assets/images/product-kanbanCur.png"),
 
 			groupList:[
-		        { text: "所属需求" },
+		        { text: "所属需求项" },
 		        // {
 		        //   text: "用户登录1",
 		        //   groupId: "group_01"
@@ -449,7 +449,7 @@ export default {
                             'span',
                             {},
                             Common.TypeFn(params.row.userstory_type)
-                            //params.row.userstory_type//1 用户需求 2 生产问题 3自主创新 
+                            //params.row.userstory_type//1 用户需求项 2 生产问题 3自主创新 
                             //
                         )
                     }
@@ -627,7 +627,7 @@ export default {
      			//{
 					// userstory_name: '用户故事1',
 					// userstory_id: 18,
-					// userstory_type: '产品需求',
+					// userstory_type: '产品需求项',
 					// charger:"谢呗",
 					// userstory_status:"已完成",
 					// sprint_id:"迭代1",
@@ -639,7 +639,7 @@ export default {
      			//{
 					// name: '用户故事2',
 					// num: 24,
-					// describe: '产品需求',
+					// describe: '产品需求项',
 					// person:"谢呗2",
 					// status:"处理中",
 					// Iteration:"迭代2",
@@ -651,7 +651,7 @@ export default {
      			//{
 					// name: '用户故事3',
 					// num: 24,
-					// describe: '产品需求',
+					// describe: '产品需求项',
 					// person:"谢呗3",
 					// status:"未开始",
 					// Iteration:"迭代3",
@@ -669,7 +669,7 @@ export default {
                 userstory_id:"",//故事编号
                 userstory_type:"",//故事类型
                 userstory_status:"",//故事状态
-                req_id:"",//所属需求
+                req_id:"",//所属需求项
                 proi:"",//优先级
                 charger:"",//负责人
                 learn_concern:"",//是否领导关心
@@ -679,7 +679,7 @@ export default {
             userstory_typeList:[
             	// {
              //        value: 1,
-             //        label: '用户需求'
+             //        label: '用户需求项'
              //    },
              //    {
              //        value: 2,
@@ -1068,7 +1068,7 @@ export default {
                 		return {text:_temp.label,groupId:val+""}
                 	}
                 	this.groupList = [];
-                	this.groupList.push({text:"所属需求"});
+                	this.groupList.push({text:"所属需求项"});
                 	for(let k=0;k<reqArr2.length;k++){
                 		this.groupList.push(checkreqName(reqArr2[k]))
                 	}

@@ -110,6 +110,9 @@
             :isAddOrEdit="isAddOrEdit"
             ref="busdata" 
             :formData = "myFormData"
+            :isDisabled="true"
+            :isClearable="false"
+            okText="临时保存(不提交)"
         />
     </div>
 </template>
@@ -300,7 +303,23 @@ export default {
             
         },
         userstoryGetDetailFn(URL,params = {},val,index,is){
-            console.log(this.dataL[index],index,this.dataL,"userstoryGetDetailFn<【】======")
+            let _bfunc_type = (value)=>{
+                let Test =  (reg,str)=>{
+                        return reg.test(str)
+                }
+                let result;
+                if(value == "add"){
+                    result = "2"
+                }else if(Test(RegExp(/ITM/ig),value)){
+                    result = "1"
+                }else if(Test(RegExp(/ICDP/ig),value)){
+                    result = "2"
+                }else{
+                    result = ""
+                }
+                return result;
+            }
+            
 
             let ckeckObj = (v,arr,txt,txt1)=>{
                 let I = arr.findIndex((item)=>{
@@ -329,7 +348,7 @@ export default {
                 }
                 this.myFormData = {
                     bfunc_name:"",
-                    bfunc_type:"",
+                    bfunc_type:_bfunc_type(val),
                     logic_sys_no:"",
                     bfunc_desc:"",
                     bfunc_id:"creatId_"+window.creatId,
@@ -380,25 +399,28 @@ export default {
                         
                     }
                 }else{
+                    
+
                     if(fromdataObj.bfunc_id.indexOf("creatId_") != -1){
+
                         this.myFormData = {
                             bfunc_name:fromdataObj.bfunc_name+"",
-                            bfunc_type:fromdataObj.bfunc_type+"",
+                            //bfunc_type:fromdataObj.bfunc_type+"",
+                            bfunc_type:_bfunc_type(fromdataObj.who+""),
                             logic_sys_no:fromdataObj.logic_sys_no+"",
                             bfunc_desc:fromdataObj.bfunc_desc+"",
                             bfunc_id:fromdataObj.bfunc_id+"",
                             who:fromdataObj.who+"",
-                            
                         }
                     }else{
                         this.myFormData = {
                             bfunc_name:fromdataObj.bfunc_name || myData.data.bfunc_name+"",
-                            bfunc_type:fromdataObj.bfunc_type || myData.data.bfunc_type+"",
+                            //bfunc_type:fromdataObj.bfunc_type || myData.data.bfunc_type+"",
+                            bfunc_type:_bfunc_type(fromdataObj.who || myData.data.who+""),
                             logic_sys_no:fromdataObj.logic_sys_no || myData.data.logic_sys_no+"",
                             bfunc_desc:fromdataObj.bfunc_desc || myData.data.bfunc_desc+"",
                             bfunc_id:fromdataObj.bfunc_id || params.busfunc_id+"",
                             who:fromdataObj.who || params.who+"",
-                            
                         }
                     }
                 }

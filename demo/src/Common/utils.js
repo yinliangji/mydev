@@ -1,10 +1,7 @@
 "use strict"
 import CommonRest from './CommonRest';
-
 import Vue from 'vue'
-
 export default class Utils extends CommonRest {
-
 //export default {
     constructor() {
         super()

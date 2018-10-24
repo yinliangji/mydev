@@ -171,13 +171,13 @@ export default {
                     align: 'center'
                 },
                 {
-                    title: '需求编号',
+                    title: '需求项编号',
                     key: 'req_id',
                     width: 150,
                     align: 'center',
                 },
                 {
-                    title: '需求名称',
+                    title: '需求项名称',
                     key: 'req_name',
                     // render: (h, params) => {
                     //     return h(
@@ -196,7 +196,7 @@ export default {
                     // }
                 },
                 {
-                    title: '需求类型',
+                    title: '需求项类型',
                     key: 'prj_type',
                     align: 'center',
                     render: (h, params) => {

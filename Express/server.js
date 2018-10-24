@@ -647,32 +647,32 @@ let GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
                 {
                     value: 'New York',
                     label: 'New York人1',
-                    who:"icdp",
+                    "who|1":["icdp","itm"],
                 },
                 {
                     value: 'London',
                     label: 'London人2',
-                    who:"icdp",
+                    "who|1":["icdp","itm"],
                 },
                 {
                     value: 'Sydney',
                     label: 'Sydney人3',
-                    who:"icdp",
+                    "who|1":["icdp","itm"],
                 },
                 {
                     value: 'Ottawa',
                     label: 'Ottawa人4',
-                    who:"icdp",
+                    "who|1":["icdp","itm"],
                 },
                 {
                     value: 'Paris',
                     label: 'Paris人5',
-                    who:"icdp",
+                    "who|1":["icdp","itm"],
                 },
                 {
                     value: 'Canberra',
                     label: 'Canberra人6',
-                    who:"icdp",
+                    "who|1":["icdp","itm"],
                 }
             ],
 
@@ -689,32 +689,32 @@ let _GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
                 {
                     value: '_New York',
                     label: '_New York人1',
-                    who:"_icdp",
+                    "who|1":["_icdp","_itm"],
                 },
                 {
                     value: '_London',
                     label: '_London人2',
-                    who:"_icdp",
+                    "who|1":["_icdp","_itm"],
                 },
                 {
                     value: '_Sydney',
                     label: '_Sydney人3',
-                    who:"_icdp",
+                    "who|1":["_icdp","_itm"],
                 },
                 {
                     value: '_Ottawa',
                     label: '_Ottawa人4',
-                    who:"_icdp",
+                    "who|1":["_icdp","_itm"],
                 },
                 {
                     value: '_Paris',
                     label: '_Paris人5',
-                    who:"_icdp",
+                    "who|1":["_icdp","_itm"],
                 },
                 {
                     value: '_Canberra',
                     label: '_Canberra人6',
-                    who:"_icdp",
+                    "who|1":["_icdp","_itm"],
                 }
             ],
 
@@ -731,32 +731,32 @@ let GroupList_ = (val1 = 200, val2 = 1, val3 = 3) => {
                 {
                     value: 'New York_',
                     label: 'New York_人1',
-                    who:"icdp_",
+                    "who|1":["icdp_","itm_"],
                 },
                 {
                     value: 'London_',
                     label: 'London_人2',
-                    who:"icdp_",
+                    "who|1":["icdp_","itm_"],
                 },
                 {
                     value: 'Sydney_',
                     label: 'Sydney_人3',
-                    who:"icdp_",
+                    "who|1":["icdp_","itm_"],
                 },
                 {
                     value: 'Ottawa_',
                     label: 'Ottawa_人4',
-                    who:"icdp_",
+                    "who|1":["icdp_","itm_"],
                 },
                 {
                     value: 'Paris_',
                     label: 'Paris_人5',
-                    who:"icdp_",
+                    "who|1":["icdp_","itm_"],
                 },
                 {
                     value: 'Canberra_',
                     label: 'Canberra_人6',
-                    who:"icdp_",
+                    "who|1":["icdp_","itm_"],
                 }
             ],
 
@@ -894,29 +894,19 @@ let storyGetReq = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": val1,
         "message": "mockDataList xxxxxxx",
-        "data": [
+        "data|10-20": [
             {
                 comment: 'xxxxx',
-                id: 1,
-                prj:250,
+                "id|+1": 1,
+                "prj|+1":250,
                 prj_tyope:"1",
-                req_id:"prj_id_xxxxxx",
-                req_name:"装服务器",
+                "req_id|+1":1,
+                "req_name|1":"@title",
                 req_submitter:"百某某",
-                settle_time:"2018-08-05",
+                settle_time:"@date(yyyy-MM-dd)",
                 status:"0",
             },
-            {
-                comment: 'xxxxx',
-                id: 2,
-                prj:251,
-                prj_tyope:"1",
-                req_id:"req_id_xxxxxx",
-                req_name:"装服务器1",
-                req_submitter:"百某某1",
-                settle_time:"2018-08-05",
-                status:"0",
-            },
+           
                 
         ],
     })
@@ -2138,6 +2128,65 @@ app.all('/userstory/returnbfunc/', function(req, res) {
     res.end()
 });
 
+
+
+let get_bfunc_by_rpj_req = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+        limit:10,
+        page:1,
+        page_rows:10,
+        pegeno:1,
+        "rows|3-5":[{
+            change_time:"2018-09-12 10:27:22",
+            "id|+1":280,
+            operator_id:"xiebei.zh",
+            operator_name:"谢蓓",
+            "task_id|+1":110,
+            userstory_status:"未开始",
+            "userstory_id|6-10":/[a-zA-Z0-9]/,
+        }],
+        table_id:"listview_bable",
+
+        "data|3-5": [{
+            "bfunc_desc|5-8": /[a-zA-Z]/,
+            "bfunc_id|5-8": /[a-zA-Z0-9]/,
+            "bfunc_name|1": "@title",
+            "bfunc_status|1": [1,2,3],
+            "bfunc_type|1": [1,2,3],
+            "create_date": "@date(yyyy-MM-dd)",
+            "create_person":"@name",
+            "id|+1":1,
+            "logic_sys_name":"证券业务系统",
+            "logic_sys_no":"0020",
+            "prj_id":"HP1800000040-01",
+            remark1:"",
+            remark2:"",
+            req_id:"PH18000000-xx",
+            "req_name|5-8":/[a-zA-Z]/,
+            us_id:"US-PH1800000-01-3333",
+
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        }],
+
+        "total|9-20": 3,
+    })
+}
+
+
+
+
+app.all('/agile/get_bfunc_by_prj_req/', function(req, res) {
+    let resVal = get_bfunc_by_rpj_req(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(get_bfunc_by_rpj_req(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
 
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {

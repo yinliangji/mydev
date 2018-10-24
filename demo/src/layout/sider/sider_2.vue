@@ -9,7 +9,7 @@
 		<MenuItem name="1-2">
 			<router-link to="/demand" />
 			<Icon type="ios-filing-outline"></Icon>
-			<span>项目需求</span>
+			<span>项目需求项</span>
 		</MenuItem>
 		<MenuItem name="1-3">
 			<router-link  :to="{path: '/product', query: {board: true}}" />

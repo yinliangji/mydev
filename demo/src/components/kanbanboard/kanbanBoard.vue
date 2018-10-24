@@ -21,6 +21,9 @@
             <div class="centerHeader">
               {{itemGroup.text}}
             </div>
+            <div>
+              <Button type="success" @click="addItem(itemGroup.groupId)" >添加用户故事</Button>
+            </div>
           </Col>
           <Col span="4" v-for="(items, index) in statusList"  :key="index">
             <kanbanItem
@@ -92,7 +95,12 @@ export default {
     kanbanHeader,
     kanbanContentHeader,
     kanbanItem
-  }
+  },
+  methods:{
+    addItem(req_id){
+      this.$router.push({path:'/product/add',query:{req_id}})
+    },
+  },
 };
 </script>
 

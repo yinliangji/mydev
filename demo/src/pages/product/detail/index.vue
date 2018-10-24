@@ -94,17 +94,17 @@
 		            	</div>
 		            </div>
 		        </TabPane>
-		        <TabPane label="需求相关" name="name3">
+		        <TabPane label="需求项相关" name="name3">
 		        	<div class="baseInfoBox">
-		            	<!-- <h3 class="Title"><span>需求相关</span></h3> -->
+		            	<h3 class="Title"><span>需求项信息</span></h3>
 		            	<div class="tableBox">
 		            		<!-- -->
 		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
 							  <tbody>
 								<tr>
-								  <th width="11%">所属需求</th>
+								  <th width="11%">所属需求项</th>
 								  <td width="20%">{{ formValidate.req_name | FALSEINFO}}</td>
-								  <th width="11%">需求提出人</th>
+								  <th width="11%">需求项提出人</th>
 								  <td width="20%" >{{ formValidate.proposer | FALSEINFO}}</td>
 								  <th width="11%">提出人部门</th>
 								  <td>{{ formValidate.proposer_department | FALSEINFO}}</td>
@@ -112,6 +112,15 @@
 							  </tbody>
 							</table>
 		            		<!-- -->
+		            	</div>
+		            	<br />
+		            	<h3 class="Title"><span>业务功能列表</span></h3>
+		            	<div class="tableContBox">
+		            		<Table border :columns="columns2" :data="tableData2"  />
+							<div class="pageBox" v-if="tableData2.length">
+					    		<Page :total="tableDAtaTatol2/tableDAtaPageLine2 > 1 ? (tableDAtaTatol2%tableDAtaPageLine2 ? parseInt(tableDAtaTatol2/tableDAtaPageLine2)+1 : tableDAtaTatol2/tableDAtaPageLine2)*10 : 1" show-elevator @on-change="changeCurrentPage2" @on-page-size-change="changePageSize2"></Page>
+					    		<p>总共{{tableDAtaTatol2}}条记录</p>
+					    	</div>
 		            	</div>
 		            </div>
 		        </TabPane>
@@ -166,7 +175,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyGetDetail,storyGetCondition,getPermission,getMissionChange} = Common.restUrl;
+const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstoryGetBus} = Common.restUrl;
 export default {
 	data () {
         return {
@@ -219,7 +228,7 @@ export default {
 
             prj_permission:[],
             identity:"",
-
+            //-- 用户故事变更记录 
             tableDAtaTatol:0,
             tableDAtaPageLine:5,
             columns: [
@@ -246,6 +255,40 @@ export default {
                 },
             ],
             tableData: [],
+            //-- 用户故事变更记录 
+            //--业务功能列表开始
+            tableData2: [],
+            columns2: [
+	        	{
+                    title: '业务编号',
+                    key: 'bfunc_id',
+                    align: 'center'
+                },
+                {
+                    title: '业务名称',
+                    key: 'bfunc_name',
+                    align: 'center',
+                    
+                },
+                {
+                    title: '创建时间',
+                    key: 'create_date',
+                    align: 'center',
+                },
+                {
+                    title: '创建人',
+                    key: 'create_person',
+                    align: 'center',
+                },
+                {
+                    title: '所属逻辑子系统',
+                    key: 'logic_sys_name',
+                    align: 'center',
+                },
+            ],
+            tableDAtaTatol2:0,
+            tableDAtaPageLine2:3,
+            //--业务功能列表结束
         }
     },
     mounted(){
@@ -262,7 +305,8 @@ export default {
 
 	    	Promise.all([_proi]).then((REP)=>{
 	    		this.storyGetDetailFn(storyGetDetail,detailID).then((TASKID)=>{
-	    			this.getMissionChangeFn(getMissionChange,TASKID,1,this.tableDAtaPageLine)
+	    			this.getMissionChangeFn(getMissionChange,TASKID,1,this.tableDAtaPageLine);
+	    			this.getMissionChangeFn2(userstoryGetBus,TASKID,1,this.tableDAtaPageLine2);
 	    		},(error)=>{
 	    			console.log(error)
 	    			this.showError(error)
@@ -281,6 +325,29 @@ export default {
 
     },
     methods: {
+    	getMissionChangeFn2(URL = "",userstory_id = "",page = "",limit = "",data = ""){
+            defaultAXIOS(URL,{prj_id:this.formValidate.prj_id,req_id:this.formValidate.req_id,page,per_page:limit,data},{timeout:5000,method:'get'})
+            .then((response) => {
+                let myData = response.data;
+                console.log("<======product userstoryGetBus***",response,myData,"======>");
+                if(myData.status == "success"){
+                	this.tableData2 = myData.data;
+                	this.tableDAtaTatol2 = myData.total;
+                }else{
+                	this.showError(URL+"|"+error);
+                }
+            })
+            .catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+    	changeCurrentPage2(i) {
+    		let TASKID = this.formValidate.id
+            this.getMissionChangeFn2(userstoryGetBus,TASKID,i,this.tableDAtaPageLine2)
+        },
+        changePageSize2(i) {
+        },
     	goDevelopmentFn () {
             this.$router.push({path: '/development', query: {board: true,us_name:this.formValidate.id}});
         },
@@ -297,9 +364,6 @@ export default {
                 console.log("<======product getMissionChange***response+++",response,myData,"======>");
                 this.tableData = myData.rows;
                 this.tableDAtaTatol = myData.total;
-
-                
-
             })
             .catch( (error) => {
                 console.log(error);

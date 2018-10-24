@@ -9,22 +9,22 @@
             <FormItem label="所属项目" >
                 <p>{{formItem.prj_name}}</p>
             </FormItem>
-            <FormItem label="需求名称" prop="req_name">
-                <Input v-model="formItem.req_name" placeholder="请输入需求名称"></Input>
+            <FormItem label="需求项名称" prop="req_name">
+                <Input v-model="formItem.req_name" placeholder="请输入需求项名称"></Input>
             </FormItem>
             
-            <FormItem label="需求类型" prop="prj_type">
+            <FormItem label="需求项类型" prop="prj_type">
                 <RadioGroup v-model="formItem.prj_type">
                     <Radio label="1">立研</Radio>
                     <Radio label="2">自研</Radio>
                 </RadioGroup>
             </FormItem>
-            <FormItem label="需求编号" prop="req_id" v-show="formItem.prj_type  == 2 ? false : true" >
-                <Input v-model="formItem.req_id"  :disabled="formItem.prj_type  == 1 ? false : true" placeholder="请输入需求编号"></Input>
-                <p v-show="formItem.prj_type  != 2 ? false : true">【需求编号】自动生成</p>
+            <FormItem label="需求项编号" prop="req_id" v-show="formItem.prj_type  == 2 ? false : true" >
+                <Input v-model="formItem.req_id"  :disabled="formItem.prj_type  == 1 ? false : true" placeholder="请输入需求项编号"></Input>
+                <p v-show="formItem.prj_type  != 2 ? false : true">【需求项编号】自动生成</p>
             </FormItem>
-            <FormItem label="需求编号" v-show="formItem.prj_type  != 2 ? false : true">
-                <p >【需求编号】自动生成</p>
+            <FormItem label="需求项编号" v-show="formItem.prj_type  != 2 ? false : true">
+                <p >【需求项编号】自动生成</p>
                 <!-- v-if="formItem.prj_type  == 2 ? false : true" -->
             </FormItem>
             <FormItem label="提出部门" prop="req_submitter">
@@ -99,8 +99,8 @@ export default {
                 //
                 if (!value) {
                     return callback(new Error('不能为空！'));
-                }else if(value == "需求编号已有"){
-                    return callback(new Error('需求编号已有，请重填！'));
+                }else if(value == "需求项编号已有"){
+                    return callback(new Error('需求项编号已有，请重填！'));
 
                 }else{
                     callback()   
@@ -232,8 +232,8 @@ export default {
 
             },(error)=>{
                 console.log(error)
-                if(error == "需求编号已有"){
-                    this.formItem.req_id = "需求编号已有"
+                if(error == "需求项编号已有"){
+                    this.formItem.req_id = "需求项编号已有"
                 }
                 this.$refs.formValidate.validate();
                 this.formItem.req_id = "";
@@ -260,7 +260,7 @@ export default {
                     if(!myData.data.length){
                         return Promise.resolve(true);
                     }else{
-                        return Promise.reject("需求编号已有");
+                        return Promise.reject("需求项编号已有");
                     }
                 }else{
                     
@@ -269,7 +269,7 @@ export default {
             })
             .catch( (error) => {
                 console.log(error);
-                if(error != "需求编号已有"){
+                if(error != "需求项编号已有"){
                     this.showError(error);
                 }
                 return Promise.reject(error);

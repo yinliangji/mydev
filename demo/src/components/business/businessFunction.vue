@@ -1,5 +1,5 @@
 <template>
-	<Modal  v-model="isShowChild" :title="title" @on-ok="submitAdd" @on-cancel="cancel" :ok-text="isView?'关闭': '提交'" :loading="busLoading">
+	<Modal  v-model="isShowChild" :title="title" @on-ok="submitAdd" @on-cancel="cancel" :ok-text="isView?'关闭': okText" :loading="busLoading">
 		<Form :model="formValidate" :label-width="120" :rules="ruleValidate" ref="formValidate"   >
 			<FormItem label="业务功能名称" prop="bfunc_name">
                 <p v-if="isView">{{formValidate.bfunc_name}}</p>
@@ -7,7 +7,7 @@
             </FormItem>
             <FormItem label="业务类型" >
                 <p v-if="isView">{{formValidate.bfunc_type}}</p>
-                <Select v-else v-model="formValidate.bfunc_type" clearable >
+                <Select v-else v-model="formValidate.bfunc_type" :clearable="isClearable" :disabled="isDisabled" ><!-- //10-24修改 -->
                     <Option v-for="(item,index) in typeList" :value="item.bfunc_type" :key="index">{{ item.bfunc_type_name }}</Option>
                 </Select>
             </FormItem>
@@ -31,6 +31,24 @@ import Common from '@/Common';
 const {reqAdd,reqGet,projectListDataNew } = Common.restUrl;
 export default {
 	props: {
+        okText: {//10-24修改
+            type: Boolean,
+            default: function() {
+                return '提交';
+            }
+        },
+        isClearable: {//10-24修改
+            type: Boolean,
+            default: function() {
+                return true;
+            }
+        },
+        isDisabled: {//10-24修改
+            type: Boolean,
+            default: function() {
+                return false;
+            }
+        },
         isView: {
             type: Boolean,
             default: function() {

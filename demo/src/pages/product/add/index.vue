@@ -22,7 +22,7 @@
                     </FormItem>
                     <Row>
                         <Col span="12">
-                            <FormItem label="责任人" >
+                            <FormItem label="责任人"  prop="nick_name">
                                 <!-- <span>{{formValidate.charger}}</span> -->
                                 <Select filterable v-model="formValidate.nick_name" placeholder="请选择事项类型">
                                     <Option v-for="(item,index) in chargerList" :key="index" :value="item.value">{{item.label}}</Option>
@@ -131,7 +131,7 @@
 
                     <div class="fromBox">
                         <FormItem label="所属需求项" prop="req_id">
-                            <Select v-model="formValidate.req_id" placeholder="请选择所属需求">
+                            <Select v-model="formValidate.req_id" placeholder="请选择所属需求项">
                                 <Option v-for="(item , index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
                         </FormItem>
@@ -391,9 +391,11 @@ export default {
                     { required: false, message: '请选择 ', trigger: 'change' }
                 ],
 
-                person: [
-                    { required: true, message: '请选择 ', trigger: 'change' }
+                nick_name: [
+                    { required: false, message: '请选择 ', trigger: 'change' }
                 ],
+
+
                 userstory_status: [
                     { required: true, message: '请选择', trigger: 'change' }
                 ],
@@ -444,6 +446,9 @@ export default {
             this.formValidate.prod_id = prod_ID;
             this.formValidate.id = ID;
 
+
+            this.formValidate.req_id = this.$router.history.current.query.req_id ? this.$router.history.current.query.req_id+"" : "";
+
             this.getStoryAddFn(storyAdd,ID,ID,prod_ID);
             this.storyGetSprintFn(storyGetSprint,ID,ID,prod_ID)
             this.storyGetReqFn(storyGetReq,ID,ID,prod_ID)
@@ -458,7 +463,7 @@ export default {
                     this.formValidate.nick_name = "";
                     setTimeout(()=>{
                         this.formValidate.nick_name = chargerObj.nick_name;
-                    },1)
+                    },100)
                     
                 },()=>{
                     console.log("GetConditionAll 失败");

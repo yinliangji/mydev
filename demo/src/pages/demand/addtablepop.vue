@@ -15,7 +15,7 @@
             
             <FormItem label="需求项类型" prop="prj_type">
                 <RadioGroup v-model="formItem.prj_type">
-                    <Radio label="1">立研</Radio>
+                    <Radio label="1">立项</Radio>
                     <Radio label="2">自研</Radio>
                 </RadioGroup>
             </FormItem>

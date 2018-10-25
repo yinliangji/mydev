@@ -4,7 +4,7 @@
         {{text}}
      </span>
      <span>
-        任务 {{taskNumber}}
+        数量 {{taskNumber}}
      </span>
                 
   </div>

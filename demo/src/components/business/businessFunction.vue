@@ -11,17 +11,39 @@
                     <Option v-for="(item,index) in typeList" :value="item.bfunc_type" :key="index">{{ item.bfunc_type_name }}</Option>
                 </Select>
             </FormItem>
-            <FormItem label="所属逻辑子系统" prop="logic_sys_no">
-                <input id="demo" type="hidden" /><!-- 修改10-20 -->
-                <p v-if="isView">{{formValidate.logic_sys_no}}</p>
-                <Select ref="logicSelect" v-else v-model="formValidate.logic_sys_no" clearable filterable id="logicSelect"><!-- 修改10-20 -->
-                    <Option v-for="(item,index) in logicList" :value="item.logic_sys_no" :key="index">{{ item.logic_sys_name }}</Option>
-                </Select>
-                <Button v-if="!isView" type="primary" @click="linkToNew">ITM新建逻辑子系统</Button>
-            </FormItem>
+            <Row>
+                <Col span="16">
+                    <FormItem label="所属逻辑子系统" prop="logic_sys_no">
+                        <input id="demo" type="hidden" /><!-- 修改10-20 -->
+                        <p v-if="isView">{{formValidate.logic_sys_no}}</p>
+                        <Select ref="logicSelect" v-else v-model="formValidate.logic_sys_no" clearable filterable id="logicSelect"><!-- 修改10-20 -->
+                            <Option v-for="(item,index) in logicList" :value="item.logic_sys_no" :key="index">{{ item.logic_sys_name }}</Option>
+                        </Select>
+                        
+                    </FormItem>
+                </Col>
+                <Col span="1">&nbsp;</Col>
+                <Col span="7">
+                    <Button v-if="!isView" type="primary" @click="linkToNew">ITM新建逻辑子系统</Button>
+                </Col>
+            </Row>
+            
             <FormItem label="业务功能描述">
                 <p v-if="isView">{{formValidate.businessDes}}</p>
                 <Input v-else v-model="formValidate.businessDes" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
+            </FormItem>
+            <FormItem label="上传附件">
+                <Upload
+                    multiple
+                    :action="actionUrl"
+                    name="file"
+                    :on-success="handleSuccess"
+                    :on-error="handleError"
+                    :show-upload-list="false"
+                    class="UploadBtn"
+                    >
+                    <Button type="ghost" icon="ios-cloud-upload-outline">文件上传</Button>
+                </Upload>
             </FormItem>
 		</Form>
 	</Modal>
@@ -32,7 +54,7 @@ const {reqAdd,reqGet,projectListDataNew } = Common.restUrl;
 export default {
 	props: {
         okText: {//10-24修改
-            type: Boolean,
+            type: [Boolean,String],
             default: function() {
                 return '提交';
             }
@@ -186,10 +208,21 @@ export default {
     				{ required: true, message: '请选择逻辑子系统', trigger: 'change' }
     			],
     		},
+            //附件上传--开始
+            actionUrl:"//jsonplaceholder.typicode.com/posts/",
+            //附件上传--结束
             
     	}
     },
     methods:{
+        //附件上传-start
+        handleSuccess(){
+
+        },
+        handleError(){
+
+        },
+        //附件上传 -end
     	submitAdd(){
             if(this.isView){
                 this.cancel();

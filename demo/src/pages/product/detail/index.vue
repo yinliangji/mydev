@@ -165,7 +165,12 @@
         	
 		</Card>
 
-
+		<Enclosure 
+			:isShow="isShowEnclosure"  
+			:addLoading="true" 
+			@enclosureClose="enclosureCloseFn" 
+			:data="EnclosureData"
+		/>
 		
 
 
@@ -176,6 +181,7 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstoryGetBus} = Common.restUrl;
+import Enclosure from "./enclosure";
 export default {
 	data () {
         return {
@@ -268,6 +274,21 @@ export default {
                     title: '业务名称',
                     key: 'bfunc_name',
                     align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'a',
+                            {
+                                style:{color:'#2d8cf0'},
+                                //domProps:{href:"###"},
+                                on: {
+                                    click: () => {
+                                        this.openEnclosure(params.index);
+                                    }
+                                }
+                            },
+                            params.row.bfunc_name
+                        );
+                    },
                     
                 },
                 {
@@ -288,6 +309,8 @@ export default {
             ],
             tableDAtaTatol2:0,
             tableDAtaPageLine2:3,
+            isShowEnclosure:false,
+            EnclosureData:"",
             //--业务功能列表结束
         }
     },
@@ -325,6 +348,14 @@ export default {
 
     },
     methods: {
+    	//业务功能列表-start
+    	enclosureCloseFn(val){
+    		this.isShowEnclosure = val;
+    	},
+    	openEnclosure(i){
+    		this.isShowEnclosure = true;
+    		this.EnclosureData = JSON.stringify(this.tableData2[i])
+    	},
     	getMissionChangeFn2(URL = "",userstory_id = "",page = "",limit = "",data = ""){
             defaultAXIOS(URL,{prj_id:this.formValidate.prj_id,req_id:this.formValidate.req_id,page,per_page:limit,data},{timeout:5000,method:'get'})
             .then((response) => {
@@ -348,6 +379,7 @@ export default {
         },
         changePageSize2(i) {
         },
+        //业务功能列表-end
     	goDevelopmentFn () {
             this.$router.push({path: '/development', query: {board: true,us_name:this.formValidate.id}});
         },
@@ -432,7 +464,10 @@ export default {
 			// 	return Promise.reject("reject");
 			// });
         },        
-    }
+    },
+    components: {
+		Enclosure,
+	},
 }
 </script>
 <style lang="less" scoped>

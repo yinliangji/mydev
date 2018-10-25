@@ -636,13 +636,17 @@ export default {
         submitAddData(){
             
             let _bfunc = this.formValidate.bfunc ? JSON.stringify(this.formValidate.bfunc) : "";
+            let _sprint = this.formValidate.sprint === null ? "" : this.formValidate.sprint;
+            let _charger = this.formValidate.nick_name === null ? "" : this.formValidate.nick_name;
+            let _nick_name = this.formValidate.charger === null ? "" : this.formValidate.charger;
+
             let tempData = {
                 userstory_name: this.formValidate.userstory_name,
                 userstory_type: this.formValidate.userstory_type,
                 userstory_status:this.formValidate.userstory_status,
                 "proi": this.formValidate.proi,
                 "userstory_desc":this.formValidate.userstory_desc,
-                sprint:this.formValidate.sprint,
+                sprint:_sprint,
                 manHours:this.formValidate.manhour,
                 mission:this.formValidate.mission + " | 0",
                 icon: "/assets/images/user_02.png",
@@ -653,8 +657,8 @@ export default {
                 prj_name:this.formValidate.prj_name,
                 req_id:this.formValidate.req_id,
                 req_name:this.formValidate.req_name,
-                charger:this.formValidate.nick_name,//一对
-                nick_name:this.formValidate.charger,//一对
+                charger:_charger,//一对
+                nick_name:_nick_name,//一对
                 bfunc:_bfunc,
             }
             

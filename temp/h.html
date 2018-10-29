@@ -1,68 +1,76 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<title></title>
-	
-	<!-- <link rel="import" href="j.js" /> -->
-	<!-- <script id="commentTemplate2" type="text/html" src="j.js"> -->
-		
-	</script>
+<meta charset="utf-8">
+<title></title>
 </head>
 <body>
 	
-	<script type="text/javascript">
-		var script = document.createElement('script');
-		script.setAttribute("id","commentTemplate")
-		script.setAttribute("type","text/html")
-		script.setAttribute("src","j.html")
-		document.getElementsByTagName("head")[0].appendChild(script);
-		var html = document.getElementById("commentTemplate").innerHTML;
-		console.log(html)
-
-
-
-		var link = document.createElement('link');
-		link.setAttribute("rel","import")
-		
-		link.setAttribute("href","j.js")
-		document.getElementsByTagName("head")[0].appendChild(link);
-
-		setTimeout(()=>{
-			var mylink = document.querySelector('link[rel="import"]')
-		var content = mylink.import
-		console.log(content,"55555555555")
-	},1000)
-		
-		
-
-		
-
-		// var link = document.querySelector('link[rel="import"]')
-		// var content = link.import;
-		// console.log(content.querySelector("body").innerHTML,"55555555555")
-
-
-		
-
-		function loadXMLDoc(){
-		    var xmlhttp;
-		    if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-		      xmlhttp=new XMLHttpRequest();
-		      }else{// code for IE6, IE5
-		      	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-		      }
-		    xmlhttp.onreadystatechange=function(){
-		      if (xmlhttp.readyState==4 && xmlhttp.status==200){
-		        document.getElementById("inhtml").innerHTML=xmlhttp.responseText;
-		        }
-		      }
-		    xmlhttp.open("GET","j.html",true);
-		    xmlhttp.send();
+<script type="text/javascript">
+function JSONP(url,fnName){
+	var _value;
+	window[fnName] = function (val){_value = val}
+	var link = document.createElement('link');
+	link.setAttribute("rel","import")
+	link.setAttribute("type","text/html")
+	link.setAttribute("id","mylink")
+	link.setAttribute("href",url)
+	document.getElementsByTagName("head")[0].appendChild(link);
+	var obj = {
+		complete:function(FN){
+			window.onload = function(){
+				//var mylink = document.querySelector('link[rel="import"]');
+				var mylink;
+				var _mylink = document.getElementsByTagName("link");
+				if(_mylink && _mylink.length){
+					for(var i=0;i<_mylink.length;i++){
+						if(_mylink[i].getAttribute("rel") == "import"){
+							mylink = _mylink[i];
+							break;
+						}
+					}
+					var content = mylink.import.getElementsByTagName("body")[0].innerHTML;
+					eval("var demo = "+content)
+					new  Function(demo)();
+				}
+				FN(_value);
+				document.getElementById("mylink").parentNode.removeChild(document.getElementById("mylink"))
+			}
 		}
-		//loadXMLDoc()
-		
-	</script>
+	};
+	return obj;
+}
+
+function jsonP(url,fnName){
+	var _value;
+    var xmlhttp;
+	window[fnName] = function (val){_value = val};
+	if (window.XMLHttpRequest){
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	}else{
+		// code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.complete = function(FN){
+		xmlhttp.onreadystatechange = function(){
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
+				var jsonpText = xmlhttp.responseText;
+				eval("var jsonp = "+jsonpText)
+				new Function(jsonp)();
+				FN(_value);
+			}
+	    }
+	}
+    xmlhttp.open("GET",url,true);
+    xmlhttp.send();
+    return xmlhttp
+}
+//jsonP("j.js","callback").complete(function(val){console.log(val)})
+JSONP("j.js","callback").complete(function(val){alert(val)})
+
+	
+</script>
 </body>
 
 </html>

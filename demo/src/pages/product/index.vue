@@ -1018,7 +1018,7 @@ export default {
 			let ID = this.getID();
 
 			Common.RemoveSession("allSession");
-			Common.SetSession("userstorySerch",Common.GetSession("userstorySerchTemp"));
+			Common.GetSession("userstorySerchTemp") && Common.SetSession("userstorySerch",Common.GetSession("userstorySerchTemp"));
 			Common.RemoveSession("userstorySerchTemp");
 
 			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);

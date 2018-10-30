@@ -10,31 +10,47 @@
 function JSONP(url,fnName){
 	var _value;
 	window[fnName] = function (val){_value = val}
-	var link = document.createElement('link');
-	link.setAttribute("rel","import")
-	link.setAttribute("type","text/html")
+	//var createEl = "link"
+	var createEl = "script"
+	var link = document.createElement(createEl);
 	link.setAttribute("id","mylink")
-	link.setAttribute("href",url)
+	if(createEl == "link"){
+		link.setAttribute("rel","import")
+		link.setAttribute("type","text/html")
+		link.setAttribute("href",url)
+	}else if(createEl == "script"){
+		link.setAttribute("src",url)
+		link.setAttribute("type","text/javascript")
+	}
+	
 	document.getElementsByTagName("head")[0].appendChild(link);
+
 	var obj = {
 		complete:function(FN){
 			window.onload = function(){
-				//var mylink = document.querySelector('link[rel="import"]');
+				
 				var mylink;
-				var _mylink = document.getElementsByTagName("link");
-				if(_mylink && _mylink.length){
-					for(var i=0;i<_mylink.length;i++){
-						if(_mylink[i].getAttribute("rel") == "import"){
-							mylink = _mylink[i];
-							break;
+				if(createEl == "link"){
+					var _mylink = document.getElementsByTagName("link");
+					if(_mylink && _mylink.length){
+						for(var i=0;i<_mylink.length;i++){
+							if(_mylink[i].getAttribute("rel") == "import"){
+								mylink = _mylink[i];
+								break;
+							}
 						}
+						var content = mylink.import.getElementsByTagName("body")[0].innerHTML;
+						eval("var demo = "+content)
+						new  Function(demo)();
 					}
-					var content = mylink.import.getElementsByTagName("body")[0].innerHTML;
-					eval("var demo = "+content)
-					new  Function(demo)();
+				}else if(createEl == "script"){
+					mylink = document.getElementById("mylink");
+					
+
 				}
+				
 				FN(_value);
-				document.getElementById("mylink").parentNode.removeChild(document.getElementById("mylink"))
+				//document.getElementById("mylink").parentNode.removeChild(document.getElementById("mylink"))
 			}
 		}
 	};
@@ -66,8 +82,11 @@ function jsonP(url,fnName){
     xmlhttp.send();
     return xmlhttp
 }
-//jsonP("j.js","callback").complete(function(val){console.log(val)})
-JSONP("j.js","callback").complete(function(val){alert(val)})
+//var URL = "j.js";
+var URL = "http://127.0.0.1:2000/j.js"
+
+//jsonP(URL,"callback").complete(function(val){console.log(val)})
+JSONP(URL,"callback").complete(function(val){alert(val)})
 
 	
 </script>

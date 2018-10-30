@@ -315,7 +315,7 @@ export default {
         }
     },
     mounted(){
-    	Common.UserstorySession(Common);
+    	Common.UserstorySession(Common,this);
 
     	this.getPermissionFn(getPermission)
     	let detailID = Common.GETdetail_id(this,Common)

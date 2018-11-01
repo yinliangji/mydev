@@ -858,6 +858,50 @@ app.all('/agile/search_busfunc/', function(req, res) {
     res.end()
 });
 
+
+let searchBusfunc = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        data: {
+            "list|6": [
+                {
+                    bfunc_id: /[a-zA-Z]{5,8}/,
+                    bfunc_name: "@name",
+                    logic_sys_name:"@title",
+                    create_date:"@date(yyyy-MM-dd)",
+                    "version|+1":1,
+                    "value|+10":1,
+                    label:"@cname",
+                },
+            ],
+        },
+    })
+}
+
+
+
+
+
+
+app.all('/agile/search_busfunc2/', function(req, res) {
+
+    let resVal
+    let Json
+    Json =  searchBusfunc(req.body.myStatus)   
+    resVal = searchBusfunc(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
+    console.log(trueorfalse)
+    res.json(Json);
+    res.end()
+});
+
+
+
+
+
 app.all('/project/allgroup/', function(req, res) {
     let resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);

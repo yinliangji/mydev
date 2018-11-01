@@ -135,6 +135,13 @@ CommonRest.restUrl = {
     "userstoryGetBus": process.env.BASE_URL + "/agile/get_bfunc_by_prj_req/",
     /****express 用户故事详情获取业务 get****/
 
+
+
+    "userstoryAddBus": process.env.BASE_URL + "/agile/search_busfunc2/",
+    /****express 添加用户故事添加已有业务功能2 get****/
+
+
+
     /*****************************************/
 
     "getPermission": process.env.BASE_URL + "/auth/getPermissionfromUser/",

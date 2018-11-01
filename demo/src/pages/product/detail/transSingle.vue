@@ -1,67 +1,12 @@
 <template>
     <div class="transBody">
-        <div class="transBodyLK" style="float:left;width:44%;">
-            <!-- <div style="margin-bottom:10px;">&nbsp;</div> -->
-            <div class="transBodyL">
-
-                <div style="padding:6px;">
-                    <Checkbox :value="checkAll" @click.prevent.native="handleCheckAll">全选</Checkbox>
-                </div>
-
-                <CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
-                    <div class="userStoryTitle">
-                      <div class="userStoryStatus" >
-                          操作
-                      </div>
-                      <div class="userStoryName" >
-                          名称
-                      </div>
-                    </div>
-                    <ul>
-                        <li v-for="(item,index) in dataL" :key="item.bfunc_id" class="storyBottom">
-                            <div class="tranHeader">
-                                <span class="userStoryStatus">
-                                    <Button type="warning" shape="circle" size="small" @click="modify('edit',index)">编辑</Button>
-                                </span>
-                                <Checkbox :label="item.bfunc_id" class="translist">
-                                    <em>{{item.bfunc_name}}</em>
-                                </Checkbox>
-                            </div>
-                        </li>
-                    </ul>
-                </CheckboxGroup>
-            </div>
+        <div  class="bottomAddBtnBox">
+            <Button type="success" @click="modify('add',-1)">新增业务功能</Button>
         </div>
-        <div class="transBodyC">
-            <Button :type="bgcolorL" long icon="chevron-left" @click="toLeft" :disabled="toLeftOnoff" >
-                <Icon type="chevron-left"></Icon>
-            </Button>
-            <Button :type="bgcolorR" long icon="chevron-right" @click="toRight" :disabled="toRightOnoff">
-                <Icon type="chevron-right"></Icon>
-            </Button>
-        </div>
-        <div class="transBodyRK" style="float:left;width:43%;">
-            <!-- <div style="margin-bottom:10px;">
-                <Row>
-                    <Col span="7">
-                        已有业务功能
-                    </Col>
-                    <Col span="13">
-                        
-                        <Select v-modle="reqserch" filterable multiple>
-                            <Option v-for="(item ,index) in reqserchList" :value="item.value" :key="index">
-                                {{item.label}}
-                            </Option>
-                        </Select>
-                    </Col>
-                    <Col span="1">
-                        &nbsp;
-                    </Col>
-                    <Col span="3">
-                        <Button type="primary" shape="circle" icon="ios-search"></Button>
-                    </Col>
-                </Row>
-            </div>     -->
+        
+       
+        <div class="transBodyRK" style="float:left;width:100%;">
+           
             <div class="transBodyR">
                 <div class="transBodyRcon">
                     <div style="padding:8px 0;">
@@ -82,7 +27,13 @@
                             <li v-for="(item,index) in dataR" :key="item.bfunc_id" class="storyBottom">
                                 <div class="tranHeader">
                                     <span class="userStoryStatus">
+                                        <Button type="error" shape="circle" size="small" @click="modify('del',index)">删除</Button>
+                                    </span>
+                                    <span class="userStoryStatus">
                                         <Button type="info" shape="circle" size="small" @click="modify('view',index)">查看</Button>
+                                    </span>
+                                    <span class="userStoryStatus">
+                                        <Button type="warning" shape="circle" size="small" @click="modify('edit',index)">编辑</Button>
                                     </span>
                                     <Checkbox :label="item.bfunc_id" class="translist">
                                         <em>{{item.bfunc_name}}</em>
@@ -94,9 +45,7 @@
                 </div>
             </div>
         </div>
-        <div  class="bottomAddBtnBox">
-            <Button type="success" @click="modify('add',-1)">新增业务功能</Button>
-        </div>
+        
         <businessFunction
             :isView="IsView"
             @changeIsShow="changeIsShow"
@@ -760,9 +709,15 @@ export default {
 }
  .userStoryStatus{
     float:right;
-    width:80px;
+    width:60px;
     text-align: center;
 }
+.translist{
+    display:block;
+    margin-right:180px;
+    padding-top:5px;
+}
+
 
 .container-transfer {
     width: 100%;
@@ -785,7 +740,7 @@ export default {
    
     margin-top: 0px;
    
-    padding: 10px 0 10px 10px;
+    padding: 10px 10px 10px 10px;
     border:none;
     border-radius:2px;
     background:#e9eaec;
@@ -892,16 +847,11 @@ export default {
 .storyBottom{
     border-top:2px dotted  #d8d8d8;
 }
-.translist{
-    display:block;
-    margin-right:80px;
-    padding-top:5px;
-}
 
 
 .bottomAddBtnBox{
     clear:both;
-    padding-top:10px;
+    padding-bottom:10px;
 }
 </style>
 

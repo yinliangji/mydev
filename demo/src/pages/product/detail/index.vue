@@ -15,6 +15,7 @@
 	                class="editBtn"
 	                long
 	                size="small"
+                    v-show="(TabsCur == 'name1' || TabsCur == 'name2' || TabsCur == 'name3' || TabsCur == 'name4') ? true : false"
 	                >
 	                编辑
 	            </Button>
@@ -29,8 +30,8 @@
 	                任务看板
 	            </Button>
             </div>
-        	<Tabs value="name1" type="card" :capture-focus="false">
-		        <TabPane label="用户故事基本信息" name="name1">
+        	<Tabs :value="TabsCur" type="card" :capture-focus="false" @on-click="tabsHandle" >
+		        <TabPane label="基本信息" name="name1">
 					<div class="baseInfoBox">
 		            	<!-- <h3 class="Title"><span>用户故事基本信息</span></h3> -->
 		            	<div class="tableBox">
@@ -52,11 +53,27 @@
 								  <th >优先级</th>
 								  <td>{{ formValidate.proi | FALSEINFO}}</td>
 								</tr>
+                                <tr>
+                                  <th width="11%">所属迭代</th>
+                                  <td width="20%">{{ formValidate.sprint_name | FALSEINFO}}</td>
+                                  <th width="11%">工时(预计)</th>
+                                  <td width="20%" >{{ formValidate.manHours | FALSEINFO}}</td>
+                                  <th width="11%">工时(实际)</th>
+                                  <td>0</td>
+                                </tr>
+
+                                <tr>
+                                  <th>关联任务(已完成)</th>
+                                  <td>{{ formValidate.complete_mission | FALSEINFO}}</td>
+                                  <th>关联任务(全部)</th>
+                                  <td>{{ formValidate.mission | FALSEINFO}}</td>
+                                  <th>故事编号</th>
+                                  <td>{{ formValidate.userstory_id | FALSEINFO}}</td>
+                                </tr>
 								<tr>
-								  <th>故事编号</th>
-								  <td >{{ formValidate.userstory_id | FALSEINFO}}</td>
+								  
 								  <th>故事描述</th>
-								  <td colspan="3" v-html="formValidate.userstory_desc?'<pre>'+formValidate.userstory_desc+'</pre>':'没有数据'"></td>
+								  <td colspan="5" v-html="formValidate.userstory_desc?'<pre>'+formValidate.userstory_desc+'</pre>':'没有数据'"></td>
 								  
 								</tr>
 								
@@ -65,66 +82,121 @@
 		            	</div>
 		            </div>
 		        </TabPane>
-		        <TabPane label="计划效率相关" name="name2">
+                <TabPane label="需求项分析" name="name2">
+                    <div class="baseInfoBox">
+                        <!-- <h3 class="Title"><span>需求项信息</span></h3> -->
+                        <div class="tableBox">
+                            <!-- -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
+                              <tbody>
+                                <tr>
+                                  <th width="11%">所属需求项</th>
+                                  <td width="20%">{{ formValidate.req_name | FALSEINFO}}</td>
+                                  <th width="11%">需求项提出人</th>
+                                  <td width="20%" >{{ formValidate.proposer | FALSEINFO}}</td>
+                                  <th width="11%">提出人部门</th>
+                                  <td>{{ formValidate.proposer_department | FALSEINFO}}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- -->
+                        </div>
+                        <br />
+                        <h3 class="Title"><span>关联业务功能</span></h3>
+                        <!-- <div class="tableContBox">
+                            <Table border :columns="columns2" :data="tableData2"  />
+                            <div class="pageBox" v-if="tableData2.length">
+                                <Page :total="tableDAtaTatol2/tableDAtaPageLine2 > 1 ? (tableDAtaTatol2%tableDAtaPageLine2 ? parseInt(tableDAtaTatol2/tableDAtaPageLine2)+1 : tableDAtaTatol2/tableDAtaPageLine2)*10 : 1" show-elevator @on-change="changeCurrentPage2" @on-page-size-change="changePageSize2"></Page>
+                                <p>总共{{tableDAtaTatol2}}条记录</p>
+                            </div>
+                        </div> -->
+                        <div class="tableContBox">
+                            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140" style="min-height:300px;" >
+                                <Row>
+                                    <Col span="3">
+                                        <Button type="success" @click="addBus()">新增业务功能</Button>
+                                    </Col>
+                                    <Col span="21">
+
+                                        <!-- 搜索选择开始 -->
+                                        
+                                            <div v-for="(myItem,index) in formValidate.AddGroupList" :key="index" >
+                                                
+                                                <FormItem 
+                                                    :label-width="100"
+                                                    :label="myItem.myLabel" 
+                                                    :prop="'AddGroupList.'+index+'.group'"
+                                                    :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                                                     
+                                                    :ref="myItem.myRef+index" 
+                                                    :class="myItem.myRef+index"
+                                                    >
+                                                    <Select
+                                                        :ref="myItem.myRef+index+'_sel'"
+                                                        :class="myItem.myRef+index+'_sel'"
+                                                        @on-change="selectChange" 
+                                                        @on-query-change="selectQueryChange"
+                                                        v-model="myItem.group" 
+                                                        :id="'sel'+index" 
+                                                        filterable 
+                                                        :loading="inputLoad"  
+                                                        multiple 
+                                                        label-in-value
+                                                        :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'"
+                                                        >
+                                                        <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :label="item.label" :key="index2">
+                                                            {{ item.label }}
+                                                        </Option>
+                                                    </Select>
+                                                </FormItem>
+                                            </div>
+                                        
+                                        <!-- 搜索选择结束 -->
+                                    </Col>
+
+                                    
+                                    
+                                </Row>
+                                <Table border :columns="columns3" :data="tableData3"  />
+                                <Trans
+                                    v-show="false"
+                                    :TransDataGroup = "formValidate.AddGroupList[0].group" 
+                                    :TransDataGroupList = "formValidate.AddGroupList[0].groupList" 
+                                    :isPopsAdd = "isPopsAdd"
+                                    :popsItem = "popsItem"
+                                    @dataLfn="leftData"
+                                    @dataRfn="rightData"
+                                    @modifyfn="modifyData"
+                                    @modifyTagfn="modifyTagData"
+                                />
+                                <div style="text-align:center;padding-top:10px;">
+                                    <Button type="primary" :loading="modal_add_loading" @click="submitAdd">
+                                        <span v-if="!modal_add_loading">　　　　保存　　　　</span>
+                                        <span v-else>Loading...</span>
+                                    </Button>
+                                    
+                                </div>
+                            </Form>
+                        </div>
+                    </div>
+                </TabPane>
+		        <TabPane label="应用设计" name="name3">
 		        	<div class="baseInfoBox">
 		            	<!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
 		            	<div class="tableBox">
-		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
-							  <tbody>
-								<tr>
-								  <th width="11%">所属迭代</th>
-								  <td width="20%">{{ formValidate.sprint_name | FALSEINFO}}</td>
-								  <th width="11%">工时(预计)</th>
-								  <td width="20%" >{{ formValidate.manHours | FALSEINFO}}</td>
-								  <th width="11%">工时(实际)</th>
-								  <td>0</td>
-								</tr>
-
-								<tr>
-								  <th>关联任务(已完成)</th>
-								  <td>{{ formValidate.complete_mission | FALSEINFO}}</td>
-								  <th>关联任务(全部)</th>
-								  <td>{{ formValidate.mission | FALSEINFO}}</td>
-								  <th>&nbsp;</th>
-								  <td>&nbsp;</td>
-								</tr>
-								
-							  </tbody>
-							</table>
+		            		应用设计制作中.......
 		            	</div>
 		            </div>
 		        </TabPane>
-		        <TabPane label="需求项相关" name="name3">
-		        	<div class="baseInfoBox">
-		            	<h3 class="Title"><span>需求项信息</span></h3>
-		            	<div class="tableBox">
-		            		<!-- -->
-		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
-							  <tbody>
-								<tr>
-								  <th width="11%">所属需求项</th>
-								  <td width="20%">{{ formValidate.req_name | FALSEINFO}}</td>
-								  <th width="11%">需求项提出人</th>
-								  <td width="20%" >{{ formValidate.proposer | FALSEINFO}}</td>
-								  <th width="11%">提出人部门</th>
-								  <td>{{ formValidate.proposer_department | FALSEINFO}}</td>
-								</tr>
-							  </tbody>
-							</table>
-		            		<!-- -->
-		            	</div>
-		            	<br />
-		            	<h3 class="Title"><span>业务功能列表</span></h3>
-		            	<div class="tableContBox">
-		            		<Table border :columns="columns2" :data="tableData2"  />
-							<div class="pageBox" v-if="tableData2.length">
-					    		<Page :total="tableDAtaTatol2/tableDAtaPageLine2 > 1 ? (tableDAtaTatol2%tableDAtaPageLine2 ? parseInt(tableDAtaTatol2/tableDAtaPageLine2)+1 : tableDAtaTatol2/tableDAtaPageLine2)*10 : 1" show-elevator @on-change="changeCurrentPage2" @on-page-size-change="changePageSize2"></Page>
-					    		<p>总共{{tableDAtaTatol2}}条记录</p>
-					    	</div>
-		            	</div>
-		            </div>
-		        </TabPane>
-		        <TabPane label="用户故事变更记录" name="name4">
+                <TabPane label="测试管理" name="name4">
+                    <div class="baseInfoBox">
+                        <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
+                        <div class="tableBox">
+                            测试管理制作中.......
+                        </div>
+                    </div>
+                </TabPane>
+		        <TabPane label="用户故事变更记录" name="name5">
 		        	<div class="baseInfoBox">
 		            	<!-- <h3 class="Title"><span>用户故事变更记录</span></h3> -->
 		            	<div class="tableBox">
@@ -140,6 +212,14 @@
 		            	</div>
 		            </div>
 		        </TabPane>
+                <TabPane label="用户故事附件" name="name6">
+                    <div class="baseInfoBox">
+                        <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
+                        <div class="tableBox">
+                            用户故事附件制作中.......
+                        </div>
+                    </div>
+                </TabPane>
 		    </Tabs>
 		  
             <!-- <div class="addModule">
@@ -171,6 +251,12 @@
 			@enclosureClose="enclosureCloseFn" 
 			:data="EnclosureData"
 		/>
+        <Delpop
+            @delpopClose = "delpopCloseFn"
+            @delpopEnter = "delpopEnterFn" 
+            :isShow = "delpopIsShow"
+            :isLoading = "delpopIsLoading"
+        />
 		
 
 
@@ -180,8 +266,10 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstoryGetBus} = Common.restUrl;
+const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstoryGetBus,userstoryAddBus} = Common.restUrl;
 import Enclosure from "./enclosure";
+import Trans from './transSingle'
+import Delpop from '@/components/delectAlert'
 export default {
 	data () {
         return {
@@ -224,7 +312,9 @@ export default {
 				prj_id:"",
 				prj_name:"",
 				prod_id:"",
-				product_name:"",        		
+				product_name:"",  
+                AddGroupList:[],//搜索查询
+                bfunc:[],//弹出业务窗口      		
             },
             userstory_typeList:[],
             userstory_statusList:[],
@@ -312,6 +402,103 @@ export default {
             isShowEnclosure:false,
             EnclosureData:"",
             //--业务功能列表结束
+            //-- tabs start
+            TabsCur:"name2",
+            //-- tabs end
+            //查询搜索开始
+            inputLoad:false,
+            isPopsAdd:false,
+            popsItem:false,
+            //查询搜索结束
+            //关联业务开始
+            columns3: [
+                {
+                    title: '编号',
+                    key: 'bfunc_id',
+                    align: 'center'
+                },
+                {
+                    title: '名称',
+                    key: 'label',
+                    align: 'center',
+                    
+                },
+                {
+                    title: '逻辑子系统名称',
+                    key: 'logic_sys_name',
+                    align: 'center',
+                },
+                {
+                    title: '修改时间',
+                    key: 'create_date',
+                    align: 'center',
+                },
+                {
+                    title: '操作',
+                    key: 'action',
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    type: 'warning',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        //this.goDemandFn(params.index)
+                                    }
+                                }
+                            }, '编辑'),
+                            h('Button', {
+                                props: {
+                                    type: 'info',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '2px',
+                                    marginLeft: '2px',
+                                },
+                                on: {
+                                    click: () => {
+                                        //this.goProductFn(params.index)
+                                    }
+                                }
+                            }, '查看'),
+                            h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '2px',
+                                    marginLeft: '2px',
+                                },
+                                on: {
+                                    click: () => {
+                                        this.deleteBusFn(params.index);
+                                    }
+                                }
+                            }, '删除'),
+                            
+                        ]);
+                    }
+                },
+            ],
+            tableData3: [],
+            tableDataCur:false,
+            //关联业务结束
+            ruleValidate: {
+            },
+            //删除弹出--start
+            delpopIsShow:false,
+            delpopIsLoading:false,
+            //删除弹出--end
+            modal_add_loading: false,
+            
         }
     },
     mounted(){
@@ -338,17 +525,142 @@ export default {
 	    		console.log(ERR)
 	    		this.showError("没有 userstory_type,userstory_status,proi 其中之一")
 	    	})
-
-	    	
-
-
     	}else{
     		this.$router.push('/product')
     	}
 
     },
+    beforecreated(){
+        console.log("用户故事detail--beforecreated-------",this.formValidate)
+    },
+    created(){
+        console.log("用户故事detail--created-------",this.formValidate)
+        this.addCheckSerch();//搜索查询
+    },
+    beforeUpdate(){
+        console.log("用户故事detail--beforeUpdate-------",this.formValidate)
+    },
+    updated(){
+        console.log("用户故事detail--updated-------",this.formValidate)
+    },
     methods: {
-    	//业务功能列表-start
+
+        //删除窗口 -start
+        delpopCloseFn(B){
+            this.delpopIsShow = B;
+        },
+        delpopEnterFn(B){
+            setTimeout(()=>{
+                this.delpopIsLoading = B;
+                this.delpopIsShow = B;
+                this.deleteBus(this.tableDataCur)
+            },1)
+            
+        },
+        delpopOpenFn(B){
+            this.delpopIsShow = B;
+        },
+        //删除窗口 -end
+        //查询搜索开始
+        modifyTagData(D){
+            Common.ModifyTagData(D,this)
+        },
+        modifyData(v,i,is){
+            //view edit add
+        },
+        leftData(D){
+            this.formValidate.bfunc = D;
+        },
+        rightData(D){
+        },
+        selectQueryChange(ITEM){
+            console.log(ITEM,"selectQueryChange")
+        },
+        selectChange(ITEM){
+            console.log(ITEM,"selectChange");
+            Common.SelectChange(this);
+            //console.log(this.isPopsAdd ,this.popsItem ,"---------selectChange");
+            if(this.isPopsAdd == "+"){
+                this.selfChangeItemAdd(this.popsItem,this.formValidate.AddGroupList[0].groupList,this.tableData3);
+            }else if(this.isPopsAdd == "-"){
+                this.selfChangeItemRemove(this.popsItem,this.tableData3)
+            }
+        },
+        addCheckSerch(){
+            Common.AddCheckSerch(this,"已有业务功能","xxxxx",false,false,"");
+        },
+        projectGroupFn(URL,params = {},ARR,thatEle){
+            Common.ProjectGroupFN(defaultAXIOS,this,URL,params,ARR,thatEle);
+        },
+        //查询搜索结束
+        //相关业务功能列表--start
+        Message(){
+            this.$Message.config({
+                top: 250,
+                duration: 3
+            });
+            this.$Message.success('保存完成');
+        },
+        error (MSG = "错误") {
+            this.$Message.config({
+                top: 250,
+                duration: 3
+            });
+            this.$Message.error(MSG);
+        },
+        submitAddData(){
+            setTimeout(()=>{
+                this.modal_add_loading = false;
+                this.Message();
+            },1000)
+        },
+        submitAdd(){
+            this.modal_add_loading = true;
+            this.submitAddData();
+        },
+        addBus(){
+            alert(1111)
+        },
+        deleteBus(i){
+            let list = this.formValidate.AddGroupList[0].group;
+            let Index = list.findIndex(item => item == this.tableData3[i].value )
+            list.splice(Index,1);
+            this.formValidate.AddGroupList[0].grouptemp = list;
+            this.tableData3.splice(i,1);
+            this.tableDataCur = false;
+        },
+        deleteBusFn(i){
+            this.delpopOpenFn(true);
+            this.tableDataCur = i;
+            
+
+        },
+        selfChangeItemAdd(value = "",List = [],data = []){
+            let Fn1 = (val,arr)=>{
+                let _temp = arr.find((item)=>{
+                    return val == item.value
+                });
+                data.push(_temp);
+            }
+            Fn1(value,List)
+        },
+        selfChangeItemRemove(val = "",data = []){
+            let Index = data.findIndex(item =>  item.value == val  )
+            
+            if(Index != -1){
+                data.splice(Index,1)
+            }
+            
+            
+        },
+        //相关业务功能列表--end
+        //tabs - start
+        tabsHandle(name){
+            this.TabsCur = name;
+        },
+        //tabs -end
+    	//业务功能列表-start -- 废弃
+        
     	enclosureCloseFn(val){
     		this.isShowEnclosure = val;
     	},
@@ -467,7 +779,28 @@ export default {
     },
     components: {
 		Enclosure,
+        Trans,
+        Delpop,
 	},
+    watch:{
+        //查询搜索开始
+        "formValidate.AddGroupList"(curVal,oldVal){
+            let _this = this;
+            if(curVal){
+                Common.changeArr(this,curVal,Common,userstoryAddBus,{prj_id:Common.GETprjid(this,Common)})//下拉样子
+            }
+        },
+        formValidate: {
+            handler(val, oldVal) {
+                if(val){
+                    Common.inputArr(this,val)//下拉样子
+                }
+            },
+            deep: true
+        },
+        
+        //查询搜索结束
+    },
 }
 </script>
 <style lang="less" scoped>
@@ -509,5 +842,9 @@ h4{
 	padding-bottom:20px;
 	padding-top:20px;
 	overflow: hidden;
+}
+.ivu-tabs {
+    //overflow:inherit;
+    //overflow-x: hidden;
 }
 </style>

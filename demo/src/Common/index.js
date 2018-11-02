@@ -705,6 +705,51 @@ export default class Common extends Utils {
         that.showError(error);
       });
     }
+    //获取逻辑子系统和业务类型 下拉列表
+    static SelbusinessList(that,FUN,URL,params){
+      //
+      return FUN(URL,params,{timeout:20000,method:'get'}).then((response) => {
+          let myData = response.data;
+          console.log("<======新增业务功能  userstoryGetLogic_sys_no***+++",response,myData,"======>");
+          if(myData.typeList && myData.logicList){
+              if(that.typeList && that.logicList){
+                that.typeList = myData.typeList;
+                that.logicList = myData.logicList
+                return Promise.resolve(myData)
+              }else{
+                that.showError("没有typeList或logicList");
+                return Promise.reject(false);
+              }
+              
+          }else{
+              that.showError(URL+"错误");
+              return Promise.reject(false);
+          }
+          
+      }).catch( (error) => {
+          console.log(error);
+          that.showError(error);
+          return Promise.reject(false);
+      });
+      //
+    }
+    static FromBusGoBack(that){
+      let detail_id = that.$router.history.current.query.detail_id
+      that.$router.push({path:'/product/detail/',query:{detail_id,TabsCur:"name2"}});
+    }
+    static BusResetFields(that){
+      that.formValidate.bfunc_id="";
+      that.formValidate.bfunc_name="";
+      that.formValidate.logic_sys_no="";
+      that.formValidate.bfunc_status="";
+      that.formValidate.who="";
+      that.formValidate.bfunc_type="";
+      that.formValidate.businessDes="";
+      that.formValidate.synergetic_relation = "";
+      that.formValidate.stepview = "";
+      that.$refs.formValidate.resetFields();
+    }
+
 
     //获取角色标题--不通用
     static AddTeam(FUN, that, URL, params){

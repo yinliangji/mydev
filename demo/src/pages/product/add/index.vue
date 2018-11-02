@@ -137,7 +137,7 @@
                         </FormItem>
 
 
-                        <div class="transBox">
+                        <div class="transBox" v-show = "false" >
                             <label class="transBoxTitle">关联业务功能</label>
                             <Row>
                                 <Col span="10">&nbsp;</Col>
@@ -175,7 +175,8 @@
                                     </div>
                                     <!-- 搜索选择结束 -->
                                 </Col>
-                                <Trans 
+                                <Trans
+
                                     :TransDataGroup = "formValidate.AddGroupList[0].group" 
                                     :TransDataGroupList = "formValidate.AddGroupList[0].groupList" 
                                     :isPopsAdd = "isPopsAdd"

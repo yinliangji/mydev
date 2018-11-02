@@ -137,7 +137,7 @@
                             </Select>
                         </FormItem>
 
-                        <div class="transBox">
+                        <div class="transBox" v-show = "false">
                             <label class="transBoxTitle">关联业务功能</label>
                             <Row>
                                 <Col span="10">&nbsp;</Col>

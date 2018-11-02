@@ -257,6 +257,12 @@
             :isShow = "delpopIsShow"
             :isLoading = "delpopIsLoading"
         />
+        <Buspop 
+            @buspopClose = "buspopCloseFn"
+            
+            :isShow = "buspopIsShow"
+            :isLoading = "buspopIsLoading"
+        />
 		
 
 
@@ -270,6 +276,7 @@ const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstory
 import Enclosure from "./enclosure";
 import Trans from './transSingle'
 import Delpop from '@/components/delectAlert'
+import Buspop from './buspop'
 export default {
 	data () {
         return {
@@ -403,7 +410,7 @@ export default {
             EnclosureData:"",
             //--业务功能列表结束
             //-- tabs start
-            TabsCur:"name2",
+            TabsCur:"name1",
             //-- tabs end
             //查询搜索开始
             inputLoad:false,
@@ -449,7 +456,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        //this.goDemandFn(params.index)
+                                        this.editBus(params.index);
                                     }
                                 }
                             }, '编辑'),
@@ -464,7 +471,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        //this.goProductFn(params.index)
+                                        this.busView(params.index);
                                     }
                                 }
                             }, '查看'),
@@ -498,6 +505,10 @@ export default {
             delpopIsLoading:false,
             //删除弹出--end
             modal_add_loading: false,
+            //业务弹出--start
+            buspopIsShow:false,
+            buspopIsLoading:false,
+            //业务弹出--end
             
         }
     },
@@ -536,6 +547,11 @@ export default {
     created(){
         console.log("用户故事detail--created-------",this.formValidate)
         this.addCheckSerch();//搜索查询
+        let _TabsCur = this.$router.history.current.query.TabsCur
+        if(_TabsCur){
+            this.TabsCur = _TabsCur;
+        }
+        
     },
     beforeUpdate(){
         console.log("用户故事detail--beforeUpdate-------",this.formValidate)
@@ -544,7 +560,15 @@ export default {
         console.log("用户故事detail--updated-------",this.formValidate)
     },
     methods: {
-
+        //业务窗口 -start
+        buspopCloseFn(B){
+            this.buspopIsShow = B;
+        },
+        
+        buspopOpenFn(B,i){
+            this.buspopIsShow = B;
+        },
+        //业务窗口 -end
         //删除窗口 -start
         delpopCloseFn(B){
             this.delpopIsShow = B;
@@ -619,7 +643,16 @@ export default {
             this.submitAddData();
         },
         addBus(){
-            alert(1111)
+            let detail_id = this.$router.history.current.query.detail_id
+            this.$router.push({path:'/product/business/add/',query:{detail_id}});
+        },
+        busView(i){
+            this.buspopOpenFn(true,i)
+            //this.buspopIsShow = true;
+        },
+        editBus(i){
+            let detail_id = this.$router.history.current.query.detail_id
+            this.$router.push({path:'/product/business/edit/',query:{detail_id,tabNum:i}});
         },
         deleteBus(i){
             let list = this.formValidate.AddGroupList[0].group;
@@ -781,6 +814,7 @@ export default {
 		Enclosure,
         Trans,
         Delpop,
+        Buspop,
 	},
     watch:{
         //查询搜索开始

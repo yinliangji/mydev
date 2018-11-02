@@ -116,6 +116,43 @@ const router = new Router({
             },
         },
         //
+        {
+            path: '/product/business/add',
+            name: 'ProductBusinessAdd',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/demand/business/add/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
+        {
+            path: '/product/business/edit',
+            name: 'ProductBusinessEdit',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/demand/business/edit/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
+        {
+            path: '/product/business/view',
+            name: 'ProductBusinessView',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/demand/business/view/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
+        //
 
         {
             path: '/demand/list',

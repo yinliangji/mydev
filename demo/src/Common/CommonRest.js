@@ -141,6 +141,13 @@ CommonRest.restUrl = {
     /****express 添加用户故事添加已有业务功能2 get****/
 
 
+    "quillEditorAdd": process.env.BASE_URL + "/uploadfiles/add/",
+    /****express 富文本编辑框添加 post****/
+
+    "quillEditorGet": process.env.BASE_URL + "/uploadfiles/detail/",
+    /****express 富文本编辑框获取 get****/
+
+
 
     /*****************************************/
 

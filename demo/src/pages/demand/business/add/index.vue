@@ -34,7 +34,6 @@
                     </Row>
                     
                     <FormItem label="业务功能描述">
-                        
                         <Input  v-model="formValidate.businessDes" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
                     </FormItem>
 
@@ -46,7 +45,8 @@
                         
                     </FormItem>
                     <FormItem label="界面流程步骤" v-if="step2">
-                        <Input  v-model="formValidate.stepview" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
+                        <Quill />
+                        <!-- <Input  v-model="formValidate.stepview" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input> -->
                     </FormItem>
                     <FormItem label="协同相关" v-if="step2">
                         <Input  v-model="formValidate.synergetic_relation" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
@@ -85,6 +85,7 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 const {reqAdd,reqGet,projectListDataNew,selbusinessList } = Common.restUrl;
+import Quill from "@/components/quill";
 export default {
     data(){
         return {
@@ -202,6 +203,9 @@ export default {
     },
     updated(){
         console.log("新增业务功能--updated-------",this.formValidate)
+    },
+    components: {
+        Quill,
     },
 }
 </script>

@@ -34,18 +34,20 @@
 	            <Button type="ghost" @click="handleReset('formDynamic')" style="margin-left: 8px">Reset</Button>
 	        </FormItem>
 	    </Form>
-	    <Transfer
-        :data="data3"
-        :target-keys="targetKeys3"
-        :list-style="listStyle"
-        :render-format="render3"
-        :operations="['To left','To right']"
-        filterable
-        @on-change="handleChange3">
-        <div :style="{float: 'right', margin: '5px'}">
-            <Button type="ghost" size="small" @click="reloadMockData">Refresh</Button>
-        </div>
-    </Transfer>
+	    
+    	xxxxxxxxxx
+
+		<quill-editor  
+			v-model="content"
+           :options="editorOption" 
+           @blur="onEditorBlur($event)" 
+           @focus="onEditorFocus($event)"
+           @change="onEditorChange($event)">
+         </quill-editor>
+         <Button @click="subQuill">确定</Button>
+		xxxxxxxxxx
+
+
 	</div>
 </template>
 <script>
@@ -53,6 +55,8 @@ import Store from '@/vuex/store'
 import API from '@/api'
 import Promise from 'thenfail'
 const {demoPostAXIOS} = API;
+
+import { quillEditor } from 'vue-quill-editor'
 
 export default {
 	name: 'page1',
@@ -68,11 +72,27 @@ export default {
                         status: 1
                     }
                 ]
-            }
+            },
 			//
+			content:'',
+            editorOption:{},
+            //
 		}
 	},
+	components: {
+    	quillEditor
+  	},
 	methods:{
+		onEditorBlur(editor){//失去焦点事件    
+ 	    },
+        onEditorFocus(editor){//获得焦点事件
+        },
+        onEditorChange({editor,html,text}){//编辑器文本发生变化
+            //this.content可以实时获取到当前编辑器内的文本内容
+            console.log(this.content);
+        },
+
+		//
 		myClick(){
 			Store.dispatch('IS_LOADING/incrementAsync',{isShow:true,msg:"正在加载中……"})     
 		},
@@ -103,6 +123,7 @@ export default {
 		//
 	},
 	mounted(){
+		
 		//
 		demoPostAXIOS("",{x:1,y:2},{timeout:2000,method:'get'}).then((response) => {
 			console.log("page1+++++++++++++++++++++",response)
@@ -117,6 +138,11 @@ export default {
 <style lang="less" scoped>
 @import './style.less';
 @import './style.css';
+
+.quill-editor {
+        height: 350px;
+        background: white;
+}
 </style>
 
 

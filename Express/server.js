@@ -2232,6 +2232,17 @@ app.all('/agile/get_bfunc_by_prj_req/', function(req, res) {
     res.end()
 });
 
+
+
+app.all('/uploadfiles/add/', function(req, res) {
+    res.json({});
+    res.end()
+});
+app.all('/uploadfiles/detail/', function(req, res) {
+    res.json({});
+    res.end()
+});
+
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({

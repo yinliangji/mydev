@@ -153,7 +153,12 @@ export default {
             setTimeout(()=>{
                 this.modal_add_loading = false;
                 this.cancel();
-                this.$router.push('/demand/business/');
+                //this.$router.push('/demand/business/');
+                let _menu = this.$router.history.current.query.menu;
+                if(_menu){
+                    Common.SetSession("cacheMenu",_menu)
+                }
+                Common.FromBusGoBack(this);
             },1000)
         },
         submitAdd(){
@@ -180,6 +185,15 @@ export default {
     },
     mounted(){
         this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)});
+        let mydata = this.$router.history.current.query.data;
+        if(mydata){
+            mydata = JSON.parse(mydata);
+            
+            this.formValidate.bfunc_id = mydata.bfunc_id;
+            this.formValidate.bfunc_name = mydata.bfunc_name;
+            this.$refs.logicSelect.setQuery(mydata.logic_sys_name);
+            
+        }
     },
     beforecreated(){
         console.log("新增业务功能--beforecreated-------",this.formValidate)

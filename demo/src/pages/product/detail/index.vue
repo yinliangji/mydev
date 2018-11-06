@@ -158,17 +158,7 @@
                                     
                                 </Row>
                                 <Table border :columns="columns3" :data="tableData3"  />
-                                <Trans
-                                    v-show="false"
-                                    :TransDataGroup = "formValidate.AddGroupList[0].group" 
-                                    :TransDataGroupList = "formValidate.AddGroupList[0].groupList" 
-                                    :isPopsAdd = "isPopsAdd"
-                                    :popsItem = "popsItem"
-                                    @dataLfn="leftData"
-                                    @dataRfn="rightData"
-                                    @modifyfn="modifyData"
-                                    @modifyTagfn="modifyTagData"
-                                />
+                                
                                 <div style="text-align:center;padding-top:10px;">
                                     <Button type="primary" :loading="modal_add_loading" @click="submitAdd">
                                         <span v-if="!modal_add_loading">　　　　保存　　　　</span>
@@ -272,7 +262,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstoryGetBus,userstoryAddBus} = Common.restUrl;
+const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstoryGetBus,userstoryAddBus,userstoryRelative,userstoryListBusfunc} = Common.restUrl;
 import Enclosure from "./enclosure";
 import Trans from './transSingle'
 import Delpop from '@/components/delectAlert'
@@ -528,6 +518,16 @@ export default {
 	    		this.storyGetDetailFn(storyGetDetail,detailID).then((TASKID)=>{
 	    			this.getMissionChangeFn(getMissionChange,TASKID,1,this.tableDAtaPageLine);
 	    			this.getMissionChangeFn2(userstoryGetBus,TASKID,1,this.tableDAtaPageLine2);
+
+
+                    this.viewBusData(userstoryListBusfunc).then(()=>{
+                        this.setCacheMenuData();
+                    },(error)=>{
+                        this.showError(error);
+                    })
+
+
+
 	    		},(error)=>{
 	    			console.log(error)
 	    			this.showError(error)
@@ -618,30 +618,105 @@ export default {
         },
         //查询搜索结束
         //相关业务功能列表--start
-        Message(){
+        Message(msg = "保存完成"){
             this.$Message.config({
                 top: 250,
                 duration: 3
             });
-            this.$Message.success('保存完成');
+            this.$Message.success(msg);
         },
-        error (MSG = "错误") {
+        error(MSG = "错误") {
             this.$Message.config({
                 top: 250,
                 duration: 3
             });
             this.$Message.error(MSG);
         },
-        submitAddData(){
-            setTimeout(()=>{
-                this.modal_add_loading = false;
-                this.Message();
-            },1000)
+        viewBusData(URL){
+            let _params = {prj_id:Common.GETprjid(this,Common),us_id:this.formValidate.userstory_id,reqid:this.formValidate.req_id,}
+            return defaultAXIOS(URL,_params,{timeout:20000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======product 获取业务功能列表 ***response+++",response,myData,"======>");
+                if(myData.status == "success" || myData.status == 200){
+                    if(myData.data && myData.data.list && Array.isArray(myData.data.list)){
+                        this.tableData3 = myData.data.list;
+                        return Promise.resolve(myData.data.list)    
+                    }else{
+                        return Promise.reject(URL+"错误");
+                    }
+                }else{
+                    return Promise.reject(myData.status);
+                }
+            }).catch( (error) => {
+                console.log(error);
+                return Promise.reject(error);
+                
+            });
+            
         },
         submitAdd(){
             this.modal_add_loading = true;
-            this.submitAddData();
+            this.saveBusData(userstoryRelative,this.tableData3).then((res)=>{
+                this.modal_add_loading = false;
+                this.Message();
+                this.removeMenuData(0);
+
+                
+                this.viewBusData(userstoryListBusfunc).then(()=>{},(error)=>{
+                    this.showError(error)
+                })
+                
+
+            },(error)=>{
+                this.showError(error)
+            })
         },
+        removeMenuData(N = 0){
+            this.formValidate.AddGroupList[N].group = [];
+            this.formValidate.AddGroupList[N].groupList = []
+            this.formValidate.AddGroupList[N].groupListtemp = [];
+            this.formValidate.AddGroupList[N].grouptemp = [];
+            document.getElementById("sel"+N).getElementsByClassName("ivu-select-input")[0].temp = false;
+            delete document.getElementById("sel"+N).getElementsByClassName("ivu-select-input")[0].temp;
+        },
+        cacheMenuData(N = 0){
+            let cache = {
+                group: this.formValidate.AddGroupList[N].group,
+                groupList:this.formValidate.AddGroupList[N].groupList,
+                groupListtemp:this.formValidate.AddGroupList[N].groupListtemp,
+                grouptemp:this.formValidate.AddGroupList[N].grouptemp,
+                temp:document.getElementById("sel"+N).getElementsByClassName("ivu-select-input")[0].temp,
+            }
+            return this.formValidate.AddGroupList[N].group.length ? JSON.stringify(cache) : false
+        },
+        setCacheMenuData(N = 0){
+            if(Common.GetSession("cacheMenu")){
+                let cache = JSON.parse(Common.GetSession("cacheMenu"));
+                this.formValidate.AddGroupList[N].group = cache.group;
+                this.formValidate.AddGroupList[N].groupList = cache.groupList
+                this.formValidate.AddGroupList[N].groupListtemp = cache.groupListtemp;
+                this.formValidate.AddGroupList[N].grouptemp = cache.grouptemp;
+                document.getElementById("sel"+N).getElementsByClassName("ivu-select-input")[0].temp = cache.temp; 
+                Common.RemoveSession("cacheMenu");
+            }
+        },
+
+        saveBusData(URL,list){
+            return defaultAXIOS(URL,{list},{timeout:20000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======product 业务列表提交***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    return Promise.resolve(myData.status)                    
+                }else{
+                    return Promise.reject(myData.status);
+                }
+            }).catch( (error) => {
+                console.log(error);
+                return Promise.reject(error);
+                
+            });
+        },
+
         addBus(){
             let detail_id = this.$router.history.current.query.detail_id
             this.$router.push({path:'/product/business/add/',query:{detail_id}});
@@ -651,8 +726,15 @@ export default {
             //this.buspopIsShow = true;
         },
         editBus(i){
-            let detail_id = this.$router.history.current.query.detail_id
-            this.$router.push({path:'/product/business/edit/',query:{detail_id,tabNum:i}});
+
+
+            let detail_id = this.$router.history.current.query.detail_id;
+            let _query = {detail_id,tabNum:i}
+            if(this.cacheMenuData(0)){
+                _query.menu = this.cacheMenuData(0)
+            }
+            _query.data = JSON.stringify(this.tableData3[i]);
+            this.$router.push({path:'/product/business/edit/',query:_query});
         },
         deleteBus(i){
             let list = this.formValidate.AddGroupList[0].group;
@@ -755,7 +837,14 @@ export default {
         },
     	editItemFn(){
     		//console.log("this.GetDetail",this.GetDetail)
-    		this.$router.push({path: '/product/edit', query: {fromEdit:true,DATA: JSON.stringify(this.GetDetail)}})
+            let _query = {
+                fromEdit:true,
+                DATA: JSON.stringify(this.GetDetail)
+            }
+            if(this.TabsCur == 'name2' && this.cacheMenuData(0)){
+                _query.menu = this.cacheMenuData(0);
+            }
+    		this.$router.push({path: '/product/edit', query:_query})
     	},
 		showError(ERR){
     		Common.ErrorShow(ERR,this);
@@ -782,11 +871,8 @@ export default {
                 		else{
                 			this.formValidate[i] = myData[i]
                 		}
-                		
                 	}
-                	
                 	return Promise.resolve(myData.id)
-
                 }else{
                 	return Promise.reject("没有数据");
                 	//this.showError("没有数据");

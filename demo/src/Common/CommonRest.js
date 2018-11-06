@@ -135,17 +135,17 @@ CommonRest.restUrl = {
     "userstoryGetBus": process.env.BASE_URL + "/agile/get_bfunc_by_prj_req/",
     /****express 用户故事详情获取业务 get****/
 
-
-
     "userstoryAddBus": process.env.BASE_URL + "/agile/search_busfunc2/",
     /****express 添加用户故事添加已有业务功能2 get****/
 
+    "userstoryRelative": process.env.BASE_URL + "/agile/relative_userstory/",
+    /****express 添加用户故事详情已有业务功能保存 post****/
 
-    "quillEditorAdd": process.env.BASE_URL + "/uploadfiles/add/",
-    /****express 富文本编辑框添加 post****/
+    "userstoryListBusfunc": process.env.BASE_URL + "/agile/list_busfunc2/",
+    /****express 添加用户故事详情已有业务功能获取 post****/
 
-    "quillEditorGet": process.env.BASE_URL + "/uploadfiles/detail/",
-    /****express 富文本编辑框获取 get****/
+
+    
 
 
 
@@ -153,6 +153,12 @@ CommonRest.restUrl = {
 
     "getPermission": process.env.BASE_URL + "/auth/getPermissionfromUser/",
     /****express 权限获取 get****/
+
+    "quillEditorAdd": process.env.BASE_URL + "/uploadfiles/add/",
+    /****express 富文本编辑框添加 post****/
+
+    "quillEditorGet": process.env.BASE_URL + "/uploadfiles/detail/",
+    /****express 富文本编辑框获取 get****/
 
     /*****************************************/
 

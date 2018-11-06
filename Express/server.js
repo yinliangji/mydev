@@ -899,6 +899,19 @@ app.all('/agile/search_busfunc2/', function(req, res) {
 });
 
 
+app.all('/agile/list_busfunc2/', function(req, res) {
+
+    let resVal
+    let Json
+    Json =  searchBusfunc(req.body.myStatus)   
+    resVal = searchBusfunc(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
+    console.log(trueorfalse)
+    res.json(Json);
+    res.end()
+});
 
 
 
@@ -2242,6 +2255,19 @@ app.all('/uploadfiles/detail/', function(req, res) {
     res.json({});
     res.end()
 });
+
+
+app.all('/agile/relative_userstory/', function(req, res) {
+    res.json({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "data":"",
+    });
+    res.end()
+});
+
+
+
 
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {

@@ -143,6 +143,7 @@
                                                         multiple 
                                                         label-in-value
                                                         :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'"
+                                                        :disabled = "serchDisabled"
                                                         >
                                                         <Option v-for="(item,index2) in myItem.groupList" :value="item.value" :label="item.label" :key="index2">
                                                             {{ item.label }}
@@ -159,7 +160,7 @@
                                 </Row>
                                 <Table border :columns="columns3" :data="tableData3"  />
                                 
-                                <div style="text-align:center;padding-top:10px;">
+                                <div style="text-align:center;padding-top:10px;" v-if="false">
                                     <Button type="primary" :loading="modal_add_loading" @click="submitAdd">
                                         <span v-if="!modal_add_loading">　　　　保存　　　　</span>
                                         <span v-else>Loading...</span>
@@ -249,7 +250,7 @@
         />
         <Buspop 
             @buspopClose = "buspopCloseFn"
-            
+            :data="buspopData"
             :isShow = "buspopIsShow"
             :isLoading = "buspopIsLoading"
         />
@@ -406,6 +407,9 @@ export default {
             inputLoad:false,
             isPopsAdd:false,
             popsItem:false,
+            serchDisabled:false,
+            serchCurDelTagVal:false,
+            serchCurDelTagNull:false,
             //查询搜索结束
             //关联业务开始
             columns3: [
@@ -444,6 +448,7 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
+                                domProps:{disabled:this.serchDisabled},
                                 on: {
                                     click: () => {
                                         this.editBus(params.index);
@@ -474,6 +479,7 @@ export default {
                                     marginRight: '2px',
                                     marginLeft: '2px',
                                 },
+                                domProps:{disabled:this.serchDisabled},
                                 on: {
                                     click: () => {
                                         this.deleteBusFn(params.index);
@@ -487,6 +493,8 @@ export default {
             ],
             tableData3: [],
             tableDataCur:false,
+            tableData3Length:0,
+
             //关联业务结束
             ruleValidate: {
             },
@@ -498,7 +506,9 @@ export default {
             //业务弹出--start
             buspopIsShow:false,
             buspopIsLoading:false,
+            buspopData:false,
             //业务弹出--end
+            
             
         }
     },
@@ -519,8 +529,10 @@ export default {
 	    			this.getMissionChangeFn(getMissionChange,TASKID,1,this.tableDAtaPageLine);
 	    			this.getMissionChangeFn2(userstoryGetBus,TASKID,1,this.tableDAtaPageLine2);
 
+                    
 
                     this.viewBusData(userstoryListBusfunc).then(()=>{
+                        this.tableData3Length = this.tableData3.length;
                         this.setCacheMenuData();
                     },(error)=>{
                         this.showError(error);
@@ -554,10 +566,10 @@ export default {
         
     },
     beforeUpdate(){
-        console.log("用户故事detail--beforeUpdate-------",this.formValidate)
+        console.log("用户故事detail--beforeUpdate-------",this.formValidate,this.tableData3,this.tableData3.length)
     },
     updated(){
-        console.log("用户故事detail--updated-------",this.formValidate)
+        console.log("用户故事detail--updated-------",this.formValidate,this.tableData3,this.tableData3.length)
     },
     methods: {
         //业务窗口 -start
@@ -566,7 +578,9 @@ export default {
         },
         
         buspopOpenFn(B,i){
+            this.buspopData = this.tableData3[i];
             this.buspopIsShow = B;
+
         },
         //业务窗口 -end
         //删除窗口 -start
@@ -601,9 +615,8 @@ export default {
             console.log(ITEM,"selectQueryChange")
         },
         selectChange(ITEM){
-            console.log(ITEM,"selectChange");
+            console.log(ITEM,"selectChange",this.isPopsAdd ,this.popsItem );
             Common.SelectChange(this);
-            //console.log(this.isPopsAdd ,this.popsItem ,"---------selectChange");
             if(this.isPopsAdd == "+"){
                 this.selfChangeItemAdd(this.popsItem,this.formValidate.AddGroupList[0].groupList,this.tableData3);
             }else if(this.isPopsAdd == "-"){
@@ -615,6 +628,27 @@ export default {
         },
         projectGroupFn(URL,params = {},ARR,thatEle){
             Common.ProjectGroupFN(defaultAXIOS,this,URL,params,ARR,thatEle);
+            setTimeout(()=>{
+                let L = this.formValidate.AddGroupList[0].groupList;
+                let T = this.tableData3;
+                let N = this.unique(L,T);
+                for(let i=0;i<N.length;i++){
+                    L.splice(L.findIndex(item => item.value == N[i]),1)
+                }
+            },300)
+        },
+        unique(arr1 = [],arr2 = []){
+            let Num = [];
+            let fn = (val,Arr)=>{
+                let Index = Arr.findIndex(item => item.value == val);
+                return Index != -1 ? Index : false;
+            }
+            for(let i=0;i<arr1.length;i++){
+                if(fn(arr1[i].value,arr2) !== false){
+                    Num.push(arr1[i].value)
+                }
+            }
+            return Num
         },
         //查询搜索结束
         //相关业务功能列表--start
@@ -633,8 +667,8 @@ export default {
             this.$Message.error(MSG);
         },
         viewBusData(URL){
-            let _params = {prj_id:Common.GETprjid(this,Common),us_id:this.formValidate.userstory_id,reqid:this.formValidate.req_id,}
-            return defaultAXIOS(URL,_params,{timeout:20000,method:'post'}).then((response) => {
+            let _params = {prj_id:Common.GETprjid(this,Common),us_id:this.formValidate.userstory_id,req_id:this.formValidate.req_id,}
+            return defaultAXIOS(URL,_params,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======product 获取业务功能列表 ***response+++",response,myData,"======>");
                 if(myData.status == "success" || myData.status == 200){
@@ -680,6 +714,7 @@ export default {
             delete document.getElementById("sel"+N).getElementsByClassName("ivu-select-input")[0].temp;
         },
         cacheMenuData(N = 0){
+            return false;
             let cache = {
                 group: this.formValidate.AddGroupList[N].group,
                 groupList:this.formValidate.AddGroupList[N].groupList,
@@ -739,8 +774,14 @@ export default {
         deleteBus(i){
             let list = this.formValidate.AddGroupList[0].group;
             let Index = list.findIndex(item => item == this.tableData3[i].value )
-            list.splice(Index,1);
-            this.formValidate.AddGroupList[0].grouptemp = list;
+            if(Index >= 0){
+                
+                list.splice(Index,1);
+                this.formValidate.AddGroupList[0].grouptemp = list;    
+            }
+            this.serchCurDelTagVal = this.tableData3[i].value;
+            this.serchCurDelTagNull = Index;
+
             this.tableData3.splice(i,1);
             this.tableDataCur = false;
         },
@@ -767,6 +808,45 @@ export default {
             }
             
             
+        },
+
+
+        saveBusListData(URL,params = {}){
+            return defaultAXIOS(URL,params,{timeout:20000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======product 业务列表添加、删除***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    return Promise.resolve(myData.status)                    
+                }else{
+                    return Promise.reject(myData.status);
+                }
+            }).catch( (error) => {
+                console.log(error);
+                return Promise.reject(error);
+                
+            });
+        },
+        busListAdd(params){
+            this.saveBusListData(userstoryRelative,params).then((res)=>{
+
+                this.Message();
+                this.serchDisabled = false;
+                document.getElementsByClassName("ivu-select-dropdown")[0].removeAttribute("id");
+                this.serchCurDelTagVal = false;
+                this.serchCurDelTagNull = false;
+
+                // this.viewBusData(userstoryListBusfunc).then(()=>{},(error)=>{
+                //     this.showError(error)
+                // })
+                
+
+            },(error)=>{
+                this.error();
+                this.showError(error);
+                this.serchDisabled = false;
+                document.getElementsByClassName("ivu-select-dropdown")[0].removeAttribute("id");
+                this.serchCurDelTagVal = false;
+            })
         },
         //相关业务功能列表--end
         //tabs - start
@@ -918,8 +998,48 @@ export default {
             },
             deep: true
         },
-        
         //查询搜索结束
+        tableData3(curVal,oldVal){
+
+
+            //console.log(curVal,oldVal,"tableData3",curVal.length - this.tableData3Length)
+
+
+            if(curVal.length - this.tableData3Length <= 1 && curVal.length - this.tableData3Length >= -1){
+                if(curVal.length - this.tableData3Length != 0){
+                    document.getElementsByClassName("ivu-select-dropdown")[0].setAttribute("id","hidden");
+                    this.serchDisabled = true;
+
+                    let params = {
+                        prj_id:Common.GETprjid(this,Common),
+                        us_id:this.formValidate.userstory_id,
+                        req_id:this.formValidate.req_id,
+                    }
+                    if(this.serchCurDelTagVal !== false){
+                        params.add = "minus";
+                        params.value = this.serchCurDelTagVal;
+                    }else if(curVal.length - this.tableData3Length > 0){
+                        params.add = "plus";
+                        params.value = this.popsItem
+                    }else if(curVal.length - this.tableData3Length < 0){
+                        params.add = "minus";
+                        params.value = this.popsItem
+                    }
+
+                    this.busListAdd(params)
+                    setTimeout(()=>{
+                        //this.busListAdd(params)
+                        // this.serchDisabled = false;
+                        // document.getElementsByClassName("ivu-select-dropdown")[0].removeAttribute("id");
+                        // this.serchCurDelTagVal = false;
+                    },1000)
+
+
+                }
+            }
+            this.tableData3Length = curVal.length;
+        },
+        //
     },
 }
 </script>
@@ -968,3 +1088,11 @@ h4{
     //overflow-x: hidden;
 }
 </style>
+<style>
+#hidden {
+    visibility: hidden;
+
+    }
+</style>
+
+

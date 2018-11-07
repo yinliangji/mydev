@@ -5,7 +5,7 @@
           <span>删除确认</span>
         </p>
         <div style="text-align:center">
-          <p>删除无法恢复，是否继续？</p>
+          <p>是否继续？</p>
         </div>
         <div slot="footer">
           <Button color="#1c2438"  :loading="modal_loading"  @click="del">删除</Button>

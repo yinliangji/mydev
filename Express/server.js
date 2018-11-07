@@ -884,6 +884,8 @@ let searchBusfunc = (val1 = 200, val2 = 1, val3 = 3) => {
 
 
 
+
+
 app.all('/agile/search_busfunc2/', function(req, res) {
 
     let resVal
@@ -899,12 +901,47 @@ app.all('/agile/search_busfunc2/', function(req, res) {
 });
 
 
+let list_busfunc = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        data: {
+            "list|3-6": [
+                {
+                    bfunc_id: /[a-zA-Z]{5,8}/,
+                    bfunc_name: "@name",
+                    logic_sys_name:"核心银行业务处理系统",
+                    create_date:"@date(yyyy-MM-dd)",
+                    "version|+1":10000,
+                    "value|+10":10000,
+                    label:"@cname",
+
+                    bfunc_desc: /[a-zA-Z]{5,8}/,
+                    bfunc_status: 2,
+                    bfunc_type: 2,
+                    create_person:"@cname",
+                    "id|+100":10000,
+                    logic_sys_no:"Z0250",
+                    operation_setp:"",
+                    remark1:"",
+                    remark2:"",
+                    req_id:"RQ-Pj1800110-6",
+                    req_name:"@title",
+                    synergetic_relation:"",
+                    us_id:"US-HP18000030-01-2111111",
+
+                },
+            ],
+        },
+    })
+}
+
 app.all('/agile/list_busfunc2/', function(req, res) {
 
     let resVal
     let Json
-    Json =  searchBusfunc(req.body.myStatus)   
-    resVal = searchBusfunc(req.body.myStatus, req.body.page, req.body.pageline);
+    Json =  list_busfunc(req.body.myStatus)   
+    resVal = list_busfunc(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1

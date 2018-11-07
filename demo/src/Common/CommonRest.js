@@ -142,7 +142,7 @@ CommonRest.restUrl = {
     /****express 添加用户故事详情已有业务功能保存 post****/
 
     "userstoryListBusfunc": process.env.BASE_URL + "/agile/list_busfunc2/",
-    /****express 添加用户故事详情已有业务功能获取 post****/
+    /****express 添加用户故事详情已有业务功能获取 get****/
 
 
     

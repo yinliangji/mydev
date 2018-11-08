@@ -144,6 +144,15 @@ CommonRest.restUrl = {
     "userstoryListBusfunc": process.env.BASE_URL + "/agile/list_busfunc2/",
     /****express 添加用户故事详情已有业务功能获取 get****/
 
+    "userstoryedit_bfunc2": process.env.BASE_URL + "/agile/edit_bfunc2/",
+    /****express 添加用户故事详情编辑页业务功能获取 get****/
+
+    "userstoryadd_bfunc1": process.env.BASE_URL + "/agile/add_bfunc1/",
+    /****express 添加用户业务功能新建第一步获取 post****/
+
+    "userstoryadd_bfunc2": process.env.BASE_URL + "/agile/add_bfunc2/",
+    /****express 添加用户业务功能新建第二步获取 post****/
+
 
     
 

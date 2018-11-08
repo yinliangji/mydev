@@ -15,7 +15,7 @@
 	                class="editBtn"
 	                long
 	                size="small"
-                    v-show="(TabsCur == 'name1' || TabsCur == 'name2' || TabsCur == 'name3' || TabsCur == 'name4') ? true : false"
+                    v-show="(TabsCur == 'name1' || TabsCur == 'name3' || TabsCur == 'name4') ? true : false"
 	                >
 	                编辑
 	            </Button>
@@ -576,11 +576,9 @@ export default {
         buspopCloseFn(B){
             this.buspopIsShow = B;
         },
-        
         buspopOpenFn(B,i){
             this.buspopData = this.tableData3[i];
             this.buspopIsShow = B;
-
         },
         //业务窗口 -end
         //删除窗口 -start
@@ -753,8 +751,10 @@ export default {
         },
 
         addBus(){
-            let detail_id = this.$router.history.current.query.detail_id
-            this.$router.push({path:'/product/business/add/',query:{detail_id}});
+            let detail_id = this.$router.history.current.query.detail_id;
+            let us_id = this.formValidate.userstory_id;
+            let req_id = this.formValidate.req_id;
+            this.$router.push({path:'/product/business/add/',query:{detail_id,us_id,req_id}});
         },
         busView(i){
             this.buspopOpenFn(true,i)

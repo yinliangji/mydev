@@ -922,12 +922,12 @@ let list_busfunc = (val1 = 200, val2 = 1, val3 = 3) => {
                     create_person:"@cname",
                     "id|+100":10000,
                     logic_sys_no:"Z0250",
-                    operation_setp:"",
+                    operation_step:"<p>列表文字</p>",
                     remark1:"",
                     remark2:"",
                     req_id:"RQ-Pj1800110-6",
                     req_name:"@title",
-                    synergetic_relation:"",
+                    synergetic_relation:"@title",
                     us_id:"US-HP18000030-01-2111111",
 
                 },
@@ -2304,7 +2304,74 @@ app.all('/agile/relative_userstory/', function(req, res) {
 });
 
 
+let edit_bfunc2 = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+        
 
+        "data": {
+            "bfunc_desc|5-8": /[a-zA-Z]/,
+            "bfunc_id|5-8": /[a-zA-Z0-9]/,
+            "bfunc_name|1": "@title",
+            "bfunc_status|1": [1,2,3],
+            "bfunc_type|1": [1,2,3],
+            "create_date": "@date(yyyy-MM-dd)",
+            "create_person":"@name",
+            "id|+1":1,
+            "logic_sys_name":"证券业务系统",
+            "logic_sys_no":"0020",
+            "prj_id":"HP1800000040-01",
+            remark1:"",
+            remark2:"",
+            req_id:"PH18000000-xx",
+            "req_name|5-8":/[a-zA-Z]/,
+            us_id:"US-PH1800000-01-3333",
+            value:"xxx@111",
+            "synergetic_relation|10-20":/[a-zA-Z0-9]/,
+            operation_step:"<p>获取的文字</p>",
+            version:1,
+
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        },
+
+        
+    })
+}
+
+app.all('/agile/edit_bfunc2/', function(req, res) {
+    let resVal = edit_bfunc2(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(edit_bfunc2(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+app.all('/agile/add_bfunc1/', function(req, res) {
+    res.json({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "data":{
+            value:"xxx@111",
+            version:1,
+            bfunc_id:10,
+        },
+    });
+    res.end()
+});
+
+app.all('/agile/add_bfunc2/', function(req, res) {
+    res.json({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "data":"",
+    });
+    res.end()
+});
 
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {

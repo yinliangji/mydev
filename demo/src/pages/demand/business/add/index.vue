@@ -45,8 +45,8 @@
                         
                     </FormItem>
                     <FormItem label="界面流程步骤" v-if="step2">
-                        <Quill />
-                        <!-- <Input  v-model="formValidate.stepview" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input> -->
+                        <Quill @quillOutput="quillOutputFn" :data="false" />
+                       
                     </FormItem>
                     <FormItem label="协同相关" v-if="step2">
                         <Input  v-model="formValidate.synergetic_relation" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
@@ -84,7 +84,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,projectListDataNew,selbusinessList } = Common.restUrl;
+const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryadd_bfunc1,userstoryadd_bfunc2 } = Common.restUrl;
 import Quill from "@/components/quill";
 export default {
     data(){
@@ -109,7 +109,9 @@ export default {
                 bfunc_status:"",
                 who:"",
                 synergetic_relation:"",
-                stepview:"",
+                operation_step:"",//富文本框
+                value:"",//
+                version:"",//
             },
             ruleValidate:{
                 bfunc_name:[
@@ -130,16 +132,67 @@ export default {
             //附件上传--开始
             actionUrl:"//jsonplaceholder.typicode.com/posts/",
             //附件上传--结束
+            //富文本框start
+            quillHTML:"",
+            //富文本框end
             
         }
     },
     methods:{
+        //富文本框start
+        quillOutputFn(html,text){
+            this.formValidate.operation_step = html+"";
+        },
+        //富文本框end
         next(){
+            this.$refs.formValidate.validate((val)=>{
+                if(val){
+                   this.nextStep();
+                }
+            })
+            // setTimeout(()=>{
+            //     this.modal_next_loading = false;
+            //     this.step2 = true;
+            // },1000)
+        },
+        nextStep(){
             this.modal_next_loading = true;
-            setTimeout(()=>{
+            let _us_id = this.$router.history.current.query.us_id ? this.$router.history.current.query.us_id : "";
+            let _prj_id = Common.GETprjid(this,Common);
+            let _req_id = this.$router.history.current.query.req_id ? this.$router.history.current.query.req_id : "";
+            let _nickname = Common.getStorageAndCookie(this,Common,"nickname")
+            let _username = Common.getStorageAndCookie(this,Common,"username")
+            let tempData = {
+                nickname:_nickname,
+                username:_username,
+                req_id:_req_id,
+                prj_id:_prj_id,
+                us_id:_us_id,
+                bfunc_name:this.formValidate.bfunc_name,
+                bfunc_type:this.formValidate.bfunc_type,
+                logic_sys_no:this.formValidate.logic_sys_no,
+                bfunc_desc:this.formValidate.businessDes,
+            };
+            defaultAXIOS(userstoryadd_bfunc1,tempData,{timeout:5000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======业务新建第一步***response+++",response,myData,"======>");
+                if(myData.status == "success" && myData.data){
+                    this.modal_next_loading = false;
+                    this.step2 = true;
+                    this.formValidate.bfunc_id = myData.data.bfunc_id;
+                    this.formValidate.value = myData.data.value;
+                    this.formValidate.version = myData.data.version;
+                }else{
+                   this.modal_next_loading = false;
+                   this.showError(userstoryadd_bfunc1+"错误");
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
                 this.modal_next_loading = false;
-                this.step2 = true;
-            },1000)
+                this.showError(error);
+            });
+            
         },
         //附件上传-start
         handleSuccess(){
@@ -150,22 +203,51 @@ export default {
         },
         //附件上传 -end
         submitAddData(){
+            let _us_id = this.$router.history.current.query.us_id ? this.$router.history.current.query.us_id : "";
+            let _req_id = this.$router.history.current.query.req_id ? this.$router.history.current.query.req_id : "";
+            let _prj_id = Common.GETprjid(this,Common);
+            let _nickname = Common.getStorageAndCookie(this,Common,"nickname")
+            let _username = Common.getStorageAndCookie(this,Common,"username")
             let tempData = {
-                bfunc_id : this.formValidate.bfunc_id,
+                nickname:_nickname,
+                username:_username,
+                req_id:_req_id,
+                prj_id:_prj_id,
+                value:this.formValidate.value,
+                bfunc_id:this.formValidate.bfunc_id,
+                version:this.formValidate.version,
+                us_id:_us_id,
                 bfunc_name : this.formValidate.bfunc_name,
-                logic_sys_no : this.formValidate.logic_sys_no,
-                bfunc_status : this.formValidate.bfunc_status,
-                who : this.formValidate.who,
                 bfunc_type :this.formValidate.bfunc_type,
-                businessDes :this.formValidate.businessDes,
+                logic_sys_no : this.formValidate.logic_sys_no,
+                bfunc_desc :this.formValidate.businessDes,
+                operation_step:this.formValidate.operation_step,
                 synergetic_relation : this.formValidate.synergetic_relation,
-                stepview : this.formValidate.stepview,
             }
-            setTimeout(()=>{
+            defaultAXIOS(userstoryadd_bfunc2,tempData,{timeout:5000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======业务新建第一步***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    this.modal_add_loading = false;
+                    Common.FromBusGoBack(this);
+                    
+                }else{
+                   this.modal_add_loading = false;
+                   this.showError(userstoryadd_bfunc2+"错误");
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
                 this.modal_add_loading = false;
-                this.cancel();
-                this.$router.push('/demand/business/');
-            },1000)
+                this.showError(error);
+            });
+
+
+            // setTimeout(()=>{
+            //     this.modal_add_loading = false;
+            //     this.cancel();
+            //     this.$router.push('/demand/business/');
+            // },1000)
         },
         submitAdd(){
             this.$refs.formValidate.validate((val)=>{
@@ -174,6 +256,9 @@ export default {
                     this.modal_add_loading = true;
                 }
             })
+        },
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
         },
         cancel(){
             Common.BusResetFields(this);

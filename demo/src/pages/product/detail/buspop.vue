@@ -21,11 +21,18 @@
 
                 
                 <FormItem label="界面流程步骤" >
-                    <p >{{formValidate.stepview}}</p>
+                    <p v-html="formValidate.operation_setp"></p>
                     
                 </FormItem>
                 <FormItem label="协同相关" >
                     <p >{{formValidate.synergetic_relation}}</p>
+                    
+                </FormItem>
+                <FormItem label="历史版本" >
+                    <p>
+                        <!-- :to="{path: '/product', query: {board: true}}" -->
+                        <router-link to="/">查看历史版本</router-link>
+                    </p>
                     
                 </FormItem>
                 <FormItem label="附件列表" >
@@ -80,22 +87,28 @@ export default {
             this.modaAdd = this.isShow;
         },
         data(){
-            console.log(this.data)
-
-                this.formValidate.bfunc_id = this.data.bfunc_id;
-                this.formValidate.bfunc_name = this.data.bfunc_name;
-                this.formValidate.logic_sys_no = this.data.logic_sys_name;
-                this.formValidate.businessDes = this.data.bfunc_desc;
-                this.formValidate.bfunc_type = this.data.bfunc_type;
-                this.formValidate.bfunc_status = this.data.bfunc_status;
-                this.formValidate.who = this.data.who;
-                this.formValidate.synergetic_relation = this.data.synergetic_relation;
-                this.formValidate.stepview = this.data.stepview;
-            
-
-
-
-            
+            let _bfunc_typeFn = (val)=>{
+                let _name = false;
+                if(val == 1){
+                    _name = "优化"
+                }else if(val == 2){
+                    _name = "新增"
+                }else if(val == 3){
+                    _name = "重构"
+                }else{
+                    _name = "未知"
+                }
+                return _name;
+            }
+            this.formValidate.bfunc_id = this.data.bfunc_id;
+            this.formValidate.bfunc_name = this.data.bfunc_name;
+            this.formValidate.logic_sys_no = this.data.logic_sys_name;
+            this.formValidate.businessDes = this.data.bfunc_desc;
+            this.formValidate.bfunc_type = _bfunc_typeFn(this.data.bfunc_type);
+            this.formValidate.bfunc_status = this.data.bfunc_status;
+            this.formValidate.who = this.data.who;
+            this.formValidate.synergetic_relation = this.data.synergetic_relation;
+            this.formValidate.operation_setp = this.data.operation_setp;
             
         },
     },

@@ -40,8 +40,7 @@
 
                    
                     <FormItem label="界面流程步骤" >
-                        <Quill />
-                        <!-- <Input  v-model="formValidate.stepview" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input> -->
+                        <Quill @quillOutput="quillOutputFn" :data="quillInput" />
                     </FormItem>
                     <FormItem label="协同相关" >
                         <Input  v-model="formValidate.synergetic_relation" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
@@ -79,7 +78,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,projectListDataNew,selbusinessList } = Common.restUrl;
+const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryedit_bfunc2 } = Common.restUrl;
 import Quill from "@/components/quill";
 export default {
     data(){
@@ -104,7 +103,10 @@ export default {
                 bfunc_status:"",
                 who:"",
                 synergetic_relation:"",
-                stepview:"",
+                operation_step:"",//富文本框
+                value:"",//
+                version:"",//
+
             },
             ruleValidate:{
                 bfunc_name:[
@@ -125,10 +127,55 @@ export default {
             //附件上传--开始
             actionUrl:"//jsonplaceholder.typicode.com/posts/",
             //附件上传--结束
+            //富文本框start
+            quillInput:false,
+            //富文本框end
             
         }
     },
     methods:{
+        
+        userstoryEdit_bfuncGet(URL,params={}){
+            let mydata = this.$router.history.current.query.data ? JSON.parse(this.$router.history.current.query.data) : {};
+            let _params = {
+                prj_id:Common.GETprjid(this,Common),
+                value:mydata.value,
+                us_id:mydata.us_id
+            }
+            return defaultAXIOS(URL,_params,{timeout:60000,method:'get'})
+            .then((response) => {
+                let myData = response.data;
+                console.log("<======【 业务编辑获取 get】***response+++",response,myData,"====>");
+                if(myData.status == "success" && myData.data){
+                    this.formValidate.bfunc_id = myData.data.bfunc_id+"";
+                    this.formValidate.bfunc_name = myData.data.bfunc_name+"";
+                    this.formValidate.logic_sys_no = myData.data.logic_sys_no+"";
+                    this.formValidate.businessDes = myData.data.bfunc_desc+"";
+                    this.formValidate.bfunc_type = myData.data.bfunc_type+"";
+                    this.formValidate.bfunc_status = myData.data.bfunc_status+"";
+                    this.formValidate.who = myData.data.who+"";
+                    this.formValidate.synergetic_relation = myData.data.synergetic_relation+"";
+                    this.formValidate.operation_step = myData.data.operation_step+"";//富文本框
+                    this.quillInput = myData.data.operation_step+"";//富文本框
+                    return Promise.resolve(true);
+                }else{
+                    return Promise.reject(myData.status);
+                }
+            })
+            .catch( (error) => {
+                console.log(error);
+                this.showError(error);
+                return Promise.reject(error);
+            });  
+        },
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
+        },
+        //富文本框start
+        quillOutputFn(html,text){
+            this.formValidate.operation_step = html+"";
+        },
+        //富文本框end
         
         //附件上传-start
         handleSuccess(){
@@ -139,27 +186,58 @@ export default {
         },
         //附件上传 -end
         submitAddData(){
+            let mydata = this.$router.history.current.query.data ? JSON.parse(this.$router.history.current.query.data) : {};
+            let _nickname = Common.getStorageAndCookie(this,Common,"nickname")
+            let _username = Common.getStorageAndCookie(this,Common,"username")
             let tempData = {
-                bfunc_id : this.formValidate.bfunc_id,
+                nickname:_nickname,
+                username:_username,
+                value:mydata.value,
+                us_id:mydata.us_id,
                 bfunc_name : this.formValidate.bfunc_name,
-                logic_sys_no : this.formValidate.logic_sys_no,
-                bfunc_status : this.formValidate.bfunc_status,
-                who : this.formValidate.who,
                 bfunc_type :this.formValidate.bfunc_type,
-                businessDes :this.formValidate.businessDes,
+                logic_sys_no : this.formValidate.logic_sys_no,
+                bfunc_desc :this.formValidate.businessDes,
+                operation_step:this.formValidate.operation_step,
                 synergetic_relation : this.formValidate.synergetic_relation,
-                stepview : this.formValidate.stepview,
             }
-            setTimeout(()=>{
-                this.modal_add_loading = false;
-                this.cancel();
-                //this.$router.push('/demand/business/');
-                let _menu = this.$router.history.current.query.menu;
-                if(_menu){
-                    Common.SetSession("cacheMenu",_menu)
+            //
+            defaultAXIOS(userstoryedit_bfunc2,tempData,{timeout:5000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======demand reqAdd***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    this.modal_add_loading = false;
+                    this.modal_add_loading = false;
+                    this.cancel();
+                    //this.$router.push('/demand/business/');
+                    let _menu = this.$router.history.current.query.menu;
+                    if(_menu){
+                        Common.SetSession("cacheMenu",_menu)
+                    }
+                    Common.FromBusGoBack(this);
+                    //
+                    
+                }else{
+                    this.modal_add_loading = false;
+                    this.showError(userstoryedit_bfunc2+"提交错误");
                 }
-                Common.FromBusGoBack(this);
-            },1000)
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.modal_add_loading = false;
+                this.showError(error);
+            });
+            //
+            // setTimeout(()=>{
+            //     this.modal_add_loading = false;
+            //     this.cancel();
+            //     //this.$router.push('/demand/business/');
+            //     let _menu = this.$router.history.current.query.menu;
+            //     if(_menu){
+            //         Common.SetSession("cacheMenu",_menu)
+            //     }
+            //     Common.FromBusGoBack(this);
+            // },1000)
         },
         submitAdd(){
             this.$refs.formValidate.validate((val)=>{
@@ -184,14 +262,17 @@ export default {
         },
     },
     mounted(){
-        this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)});
+        this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)}).then(()=>{
+            this.userstoryEdit_bfuncGet(userstoryedit_bfunc2)
+        },(error)=>{});
         let mydata = this.$router.history.current.query.data;
         if(mydata){
             mydata = JSON.parse(mydata);
             
-            this.formValidate.bfunc_id = mydata.bfunc_id;
-            this.formValidate.bfunc_name = mydata.bfunc_name;
-            this.$refs.logicSelect.setQuery(mydata.logic_sys_name);
+            console.log(mydata,"-=-=-=-=-=-=-=-")
+            // this.formValidate.bfunc_id = mydata.bfunc_id;
+            // this.formValidate.bfunc_name = mydata.bfunc_name;
+            // this.$refs.logicSelect.setQuery(mydata.logic_sys_name);
             
         }
     },

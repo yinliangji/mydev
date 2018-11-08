@@ -24,16 +24,32 @@ export default {
             editorOption:{},
 		}
 	},
-	
+	props: {
+        data: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
+        
+    },
+    watch:{
+    	data(){
+    		this.value = this.data;
+    	},
+		value(val){
+			console.log("value",val)
+		}
+	},
 	methods:{
 		textChangeHandler(delta,oldDelta,source){
-
+			console.log('textChangeHandler',delta,oldDelta,source)
 		},
 		selectionChangeHandler(range,oldRange,source){
-
+			console.log('selectionChangeHandler',range,oldRange,source)
 		},
 		editorChangeHandler(eventName,...args){
-			console.log('eventName',eventName)
+			console.log('editorChangeHandler',eventName,...args)
 		},
 		submit(){
 			let url = quillEditorAdd;
@@ -61,23 +77,22 @@ export default {
 
 		},
 		onEditorBlur(editor){//失去焦点事件    
+			console.log("onEditorBlur",editor);
  	    },
         onEditorFocus(editor){//获得焦点事件
+        	console.log("onEditorFocus",editor);
         },
-        onEditorChange({editor,html,text}){//编辑器文本发生变化
+        onEditorChange(EditorChangeObj = {editor,html,text}){//编辑器文本发生变化
             //this.content可以实时获取到当前编辑器内的文本内容
-            console.log(this.value);
+            console.log("onEditorChange",this.value,EditorChangeObj);
+            this.$emit("quillOutput",EditorChangeObj.html,EditorChangeObj.text)
         },
 		
 	},
 	mounted(){
-		this.getEdit()
+		//this.getEdit()
 	},
-	watch:{
-		value(val){
-			console.log("value",val)
-		}
-	},
+	
 
 }
 </script>

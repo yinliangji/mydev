@@ -153,6 +153,20 @@ CommonRest.restUrl = {
     "userstoryadd_bfunc2": process.env.BASE_URL + "/agile/add_bfunc2/",
     /****express 添加用户业务功能新建第二步获取 post****/
 
+    "userstoryUploadFile": process.env.BASE_URL + "/agile/uploadFile",
+    /****express 添加用户业务功能上传文件 get****/
+
+    "userstorydelete": process.env.BASE_URL + "/agile/delete_bfunc3/",
+    /****express 用户业务功能删除文件 post****/
+
+    "userstoryFilesList": process.env.BASE_URL + "/agile/getuploadedfiles/",
+    /****express 用户业务功能附件文件列表 get****/
+
+    "userstoryDeleteFile": process.env.BASE_URL + "/agile/deleteFile/",
+    /****express 用户业务功能删除文件列表 post****/
+
+
+
 
     
 

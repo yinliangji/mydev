@@ -1,0 +1,13 @@
+pages\demand/addtablepop.vue
+pages\product\add/index.vue
+pages\product\edit/index.vue
+pages\product\detail/index.vue
+pages\product\detail/transSingle.vue
+pages\demand\business\add/index.vue
+pages\demand\business\edit/index.vue
+
+components\delectAlert/index.vue
+
+components\quill/index.vue
+
+src\router/index.js ------

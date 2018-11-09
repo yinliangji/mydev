@@ -1391,6 +1391,43 @@ export default class Common extends Utils {
               
       }
     }
+    //瞬间弹出信息
+    static CommonMessage(that,Msg){
+      that.$Message.config({
+          top: 250,
+          duration: 3
+      });
+      that.$Message.success(Msg);
+    }
+    //瞬间弹出错误
+    static CommonError(that,Msg){
+      that.$Message.config({
+          top: 250,
+          duration: 3
+      });
+      that.$Message.error(Msg);
+    }
+    //获取业务功能附件列表
+    static GetFilesList(that,FUN,URL,_params = {}){
+      return FUN(URL,_params,{timeout:60000,method:'get'})
+      .then((response) => {
+          let myData = response.data;
+          console.log("<======【 附件列表获取 get】***response+++",response,myData,"====>");
+          if(myData.status == "success" && myData.files && Array.isArray(myData.files)){
+              that.tableData = myData.files;
+              return Promise.resolve(true);
+          }else{
+              that.showError(URL+"错误");
+              return Promise.reject(myData.status);
+          }
+      })
+      .catch( (error) => {
+          console.log(error);
+          that.showError(error);
+          return Promise.reject(error);
+      }); 
+    }
+    
 
     
 

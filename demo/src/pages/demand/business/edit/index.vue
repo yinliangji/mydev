@@ -60,6 +60,10 @@
                             <Button type="ghost" icon="ios-cloud-upload-outline">文件上传</Button>
                         </Upload>
                     </FormItem>
+                    <FormItem label="附件列表" >
+                        <Table border :columns="columns" :data="tableData"  />
+                    </FormItem>
+                    
                     <FormItem >
                         <Button type="primary" :loading="modal_add_loading" @click="submitAdd">
                             <span v-if="!modal_add_loading">提交</span>
@@ -71,21 +75,24 @@
                 
             </div>
         </Card>
-        
+        <Delpop
+            @delpopClose = "delpopCloseFn"
+            @delpopEnter = "delpopEnterFn" 
+            :isShow = "delpopIsShow"
+            :isLoading = "delpopIsLoading"
+        />
     </div>
 </template>
 <script>
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryedit_bfunc2 } = Common.restUrl;
+const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryedit_bfunc2,userstoryUploadFile,userstoryFilesList,userstoryDeleteFile } = Common.restUrl;
 import Quill from "@/components/quill";
+import Delpop from '@/components/delectAlert'
 export default {
     data(){
         return {
-            
-            
-
             isFilterable:true,
             isClearable:true,
             isDisabled:false,
@@ -125,16 +132,155 @@ export default {
             typeList:[],
             logicList:[],
             //附件上传--开始
-            actionUrl:"//jsonplaceholder.typicode.com/posts/",
+            actionUrl:false,//jsonplaceholder.typicode.com/posts/,
             //附件上传--结束
             //富文本框start
             quillInput:false,
             //富文本框end
+            //附件列表start
+            
+            tableData: [
+            ],
+            columns: [
+                {
+                    title: '版本号',
+                    key: 'fileId',
+                    align: 'center'
+                },
+                {
+                    title: '附件名称',
+                    key: 'fileName',
+                    align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'a',
+                            {
+                                style:{color:'#2d8cf0'},
+                                domProps:{href:params.row.url,target:"_blank"},
+                                on: {
+                                    click: () => {
+                                        
+                                    }
+                                }
+                            },
+                            params.row.fileName
+                        );
+                    },
+                },
+                {
+                    title: '发布人',
+                    key: 'creater',
+                    align: 'center',
+                },
+                {
+                    title: '创建时间',
+                    key: 'created_time',
+                    align: 'center',
+                },
+                {
+                    title: '操作',
+                    key: 'action',
+                    width: 150,
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                           
+                            h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                
+                                on: {
+                                    click: () => {
+                                        this.deleteFile(params.index)
+                                    }
+                                }
+                            }, '删除'),
+                            
+                        ]);
+                    }
+                }
+            ],
+            tableDAtaTatol:0,
+            tableDAtaPageLine:3,
+
+            //附件列表end
+            ////删除弹出--start
+            delpopIsShow:false,
+            delpopIsLoading:false,
+            tableDataCur:false,
+            //删除弹出--end
             
         }
     },
     methods:{
-        
+        //删除窗口 -start
+        delpopCloseFn(B){
+            this.delpopIsShow = B;
+            setTimeout(()=>{
+                console.log(B,this.delpopIsShow)
+            },1000)
+            
+        },
+        delpopEnterFn(B){
+
+            let mydata = this.$router.history.current.query.data ?JSON.parse(this.$router.history.current.query.data) : {};
+            let _params = {
+                version:mydata.version,
+                bfunc_id:mydata.bfunc_id,
+                file_path:this.tableData[this.tableDataCur].file_path,
+            }
+            let URL = userstoryDeleteFile;
+            return defaultAXIOS(URL,_params,{timeout:60000,method:'get'})
+            .then((response) => {
+                let myData = response.data;
+                console.log("<======【 业务编辑文件删除 get】***response+++",response,myData,"====>");
+                if(myData.status == "success"){
+                    this.delpopIsLoading = B;
+                    this.delpopIsShow = B;
+                    this.getFilesList(userstoryFilesList);
+                    return Promise.resolve(true);
+                }else{
+                    this.delpopIsLoading = B;
+                    this.delpopIsShow = B;
+                    this.showError(URL+"错误");
+                    return Promise.reject(myData.status);
+                }
+            })
+            .catch( (error) => {
+                console.log(error);
+                this.delpopIsLoading = B;
+                this.delpopIsShow = B;
+                this.showError(error);
+                return Promise.reject(error);
+            }); 
+            
+            // setTimeout(()=>{
+            //     this.delpopIsLoading = B;
+            //     this.delpopIsShow = B;
+            //     this.deleteBus(this.tableDataCur)
+            // },1)
+            
+        },
+        delpopOpenFn(B){
+            this.delpopIsShow = B;
+        },
+        //删除窗口 -end
+        //附件列表start
+        getFilesList(URL){
+            let mydata = this.$router.history.current.query.data ?JSON.parse(this.$router.history.current.query.data) : {};
+            let _params = {
+                version:mydata.version,
+                bfunc_id:mydata.bfunc_id,
+            }
+            Common.GetFilesList(this,defaultAXIOS,URL,_params) 
+        },
+        deleteFile(i){
+            this.delpopOpenFn(true);
+            this.tableDataCur = i;
+        },
+        //附件列表end
         userstoryEdit_bfuncGet(URL,params={}){
             let mydata = this.$router.history.current.query.data ? JSON.parse(this.$router.history.current.query.data) : {};
             let _params = {
@@ -178,11 +324,20 @@ export default {
         //富文本框end
         
         //附件上传-start
-        handleSuccess(){
-
+        Message(msg = "保存完成"){
+            Common.CommonMessage(this,msg)
         },
-        handleError(){
-
+        error(MSG = "错误") {
+            Common.CommonError(this,MSG)
+        },
+        handleSuccess(res,file,list){
+            console.log("handleSuccess",res,file,list)
+            this.Message("上传成功");
+            this.getFilesList(userstoryFilesList)
+        },
+        handleError(res,file,list){
+            console.log("上传失败","handleError",res,file,list);
+            this.error("上传失败")
         },
         //附件上传 -end
         submitAddData(){
@@ -263,24 +418,18 @@ export default {
     },
     mounted(){
         this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)}).then(()=>{
-            this.userstoryEdit_bfuncGet(userstoryedit_bfunc2)
+            this.userstoryEdit_bfuncGet(userstoryedit_bfunc2);
+            this.getFilesList(userstoryFilesList)
         },(error)=>{});
-        let mydata = this.$router.history.current.query.data;
-        if(mydata){
-            mydata = JSON.parse(mydata);
-            
-            console.log(mydata,"-=-=-=-=-=-=-=-")
-            // this.formValidate.bfunc_id = mydata.bfunc_id;
-            // this.formValidate.bfunc_name = mydata.bfunc_name;
-            // this.$refs.logicSelect.setQuery(mydata.logic_sys_name);
-            
-        }
+        
     },
     beforecreated(){
         console.log("新增业务功能--beforecreated-------",this.formValidate)
     },
     created(){
-        console.log("新增业务功能--created-------",this.formValidate)
+        console.log("新增业务功能--created-------",this.formValidate);
+        let mydata = this.$router.history.current.query.data ? JSON.parse(this.$router.history.current.query.data) : {};
+        this.actionUrl = userstoryUploadFile+"?type=6&req_id="+mydata.req_id+"&version="+mydata.version+"&bfunc_id="+mydata.bfunc_id+"&id="+Common.GETID(this,Common)
     },
     beforeUpdate(){
         console.log("新增业务功能--beforeUpdate-------",this.formValidate)
@@ -290,6 +439,7 @@ export default {
     },
     components: {
         Quill,
+        Delpop,
     },
 }
 </script>

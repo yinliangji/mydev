@@ -21,8 +21,7 @@
 
                 
                 <FormItem label="界面流程步骤" >
-                    <p v-html="formValidate.operation_setp"></p>
-                    
+                    <p v-html="formValidate.operation_step" class="stepBox"></p>
                 </FormItem>
                 <FormItem label="协同相关" >
                     <p >{{formValidate.synergetic_relation}}</p>
@@ -30,17 +29,18 @@
                 </FormItem>
                 <FormItem label="历史版本" >
                     <p>
-                        <!-- :to="{path: '/product', query: {board: true}}" -->
-                        <router-link to="/">查看历史版本</router-link>
+                        <router-link :to="{path: '/demand/historyVersion', query: {historyId: data.bfunc_id}}">
+                            查看历史版本
+                        </router-link>
                     </p>
                     
                 </FormItem>
                 <FormItem label="附件列表" >
                     <Table border :columns="columns" :data="tableData"  />
-                    <div class="pageBox" v-if="tableData.length">
+                    <!-- <div class="pageBox" v-if="tableData.length">
                         <Page  :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
                         <p>总共{{tableDAtaTatol}}条记录</p>
-                    </div>
+                    </div> -->
                     
                 </FormItem>
                 
@@ -58,7 +58,21 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,projectListDataNew,selbusinessList } = Common.restUrl;
+const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryFilesList } = Common.restUrl;
+
+let _bfunc_typeFn = (val)=>{
+    let _name = false;
+    if(val == 1){
+        _name = "优化"
+    }else if(val == 2){
+        _name = "新增"
+    }else if(val == 3){
+        _name = "重构"
+    }else{
+        _name = "未知"
+    }
+    return _name;
+}
 
 export default {
     props: {
@@ -87,19 +101,7 @@ export default {
             this.modaAdd = this.isShow;
         },
         data(){
-            let _bfunc_typeFn = (val)=>{
-                let _name = false;
-                if(val == 1){
-                    _name = "优化"
-                }else if(val == 2){
-                    _name = "新增"
-                }else if(val == 3){
-                    _name = "重构"
-                }else{
-                    _name = "未知"
-                }
-                return _name;
-            }
+            console.log(this.data,"000000000000")
             this.formValidate.bfunc_id = this.data.bfunc_id;
             this.formValidate.bfunc_name = this.data.bfunc_name;
             this.formValidate.logic_sys_no = this.data.logic_sys_name;
@@ -108,7 +110,8 @@ export default {
             this.formValidate.bfunc_status = this.data.bfunc_status;
             this.formValidate.who = this.data.who;
             this.formValidate.synergetic_relation = this.data.synergetic_relation;
-            this.formValidate.operation_setp = this.data.operation_setp;
+            this.formValidate.operation_step = this.data.operation_step;
+            this.getFilesList(userstoryFilesList);
             
         },
     },
@@ -145,61 +148,41 @@ export default {
             typeList:[],
             logicList:[],
             tableData: [
-                {
-                   version:"1", 
-                   release:"名称1",
-                   enclosure:"附件1",
-                   date:"2011-10-10",
-                },
-                {
-                   version:"2", 
-                   release:"名称2",
-                   enclosure:"附件2",
-                   date:"2012-11-10",
-                },
-                {
-                   version:"3", 
-                   release:"名称3",
-                   enclosure:"附件3",
-                   date:"2013-12-10",
-                },
             ],
             columns: [
                 {
+                    title: '版本号',
+                    key: 'fileId',
+                    align: 'center'
+                },
+                {
                     title: '附件名称',
-                    key: 'enclosure',
+                    key: 'fileName',
                     align: 'center',
                     render: (h, params) => {
                         return h(
                             'a',
                             {
                                 style:{color:'#2d8cf0'},
-                                //domProps:{href:"###"},
+                                domProps:{href:params.row.url,target:"_blank"},
                                 on: {
                                     click: () => {
                                         
                                     }
                                 }
                             },
-                            params.row.enclosure
+                            params.row.fileName
                         );
                     },
                 },
-                
                 {
-                    title: '附件大小',
-                    key: 'version',
-                    align: 'center'
-                },
-                
-                {
-                    title: '上传时间',
-                    key: 'date',
+                    title: '发布人',
+                    key: 'creater',
                     align: 'center',
                 },
                 {
-                    title: '创建人',
-                    key: 'release',
+                    title: '创建时间',
+                    key: 'created_time',
                     align: 'center',
                 },
                 
@@ -210,6 +193,13 @@ export default {
         }
     },
     methods:{
+        getFilesList(URL){
+            let _params = {
+                version:this.data.version,
+                bfunc_id:this.data.bfunc_id,
+            }
+            Common.GetFilesList(this,defaultAXIOS,URL,_params) 
+        },
         changeCurrentPage(i) {
             
         },
@@ -236,6 +226,9 @@ export default {
         cancel(){
             this.$emit("buspopClose",false)
         },
+        showError(ERR){
+            Common.CommonError(this,ERR);
+        },
     },
 }
 </script>
@@ -246,5 +239,8 @@ export default {
     padding-bottom:0px;
     padding-top:10px;
     overflow: hidden;
+}
+.stepBox img {
+    max-width: 100%;
 }
 </style>

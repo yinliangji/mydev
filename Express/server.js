@@ -922,7 +922,7 @@ let list_busfunc = (val1 = 200, val2 = 1, val3 = 3) => {
                     create_person:"@cname",
                     "id|+100":10000,
                     logic_sys_no:"Z0250",
-                    operation_step:"<p>列表文字</p>",
+                    operation_step:"<p>列表HTML文字</p>",
                     remark1:"",
                     remark2:"",
                     req_id:"RQ-Pj1800110-6",
@@ -2370,6 +2370,52 @@ app.all('/agile/add_bfunc2/', function(req, res) {
         "message": "message xxxxxxx",
         "data":"",
     });
+    res.end()
+});
+
+
+
+app.all('/agile/uploadFile', function(req, res) {
+    
+    res.json({status: "success",message: "uploadFile success",});
+    res.end()
+});
+
+app.all('/agile/delete_bfunc3/', function(req, res) {
+    
+    res.json({status: "success",message: "delete_bfunc3 success",});
+    res.end()
+});
+
+let getuploadedfiles = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "files|0-3": [{
+            "fileId|+1":1,
+            "fileName":"@name",
+            "file_path":"/static/img/logo.281c95a.png",
+            "created_time":"@date(yyyy-MM-dd)",
+            "creater":"@cname",
+            "url":"http://127.0.0.1:8000/static/img/logo.281c95a.png",
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+        }],
+    })
+}
+
+
+app.all('/agile/getuploadedfiles/', function(req, res) {
+    let resVal = getuploadedfiles(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(getuploadedfiles(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+app.all('/agile/deleteFile/', function(req, res) {
+    res.json({status: "success",message: "delete_bfunc3 success",});
     res.end()
 });
 

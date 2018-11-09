@@ -1,5 +1,5 @@
 <template>
-    <Modal v-model="modaDelete" width="300">
+    <Modal v-model="modaDelete" width="300" @on-cancel="cancel">
         <p slot="header" style="color:#f60;text-align:center">
           <Icon type="ios-information-circle"></Icon>
           <span>删除确认</span>

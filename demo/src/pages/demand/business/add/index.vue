@@ -38,7 +38,7 @@
                     </FormItem>
 
                     <FormItem v-if="!step2">
-                        <Button type="primary" :loading="modal_next_loading" @click="next">
+                        <Button type="primary" :loading="modal_next_loading" @click="next" :disabled="nextBtn">
                             <span v-if="!modal_next_loading">保存并且下一步</span>
                             <span v-else>Loading...</span>
                         </Button>
@@ -84,7 +84,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryadd_bfunc1,userstoryadd_bfunc2 } = Common.restUrl;
+const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryadd_bfunc1,userstoryadd_bfunc2,userstoryUploadFile } = Common.restUrl;
 import Quill from "@/components/quill";
 export default {
     data(){
@@ -129,8 +129,9 @@ export default {
             },
             typeList:[],
             logicList:[],
+            nextBtn:true,
             //附件上传--开始
-            actionUrl:"//jsonplaceholder.typicode.com/posts/",
+            actionUrl:false,//jsonplaceholder.typicode.com/posts/,
             //附件上传--结束
             //富文本框start
             quillHTML:"",
@@ -182,6 +183,9 @@ export default {
                     this.formValidate.bfunc_id = myData.data.bfunc_id;
                     this.formValidate.value = myData.data.value;
                     this.formValidate.version = myData.data.version;
+
+                    this.actionUrl = userstoryUploadFile+"?type=6&req_id="+_req_id+"&version="+myData.data.version+"&bfunc_id="+myData.data.bfunc_id+"&id="+Common.GETID(this,Common)
+
                 }else{
                    this.modal_next_loading = false;
                    this.showError(userstoryadd_bfunc1+"错误");
@@ -195,11 +199,19 @@ export default {
             
         },
         //附件上传-start
-        handleSuccess(){
-
+        Message(msg = "保存完成"){
+            Common.CommonMessage(this,msg)
         },
-        handleError(){
-
+        error(MSG = "错误") {
+            Common.CommonError(this,MSG)
+        },
+        handleSuccess(res,file,list){
+            console.log("handleSuccess",res,file,list)
+            this.Message("上传成功")
+        },
+        handleError(res,file,list){
+            console.log("上传失败","handleError",res,file,list);
+            this.error("上传失败")
         },
         //附件上传 -end
         submitAddData(){
@@ -275,7 +287,11 @@ export default {
         },
     },
     mounted(){
-        this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)});
+        this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)}).then(()=>{
+            this.nextBtn = false;
+        },(error)=>{
+            this.showError("typeList和logicList 出错");
+        })
     },
     beforecreated(){
         console.log("新增业务功能--beforecreated-------",this.formValidate)

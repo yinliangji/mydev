@@ -263,7 +263,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstoryGetBus,userstoryAddBus,userstoryRelative,userstoryListBusfunc} = Common.restUrl;
+const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstoryGetBus,userstoryAddBus,userstoryRelative,userstoryListBusfunc,userstorydelete} = Common.restUrl;
 import Enclosure from "./enclosure";
 import Trans from './transSingle'
 import Delpop from '@/components/delectAlert'
@@ -586,11 +586,37 @@ export default {
             this.delpopIsShow = B;
         },
         delpopEnterFn(B){
-            setTimeout(()=>{
+            let URL = userstorydelete;
+            let params = {
+                us_id:this.tableData3[this.tableDataCur].us_id,
+                bfunc_id:this.tableData3[this.tableDataCur].bfunc_id,
+                version:this.tableData3[this.tableDataCur].version,
+            }
+            return defaultAXIOS(URL,params,{timeout:20000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======product 业务列表删除***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    this.delpopIsLoading = B;
+                    this.delpopIsShow = B;
+                    this.deleteBus(this.tableDataCur)
+                    return Promise.resolve(myData.status)                    
+                }else{
+                    this.delpopIsLoading = B;
+                    this.delpopIsShow = B;
+                    return Promise.reject(myData.status);
+                }
+            }).catch( (error) => {
+                console.log(error);
                 this.delpopIsLoading = B;
                 this.delpopIsShow = B;
-                this.deleteBus(this.tableDataCur)
-            },1)
+                return Promise.reject(error);
+                
+            });
+            // setTimeout(()=>{
+            //     this.delpopIsLoading = B;
+            //     this.delpopIsShow = B;
+            //     this.deleteBus(this.tableDataCur)
+            // },1)
             
         },
         delpopOpenFn(B){
@@ -775,21 +801,28 @@ export default {
             let list = this.formValidate.AddGroupList[0].group;
             let Index = list.findIndex(item => item == this.tableData3[i].value )
             if(Index >= 0){
-                
                 list.splice(Index,1);
                 this.formValidate.AddGroupList[0].grouptemp = list;    
             }
             this.serchCurDelTagVal = this.tableData3[i].value;
             this.serchCurDelTagNull = Index;
+            this.tableDataCur = false;
+
 
             this.tableData3.splice(i,1);
-            this.tableDataCur = false;
+            this.tableData3Length = this.tableData3.length;
+            return;
+            this.viewBusData(userstoryListBusfunc).then(()=>{
+                this.tableData3Length = this.tableData3.length;
+                this.setCacheMenuData();
+            },(error)=>{
+                this.showError(error);
+            })
+
         },
         deleteBusFn(i){
             this.delpopOpenFn(true);
             this.tableDataCur = i;
-            
-
         },
         selfChangeItemAdd(value = "",List = [],data = []){
             let Fn1 = (val,arr)=>{

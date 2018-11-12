@@ -798,7 +798,10 @@ export default {
 		getInfoFn(ID){
 			let _myAllSession = Common.GetSession("allSession");
 		    this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
-		    	if(!_myAllSession){
+
+		    	
+		    	
+		    	if(!_myAllSession || (_myAllSession && !JSON.parse(_myAllSession).hasOwnProperty("sprint"))){
 		    		this.formValidate.sprint = sprint+"";
 		    	}
 
@@ -807,8 +810,6 @@ export default {
 	        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
 	        	this.tableDataAjaxFn(storyAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
 
-	        		console.log(Common.GetSession("tableDAtaPageCurrent"),"=========")
-	        	
 
 	        },(error)=>{
 	        	console.log(error);
@@ -834,8 +835,9 @@ export default {
 	    	let _sprint = this.storyGetConditionFn(storyGetCondition,"sprint",ID);
 
 	    	return Promise.all([_sprint]).then((REP)=>{
-	    		//
-			    return defaultAXIOS(URL+ID,{},{timeout:20000,method:'get'}).then((response) => {
+	    		//return Promise.resolve(true)
+	    		
+			    return defaultAXIOS(URL,{prj_id:ID},{timeout:20000,method:'get'}).then((response) => {
 	                let myData = response.data;
 	                console.log("<======agile getDefSpring***response+++",response,myData,"======>");
 	                if(myData && myData.data && !isNaN(myData.data-0) ){

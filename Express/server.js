@@ -1930,6 +1930,10 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
 }
 
 
+app.all('/userstory/getDefaultSpringIdByPrj/', function(req, res) {
+    res.json({ status: "success",data:"6" });
+    res.end()
+});
 app.all('/userstory/getDefaultSpringIdByPrj/1', function(req, res) {
     res.json({ status: "success",data:"7" });
     res.end()

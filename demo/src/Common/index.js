@@ -734,8 +734,14 @@ export default class Common extends Utils {
       //
     }
     static FromBusGoBack(that){
-      let detail_id = that.$router.history.current.query.detail_id
-      that.$router.push({path:'/product/detail/',query:{detail_id,TabsCur:"name2"}});
+      let business = that.$router.history.current.query.business;
+      let detail_id = that.$router.history.current.query.detail_id;
+      if(business){
+        that.$router.push({path:'/demand/business/',query:{}});
+      }else{
+        that.$router.push({path:'/product/detail/',query:{detail_id,TabsCur:"name2"}});
+      }
+      
     }
     static BusResetFields(that){
       that.formValidate.bfunc_id="";

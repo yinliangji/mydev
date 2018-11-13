@@ -26,7 +26,7 @@
 									<Col span="2" style="text-align: center">所属迭代</Col>
 						            <Col span="6">
 						                <FormItem >
-						                    <Select clearable filterable v-model="formValidate.sprint"  placeholder="请选择迭代">
+						                    <Select ref="Sprint" clearable filterable v-model="formValidate.sprint"  placeholder="请选择迭代">
                                                 <Option v-for="(item,index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
@@ -35,7 +35,7 @@
 
 						            
 						        </Row>
-						        <Row class="SerchBox"  v-if="isShowMoreShow">
+						        <Row class="SerchBox"  v-show="isShowMoreShow">
 						        	<Col span="2" style="text-align: center">故事状态</Col>
 						            <Col span="6">
 						                <FormItem >
@@ -48,7 +48,7 @@
 						            <Col span="2" style="text-align: center">所属需求项</Col>
 						            <Col span="6">
 						                <FormItem >
-						                    <Select clearable filterable v-model="formValidate.req_id" placeholder="请选择所属需求项">
+						                    <Select ref="ReqId" clearable filterable v-model="formValidate.req_id" placeholder="请选择所属需求项">
 					                            <Option v-for="(item,index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
 					                        </Select>
 						                </FormItem>
@@ -63,7 +63,7 @@
 						                </FormItem>
 						            </Col>
 						        </Row>
-						        <Row class="SerchBox"  v-if="isShowMoreShow">
+						        <Row class="SerchBox"  v-show="isShowMoreShow">
 						        	
 						            <Col span="2" style="text-align: center">故事类型</Col>
 						            <Col span="6">
@@ -79,7 +79,7 @@
 									<Col span="2" style="text-align: center">负责人</Col>
 						            <Col span="6">
 						                <FormItem >
-						                    <Select clearable filterable v-model="formValidate.charger" placeholder="请选择负责人">
+						                    <Select ref="Charger" clearable filterable v-model="formValidate.charger" placeholder="请选择负责人">
                                                 <Option v-for="(item,index) in chargerList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
@@ -969,11 +969,18 @@ export default {
 
 
 		selectMenuFn(N){
+
 			let ID = N;
 			Common.setStorageAndCookie(Common,"id",N)
 			defaultAXIOS(projectDetail+ID,{},{timeout:2000,method:'get'}).then((response) => {
 			    let myData = response.data;
 			    console.log("<======detail***response+++",response,myData,"+++detail***response======>");
+
+			    //this.$refs.req_id.setQuery();
+			    this.$refs.ReqId.clearSingleSelect();
+			    this.$refs.Charger.clearSingleSelect()
+			    this.$refs.Sprint.clearSingleSelect()
+
 			    let DATA = myData.data ? myData.data : myData
 			    let prodId = DATA.prod_id?DATA.prod_id : DATA.prod 
 			    if(prodId){

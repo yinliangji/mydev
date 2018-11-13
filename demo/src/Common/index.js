@@ -1045,7 +1045,7 @@ export default class Common extends Utils {
 
     //获取权限--不通用
     static GetPermission(FUN,that,URL,params = {}){
-      
+
       if(timer){clearInterval(timer)}
       let time = 0;
       let timer = setInterval(()=>{
@@ -1076,7 +1076,7 @@ export default class Common extends Utils {
           });
           //
         }else if(time > 60){
-          toLoginPage();
+          toLoginPage(that);
         }
         time ++
       },500)
@@ -1483,14 +1483,20 @@ function getSCFn(that,_Common,name){
   return result
 
 }
-function toLoginPage(){
+function toLoginPage(THAT = false){
   let HostName = document.location.hostname;
-  if(HostName == "128.196.63.30"){
+  if(HostName == "127.0.0.1"){
+    if(THAT){
+      THAT.showError('重定向 window.location.href="http://127.0.0.1:1000/"');
+    }else{
+      alert('window.location.href="http://127.0.0.1:1000/"')
+    }
+  }else if(HostName == "128.196.63.30"){
     window.location.href="http://128.192.184.4:8020/icdp?apptype=app03"
   }else if(HostName == "128.196.0.127"){
     window.location.href="http://128.194.224.146:8000/icdp?apptype=app03"
   }else{
-    alert('window.location.href="http://127.0.0.1:1000/"')
+    window.location.href="http://128.192.184.4:8020/icdp?apptype=app03"
   }
 }
 window.toLoginPage = toLoginPage;

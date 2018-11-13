@@ -6,7 +6,6 @@ export default class CommonRest {
     	//super()
     }
 }
-
 CommonRest.restUrl = {
     "DemoURL_1": process.env.BASE_URL + "/json.action",
     /****express demo json****/
@@ -41,11 +40,11 @@ CommonRest.restUrl = {
     "projectGetProd": process.env.BASE_URL + "/get_prod/",
     /****express 敏捷项目获取所属产品 get****/
 
-    "projectAddGroup": process.env.SUB_BASE_URL + "/agile/getUsers/",
-    /****express 敏捷项目添加角色人员 get****/
+    "projectAddGroup": process.env.BASE_URL + "/agile/getUsers/",
+    /****express 敏捷项目添加角色人员 get SUB_BASE_URL****/
 
-    "addTeam": process.env.SUB_BASE_URL + "/agile/getRoles/",
-    /****express 敏捷项目获取角色 get****/
+    "addTeam": process.env.BASE_URL + "/agile/getRoles/",
+    /****express 敏捷项目获取角色 get SUB_BASE_URL****/
 
     "byRole": process.env.BASE_URL + "/agile/getUsersByRole/",
     /****express 敏捷项目搜索获取角色 get****/

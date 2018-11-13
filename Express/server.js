@@ -203,7 +203,7 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             
             "proposer":"",
             "proposer_department":"",
-            "req_id":"req_id_xxxxxx",
+            "req_id|+1":1,
             "req_name":"",
             "sprint": 26,
             "sprint_name":26,

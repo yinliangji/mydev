@@ -637,9 +637,9 @@ export default {
         submitAddData(){
             
             let _bfunc = this.formValidate.bfunc ? JSON.stringify(this.formValidate.bfunc) : "";
-            let _sprint = this.formValidate.sprint === null ? "" : this.formValidate.sprint;
-            let _charger = this.formValidate.nick_name === null ? "" : this.formValidate.nick_name;
-            let _nick_name = this.formValidate.charger === null ? "" : this.formValidate.charger;
+            let _sprint = (this.formValidate.sprint === null ? "" : this.formValidate.sprint)|| "";
+            let _charger = (this.formValidate.nick_name === null ? "" : this.formValidate.nick_name) || "";
+            let _nick_name = (this.formValidate.charger === null ? "" : this.formValidate.charger) || "";
 
             let tempData = {
                 userstory_name: this.formValidate.userstory_name,

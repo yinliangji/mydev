@@ -447,6 +447,7 @@ export default {
         if(this.$router.history.current.query.DATA){
             
             let _DATA = JSON.parse(this.$router.history.current.query.DATA)
+
             this.getStoryEditFn(_DATA)
             this.storyGetSprintFn(storyGetSprint,ID,ID,_DATA.prod_id)
             this.storyGetReqFn(storyGetReq,ID,ID,_DATA.prod_id);
@@ -564,7 +565,6 @@ export default {
         },
         storyGetSprintFn(URL = "",id,prj_id,prod_id){
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
-                //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product get sprintlist***response+++",response,myData,"======>");
 
@@ -629,9 +629,9 @@ export default {
         },
         submitAddData(){
             let _bfunc = this.formValidate.bfunc ? JSON.stringify(this.formValidate.bfunc) : "";
-            let _sprint = this.formValidate.sprint === null ? "" : this.formValidate.sprint;
-            let _charger = this.formValidate.nick_name === null ? "" : this.formValidate.nick_name;
-            let _nick_name = this.formValidate.charger === null ? "" : this.formValidate.charger;
+            let _sprint = (this.formValidate.sprint === null ? "" : this.formValidate.sprint) || "";
+            let _charger = (this.formValidate.nick_name === null ? "" : this.formValidate.nick_name) || "";
+            let _nick_name = (this.formValidate.charger === null ? "" : this.formValidate.charger) || "";
 
             let tempData = {
                 userstory_name: this.formValidate.userstory_name,

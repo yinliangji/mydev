@@ -1065,7 +1065,7 @@ export default class Common extends Utils {
                   that.identity = myData.identity
                 }
               }else if(myData.status =="redirect"){
-                toLoginPage();
+                toLoginPage(that);
               }else{
                 that.showError("权限不足，不能有任何动作");
               }

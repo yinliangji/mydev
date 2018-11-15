@@ -949,15 +949,23 @@ export default {
             Common.GetPermission(defaultAXIOS,this,URL);
         },
     	editItemFn(){
-    		//console.log("this.GetDetail",this.GetDetail)
             let _query = {
                 fromEdit:true,
                 DATA: JSON.stringify(this.GetDetail)
             }
-            if(this.TabsCur == 'name2' && this.cacheMenuData(0)){
-                _query.menu = this.cacheMenuData(0);
+            if(this.TabsCur == 'name1'){
+                this.$router.push({path: '/product/edit', query:_query})
+            }else if(this.TabsCur == 'name2'){
+                if(this.cacheMenuData(0)){
+                    _query.menu = this.cacheMenuData(0);
+                }
+                this.$router.push({path: '/product/edit', query:_query})
+            }else if(this.TabsCur == 'name3'){
+
+            }else if(this.TabsCur == 'name4'){
+
             }
-    		this.$router.push({path: '/product/edit', query:_query})
+            
     	},
 		showError(ERR){
     		Common.ErrorShow(ERR,this);

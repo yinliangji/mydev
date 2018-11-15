@@ -147,7 +147,7 @@
 				    		<p>总共{{tableDAtaTatol}}条记录</p>
 				    	</div>
 					</div>
-					<div class="listBox" v-show="currentView == 'kanbanboard'">
+					<div class="listBox" v-show="currentView == 'kanbanboard'" id="kanbanboard">
 						<!-- :groupList="[]"  -->
 						<kanbanboard
 							:idDisabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
@@ -1313,6 +1313,27 @@ span.low {
 	border-bottom: #ccc solid 1px;
 	padding-top:0.5em;
 	padding-bottom:0.5em;
+}
+</style>
+<style>
+#kanbanboard .content-header , #kanbanboard .ivu-col>div{
+	width: auto !important;
+}
+#kanbanboard .ivu-row-flex .ivu-col{
+	padding-right: 4px !important;
+	padding-left: 4px !important;
+}
+#kanbanboard .ivu-row-flex .ivu-col:first-of-type{
+	padding-right: 10px !important;
+	padding-left: 8px !important;
+}
+#kanbanboard .ivu-row-flex .ivu-col:nth-of-type(2){
+	padding-right: 4px !important;
+	padding-left: 8px !important;
+}
+#kanbanboard .ivu-row-flex .ivu-col:last-of-type{
+	padding-right: 8px !important;
+	padding-left: 4px !important;
 }
 </style>
 

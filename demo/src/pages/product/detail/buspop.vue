@@ -240,7 +240,11 @@ export default {
     padding-top:10px;
     overflow: hidden;
 }
+
+</style>
+<style>
 .stepBox img {
     max-width: 100%;
+    display: block;
 }
 </style>

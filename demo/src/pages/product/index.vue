@@ -148,7 +148,7 @@
 				    	</div>
 					</div>
 					<div class="listBox" v-show="currentView == 'kanbanboard'" id="kanbanboard">
-						<!-- :groupList="[]"  -->
+						<!-- :groupList="[]" :groupList="groupList"  -->
 						<kanbanboard
 							:idDisabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
 							:sortdisabled="true" 
@@ -1098,7 +1098,7 @@ export default {
 							_Obj.userId = "userId_"+ i +"_"+j;
 							_Obj.groupId = myData[i].list[j].req_id+"";
 							//_Obj.bgColor = { background: ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi) };
-							_Obj.bgcolor = ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else if(C==3){return '#f2e1f0'}else{return '#ffffff'}})(myData[i].list[j].proi);
+							_Obj.bgcolor = ((C)=>{if(C==1){return '#FE4515'}else if(C==2){return '#12C37A'}else if(C==3){return '#FEB159'}else{return '#ffffff'}})(myData[i].list[j].proi);
 							_Obj.taskStateStr = myData[i].userstory_status;
 							_Obj.headPortrait =   require("@/assets/images/user_02.png"); //"/assets/images/user_02.png";
 							_Obj.taskName = myData[i].list[j].userstory_name;
@@ -1272,28 +1272,31 @@ export default {
 	position:relative;
 }
 span.high {
-  background: #f8d6af;
+  background: #FE4515;
   width: 100%;
   height: 25px;
   display: inline-block;
   line-height: 25px;
   text-align: center;
+  color:white;
 }
 span.middle {
-  background: #b3ecec;
+  background: #12C37A;
   width: 100%;
   height: 25px;
   display: inline-block;
   line-height: 25px;
   text-align: center;
+  color:white;
 }
 span.low {
-  background: #f2e1f0;
+  background: #FEB159;
   width: 100%;
   height: 25px;
   display: inline-block;
   line-height: 25px;
   text-align: center;
+  color:white;
 }
 .pageBox {
 	padding-bottom:20px;
@@ -1329,7 +1332,7 @@ span.low {
 }
 #kanbanboard .ivu-row-flex .ivu-col:nth-of-type(2){
 	padding-right: 4px !important;
-	padding-left: 8px !important;
+	padding-left: 2px !important;
 }
 #kanbanboard .ivu-row-flex .ivu-col:last-of-type{
 	padding-right: 8px !important;

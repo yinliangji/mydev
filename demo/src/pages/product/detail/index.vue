@@ -183,7 +183,9 @@
                     <div class="baseInfoBox">
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
                         <div class="tableBox">
-                            测试管理制作中.......
+                            <!-- wy start -->
+                            <storyTestCase :storyInfo="storyTestCaseData"></storyTestCase>
+                            <!-- wy end -->
                         </div>
                     </div>
                 </TabPane>
@@ -268,6 +270,7 @@ import Enclosure from "./enclosure";
 import Trans from './transSingle'
 import Delpop from '@/components/delectAlert'
 import Buspop from './buspop'
+import storyTestCase from '@/components/storyTestCase'
 export default {
 	data () {
         return {
@@ -508,6 +511,9 @@ export default {
             buspopIsLoading:false,
             buspopData:false,
             //业务弹出--end
+            // wy start
+            storyTestCaseData:{},
+            // wy end
             
             
         }
@@ -526,10 +532,11 @@ export default {
 
 	    	Promise.all([_proi]).then((REP)=>{
 	    		this.storyGetDetailFn(storyGetDetail,detailID).then((TASKID)=>{
+                    //wy start
+                    this.copydata(this.storyTestCaseData,this.formValidate);
+                    //wy end
 	    			this.getMissionChangeFn(getMissionChange,TASKID,1,this.tableDAtaPageLine);
 	    			this.getMissionChangeFn2(userstoryGetBus,TASKID,1,this.tableDAtaPageLine2);
-
-                    
 
                     this.viewBusData(userstoryListBusfunc).then(()=>{
                         this.tableData3Length = this.tableData3.length;
@@ -572,6 +579,11 @@ export default {
         console.log("用户故事detail--updated-------",this.formValidate,this.tableData3,this.tableData3.length)
     },
     methods: {
+        //wy start
+        copydata(to,from){
+            Object.assign(to,from)
+        },
+        //wy end
         //业务窗口 -start
         buspopCloseFn(B){
             this.buspopIsShow = B;
@@ -588,7 +600,7 @@ export default {
         delpopEnterFn(B){
             let URL = userstorydelete;
             let params = {
-                us_id:this.tableData3[this.tableDataCur].us_id,
+                us_id:this.tableData3[this.tableDataCur].us_id || this.formValidate.userstory_id,
                 bfunc_id:this.tableData3[this.tableDataCur].bfunc_id,
                 version:this.tableData3[this.tableDataCur].version,
             }
@@ -599,10 +611,12 @@ export default {
                     this.delpopIsLoading = B;
                     this.delpopIsShow = B;
                     this.deleteBus(this.tableDataCur)
+                    this.Message("删除完成")
                     return Promise.resolve(myData.status)                    
                 }else{
                     this.delpopIsLoading = B;
                     this.delpopIsShow = B;
+                    this.error(myData.message)
                     return Promise.reject(myData.status);
                 }
             }).catch( (error) => {
@@ -641,6 +655,7 @@ export default {
         selectChange(ITEM){
             console.log(ITEM,"selectChange",this.isPopsAdd ,this.popsItem );
             Common.SelectChange(this);
+            this.serchCurDelTagVal = false;
             if(this.isPopsAdd == "+"){
                 this.selfChangeItemAdd(this.popsItem,this.formValidate.AddGroupList[0].groupList,this.tableData3);
             }else if(this.isPopsAdd == "-"){
@@ -829,7 +844,7 @@ export default {
                 let _temp = arr.find((item)=>{
                     return val == item.value
                 });
-                data.push(_temp);
+                data.unshift(_temp);
             }
             Fn1(value,List)
         },
@@ -1022,6 +1037,7 @@ export default {
         Trans,
         Delpop,
         Buspop,
+        storyTestCase,
 	},
     watch:{
         //查询搜索开始
@@ -1056,24 +1072,32 @@ export default {
                         us_id:this.formValidate.userstory_id,
                         req_id:this.formValidate.req_id,
                     }
+                    let setPro = (Obj,name)=>{
+                        let V = "";
+                        if(Obj && Obj[name]){
+                            V = Obj[name];
+                        }
+                        return V
+                    }
                     if(this.serchCurDelTagVal !== false){
                         params.add = "minus";
                         params.value = this.serchCurDelTagVal;
                     }else if(curVal.length - this.tableData3Length > 0){
                         params.add = "plus";
-                        params.value = this.popsItem
+                        params.value = this.popsItem;
+                        let myObj = Common.checkValToObj(this.popsItem,this.formValidate.AddGroupList[0].groupList);
+                        params.who = setPro(myObj,"who");
+                        params.bfunc_name = setPro(myObj,"bfunc_name");
                     }else if(curVal.length - this.tableData3Length < 0){
                         params.add = "minus";
                         params.value = this.popsItem
                     }
+                   
+                    
 
-                    this.busListAdd(params)
-                    setTimeout(()=>{
-                        //this.busListAdd(params)
-                        // this.serchDisabled = false;
-                        // document.getElementsByClassName("ivu-select-dropdown")[0].removeAttribute("id");
-                        // this.serchCurDelTagVal = false;
-                    },1000)
+                    this.busListAdd(params);
+                    this.serchCurDelTagVal = false;
+                    
 
 
                 }

@@ -114,7 +114,10 @@ export default class Utils extends CommonRest {
       if(_return){return array};
       
     }
-
+    //
+    static checkValToObj(val = "",arr = []){
+      return arr.find((item)=>{return item.value == val})
+    }
 
     
     //写cookies 

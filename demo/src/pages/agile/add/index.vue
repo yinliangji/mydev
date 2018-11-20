@@ -75,7 +75,7 @@
                         </FormItem>
 
 
-                        <FormItem label="模块选择" prop="modules">
+                        <FormItem label="模块选择" prop="modules" v-show="false">
                             <Select v-model="formValidate.modules" multiple >
                                 <Option v-for="item in moduleList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
@@ -755,6 +755,7 @@ export default {
 
 
         listModuleFn(URL,params = {}){
+            return;
             Common.Modulelist(defaultAXIOS,this,URL,params)
         },
 

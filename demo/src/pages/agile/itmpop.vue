@@ -9,7 +9,7 @@
             :loading="modal_add_loading"
 
             @on-ok="submitRole(index,myItem.myRef+index,'formITMitem'+index)"  
-            ok-text="添加"
+            :ok-text="okBtnTxt"
             @on-cancel="cancelRole(index,myItem.myRef+index,'formITMitem'+index)"
             @on-visible-change="changeRole"
 
@@ -18,14 +18,14 @@
             <!-- :prop="'ITMitem.AddGroupList.'+index+'.grouptemp'" -->
             <table class="ITMtable">
                 <tr>
-                    <th>项目名称</th><td><p>{{ ITMtable.name | FALSEINFO}}</p></td>
+                    <th>项目名称</th><td><p>{{ ITMtable.prj_name | FALSEINFO}}</p></td>
                 </tr>
                 <tr>
-                    <th>项目编号</th><td><p>{{ ITMtable.num | FALSEINFO}}</p></td>
+                    <th>项目编号</th><td><p>{{ ITMtable.prj_id | FALSEINFO}}</p></td>
                 </tr>
-                <tr>
-                    <th>项目描述</th><td><p>{{ ITMtable.desc | FALSEINFO}}</p></td>
-                </tr>
+                <!-- <tr>
+                    <th>项目描述</th><td><p>{{ ITMtable.msg | FALSEINFO}}</p></td>
+                </tr> -->
             </table>
             <Form :label-width="80"  :ref="'formITMitem'+index" :model="ITMitem">
                 <FormItem 
@@ -52,7 +52,8 @@
                         </Option>
                     </Select>
                 </FormItem>
-            </Form>           
+            </Form>
+            <p :class="isShowTxt?'opacityTrue':'opacityFalse'">{{ ITMtable.msg | FALSEINFO}}</p>
         </Modal>
     </div>
 </template>
@@ -60,7 +61,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAddGroup,importITM,getITMtable} = Common.restUrl;
+const {projectAddGroup,importITM,getITMtable,syncSearch} = Common.restUrl;
 export default {
     name: 'itm',
     props: {
@@ -74,13 +75,14 @@ export default {
     watch:{
         isShow() {
             if(this.isShow){
-                this.outinITM()
+                this.initAlertTxt();
+                this.outinITM();
             }
         },
         "ITMitem.AddGroupList"(curVal,oldVal){
             let _this = this;
             if(curVal){
-                Common.changeArr2(this,curVal,Common,projectAddGroup,this.projectGroupFn2)//修改添加角色
+                Common.changeArr2(this,curVal,Common,syncSearch,this.projectGroupFn2)//修改添加角色
             }
         },
         ITMitem: {
@@ -96,10 +98,10 @@ export default {
     },
 
     beforeUpdate(){
-        console.log("beforeUpdate-------",)
+        console.log("beforeUpdate---itm导入弹出框----",this.ITMitem)
     },
     updated(){
-        console.log("updated-------",)
+        console.log("updated----itm导入弹出框---",this.ITMitem)
     },
     data () {
         return {
@@ -107,18 +109,26 @@ export default {
                 AddGroupList:[],
             },
             ITMtable:{
-                name:"",
-                num:"",
+                prj_name:"",
+                prj_id:"",
                 desc:"",
+                msg:"",
             },
             inputLoad:false,
             modal_add_loading:true,
+            isShowTxt:false,
+            okBtnTxt:"添加",
         }
     },
     mounted(){
         
     },
     methods: {
+        initAlertTxt(){
+            this.isShowTxt = false;
+            this.okBtnTxt = "添加";
+            modal_add_loading:true;
+        },
         cleanITM(){
             this.ITMitem.AddGroupList = [];
             this.ITMtableTxt("");
@@ -135,11 +145,14 @@ export default {
             let _val = val[val.length-1];
             this.ITMitem.AddGroupList[0].grouptemp = [];
             this.ITMitem.AddGroupList[0].grouptemp.push(_val);
+
+            let _obj = this.ITMitem.AddGroupList[0].groupListtemp.find(item => item.value == _val);
+
             this.ITMtableTxt("加载中......");
+            this.initAlertTxt();
             Common.throttle(
                 (value, THIS) => {
-                    console.log(value);
-                    THIS.getITMtableFn(getITMtable,{xxxxx:value})
+                    THIS.getITMtableFn(getITMtable,{prj_id:value,prj_name:_obj?_obj.prj_name : ""})
                 },
                 this,
                 1500,
@@ -149,14 +162,20 @@ export default {
             //
         },
         getITMtableFn(URL,params = {}){
-            if(params.xxxxx){
-                defaultAXIOS(URL,params,{timeout:5000,method:'post'}).then((response) => {
+            if(params.prj_id){
+                defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                     let myData = response.data;
                     console.log("<======agile ITMtable***response+++",response,myData,"======>");
                     if(myData.status == "success"){
                         for(let I in this.ITMtable){
-                            this.ITMtable[I] = myData.data[I];
+                            if(myData.data[I]){
+                                this.ITMtable[I] = myData.data[I];
+                            }
                         }
+                        this.ITMtable.msg = this.ITMtable.msg? this.ITMtable.msg : "有风险，添加请谨慎!"
+                        this.ITMtable.prj_id = params.prj_id;
+                        this.ITMtable.prj_name = params.prj_name;
+
                     }else{
                         this.showError(URL+"错误");
                         this.ITMtableTxt("加载错误");
@@ -180,26 +199,39 @@ export default {
             this.$refs[fromName][i].resetFields();
         },
         submitRole(i,name,fromName){
-            this.$refs[fromName][i].validate((valid)=>{//验证
-                this.modal_add_loading = false;
+
+            this.modal_add_loading = false;
+            setTimeout(()=>{
                 this.$nextTick(() => {
                   this.modal_add_loading = true;
                 });
+            },300)
+
+            this.$refs[fromName][i].validate((valid)=>{//验证
                 if(valid){
-                    this.modal_add_loading = true;
-                    this.$nextTick(() => {
-                      this.modal_add_loading = true;
-                    });
-                    this.submitAddData(i,fromName,this.ITMitem.AddGroupList[i],this,this.ITMitem.AddGroupList[i].grouptemp);
+                    if(!this.isShowTxt){
+                        this.isShowTxt = true;
+                        this.okBtnTxt = "我已经看见提示，继续添加";
+                    }else{
+                        this.modal_add_loading = true;
+                        this.$nextTick(() => {
+                          this.modal_add_loading = true;
+                        });
+                        this.submitAddData(i,fromName,this.ITMitem.AddGroupList[i],this,this.ITMitem.AddGroupList[i].grouptemp);
+                    }
                 }
             })
+                
+
+            
             
         },
         submitAddData(i,fromName,obj,that,group){
+            this.initAlertTxt();
             let tempData = {
-                xxxxx:JSON.stringify(group),
+                prj_id:group[0],
+                prj_name:(obj.groupListtemp.find(item=>item.value == group[1]) || {}).prj_name || "",
             }
-            //
             defaultAXIOS(importITM,tempData,{timeout:5000,method:'post'}).then((response) => {
                 let myData = response.data;
                 console.log("<======agile ITMAdd***response+++",response,myData,"======>");
@@ -207,7 +239,6 @@ export default {
                     that.$refs[fromName][i].resetFields();
                     that.modal_add_loading = false;
                     obj.modaAdd = false;
-                   
                     that.$emit("itmClose",false,"tableData");
                     
                 }else{
@@ -223,7 +254,6 @@ export default {
                 that.showError(error);
                 that.$emit("itmClose",false);
             });
-            //
 
         },
         outinITM(){
@@ -245,6 +275,9 @@ export default {
             }
         },
         projectGroupFn2(URL,params = {},ARR,thatEle){
+
+            params.prj_name = params.userName;
+            params.prj_id = "";
             Common.ProjectGroup2(defaultAXIOS,this,URL,params,ARR,thatEle,this.ITMitem,this.addSelectEleList);
         },
         addSelectEleList(ARR,thatEle,dataList){
@@ -321,7 +354,14 @@ export default {
     text-align: right;
     padding-right: 18px;
     width:20%;
-    
+}
+.opacityTrue{
+    color:red;
+    opacity: 1;
 
+}
+.opacityFalse{
+    color:red;
+    opacity: 0;
 }
 </style>

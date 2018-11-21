@@ -648,31 +648,43 @@ let GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
                     value: 'New York',
                     label: 'New York人1',
                     "who|1":["icdp","itm"],
+                    prj_id: 'New York',
+                    prj_name: 'New York人1',
                 },
                 {
                     value: 'London',
                     label: 'London人2',
                     "who|1":["icdp","itm"],
+                    prj_id: 'London',
+                    prj_name: 'London人2',
                 },
                 {
                     value: 'Sydney',
                     label: 'Sydney人3',
                     "who|1":["icdp","itm"],
+                    prj_id: 'Sydney',
+                    prj_name: 'Sydney人3',
                 },
                 {
                     value: 'Ottawa',
                     label: 'Ottawa人4',
                     "who|1":["icdp","itm"],
+                    prj_id: 'Ottawa',
+                    prj_name: 'Ottawa人4',
                 },
                 {
                     value: 'Paris',
                     label: 'Paris人5',
                     "who|1":["icdp","itm"],
+                    prj_id: 'Paris',
+                    prj_name: 'Paris人5',
                 },
                 {
                     value: 'Canberra',
                     label: 'Canberra人6',
                     "who|1":["icdp","itm"],
+                    prj_id: 'Canberra',
+                    prj_name: 'Canberra人6',
                 }
             ],
 
@@ -690,31 +702,43 @@ let _GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
                     value: '_New York',
                     label: '_New York人1',
                     "who|1":["_icdp","_itm"],
+                    prj_id: '_New York',
+                    prj_name: '_New York人1',
                 },
                 {
                     value: '_London',
                     label: '_London人2',
                     "who|1":["_icdp","_itm"],
+                    prj_id: '_London',
+                    prj_name: '_London人2',
                 },
                 {
                     value: '_Sydney',
                     label: '_Sydney人3',
                     "who|1":["_icdp","_itm"],
+                    prj_id: '_Sydney',
+                    prj_name: '_Sydney人3',
                 },
                 {
                     value: '_Ottawa',
                     label: '_Ottawa人4',
                     "who|1":["_icdp","_itm"],
+                    prj_id: '_Ottawa',
+                    prj_name: '_Ottawa人4',
                 },
                 {
                     value: '_Paris',
                     label: '_Paris人5',
                     "who|1":["_icdp","_itm"],
+                    prj_id: '_Paris',
+                    prj_name: '_Paris人5',
                 },
                 {
                     value: '_Canberra',
                     label: '_Canberra人6',
                     "who|1":["_icdp","_itm"],
+                    prj_id: '_Canberra',
+                    prj_name: '_Canberra人6',
                 }
             ],
 
@@ -732,31 +756,43 @@ let GroupList_ = (val1 = 200, val2 = 1, val3 = 3) => {
                     value: 'New York_',
                     label: 'New York_人1',
                     "who|1":["icdp_","itm_"],
+                    prj_id: 'New York_',
+                    prj_name: 'New York_人1',
                 },
                 {
                     value: 'London_',
                     label: 'London_人2',
                     "who|1":["icdp_","itm_"],
+                    prj_id: 'London_',
+                    prj_name: 'London_人2',
                 },
                 {
                     value: 'Sydney_',
                     label: 'Sydney_人3',
                     "who|1":["icdp_","itm_"],
+                    prj_id: 'Sydney_',
+                    prj_name: 'Sydney_人3',
                 },
                 {
                     value: 'Ottawa_',
                     label: 'Ottawa_人4',
                     "who|1":["icdp_","itm_"],
+                    prj_id: 'Ottawa_',
+                    prj_name: 'Ottawa_人4',
                 },
                 {
                     value: 'Paris_',
                     label: 'Paris_人5',
                     "who|1":["icdp_","itm_"],
+                    prj_id: 'Paris_',
+                    prj_name: 'Paris_人5',
                 },
                 {
                     value: 'Canberra_',
                     label: 'Canberra_人6',
                     "who|1":["icdp_","itm_"],
+                    prj_id: 'Canberra_',
+                    prj_name: 'Canberra_人6',
                 }
             ],
 
@@ -766,6 +802,29 @@ let GroupList_ = (val1 = 200, val2 = 1, val3 = 3) => {
 
 let trueorfalse = 0;
 app.all('/agile/getUsers/', function(req, res) {
+
+    let resVal
+    let Json
+    if(trueorfalse == 0){
+        Json =  GroupList(req.body.myStatus)   
+        resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+    }else if(trueorfalse == 1){
+        Json =  _GroupList(req.body.myStatus) 
+        resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+
+    }else{
+        Json =  GroupList_(req.body.myStatus)   
+        resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+    }
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
+    console.log(trueorfalse)
+    res.json(Json);
+    res.end()
+});
+
+app.all('/prj/sync_search/', function(req, res) {
 
     let resVal
     let Json
@@ -2043,7 +2102,7 @@ app.all('/uploadfiles/delete_file/', function(req, res) {
 });
 
 
-app.all('/importITM/xxxxx/', function(req, res) {
+app.all('/prj/sync_submit/', function(req, res) {
     let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
@@ -2060,11 +2119,12 @@ let getITMtable = (val1 = 200, val2 = 1, val3 = 3) => {
             name:"@title",
             "num|1-100":1,
             "desc|5-10":/[a-zA-Z0-9]/,
+            "msg":"@cname",
         },
     })
 }
 
-app.all('/getITMtable/xxxxx/', function(req, res) {
+app.all('/prj/sync_check/', function(req, res) {
     let resVal = getITMtable(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);

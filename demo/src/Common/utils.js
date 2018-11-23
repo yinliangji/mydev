@@ -299,3 +299,24 @@ export default class Utils extends CommonRest {
    
     
 }
+window.EVENT = {
+  on(eventName,callback){
+    if(!this.handles){
+      this.handles = {};
+    }
+    if(!this.handles[eventName]){
+      this.handles[eventName] = [];
+    }
+    this.handles[eventName].push(callback)
+  },
+  emit(eventName){
+    if(this.handles[arguments[0]]){
+      for(var i=0;i<this.handles[arguments[0]].length;i++){
+        this.handles[arguments[0]][i](arguments[1])
+      }
+    }
+  }
+}
+EVENT.on("USER",(result)=>{
+  console.log(result,"<=====***====EVENT.on USER")
+})

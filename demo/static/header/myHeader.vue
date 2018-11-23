@@ -67,9 +67,42 @@
         url: process.env.BASE_URL+'/menu/getMenu',
         data: {}
       }).then((parm)=>{
-        console.log("myHeader---->",parm);
+        console.log(parm);
         this.menujson = parm.data;
       }).catch((error)=>{})
+
+
+      this.$axios({
+        method: 'post',
+        url: process.env.BASE_URL+'/login_save?username=xiebei.zh&nickname=%E8%B0%A2%E8%93%93&success=true',
+        data: {}
+      }).then((parm)=>{
+        let setCookie = (name,value) => { 
+            var Days = 0.1; 
+            var exp = new Date(); 
+            exp.setTime(exp.getTime() + Days*24*60*60*1000);
+            document.cookie = name + "="+ decodeURIComponent (value) + ";expires=" + exp.toGMTString(); 
+            setTimeout(()=>{
+              
+            },3000) 
+        }
+        console.log("login_save==>",parm);
+        setCookie("username","xiebei.zh");
+        setCookie("nickname","%E8%B0%A2%E8%93%93");
+
+
+        setTimeout(()=>{
+          if(window.EVENT){
+            EVENT.emit("USER",{username:"xiebei.zh",nickname:"%E8%B0%A2%E8%93%93"});
+            console.log(JSON.stringify(window.EVENT),"<==========EVENT.emit")
+          }
+        },500)
+        
+        
+      }).catch((error)=>{
+
+      })
+
     },
     methods:{
       toLogin:function () {

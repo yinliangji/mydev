@@ -175,7 +175,9 @@
 		        	<div class="baseInfoBox">
 		            	<!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
 		            	<div class="tableBox">
-		            		应用设计制作中.......
+		            		<!-- juzi start -->
+                            <AppDesign :userStoryId="userStoryId" />
+                            <!-- juzi end -->
 		            	</div>
 		            </div>
 		        </TabPane>
@@ -270,7 +272,12 @@ import Enclosure from "./enclosure";
 import Trans from './transSingle'
 import Delpop from '@/components/delectAlert'
 import Buspop from './buspop'
+// wy start
 import storyTestCase from '@/components/storyTestCase'
+// wy end
+//juzi start
+import AppDesign from '@/pages/appdesign'
+//juzi end
 export default {
 	data () {
         return {
@@ -514,6 +521,9 @@ export default {
             // wy start
             storyTestCaseData:{},
             // wy end
+            //juzi start
+            userStoryId:"",
+            //juzi end
             
             
         }
@@ -535,7 +545,10 @@ export default {
                     //wy start
                     this.copydata(this.storyTestCaseData,this.formValidate);
                     //wy end
-	    			this.getMissionChangeFn(getMissionChange,TASKID,1,this.tableDAtaPageLine);
+                    //juzi start
+                    this.userStoryId = this.formValidate.userstory_id;
+	    			//juzi end
+                    this.getMissionChangeFn(getMissionChange,TASKID,1,this.tableDAtaPageLine);
 	    			this.getMissionChangeFn2(userstoryGetBus,TASKID,1,this.tableDAtaPageLine2);
 
                     this.viewBusData(userstoryListBusfunc).then(()=>{
@@ -1038,6 +1051,7 @@ export default {
         Delpop,
         Buspop,
         storyTestCase,
+        AppDesign,
 	},
     watch:{
         //查询搜索开始

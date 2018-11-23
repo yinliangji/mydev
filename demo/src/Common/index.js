@@ -1045,41 +1045,46 @@ export default class Common extends Utils {
 
     //获取权限--不通用
     static GetPermission(FUN,that,URL,params = {}){
+    	return FUN(URL,{username:super.getCookie("username")},{timeout:20000,method:'get'}).then((response) => {
+			let myData = response.data;
+			console.log("<======agile getPermission***response+++",response,myData,"======>");
+			if(myData.status =="success"){
+				if(myData.prj_permission && Array.isArray(myData.prj_permission) && myData.prj_permission.length){
+					that.prj_permission = myData.prj_permission;
+					that.identity = myData.identity
+				}else if(myData.permission && Array.isArray(myData.permission) && myData.permission.length){
+					that.prj_permission = myData.permission;
+					that.identity = myData.identity
+				}
+				return Promise.resolve(myData)
+			}else if(myData.status =="redirect"){
+				toLoginPage(that,myData.status);
+				return Promise.reject(myData.status);
+			}else{
+				toLoginPage(that,myData.status);
+				that.showError("权限不足，不能有任何动作");
+				return Promise.reject("权限不足，不能有任何动作");
+			}
+          
+		}).catch( (error) => {
+			console.log(error);
+			toLoginPage(that,"获取权限出错！");
+			that.showError(error);
+			return Promise.reject(error);
+		});
 
-      if(timer){clearInterval(timer)}
-      let time = 0;
-      let timer = setInterval(()=>{
-
-        if(super.getCookie("username")){
-          clearInterval(timer);
-          //
-          FUN(URL,{},{timeout:20000,method:'get'}).then((response) => {
-              let myData = response.data;
-              console.log("<======agile getPermission***response+++",response,myData,"======>");
-              if(myData.status =="success"){
-                if(myData.prj_permission && Array.isArray(myData.prj_permission) && myData.prj_permission.length){
-                  that.prj_permission = myData.prj_permission;
-                  that.identity = myData.identity
-                }else if(myData.permission && Array.isArray(myData.permission) && myData.permission.length){
-                  that.prj_permission = myData.permission;
-                  that.identity = myData.identity
-                }
-              }else if(myData.status =="redirect"){
-                toLoginPage(that);
-              }else{
-                that.showError("权限不足，不能有任何动作");
-              }
-              
-          }).catch( (error) => {
-              console.log(error);
-              that.showError(error);
-          });
-          //
-        }else if(time > 60){
-          toLoginPage(that);
-        }
-        time ++
-      },500)
+		if(timer){clearInterval(timer)}
+		let time = 0;
+		let timer = setInterval(()=>{
+			if(super.getCookie("username")){
+				clearInterval(timer);
+				//
+				//
+			}else if(time > 60){
+				toLoginPage(that);
+			}
+			time ++
+		},500)
       
     }
 
@@ -1484,19 +1489,55 @@ function getSCFn(that,_Common,name){
 
 }
 function toLoginPage(THAT = false){
-  let HostName = document.location.hostname;
-  if(HostName == "127.0.0.1"){
-    if(THAT){
-      THAT.showError('重定向 window.location.href="http://127.0.0.1:1000/"');
-    }else{
-      alert('window.location.href="http://127.0.0.1:1000/"')
-    }
-  }else if(HostName == "128.196.63.30"){
-    window.location.href="http://128.192.184.4:8020/icdp?apptype=app03"
-  }else if(HostName == "128.196.0.127"){
-    window.location.href="http://128.194.224.146:8000/icdp?apptype=app03"
-  }else{
-    window.location.href="http://128.192.184.4:8020/icdp?apptype=app03"
-  }
+	let error =	(MSG = "错误",CallBack = ()=>{},Fn = ()=>{})=>{
+		if(THAT){
+			THAT.$Message.config({
+			top: 250,
+			duration: 3,
+			closable:true,
+			onClose:CallBack(),
+			});
+			THAT.$Message.error(MSG);
+			return true ;
+		}else{
+			setTimeout(()=>{
+				Fn();
+			},2000)
+			
+			return false;
+		}
+	}
+
+	let HostName = document.location.hostname;
+	if(HostName == "127.0.0.1"){
+		if(THAT){
+		  THAT.showError('重定向 window.location.href="http://127.0.0.1:1000/"');
+		}else{
+		  alert('window.location.href="http://127.0.0.1:1000/"')
+		}
+	}else if(HostName == "128.196.63.30"){
+		error("错误！到【http://128.192.184.4:8020/icdp?apptype=app03】登录",()=>{
+			//window.location.href="http://128.192.184.4:8020/icdp?apptype=app03";
+		},()=>{
+			window.location.href="http://128.192.184.4:8020/icdp?apptype=app03";
+		})
+
+	}else if(HostName == "128.196.0.127"){
+		error("错误！到【http://128.194.224.146:8000/icdp?apptype=app03】登录",()=>{
+			//window.location.href="http://128.194.224.146:8000/icdp?apptype=app03"
+		},()=>{
+			window.location.href="http://128.194.224.146:8000/icdp?apptype=app03"
+		})
+	}else{
+		error("错误！到【http://128.192.184.4:8020/icdp?apptype=app03】登录",()=>{
+			//window.location.href="http://128.192.184.4:8020/icdp?apptype=app03"
+		},()=>{
+			window.location.href="http://128.192.184.4:8020/icdp?apptype=app03"
+		})
+	}
 }
 window.toLoginPage = toLoginPage;
+
+
+
+

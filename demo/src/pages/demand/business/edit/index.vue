@@ -126,7 +126,7 @@ export default {
                     { required: true, message: '请选择状态', trigger: 'change' }
                 ],
                 logic_sys_no:[
-                    { required: true, message: '请选择逻辑子系统', trigger: 'change' }
+                    { required: false, message: '请选择逻辑子系统', trigger: 'change' }
                 ],
             },
             typeList:[],

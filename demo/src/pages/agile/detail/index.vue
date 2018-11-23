@@ -538,6 +538,7 @@ export default {
                     Common.ArrDelVal(_arr);
 
                     if(_arr.length){
+                        return
                         this.listModuleFn(listModule,{},_arr);
                     }else{
                         
@@ -587,7 +588,7 @@ export default {
                     this.formValidate.modules = _myArr.join("、")
                   
                 } else {
-                    that.showError(listModule + "_没有数据");
+                    this.showError(URL + "_没有数据");
                 }
             }).catch( (_error) => {
                 console.log(_error);

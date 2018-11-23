@@ -1,0 +1,6 @@
+setTimeout(()=>{
+          if(window.EVENT){
+            EVENT.emit("USER",{username:"xxxxx",nickname:"xxxxx"});
+            console.log(JSON.stringify(window.EVENT),"<==========EVENT.emit")
+          }
+        },500)

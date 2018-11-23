@@ -200,8 +200,23 @@ const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDevel
 export default {
 	name: 'aglie',
     mounted(){
-        this.getPermissionFn(getPermission)
-        this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+
+        let auth_list = ()=>{
+            this.getPermissionFn(getPermission).then(()=>{
+                this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+            },()=>{
+                this.showError("权限不足，不能有任何动作");
+            })
+        }
+        EVENT.on("USER",(result)=>{
+            if(!Common.getCookie("username")){
+                auth_list();
+            }
+            auth_list();
+        })
+        if(Common.getCookie("username")){
+            auth_list();
+        }
         this.tableDAtaPageCurrent = 1;
         /* 搜索条件 以后加上
         this.byRoleFn(byRole,"icdp_projManager");
@@ -249,7 +264,8 @@ export default {
 
     },
     created(){
-        console.log("agile--created-------",this.tableData,this.ITMitem)
+        console.log("agile--created-------",this.tableData,this.ITMitem);
+
         
     },
     beforeUpdate(){
@@ -475,7 +491,7 @@ export default {
         },
 
         getPermissionFn(URL){
-            Common.GetPermission(defaultAXIOS,this,URL);
+            return Common.GetPermission(defaultAXIOS,this,URL);
         },
         cancelSerchAll(){
             for(let i in this.formValidate){
@@ -526,7 +542,7 @@ export default {
         tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = ""){
             let starttimeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
             let endtimeFromet = end_time ? end_time.Format("yyyy-MM-dd") : "";
-            defaultAXIOS(URL,{page,pageline,prj_name,prj_id,start_time:starttimeFromet,end_time:endtimeFromet,icdp_projManager,icdp_agileCoach,icdp_devTeam,icdp_testTeam},{timeout:20000,method:'get'}).then((response) => {
+            defaultAXIOS(URL,{page,pageline,prj_name,prj_id,start_time:starttimeFromet,end_time:endtimeFromet,icdp_projManager,icdp_agileCoach,icdp_devTeam,icdp_testTeam,username:Common.getCookie("username")},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");

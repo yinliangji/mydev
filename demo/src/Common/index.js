@@ -128,6 +128,7 @@ export default class Common extends Utils {
                 for(let k=0;k<TAB[i][j].member.length;k++){
                   if(TAB[i][j].member[k].nick_name.indexOf("-") != -1){
                     TAB[i][j].member[k].nick_name = TAB[i][j].member[k].nick_name.split("-")[0];
+                    TAB[i][j].member[k].nick_name = TAB[i][j].member[k].nick_name.indexOf("(") != -1 ? TAB[i][j].member[k].nick_name+")" : TAB[i][j].member[k].nick_name+"";
                   }
                   if(TAB[i][j].member[k].nick_name.indexOf("、") == -1){
                     TAB[i][j].member[k].nick_name = TAB[i][j].member[k].nick_name+"、";
@@ -1453,6 +1454,7 @@ function fileterStr(STR){
       for(let i=0;i<strArr.length;i++){
         if(strArr[i].indexOf("-") != -1){
           strArr[i] = strArr[i].split("-")[0];
+          strArr[i] = strArr[i].indexOf("(") != -1 ? strArr[i] + ")" : strArr[i] + "";
         }
       }
       strArr = strArr.join("、")
@@ -1467,7 +1469,7 @@ function fileterStr2(STR){
   let strArr = "";
   if(STR){
     if(STR.indexOf("-") != -1){
-      strArr = STR.split("-")[0];
+      strArr = STR.split("-")[0].indexOf("(") ? STR.split("-")[0]+")" : STR.split("-")[0]+"";
     }else{
       return STR  
     }

@@ -280,7 +280,7 @@ export default {
             Common.ErrorShow(ERR,this);
         },
         checkMenuListFn(URL){
-            defaultAXIOS(URL,{},{timeout:5000,method:'get'})
+            defaultAXIOS(URL,{username:Common.getCookie("username")},{timeout:5000,method:'get'})
             .then((response) => {
                 let myData = response.data;
                 console.log("<======demand projectListDateNew***response+++",response,myData,"======>");

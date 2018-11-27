@@ -39,7 +39,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,projectListDataNew} = Common.restUrl;
+const {reqAdd,reqGet,reqEdit,projectListDataNew} = Common.restUrl;
 
 export default {
     props: {
@@ -120,6 +120,7 @@ export default {
                 req_submitter:"",
                 prj_id:"",
                 prj_name:"",
+                myId:"",
             },
 
             ruleValidate: {
@@ -143,13 +144,14 @@ export default {
     },
     methods: {
         editFn(data){
-            console.log(data)
+            
             if(data && Array.isArray(data)){
                 this.formItem.req_id = data[0].req_id+"";
                 this.formItem.req_name = data[0].req_name+"";
                 this.formItem.req_submitter = data[0].req_submitter+"";
                 this.formItem.prj_type = data[0].prj_type+"";
                 this.formItem.prj_id = Common.GETID(this,Common);
+                this.formItem.myId = data[0].id+"" || "";
             }
         },
         addItem(){
@@ -162,6 +164,7 @@ export default {
             this.formItem.prj_type = "2";
             this.formItem.prj_id = "";
             this.editTableData = false;
+            this.myId = "";
         },
         submitAddData(){
             let tempData = {
@@ -171,6 +174,7 @@ export default {
                 req_submitter:this.formItem.req_submitter,
                 prj_type:this.formItem.prj_type,
                 prj_id:this.formItem.prj_id,
+                myId:this.formItem.myId,
             }
             /*
             setTimeout(() => {
@@ -184,8 +188,8 @@ export default {
                 this.$emit("popClose2",true);
             },1000)
             */
-            //
-            defaultAXIOS(reqAdd,tempData,{timeout:5000,method:'post'}).then((response) => {
+            let URL = this.ADDorEDIT ? reqAdd : reqEdit;
+            defaultAXIOS(URL,tempData,{timeout:5000,method:'post'}).then((response) => {
                 let myData = response.data;
                 console.log("<======demand reqAdd***response+++",response,myData,"======>");
                 if(myData.status == "success"){

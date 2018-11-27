@@ -1588,7 +1588,8 @@ let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
         "status": "success",
         "message": "mockDataList xxxxxxx",
         "data|3-5": [{
-            "req_id|+1": 1,
+            "id|+1": 1,
+            "req_id|+1": 10,
             "req_submitter|5-8": /[a-zA-Z]/,
             "req_name|5-8": /[a-zA-Z0-9]/,
             "prj_type": 1,
@@ -1625,11 +1626,16 @@ app.all('/req/getReq/', function(req, res) {
 });
 
 app.all('/req/addReq/', function(req, res) {
-    res.json({ status: "fial" });
+    res.json({ status: "success" });//fial
     res.end()
 });
 
 app.all('/req/deleteReq/', function(req, res) {
+    res.json({ status: "success" });
+    res.end()
+});
+
+app.all('/req/updateReq/', function(req, res) {
     res.json({ status: "success" });
     res.end()
 });

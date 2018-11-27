@@ -194,6 +194,9 @@ CommonRest.restUrl = {
     "reqAdd": process.env.BASE_URL + "/req/addReq/",
     /****express 需求项目列表 get****/
 
+    "reqEdit": process.env.BASE_URL + "/req/updateReq/",
+    /****express 需求项目列表 get****/
+
     "reqGet": process.env.BASE_URL + "/req/getReq/",
     /****express 需求项目列表 get****/
 

@@ -583,6 +583,362 @@ app.post('/project/add', function(req, res) {
     res.end()
 });
 
+let detail = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "detail xxxxxxx",
+        data: {
+            "id|+1": 1,
+            "prj_id|+1": 100,
+
+            "prj_name|5-8": /[a-zA-Z]/,
+            "manager|6-10": /[a-zA-Z0-9]/,
+            "prj_desc": "@title",
+            "prj_goal": "项目目标",
+            "prj_type": "2",
+            "settle_time": "@date(yyyy-MM-dd)",
+            "start_time": "@date(yyyy-MM-dd)",
+            "end_time": "@date(yyyy-MM-dd)",
+            
+            
+            "logic_sys_name": "逻辑子系统1|逻辑子系统2",
+            "logic_sys_id": "logic_sys_id|logic_sys_id2",
+            "physics_sys_id": "phycics_sys_id|phycics_sys_id2",
+            "physics_sys_name": "物理子系统1|物理子系统2",
+            "modules": "mid0001|mid0002|",
+            "allgroup": "Canberra|London|",
+            "managerGroup": "Sydney|Ottawa|",
+            "developerGroup": "Paris|",
+            "testerGroup": "Canberra|",
+            "prod_id": "2",
+            "pid": "2",
+            "prod_name|5-8": /[a-zA-Z]/,
+            AddGroupList: [
+                {
+                    myRef: "selfRef",
+                    group: ["Canberra", "London", ],
+                    groupList: [{
+                            value: 'London',
+                            label: 'London人2'
+                        },
+                        {
+                            value: 'Canberra',
+                            label: 'Canberra人6'
+                        }
+                    ],
+                    myLabel: "总体组",
+                    delBtn: false,
+                    groupName: "allgroupList",
+                    required: true,
+                },
+                {
+                    myRef: "selfRef",
+                    group: ["Sydney", "Ottawa", ],
+                    groupList: [{
+                            value: 'Sydney',
+                            label: 'Sydney人3'
+                        },
+                        {
+                            value: 'Ottawa',
+                            label: 'Ottawa人4'
+                        },
+                    ],
+                    myLabel: "项目经理",
+                    delBtn: false,
+                    groupName: "managerGroupList",
+                    required: false,
+                },
+                {
+                    myRef: "selfRef",
+                    group: ["Paris", ],
+                    groupList: [{
+                        value: 'Paris',
+                        label: 'Paris人5'
+                    }, ],
+                    myLabel: "开发组",
+                    delBtn: true,
+                    groupName: "developerGroupList",
+                    required: false,
+                },
+                {
+                    myRef: "selfRef",
+                    group: ["Canberra", ],
+                    groupList: [{
+                        value: 'Canberra',
+                        label: 'Canberra人6'
+                    }],
+                    myLabel: "测试组",
+                    delBtn: true,
+                    groupName: "testerGroupList",
+                    required: false,
+                },
+            ],
+            modulesAdd: "",
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+        },
+        "person|0-10":[
+            {
+                "title|+1":["ICDP超级管理员","ICDP管理员","ICDP配置管理员","ICDP项目经理","ICDP产品经理","ICDP小组长","ICDP敏捷教练","ICDP总体组","ICDP开发组"],
+                "member|1-10":[
+                    {
+                        "nick_name|1":'@cname',
+                        "prj_id|5-10":/[a-zA-Z0-9]/,
+                        "role_name":/[a-zA-Z]{5,8}/,
+                        "user_name":'@name',
+                        "id|+1":100,
+                    },
+                ]
+            }
+        ],
+        person_:[
+
+            {
+                "title":"产品经理",
+                "member":[
+                    {
+                        "nick_name":"李卓",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_prodManager",
+                        "user_name":"lizhuo.zh",
+                        "id":4,
+                    },
+                   
+                ],
+            },
+
+            {
+                "title":"项目经理",
+                "member":[
+                    {
+                        "nick_name":"谢蓓",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+            },
+
+            {
+                "title":"开发组",
+                "member":[
+                    {
+                        "nick_name":"奇慧超",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"qihuichao",
+                        "id":4,
+                    },
+                    {
+                        "nick_name":"黄永华",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"huangyonghua",
+                        "id":5,
+                    },
+                    {
+                        "nick_name":"来咧",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"lailie",
+                        "id":6,
+                    },
+                    {
+                        "nick_name":"殷良骥",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"yinliangji",
+                        "id":7,
+                    },
+                ],
+            },
+
+            {
+                "title":"超级管理员",
+                "member":[
+                    {
+                        "nick_name":"谢蓓22",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+            },
+              
+            {
+                "title":"管理员",
+                "member":[
+                    {
+                        "nick_name":"谢蓓3333",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+            },
+
+            {
+                "title":"配置管理员",
+                "member":[
+                    {
+                        "nick_name":"谢蓓444",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+            },
+
+            {
+                "title":"小组长",
+                "member":[
+                    {
+                        "nick_name":"谢蓓2555",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+            },
+
+            {
+                "title":"敏捷教练",
+                "member":[
+                    {
+                        "nick_name":"谢蓓6666",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+            },
+
+            {
+                "title":"测试组",
+                "member":[
+                    {
+                        "nick_name":"谢蓓777",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+            },
+
+            {
+                "title":"总体组",
+                "member":[
+                    {
+                        "nick_name":"谢蓓888",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+            },
+            /*
+            */         
+        ],
+        role_user_info:[
+            {
+                "title":"产品经理",
+                "member":[
+                    {
+                        "nick_name":"李卓",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_prodManager",
+                        "user_name":"lizhuo.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+            {
+                "title":"项目经理",
+                "member":[
+                    {
+                        "nick_name":"谢蓓",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+            {
+                "title":"开发组",
+                "member":[
+                    {
+                        "nick_name":"奇慧超",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"qihuichao",
+                        "id":4,
+                    },
+                    {
+                        "nick_name":"黄永华",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"huangyonghua",
+                        "id":5,
+                    },
+                    {
+                        "nick_name":"来咧",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"lailie",
+                        "id":6,
+                    },
+                    {
+                        "nick_name":"殷良骥",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"yinliangji",
+                        "id":7,
+                    },
+                ],
+
+            },
+        ],
+        logicSystem:[
+            {
+                value: 'Canberra',
+                label: 'Canberra人6'
+            },
+            {
+                value: 'London',
+                label: 'London人2'
+            },
+        ],
+        phySystem:[
+            {
+                value: 'London',
+                label: 'London人2'
+            },
+        ],
+    })
+}
+
+
 app.all('/project/detail/1', function(req, res) {
     let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
@@ -940,12 +1296,6 @@ let searchBusfunc = (val1 = 200, val2 = 1, val3 = 3) => {
 }
 
 
-
-
-
-
-
-
 app.all('/agile/search_busfunc2/', function(req, res) {
 
     let resVal
@@ -1041,9 +1391,6 @@ app.all('/project/testerGroup/', function(req, res) {
     res.end()
 });
 
-
-
-
 let storyGetReq = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": val1,
@@ -1073,9 +1420,6 @@ app.all('/getReq_fromPrj/', function(req, res) {
     res.json(storyGetReq(req.body.myStatus));
     res.end()
 });
-
-
-
 
 
 let Role = (val1 = 200, val2 = 1, val3 = 3) => {
@@ -1366,11 +1710,6 @@ app.all('/userstory/changeUserstoryStatus/', function(req, res) {
     res.end()
 });
 
-
-
-
-
-
 app.all('/project/edit', function(req, res) {
     let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
@@ -1390,9 +1729,6 @@ app.post('/project/delete', function(req, res) {
     res.end()
 });
 
-
-
-
 app.all('/menu/getMenu', function(req, res) {
     let resVal = menuGetMenu(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
@@ -1400,9 +1736,6 @@ app.all('/menu/getMenu', function(req, res) {
     res.json(menuGetMenu(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
-
-
-
 
 let addGroupList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
@@ -1532,9 +1865,6 @@ app.all('/agile/getRoles/', function(req, res) {
     res.end()
 });
 
-
-
-
 let listModule = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": val1,
@@ -1580,8 +1910,6 @@ app.all('/auth/publishUser/', function(req, res) {
     res.json({nick_name:"谢蓓",user_name:"xiebei.zh"});
     res.end()
 });
-
-
 
 let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
@@ -1641,359 +1969,6 @@ app.all('/req/updateReq/', function(req, res) {
 });
 
 
-
-
-let detail = (val1 = 200, val2 = 1, val3 = 3) => {
-    return Mock.mock({
-        "status": "success",
-        "message": "detail xxxxxxx",
-        data: {
-            "id|+1": 1,
-            "prj_id|+1": 100,
-
-            "prj_name|5-8": /[a-zA-Z]/,
-            "manager|6-10": /[a-zA-Z0-9]/,
-            "prj_desc": "@title",
-            "prj_goal": "项目目标",
-            "prj_type": "2",
-            "settle_time": "@date(yyyy-MM-dd)",
-            "start_time": "@date(yyyy-MM-dd)",
-            "end_time": "@date(yyyy-MM-dd)",
-            
-            "logic_sys_id": "logic_sys_id|logic_sys_id2",
-            "physics_sys_id": "phycics_sys_id|phycics_sys_id2",
-            "modules": "mid0001|mid0002|",
-            "allgroup": "Canberra|London|",
-            "managerGroup": "Sydney|Ottawa|",
-            "developerGroup": "Paris|",
-            "testerGroup": "Canberra|",
-            "prod_id": "2",
-            "pid": "2",
-            "prod_name|5-8": /[a-zA-Z]/,
-            AddGroupList: [
-                {
-                    myRef: "selfRef",
-                    group: ["Canberra", "London", ],
-                    groupList: [{
-                            value: 'London',
-                            label: 'London人2'
-                        },
-                        {
-                            value: 'Canberra',
-                            label: 'Canberra人6'
-                        }
-                    ],
-                    myLabel: "总体组",
-                    delBtn: false,
-                    groupName: "allgroupList",
-                    required: true,
-                },
-                {
-                    myRef: "selfRef",
-                    group: ["Sydney", "Ottawa", ],
-                    groupList: [{
-                            value: 'Sydney',
-                            label: 'Sydney人3'
-                        },
-                        {
-                            value: 'Ottawa',
-                            label: 'Ottawa人4'
-                        },
-                    ],
-                    myLabel: "项目经理",
-                    delBtn: false,
-                    groupName: "managerGroupList",
-                    required: false,
-                },
-                {
-                    myRef: "selfRef",
-                    group: ["Paris", ],
-                    groupList: [{
-                        value: 'Paris',
-                        label: 'Paris人5'
-                    }, ],
-                    myLabel: "开发组",
-                    delBtn: true,
-                    groupName: "developerGroupList",
-                    required: false,
-                },
-                {
-                    myRef: "selfRef",
-                    group: ["Canberra", ],
-                    groupList: [{
-                        value: 'Canberra',
-                        label: 'Canberra人6'
-                    }],
-                    myLabel: "测试组",
-                    delBtn: true,
-                    groupName: "testerGroupList",
-                    required: false,
-                },
-            ],
-            modulesAdd: "",
-            "__value2__page": val2,
-            "__value3__pageline": val3,
-        },
-        "person|0-10":[
-            {
-                "title|+1":["ICDP超级管理员","ICDP管理员","ICDP配置管理员","ICDP项目经理","ICDP产品经理","ICDP小组长","ICDP敏捷教练","ICDP总体组","ICDP开发组"],
-                "member|1-10":[
-                    {
-                        "nick_name|1":'@cname',
-                        "prj_id|5-10":/[a-zA-Z0-9]/,
-                        "role_name":/[a-zA-Z]{5,8}/,
-                        "user_name":'@name',
-                        "id|+1":100,
-                    },
-                ]
-            }
-        ],
-        person_:[
-
-            {
-                "title":"产品经理",
-                "member":[
-                    {
-                        "nick_name":"李卓",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_prodManager",
-                        "user_name":"lizhuo.zh",
-                        "id":4,
-                    },
-                   
-                ],
-            },
-
-            {
-                "title":"项目经理",
-                "member":[
-                    {
-                        "nick_name":"谢蓓",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_projManager",
-                        "user_name":"xiebei.zh",
-                        "id":4,
-                    },
-                   
-                ],
-            },
-
-            {
-                "title":"开发组",
-                "member":[
-                    {
-                        "nick_name":"奇慧超",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_devTeam",
-                        "user_name":"qihuichao",
-                        "id":4,
-                    },
-                    {
-                        "nick_name":"黄永华",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_devTeam",
-                        "user_name":"huangyonghua",
-                        "id":5,
-                    },
-                    {
-                        "nick_name":"来咧",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_devTeam",
-                        "user_name":"lailie",
-                        "id":6,
-                    },
-                    {
-                        "nick_name":"殷良骥",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_devTeam",
-                        "user_name":"yinliangji",
-                        "id":7,
-                    },
-                ],
-            },
-
-            {
-                "title":"超级管理员",
-                "member":[
-                    {
-                        "nick_name":"谢蓓22",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_projManager",
-                        "user_name":"xiebei.zh",
-                        "id":4,
-                    },
-                   
-                ],
-            },
-              
-            {
-                "title":"管理员",
-                "member":[
-                    {
-                        "nick_name":"谢蓓3333",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_projManager",
-                        "user_name":"xiebei.zh",
-                        "id":4,
-                    },
-                   
-                ],
-            },
-
-            {
-                "title":"配置管理员",
-                "member":[
-                    {
-                        "nick_name":"谢蓓444",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_projManager",
-                        "user_name":"xiebei.zh",
-                        "id":4,
-                    },
-                   
-                ],
-            },
-
-            {
-                "title":"小组长",
-                "member":[
-                    {
-                        "nick_name":"谢蓓2555",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_projManager",
-                        "user_name":"xiebei.zh",
-                        "id":4,
-                    },
-                   
-                ],
-            },
-
-            {
-                "title":"敏捷教练",
-                "member":[
-                    {
-                        "nick_name":"谢蓓6666",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_projManager",
-                        "user_name":"xiebei.zh",
-                        "id":4,
-                    },
-                   
-                ],
-            },
-
-            {
-                "title":"测试组",
-                "member":[
-                    {
-                        "nick_name":"谢蓓777",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_projManager",
-                        "user_name":"xiebei.zh",
-                        "id":4,
-                    },
-                   
-                ],
-            },
-
-            {
-                "title":"总体组",
-                "member":[
-                    {
-                        "nick_name":"谢蓓888",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_projManager",
-                        "user_name":"xiebei.zh",
-                        "id":4,
-                    },
-                   
-                ],
-            },
-            /*
-            */         
-        ],
-        role_user_info:[
-            {
-                "title":"产品经理",
-                "member":[
-                    {
-                        "nick_name":"李卓",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_prodManager",
-                        "user_name":"lizhuo.zh",
-                        "id":4,
-                    },
-                   
-                ],
-
-            },
-            {
-                "title":"项目经理",
-                "member":[
-                    {
-                        "nick_name":"谢蓓",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_projManager",
-                        "user_name":"xiebei.zh",
-                        "id":4,
-                    },
-                   
-                ],
-
-            },
-            {
-                "title":"开发组",
-                "member":[
-                    {
-                        "nick_name":"奇慧超",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_devTeam",
-                        "user_name":"qihuichao",
-                        "id":4,
-                    },
-                    {
-                        "nick_name":"黄永华",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_devTeam",
-                        "user_name":"huangyonghua",
-                        "id":5,
-                    },
-                    {
-                        "nick_name":"来咧",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_devTeam",
-                        "user_name":"lailie",
-                        "id":6,
-                    },
-                    {
-                        "nick_name":"殷良骥",
-                        "prj_id":"prj00010",
-                        "role_name":"icdp_devTeam",
-                        "user_name":"yinliangji",
-                        "id":7,
-                    },
-                ],
-
-            },
-        ],
-        logicSystem:[
-            {
-                value: 'Canberra',
-                label: 'Canberra人6'
-            },
-            {
-                value: 'London',
-                label: 'London人2'
-            },
-        ],
-        phySystem:[
-            {
-                value: 'London',
-                label: 'London人2'
-            },
-        ],
-    })
-}
 
 
 app.all('/userstory/getDefaultSpringIdByPrj/', function(req, res) {

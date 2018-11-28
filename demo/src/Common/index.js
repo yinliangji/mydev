@@ -1029,10 +1029,12 @@ export default class Common extends Utils {
           if(myData && myData.user_name){
               that.formValidate.charger = myData.nick_name
               that.formValidate.nick_name = myData.user_name
-
               return Promise.resolve({charger:myData.nick_name,nick_name:myData.user_name})
-
           }else{
+              that.formValidate.charger = super.getCookie("nickname") || "";
+              that.formValidate.nick_name = super.getCookie("username") || "";
+              return Promise.resolve({charger:super.getCookie("nickname") || "",nick_name:super.getCookie("username") || ""})
+
               that.showError(URL+"_没有数据");
               return Promise.reject(URL+"_没有数据");
           }

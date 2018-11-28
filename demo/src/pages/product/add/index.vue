@@ -537,7 +537,7 @@ export default {
 
                     
                 }else{
-                    this.showError("没有数据");
+                    this.showError(URL+"_没有数据");
                 }
                 
             }).catch( (error) => {
@@ -566,7 +566,7 @@ export default {
 
                     
                 }else{
-                    this.showError("没有数据");
+                    this.showError(URL+"_没有数据");
                 }
                 
             }).catch( (error) => {

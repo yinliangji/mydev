@@ -26,9 +26,9 @@
 							  <tbody>
 								<tr>
 								  <th width="11%">项目编号</th>
-								  <td>{{ formValidate.prj_id | FALSEINFO}}</td>
+								  <td width="22%">{{ formValidate.prj_id | FALSEINFO}}</td>
 								  <th width="11%">项目名称</th>
-								  <td>{{formValidate.prj_name | FALSEINFO}}</td>
+								  <td width="22%">{{formValidate.prj_name | FALSEINFO}}</td>
 								  <th width="11%">所属产品</th>
 								  <td>{{formValidate.prod_name | FALSEINFO}}</td>
 								</tr>
@@ -45,9 +45,9 @@
                                   <th>所属模块</th>
                                   <td>{{formValidate.modules | FALSEINFO}}</td>
                                   <th>逻辑子系统</th>
-                                  <td>{{formValidate.logic_sys_id | FALSEINFO}}</td>
+                                  <td>{{formValidate.logic_sys_name | FALSEINFO}}</td>
                                   <th>物理子系统</th>
-                                  <td>{{formValidate.physics_sys_id | FALSEINFO}}</td>
+                                  <td>{{formValidate.physics_sys_name | FALSEINFO}}</td>
                                 </tr>
 
 								
@@ -230,7 +230,9 @@ export default {
                 prod_name:"",
                 person:[],
                 logic_sys_id:"",
+                logic_sys_name:"",
                 physics_sys_id:"",
+                physics_sys_name:"",
                 // allgroup:"",
                 // managerGroup:"",
                 // developerGroup:"",
@@ -510,7 +512,7 @@ export default {
                 this.HTML = "";
                 if(myData.data && myData.data.id){
                 	for(var I in this.formValidate){
-                        if(I == "logic_sys_id" || I == "physics_sys_id"){
+                        if(I == "logic_sys_id" || I == "logic_sys_name" || I == "physics_sys_id" || I == "physics_sys_name"){
                             if(myData.data[I] && myData.data[I].indexOf("|") != -1){
                                 this.formValidate[I] = myData.data[I].replace(/\|/g,"、");
                             }else if(myData.data[I] && myData.data[I].indexOf(",") != -1){

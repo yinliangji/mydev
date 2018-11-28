@@ -727,7 +727,7 @@ export default {
         console.log("trans--updated-------",this.myFormData)
     },
     mounted(){
-        this.list_logic_type = this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)});
+        //this.list_logic_type = this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)});//以后加上
     },
 }
 

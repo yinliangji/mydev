@@ -538,8 +538,6 @@ export default {
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======product get storyGetReq***response+++",response,myData,"======>");
-
-
                 
                 if(myData.data && myData.data.length){
                     //value: 'New York',
@@ -551,8 +549,6 @@ export default {
                         this.req_idList.push(_tempObj);
                         _tempObj = {};
                     }
-                    console.log("this.req_idList",this.req_idList)
-
                     
                 }else{
                     this.showError("没有数据");
@@ -567,8 +563,6 @@ export default {
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======product get sprintlist***response+++",response,myData,"======>");
-
-
                 
                 if(myData.sprintlist && myData.sprintlist.length){
                      //value: 'New York',

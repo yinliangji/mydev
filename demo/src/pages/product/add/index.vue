@@ -240,7 +240,7 @@ import Trans from './trans'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAdd,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no } = Common.restUrl;
+const {storyAdd,storyAddGet,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no } = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -442,7 +442,7 @@ export default {
         let prj_ID = Common.GETprjid(this,Common);
         let prod_ID = Common.GETprodid(this,Common);
 
-        if(prj_ID && prod_ID && ID){
+        if(prj_ID  && ID){//&& prod_ID
             this.formValidate.prj_id = prj_ID;
             this.formValidate.prod_id = prod_ID;
             this.formValidate.id = ID;
@@ -450,9 +450,11 @@ export default {
 
             this.formValidate.req_id = this.$router.history.current.query.req_id ? this.$router.history.current.query.req_id+"" : "";
 
-            this.getStoryAddFn(storyAdd,ID,ID,prod_ID);
-            this.storyGetSprintFn(storyGetSprint,ID,ID,prod_ID)
-            this.storyGetReqFn(storyGetReq,ID,ID,prod_ID)
+            let _prod_ID = prod_ID == "0" ? "" : prod_ID;
+
+            this.getStoryAddFn(storyAddGet,ID,ID,_prod_ID);
+            this.storyGetSprintFn(storyGetSprint,ID,ID,_prod_ID)
+            this.storyGetReqFn(storyGetReq,ID,ID,_prod_ID)
 
             this.publishUserFn(publishUser).then((chargerObj)=>{
 
@@ -519,6 +521,7 @@ export default {
             //Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
         },
         storyGetReqFn(URL = "",id,prj_id,prod_id){
+            return //临时去掉
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
@@ -546,16 +549,11 @@ export default {
             });
         },
         storyGetSprintFn(URL = "",id,prj_id,prod_id){
+            return //临时去掉
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
-                //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product get sprintlist***response+++",response,myData,"======>");
-
-
-                
                 if(myData.sprintlist && myData.sprintlist.length){
-                     //value: 'New York',
-                //     label: '业务模块1'
                     let _tempObj = {};
                     for(let i=0;i<myData.sprintlist.length;i++){
                         _tempObj.value = myData.sprintlist[i].sp_id+"";
@@ -563,12 +561,9 @@ export default {
                         this.sprintList.push(_tempObj);
                         _tempObj = {};
                     }
-
-                    
                 }else{
                     this.showError(URL+"_没有数据");
                 }
-                
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);
@@ -576,16 +571,51 @@ export default {
         },
         getStoryAddFn(URL = "",id,prj_id,prod_id){
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
-                //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product get***response+++",response,myData,"======>");
-
-                
                 let _data = Array.isArray(myData) ? myData[0] : myData
                 
                 if(_data.status == "success"){
                     this.formValidate.prj_name = _data.prj_name;
                     this.formValidate.product_name = _data.product_name;
+
+                    // 添加迭代下拉
+                    if(_data.getSprintsByPrj && Array.isArray(_data.getSprintsByPrj) && _data.getSprintsByPrj.length){
+                        let _tempObj = {};
+                        for(let i=0;i<_data.getSprintsByPrj.length;i++){
+                            _tempObj.value = _data.getSprintsByPrj[i].sp_id+"";
+                            _tempObj.label = _data.getSprintsByPrj[i].sp_name+"";
+                            this.sprintList.push(_tempObj);
+                            _tempObj = {};
+                        }
+                    }else{
+                        this.showError(URL+"_添加迭代_没有数据");
+                    }
+                    //
+                    //添加需求下拉
+                    if(_data.getReq_fromPrj && Array.isArray(_data.getReq_fromPrj) && _data.getReq_fromPrj.length){
+
+                        let _tempObj = {};
+                        for(let i=0;i<_data.getReq_fromPrj.length;i++){
+                            _tempObj.value = _data.getReq_fromPrj[i].id+"" || _data.getReq_fromPrj[i].req_id+"";
+                            _tempObj.label = _data.getReq_fromPrj[i].req_name+"";
+                            this.req_idList.push(_tempObj);
+                            _tempObj = {};
+                        }
+                        
+                    }else{
+                        this.$Modal.warning({
+                            title:"请先添加需求项",
+                            content:"此项目尚未添加需求项，请先添加需求项",
+                            okText:"添加需求项",
+                            onOk:()=>{
+                                this.$router.push('/demand');
+                            },
+                        })
+                        //this.showError(URL+"_没有数据");
+                    }
+                    //
+
                 }else{
                     this.showError(myData);
                 }
@@ -595,6 +625,7 @@ export default {
                 this.showError(error);
             });
         },
+
         showError(ERR){
             Common.ErrorShow(ERR,this);
         },

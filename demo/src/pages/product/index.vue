@@ -2,7 +2,7 @@
 	<div class="pageContent">
 		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'10'" />
 		<selectMenu @changeSelect="selectMenuFn"></selectMenu>
-		<Card>
+		<Card id="BoxPT">
 			<div class="productBox">
 				<h3 class="Title"><span>用户故事</span></h3>
 				<Form ref="formValidate" class="formValidate">
@@ -141,7 +141,7 @@
 
 
 					<div class="tableContBox" v-show="currentView == 'developList'">
-						<Table border :columns="columns" :data="tableData"  />
+						<Table stripe border :columns="columns" :data="tableData"  />
 						<div class="pageBox" v-if="tableData.length">
 				    		<Page :current="tableDAtaPageCurrent" :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
 				    		<p>总共{{tableDAtaTatol}}条记录</p>
@@ -177,6 +177,12 @@
                 <Button type="error" size="large" long  @click="cardpopEnter">确认</Button>
             </div>
         </Modal>
+        <Delpop
+            @delpopClose = "delpopCloseFn"
+            @delpopEnter = "delpopEnterFn" 
+            :isShow = "delpopIsShow"
+            :isLoading = "delpopIsLoading"
+        />
 	</div>
 </template>
 <script>
@@ -187,7 +193,8 @@ import ADDorEDITpop from "./add_or_edit_pop";
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring} = Common.restUrl;
+import Delpop from '@/components/delectAlert'
+const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList} = Common.restUrl;
 export default {
 	watch: {
 		'$route' (to, from) {
@@ -426,8 +433,8 @@ export default {
                         return h(
                             'a',
                             {
-                                style:{color:'#2d8cf0'},
-                                //domProps:{href:"###"},
+                                "class":{txtBlock:true,txtBlockNone:false},
+                                attrs:{title:params.row.userstory_name},
                                 on: {
                                     click: () => {
                                         this.goProductDetailFn(params.index)
@@ -571,10 +578,25 @@ export default {
                 {
                     title: '操作',
                     key: 'action',
-                    width: 220,
+                    width: 260,
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
+                        	h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                domProps:{disabled:this.authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])},
+                                on: {
+                                    click: () => {
+                                        this.deleteTableLine(params.index)
+                                    }
+                                }
+                            }, '删除'),
                             h('Button', {
                                 props: {
                                     type: 'primary',
@@ -661,6 +683,7 @@ export default {
 					// icon: require("@/assets/images/user_02.png")
      			//},
             ],
+            tableDataCur:"",
             tableDAtaTatol:0,
             tableDAtaPageLine:5,
             tableDAtaPageCurrent:1,
@@ -744,11 +767,16 @@ export default {
 
             cardpop:false,
             cardpopList:[],
+            //删除弹出--start
+            delpopIsShow:false,
+            delpopIsLoading:false,
+            //删除弹出--end
 		}
 	},
 	components: {
 		kanbanboard,
-		ADDorEDITpop
+		ADDorEDITpop,
+		Delpop,
 
 	},
 	computed: {
@@ -780,6 +808,52 @@ export default {
 		
 	},
 	methods:{
+		deleteTableLine(i){
+            this.delpopOpenFn(true);
+            this.tableDataCur = i;
+        },
+		//删除窗口 -start
+        delpopCloseFn(B){
+            this.delpopIsShow = B;
+        },
+        delpopEnterFn(B){
+            let URL = userstoryDeleteList;
+            let params = {
+                id:this.tableData[this.tableDataCur].id,
+            }
+            return defaultAXIOS(URL,params,{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======product 用户故事列表删除***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    this.delpopIsLoading = B;
+                    this.delpopIsShow = B;
+                    Common.CommonMessage(this,"删除完成")
+                    this.getInfoFn(this.getID());
+                    return Promise.resolve(myData.status)                    
+                }else{
+                    this.delpopIsLoading = B;
+                    this.delpopIsShow = B;
+                    Common.CommonError(this,myData.message)
+                    return Promise.reject(myData.status);
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.delpopIsLoading = B;
+                this.delpopIsShow = B;
+                return Promise.reject(error);
+                
+            });
+            // setTimeout(()=>{
+            //     this.delpopIsLoading = B;
+            //     this.delpopIsShow = B;
+            //     this.deleteBus(this.tableDataCur)
+            // },1)
+            
+        },
+        delpopOpenFn(B){
+            this.delpopIsShow = B;
+        },
+        //删除窗口 -end
 		isKanbanboard(){
 			if(Common.GetSession("CurView")){
 				this.currentView = Common.GetSession("CurView");
@@ -807,8 +881,15 @@ export default {
 
 		    	this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent") - 0 : 1;
 
-	        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-	        	this.tableDataAjaxFn(storyAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+
+		    	//currentView: "developList",//developList//kanbanboard
+		    	if(this.currentView == "kanbanboard"){
+		    		this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+		    	}else{
+		    		this.tableDataAjaxFn(storyAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+		    	}
+	        	
+	        	
 
 
 	        },(error)=>{
@@ -983,6 +1064,11 @@ export default {
 
 			    let DATA = myData.data ? myData.data : myData
 			    let prodId = DATA.prod_id?DATA.prod_id : DATA.prod 
+			    if(DATA.prj_id){
+			    	Common.setStorageAndCookie(Common,'prj_id',DATA.prj_id);
+			    }else{
+			    	Common.setStorageAndCookie(Common,'prj_id',"");
+			    }
 			    if(prodId){
 
 					//Common.setCookie("prj_id",DATA.prj_id);
@@ -990,9 +1076,10 @@ export default {
 		            //Common.setCookie("prod_id",prodId);
 		            //localStorage.setItem('prod_id',prodId);
 		            Common.setStorageAndCookie(Common,'prod_id',prodId);
-		            Common.setStorageAndCookie(Common,'prj_id',DATA.prj_id);
-
+			    }else{
+			    	Common.setStorageAndCookie(Common,'prod_id',"");
 			    }
+
 			    this.tableDAtaPageCurrent = 1;
 			    for(let I in this.formValidate){
 			    	if(I != "sprint"){
@@ -1240,12 +1327,18 @@ export default {
 		showList() {
 			let CurView = "developList";
 			this.currentView = CurView;
-			Common.SetSession("CurView",CurView)
+			Common.SetSession("CurView",CurView);
+			setTimeout(()=>{
+				this.getInfoFn(this.getID())
+			},350)
 		},
 		showTask(){
 			let CurView = "kanbanboard"
 			this.currentView = CurView;
-			Common.SetSession("CurView",CurView)
+			Common.SetSession("CurView",CurView);
+			setTimeout(()=>{
+				this.getInfoFn(this.getID())
+			},350)
 		},
 	}
 }

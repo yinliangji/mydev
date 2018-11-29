@@ -386,3 +386,22 @@ h3.Title:before {
     min-height: 32px;
     */
 }
+/* 表格列表相关 start */
+a.txtBlock {
+    color: #2d8cf0;
+    overflow: hidden;
+    
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+a.txtBlockNone{
+    color: #2d8cf0;
+}
+
+/* 表格列表相关 end */
+/* 页面 内容头部 start */
+#BoxPT > .ivu-card-body {
+    padding-top:0; 
+}
+/* 页面 内容头部 end */

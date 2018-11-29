@@ -284,6 +284,12 @@ export default {
             Common.ErrorShow(ERR,this);
         },
         checkMenuListFn(URL){
+            if(Common.getCookie("prj_name") && Common.getCookie("prjId")){
+                this.formItem.prj_id = Common.getCookie("prjId");
+                this.formItem.prj_name = Common.getCookie("prj_name");
+                return
+            }
+
             defaultAXIOS(URL,{username:Common.getCookie("username")},{timeout:5000,method:'get'})
             .then((response) => {
                 let myData = response.data;

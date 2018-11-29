@@ -2,7 +2,7 @@
     <div class="pageContent">
         <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'10'" />
         <selectMenu @changeSelect="selectMenuFn"></selectMenu>
-        <Card>
+        <Card id="BoxPT">
             <div class="demandBox">
                 <h3 class="Title"><span>需求项管理</span></h3>
                 <Form ref="formValidate" class="formValidate">
@@ -301,7 +301,7 @@ export default {
         this.getPermissionFn(getPermission);
         let ID = Common.GETID(this,Common) ? Common.GETID(this,Common) : this.$router.push('/agile');
         
-        this.getPermissionFn(getPermission);
+        //this.getPermissionFn(getPermission);
         this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
         this.tableDAtaPageCurrent = 1;
 
@@ -376,6 +376,9 @@ export default {
             this.modaDelete = false;
         },
         getPrjidFn(URL,ID){
+            if(Common.getCookie("prjId")){
+                return Promise.resolve(Common.getCookie("prjId"));
+            }
             return defaultAXIOS(URL+ID,{},{timeout:2000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======demand**projectDetail*response+++",response,myData,"======>");

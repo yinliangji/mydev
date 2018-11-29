@@ -1,6 +1,6 @@
 <template>
 	<div class="pageContent">
-        <Card>
+        <Card id="BoxPT">
             <div class="aglieBox">
             	<h3 class="Title"><span>敏捷项目列表</span></h3>
             	<Form ref="formValidate" class="formValidate">
@@ -134,7 +134,7 @@
                             从ITM导入项目 功能制作中，不能点！！！
                         </Button>
 					</div>
-			    	<Table border  ref="selection" :columns="columns" :data="tableData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
+			    	<Table border stripe  ref="selection" :columns="columns" :data="tableData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
                    
 
@@ -208,11 +208,11 @@ export default {
                 this.showError("权限不足，不能有任何动作");
             })
         }
+        
         EVENT.on("USER",(result)=>{
             if(!Common.getCookie("username")){
                 auth_list();
             }
-            auth_list();
         })
         if(Common.getCookie("username")){
             auth_list();
@@ -303,8 +303,11 @@ export default {
                         return h(
                             'a',
                             {
-                                style:{color:'#2d8cf0'},
-                                //domProps:{href:"###"},
+                                //style:{color:'#2d8cf0'},
+                                //attrs:{title:"xxxxx",href:"###"},
+                                //domProps:{innerHTML:"内容",},
+                                "class":{txtBlock:true,txtBlockNone:false},
+                                attrs:{title:params.row.prj_name},
                                 on: {
                                     click: () => {
                                         this.goAgileDetailFn(params.index,params)
@@ -853,6 +856,9 @@ export default {
     width:20%;
     
 
+}
+.ivu-card-body {
+    padding-top:0;
 }
 </style>
 

@@ -91,6 +91,9 @@ CommonRest.restUrl = {
 
     "storyAdd": process.env.BASE_URL + "/userstory/addUserstory/",
     /****express 用户故事列表 post****/
+    "storyAddGet": process.env.BASE_URL + "/userstory/get_select_info/",
+    /****express 添加用户故事获取下拉菜单 get****/
+    
 
     "storyEdit": process.env.BASE_URL + "/userstory/modifyUserstory/",
     /****express 用户故事列表 post****/
@@ -166,6 +169,9 @@ CommonRest.restUrl = {
 
     "userstoryDeleteFile": process.env.BASE_URL + "/agile/deleteFile/",
     /****express 用户业务功能删除文件列表 post****/
+
+    "userstoryDeleteList": process.env.BASE_URL + "/userstory/deleteUserstory/",
+    /****express 用户故事列表删除 get****/
 
 
 

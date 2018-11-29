@@ -36,6 +36,21 @@ let mockData = () => {
     })
 }
 
+
+
+
+
+let menuGetMenu = (val1 = 0, val2 = 0, val3 = 200) => {
+    return Mock.mock({
+        "status": val3,
+        "message": "menuGetMenu xxxxxxx",
+        "data": {
+            data: [],
+        }
+    })
+}
+
+
 let mockData2 = (val1, val2, val3 = 200) => {
     return Mock.mock({
         "status": val3,
@@ -51,17 +66,20 @@ let mockData2 = (val1, val2, val3 = 200) => {
 }
 
 
-
-let menuGetMenu = (val1 = 0, val2 = 0, val3 = 200) => {
-    return Mock.mock({
-        "status": val3,
-        "message": "menuGetMenu xxxxxxx",
-        "data": {
-            data: [],
-        }
-    })
-}
-
+app.all('/json.action', function(req, res) {
+    let resVal = mockData2(req.body.firstName, req.body.lastName, req.body.myStatus);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    //console.log(__dirname)
+    //console.log("res==>",res);
+    if (req.body.firstName == "yin") {
+        res.json(mockData2(req.body.firstName, req.body.lastName, req.body.myStatus));
+    } else {
+        res.json(mockData());
+    }
+    //console.log("res==>",res); 
+    res.end()
+});
 
 
 let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
@@ -72,7 +90,7 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
             "list|3-9": [{
                 "id": 1,
                 "prj_id": 1,
-                "prj_name|5-8": /[a-zA-Z0-9]/,
+                "prj_name|5-148": /[a-zA-Z0-9]/,
                 "manager": /([a-zA-Z]{5,8})\|([a-zA-Z]{5,8})/,
                 "prj_desc": "项目描述",
                 "prj_goal": "项目目标",
@@ -95,23 +113,6 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
        
     })
 }
-
-app.all('/json.action', function(req, res) {
-    let resVal = mockData2(req.body.firstName, req.body.lastName, req.body.myStatus);
-    console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
-    //console.log(__dirname)
-    //console.log("res==>",res);
-    if (req.body.firstName == "yin") {
-        res.json(mockData2(req.body.firstName, req.body.lastName, req.body.myStatus));
-    } else {
-        res.json(mockData());
-    }
-    //console.log("res==>",res); 
-    res.end()
-});
-
-
 
 
 
@@ -175,10 +176,10 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
         "prj_name":"prj_name_xxxxxx",
         "product_name":"product_name_xxxxxxxx",
         "rows|3-5": [{
-            "id": 1,
+            "id|+1": 1,
             "detail_id": 1,
             "userstory_id": 1,
-            "userstory_name|5-8": /[a-zA-Z]/,
+            "userstory_name|5-158": /[a-zA-Z]/,
             "userstory_type|1-3": 1,
             "charger": "xiebei.zh",
             "nick_name":"谢蓓",
@@ -242,6 +243,84 @@ app.all('/userstory/listUserstory/', function(req, res) {
 });
 
 app.all('/userstory/addUserstory/', function(req, res) {
+    let resVal = listUserstoryList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    let _data = 
+        { 
+            status: "success", 
+            message: "ok" ,
+            "prj_name":"敏捷项目0000_xxxxxx",
+            "product_name":"product_name_xxxxxxxx",
+            getReq_fromPrj:[
+                {
+                    comment: 'xxxxx',
+                    id: 1,
+                    prj:250,
+                    prj_tyope:"1",
+                    req_id:"prj_id_xxxxxx",
+                    req_name:"装服务器",
+                    req_submitter:"百某某",
+                    settle_time:"2018-08-05",
+                    status:"0",
+                },
+                {
+                    comment: 'xxxxx',
+                    id: 2,
+                    prj:251,
+                    prj_tyope:"1",
+                    req_id:"req_id_xxxxxx",
+                    req_name:"装服务器1",
+                    req_submitter:"百某某1",
+                    settle_time:"2018-08-05",
+                    status:"0",
+                },
+            ],
+            getSprintsByPrj:[
+                {
+                    "sprint": 25,
+                    "sp_id": 25,
+                    "sp_name": 25,
+                },
+                {
+                    "sprint": 26,
+                    "sp_id": 26,
+                    "sp_name": 26,
+                },
+                {
+                    "sprint": 27,
+                    "sp_id": 27,
+                    "sp_name": 27,
+                },
+            ],
+            userstory_type:[
+                {value:"用户需求",key:"1"},
+                {value:"生产问题",key:"2"},
+                {value:"自主创新",key:"3"},
+            ]
+            ,
+            userstory_status:[
+                {value:"提出",key:"1"},
+                {value:"开发中",key:"2"},
+                {value:"测试",key:"3"},
+                {value:"上线",key:"4"},
+            ],
+            proi:[
+                {value:"高",key:"1"},
+                {value:"中",key:"2"},
+                {value:"低",key:"3"},
+            ],
+
+
+
+
+        }
+    
+    res.json(_data);
+    res.end()
+});
+
+app.all('/userstory/get_select_info/', function(req, res) {
     let resVal = listUserstoryList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
@@ -2464,6 +2543,14 @@ app.all('/agile/deleteFile/', function(req, res) {
     res.json({status: "success",message: "delete_bfunc3 success",});
     res.end()
 });
+
+app.all('/userstory/deleteUserstory/', function(req, res) {
+    res.json({status: "success",message: "delete_list success",});
+    res.end()
+});
+
+
+
 
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {

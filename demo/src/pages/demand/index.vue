@@ -313,8 +313,9 @@ export default {
         console.log("demand--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
-        goUserStory(){
-            this.$router.push('/product')
+        goUserStory(i){
+            Common.SetSession("REQ_ID",this.tableData[i].id)
+            this.$router.push({path: '/product', query: {board: true}})
         },
         toBusiness(i,From){
         	if(From && From == "fromlist"){

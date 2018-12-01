@@ -24,22 +24,41 @@
 				</div>
 			</Menu>	
 		</Header> -->
-		<MyHeaderCont :isgo="false" />
+		<MyHeaderCont :isgo="false" :apptype="apptype" :agileData="agileData" />
 		<div class="header-under-bar"></div>
 	</Layout>
 </template>
 <script>
 import MyHeaderCont from 'header'
+import Store from '@/vuex/store'
 export default {
+	data () {
+        return {
+        	apptype:"app03",
+        	agileData:false,
+        }
+    },
+    computed: {
+        myAgileData() {
+            return this.$store.state["EVENT_EMIT"].emit
+        },
+    },
+    watch:{
+        myAgileData(curVal,oldVal){
+        	this.agileData = curVal
+        },
+    },
+    mounted(){
+    	setTimeout(()=>{
+    		//Store.dispatch('EVENT_EMIT/incrementAsync', {isEmit: true,})
+    	},3000)
+    },
 	components: {
     	MyHeaderCont,
-
-  	}
+  	},
 }
 </script>
 <style lang="less" scoped>
-
-
 .headerBox {
 	position:relative;
 	height:74px;

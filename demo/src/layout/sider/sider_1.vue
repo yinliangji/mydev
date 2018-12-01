@@ -18,13 +18,39 @@
 	</aside>
 </template>
 <script>
+
+import Common from '@/Common';
+const {getPermission} = Common.restUrl;
 export default {
 	name: 'sider_1',
 	data(){
 		return{
-			isShowMngAllBtn:true,
+			isShowMngAllBtn:false,
 		}
-	}
+	},
+	methods:{
+		showError(Err){
+			Common.ErrorShow(ERR,this);
+		},
+		getPermission(params){
+			if(params && Array.isArray(params)){
+				this.isShowMngAllBtn = params.findIndex(n => n == "icdp_projList_mng") > -1 ? true : false
+			}
+
+		},
+	},
+    created(){
+    	console.log("sider_1--created-------");
+    	EVENT.on("SIDER1",(result)=>{
+            if(result && result.permission){
+            	this.getPermission(result.permission)
+            }else{
+            	this.getPermission()
+            }
+        })
+
+        
+    },
 }
 </script>
 <style lang="less" scoped>

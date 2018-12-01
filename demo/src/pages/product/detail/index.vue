@@ -1,87 +1,89 @@
 <template>
-	<div class="pageContent">
-		<goAgile :go="'/product'" :text="'返回用户故事列表'" :TOP="'7'" />
-		<Breadcrumb :style="{margin: '16px 0'}">
+    <div class="pageContent">
+        <goAgile :go="'/product'" :text="'返回用户故事列表'" :TOP="'7'" />
+        <Breadcrumb :style="{margin: '16px 0'}">
             <BreadcrumbItem>首页</BreadcrumbItem>
             <BreadcrumbItem>用户故事</BreadcrumbItem>
             <BreadcrumbItem>用户故事基本信息</BreadcrumbItem>
         </Breadcrumb>
         <Card>
-        	<div class="editBtn">
-	        	<Button 
-	                type="warning" 
-	                @click="editItemFn"
-	                :disabled="authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])" 
-	                class="editBtn"
-	                long
-	                size="small"
+            <div class="editBtn">
+                <Button 
+                    type="warning" 
+                    @click="editItemFn"
+                    :disabled="authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])" 
+                    class="editBtn"
+                    long
+                    size="small"
                     v-show="(TabsCur == 'name1' || TabsCur == 'name3' || TabsCur == 'name4') ? true : false"
-	                >
-	                编辑
-	            </Button>
-	            <Button 
-	                type="success" 
-	                @click="goDevelopmentFn"
-	                :disabled="false" 
-	                class="editBtn2"
-	                long
-	                size="small"
-	                >
-	                任务看板
-	            </Button>
+                    >
+                    编辑
+                </Button>
+                <Button 
+                    type="success" 
+                    @click="goDevelopmentFn"
+                    :disabled="false" 
+                    class="editBtn2"
+                    long
+                    size="small"
+                    >
+                    任务看板
+                </Button>
             </div>
-        	<Tabs :value="TabsCur" type="card" :capture-focus="false" @on-click="tabsHandle" >
-		        <TabPane label="基本信息" name="name1">
-					<div class="baseInfoBox">
-		            	<!-- <h3 class="Title"><span>用户故事基本信息</span></h3> -->
-		            	<div class="tableBox">
-		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
-							  <tbody>
-							  	<tr>
-								  <th width="11%">所属产品</th>
-								  <td width="20%">{{ formValidate.product_name | FALSEINFO}}</td>
-								  <th width="11%">所属项目</th>
-								  <td width="20%" >{{ formValidate.prj_name | FALSEINFO}}</td>
-								  <th width="11%">用户故事名称</th>
-								  <td>{{ formValidate.userstory_name | FALSEINFO}}</td>
-								</tr>
-								<tr>
-								  <th >故事类型</th>
-								  <td >{{ formValidate.userstory_type | FALSEINFO}}</td>
-								  <th >故事状态</th>
-								  <td >{{ formValidate.userstory_status | FALSEINFO}}</td>
-								  <th >优先级</th>
-								  <td>{{ formValidate.proi | FALSEINFO}}</td>
-								</tr>
+            <Tabs :value="TabsCur" type="card" :capture-focus="false" @on-click="tabsHandle" >
+                <TabPane label="基本信息" name="name1">
+                    <div class="baseInfoBox">
+                        <!-- <h3 class="Title"><span>用户故事基本信息</span></h3> -->
+                        <div class="tableBox">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
+                              <tbody>
                                 <tr>
-                                  <th width="11%">所属迭代</th>
-                                  <td width="20%">{{ formValidate.sprint_name | FALSEINFO}}</td>
-                                  <th width="11%">工时(预计)</th>
-                                  <td width="20%" >{{ formValidate.manHours | FALSEINFO}}</td>
-                                  <th width="11%">工时(实际)</th>
-                                  <td>0</td>
+                                  <th width="11%">用户故事名称</th>
+                                  <td width="20%">{{ formValidate.userstory_name | FALSEINFO}}</td>
+                                  <th width="11%">所属项目</th>
+                                  <td  width="20%"><router-link to="/agile/detail">{{ formValidate.prj_name | FALSEINFO}}</router-link></td>
+                                  <th width="11%">所属产品</th>
+                                  <td >{{ formValidate.product_name | FALSEINFO}}</td>
+                                </tr>
+                                <tr>
+                                  <th >责任人</th>
+                                  <td >{{ formValidate.charger | FALSEINFO}}（{{ formValidate.nick_name | FALSEINFO}}）</td>
+                                  <th >故事状态</th>
+                                  <td >{{ formValidate.userstory_status | FALSEINFO}}</td>
+                                  <th >故事类型</th>
+                                  <td >{{ formValidate.userstory_type | FALSEINFO}}</td>
                                 </tr>
 
                                 <tr>
-                                  <th>关联任务(已完成)</th>
-                                  <td>{{ formValidate.complete_mission | FALSEINFO}}</td>
-                                  <th>关联任务(全部)</th>
-                                  <td>{{ formValidate.mission | FALSEINFO}}</td>
+                                  <th >优先级</th>
+                                  <td>{{ formValidate.proi | FALSEINFO}}</td>
+                                  <th width="11%">所属迭代</th>
+                                  <td width="20%">{{ formValidate.sprint_name | FALSEINFO}}</td>
+                                  <th width="11%">工时<br />(实际/预计)</th>
+                                  <td>0 / {{ formValidate.manHours | FALSEINFO}}</td>
+                                </tr>
+
+                                <tr>
                                   <th>故事编号</th>
                                   <td>{{ formValidate.userstory_id | FALSEINFO}}</td>
+                                  <th>关联任务<br />(已完成/全部)</th>
+                                  <td>{{ formValidate.complete_mission | FALSEINFO}} / {{ formValidate.mission | FALSEINFO}}</td>
+                                  <th width="11%">创建时间</th>
+                                  <td>{{ formValidate.created_time | FALSEINFO}}</td>
                                 </tr>
-								<tr>
-								  
-								  <th>故事描述</th>
-								  <td colspan="5" v-html="formValidate.userstory_desc?'<pre>'+formValidate.userstory_desc+'</pre>':'没有数据'"></td>
-								  
-								</tr>
-								
-							  </tbody>
-							</table>
-		            	</div>
-		            </div>
-		        </TabPane>
+                               
+                               
+                                  
+                                  <th>故事描述</th>
+                                  <td colspan="5" v-html="formValidate.userstory_desc?'<pre>'+formValidate.userstory_desc+'</pre>':'没有数据'"></td>
+                                  
+                                </tr>
+                                
+                              </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </TabPane>
                 <TabPane label="需求项分析" name="name2">
                     <div class="baseInfoBox">
                         <!-- <h3 class="Title"><span>需求项信息</span></h3> -->
@@ -171,16 +173,16 @@
                         </div>
                     </div>
                 </TabPane>
-		        <TabPane label="应用设计" name="name3">
-		        	<div class="baseInfoBox">
-		            	<!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
-		            	<div class="tableBox">
-		            		<!-- juzi start -->
+                <TabPane label="应用设计" name="name3">
+                    <div class="baseInfoBox">
+                        <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
+                        <div class="tableBox">
+                            <!-- juzi start -->
                             <AppDesign :userStoryId="userStoryId" />
                             <!-- juzi end -->
-		            	</div>
-		            </div>
-		        </TabPane>
+                        </div>
+                    </div>
+                </TabPane>
                 <TabPane label="测试管理" name="name4">
                     <div class="baseInfoBox">
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
@@ -191,22 +193,22 @@
                         </div>
                     </div>
                 </TabPane>
-		        <TabPane label="用户故事变更记录" name="name5">
-		        	<div class="baseInfoBox">
-		            	<!-- <h3 class="Title"><span>用户故事变更记录</span></h3> -->
-		            	<div class="tableBox">
-		            		<!-- -->
-		            		<div class="tableContBox">
-								<Table border :columns="columns" :data="tableData"  />
-								<div class="pageBox" v-if="tableData.length">
-						    		<Page :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
-						    		<p>总共{{tableDAtaTatol}}条记录</p>
-						    	</div>
-							</div>
-		            		<!-- -->
-		            	</div>
-		            </div>
-		        </TabPane>
+                <TabPane label="用户故事变更记录" name="name5">
+                    <div class="baseInfoBox">
+                        <!-- <h3 class="Title"><span>用户故事变更记录</span></h3> -->
+                        <div class="tableBox">
+                            <!-- -->
+                            <div class="tableContBox">
+                                <Table border :columns="columns" :data="tableData"  />
+                                <div class="pageBox" v-if="tableData.length">
+                                    <Page :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+                                    <p>总共{{tableDAtaTatol}}条记录</p>
+                                </div>
+                            </div>
+                            <!-- -->
+                        </div>
+                    </div>
+                </TabPane>
                 <TabPane label="用户故事附件" name="name6">
                     <div class="baseInfoBox">
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
@@ -215,37 +217,37 @@
                         </div>
                     </div>
                 </TabPane>
-		    </Tabs>
-		  
+            </Tabs>
+          
             <!-- <div class="addModule">
-            	<Row class="tagBox">
-	                <Col span="2">
-	                    <h4>技术模块</h4>
-	                </Col>
-	                <Col span="22" >
-	                    <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose">{{ item}}</Tag>
-	                    <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">添加技术模块</Button>
-	                </Col>
-	            </Row>
-	            <Row class="tagBox">
-	                <Col span="2">
-	                    <h4>业务模块</h4>
-	                </Col>
-	                <Col span="22" >
-	                    <Tag v-for="item in count2" :key="item" :name="item" closable @on-close="handleClose2">{{ item}}</Tag>
-	                    <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem2">添加业务模块</Button>
-	                </Col>
-	            </Row>
-        	</div> -->
-        	
-		</Card>
+                <Row class="tagBox">
+                    <Col span="2">
+                        <h4>技术模块</h4>
+                    </Col>
+                    <Col span="22" >
+                        <Tag v-for="item in count" :key="item" :name="item" closable @on-close="handleClose">{{ item}}</Tag>
+                        <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">添加技术模块</Button>
+                    </Col>
+                </Row>
+                <Row class="tagBox">
+                    <Col span="2">
+                        <h4>业务模块</h4>
+                    </Col>
+                    <Col span="22" >
+                        <Tag v-for="item in count2" :key="item" :name="item" closable @on-close="handleClose2">{{ item}}</Tag>
+                        <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem2">添加业务模块</Button>
+                    </Col>
+                </Row>
+            </div> -->
+            
+        </Card>
 
-		<Enclosure 
-			:isShow="isShowEnclosure"  
-			:addLoading="true" 
-			@enclosureClose="enclosureCloseFn" 
-			:data="EnclosureData"
-		/>
+        <Enclosure 
+            :isShow="isShowEnclosure"  
+            :addLoading="true" 
+            @enclosureClose="enclosureCloseFn" 
+            :data="EnclosureData"
+        />
         <Delpop
             @delpopClose = "delpopCloseFn"
             @delpopEnter = "delpopEnterFn" 
@@ -258,10 +260,10 @@
             :isShow = "buspopIsShow"
             :isLoading = "buspopIsLoading"
         />
-		
+        
 
 
-	</div>
+    </div>
 </template>
 <script>
 import API from '@/api'
@@ -279,9 +281,9 @@ import storyTestCase from '@/components/storyTestCase'
 import AppDesign from '@/pages/appdesign'
 //juzi end
 export default {
-	data () {
+    data () {
         return {
-        	modaAdd: false,
+            modaAdd: false,
             modal_add_loading: true,
 
             technologyORbusiness:true,
@@ -289,40 +291,41 @@ export default {
                 technologyName:"",
                 businessName:"",
             },
-        	count: ["技术模块1", "技术模块2", "技术模块3"],
-        	count2: ["业务模块1", "业务模块2", "业务模块3"],
-        	formValidate: {
-				id: "",
-				userstory_id: "",
-				userstory_name: "",
-				userstory_type: "",
-				charger: "",
-				userstory_status: "",
-				proi: "",
-				manHours: "",
-				mission: "",
-				complete_mission: "",
-				phycics_sys_id:"",
-				actual_online_time:"",
-				charger:"",
-				created_time:"",
-				last_chg_time:"",
-				last_chgr:"",
-				learn_concern:"",
-				plan_online_time:"",
-				proposer:"",
-				proposer_department:"",
-				req_id:"",
-				req_name:"",
-				sprint: "",
-				sprint_name:"",
-				userstory_desc:"",
-				prj_id:"",
-				prj_name:"",
-				prod_id:"",
-				product_name:"",  
+            count: ["技术模块1", "技术模块2", "技术模块3"],
+            count2: ["业务模块1", "业务模块2", "业务模块3"],
+            formValidate: {
+                id: "",
+                userstory_id: "",
+                userstory_name: "",
+                userstory_type: "",
+                charger: "",
+                userstory_status: "",
+                proi: "",
+                manHours: "",
+                mission: "",
+                complete_mission: "",
+                phycics_sys_id:"",
+                actual_online_time:"",
+                charger:"",
+                nick_name:"",
+                created_time:"",
+                last_chg_time:"",
+                last_chgr:"",
+                learn_concern:"",
+                plan_online_time:"",
+                proposer:"",
+                proposer_department:"",
+                req_id:"",
+                req_name:"",
+                sprint: "",
+                sprint_name:"",
+                userstory_desc:"",
+                prj_id:"",
+                prj_name:"",
+                prod_id:"",
+                product_name:"",  
                 AddGroupList:[],//搜索查询
-                bfunc:[],//弹出业务窗口      		
+                bfunc:[],//弹出业务窗口           
             },
             userstory_typeList:[],
             userstory_statusList:[],
@@ -336,7 +339,7 @@ export default {
             tableDAtaTatol:0,
             tableDAtaPageLine:5,
             columns: [
-	        	{
+                {
                     title: '状态',
                     key: 'userstory_status',
                     align: 'center'
@@ -363,7 +366,7 @@ export default {
             //--业务功能列表开始
             tableData2: [],
             columns2: [
-	        	{
+                {
                     title: '业务编号',
                     key: 'bfunc_id',
                     align: 'center'
@@ -529,27 +532,27 @@ export default {
         }
     },
     mounted(){
-    	Common.UserstorySession(Common,this);
+        Common.UserstorySession(Common,this);
 
-    	this.getPermissionFn(getPermission)
-    	let detailID = Common.GETdetail_id(this,Common)
-    	let ID = Common.GETID(this,Common)
-    	if(detailID && ID){
+        this.getPermissionFn(getPermission)
+        let detailID = Common.GETdetail_id(this,Common)
+        let ID = Common.GETID(this,Common)
+        if(detailID && ID){
 
-    		//let _type = this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
-	    	//let _status = this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
-	    	let _proi = this.storyGetConditionFn(storyGetCondition,"proi",ID);
+            //let _type = this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
+            //let _status = this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
+            let _proi = this.storyGetConditionFn(storyGetCondition,"proi",ID);
 
-	    	Promise.all([_proi]).then((REP)=>{
-	    		this.storyGetDetailFn(storyGetDetail,detailID).then((TASKID)=>{
+            Promise.all([_proi]).then((REP)=>{
+                this.storyGetDetailFn(storyGetDetail,detailID).then((TASKID)=>{
                     //wy start
                     this.copydata(this.storyTestCaseData,this.formValidate);
                     //wy end
                     //juzi start
                     this.userStoryId = this.formValidate.userstory_id;
-	    			//juzi end
+                    //juzi end
                     this.getMissionChangeFn(getMissionChange,TASKID,1,this.tableDAtaPageLine);
-	    			this.getMissionChangeFn2(userstoryGetBus,TASKID,1,this.tableDAtaPageLine2);
+                    this.getMissionChangeFn2(userstoryGetBus,TASKID,1,this.tableDAtaPageLine2);
 
                     this.viewBusData(userstoryListBusfunc).then(()=>{
                         this.tableData3Length = this.tableData3.length;
@@ -560,17 +563,17 @@ export default {
 
 
 
-	    		},(error)=>{
-	    			console.log(error)
-	    			this.showError(error)
-	    		})
-	    	},(ERR)=>{
-	    		console.log(ERR)
-	    		this.showError("没有 userstory_type,userstory_status,proi 其中之一")
-	    	})
-    	}else{
-    		this.$router.push('/product')
-    	}
+                },(error)=>{
+                    console.log(error)
+                    this.showError(error)
+                })
+            },(ERR)=>{
+                console.log(ERR)
+                this.showError("没有 userstory_type,userstory_status,proi 其中之一")
+            })
+        }else{
+            this.$router.push('/product')
+        }
 
     },
     beforecreated(){
@@ -915,25 +918,25 @@ export default {
             this.TabsCur = name;
         },
         //tabs -end
-    	//业务功能列表-start -- 废弃
+        //业务功能列表-start -- 废弃
         
-    	enclosureCloseFn(val){
-    		this.isShowEnclosure = val;
-    	},
-    	openEnclosure(i){
-    		this.isShowEnclosure = true;
-    		this.EnclosureData = JSON.stringify(this.tableData2[i])
-    	},
-    	getMissionChangeFn2(URL = "",userstory_id = "",page = "",limit = "",data = ""){
+        enclosureCloseFn(val){
+            this.isShowEnclosure = val;
+        },
+        openEnclosure(i){
+            this.isShowEnclosure = true;
+            this.EnclosureData = JSON.stringify(this.tableData2[i])
+        },
+        getMissionChangeFn2(URL = "",userstory_id = "",page = "",limit = "",data = ""){
             defaultAXIOS(URL,{prj_id:this.formValidate.prj_id,req_id:this.formValidate.req_id,page,per_page:limit,data},{timeout:5000,method:'get'})
             .then((response) => {
                 let myData = response.data;
                 console.log("<======product userstoryGetBus***",response,myData,"======>");
                 if(myData.status == "success"){
-                	this.tableData2 = myData.data;
-                	this.tableDAtaTatol2 = myData.total;
+                    this.tableData2 = myData.data;
+                    this.tableDAtaTatol2 = myData.total;
                 }else{
-                	this.showError(URL+"|"+error);
+                    this.showError(URL+"|"+error);
                 }
             })
             .catch( (error) => {
@@ -941,23 +944,23 @@ export default {
                 this.showError(error);
             });
         },
-    	changeCurrentPage2(i) {
-    		let TASKID = this.formValidate.id
+        changeCurrentPage2(i) {
+            let TASKID = this.formValidate.id
             this.getMissionChangeFn2(userstoryGetBus,TASKID,i,this.tableDAtaPageLine2)
         },
         changePageSize2(i) {
         },
         //业务功能列表-end
-    	goDevelopmentFn () {
+        goDevelopmentFn () {
             this.$router.push({path: '/development', query: {board: true,us_name:this.formValidate.id}});
         },
-    	changeCurrentPage(i) {
-    		let TASKID = this.formValidate.id
+        changeCurrentPage(i) {
+            let TASKID = this.formValidate.id
             this.getMissionChangeFn(getMissionChange,TASKID,i,this.tableDAtaPageLine)
         },
         changePageSize(i) {
         },
-    	getMissionChangeFn(URL = "",userstory_id = "",page = "",limit = "",data = ""){
+        getMissionChangeFn(URL = "",userstory_id = "",page = "",limit = "",data = ""){
             defaultAXIOS(URL,{userstory_id,page,limit,data},{timeout:5000,method:'get'})
             .then((response) => {
                 let myData = response.data;
@@ -970,13 +973,13 @@ export default {
                 this.showError(error);
             });
         },
-    	authIs(KEY){
+        authIs(KEY){
             return Common.auth(this,KEY)
         },
         getPermissionFn(URL){
             Common.GetPermission(defaultAXIOS,this,URL);
         },
-    	editItemFn(){
+        editItemFn(){
             let _query = {
                 fromEdit:true,
                 DATA: JSON.stringify(this.GetDetail)
@@ -994,37 +997,37 @@ export default {
 
             }
             
-    	},
-		showError(ERR){
-    		Common.ErrorShow(ERR,this);
-    	},
-     	storyGetDetailFn(URL = "",detail_id){
+        },
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
+        },
+        storyGetDetailFn(URL = "",detail_id){
             return defaultAXIOS(URL,{detail_id},{timeout:5000,method:'get'})
             .then((response) => {
                 let myData = response.data;
                 console.log("<======product detail***response+++",response,myData,"======>");
 
                 if(Object.getOwnPropertyNames(myData).length >2){
-                	this.GetDetail = myData;
-                	for(let i in myData){
-                		if(i == "proi"){
-                			//this.formValidate[i] = proiFn(myData[i],i)
-                			this.formValidate[i] = Common.ProiFn(myData[i],i)
-                		}else if(i == "userstory_type"){
-                			//this.formValidate[i] = typeFn(myData[i],i)
-                			this.formValidate[i] = Common.TypeFn(myData[i],i)
-                		}else if(i == "userstory_status"){
-                			//this.formValidate[i] = statusFn(myData[i],i)
-                			this.formValidate[i] = Common.StatusFn(myData[i],i)
-                		}
-                		else{
-                			this.formValidate[i] = myData[i]
-                		}
-                	}
-                	return Promise.resolve(myData.id)
+                    this.GetDetail = myData;
+                    for(let i in myData){
+                        if(i == "proi"){
+                            //this.formValidate[i] = proiFn(myData[i],i)
+                            this.formValidate[i] = Common.ProiFn(myData[i],i)
+                        }else if(i == "userstory_type"){
+                            //this.formValidate[i] = typeFn(myData[i],i)
+                            this.formValidate[i] = Common.TypeFn(myData[i],i)
+                        }else if(i == "userstory_status"){
+                            //this.formValidate[i] = statusFn(myData[i],i)
+                            this.formValidate[i] = Common.StatusFn(myData[i],i)
+                        }
+                        else{
+                            this.formValidate[i] = myData[i]
+                        }
+                    }
+                    return Promise.resolve(myData.id)
                 }else{
-                	return Promise.reject("没有数据");
-                	//this.showError("没有数据");
+                    return Promise.reject("没有数据");
+                    //this.showError("没有数据");
                 }
 
             })
@@ -1036,23 +1039,23 @@ export default {
         },
         storyGetConditionFn(URL,condition,prj_id){
 
-        	return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","proi"]);
+            return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","proi"]);
 
-			// return Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id).then((D)=>{
-			// 	return Promise.resolve("resolve")
-			// },(E)=>{
-			// 	return Promise.reject("reject");
-			// });
+            // return Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id).then((D)=>{
+            //  return Promise.resolve("resolve")
+            // },(E)=>{
+            //  return Promise.reject("reject");
+            // });
         },        
     },
     components: {
-		Enclosure,
+        Enclosure,
         Trans,
         Delpop,
         Buspop,
         storyTestCase,
         AppDesign,
-	},
+    },
     watch:{
         //查询搜索开始
         "formValidate.AddGroupList"(curVal,oldVal){
@@ -1129,19 +1132,19 @@ export default {
     padding-top: 0;
 }
 .addModule{
-	padding-top:30px;
-	padding-bottom:30px;
+    padding-top:30px;
+    padding-bottom:30px;
 }
 .tagBox {
-	padding-bottom:30px;
+    padding-bottom:30px;
 
 }
 h4{
-	font-size:14px;
-	color:#495060;
-	font-weight: normal;
-	height:26px;
-	line-height: 26px;
+    font-size:14px;
+    color:#495060;
+    font-weight: normal;
+    height:26px;
+    line-height: 26px;
 }
 .editBtn{
     position:absolute;
@@ -1158,9 +1161,9 @@ h4{
     width: 62px;
 }
 .pageBox {
-	padding-bottom:20px;
-	padding-top:20px;
-	overflow: hidden;
+    padding-bottom:20px;
+    padding-top:20px;
+    overflow: hidden;
 }
 .ivu-tabs {
     //overflow:inherit;

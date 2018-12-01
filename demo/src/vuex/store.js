@@ -101,11 +101,35 @@ const module_loginSave = {
 	},
 }
 
+const module_EMIT = {
+	namespaced: true,
+	state:{
+		emit:false,
+	},
+	mutations:{
+	    increment (state,payload) {
+	        state.emit = payload.Msg;
+	    }
+	},
+	getters:{
+		getFn:state=>{return state.emit},
+		getFn1:state=>{return state.emit},
+		getFns:(state, getters) => {return getters},
+
+	},
+	actions:{
+		incrementAsync (context,{isEmit}) {
+			context.commit({type: 'increment',Msg:isEmit})
+		}
+	},
+}
+
 export default new Vuex.Store({
 	modules: {
 	    IS_LOADING:module_globalLoading,
 	    IS_PAGELOADING:module_pageLoading,
 	    ADD_DATA_TEST:module_testAdd,
 	    LOGIN_SAVE:module_loginSave,
+	    EVENT_EMIT:module_EMIT,
   	}
 });

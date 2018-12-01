@@ -127,6 +127,7 @@
 								<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
 								@click="showTask" class="cursor">
 							</Col>
+							<!--
 							<Col span="1" v-if="currentView == 'kanbanboard'">
 								<span class="high">高</span>
 							</Col>
@@ -136,6 +137,7 @@
 							<Col span="1" v-if="currentView == 'kanbanboard'">
 								<span class="low">低</span>
 							</Col>
+							-->
 						</Row>
 					</div>
 
@@ -873,10 +875,24 @@ export default {
 			let _myAllSession = Common.GetSession("allSession");
 		    this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
 
+
+
 		    	
 		    	
 		    	if(!_myAllSession || (_myAllSession && !JSON.parse(_myAllSession).hasOwnProperty("sprint"))){
 		    		this.formValidate.sprint = sprint+"";
+		    	}
+
+		    	if(Common.GetSession("REQ_ID")){
+		    		this.formValidate.req_id = Common.GetSession("REQ_ID") + "";
+		    		this.formValidate.sprint = "";
+		    		setTimeout(()=>{
+		    			this.optionSession();
+		    			this.isShowMoreShow = true;
+		    		},350)
+
+		    		
+
 		    	}
 
 		    	this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent") - 0 : 1;
@@ -1110,12 +1126,16 @@ export default {
             }
             this.$refs.formValidate.resetFields();
         },
+        optionSession(){
+        	Common.RemoveSession("allSession");
+			Common.GetSession("userstorySerchTemp") && Common.SetSession("userstorySerch",Common.GetSession("userstorySerchTemp")) ;
+			Common.RemoveSession("userstorySerchTemp");
+
+        },
 		serchAll(){
 			let ID = this.getID();
-
-			Common.RemoveSession("allSession");
-			Common.GetSession("userstorySerchTemp") && Common.SetSession("userstorySerch",Common.GetSession("userstorySerchTemp"));
-			Common.RemoveSession("userstorySerchTemp");
+			this.optionSession();
+			Common.RemoveSession("REQ_ID");
 
 			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
             this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
@@ -1157,18 +1177,26 @@ export default {
 
                 	let reqArr2 = Array.from(new Set(reqArr));
                 	let checkreqName = (val)=>{
-
-                		let _temp = this.req_idList.find((item)=>{
-                			return val == item.value
-                		})
-                		return {text:_temp.label,groupId:val+""}
+                		let _temp
+                		if(this.req_idList){
+                			_temp = this.req_idList.find((item)=>{
+	                			return val == item.value
+	                		})
+	                		if(_temp && _temp.label){
+	                			return {text:_temp.label,groupId:val+""}
+	                		}else{
+	                			return false;
+	                		}
+                		}else{
+                			return false;
+                		}
                 	}
                 	this.groupList = [];
                 	this.groupList.push({text:"所属需求项"});
                 	for(let k=0;k<reqArr2.length;k++){
-                		this.groupList.push(checkreqName(reqArr2[k]))
+                		let _CN = checkreqName(reqArr2[k]);
+                		if(_CN){this.groupList.push(_CN)}
                 	}
-	            
 
 	            	let _arr = [];
 					let _Obj = {};

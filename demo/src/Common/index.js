@@ -1047,8 +1047,9 @@ export default class Common extends Utils {
     }
 
     //获取权限--不通用
-    static GetPermission(FUN,that,URL,params = {}){
-    	return FUN(URL,{username:super.getCookie("username")},{timeout:20000,method:'get'}).then((response) => {
+    static GetPermission(FUN,that,URL,params){
+      let _params = params ? params : {username:super.getCookie("username")}
+    	return FUN(URL,_params,{timeout:20000,method:'get'}).then((response) => {
 			let myData = response.data;
 			console.log("<======agile getPermission***response+++",response,myData,"======>");
 			if(myData.status =="success"){
@@ -1441,6 +1442,15 @@ export default class Common extends Utils {
           return Promise.reject(error);
       }); 
     }
+    //去null
+    static replaceNullFn(val){
+      if(val === null || val === "null" || val === undefined ||  val === "undefined" ||  val === false ||  val === "false"){
+        return "";
+      }else{
+        return val || "";
+      }
+    }
+    
     
 
     
@@ -1471,7 +1481,7 @@ function fileterStr2(STR){
   let strArr = "";
   if(STR){
     if(STR.indexOf("-") != -1){
-      strArr = STR.split("-")[0].indexOf("(") ? STR.split("-")[0]+")" : STR.split("-")[0]+"";
+      strArr = STR.split("-")[0].indexOf("(") != -1 ? STR.split("-")[0]+")" : STR.split("-")[0]+"";
     }else{
       return STR  
     }

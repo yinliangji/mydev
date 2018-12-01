@@ -14,6 +14,7 @@
     </Layout>
 </template>
 <script>
+
 import MyHeader from '@/layout/header'
 import Mysider from '@/layout/sider'
 import MyFooter from '@/layout/footer'

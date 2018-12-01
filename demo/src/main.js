@@ -90,6 +90,28 @@ Vue.prototype.getCookie = function(cname) {
     return "";
 }
 
+window.EVENT = {
+  on(eventName,callback){
+    if(!this.handles){
+      this.handles = {};
+    }
+    if(!this.handles[eventName]){
+      this.handles[eventName] = [];
+    }
+    this.handles[eventName].push(callback)
+  },
+  emit(eventName){
+    if(this.handles[arguments[0]]){
+      for(var i=0;i<this.handles[arguments[0]].length;i++){
+        this.handles[arguments[0]][i](arguments[1])
+      }
+    }
+  }
+}
+EVENT.on("USER",(result)=>{
+  console.log(result,"<=====***====EVENT.on USER")
+})
+
 if (process.env.NODE_ENV === 'production' && window.location.href.indexOf("debug=true") != -1) {
     console.log = function () { }
 }

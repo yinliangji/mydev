@@ -202,22 +202,36 @@ export default {
     mounted(){
 
         let auth_list = ()=>{
-            this.getPermissionFn(getPermission).then(()=>{
+            this.getPermissionFn(getPermission).then((result)=>{
+
                 this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+                setTimeout(()=>{
+                    EVENT.emit("SIDER1",result);
+                },500)
             },()=>{
                 this.showError("权限不足，不能有任何动作");
             })
         }
         
         EVENT.on("USER",(result)=>{
-            if(!Common.getCookie("username")){
+            if(Common.getCookie("username")){
+                console.log('EVENT.on("USER",(result) -- auth_list()');
                 auth_list();
             }
         })
         if(Common.getCookie("username")){
+            console.log('直接执行 auth_list()');
             auth_list();
+        }else{
+            Store.dispatch('EVENT_EMIT/incrementAsync', {isEmit: true,})
         }
         this.tableDAtaPageCurrent = 1;
+
+        
+        
+
+        
+
         /* 搜索条件 以后加上
         this.byRoleFn(byRole,"icdp_projManager");
         this.byRoleFn(byRole,"icdp_agileCoach");

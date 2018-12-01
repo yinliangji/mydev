@@ -38,7 +38,34 @@
   export default {
     components: {Checkbox},
     name: "myhead",
-    props:['isgo'],
+    //props:['isgo',""],
+    props: {
+        isgo: {
+            isgo: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
+        apptype: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
+        agileData: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
+        
+    },
+    watch:{
+        agileData() {
+            console.log(this.agileData,"header-agileData-头部")
+            this.EVENTUSER();
+        },
+    },
     data(){
       return{
         header_position:'headFix',
@@ -89,22 +116,18 @@
         console.log("login_save==>",parm);
         setCookie("username","xiebei.zh");
         setCookie("nickname","%E8%B0%A2%E8%93%93");
-
-
-        setTimeout(()=>{
-          if(window.EVENT){
-            EVENT.emit("USER",{username:"xiebei.zh",nickname:"%E8%B0%A2%E8%93%93"});
-            console.log(JSON.stringify(window.EVENT),"<==========EVENT.emit")
-          }
-        },500)
-        
-        
       }).catch((error)=>{
 
       })
 
     },
     methods:{
+      EVENTUSER(){
+          if(window.EVENT){
+            EVENT.emit("USER",{username:"xiebei.zh",nickname:"%E8%B0%A2%E8%93%93"});
+            console.log(JSON.stringify(window.EVENT),"<==========EVENT.emit")
+          }
+      },
       toLogin:function () {
         this.ruleForm = {};
         this.getCookie();

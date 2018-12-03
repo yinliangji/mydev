@@ -945,8 +945,11 @@ export default {
 
             let _createModule = Array.isArray(this.formValidate.createModule) ? this.formValidate.createModule.join(_join) : this.formValidate.createModule;
             
-            let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
-            let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
+            // let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
+            // let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
+            let _start_time = Common.DateFormat(Common,this.formValidate.start_time);
+            let _end_time = Common.DateFormat(Common,this.formValidate.end_time);
+             
 
             //let _proj_role = JSON.stringify(Common.CheeckRoleVal(this,Common.objInArr(this.formValidate.AddGroupList)));
 
@@ -1026,6 +1029,8 @@ export default {
                 if(valid){
                     this.submitAddData();
                     this.modal_add_loading = true;
+                }else{
+                    Common.CommonWarning(this,"有必选的还未填写！")
                 }
             })
         },

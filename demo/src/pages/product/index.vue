@@ -871,16 +871,14 @@ export default {
 		cardpopEnter(){
 			this.cardpop = false;
 		},
-		getInfoFn(ID){
+		getInfoFn(ID,isShowList){
 			let _myAllSession = Common.GetSession("allSession");
 		    this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
-
-
-
-		    	
 		    	
 		    	if(!_myAllSession || (_myAllSession && !JSON.parse(_myAllSession).hasOwnProperty("sprint"))){
-		    		this.formValidate.sprint = sprint+"";
+		    		if(!isShowList){
+		    			this.formValidate.sprint = sprint+"";
+		    		}
 		    	}
 
 		    	if(Common.GetSession("REQ_ID")){
@@ -890,9 +888,6 @@ export default {
 		    			this.optionSession();
 		    			this.isShowMoreShow = true;
 		    		},350)
-
-		    		
-
 		    	}
 
 		    	this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent") - 0 : 1;
@@ -1357,7 +1352,7 @@ export default {
 			this.currentView = CurView;
 			Common.SetSession("CurView",CurView);
 			setTimeout(()=>{
-				this.getInfoFn(this.getID())
+				this.getInfoFn(this.getID(),"showList")
 			},350)
 		},
 		showTask(){
@@ -1365,7 +1360,7 @@ export default {
 			this.currentView = CurView;
 			Common.SetSession("CurView",CurView);
 			setTimeout(()=>{
-				this.getInfoFn(this.getID())
+				this.getInfoFn(this.getID(),"showTask")
 			},350)
 		},
 	}

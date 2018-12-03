@@ -1407,7 +1407,7 @@ export default class Common extends Utils {
       }
     }
     //瞬间弹出信息
-    static CommonMessage(that,Msg){
+    static CommonMessage(that,Msg="！！！"){
       that.$Message.config({
           top: 250,
           duration: 3
@@ -1415,12 +1415,21 @@ export default class Common extends Utils {
       that.$Message.success(Msg);
     }
     //瞬间弹出错误
-    static CommonError(that,Msg){
+    static CommonError(that,Msg="错误"){
       that.$Message.config({
           top: 250,
           duration: 3
       });
       that.$Message.error(Msg);
+    }
+    //瞬间弹出提示
+    static CommonWarning(that,Msg="错误"){
+      that.$Message.config({
+          top: 250,
+          duration: 3,
+          closable:true,
+      });
+      that.$Message.warning(Msg);
     }
     //获取业务功能附件列表
     static GetFilesList(that,FUN,URL,_params = {}){
@@ -1444,12 +1453,17 @@ export default class Common extends Utils {
     }
     //去null
     static replaceNullFn(val){
-      if(val === null || val === "null" || val === undefined ||  val === "undefined" ||  val === false ||  val === "false"){
+      if(val === null || val === "null" || val === undefined ||  val === "undefined" ||  val === false ||  val === "false" || val === NaN || val === "NaN" || val === "NaN-aN-aN"){
         return "";
       }else{
         return val || "";
       }
     }
+    //判断是否时间 时间格式化
+    static DateFormat(_Common,date){
+      return _Common.replaceNullFn(date) ? new Date(_Common.replaceNullFn(date)).Format("yyyy-MM-dd") : "";
+    }
+
     
     
 

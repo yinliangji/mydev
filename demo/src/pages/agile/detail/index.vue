@@ -461,11 +461,11 @@ export default {
                 let myData = response.data;
                 console.log("<======detail***fileDown+++",response,myData,"======>");
                 
-                if(Array.isArray(myData.files)){
+                if(myData && myData.files && Array.isArray(myData.files)){
                     this.tableData = myData.files
                     this.tableDAtaTatol = myData.total;
                 }else{
-                    this.showError("不是数组");
+                    this.showError(URL+"_错误或者没有数据");
                 }
 
               

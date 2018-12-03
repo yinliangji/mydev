@@ -688,6 +688,8 @@ export default {
                 if(valid){
                     this.submitAddData();
                     this.modal_add_loading = true;
+                }else{
+                    Common.CommonWarning(this,"有必选的还未填写！")
                 }
             })
         },

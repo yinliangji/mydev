@@ -51,7 +51,7 @@ Vue.filter('FALSEINFO', value => { // 交易明细
         if(value === 0 || value === "0"){
             return value
         }else{
-            return "没有数据"
+            return ""
         }
         
     } else {

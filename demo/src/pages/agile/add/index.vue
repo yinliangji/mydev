@@ -331,7 +331,7 @@ export default {
         },
         "formPartValidate.addGroupList"(curVal,oldVal){
             if(curVal && curVal.length){
-                this.publishUserFn(publishUser,{},curVal);
+                this.publishUserFn(publishUser,{username:Common.getCookie("username")},curVal);
             }
         },
 
@@ -728,6 +728,7 @@ export default {
                 }
 
                 let _ARRobj = {}
+                
                 if(myData.nick_name && myData.user_name){
                     _ARRobj.label = myData.nick_name
                     _ARRobj.value = myData.user_name
@@ -927,6 +928,8 @@ export default {
             let _phySystem = JSON.stringify(_System[1].member.map((item)=>{return item.value}));
             let _proj_role = JSON.stringify(_proj_role_);
 
+            let _username = Common.getCookie("username");
+
 
             //let _proj_role = JSON.stringify(Common.objInArr(this.formValidate.AddGroupList));
 
@@ -949,6 +952,7 @@ export default {
                 pid:this.formValidate.pid,
                 logicSystem:_logicSystem,//子系统
             	phySystem:_phySystem,//子系统
+                username:_username,
 
 
 

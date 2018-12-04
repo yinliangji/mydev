@@ -1724,7 +1724,7 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
             "icdp_prjrequirement_view",
             "icdp_prjrequirement_edit",
         ],
-        identity:"SuperAdmin",
+        identity:"PlainAdmin",
         //PlainAdmin
         //SuperAdmin
         //Admin
@@ -1985,7 +1985,7 @@ app.all('/module/listModule/', function(req, res) {
 });
 
 app.all('/auth/publishUser/', function(req, res) {
-    res.json({nick_name:"谢蓓",user_name:"xiebei.zh"});
+    res.json({nick_name:"谢蓓-建行",user_name:"xiebei.zh"});
     res.end()
 });
 

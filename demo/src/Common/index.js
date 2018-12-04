@@ -1056,10 +1056,13 @@ export default class Common extends Utils {
 				if(myData.prj_permission && Array.isArray(myData.prj_permission) && myData.prj_permission.length){
 					that.prj_permission = myData.prj_permission;
 					that.identity = myData.identity
+          
 				}else if(myData.permission && Array.isArray(myData.permission) && myData.permission.length){
 					that.prj_permission = myData.permission;
 					that.identity = myData.identity
+          
 				}
+
 				return Promise.resolve(myData)
 			}else if(myData.status =="redirect"){
 				toLoginPage(that,myData.status);

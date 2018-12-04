@@ -230,7 +230,7 @@ export default {
             this.initAlertTxt();
             let tempData = {
                 prj_id:group[0],
-                prj_name:(obj.groupListtemp.find(item=>item.value == group[1]) || {}).prj_name || "",
+                prj_name:(obj.groupListtemp.find(item=>item.value == group[0]) || {}).prj_name || "",
             }
             defaultAXIOS(importITM,tempData,{timeout:5000,method:'post'}).then((response) => {
                 let myData = response.data;

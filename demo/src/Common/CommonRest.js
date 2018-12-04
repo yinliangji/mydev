@@ -58,7 +58,10 @@ CommonRest.restUrl = {
     "fileDownList": process.env.BASE_URL + "/uploadfiles/getuploadedfiles/",
     /****express 敏捷项目详情文件下载列表 get****/
 
-    "fileUpload": process.env.BASE_URL + "/uploadfiles/upload_file/",
+    //"fileUpload":process.env.BASE_URL + "/uploadfiles/upload_file/",
+    //"fileUpload":process.env.BASE_ZUUL_URL + "/uploadfiles/upload_file/",
+    //"fileUpload":addZUUL(process.env.BASE_ZUUL_URL + "/uploadfiles/upload_file/") ,
+    "fileUpload":addZUUL(process.env.BASE_URL + "/uploadfiles/upload_file/"),
     /****express 敏捷项目详情文件上传 get****/
 
     "fileDelete": process.env.BASE_URL + "/uploadfiles/delete_file/",
@@ -158,7 +161,10 @@ CommonRest.restUrl = {
     "userstoryadd_bfunc2": process.env.BASE_URL + "/agile/add_bfunc2/",
     /****express 添加用户业务功能新建第二步获取 post****/
 
-    "userstoryUploadFile": process.env.BASE_URL + "/agile/uploadFile",
+    //"userstoryUploadFile":process.env.BASE_URL + "/agile/uploadFile",
+    //"userstoryUploadFile":process.env.BASE_ZUUL_URL + "/agile/uploadFile",
+    //"userstoryUploadFile":addZUUL(process.env.BASE_ZUUL_URL + "/agile/uploadFile") ,
+    "userstoryUploadFile":addZUUL(process.env.BASE_URL + "/agile/uploadFile") ,
     /****express 添加用户业务功能上传文件 get****/
 
     "userstorydelete": process.env.BASE_URL + "/agile/delete_bfunc3/",
@@ -209,10 +215,8 @@ CommonRest.restUrl = {
     "reqDelect": process.env.BASE_URL + "/req/deleteReq/",
     /****express 需求项目列表 get****/
 
-
-
-
 }
+
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);
 
 CommonRest.UA = navigator.userAgent.toLowerCase();
@@ -221,4 +225,17 @@ CommonRest.browser = {
     "isIOS": !!CommonRest.UA.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/ig),
     "isAndroid": /Android/ig.test(CommonRest.UA) || /linux/ig.test(CommonRest.UA),
     "isQQ": /\sQQ/ig.test(CommonRest.UA),
+}
+
+
+function addZUUL(val){
+    if(val.indexOf("127.0.0.1:9090") != -1 || val.indexOf("127.0.0.1:8000") != -1){
+        return val
+    }else if(val.indexOf("/zuul/") != -1){
+        return val
+    }else if(val.indexOf("/ag_e") != -1){
+        return val.replace("/ag_e",process.env.BASE_ZUUL_URL)
+    }else{
+       return val 
+    }
 }

@@ -149,6 +149,8 @@ export default {
             this.$refs.formValidate.validate((val)=>{
                 if(val){
                    this.nextStep();
+                }else{
+                    Common.CommonWarning(this,"有必选的还未填写！")
                 }
             })
             // setTimeout(()=>{
@@ -266,6 +268,8 @@ export default {
                 if(val){
                     this.submitAddData();
                     this.modal_add_loading = true;
+                }else{
+                    Common.CommonWarning(this,"有必选的还未填写！")
                 }
             })
         },

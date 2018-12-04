@@ -47,7 +47,7 @@
                                 </tr>
                                 <tr>
                                   <th >责任人</th>
-                                  <td >{{ formValidate.charger | FALSEINFO}}（{{ formValidate.nick_name | FALSEINFO}}）</td>
+                                  <td >{{ formValidate.nick_name | FALSEINFO}}</td>
                                   <th >故事状态</th>
                                   <td >{{ formValidate.userstory_status | FALSEINFO}}</td>
                                   <th >故事类型</th>
@@ -75,7 +75,7 @@
                                
                                   
                                   <th>故事描述</th>
-                                  <td colspan="5" v-html="formValidate.userstory_desc?'<pre>'+formValidate.userstory_desc+'</pre>':'没有数据'"></td>
+                                  <td colspan="5" v-html="formValidate.userstory_desc?'<pre>'+formValidate.userstory_desc+'</pre>':''"></td>
                                   
                                 </tr>
                                 

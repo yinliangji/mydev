@@ -54,11 +54,11 @@
 								
 								<tr>
 								  <th>项目描述</th>
-								  <td colspan="5" v-html="formValidate.prj_desc?'<pre>'+formValidate.prj_desc+'</pre>':'没有数据'"></td>
+								  <td colspan="5" v-html="formValidate.prj_desc?'<pre>'+formValidate.prj_desc+'</pre>':''"></td>
 								</tr>
 								<tr>
 								  <th>项目目标</th>
-								  <td colspan="5" v-html="formValidate.prj_goal?'<pre>'+formValidate.prj_goal+'</pre>':'没有数据'"></td>
+								  <td colspan="5" v-html="formValidate.prj_goal?'<pre>'+formValidate.prj_goal+'</pre>':''"></td>
 								</tr>
 							  </tbody>
 							</table>
@@ -258,12 +258,12 @@ export default {
                             'a',
                             {
                                 style:{color:'#2d8cf0'},
-                                domProps:{href:downFile+params.row.url},
-                                // on: {
-                                //     click: () => {
-                                //         this.goAgileDetailFn(params.index,params)
-                                //     }
-                                // }
+                                //domProps:{href:downFile+params.row.url},
+                                on: {
+                                    click: () => {
+                                        this.listFileDown(params)
+                                    }
+                                }
                             },
                             params.row.fileName
                         );
@@ -363,6 +363,27 @@ export default {
     },
     
     methods: {
+        //下载文件 start
+        listFileDown(params){
+            let URL = downFile + params.row.url;
+            let fileName = params.row.fileName;
+            let param = {
+                key:params.row.fileId,
+                filename:fileName,
+            }
+            defaultAXIOS(URL,{param},{timeout:2000,method:'get',responseType:"blob"}).then((response) => {
+                let myData = response.data;
+                console.log("<======detail***文件下载+++",response,myData,"======>");
+                let blob = new Blob([myData.data],{type:"application/vnd.ms-excel"});
+                let link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = fileName;
+                link.click();
+            }).catch( (error) => {
+                this.showError(error);
+            });
+        },
+        //下载文件 end
         del () {
             this.modal_loading = true;
             
@@ -504,12 +525,14 @@ export default {
     		Common.ErrorShow(ERR,this);
     	},
      	tableDataAjaxFn(URL = "",ID = ""){
+
             return defaultAXIOS(URL+ID,{},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======detail***response+++",response,myData,"+++detail***response======>");
                 let _temp = false;
                 this.table=[];
                 this.HTML = "";
+
                 if(myData.data && myData.data.id){
                 	for(var I in this.formValidate){
                         if(I == "logic_sys_id" || I == "logic_sys_name" || I == "physics_sys_id" || I == "physics_sys_name"){
@@ -540,8 +563,7 @@ export default {
                     Common.ArrDelVal(_arr);
 
                     if(_arr.length){
-                        return
-                        this.listModuleFn(listModule,{},_arr);
+                        //this.listModuleFn(listModule,{},_arr); //不要删
                     }else{
                         
                     }

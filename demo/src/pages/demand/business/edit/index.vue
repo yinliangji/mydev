@@ -87,7 +87,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryedit_bfunc2,userstoryUploadFile,userstoryFilesList,userstoryDeleteFile } = Common.restUrl;
+const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryedit_bfunc2,userstoryUploadFile,userstoryFilesList,userstoryDeleteFile,downFile} = Common.restUrl;
 import Quill from "@/components/quill";
 import Delpop from '@/components/delectAlert'
 export default {
@@ -156,10 +156,10 @@ export default {
                             'a',
                             {
                                 style:{color:'#2d8cf0'},
-                                domProps:{href:params.row.url,target:"_blank"},
+                                //domProps:{href:params.row.url,target:"_blank"},
                                 on: {
                                     click: () => {
-                                        
+                                        this.listFileDown(params)
                                     }
                                 }
                             },
@@ -215,6 +215,27 @@ export default {
         }
     },
     methods:{
+        //下载文件 start
+        listFileDown(params){
+            let URL = downFile + params.row.url;
+            let fileName = params.row.fileName;
+            let param = {
+                key:params.row.fileId,
+                filename:fileName,
+            }
+            defaultAXIOS(URL,{param},{timeout:2000,method:'get',responseType:"blob"}).then((response) => {
+                let myData = response.data;
+                console.log("<======detail***文件下载+++",response,myData,"======>");
+                let blob = new Blob([myData.data],{type:"application/vnd.ms-excel"});
+                let link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = fileName;
+                link.click();
+            }).catch( (error) => {
+                this.showError(error);
+            });
+        },
+        //下载文件 end
         //删除窗口 -start
         delpopCloseFn(B){
             this.delpopIsShow = B;
@@ -399,6 +420,8 @@ export default {
                 if(val){
                     this.submitAddData();
                     this.modal_add_loading = true;
+                }else{
+                    Common.CommonWarning(this,"有必选的还未填写！")
                 }
             })
         },

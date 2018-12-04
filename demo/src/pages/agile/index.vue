@@ -128,10 +128,10 @@
                         </Button>
                         <Button 
                             type="info" 
-                            :disabled="authIsAdmin(['SuperAdmin'])"
+                            :disabled="authIsAdmin(['PlainAdmin'])"
                             @click="outinITM" 
                             >
-                            从ITM导入项目 功能制作中，不能点！！！
+                            从ITM导入项目
                         </Button>
 					</div>
 			    	<Table border stripe  ref="selection" :columns="columns" :data="tableData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
@@ -203,6 +203,8 @@ export default {
 
         let auth_list = ()=>{
             this.getPermissionFn(getPermission).then((result)=>{
+                
+
 
                 this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
                 setTimeout(()=>{

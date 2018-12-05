@@ -578,8 +578,8 @@ export default {
     mounted(){
         this.addTeamFn(addTeam)
 
-        let ID = this.$router.history.current.query.id ? this.$router.history.current.query.id : 0;
-        let PRJ_ID = this.$router.history.current.query.prj_id ? this.$router.history.current.query.prj_id : "";
+        let ID = Common.GETID(this,Common) ? Common.GETID(this,Common) : "";
+        let PRJ_ID = Common.GETprjid(this,Common) ? Common.GETprjid(this,Common) : "";
         this.projectGetProdFn(projectGetProd,{id:ID,prj_id:PRJ_ID});
         if(ID && PRJ_ID){
             this.projectEditFn(projectEdit,{id:ID,prj_id:PRJ_ID});
@@ -916,7 +916,9 @@ export default {
 
             this.formValidate.prod_id = "";
             //this.formValidate.AddGroupList = this.defaultGroup;
-            this.formValidate.prj_id = this.$router.history.current.query.id ? this.$router.history.current.query.id : "";
+            
+            //this.formValidate.prj_id = this.$router.history.current.query.id ? this.$router.history.current.query.id : "";
+            this.formValidate.prj_id = "";
             
 
 
@@ -966,7 +968,7 @@ export default {
             let _pid = this.formValidate.pid ? this.formValidate.pid : ""
 
             let tempData = {
-                id:this.$router.history.current.query.id,
+                id:Common.GETID(this,Common),
                 prj_type:this.formValidate.prj_type,
                 prj_name: this.formValidate.prj_name,
                 start_time:_start_time,

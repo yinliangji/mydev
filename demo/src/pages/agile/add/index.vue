@@ -890,7 +890,10 @@ export default {
 
 
 
-            this.formValidate.prj_id = this.$router.history.current.query.id ? this.$router.history.current.query.id : "";
+            //this.formValidate.prj_id = this.$router.history.current.query.id ? this.$router.history.current.query.id : "";
+            this.formValidate.prj_id = "";
+
+            
             this.editTableData = false;
             this.formValidate.date = [];
             this.formValidate.startTime = "";

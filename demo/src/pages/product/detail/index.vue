@@ -539,6 +539,10 @@ export default {
         let ID = Common.GETID(this,Common)
         if(detailID && ID){
 
+            if(!Common.getCookie("id")){
+                Common.setCookie("id",ID)
+            }
+
             //let _type = this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
             //let _status = this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
             let _proi = this.storyGetConditionFn(storyGetCondition,"proi",ID);

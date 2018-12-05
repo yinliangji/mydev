@@ -1466,6 +1466,22 @@ export default class Common extends Utils {
     static DateFormat(_Common,date){
       return _Common.replaceNullFn(date) ? new Date(_Common.replaceNullFn(date)).Format("yyyy-MM-dd") : "";
     }
+    //下载文件
+    static DownFile(FN,that,URL,params={},fileName=""){
+      return FN(URL,params,{timeout:2000,method:'get',responseType:"blob"}).then((response) => {
+          let myData = response.data;
+          console.log("<======***文件下载+++",response,myData,"======>");
+          let blob = new Blob([myData],{type:"application/vnd.ms-excel"});
+          let link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+          return Promise.resolve(link);
+      }).catch( (error) => {
+          that.showError(error);
+          return Promise.reject(error);
+      });
+    }
 
     
     
@@ -1511,10 +1527,10 @@ function getSCFn(that,_Common,name){
   let result = false;
   if(that.$router.history.current.query[name]){
      result = that.$router.history.current.query[name] 
-  }else if(localStorage.getItem(name)){
-     result = localStorage.getItem(name)
   }else if(_Common.getCookie(name)){
       result = _Common.getCookie(name)
+  }else if(localStorage.getItem(name)){
+     result = localStorage.getItem(name)
   }
   return result
 

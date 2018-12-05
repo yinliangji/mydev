@@ -157,6 +157,11 @@ export default {
                             {
                                 style:{color:'#2d8cf0'},
                                 //domProps:{href:params.row.url,target:"_blank"},
+                                attrs:{
+                                    id:"id"+params.row.fileId,
+                                },
+                                key:"key"+params.row.fileId,
+                                ref:"ref"+params.row.fileId,
                                 on: {
                                     click: () => {
                                         this.listFileDown(params)
@@ -223,17 +228,7 @@ export default {
                 key:params.row.fileId,
                 filename:fileName,
             }
-            defaultAXIOS(URL,{param},{timeout:2000,method:'get',responseType:"blob"}).then((response) => {
-                let myData = response.data;
-                console.log("<======detail***文件下载+++",response,myData,"======>");
-                let blob = new Blob([myData.data],{type:"application/vnd.ms-excel"});
-                let link = document.createElement("a");
-                link.href = window.URL.createObjectURL(blob);
-                link.download = fileName;
-                link.click();
-            }).catch( (error) => {
-                this.showError(error);
-            });
+            return Common.DownFile(defaultAXIOS,this,URL,param,fileName)
         },
         //下载文件 end
         //删除窗口 -start

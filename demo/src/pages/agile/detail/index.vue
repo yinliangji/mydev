@@ -258,6 +258,11 @@ export default {
                             'a',
                             {
                                 style:{color:'#2d8cf0'},
+                                attrs:{
+                                    id:"id"+params.row.fileId,
+                                },
+                                key:"key"+params.row.fileId,
+                                ref:"ref"+params.row.fileId,
                                 //domProps:{href:downFile+params.row.url},
                                 on: {
                                     click: () => {
@@ -299,7 +304,6 @@ export default {
                                 style: {},
                                 on: {
                                     click: () => {
-
                                         this.tableDel(params.index,params.row.file_path)
                                     }
                                 }
@@ -320,8 +324,8 @@ export default {
         }
     },
     mounted(){
-    	if(this.$router.history.current.query.id){
-            let myID = this.$router.history.current.query.id;
+    	if(Common.GETID(this,Common)){
+            let myID = Common.GETID(this,Common);
     		Common.setStorageAndCookie(Common,"id",myID)
 
     		this.tableDataAjaxFn(projectDetail,myID).then((prj_id)=>{
@@ -371,17 +375,7 @@ export default {
                 key:params.row.fileId,
                 filename:fileName,
             }
-            defaultAXIOS(URL,{param},{timeout:2000,method:'get',responseType:"blob"}).then((response) => {
-                let myData = response.data;
-                console.log("<======detail***文件下载+++",response,myData,"======>");
-                let blob = new Blob([myData.data],{type:"application/vnd.ms-excel"});
-                let link = document.createElement("a");
-                link.href = window.URL.createObjectURL(blob);
-                link.download = fileName;
-                link.click();
-            }).catch( (error) => {
-                this.showError(error);
-            });
+            return Common.DownFile(defaultAXIOS,this,URL,param,fileName)
         },
         //下载文件 end
         del () {

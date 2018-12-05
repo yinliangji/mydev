@@ -2179,6 +2179,7 @@ let getITMtable = (val1 = 200, val2 = 1, val3 = 3) => {
             "num|1-100":1,
             "desc|5-10":/[a-zA-Z0-9]/,
             "msg":"@cname",
+            "isExist|1":["yes","no"],
         },
     })
 }

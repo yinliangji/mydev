@@ -61,7 +61,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAddGroup,importITM,getITMtable,syncSearch} = Common.restUrl;
+const {projectAddGroup,importITMyes,importITMno,getITMtable,syncSearch} = Common.restUrl;
 export default {
     name: 'itm',
     props: {
@@ -98,10 +98,10 @@ export default {
     },
 
     beforeUpdate(){
-        console.log("beforeUpdate---itm导入弹出框----",this.ITMitem)
+        console.log("beforeUpdate---itm导入弹出框----",this.ITMitem,this.ITMtable)
     },
     updated(){
-        console.log("updated----itm导入弹出框---",this.ITMitem)
+        console.log("updated----itm导入弹出框---",this.ITMitem,this.ITMtable)
     },
     data () {
         return {
@@ -113,6 +113,7 @@ export default {
                 prj_id:"",
                 desc:"",
                 msg:"",
+                isExist:"",
             },
             inputLoad:false,
             modal_add_loading:true,
@@ -175,7 +176,11 @@ export default {
                         this.ITMtable.msg = this.ITMtable.msg? this.ITMtable.msg : "有风险，添加请谨慎!"
                         this.ITMtable.prj_id = params.prj_id;
                         this.ITMtable.prj_name = params.prj_name;
-
+                        if(myData.data && myData.data.isExist == "no"){
+                            this.okBtnTxt = "确认添加";
+                        }else{
+                            this.okBtnTxt = "添加";
+                        }
                     }else{
                         this.showError(URL+"错误");
                         this.ITMtableTxt("加载错误");
@@ -199,6 +204,7 @@ export default {
             this.$refs[fromName][i].resetFields();
         },
         submitRole(i,name,fromName){
+            let _isExist = this.ITMtable.isExist;
 
             this.modal_add_loading = false;
             setTimeout(()=>{
@@ -209,30 +215,27 @@ export default {
 
             this.$refs[fromName][i].validate((valid)=>{//验证
                 if(valid){
-                    if(!this.isShowTxt){
+                    if(!this.isShowTxt && _isExist =="yes"){
                         this.isShowTxt = true;
-                        this.okBtnTxt = "我已经看见提示，继续添加";
+                        this.okBtnTxt = "我已经看见提示！！！继续添加";
                     }else{
                         this.modal_add_loading = true;
                         this.$nextTick(() => {
                           this.modal_add_loading = true;
                         });
-                        this.submitAddData(i,fromName,this.ITMitem.AddGroupList[i],this,this.ITMitem.AddGroupList[i].grouptemp);
+                        this.submitAddData(i,fromName,this.ITMitem.AddGroupList[i],this,this.ITMitem.AddGroupList[i].grouptemp,_isExist);
                     }
                 }
             })
-                
-
-            
-            
         },
-        submitAddData(i,fromName,obj,that,group){
+        submitAddData(i,fromName,obj,that,group,isExist){
             this.initAlertTxt();
             let tempData = {
                 prj_id:group[0],
                 prj_name:(obj.groupListtemp.find(item=>item.value == group[0]) || {}).prj_name || "",
             }
-            defaultAXIOS(importITM,tempData,{timeout:5000,method:'post'}).then((response) => {
+            let URL = isExist == "yes" ? importITMyes : importITMno;
+            defaultAXIOS(URL,tempData,{timeout:5000,method:'post'}).then((response) => {
                 let myData = response.data;
                 console.log("<======agile ITMAdd***response+++",response,myData,"======>");
                 if(myData.status == "success"){
@@ -244,7 +247,7 @@ export default {
                 }else{
                     obj.modaAdd = true;
                     that.modal_add_loading = false;
-                    that.showError(importITM+"错误");
+                    that.showError(URL+"错误");
                     this.$emit("itmClose",false);
                 }
                 

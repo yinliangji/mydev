@@ -1,7 +1,7 @@
 <template>
 	<div class="pageContent">
 		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'7'" />
-		<selectMenu @changeSelect="selectMenuFn"></selectMenu>
+		<selectMenu @changeSelect="selectMenuFn" @sendData="getSendData"></selectMenu>
        
         <Card class="detailContBox">
             <div class="editBtn">
@@ -367,6 +367,9 @@ export default {
     },
     
     methods: {
+        getSendData(data){
+            console.log(data,"<==========getSendData");
+        },
         //下载文件 start
         listFileDown(params){
             let URL = downFile + params.row.url;

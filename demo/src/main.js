@@ -76,7 +76,7 @@ Date.prototype.Format = function(fmt) { // author: meizz
 }
 
 Vue.prototype.setCookie = function(cname, cvalue) {
-    document.cookie = cname + "=" + cvalue + "; ";
+    document.cookie = cname + "=" + cvalue + ";path=/ ";
 }
 
 Vue.prototype.getCookie = function(cname) {

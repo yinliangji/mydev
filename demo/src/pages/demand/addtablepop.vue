@@ -30,6 +30,10 @@
             <FormItem label="提出部门" prop="req_submitter">
                 <Input v-model="formItem.req_submitter" placeholder="请输入提出部门"></Input>
             </FormItem>
+
+            <FormItem label="需求项描述" prop="comment" v-show="formItem.prj_type  != 2 ? false : true">
+                <Input v-model="formItem.comment" type="textarea" :autosize="{minRows: 1,maxRows: 2}" placeholder="请填写需求项描述"></Input>
+            </FormItem>
             
 
         </Form>
@@ -121,6 +125,7 @@ export default {
                 prj_id:"",
                 prj_name:"",
                 myId:"",
+                comment:"",
             },
 
             ruleValidate: {
@@ -131,6 +136,9 @@ export default {
                     { required: true,validator: req_idCheck,  trigger: 'blur' }//message: '编号为空或重复！',
                 ],
                 req_submitter: [
+                    { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
+                comment: [
                     { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
             },
@@ -152,6 +160,8 @@ export default {
                 this.formItem.prj_type = data[0].prj_type+"";
                 this.formItem.prj_id = Common.GETID(this,Common);
                 this.formItem.myId = data[0].id+"" || "";
+                this.formItem.comment = data[0].comment+"";
+
             }
         },
         addItem(){
@@ -164,7 +174,8 @@ export default {
             this.formItem.prj_type = "2";
             this.formItem.prj_id = "";
             this.editTableData = false;
-            this.myId = "";
+            this.formItem.myId = "";
+            this.formItem.comment = "";
         },
         submitAddData(){
             let tempData = {
@@ -175,6 +186,7 @@ export default {
                 prj_type:this.formItem.prj_type,
                 prj_id:this.formItem.prj_id,
                 myId:this.formItem.myId,
+                comment:this.formItem.comment,
             }
             /*
             setTimeout(() => {

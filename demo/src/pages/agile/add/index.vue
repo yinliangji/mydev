@@ -331,7 +331,7 @@ export default {
         },
         "formPartValidate.addGroupList"(curVal,oldVal){
             if(curVal && curVal.length){
-                this.publishUserFn(publishUser,{username:Common.getCookie("username")},curVal);
+                this.publishUserFn(publishUser,{username:Common.getStorageAndCookie(this,Common,"username")},curVal);
             }
         },
 
@@ -735,9 +735,9 @@ export default {
                     _tempObj.group.push(myData.user_name)
                     _tempObj.groupList.push(_ARRobj)
                 }else{
-                    _ARRobj.label = Common.getCookie("username") 
-                    _ARRobj.value = Common.getCookie("nickname")
-                    _tempObj.group.push(Common.getCookie("nickname"))
+                    _ARRobj.label = Common.getStorageAndCookie(this,Common,"username") 
+                    _ARRobj.value = Common.getStorageAndCookie(this,Common,"nickname")
+                    _tempObj.group.push(Common.getStorageAndCookie(this,Common,"nickname"))
                     _tempObj.groupList.push(_ARRobj)
 
                 }
@@ -931,7 +931,7 @@ export default {
             let _phySystem = JSON.stringify(_System[1].member.map((item)=>{return item.value}));
             let _proj_role = JSON.stringify(_proj_role_);
 
-            let _username = Common.getCookie("username");
+            let _username = Common.getStorageAndCookie(this,Common,"username");
 
 
             //let _proj_role = JSON.stringify(Common.objInArr(this.formValidate.AddGroupList));

@@ -91,7 +91,7 @@
                                 </Button>
                                 <Button 
                                     type="info" 
-                                    :disabled="authIsAdmin(['SuperAdmin'])"
+                                    :disabled="authIsAdmin(['PlainAdmin'])"
                                     @click="outinITM"
                                     size="small"
                                     style="float: right"
@@ -279,7 +279,7 @@ export default {
                 // },
             ],
             tableDAtaTatol:0,
-            tableDAtaPageLine:5,
+            tableDAtaPageLine:10,
             tableDAtaPageCurrent:1,
             actionArr:[],
             formValidate: {
@@ -377,8 +377,8 @@ export default {
             this.modaDelete = false;
         },
         getPrjidFn(URL,ID){
-            if(Common.getCookie("prjId")){
-                return Promise.resolve(Common.getCookie("prjId"));
+            if(Common.getStorageAndCookie(this,Common,"prjId")){
+                return Promise.resolve(Common.getStorageAndCookie(this,Common,"prjId"));
             }
             return defaultAXIOS(URL+ID,{},{timeout:2000,method:'get'}).then((response) => {
                 let myData = response.data;

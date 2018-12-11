@@ -4,6 +4,32 @@
 		<selectMenu @changeSelect="selectMenuFn" @sendData="getSendData"></selectMenu>
        
         <Card class="detailContBox">
+            <div class="editBtn3">
+                <Button 
+                    type="info"
+                    @click="outputWord"
+                    :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
+                    shape="circle"
+                    long
+                    size="small"
+                    icon="ios-download-outline"
+                    >
+                    word 导出
+                </Button>
+            </div>
+            <div class="editBtn2">
+                <Button 
+                    type="info"
+                    @click="outputExecl"
+                    :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
+                    shape="circle"
+                    long
+                    size="small"
+                    icon="ios-download-outline"
+                    >
+                    execl 导出
+                </Button>
+            </div>
             <div class="editBtn">
                 <Button 
                     type="warning"
@@ -42,8 +68,8 @@
 								</tr>
 
                                 <tr>
-                                  <th>所属模块</th>
-                                  <td>{{formValidate.modules | FALSEINFO}}</td>
+                                  <th>责任人</th>
+                                  <td>{{formValidate.create_person | FALSEINFO}}</td>
                                   <th>逻辑子系统</th>
                                   <td>{{formValidate.logic_sys_name | FALSEINFO}}</td>
                                   <th>物理子系统</th>
@@ -51,7 +77,11 @@
                                 </tr>
 
 								
-								
+								<tr>
+                                  <th>所属模块</th>
+                                  <td colspan="5">{{formValidate.modules | FALSEINFO}}</td>
+                                </tr>
+
 								<tr>
 								  <th>项目描述</th>
 								  <td colspan="5" v-html="formValidate.prj_desc?'<pre>'+formValidate.prj_desc+'</pre>':''"></td>
@@ -233,6 +263,7 @@ export default {
                 logic_sys_name:"",
                 physics_sys_id:"",
                 physics_sys_name:"",
+                create_person:"",
                 // allgroup:"",
                 // managerGroup:"",
                 // developerGroup:"",
@@ -504,6 +535,12 @@ export default {
         getPermissionFn(URL){
             Common.GetPermission(defaultAXIOS,this,URL);
         },
+        outputExecl(){
+            console.error("outputExecl")
+        },
+        outputWord(){
+            console.error("outputWord")
+        },
         editItemFn(){
             this.$router.push({path: '/agile/edit', query: {id: Common.GETID(this,Common),prj_id:Common.GETprjid(this,Common)}})
         },
@@ -567,6 +604,7 @@ export default {
                 }
 
                 if(myData.data && myData.data.id){
+                    
                     Common.setStorageAndCookie(Common,"prj_id",myData.data.prj_id);
                     this.$router.push({path: '/agile/detail', query: {id: ID,prj_id:myData.data.prj_id}});
                     this.actionUrl = fileUpload+"?taskId="+this.formValidate.prj_id+"&type=1&id="+Common.GETID(this,Common);
@@ -689,6 +727,20 @@ h4{
     top:10px;
     z-index: 10;
     width: 62px;
+}
+.editBtn2{
+    position:absolute;
+    right:90px;
+    top:10px;
+    z-index: 10;
+    width: 90px;
+}
+.editBtn3{
+    position:absolute;
+    right:190px;
+    top:10px;
+    z-index: 10;
+    width: 90px;
 }
 .pageBox {
     padding-bottom:20px;

@@ -456,7 +456,7 @@ export default {
             this.storyGetSprintFn(storyGetSprint,ID,ID,_prod_ID)
             this.storyGetReqFn(storyGetReq,ID,ID,_prod_ID)
 
-            this.publishUserFn(publishUser,{username:Common.getCookie("username")}).then((chargerObj)=>{
+            this.publishUserFn(publishUser,{username:Common.getStorageAndCookie(this,Common,"username")}).then((chargerObj)=>{
 
                 //this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
                 //this.storyGetConditionFn(storyGetCondition,"proi",ID);

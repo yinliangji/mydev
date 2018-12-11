@@ -55,21 +55,27 @@ export default {
                     if(prjIdUrl || prjIdUrl === 0){
                         if(prjIdUrl === 0){
                             this.setCookie("prjId","");
+                            this.setCookie("id","");
                             this.$router.push({path:"/agile"});
                         }else{
                             this.curProject = parseInt(prjIdUrl);
-                            this.setCookie("prjId",prjIdUrl)
+                            this.setCookie("prjId",prjIdUrl);
+                            this.setCookie("id",prjIdUrl);
+
                         }
                     }else if(!prjIdUrl && prjIdCookie){
                         this.curProject = parseInt(prjIdCookie);
-                        this.setCookie("prjId",prjIdCookie)
+                        this.setCookie("prjId",prjIdCookie);
+                        this.setCookie("id",prjIdCookie)
                     }else if(!prjIdUrl && !prjIdCookie){
                         this.curProject = self.projectList[0].id;
                         this.setCookie("prjId",self.projectList[0].id);
-                        this.setCookie("prjId",self.projectList[0].prj_name);
+                        this.setCookie("id",self.projectList[0].id);
+                        this.setCookie("prj_name",self.projectList[0].prj_name);
                     }else{
                         this.curProject = "";
                         this.setCookie("prjId","");
+                        this.setCookie("id","");
                         this.$router.push({path:"/agile"});
                     }
 
@@ -84,6 +90,7 @@ export default {
                         if(this.getCookie("prjId") == prjNumArr[i].id){
                             sessionStorage.setItem("QprjNumber",prjNumArr[i].prj_id);
                             sessionStorage.setItem("QprjName",prjNumArr[i].prj_name);
+                            this.setCookie("prj_name",prjNumArr[i].prj_name);
                             break
                         }
                     }
@@ -103,16 +110,19 @@ export default {
         changeCurProject(data) {
             
             this.$emit("changeSelect",this.curProject);
-            this.setCookie("prj_id", data)//临时
+            
             this.setCookie("prjId", data);
+            this.setCookie("id", data);
             let prjSn = this._getPrjSn(data);
-            this.setCookie("prjSn",prjSn);
             this.setCookie("prj_id",prjSn);
+            this.setCookie("prjSn",prjSn);
+            
             let prjNumArr = this.projectList;
             for(var i=0;i<prjNumArr.length;i++){
                 if(this.getCookie("prjId") == prjNumArr[i].id){
                     sessionStorage.setItem("QprjNumber",prjNumArr[i].prj_id);
                     sessionStorage.setItem("QprjName",prjNumArr[i].prj_name);
+                    this.setCookie("prj_name",prjNumArr[i].prj_name);
                     break
                 }
             }
@@ -132,12 +142,13 @@ export default {
                     return prjId;
                 }else{
                     this.setCookie("prjId","");
+                    this.setCookie("id","");
                 }
             }
             return;
         },
         _getCookie(){
-            let prjId = this.getCookieId("prjId");
+            let prjId = this.getCookieId("prjId") || this.getCookieId("id");
             let hasCookieIndex;
             if(prjId){
                 hasCookieIndex = _findIndex(this.projectList,"id",prjId);
@@ -145,6 +156,7 @@ export default {
                     return prjId;
                 }else{
                     this.setCookie("prjId","");
+                    this.setCookie("id","");
                 }
             }
             return;

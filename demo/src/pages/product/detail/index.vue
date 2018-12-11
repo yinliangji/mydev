@@ -27,7 +27,7 @@
                     long
                     size="small"
                     >
-                    任务看板
+                    事项看板
                 </Button>
             </div>
             <Tabs :value="TabsCur" type="card" :capture-focus="false" @on-click="tabsHandle" >
@@ -66,7 +66,7 @@
                                 <tr>
                                   <th>故事编号</th>
                                   <td>{{ formValidate.userstory_id | FALSEINFO}}</td>
-                                  <th>关联任务<br />(已完成/全部)</th>
+                                  <th>关联事项<br />(已完成/全部)</th>
                                   <td>{{ formValidate.complete_mission | FALSEINFO}} / {{ formValidate.mission | FALSEINFO}}</td>
                                   <th width="11%">创建时间</th>
                                   <td>{{ formValidate.created_time | FALSEINFO}}</td>
@@ -534,13 +534,36 @@ export default {
     mounted(){
         Common.UserstorySession(Common,this);
 
-        this.getPermissionFn(getPermission)
+        //this.getPermissionFn(getPermission); 获取权限开始
+        let auth_list = ()=>{
+            this.getPermissionFn(getPermission).then((result)=>{
+                setTimeout(()=>{
+                    EVENT.emit("SIDER1",result);
+                },500)
+            },()=>{
+                this.showError("权限不足，不能有任何动作");
+            })
+        }
+        EVENT.on("USER",(result)=>{
+            if(Common.getStorageAndCookie(this,Common,"username")){
+                console.log('EVENT.on("USER",(result) -- auth_list()');
+                auth_list();
+            }
+        })
+        if(Common.getStorageAndCookie(this,Common,"username")){
+            console.log('直接执行 auth_list()');
+            auth_list();
+        }else{
+            Store.dispatch('EVENT_EMIT/incrementAsync', {isEmit: true,})
+        }
+        // 获取权限结束
+
         let detailID = Common.GETdetail_id(this,Common)
         let ID = Common.GETID(this,Common)
         if(detailID && ID){
 
-            if(!Common.getCookie("id")){
-                Common.setCookie("id",ID)
+            if(!Common.GETID(this,Common,"inCookie")){
+                Common.setStorageAndCookie(Common,"id",ID)
             }
 
             //let _type = this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
@@ -981,7 +1004,7 @@ export default {
             return Common.auth(this,KEY)
         },
         getPermissionFn(URL){
-            Common.GetPermission(defaultAXIOS,this,URL);
+            return Common.GetPermission(defaultAXIOS,this,URL);
         },
         editItemFn(){
             let _query = {

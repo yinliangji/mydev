@@ -706,8 +706,9 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
         "status": "success",
         "message": "detail xxxxxxx",
         data: {
-            "id|+1": 1,
-            "prj_id|+1": 100,
+            "create_person":"xiebei.zh",
+            "id": 1,
+            "prj_id":"PJ100001",
 
             "prj_name|5-8": /[a-zA-Z]/,
             "manager|6-10": /[a-zA-Z0-9]/,
@@ -2210,6 +2211,32 @@ app.all('/prj/sync_submit/', function(req, res) {
     res.end()
 });
 
+let get_count = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "data":{
+            "count|1":[0,10],
+        },
+        
+    })
+}
+
+app.all('/req/get_count/', function(req, res) {
+
+    let resVal = get_count(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(get_count(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+app.all('/req/save_req_list/', function(req, res) {
+    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json({status: "success",message: "import success",});
+    res.end()
+});
 
 let getITMtable = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({

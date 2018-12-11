@@ -657,26 +657,59 @@ export default class Common extends Utils {
     }
 
     //获取id--不通用
-    static GETID(that,_Common){
-      let ID = getSCFn(that,_Common,"id");
+    static GETID(that,_Common,From){
+      let ID = false;
+      let key = "id";
+      if(From == "inCookie"){
+        ID = getCookieFn(that,_Common,key);
+      }else if(From == "inLocalStorage"){
+        ID = getLocalStorageFn(that,_Common,key);
+      }else{
+        ID = getSCFn(that,_Common,key);
+      }
       return ID;
     }
 
     //获取detail_id--不通用
-    static GETdetail_id(that,_Common){
-      let detailID = getSCFn(that,_Common,"detail_id");
+    static GETdetail_id(that,_Common,From){
+      let detailID = false;
+      let key = "detail_id";
+      if(From == "inCookie"){
+        detailID = getCookieFn(that,_Common,key);
+      }else if(From == "inLocalStorage"){
+        detailID = getLocalStorageFn(that,_Common,key);
+      }else{
+        detailID = getSCFn(that,_Common,key);
+      }
       return detailID;
     }
 
     //获取prj_id--不通用
-    static GETprjid(that,_Common){
-      let prj_ID = getSCFn(that,_Common,"prj_id");
+    static GETprjid(that,_Common,From){
+      let prj_ID = false;
+      let key = "prj_id";
+      if(From == "inCookie"){
+        prj_ID = getCookieFn(that,_Common,key);
+      }else if(From == "inLocalStorage"){
+        prj_ID = getLocalStorageFn(that,_Common,key);
+      }else{
+        prj_ID = getSCFn(that,_Common,key);
+      }
       return prj_ID;
     }
 
     //获取prod_id--不通用
-    static GETprodid(that,_Common){
-      let prod_ID = getSCFn(that,_Common,"prod_id");
+    static GETprodid(that,_Common,From){
+      let prod_ID = false;
+      let key = "prod_id";
+
+      if(From == "inCookie"){
+        prod_ID = getCookieFn(that,_Common,key);
+      }else if(From == "inLocalStorage"){
+        prod_ID = getLocalStorageFn(that,_Common,key);
+      }else{
+        prod_ID = getSCFn(that,_Common,key);
+      }
       return prod_ID;
     }
 
@@ -1535,6 +1568,13 @@ function getSCFn(that,_Common,name){
   return result
 
 }
+function getCookieFn(that,_Common,name){
+  return _Common.getCookie(name) ? _Common.getCookie(name) : false;
+}
+function getLocalStorageFn(that,_Common,name){
+  return localStorage.getItem(name) ? localStorage.getItem(name) : false;
+}
+
 function toLoginPage(THAT = false){
 	let error =	(MSG = "错误",CallBack = ()=>{},Fn = ()=>{})=>{
 		if(THAT){

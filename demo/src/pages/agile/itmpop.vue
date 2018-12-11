@@ -233,6 +233,7 @@ export default {
             let tempData = {
                 prj_id:group[0],
                 prj_name:(obj.groupListtemp.find(item=>item.value == group[0]) || {}).prj_name || "",
+                username:Common.getStorageAndCookie(this,Common,"username"),
             }
             let URL = isExist == "yes" ? importITMyes : importITMno;
             defaultAXIOS(URL,tempData,{timeout:5000,method:'post'}).then((response) => {

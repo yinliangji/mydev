@@ -629,7 +629,7 @@ export default {
                                         this.goAddDevelopmentFn(params.index)
                                     }
                                 }
-                            }, '添加任务'),
+                            }, '添加事项'),
                             h('Button', {
                                 props: {
                                     type: 'success',
@@ -642,7 +642,7 @@ export default {
                                         this.goDevelopmentFn(params.index);
                                     }
                                 }
-                            }, '任务看板')
+                            }, '事项看板')
                         ]);
                     }
                 }
@@ -687,7 +687,7 @@ export default {
             ],
             tableDataCur:"",
             tableDAtaTatol:0,
-            tableDAtaPageLine:5,
+            tableDAtaPageLine:10,
             tableDAtaPageCurrent:1,
             formValidate: {
                 userstory_name:"",//用户故事名称

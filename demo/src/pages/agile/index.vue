@@ -216,12 +216,12 @@ export default {
         }
         
         EVENT.on("USER",(result)=>{
-            if(Common.getCookie("username")){
+            if(Common.getStorageAndCookie(this,Common,"username")){
                 console.log('EVENT.on("USER",(result) -- auth_list()');
                 auth_list();
             }
         })
-        if(Common.getCookie("username")){
+        if(Common.getStorageAndCookie(this,Common,"username")){
             console.log('直接执行 auth_list()');
             auth_list();
         }else{
@@ -431,7 +431,7 @@ export default {
                                         this.goDevelopmentFn(params.index)
                                     }
                                 }
-                            }, '任务'),
+                            }, '事项'),
                             
                         ]);
                     }
@@ -451,7 +451,7 @@ export default {
             ],
 
             tableDAtaTatol:0,
-            tableDAtaPageLine:5,
+            tableDAtaPageLine:10,
             tableDAtaPageCurrent:1,
             actionArr:[],
             formValidate: {
@@ -561,7 +561,7 @@ export default {
         tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = ""){
             let starttimeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
             let endtimeFromet = end_time ? end_time.Format("yyyy-MM-dd") : "";
-            defaultAXIOS(URL,{page,pageline,prj_name,prj_id,start_time:starttimeFromet,end_time:endtimeFromet,icdp_projManager,icdp_agileCoach,icdp_devTeam,icdp_testTeam,username:Common.getCookie("username")},{timeout:20000,method:'get'}).then((response) => {
+            defaultAXIOS(URL,{page,pageline,prj_name,prj_id,start_time:starttimeFromet,end_time:endtimeFromet,icdp_projManager,icdp_agileCoach,icdp_devTeam,icdp_testTeam,username:Common.getStorageAndCookie(this,Common,"username")},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");

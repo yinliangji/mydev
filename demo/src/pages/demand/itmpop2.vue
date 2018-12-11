@@ -1,19 +1,30 @@
 <template>
-   <Modal v-model="modaDelete3" width="360" @on-ok="importFn"  ok-text="导入" :loading="modal_loading3" @on-cancel="cancel">
+   <Modal v-model="modaDelete3" width="360" @on-ok="importFn"  :ok-text="okText" :loading="modal_loading3" @on-cancel="cancel">
         <p slot="header" style="color:#f60;text-align:center">
             <Icon type="information-circled"></Icon>
             <span>从ITM同步同步需求项确认</span>
         </p>
-        <div style="text-align:left;text-indent: 2em;">
-            <p>
-                此操作会清除现已导入的立项需求项，并重新从ITM导入 <span style="color:red;">xxxx</span> 个项目 <span style="color:red;">xxxx</span> 的需求项，
-            </p>
-            <p>
-                此操作不会删除已关联的用户故事，但会取消与用户故事的关联，
-            </p>
-            <p>
-                导入完成后，您需要重新关联需求项与用户故事。
-            </p>
+        <div class="popBox">
+            <Form :model="formValidate" :label-width="86"  ref="formValidate">
+                
+                <FormItem label="项目编号">
+                    <Input  v-model="formValidate.prj_id" placeholder="请输入项目编号"></Input>
+                </FormItem>
+                <p>{{searchTxt}}</p>
+                <div>
+
+                    <p>
+                        此操作会清除现已导入的立项需求项，并重新从ITM导入 <span style="color:red;">{{itemNumber}}</span> 个 <span style="color:red;">{{prj_name}}</span> 的项目需求项，
+                    </p>
+                    
+                    <p>
+                        此操作不会删除已关联的用户故事，但会取消与用户故事的关联，
+                    </p>
+                    <p>
+                        导入完成后，您需要重新关联需求项与用户故事。
+                    </p>
+                </div>
+            </Form>
         </div>
         
     </Modal>
@@ -22,7 +33,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {importITM2} = Common.restUrl;
+const {importITM2,projectListDataNew,getCountITM} = Common.restUrl;
 
 export default {
     props: {
@@ -37,6 +48,12 @@ export default {
     watch:{
         isShow() {
             this.modaDelete3 = this.isShow;
+            if(this.isShow){this.getCountITMFn(getCountITM)}
+        },
+        "formValidate.prj_id"(curVal,oldVal){
+            Common.throttle((value,that)=>{
+                this.getCountITMFn(getCountITM,value)
+            },this,1500,curVal,2000)();
         },
     },
     beforecreated(){
@@ -54,19 +71,59 @@ export default {
     },
     data () {
         return {
+            formValidate:{
+                prj_id:"",
+            },
             modaDelete3:false,
             modal_loading3:true,
+            itemNumber:"",
+            prj_name:"",
+            okText:"导入",
+            searchTxt:">>>>>",
         }
     },
     methods: {
+        getCountITMFn(URL,val){
+            this.searchTxt = "正在查询";
+            let prjSn = val ? val : Common.GETprjid(this,Common);
+            defaultAXIOS(URL,{prjSn},{timeout:2000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======getCountITM***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    this.itemNumber = myData.data.count;
+                    this.searchTxt = ">>>>>";
+                    if(myData.data.count == 0){
+                        this.okText = "输入项目编号查询，或者关闭！"
+                    }else{
+                        this.okText = "导入"
+                    }
+                }else{
+                    this.showError(URL+"错误");
+                }
+
+            }).catch( (error) => {
+                this.showError(error);
+                this.importBtnStatus();
+            });
+        },
         cancel(){
+            this.itemNumber = "";
+            this.formValidate.prj_id = "";
+            this.itemNumber = ""
+            this.prj_name = "";
+            this.okText = "导入";
+            this.searchTxt = ">>>>>";
+
+
             this.$emit("popClose3",false,"cancel");
         },
         importFn(){
-            // setTimeout(()=>{
-            //     this.importITM2Fn(importITM2)
-            // },2000)
-           this.importITM2Fn(importITM2)
+            if(this.okText == "导入"){
+                let prjSn = this.formValidate.prj_id ? this.formValidate.prj_id : Common.GETprjid(this,Common);
+                this.importITM2Fn(importITM2,{prjSn})
+            }else{
+                this.cancel();
+            }
         },
         importBtnStatus(){
             this.modal_loading3 = false;
@@ -79,13 +136,41 @@ export default {
               this.modal_add_loading = true;
             });
         },
+        checkMenuListFn(URL){
+            if(Common.getStorageAndCookie(this,Common,"prj_name") ){
+                this.prj_name = Common.getStorageAndCookie(this,Common,"prj_name");
+                return
+            }
+
+            defaultAXIOS(URL,{username:Common.getStorageAndCookie(this,Common,"username")},{timeout:5000,method:'get'})
+            .then((response) => {
+                let myData = response.data;
+                console.log("<======demand projectListDateNew***response+++",response,myData,"======>");
+                let _newData = myData.data ? myData.data : myData;
+                if(Array.isArray(_newData) && _newData.length){
+                    for(let i=0;i<_newData.length;i++){
+                        if(Common.GETID(this,Common) == _newData[i].id){
+                            this.prj_name = _newData[i].prj_name+"";
+                        }
+                    }
+                }else{
+                    this.showError(URL+"_错误");
+                }
+                
+            })
+            .catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
         importITM2Fn(URL,params = {}){
-            defaultAXIOS(URL,params,{timeout:2000,method:'post'}).then((response) => {
+            defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======importITM2***response+++",response,myData,"======>");
 
                 this.importBtnStatus();
                 if(myData.status == "success"){
+                    this.cancel();
                     this.$emit("popClose3",false);
                     
                 }else{
@@ -97,12 +182,21 @@ export default {
                 this.importBtnStatus();
             });
         },
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
+        },
     },
     mounted(){
-
+        this.checkMenuListFn(projectListDataNew);
     },
 }
 </script>
 <style lang="less" scoped>
-
+.popBox {
+    text-align:left;
+}
+.popBox p {
+    text-indent: 2em;
+}
+.ivu-form-item { margin-bottom: 0;}
 </style>

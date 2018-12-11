@@ -727,6 +727,7 @@ export default {
             Common.setStorageAndCookie(Common,"id",this.tableData[I].id)
             Common.setStorageAndCookie(Common,"prj_id",this.tableData[I].prj_id)
             Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id)
+            
             /*
             Common.setCookie("id",this.tableData[I].id);
             localStorage.setItem('id', this.tableData[I].id);

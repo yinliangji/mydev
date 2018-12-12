@@ -81,8 +81,6 @@ CommonRest.restUrl = {
     "getITMtable": process.env.BASE_URL + "/prj/sync_check/",
     /****express 敏捷项目列表ITM get****/
 
-    
-
     "syncSearch": process.env.BASE_URL + "/prj/sync_search/",
     /****express 敏捷项目添加角色人员 get SUB_BASE_URL****/
 
@@ -178,6 +176,9 @@ CommonRest.restUrl = {
     /****express 用户业务功能删除文件列表 post****/
 
     "userstoryDeleteList": process.env.BASE_URL + "/userstory/deleteUserstory/",
+    /****express 用户故事列表删除 get****/
+
+    "userstoryOutExcel": process.env.BASE_URL + "/exportExcelFile/usDetailExp/",
     /****express 用户故事列表删除 get****/
 
 

@@ -23,7 +23,7 @@ export default {
     methods: {
         showProjectList(){
             var self = this;
-            let username = this.getCookieId("username");
+            let username = this.getCookie("username");
             if(!username){
                 if(document.location.hostname === "128.192.63.30"){
                     console.error("http://128.192.184.4:8020/icdp?apptype=app03");
@@ -52,6 +52,8 @@ export default {
                     let prjIdUrl = this._getUrlParam();
                     let prjIdCookie = this._getCookie();
 
+                    console.log("prjIdUrl=",prjIdUrl,"prjIdUrl=",prjIdUrl)
+
                     if(prjIdUrl || prjIdUrl === 0){
                         if(prjIdUrl === 0){
                             this.setCookie("prjId","");
@@ -63,20 +65,25 @@ export default {
                             this.setCookie("id",prjIdUrl);
 
                         }
+                        console.log("prjIdUrl || prjIdUrl === 0",prjIdUrl,prjIdUrl)
                     }else if(!prjIdUrl && prjIdCookie){
                         this.curProject = parseInt(prjIdCookie);
                         this.setCookie("prjId",prjIdCookie);
-                        this.setCookie("id",prjIdCookie)
+                        this.setCookie("id",prjIdCookie);
+                        console.log("!prjIdUrl && prjIdCookie",prjIdUrl,prjIdCookie)
                     }else if(!prjIdUrl && !prjIdCookie){
                         this.curProject = self.projectList[0].id;
                         this.setCookie("prjId",self.projectList[0].id);
                         this.setCookie("id",self.projectList[0].id);
                         this.setCookie("prj_name",self.projectList[0].prj_name);
+                        console.log("!prjIdUrl && !prjIdCookie",prjIdUrl,prjIdCookie)
                     }else{
                         this.curProject = "";
                         this.setCookie("prjId","");
                         this.setCookie("id","");
+                        console.log("else")
                         this.$router.push({path:"/agile"});
+
                     }
 
                     let prjSn = this._getPrjSn(this.curProject);
@@ -148,7 +155,7 @@ export default {
             return;
         },
         _getCookie(){
-            let prjId = this.getCookieId("prjId") || this.getCookieId("id");
+            let prjId = this.getCookie("prjId") || this.getCookie("id");
             let hasCookieIndex;
             if(prjId){
                 hasCookieIndex = _findIndex(this.projectList,"id",prjId);

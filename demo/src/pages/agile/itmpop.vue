@@ -217,7 +217,7 @@ export default {
                 if(valid){
                     if(!this.isShowTxt && _isExist =="yes"){
                         this.isShowTxt = true;
-                        this.okBtnTxt = "我已经看见提示！！！继续添加";
+                        this.okBtnTxt = "确定重新导入";
                     }else{
                         this.modal_add_loading = true;
                         this.$nextTick(() => {

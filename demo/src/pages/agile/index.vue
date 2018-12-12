@@ -128,7 +128,7 @@
                         </Button>
                         <Button 
                             type="info" 
-                            :disabled="authIsAdmin(['PlainAdmin'])"
+                            :disabled="authIsAdmin(['SuperAdmin','PlainAdmin'])"
                             @click="outinITM" 
                             >
                             从ITM导入项目

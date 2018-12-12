@@ -406,7 +406,7 @@ export default {
             defDate:"",
             formValidate: {
                 prod_id:"",
-                prj_type:"1",
+                prj_type:"2",
                 prj_name:'',
                 start_time: '',
                 end_time: '',

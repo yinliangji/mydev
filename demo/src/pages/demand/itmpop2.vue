@@ -2,26 +2,27 @@
    <Modal v-model="modaDelete3" width="360" @on-ok="importFn"  :ok-text="okText" :loading="modal_loading3" @on-cancel="cancel">
         <p slot="header" style="color:#f60;text-align:center">
             <Icon type="information-circled"></Icon>
-            <span>从ITM同步同步需求项确认</span>
+            <span>{{title}}</span>
         </p>
         <div class="popBox">
             <Form :model="formValidate" :label-width="86"  ref="formValidate">
                 
-                <FormItem label="项目编号">
+                <FormItem label="项目编号" v-show="false">
                     <Input  v-model="formValidate.prj_id" placeholder="请输入项目编号"></Input>
                 </FormItem>
-                <p>{{searchTxt}}</p>
-                <div>
-
+                <p  v-show="false">{{searchTxt}}</p>
+                <div v-if="itemNumber == 0">
+                    <p>在ITM上没有找到项目<span style="color:red;">{{prj_name}}</span>的需求项，请在ITM上确认需求项是否存在后，重新执行该操作</p>
+                </div>
+                <div v-else>
                     <p>
-                        此操作会清除现已导入的立项需求项，并重新从ITM导入 <span style="color:red;">{{itemNumber}}</span> 个 <span style="color:red;">{{prj_name}}</span> 的项目需求项，
-                    </p>
-                    
-                    <p>
-                        此操作不会删除已关联的用户故事，但会取消与用户故事的关联，
+                        1.  此操作会清除<span style="color:red;">{{prj_name}}</span>项目已有需求项，并重新从ITM导入该项目<span style="color:red;">{{itemNumber}}</span>个需求项
                     </p>
                     <p>
-                        导入完成后，您需要重新关联需求项与用户故事。
+                        2.  此操作不会删除旧的需求项关联的用户故事，但会取消与用户故事的关联关系
+                    </p>
+                    <p>
+                        3.  导入完成后，您需要关联需求项与用户故事（编辑用户故事，选择关联的需求项）
                     </p>
                 </div>
             </Form>
@@ -48,7 +49,10 @@ export default {
     watch:{
         isShow() {
             this.modaDelete3 = this.isShow;
-            if(this.isShow){this.getCountITMFn(getCountITM)}
+            if(this.isShow){
+                this.getCountITMFn(getCountITM);
+                this.checkMenuListFn(projectListDataNew);
+            }
         },
         "formValidate.prj_id"(curVal,oldVal){
             Common.throttle((value,that)=>{
@@ -80,6 +84,7 @@ export default {
             prj_name:"",
             okText:"导入",
             searchTxt:">>>>>",
+            title:"从ITM同步同步需求项确认",
         }
     },
     methods: {
@@ -93,9 +98,11 @@ export default {
                     this.itemNumber = myData.data.count;
                     this.searchTxt = ">>>>>";
                     if(myData.data.count == 0){
-                        this.okText = "输入项目编号查询，或者关闭！"
+                        this.okText = "关闭！"
+                        this.title = "从ITM同步同步需求项确认";
                     }else{
-                        this.okText = "导入"
+                        this.okText = "导入";
+                        this.title = "需求项同步须知";
                     }
                 }else{
                     this.showError(URL+"错误");
@@ -187,7 +194,7 @@ export default {
         },
     },
     mounted(){
-        this.checkMenuListFn(projectListDataNew);
+        
     },
 }
 </script>

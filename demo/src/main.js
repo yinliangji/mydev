@@ -110,11 +110,28 @@ window.EVENT = {
 }
 EVENT.on("USER",(result)=>{
   console.log(result,"<=====***====EVENT.on USER")
-})
+});
+(function(){
+    let GetCookie = function(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i].trim();
+            if (c.indexOf(name) == 0)
+                return c.substring(name.length, c.length);;
+        }
+        return "";
+    }
+    if (process.env.NODE_ENV === 'production' && (window.location.href.indexOf("consoleLog=true") == -1 ||  !GetCookie("consoleLog"))) {
+        console.log = function () { }
+    }
+    if (process.env.NODE_ENV === 'production' && (window.location.href.indexOf("consoleError=true") == -1 ||  !GetCookie("consoleError"))) {
+        console.error = function () { }
+    }
 
-if (process.env.NODE_ENV === 'production' && window.location.href.indexOf("debug=true") != -1) {
-    console.log = function () { }
-}
+})()
+
+
 
 /* 通用结束 */
 

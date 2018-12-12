@@ -68,7 +68,7 @@
 								</tr>
 
                                 <tr>
-                                  <th>责任人</th>
+                                  <th>创建人</th>
                                   <td>{{formValidate.create_person | FALSEINFO}}</td>
                                   <th>逻辑子系统</th>
                                   <td>{{formValidate.logic_sys_name | FALSEINFO}}</td>

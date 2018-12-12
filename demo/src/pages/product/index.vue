@@ -110,7 +110,7 @@
 			    <div class="tableBox">
 					<div class="tagBox">
 						<Row :gutter="10" align="middle">
-							<Col span="3" class="addBtnBox">
+							<Col span="5" class="addBtnBox">
 								<Button 
 									type="success"  
 									@click="addItem"
@@ -118,7 +118,16 @@
 								>
 									添加用户故事
 								</Button>
+								<Button 
+									icon="ios-download-outline"
+									type="info"  
+									@click="optputExecl"
+									:disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
+								>
+									导出 excel
+								</Button>
 							</Col>
+							
 							<Col span="1" >
 								<img :src="currentView == 'developList' ? developListImgCur : developListImg" 
 								@click="showList" class="cursor">
@@ -196,7 +205,7 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 import Delpop from '@/components/delectAlert'
-const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList} = Common.restUrl;
+const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList,userstoryOutExcel} = Common.restUrl;
 export default {
 	watch: {
 		'$route' (to, from) {
@@ -810,6 +819,44 @@ export default {
 		
 	},
 	methods:{
+		optputExecl(){
+			
+
+			let params = {
+				id:this.getID(),
+				prj_id:this.getID(),
+				userstory_name:this.formValidate.userstory_name,
+				userstory_id:this.formValidate.userstory_id,
+				userstory_type:this.formValidate.userstory_type,
+				userstory_status:this.formValidate.userstory_status,
+				req_id:this.formValidate.req_id,
+				proi:this.formValidate.proi,
+				charger:this.formValidate.charger,
+				learn_concern:this.formValidate.learn_concern,
+				sprint:this.formValidate.sprint,
+			}
+			let fileName = "用户故事导出"
+
+			defaultAXIOS(userstoryOutExcel,params,{timeout:60000,method:'get',responseType:"blob"}).then((response) => {
+	            let myData = response.data;
+	            console.log("<======product***导出execl+++",response,myData,"======>");
+
+				let blob = new Blob([myData],{type:"application/vnd.ms-excel"});
+				let link = document.createElement("a");
+				link.href = window.URL.createObjectURL(blob);
+				link.download = fileName;
+				link.click();
+				return Promise.resolve(link);
+
+
+	        }).catch( (error) => {
+	            console.log(error);
+	            this.showError(error);
+	            return Promise.reject(error);
+	        });
+
+
+		},
 		deleteTableLine(i){
             this.delpopOpenFn(true);
             this.tableDataCur = i;

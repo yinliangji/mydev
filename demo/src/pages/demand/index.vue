@@ -91,7 +91,7 @@
                                 </Button>
                                 <Button 
                                     type="info" 
-                                    :disabled="authIsAdmin(['PlainAdmin'])"
+                                    :disabled="authIsAdmin(['SuperAdmin','PlainAdmin'])"
                                     @click="outinITM"
                                     size="small"
                                     style="float: right"
@@ -198,6 +198,7 @@ export default {
                 {
                     title: '需求项类型',
                     key: 'prj_type',
+                    width: 100,
                     align: 'center',
                     render: (h, params) => {
                         return h(
@@ -210,12 +211,25 @@ export default {
                     title: '提出部门',
                     key: 'req_submitter',
                     align: 'center',
+                    width: 140,
                 },
                 {
-                    title: '需求项下用户故事上线情况',
-                    width: 190,
+                    title: '用户故事情况(上线 / 未上线)',
+                    width: 120,
                     key: 'on_line',
                     align: 'center',
+                    type: 'html',
+                    renderHeader: (h, params) => {
+                        return h('div', {
+                            attrs:{title:"根据需求项分解为更细粒度的用户故事的完成情况"}
+                        }, [
+                            h('span', {}, '用户故事情况'),
+                            //h('Icon', {props:{type: 'ios-help'},}, ''),
+                            h('br'),
+                            h('span', {}, '(上线 / 未上线)')
+                        ]);
+                    }
+
                 },
 
                 {

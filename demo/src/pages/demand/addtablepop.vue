@@ -13,19 +13,24 @@
                 <Input v-model="formItem.req_name" placeholder="请输入需求项名称"></Input>
             </FormItem>
             
-            <FormItem label="需求项类型" prop="prj_type">
-                <RadioGroup v-model="formItem.prj_type">
-                    <Radio label="1">立项</Radio>
-                    <Radio label="2">自研</Radio>
-                </RadioGroup>
-            </FormItem>
+            
             <FormItem label="需求项编号" prop="req_id" v-show="formItem.prj_type  == 2 ? false : true" >
                 <Input v-model="formItem.req_id"  :disabled="formItem.prj_type  == 1 ? false : true" placeholder="请输入需求项编号"></Input>
                 <p v-show="formItem.prj_type  != 2 ? false : true">【需求项编号】自动生成</p>
             </FormItem>
             <FormItem label="需求项编号" v-show="formItem.prj_type  != 2 ? false : true">
-                <p >【需求项编号】自动生成</p>
+                <p >【项目在ITM中对应的需求项编号】</p>
                 <!-- v-if="formItem.prj_type  == 2 ? false : true" -->
+            </FormItem>
+            <FormItem label="需求项类型" prop="prj_type">
+                <RadioGroup v-model="formItem.prj_type">
+                    <Tooltip content="在ITM中立项的项目对应的需求项" placement="top-start">
+                        <Radio label="1">立项 <Icon type="ios-help"></Icon></Radio>
+                    </Tooltip>
+                    <Tooltip content="非立项项目对应的需求项" placement="top-start">
+                        <Radio label="2">自研 <Icon type="ios-help"></Icon></Radio>
+                    </Tooltip>
+                </RadioGroup>
             </FormItem>
             <FormItem label="提出部门" prop="req_submitter">
                 <Input v-model="formItem.req_submitter" placeholder="请输入提出部门"></Input>
@@ -338,5 +343,18 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
+.top,.bottom{
+    text-align: center;
+}
+.center{
+    width: 300px;
+    margin: 10px auto;
+    overflow: hidden;
+}
+.center-left{
+    float: left;
+}
+.center-right{
+    float: right;
+}
 </style>

@@ -244,14 +244,14 @@ export default class Common extends Utils {
       }
 
 
-      if (process.env.NODE_ENV === 'production' && window.location.href.indexOf("debug=true") == -1) {
+      if (process.env.NODE_ENV === 'production' && (window.location.href.indexOf("debug=true") == -1 || !super.getCookie("debug") )) {
         console.log(MET+" | "+URL);
         console.log(JSON.stringify(ERR));
       }else{
         THIS.$Notice.open({
             title: MET+" | "+URL,
             desc: JSON.stringify(ERR),
-            duration: 60
+            duration: 10
         });
       }
     }

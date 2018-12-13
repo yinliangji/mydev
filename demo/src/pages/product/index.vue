@@ -76,10 +76,10 @@
                                         </FormItem>
 						            </Col>
 
-									<Col span="2" style="text-align: center">负责人</Col>
+									<Col span="2" style="text-align: center">责任人</Col>
 						            <Col span="6">
 						                <FormItem >
-						                    <Select ref="Charger" clearable filterable v-model="formValidate.charger" placeholder="请选择负责人">
+						                    <Select ref="Charger" clearable filterable v-model="formValidate.charger" placeholder="请选择责任人">
                                                 <Option v-for="(item,index) in chargerList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
 						                </FormItem>
@@ -130,11 +130,11 @@
 							
 							<Col span="1" >
 								<img :src="currentView == 'developList' ? developListImgCur : developListImg" 
-								@click="showList" class="cursor">
+								@click="showList" class="cursor" title="用户故事列表">
 							</Col>
 							<Col span="1" >
 								<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
-								@click="showTask" class="cursor">
+								@click="showTask" class="cursor" title="用户故事看板">
 							</Col>
 							<!--
 							<Col span="1" v-if="currentView == 'kanbanboard'">
@@ -473,7 +473,7 @@ export default {
                     }
                 },
                 {
-                    title: '负责人',
+                    title: '责任人',
                     key: 'nick_name',
                     width: 100,
                     align: 'center',
@@ -562,12 +562,12 @@ export default {
                     key: 'manHours',
                     type: 'html',
                     align: 'center',
-                    width: 90,
+                    width: 100,
                     renderHeader: (h, params) => {
 				        return h('div', {}, [
 				            h('span', {}, '工时'),
 				            h('br'),
-				            h('span', {}, '实际|预计')
+				            h('span', {}, '实际 / 预计')
 				        ]);
 				    }
                 },
@@ -610,7 +610,7 @@ export default {
                             }, '删除'),
                             h('Button', {
                                 props: {
-                                    type: 'primary',
+                                    type: 'warning',
                                     size: 'small'
                                 },
                                 style: {
@@ -820,8 +820,6 @@ export default {
 	},
 	methods:{
 		optputExecl(){
-			
-
 			let params = {
 				id:this.getID(),
 				prj_id:this.getID(),
@@ -836,26 +834,7 @@ export default {
 				sprint:this.formValidate.sprint,
 			}
 			let fileName = "用户故事导出"
-
-			defaultAXIOS(userstoryOutExcel,params,{timeout:60000,method:'get',responseType:"blob"}).then((response) => {
-	            let myData = response.data;
-	            console.log("<======product***导出execl+++",response,myData,"======>");
-
-				let blob = new Blob([myData],{type:"application/vnd.ms-excel"});
-				let link = document.createElement("a");
-				link.href = window.URL.createObjectURL(blob);
-				link.download = fileName;
-				link.click();
-				return Promise.resolve(link);
-
-
-	        }).catch( (error) => {
-	            console.log(error);
-	            this.showError(error);
-	            return Promise.reject(error);
-	        });
-
-
+			return Common.DownFile(defaultAXIOS,this,userstoryOutExcel,params,fileName);
 		},
 		deleteTableLine(i){
             this.delpopOpenFn(true);
@@ -1303,19 +1282,12 @@ export default {
 
 		},
 		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
-
-
-
-
             defaultAXIOS(URL,{page,limit,data,id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
-                //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("<======product***response+++",response,myData,"======>");
+                console.log("<======***用户故事列表+++",response,myData,"======>");
                 this.tableData = myData.rows;
+                this.tableData.forEach(item=>item.manHours = "0/"+item.manHours)
                 this.tableDAtaTatol = myData.page_rows;
-
-    			
-
 
             }).catch( (error) => {
                 console.log(error);
@@ -1333,10 +1305,6 @@ export default {
         showError(ERR){
             Common.ErrorShow(ERR,this);
         },
-
-
-        
-		
 
 		tabRowAddFn(){
             this.tableData.push(this.addtest);

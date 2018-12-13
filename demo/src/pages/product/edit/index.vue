@@ -588,7 +588,15 @@ export default {
         getStoryEditFn(DATA){
             for (let i in this.formValidate){
                 if(i == "manhour"){
-                    this.formValidate.manhour = Number(DATA.manHours+"")
+                    
+                    let temp;
+                    if(DATA.manHours.indexOf("/") != -1){
+                        temp = "/"
+                    }else if(DATA.manHours.indexOf("|") != -1){
+                        temp = ""
+                    }
+                    temp = temp? DATA.manHours.split(temp)[1] : DATA.manHours;
+                    this.formValidate.manhour = Number(temp)
                 }else if(i == "AddGroupList" || i == "bfunc"){
                 }else{
                     this.formValidate[i] = DATA[i]+"";

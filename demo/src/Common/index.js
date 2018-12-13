@@ -1499,7 +1499,7 @@ export default class Common extends Utils {
     static DateFormat(_Common,date){
       return _Common.replaceNullFn(date) ? new Date(_Common.replaceNullFn(date)).Format("yyyy-MM-dd") : "";
     }
-    //下载文件
+    //下载文件和导出文件
     static DownFile(FN,that,URL,params={},fileName=""){
       return FN(URL,params,{timeout:2000,method:'get',responseType:"blob"}).then((response) => {
           let myData = response.data;

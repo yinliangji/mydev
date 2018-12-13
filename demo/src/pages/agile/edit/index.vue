@@ -13,6 +13,7 @@
                             <Select clearable v-model="formValidate.pid"  placeholder="请选择所属产品">
                                 <Option v-for="item in prod_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
+                            <ToolTip  content="项目归属的产品，如项目“企业现金二期”所属产品是“企业现金”" />
                         </FormItem> 
 
 
@@ -25,8 +26,8 @@
                             <Col span="12">
                                 <FormItem label="项目类型" prop="prj_type">
                                     <RadioGroup v-model="formValidate.prj_type">
-                                        <Radio label="1">立研</Radio>
-                                        <Radio label="2">自研</Radio>
+                                        <Radio title="在ITM中已立项的项目" label="1">立研</Radio>
+                                        <Radio title="非立项项目" label="2">自研</Radio>
                                     </RadioGroup>
                                 </FormItem>
                             </Col>
@@ -72,6 +73,7 @@
                             <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
                                 添加模块
                             </Button>
+                            <ToolTip :L="82" placement="top-start" content="项目对应的功能模块，该模块将会与代码工程对应，一个代码工程可以对应1-n个模块" />
                         </FormItem>
                         <FormItem label="模块选择" prop="modules">
                             <Select v-model="formValidate.modules" multiple >
@@ -251,7 +253,7 @@
         </Modal>  
 
 
-        <Modal ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
+        <Modal  ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
             <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
                 <FormItem label="角色名称" prop="partName">
                     
@@ -260,7 +262,9 @@
                     <Select v-model="formPartValidate.partName" placeholder="请选择角色" v-else>
                         <Option v-for="(item,index) in formPartValidate.addGroupList" :value="item.value" :key="index">{{ item.label }}</Option>
                     </Select>
+                    
                 </FormItem>
+                <p>若下拉列表中没有合适的角色，请联系我们 <span style="color:red;">010-63314458</span> 帮您提供更多新的角色。</p>
             </Form>
         </Modal>
 

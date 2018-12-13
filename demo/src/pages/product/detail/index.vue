@@ -15,7 +15,7 @@
                     class="editBtn"
                     long
                     size="small"
-                    v-show="(TabsCur == 'name1' || TabsCur == 'name3' || TabsCur == 'name4') ? true : false"
+                    v-show="(TabsCur == 'name1') ? true : false"
                     >
                     编辑
                 </Button>
@@ -269,6 +269,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
+import Store from '@/vuex/store'
 const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstoryGetBus,userstoryAddBus,userstoryRelative,userstoryListBusfunc,userstorydelete} = Common.restUrl;
 import Enclosure from "./enclosure";
 import Trans from './transSingle'
@@ -852,7 +853,13 @@ export default {
             if(this.cacheMenuData(0)){
                 _query.menu = this.cacheMenuData(0)
             }
-            _query.data = JSON.stringify(this.tableData3[i]);
+            let addus_id = (arr)=>{
+                if(!arr.us_id){arr.us_id = this.formValidate.userstory_id};
+                arr.req_id = this.formValidate.req_id
+                return arr;
+            }
+            _query.data = JSON.stringify(addus_id(this.tableData3[i]));
+            //_query.data = JSON.stringify(this.tableData3[i]);
             this.$router.push({path:'/product/business/edit/',query:_query});
         },
         deleteBus(i){
@@ -919,8 +926,7 @@ export default {
         },
         busListAdd(params){
             this.saveBusListData(userstoryRelative,params).then((res)=>{
-
-                this.Message();
+                this.Message((val=>val == "minus" ? "删除成功":"添加成功")(params.add));
                 this.serchDisabled = false;
                 document.getElementsByClassName("ivu-select-dropdown")[0].removeAttribute("id");
                 this.serchCurDelTagVal = false;
@@ -1126,6 +1132,8 @@ export default {
                     if(this.serchCurDelTagVal !== false){
                         params.add = "minus";
                         params.value = this.serchCurDelTagVal;
+                        let myObj = Common.checkValToObj(this.serchCurDelTagVal,this.formValidate.AddGroupList[0].groupList);
+                        params.who = setPro(myObj,"who");
                     }else if(curVal.length - this.tableData3Length > 0){
                         params.add = "plus";
                         params.value = this.popsItem;
@@ -1134,7 +1142,9 @@ export default {
                         params.bfunc_name = setPro(myObj,"bfunc_name");
                     }else if(curVal.length - this.tableData3Length < 0){
                         params.add = "minus";
-                        params.value = this.popsItem
+                        params.value = this.popsItem;
+                        let myObj = Common.checkValToObj(this.popsItem,this.formValidate.AddGroupList[0].groupList);
+                        params.who = setPro(myObj,"who");
                     }
                    
                     

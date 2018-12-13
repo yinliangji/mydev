@@ -14,7 +14,7 @@
                     size="small"
                     icon="ios-download-outline"
                     >
-                    word 导出
+                    word 导出设计文档
                 </Button>
             </div>
             <div class="editBtn2">
@@ -27,7 +27,7 @@
                     size="small"
                     icon="ios-download-outline"
                     >
-                    execl 导出
+                    excel 导出服务接口和错误码
                 </Button>
             </div>
             <div class="editBtn">
@@ -234,7 +234,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectDetail,listModule,getPermission,fileDownList,downFile,fileUpload,fileDelete} = Common.restUrl;
+const {projectDetail,listModule,getPermission,fileDownList,downFile,fileUpload,fileDelete,projectOutputWord,projectOutputExecl} = Common.restUrl;
 export default {
 	data () {
         return {
@@ -536,10 +536,18 @@ export default {
             Common.GetPermission(defaultAXIOS,this,URL);
         },
         outputExecl(){
-            console.error("outputExecl")
+            let params = {
+                prj_id:this.formValidate.prj_id,
+            }
+            let fileName = "项目导出"
+            return Common.DownFile(defaultAXIOS,this,projectOutputExecl,params,fileName);
         },
         outputWord(){
-            console.error("outputWord")
+            let params = {
+                prj_id:this.formValidate.prj_id,
+            }
+            let fileName = "项目导出.doc"
+            return Common.DownFile(defaultAXIOS,this,projectOutputWord,params,fileName);
         },
         editItemFn(){
             this.$router.push({path: '/agile/edit', query: {id: Common.GETID(this,Common),prj_id:Common.GETprjid(this,Common)}})
@@ -733,14 +741,14 @@ h4{
     right:90px;
     top:10px;
     z-index: 10;
-    width: 90px;
+    width: 190px;
 }
 .editBtn3{
     position:absolute;
-    right:190px;
+    right:290px;
     top:10px;
     z-index: 10;
-    width: 90px;
+    width: 140px;
 }
 .pageBox {
     padding-bottom:20px;

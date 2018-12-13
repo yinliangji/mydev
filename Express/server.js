@@ -2625,6 +2625,18 @@ app.all('/exportExcelFile/usDetailExp/', function(req, res) {
 
 
 
+app.all('/designer/application_erro/', function(req, res) {
+    res.json({status: "success",message: "delete_list success",});
+    res.end()
+});
+app.all('/designer/project_id/', function(req, res) {
+    res.json({status: "success",message: "delete_list success",});
+    res.end()
+});
+
+
+
+
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({

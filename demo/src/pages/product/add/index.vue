@@ -312,7 +312,7 @@ export default {
             editTableData:false,
             formValidate: {
                 userstory_name: '',
-                userstory_type:"",
+                userstory_type:"1",
                 userstory_status:"1",
                 proi:"3",
                 userstory_desc: '',

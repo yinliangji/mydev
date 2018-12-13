@@ -82,7 +82,13 @@ CommonRest.restUrl = {
     /****express 敏捷项目列表ITM get****/
 
     "syncSearch": process.env.BASE_URL + "/prj/sync_search/",
-    /****express 敏捷项目添加角色人员 get SUB_BASE_URL****/
+    /****express 敏捷项目添加角色人员 get ****/
+
+    "projectOutputExecl": process.env.BASE_URL + "/designer/application_erro/",
+    /****express 敏捷项目导出word get ****/
+
+    "projectOutputWord": process.env.BASE_URL + "/designer/project_id/",
+    /****express 敏捷项目导出word get ****/
 
 
 
@@ -163,7 +169,7 @@ CommonRest.restUrl = {
     //"userstoryUploadFile":process.env.BASE_URL + "/agile/uploadFile",
     //"userstoryUploadFile":process.env.BASE_ZUUL_URL + "/agile/uploadFile",
     //"userstoryUploadFile":addZUUL(process.env.BASE_ZUUL_URL + "/agile/uploadFile") ,
-    "userstoryUploadFile":addZUUL(process.env.BASE_URL + "/agile/uploadFile") ,
+    "userstoryUploadFile":addZUUL(process.env.BASE_URL + "/agile/uploadFile"),
     /****express 添加用户业务功能上传文件 get****/
 
     "userstorydelete": process.env.BASE_URL + "/agile/delete_bfunc3/",

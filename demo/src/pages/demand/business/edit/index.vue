@@ -29,7 +29,7 @@
                         </Col>
                         
                         <Col span="4">
-                            &nbsp;&nbsp;<Button  type="primary" @click="linkToNew">ITM新建逻辑子系统</Button>
+                            &nbsp;&nbsp;<Button v-show="false" type="primary" @click="linkToNew">ITM新建逻辑子系统</Button>
                         </Col>
                     </Row>
                     
@@ -302,7 +302,8 @@ export default {
             let _params = {
                 prj_id:Common.GETprjid(this,Common),
                 value:mydata.value,
-                us_id:mydata.us_id
+                us_id:mydata.us_id,
+                req_id:mydata.req_id,
             }
             return defaultAXIOS(URL,_params,{timeout:60000,method:'get'})
             .then((response) => {

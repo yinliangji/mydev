@@ -19,6 +19,9 @@ Vue.config.productionTip = false
 import goAgile from './components/goAgile/index.js'
 Vue.use(goAgile);
 
+import ToolTip from './components/Tooltip/index.js'
+Vue.use(ToolTip);
+
 import selectMenu from './components/selectMenu'
 Vue.use(selectMenu);
 

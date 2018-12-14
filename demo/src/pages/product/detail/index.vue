@@ -92,11 +92,11 @@
                             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
                               <tbody>
                                 <tr>
-                                  <th width="11%">所属需求项</th>
+                                  <th width="11%" style="background:none; color:#495060;">所属需求项</th>
                                   <td width="20%">{{ formValidate.req_name | FALSEINFO}}</td>
-                                  <th width="11%">需求项提出人</th>
+                                  <th width="11%" style="background:none; color:#495060;">需求项提出人</th>
                                   <td width="20%" >{{ formValidate.proposer | FALSEINFO}}</td>
-                                  <th width="11%">提出人部门</th>
+                                  <th width="11%" style="background:none; color:#495060;">提出人部门</th>
                                   <td>{{ formValidate.proposer_department | FALSEINFO}}</td>
                                 </tr>
                               </tbody>
@@ -213,7 +213,8 @@
                     <div class="baseInfoBox">
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
                         <div class="tableBox">
-                            用户故事附件制作中.......
+                            <!-- 用户故事附件制作中....... -->
+                            <FileDownLoad :PRJID="formValidate.prj_id" />
                         </div>
                     </div>
                 </TabPane>
@@ -275,6 +276,7 @@ import Enclosure from "./enclosure";
 import Trans from './transSingle'
 import Delpop from '@/components/delectAlert'
 import Buspop from './buspop'
+import FileDownLoad from './filedown'
 // wy start
 import storyTestCase from '@/components/storyTestCase'
 // wy end
@@ -1088,6 +1090,7 @@ export default {
         Buspop,
         storyTestCase,
         AppDesign,
+        FileDownLoad,
     },
     watch:{
         //查询搜索开始
@@ -1206,6 +1209,8 @@ h4{
     //overflow:inherit;
     //overflow-x: hidden;
 }
+
+
 </style>
 <style>
 #hidden {

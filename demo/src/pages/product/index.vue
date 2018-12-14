@@ -110,31 +110,51 @@
 			    <div class="tableBox">
 					<div class="tagBox">
 						<Row :gutter="10" align="middle">
-							<Col span="5" class="addBtnBox">
+							<Col span="3" >
 								<Button 
+									class="addBtnBox"
 									type="success"  
 									@click="addItem"
 									:disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
 								>
 									添加用户故事
 								</Button>
+								
+							</Col>
+							
+							<Col span="2" >
+								<img :src="currentView == 'developList' ? developListImgCur : developListImg" 
+								@click="showList" class="cursor" title="用户故事列表">
+							</Col>
+							<Col span="2" >
+								<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
+								@click="showTask" class="cursor" title="用户故事看板">
+							</Col>
+							<Col span="17" style="text-align:right;" >
 								<Button 
+									class="addBtnBox"
 									icon="ios-download-outline"
 									type="info"  
 									@click="optputExecl"
 									:disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
+									size="small"
+									shape="circle"
 								>
 									导出 excel
 								</Button>
-							</Col>
-							
-							<Col span="1" >
-								<img :src="currentView == 'developList' ? developListImgCur : developListImg" 
-								@click="showList" class="cursor" title="用户故事列表">
-							</Col>
-							<Col span="1" >
-								<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
-								@click="showTask" class="cursor" title="用户故事看板">
+								<Button 
+									class="addBtnBox"
+									icon="ios-download-outline"
+									type="info"  
+									@click="optputWord"
+									:disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
+									size="small"
+									shape="circle"
+								>
+									导出 word
+								</Button>
+								
+								&nbsp;
 							</Col>
 							<!--
 							<Col span="1" v-if="currentView == 'kanbanboard'">
@@ -205,7 +225,7 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 import Delpop from '@/components/delectAlert'
-const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList,userstoryOutExcel} = Common.restUrl;
+const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList,userstoryOutExcel,userstoryOutWord} = Common.restUrl;
 export default {
 	watch: {
 		'$route' (to, from) {
@@ -833,8 +853,25 @@ export default {
 				learn_concern:this.formValidate.learn_concern,
 				sprint:this.formValidate.sprint,
 			}
-			let fileName = "用户故事导出"
+			let fileName = "用户故事Execl导出"
 			return Common.DownFile(defaultAXIOS,this,userstoryOutExcel,params,fileName);
+		},
+		optputWord(){
+			let params = {
+				id:this.getID(),
+				prj_id:this.getID(),
+				userstory_name:this.formValidate.userstory_name,
+				userstory_id:this.formValidate.userstory_id,
+				userstory_type:this.formValidate.userstory_type,
+				userstory_status:this.formValidate.userstory_status,
+				req_id:this.formValidate.req_id,
+				proi:this.formValidate.proi,
+				charger:this.formValidate.charger,
+				learn_concern:this.formValidate.learn_concern,
+				sprint:this.formValidate.sprint,
+			}
+			let fileName = "用户故事Word导出.doc"
+			return Common.DownFile(defaultAXIOS,this,userstoryOutWord,params,fileName);
 		},
 		deleteTableLine(i){
             this.delpopOpenFn(true);
@@ -1146,6 +1183,7 @@ export default {
                 this.formValidate[i] = "";
             }
             this.$refs.formValidate.resetFields();
+            this.serchAll();
         },
         optionSession(){
         	Common.RemoveSession("allSession");
@@ -1377,6 +1415,14 @@ export default {
 			setTimeout(()=>{
 				this.getInfoFn(this.getID(),"showTask")
 			},350)
+		},
+		resetKanbanboard(){
+			this.cardListBase=[];
+			this.statusListBase=[];
+			this.groupList=[{ text: "所属需求项" }];
+		},
+		resetList(){
+			this.tableData = [];
 		},
 	}
 }

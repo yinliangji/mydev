@@ -185,7 +185,10 @@ CommonRest.restUrl = {
     /****express 用户故事列表删除 get****/
 
     "userstoryOutExcel": process.env.BASE_URL + "/exportExcelFile/usDetailExp/",
-    /****express 用户故事列表删除 get****/
+    /****express 用户故事导出excel get****/
+
+    "userstoryOutWord": process.env.BASE_URL + "/exportExcelFile/usBfuncExp/",
+    /****express 用户故事导出word get****/
 
 
 

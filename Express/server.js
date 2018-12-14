@@ -2622,6 +2622,11 @@ app.all('/exportExcelFile/usDetailExp/', function(req, res) {
     res.end()
 });
 
+app.all('/exportExcelFile/usBfuncExp/', function(req, res) {
+    res.json({status: "success",message: "delete_list success",});
+    res.end()
+});
+
 
 
 

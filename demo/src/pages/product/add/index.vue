@@ -107,7 +107,7 @@
 
                     <div class="fromBox">
                         <Row>
-                            <Col span="12">
+                            <Col span="12" class="relZIndex1">
                                 <FormItem label="所属迭代" prop="sprint">
                                     <Select clearable v-model="formValidate.sprint" placeholder="请选所属迭代">
                                         <!-- <Option value="迭代1">迭代1</Option>
@@ -115,6 +115,7 @@
                                         <Option value="迭代3">迭代3</Option> -->
                                         <Option v-for="(item , index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
                                     </Select>
+                                    <ToolTip content="计划在哪个迭代周期内完成此用户故事" />
                                 </FormItem>
                             </Col>
                             <Col span="12">
@@ -134,6 +135,7 @@
                             <Select v-model="formValidate.req_id" placeholder="请选择所属需求项">
                                 <Option v-for="(item , index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
+                            <ToolTip :W="135" content="此用户故事来源的需求项" />
                         </FormItem>
 
 

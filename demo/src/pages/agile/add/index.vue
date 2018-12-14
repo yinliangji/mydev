@@ -26,9 +26,9 @@
                             <Col span="12">
                                 <FormItem label="项目类型" prop="prj_type">
                                     <RadioGroup v-model="formValidate.prj_type">
-                                        
                                         <Radio title="在ITM中已立项的项目" label="1">立研</Radio>
                                         <Radio title="非立项项目" label="2">自研</Radio>
+                                        <ToolTip :L="105"  content="立项：在ITM中已立项的项目　　　自研：非立项项目" />
                                         
                                     </RadioGroup>
                                 </FormItem>
@@ -257,21 +257,8 @@
             </Form>
         </Modal>    
 
-
-        <Modal ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
-            <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
-                <FormItem label="角色名称" prop="partName">
-
-                    <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8" v-if="!formPartValidate.addGroupList.length"></Input>
-
-                    <Select v-model="formPartValidate.partName" placeholder="请选择角色" v-else>
-                        <Option v-for="(item,index) in formPartValidate.addGroupList" :value="item.value" :key="index">{{ item.label }}</Option>
-                    </Select>
-
-                </FormItem>
-                <p>若下拉列表中没有合适的角色，请联系我们 <span style="color:red;">010-63314458</span> 帮您提供更多新的角色。</p>
-            </Form>
-        </Modal>
+      
+        <AddPartPop :isShow="partAdd" :data="formPartValidate.addGroupList" :items="formValidate.AddGroupList" @closeAddPartPop="partCancel3" @sendAddPartPop="submitPart3" />
 
         <Modal v-model="modaDelete" width="300">
             <p slot="header" style="color:#f60;text-align:center">
@@ -299,6 +286,7 @@ const {defaultAXIOS} = API;
 import Common from '@/Common';
 const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,listModule,publishUser,logicSystem,phySystem} = Common.restUrl;
 import Store from '@/vuex/store'
+import AddPartPop from '@/pages/agile/add/addpartpop';
 
 const validateDate = (rule, value, callback) => {
     if (!value || !value[0] || !value[1]) {
@@ -340,13 +328,6 @@ export default {
                 this.publishUserFn(publishUser,{username:Common.getStorageAndCookie(this,Common,"username")},curVal);
             }
         },
-
-
-
-       
-
-
-        
     },
     beforecreated(){
         console.log("agileAdd--beforecreated-------",this.formValidate)
@@ -460,13 +441,10 @@ export default {
                 //     label: 'New York总体组人1'
                 // },
             ],
-            
-            
             moduleList: [
                 // {
                 //     value: '模块1-1',
                 //     label: '模块1'
-               
             ],
             ruleValidate: {
                 prod_id: [
@@ -659,11 +637,7 @@ export default {
 
         this.projectGetProdFn();
 
-
         this.listModuleFn(listModule,((ID)=>{return ID?{id:ID}:{id:""}})(Common.GETID(this,Common)))
-
-        
-
 
     },
     
@@ -788,15 +762,24 @@ export default {
             this.$refs.addPartPopBox.resetFields();
             
         },
+
         addpart(){
             this.partAdd = true;
         },
-        submitPart(name){
-        	//Common.addPartPopBox(name,this);//下拉样子
-            Common.addPartPopBox2(name,this); //修改添加角色
-        	
-        },
         
+        submitPart(name,partName){
+            //Common.addPartPopBox(name,this);//下拉样子
+            Common.addPartPopBox2(name,this); //修改添加角色
+        },
+        partCancel3(isClose){
+            this.partAdd = isClose;
+            this.formPartValidate.partName = "";
+        },
+        submitPart3(name,partName){
+            this.formPartValidate.partName = partName;
+            Common.addPartPopBox3(name,this,partName); //修改添加角色
+        },
+
         delCancel(){
           this.modaDelete = false;
         },
@@ -805,10 +788,6 @@ export default {
             this.thisIndex = null;
             this.modaDelete = false;
         },
-
-
-
-
         projectGroupFn(URL,params = {},ARR,thatEle){
             defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
                 let myData = response.data;
@@ -833,11 +812,6 @@ export default {
                 this.showError(error);
             });   
         },
-
-        
-
-
-
         projectGetProdFn(){
             defaultAXIOS(projectGetProd,{},{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
@@ -1037,7 +1011,10 @@ export default {
                 this.formItem.businessName = "";
             });
         },
-    }
+    },
+    components: {
+        AddPartPop,
+    },
 
 }
 </script>

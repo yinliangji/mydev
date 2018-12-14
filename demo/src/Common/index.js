@@ -511,6 +511,31 @@ export default class Common extends Utils {
         }
       })
     }
+    //添加角色2--不通用
+    static  addPartPopBox3(name,that){
+      let _tempObj = {
+        myRef: "selfRef",
+        group: [],
+        groupList: [],
+        myLabel: "",
+        myValue: "",
+        delBtn: true,
+        groupName: "",
+        required: true,
+        modaAdd:false,//添加角色修改
+        grouptemp:[],//修改添加角色
+        groupListtemp: [],//修改添加角色
+        myReftemp: "selfRefRole",//修改添加角色
+      }
+      _tempObj.myLabel = that.formPartValidate.addGroupList.length ? that.formPartValidate.addGroupList.filter((item) => {
+        return item.value == that.formPartValidate.partName
+      })[0].label : that.formPartValidate.partName;
+      _tempObj.myValue = that.formPartValidate.partName;
+      that.formValidate.AddGroupList.push(_tempObj);
+      that.formPartValidate.partName = "";
+      _tempObj = null;
+      that.partAdd = false;
+    }
 
     //搜索--修改标签
     static ModifyTagData(D,that){
@@ -1501,7 +1526,7 @@ export default class Common extends Utils {
     }
     //下载文件和导出文件
     static DownFile(FN,that,URL,params={},fileName=""){
-      return FN(URL,params,{timeout:2000,method:'get',responseType:"blob"}).then((response) => {
+      return FN(URL,params,{timeout:60000,method:'get',responseType:"blob"}).then((response) => {
           let myData = response.data;
           console.log("<======***文件下载+++",response,myData,"======>");
           let blob = new Blob([myData],{type:"application/vnd.ms-excel"});

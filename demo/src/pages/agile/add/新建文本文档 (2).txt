@@ -1,0 +1,27 @@
+<Modal ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
+            <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
+                <FormItem label="角色名称" prop="partName">
+                    <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8" v-if="!formPartValidate.addGroupList.length"></Input>
+                    <Select v-model="formPartValidate.partName" placeholder="请选择角色" v-else>
+                        <Option v-for="(item,index) in formPartValidate.addGroupList" :value="item.value" :key="index">{{ item.label }}</Option>
+                    </Select>
+                </FormItem>
+                <p>若下拉列表中没有合适的角色，请联系我们 <span style="color:red;">010-63314458</span> 帮您提供更多新的角色。</p>
+            </Form>
+        </Modal>
+
+
+<Modal  ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
+            <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
+                <FormItem label="角色名称" prop="partName">
+                    
+                    <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8" v-if="!formPartValidate.addGroupList.length"></Input>
+
+                    <Select v-model="formPartValidate.partName" placeholder="请选择角色" v-else>
+                        <Option v-for="(item,index) in formPartValidate.addGroupList" :value="item.value" :key="index">{{ item.label }}</Option>
+                    </Select>
+                    
+                </FormItem>
+                <p>若下拉列表中没有合适的角色，请联系我们 <span style="color:red;">010-63314458</span> 帮您提供更多新的角色。</p>
+            </Form>
+        </Modal> 

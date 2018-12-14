@@ -517,6 +517,7 @@ export default {
                 this.formValidate[i] = "";
             }
             this.$refs.formValidate.resetFields();
+            this.serchAll();
         },
 
         serchAll(){

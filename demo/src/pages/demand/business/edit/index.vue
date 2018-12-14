@@ -448,7 +448,7 @@ export default {
     created(){
         console.log("新增业务功能--created-------",this.formValidate);
         let mydata = this.$router.history.current.query.data ? JSON.parse(this.$router.history.current.query.data) : {};
-        this.actionUrl = userstoryUploadFile+"?type=6&req_id="+mydata.req_id+"&version="+mydata.version+"&bfunc_id="+mydata.bfunc_id+"&id="+Common.GETID(this,Common)
+        this.actionUrl = userstoryUploadFile+"?type=6&req_id="+mydata.req_id+"&version="+mydata.version+"&bfunc_id="+mydata.bfunc_id+"&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
     },
     beforeUpdate(){
         console.log("新增业务功能--beforeUpdate-------",this.formValidate)

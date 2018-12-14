@@ -186,7 +186,7 @@ export default {
                     this.formValidate.value = myData.data.value;
                     this.formValidate.version = myData.data.version;
 
-                    this.actionUrl = userstoryUploadFile+"?type=6&req_id="+_req_id+"&version="+myData.data.version+"&bfunc_id="+myData.data.bfunc_id+"&id="+Common.GETID(this,Common)
+                    this.actionUrl = userstoryUploadFile+"?type=6&req_id="+_req_id+"&version="+myData.data.version+"&bfunc_id="+myData.data.bfunc_id+"&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
 
                 }else{
                    this.modal_next_loading = false;

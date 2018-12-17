@@ -1,5 +1,5 @@
 <template>
-    <div class="tableContBox">
+    <div class="tableContBox" style="padding-left:1px;">
         
         <Upload
             multiple
@@ -34,7 +34,7 @@ const { fileDownList,fileUpload} = Common.restUrl;
 
 export default {
     props: {
-        PRJID: {
+        USID: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
                 return false;
@@ -43,10 +43,10 @@ export default {
         
     },
     watch:{
-        PRJID(){
-            this.formValidate.prj_id = this.PRJID;
-            if(this.PRJID){
-                this.init(this.PRJID);
+        USID(){
+            this.formValidate.userstory_id = this.USID;
+            if(this.USID){
+                this.init(this.USID);
             }
         },
     },
@@ -141,18 +141,18 @@ export default {
             tableData: [],
             actionUrl:"//jsonplaceholder.typicode.com/posts/",
             formValidate:{
-                prj_id:"",
+                userstory_id:"",
             },
             
         }
     },
     methods:{
-        init(PrjID){
+        init(usID){
             //Common.GETprjid(this,Common)
-            let Prj_ID = PrjID? PrjID : this.formValidate.prj_id;
-            this.actionUrl = fileUpload+"?taskId="+Prj_ID+"&type=2&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
+            let us_ID = usID? usID : this.formValidate.userstory_id;
+            this.actionUrl = fileUpload+"?taskId="+us_ID+"&type=2&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
 
-            this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),PrjID)
+            this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),usID)
             this.tableDAtaPageCurrent = 1;
         },
         handleError(res,file,list){
@@ -162,14 +162,14 @@ export default {
         },
         handleSuccess(res,file,list){
 
-            this.listUpFile(fileUpload,Common.GETID(this,Common),this.formValidate.prj_id).then(()=>{
+            this.listUpFile(fileUpload,Common.GETID(this,Common),this.formValidate.userstory_id).then(()=>{
                 this.$Notice.config({
                       top:100,
                       duration: 2
                   });
 
                 this.$Notice.success({title:"添加成功"})
-                this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.prj_id)
+                this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.userstory_id)
                 this.tableDAtaPageCurrent = 1;
 
 
@@ -180,10 +180,10 @@ export default {
             
             
         },
-        listUpFile(URL,id="",prj_id = ""){
+        listUpFile(URL,id="",userstory_id = ""){
             return Promise.resolve("添加成功");
 
-            return defaultAXIOS(URL,{id,taskId:prj_id},{timeout:20000,method:'get'}).then((response) => {
+            return defaultAXIOS(URL,{id,taskId:userstory_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======detail***yong+++",response,myData,"======>");
 
@@ -204,11 +204,11 @@ export default {
 
         },
         changeCurrentPage(i) {
-            this.fileDownFn(fileDownList,i,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.prj_id)
+            this.fileDownFn(fileDownList,i,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.userstory_id)
             this.tableDAtaPageCurrent = i;
         },
-        fileDownFn(URL = "",page = 1,pageline = 3,id = "",prj_id = ""){
-            defaultAXIOS(URL,{page,pageline,id,taskId:prj_id},{timeout:20000,method:'get'}).then((response) => {
+        fileDownFn(URL = "",page = 1,pageline = 3,id = "",userstory_id = ""){
+            defaultAXIOS(URL,{page,pageline,id,taskId:userstory_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======detail***用户故事附件列表+++",response,myData,"======>");
                 

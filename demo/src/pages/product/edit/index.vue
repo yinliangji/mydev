@@ -426,25 +426,10 @@ export default {
         if(!this.$router.history.current.query.fromEdit){
             Common.UserstorySession(Common);
         }
-                
 
         let ID = Common.GETID(this,Common);
         let prj_ID = false;
         let prod_ID = false;
-
-        // if(this.$router.history.current.query.id){
-        //    ID = this.$router.history.current.query.id 
-        // }else if(localStorage.getItem('id')){
-        //    ID = localStorage.getItem('id')
-        // }else if(Common.getCookie("id")){
-        //     ID = Common.getCookie("id")
-        // }else{
-        //    ID = false; 
-        // }
-
-        
-
-
        
         if(this.$router.history.current.query.DATA){
             
@@ -592,9 +577,9 @@ export default {
                 if(i == "manhour"){
                     
                     let temp;
-                    if(DATA.manHours.indexOf("/") != -1){
+                    if(DATA.manHours.toString().indexOf("/") != -1){
                         temp = "/"
-                    }else if(DATA.manHours.indexOf("|") != -1){
+                    }else if(DATA.manHours.toString().indexOf("|") != -1){
                         temp = ""
                     }
                     temp = temp? DATA.manHours.split(temp)[1] : DATA.manHours;

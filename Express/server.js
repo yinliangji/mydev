@@ -653,7 +653,7 @@ let Userstorydetail = (val1 = 200, val2 = 1, val3 = 3) => {
             "proposer":"",
             "proposer_department":"",
             "req_id":"req_id_xxxxxx",
-            "req_name":"",
+            "req_name":"@title",
             "sprint": 26,
             "sprint_name":26,
             "userstory_desc":"故事描述123123",
@@ -1859,7 +1859,7 @@ app.all('/menu/getMenu', function(req, res) {
 let addGroupList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": val1,
-        "message": "mockDataList xxxxxxx",
+        "message": "敏捷项目获取角色 xxxxxxx",
         data: [
             {
                 cn_name:"ICDP超级管理员",

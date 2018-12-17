@@ -35,15 +35,6 @@
                             </Col>
                         </Row>
 
-
-                        
-
-                      
-
-                        
-
-                      
-
     					<Row>
                             <Col span="12">
                                 <FormItem label="开始时间" prop="start_time">
@@ -69,13 +60,15 @@
 
 
                         <FormItem label="填写模块" prop="createModule">
-                            <Tag v-for="item in formValidate.createModule" :key="item" :name="item" closable @on-close="handleClose">
-                                {{ item}}
-                            </Tag>
-                            <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
-                                添加模块
-                            </Button>
-                            <ToolTip :L="82" placement="top-start" content="项目对应的功能模块，该模块将会与代码工程对应，一个代码工程可以对应1-n个模块" />
+                            <span style="position: relative;">
+                                <Tag v-for="item in formValidate.createModule" :key="item" :name="item" closable @on-close="handleClose">
+                                    {{ item}}
+                                </Tag>
+                                <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
+                                    添加模块
+                                </Button>
+                                <ToolTip  placement="top-start" :T="-4" content="项目对应的功能模块，该模块将会与代码工程对应，一个代码工程可以对应1-n个模块" />
+                            </span>
                         </FormItem>
 
 
@@ -349,6 +342,9 @@ export default {
 
     data () {
         let _this = this;
+        const validateDateEnd = Common.checkEndDate(this);
+        const validatePart = Common.checkPart(this);
+        /*
         const validateDateEnd = (rule, value, callback) => {
             if (value) {
                 let Timer = new Date(value).getTime() - new Date(this.formValidate.start_time).getTime();
@@ -357,6 +353,8 @@ export default {
                 }else{
                     return callback(new Error('结束日期早于开始日期！'));
                 }
+            }else if(!value){
+                return callback(new Error('请选择日期！'));
             }else{
                 callback()  
             }
@@ -378,6 +376,7 @@ export default {
                 }
             }
         };
+        */
         return {
             options3: {
                 disabledDate (date) {
@@ -460,11 +459,11 @@ export default {
                 prj_name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
-                // start_time: [
-                //     { required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
-                // ],
+                 start_time: [
+                     { required: true, type: 'date', message: '请选择日期！', trigger: 'change' }
+                 ],
                 end_time: [//
-                    { required: false, type: 'date', validator: validateDateEnd, trigger: 'change' }
+                    { required: true, type: 'date', validator: validateDateEnd, trigger: 'change' }
                     //{ required: false, type: 'date', message: 'Please select the date', trigger: 'change' }
                 ],
                 prj_desc: [

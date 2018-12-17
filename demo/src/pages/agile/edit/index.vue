@@ -68,15 +68,17 @@
 
 
                         <FormItem label="填写模块" >
-                            <Tag v-for="item in formValidate.createModule" :key="item" :name="item" closable @on-close="handleClose">
-                                {{ item}}
-                            </Tag>
-                            <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
-                                添加模块
-                            </Button>
-                            <ToolTip :L="82" placement="top-start" content="项目对应的功能模块，该模块将会与代码工程对应，一个代码工程可以对应1-n个模块" />
+                            <span style="position: relative;">
+                                <Tag v-for="item in formValidate.createModule" :key="item" :name="item" closable @on-close="handleClose">
+                                    {{ item}}
+                                </Tag>
+                                <Button icon="ios-plus-empty" type="dashed" size="small" @click="addItem">
+                                    添加模块
+                                </Button>
+                                <ToolTip :T="-4" placement="top-start" content="项目对应的功能模块，该模块将会与代码工程对应，一个代码工程可以对应1-n个模块" />
+                            </span>
                         </FormItem>
-                        <FormItem label="模块选择" prop="modules">
+                        <FormItem label="模块选择" prop="modules" v-show="false">
                             <Select v-model="formValidate.modules" multiple >
                                 <Option v-for="item in moduleList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
@@ -327,22 +329,25 @@ export default {
         }
     },
     beforecreated(){
-        console.log("agileEdit--beforecreated-------",this.formValidate.modules)
+        console.log("agileEdit--beforecreated-------",this.formValidate)
     },
     created(){
-        console.log("agileEdit--created-------",this.formValidate.modules)
+        console.log("agileEdit--created-------",this.formValidate)
     },
     beforeUpdate(){
-        console.log("agileEdit--beforeUpdate-------",this.formValidate.modules)
+        console.log("agileEdit--beforeUpdate-------",this.formValidate)
     },
     updated(){
-        console.log("agileEdit--updated-------",this.formValidate.modules)
+        console.log("agileEdit--updated-------",this.formValidate)
     },
 	computed: {
     },
 
     data () {
         let _this = this;
+        const validateDateEnd = Common.checkEndDate(this);
+        const validatePart = Common.checkPart(this);
+        /*
         const validateDateEnd = (rule, value, callback) => {
             if (value) {
                 let Timer = new Date(value).getTime() - new Date(this.formValidate.start_time).getTime();
@@ -373,7 +378,7 @@ export default {
                 }
             }
         };
-
+        */
         return {
             options3: {
                 disabledDate (date) {
@@ -456,8 +461,6 @@ export default {
                 //     value: '模块1-1',
                 //     label: '模块1'
                 // },
-               
-               
             ],
             ruleValidate: {
                 prod_id: [
@@ -473,11 +476,11 @@ export default {
                 prj_name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
-                // start_time: [
-                //     { required: false, type: 'date', message: 'Please select the date', trigger: 'change' }
-                // ],
+                start_time: [
+                    { required: true, type: 'date', message: '请选择日期！', trigger: 'change' }
+                ],
                 end_time: [
-                    { required: false, type: 'date', validator: validateDateEnd, trigger: 'change' }
+                    { required: true, type: 'date', validator: validateDateEnd, trigger: 'change' }
                     //{ required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
                 ],
                 prj_desc: [
@@ -579,7 +582,21 @@ export default {
         }
 
         this.listModuleFn(listModule,((ID)=>{return ID?{id:ID}:{id:""}})(Common.GETID(this,Common)))
-        
+        .then((res)=>{
+            let fn = (obj)=>{
+                return obj.label+"【"+obj.value+"】";            
+            }
+            if(res && Array.isArray(res) && res.length){
+                if(!this.formValidate.createModule){
+                    this.formValidate.createModule = [];
+                }
+                if(Array.isArray(this.formValidate.createModule)){
+                    res.forEach((item)=>{
+                      this.formValidate.createModule.push(fn(item))  
+                    });
+                }
+            }
+        }, (error)=>{})
     },
     
     methods: {
@@ -621,7 +638,7 @@ export default {
         },
         /* 修改添加角色 */
         listModuleFn(URL,params = {}){
-            Common.Modulelist(defaultAXIOS,this,URL,params)
+            return Common.Modulelist(defaultAXIOS,this,URL,params)
         },
 
         addTeamFn(URL,params = {}){
@@ -750,9 +767,11 @@ export default {
                     }else if(_temp.indexOf("|") != -1){
                         this.formValidate[I] = myData.data[I].split("|").filter(item=>item)
                     }else{
-                        this.formValidate[I] = myData.data[I];
+                        if(myData.data[I]){
+                            this.formValidate[I] = myData.data[I];    
+                        }
+                        
                     }
-
                 }
                 let addsystem = (_obj,_myData)=>{
                     if(_myData && Array.isArray(_myData)){
@@ -942,9 +961,25 @@ export default {
             let _join = "|";
             
             let _modules = Array.isArray(this.formValidate.modules) ? this.formValidate.modules.join(_join) : this.formValidate.modules;
-
-            let _createModule = Array.isArray(this.formValidate.createModule) ? this.formValidate.createModule.join(_join) : this.formValidate.createModule;
-            
+            let _createModule = ((createModule)=>{
+                let fn = (name)=>{
+                    if(name.toString().indexOf("【") != -1 && name.toString().indexOf("】") != -1){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+                if(Array.isArray(createModule) && createModule.length){
+                    for (let i = createModule.length - 1; i >= 0; i--) {
+                        if (fn(createModule[i])) {
+                            createModule.splice(i, 1);
+                        }
+                    }
+                    return createModule.join(_join);
+                }else{
+                    return createModule
+                }
+            })(this.formValidate.createModule)
             // let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             // let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
             let _start_time = Common.DateFormat(Common,this.formValidate.start_time);
@@ -1040,6 +1075,15 @@ export default {
             this.$router.push('/agile');
         },
         handleClose (event, name) {
+            let getStr = (string,str_after,str_before)=>{
+                return string.substring(string.indexOf(str_after)+1,string.lastIndexOf(str_before))
+            }
+            if(name.toString().indexOf("【") != -1 && name.toString().indexOf("】") != -1){
+                let _arr = _.cloneDeep(this.formValidate.modules)
+                _arr.splice(_arr.indexOf(getStr(name,"【","】")),1);
+                this.formValidate.modules = [];
+                this.formValidate.modules = _arr;
+            }
             const index = this.formValidate.createModule.indexOf(name);
             this.formValidate.createModule.splice(index, 1);
         },

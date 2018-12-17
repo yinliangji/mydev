@@ -1,10 +1,10 @@
 <template>
-    <div class="TooltipWrap" :style="L?'right:auto;left:'+L+'px':''">
+    <div class="TooltipWrap" :style="L?'right:auto;left:'+L+'px;top:'+T+'px':'top:'+T+'px'">
         <Tooltip  :placement="placement">
             <div slot="content" :style="'white-space:normal;width:'+W+'px;'">
                 {{content}}
             </div>
-            <Icon type="ios-help" :size="size" :color="color"></Icon>
+            <Icon type="ios-help-outline" :size="size" :color="color"></Icon>
         </Tooltip>
     </div>
 </template>
@@ -19,7 +19,7 @@ export default {
         size: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
-                return "24";
+                return "16";
             }
         },
         color: {
@@ -52,6 +52,13 @@ export default {
                 return false;
             }
         },
+        T:{
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return 4;
+            }
+        },
+
     },
     mounted(){
     	

@@ -2,9 +2,18 @@
     <div class="pageContent">
         <goAgile :go="'/product'" :text="'返回用户故事列表'" :TOP="'7'" />
         <Breadcrumb :style="{margin: '16px 0'}">
-            <BreadcrumbItem>首页</BreadcrumbItem>
-            <BreadcrumbItem>用户故事</BreadcrumbItem>
-            <BreadcrumbItem>用户故事基本信息</BreadcrumbItem>
+            <BreadcrumbItem>
+                <span class="crumbs">{{formValidate.prj_name}}</span>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+                <span class="crumbs">{{formValidate.req_name}}</span>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+                <span class="crumbs">{{formValidate.userstory_name}}</span>
+                <span class="crumbs">（</span>
+                <span class="crumbs">{{formValidate.sprint_name}}</span>
+                <span class="crumbs">）</span>
+            </BreadcrumbItem>
         </Breadcrumb>
         <Card>
             <div class="editBtn">
@@ -118,7 +127,7 @@
                                     <Col span="3">
                                         <Button type="success" @click="addBus()">新增业务功能</Button>
                                     </Col>
-                                    <Col span="21">
+                                    <Col span="21" id="serchReq">
 
                                         <!-- 搜索选择开始 -->
                                         
@@ -214,7 +223,7 @@
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
                         <div class="tableBox">
                             <!-- 用户故事附件制作中....... -->
-                            <FileDownLoad :PRJID="formValidate.prj_id" />
+                            <FileDownLoad :USID="formValidate.userstory_id" />
                         </div>
                     </div>
                 </TabPane>
@@ -1211,12 +1220,26 @@ h4{
 }
 
 
+
 </style>
 <style>
 #hidden {
     visibility: hidden;
-
-    }
+}
+#serchReq .ivu-select-item-selected{
+    display: none;
+}
+#serchReq .ivu-tag .ivu-icon-ios-close-empty{
+    display: none !important;
+}    
+.crumbs {
+    display: inline-block;
+    max-width: 15em;
+    height: 1.1em;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
+}
 </style>
 
 

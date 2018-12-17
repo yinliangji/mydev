@@ -740,7 +740,7 @@ export default class Common extends Utils {
 
     //获取模块--不通用
     static Modulelist(FUN, that, URL, params) {
-      FUN(URL, params, {
+      return FUN(URL, params, {
         timeout: 5000,
         method: 'get'
       }).then((response) => {
@@ -755,13 +755,16 @@ export default class Common extends Utils {
             that.moduleList.push(_temp);
             _temp = {};
           }
+          return Promise.resolve(that.moduleList)
         } else {
           that.showError(URL + "_没有数据");
+          return Promise.reject(false);
         }
 
       }).catch((error) => {
         console.log(error);
         that.showError(error);
+        return Promise.reject(error);
       });
     }
     //获取逻辑子系统和业务类型 下拉列表
@@ -814,7 +817,6 @@ export default class Common extends Utils {
       that.formValidate.stepview = "";
       that.$refs.formValidate.resetFields();
     }
-
 
     //获取角色标题--不通用
     static AddTeam(FUN, that, URL, params){
@@ -1131,26 +1133,25 @@ export default class Common extends Utils {
 				return Promise.reject("权限不足，不能有任何动作");
 			}
           
-		}).catch( (error) => {
-			console.log(error);
-			toLoginPage(that,"获取权限出错！");
-			that.showError(error);
-			return Promise.reject(error);
-		});
+  		}).catch( (error) => {
+  			console.log(error);
+  			toLoginPage(that,"获取权限出错！");
+  			that.showError(error);
+  			return Promise.reject(error);
+  		});
 
-		if(timer){clearInterval(timer)}
-		let time = 0;
-		let timer = setInterval(()=>{
-			if(super.getCookie("username")){
-				clearInterval(timer);
-				//
-				//
-			}else if(time > 60){
-				toLoginPage(that);
-			}
-			time ++
-		},500)
-      
+  		if(timer){clearInterval(timer)}
+  		let time = 0;
+  		let timer = setInterval(()=>{
+  			if(super.getCookie("username")){
+  				clearInterval(timer);
+  				//
+  				//
+  			}else if(time > 60){
+  				toLoginPage(that);
+  			}
+  			time ++
+  		},500)
     }
 
     static returnDelArr(arr,arrList){
@@ -1540,13 +1541,42 @@ export default class Common extends Utils {
           return Promise.reject(error);
       });
     }
-
-    
-    
-
-    
-
-
+    //检查结束日期
+    static checkEndDate(that){
+      return (rule, value, callback)=>{
+        if (value) {
+            let Timer = new Date(value).getTime() - new Date(that.formValidate.start_time).getTime();
+            if(Timer >= 0){
+                callback()
+            }else{
+                return callback(new Error('结束日期早于开始日期！'));
+            }
+        }else if(!value){
+            return callback(new Error('请选择日期！'));
+        }else{
+            callback()  
+        }
+      };
+    }
+    //检查添加角色是否重复
+    static checkPart(that){
+      return (rule, value, callback) => {
+          if(!value){
+              return callback(new Error('内容不能为空！'));    
+          }else{
+              if(that.formValidate.AddGroupList.length){
+                  for(var i=0;i<that.formValidate.AddGroupList.length;i++){
+                      if(that.formValidate.AddGroupList[i].myValue == (value+"")){
+                          return callback(new Error('内容重复！')); 
+                      }
+                  }
+                  callback()
+              }else{
+                  callback()
+              }
+          }
+      };
+    }
 
 }
 function fileterStr(STR){

@@ -232,6 +232,11 @@ CommonRest.restUrl = {
     "getCountITM": process.env.BASE_URL + "/req/get_count/",
     /****express 需求项目列表 get****/
 
+    "addBusfuncQueryCombox": process.env.BASE_URL + "/agile/addBusfuncQueryCombox/",
+    /****express 需求项目添加--所属逻辑子系统 get****/
+
+    
+
 }
 
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);

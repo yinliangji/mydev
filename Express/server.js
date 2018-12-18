@@ -1986,9 +1986,34 @@ app.all('/agile/getRoles/', function(req, res) {
 
 let listModule = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
-        "status": val1,
+        "status": "success",
         "message": "mockDataList xxxxxxx",
-        
+        data:{
+            "res": [
+                {
+                    "physics_sys_id": 1,
+                    "func_desc|5-8":/[a-zA-Z0-9]/,
+                    "logic_sys_id":1,
+                    "module_id":"mid0001",
+                    "module_name":"模块1",
+                    "prod":1,
+                    "id":1,
+                    "__value2__": val2,
+                    "__value3__": val3,
+                },
+                {
+                    "physics_sys_id": 2,
+                    "func_desc|5-8":/[a-zA-Z0-9]/,
+                    "logic_sys_id":2,
+                    "module_id":"mid0002",
+                    "module_name":"模块2",
+                    "prod":2,
+                    "id":2,
+                    "__value2__": val2,
+                    "__value3__": val3,
+                }
+            ],
+        },
         "res": [
             {
                 "physics_sys_id": 1,
@@ -2377,6 +2402,15 @@ let selectBusFuncStatus = (val1 = 200, val2 = 1, val3 = 3) => {
 }
 
 app.all('/agile/selectBusFuncStatus/', function(req, res) {
+   
+    let resVal = selectBusFuncStatus(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(selectBusFuncStatus(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+app.all('/agile/addBusfuncQueryCombox/', function(req, res) {
    
     let resVal = selectBusFuncStatus(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);

@@ -101,13 +101,15 @@
                             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
                               <tbody>
                                 <tr>
-                                  <th width="11%" style="background:none; color:#495060;">所属需求项</th>
-                                  <td width="20%">{{ formValidate.req_name | FALSEINFO}}</td>
-                                  <th width="11%" style="background:none; color:#495060;">需求项提出人</th>
-                                  <td width="20%" >{{ formValidate.proposer | FALSEINFO}}</td>
-                                  <th width="11%" style="background:none; color:#495060;">提出人部门</th>
-                                  <td>{{ formValidate.proposer_department | FALSEINFO}}</td>
-                                </tr>
+                                    <th width="11%" style="background:none; color:#495060;">所属需求项</th>
+                                    <td >{{ formValidate.req_name | FALSEINFO}}</td>
+                                    <!--
+                                    <th width="11%" style="background:none; color:#495060;">需求项提出人</th>
+                                    <td width="20%" >{{ formValidate.proposer | FALSEINFO}}</td>
+                                    <th width="11%" style="background:none; color:#495060;">提出人部门</th>
+                                    <td>{{ formValidate.proposer_department | FALSEINFO}}</td>
+                                    -->
+                                    </tr>
                               </tbody>
                             </table>
                             <!-- -->
@@ -124,9 +126,7 @@
                         <div class="tableContBox">
                             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140" style="min-height:300px;" >
                                 <Row>
-                                    <Col span="3">
-                                        <Button type="success" @click="addBus()">新增业务功能</Button>
-                                    </Col>
+                                    
                                     <Col span="21" id="serchReq">
 
                                         <!-- 搜索选择开始 -->
@@ -164,6 +164,9 @@
                                             </div>
                                         
                                         <!-- 搜索选择结束 -->
+                                    </Col>
+                                    <Col span="3">
+                                        &nbsp;&nbsp;<Button type="success" @click="addBus()">新增业务功能</Button>
                                     </Col>
 
                                     

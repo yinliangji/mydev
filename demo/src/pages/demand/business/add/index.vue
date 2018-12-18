@@ -1,78 +1,81 @@
 <template>
 	<div class="pageContent">
-        <goAgile :go="'/demand'" :text="'返回项目需求项'" :TOP="'5'" />
-       <Card>
+        <!-- <goAgile :go="'/demand'" :text="'返回项目需求项'" :TOP="'5'" /> -->
+        <Card>
             <div class="productAddBox">
                 
                 <Form :model="formValidate" :label-width="120" :rules="ruleValidate" ref="formValidate"   >
                     <h3 class="Title"><span>新增业务功能</span></h3>
-                    <FormItem label="业务功能名称" prop="bfunc_name">
+                    <div class="fromBox">
+                        <FormItem label="业务功能名称" prop="bfunc_name">
+                            
+                            <Input  v-model="formValidate.bfunc_name" placeholder="请输入业务功能名称"></Input>
+                        </FormItem>
+                        <FormItem label="业务类型" >
+                            
+                            <Select  v-model="formValidate.bfunc_type" :clearable="isClearable" :disabled="isDisabled" ><!-- //10-24修改 -->
+                                <Option v-for="(item,index) in typeList" :value="item.bfunc_type" :key="index">{{ item.bfunc_type_name }}</Option>
+                            </Select>
+                        </FormItem>
+                        <Row>
+                            <Col span="20">
+                                <FormItem label="所属逻辑子系统" prop="logic_sys_no">
+                                    <input id="demo" type="hidden" /><!-- 修改10-20 -->
+                                    
+                                    <Select ref="logicSelect"  v-model="formValidate.logic_sys_no" clearable filterable id="logicSelect"><!-- 修改10-20 -->
+                                        <Option v-for="(item,index) in logicList" :value="item.logic_sys_no" :key="index">{{ item.logic_sys_name }}</Option>
+                                    </Select>
+                                    
+                                </FormItem>
+                            </Col>
+                            
+                            <Col span="4">
+                                &nbsp;&nbsp;<Button v-show="false" type="primary" @click="linkToNew">ITM新建逻辑子系统</Button>
+                            </Col>
+                        </Row>
                         
-                        <Input  v-model="formValidate.bfunc_name" placeholder="请输入业务功能名称"></Input>
-                    </FormItem>
-                    <FormItem label="业务类型" >
-                        
-                        <Select  v-model="formValidate.bfunc_type" :clearable="isClearable" :disabled="isDisabled" ><!-- //10-24修改 -->
-                            <Option v-for="(item,index) in typeList" :value="item.bfunc_type" :key="index">{{ item.bfunc_type_name }}</Option>
-                        </Select>
-                    </FormItem>
-                    <Row>
-                        <Col span="20">
-                            <FormItem label="所属逻辑子系统" prop="logic_sys_no">
-                                <input id="demo" type="hidden" /><!-- 修改10-20 -->
-                                
-                                <Select ref="logicSelect"  v-model="formValidate.logic_sys_no" clearable filterable id="logicSelect"><!-- 修改10-20 -->
-                                    <Option v-for="(item,index) in logicList" :value="item.logic_sys_no" :key="index">{{ item.logic_sys_name }}</Option>
-                                </Select>
-                                
-                            </FormItem>
-                        </Col>
-                        
-                        <Col span="4">
-                            &nbsp;&nbsp;<Button v-show="false" type="primary" @click="linkToNew">ITM新建逻辑子系统</Button>
-                        </Col>
-                    </Row>
-                    
-                    <FormItem label="业务功能描述">
-                        <Input  v-model="formValidate.businessDes" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
-                    </FormItem>
+                        <FormItem label="业务功能描述">
+                            <Input  v-model="formValidate.businessDes" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
+                        </FormItem>
 
-                    <FormItem v-if="!step2">
-                        <Button type="primary" :loading="modal_next_loading" @click="next" :disabled="nextBtn">
-                            <span v-if="!modal_next_loading">保存并且下一步</span>
-                            <span v-else>Loading...</span>
-                        </Button>
-                        
-                    </FormItem>
-                    <FormItem label="界面流程步骤" v-if="step2">
-                        <Quill @quillOutput="quillOutputFn" :data="false" />
-                       
-                    </FormItem>
-                    <FormItem label="协同相关" v-if="step2">
-                        <Input  v-model="formValidate.synergetic_relation" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
-                    </FormItem>
+                        <FormItem v-if="!step2">
+                            <Button type="primary" :loading="modal_next_loading" @click="next" :disabled="nextBtn">
+                                <span v-if="!modal_next_loading">保存并且下一步</span>
+                                <span v-else>Loading...</span>
+                            </Button>
+                            <Button type="ghost" style="margin-left: 8px" @click="goBack">返回</Button>
+                            
+                        </FormItem>
+                        <FormItem label="界面流程步骤" v-if="step2">
+                            <Quill @quillOutput="quillOutputFn" :data="false" />
+                           
+                        </FormItem>
+                        <FormItem label="协同相关" v-if="step2">
+                            <Input  v-model="formValidate.synergetic_relation" type="textarea" :autosize="{minRows:2,maxRows:5}" placeholder="写点什么..."></Input>
+                        </FormItem>
 
 
-                    <FormItem label="上传附件" v-if="step2">
-                        <Upload
-                            multiple
-                            :action="actionUrl"
-                            name="file"
-                            :on-success="handleSuccess"
-                            :on-error="handleError"
-                            :show-upload-list="false"
-                            class="UploadBtn"
-                            >
-                            <Button type="ghost" icon="ios-cloud-upload-outline">文件上传</Button>
-                        </Upload>
-                    </FormItem>
-                    <FormItem v-if="step2">
-                        <Button type="primary" :loading="modal_add_loading" @click="submitAdd">
-                            <span v-if="!modal_add_loading">提交</span>
-                            <span v-else>Loading...</span>
-                        </Button>
-                        <Button type="ghost" style="margin-left: 8px" @click="goBack">返回</Button>
-                    </FormItem>
+                        <FormItem label="上传附件" v-if="step2">
+                            <Upload
+                                multiple
+                                :action="actionUrl"
+                                name="file"
+                                :on-success="handleSuccess"
+                                :on-error="handleError"
+                                :show-upload-list="false"
+                                class="UploadBtn"
+                                >
+                                <Button type="ghost" icon="ios-cloud-upload-outline">文件上传</Button>
+                            </Upload>
+                        </FormItem>
+                        <FormItem v-if="step2">
+                            <Button type="primary" :loading="modal_add_loading" @click="submitAdd">
+                                <span v-if="!modal_add_loading">提交</span>
+                                <span v-else>Loading...</span>
+                            </Button>
+                            <Button type="ghost" style="margin-left: 8px" @click="goBack">返回</Button>
+                        </FormItem>
+                    </div>
                 </Form>
                 
             </div>
@@ -84,7 +87,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryadd_bfunc1,userstoryadd_bfunc2,userstoryUploadFile } = Common.restUrl;
+const {reqAdd,reqGet,projectListDataNew,addBusfuncQueryCombox,userstoryadd_bfunc1,userstoryadd_bfunc2,userstoryUploadFile } = Common.restUrl;
 import Quill from "@/components/quill";
 export default {
     data(){
@@ -124,7 +127,7 @@ export default {
                     { required: true, message: '请选择状态', trigger: 'change' }
                 ],
                 logic_sys_no:[
-                    { required: false, message: '请选择逻辑子系统', trigger: 'change' }
+                    { required: true, message: '请选择逻辑子系统', trigger: 'change' }
                 ],
             },
             typeList:[],
@@ -291,9 +294,15 @@ export default {
         },
     },
     mounted(){
-        this.nextBtn = false;//临时
-        this.selbusinessListFn(selbusinessList,{prj_id:Common.GETprjid(this,Common)}).then(()=>{
+        //this.nextBtn = false;//临时
+        this.selbusinessListFn(addBusfuncQueryCombox,{prjSn:Common.GETprjid(this,Common),prj_id:Common.GETprjid(this,Common)}).then((res)=>{
             this.nextBtn = false;
+            console.error(res);
+            if(res && res.typeList && Array.isArray(res.typeList) && res.typeList.length){
+                let temp = res.typeList.find(item=>item.bfunc_type_name == "新增");
+                this.formValidate.bfunc_type = temp && temp.bfunc_type ? temp.bfunc_type : "";
+            }
+
         },(error)=>{
             this.showError("typeList和logicList 出错");
         })
@@ -316,5 +325,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
+.fromBox {
+    width: 80%;
+}
 </style>

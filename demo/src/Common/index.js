@@ -745,8 +745,36 @@ export default class Common extends Utils {
         method: 'get'
       }).then((response) => {
         let myData = response.data;
-        console.log("<======【agile listModule get】***response+++", response, myData, "====>");
+        console.log("<======【agile 获取模块 get】***response+++", response, myData, "====>");
+        if(myData.status == "success"){
+          let MYDATA = myData.data ? myData.data : myData;
+          if (MYDATA.res && Array.isArray(MYDATA.res) && MYDATA.res.length) {
+            let _temp = {};
+            for (let i = 0; i < MYDATA.res.length; i++) {
+              _temp.label = MYDATA.res[i].module_name;
+              _temp.value = MYDATA.res[i].module_id + "";
+              that.moduleList.push(_temp);
+              _temp = {};
+            }
+          }
+          return Promise.resolve(that.moduleList)
+        }else{
+          if(myData.res && Array.isArray(myData.res) && myData.res.length){
+            let _temp = {};
+            for (let i = 0; i < myData.res.length; i++) {
+              _temp.label = myData.res[i].module_name;
+              _temp.value = myData.res[i].module_id + "";
+              that.moduleList.push(_temp);
+              _temp = {};
+            }
+            return Promise.resolve(that.moduleList)
+          }else{
+            that.showError(URL + "|status=" +myData.status +"_错误");
+            return Promise.reject(false);  
+          }
+        }
 
+        /*
         if (myData && myData.res && myData.res.length) {
           let _temp = {};
           for (let i = 0; i < myData.res.length; i++) {
@@ -760,6 +788,7 @@ export default class Common extends Utils {
           that.showError(URL + "_没有数据");
           return Promise.reject(false);
         }
+        */
 
       }).catch((error) => {
         console.log(error);

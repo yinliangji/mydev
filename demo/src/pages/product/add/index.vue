@@ -606,6 +606,16 @@ export default {
                         }
                         
                     }else{
+                        this.$Modal.confirm({
+                            title: '请先添加需求项',
+                            content: '<p>此项目尚未添加需求项，请先添加需求项</p>',
+                            okText: '添加需求项',
+                            cancelText: '关闭',
+                            onOk:()=>{
+                                this.$router.push('/demand');
+                            },
+                        });
+                        /*
                         this.$Modal.warning({
                             title:"请先添加需求项",
                             content:"此项目尚未添加需求项，请先添加需求项",
@@ -614,6 +624,8 @@ export default {
                                 this.$router.push('/demand');
                             },
                         })
+                        */
+
                         //this.showError(URL+"_没有数据");
                     }
                     //

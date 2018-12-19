@@ -30,7 +30,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const { fileDownList,fileUpload} = Common.restUrl;
+const { fileDownList,fileUpload,downFile} = Common.restUrl;
 
 export default {
     props: {
@@ -63,7 +63,7 @@ export default {
         console.log("updated----用户故事附件---")
     },
     mounted(){
-        
+        this.init(this.USID);
     },
     data() {
         return {
@@ -147,6 +147,17 @@ export default {
         }
     },
     methods:{
+    	//下载文件 start
+        listFileDown(params){
+            let URL = downFile + params.row.url;
+            let fileName = params.row.fileName;
+            let param = {
+                key:params.row.fileId,
+                filename:fileName,
+            }
+            return Common.DownFile(defaultAXIOS,this,URL,param,fileName)
+        },
+        //下载文件 end
         init(usID){
             //Common.GETprjid(this,Common)
             let us_ID = usID? usID : this.formValidate.userstory_id;

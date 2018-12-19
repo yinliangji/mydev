@@ -44,52 +44,7 @@
                     <div class="baseInfoBox">
                         <!-- <h3 class="Title"><span>用户故事基本信息</span></h3> -->
                         <div class="tableBox">
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
-                              <tbody>
-                                <tr>
-                                  <th width="11%">用户故事名称</th>
-                                  <td width="20%">{{ formValidate.userstory_name | FALSEINFO}}</td>
-                                  <th width="11%">所属项目</th>
-                                  <td  width="20%"><router-link to="/agile/detail">{{ formValidate.prj_name | FALSEINFO}}</router-link></td>
-                                  <th width="11%">所属产品</th>
-                                  <td >{{ formValidate.product_name | FALSEINFO}}</td>
-                                </tr>
-                                <tr>
-                                  <th >责任人</th>
-                                  <td >{{ formValidate.nick_name | FALSEINFO}}</td>
-                                  <th >故事状态</th>
-                                  <td >{{ formValidate.userstory_status | FALSEINFO}}</td>
-                                  <th >故事类型</th>
-                                  <td >{{ formValidate.userstory_type | FALSEINFO}}</td>
-                                </tr>
-
-                                <tr>
-                                  <th >优先级</th>
-                                  <td>{{ formValidate.proi | FALSEINFO}}</td>
-                                  <th width="11%">所属迭代</th>
-                                  <td width="20%">{{ formValidate.sprint_name | FALSEINFO}}</td>
-                                  <th width="11%">工时<br />(实际/预计)</th>
-                                  <td>0 / {{ formValidate.manHours | FALSEINFO}}</td>
-                                </tr>
-
-                                <tr>
-                                  <th>故事编号</th>
-                                  <td>{{ formValidate.userstory_id | FALSEINFO}}</td>
-                                  <th>关联事项<br />(已完成/全部)</th>
-                                  <td>{{ formValidate.complete_mission | FALSEINFO}} / {{ formValidate.mission | FALSEINFO}}</td>
-                                  <th width="11%">创建时间</th>
-                                  <td>{{ formValidate.created_time | FALSEINFO}}</td>
-                                </tr>
-                               
-                               
-                                  
-                                  <th>故事描述</th>
-                                  <td colspan="5" v-html="formValidate.userstory_desc?'<pre>'+formValidate.userstory_desc+'</pre>':''"></td>
-                                  
-                                </tr>
-                                
-                              </tbody>
-                            </table>
+                            <InfoTable :Data="formValidate" />
                         </div>
                     </div>
                 </TabPane>
@@ -190,7 +145,7 @@
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
                         <div class="tableBox">
                             <!-- juzi start -->
-                            <AppDesign :userStoryId="userStoryId" />
+                            <AppDesign :userStoryId="userStoryId" v-if="TabsCur == 'name3'" />
                             <!-- juzi end -->
                         </div>
                     </div>
@@ -200,7 +155,7 @@
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
                         <div class="tableBox">
                             <!-- wy start -->
-                            <storyTestCase :storyInfo="storyTestCaseData"></storyTestCase>
+                            <storyTestCase :storyInfo="storyTestCaseData" v-if="TabsCur == 'name4'" />
                             <!-- wy end -->
                         </div>
                     </div>
@@ -210,6 +165,8 @@
                         <!-- <h3 class="Title"><span>用户故事变更记录</span></h3> -->
                         <div class="tableBox">
                             <!-- -->
+                            <UsChange :TASKID="TASKID" v-if="TabsCur == 'name5'" />
+                            <!--
                             <div class="tableContBox">
                                 <Table border :columns="columns" :data="tableData"  />
                                 <div class="pageBox" v-if="tableData.length">
@@ -217,16 +174,17 @@
                                     <p>总共{{tableDAtaTatol}}条记录</p>
                                 </div>
                             </div>
+                            -->
                             <!-- -->
                         </div>
                     </div>
                 </TabPane>
                 <TabPane label="用户故事附件" name="name6">
-                    <div class="baseInfoBox">
+                    <div class="baseInfoBox" >
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
                         <div class="tableBox">
                             <!-- 用户故事附件制作中....... -->
-                            <FileDownLoad :USID="formValidate.userstory_id" />
+                            <FileDownLoad :USID="formValidate.userstory_id" v-if="TabsCur == 'name6'" />
                         </div>
                     </div>
                 </TabPane>
@@ -289,6 +247,8 @@ import Trans from './transSingle'
 import Delpop from '@/components/delectAlert'
 import Buspop from './buspop'
 import FileDownLoad from './filedown'
+import InfoTable from './info'
+import UsChange from './change'
 // wy start
 import storyTestCase from '@/components/storyTestCase'
 // wy end
@@ -350,34 +310,8 @@ export default {
 
             prj_permission:[],
             identity:"",
-            //-- 用户故事变更记录 
-            tableDAtaTatol:0,
-            tableDAtaPageLine:5,
-            columns: [
-                {
-                    title: '状态',
-                    key: 'userstory_status',
-                    align: 'center'
-                },
-                {
-                    title: '变更时间',
-                    key: 'change_time',
-                    align: 'center',
-                    
-                },
-                {
-                    title: '操作者',
-                    key: 'operator_name',
-                    align: 'center',
-                },
-                {
-                    title: '用户故事',
-                    key: 'userstory_id',
-                    align: 'center',
-                },
-            ],
-            tableData: [],
-            //-- 用户故事变更记录 
+            TASKID:"",
+           
             //--业务功能列表开始
             tableData2: [],
             columns2: [
@@ -593,8 +527,11 @@ export default {
                     //juzi start
                     this.userStoryId = this.formValidate.userstory_id;
                     //juzi end
-                    this.getMissionChangeFn(getMissionChange,TASKID,1,this.tableDAtaPageLine);
-                    this.getMissionChangeFn2(userstoryGetBus,TASKID,1,this.tableDAtaPageLine2);
+                   
+                    this.TASKID = TASKID;
+                    
+
+                    //this.getMissionChangeFn2(userstoryGetBus,TASKID,1,this.tableDAtaPageLine2);
 
                     this.viewBusData(userstoryListBusfunc).then(()=>{
                         this.tableData3Length = this.tableData3.length;
@@ -1001,25 +938,7 @@ export default {
         goDevelopmentFn () {
             this.$router.push({path: '/development', query: {board: true,us_name:this.formValidate.id}});
         },
-        changeCurrentPage(i) {
-            let TASKID = this.formValidate.id
-            this.getMissionChangeFn(getMissionChange,TASKID,i,this.tableDAtaPageLine)
-        },
-        changePageSize(i) {
-        },
-        getMissionChangeFn(URL = "",userstory_id = "",page = "",limit = "",data = ""){
-            defaultAXIOS(URL,{userstory_id,page,limit,data},{timeout:5000,method:'get'})
-            .then((response) => {
-                let myData = response.data;
-                console.log("<======product getMissionChange***response+++",response,myData,"======>");
-                this.tableData = myData.rows;
-                this.tableDAtaTatol = myData.total;
-            })
-            .catch( (error) => {
-                console.log(error);
-                this.showError(error);
-            });
-        },
+       
         authIs(KEY){
             return Common.auth(this,KEY)
         },
@@ -1103,6 +1022,8 @@ export default {
         storyTestCase,
         AppDesign,
         FileDownLoad,
+        InfoTable,
+        UsChange,
     },
     watch:{
         //查询搜索开始
@@ -1212,11 +1133,7 @@ h4{
     z-index: 10;
     width: 62px;
 }
-.pageBox {
-    padding-bottom:20px;
-    padding-top:20px;
-    overflow: hidden;
-}
+
 .ivu-tabs {
     //overflow:inherit;
     //overflow-x: hidden;

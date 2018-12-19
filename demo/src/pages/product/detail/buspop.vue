@@ -58,7 +58,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryFilesList } = Common.restUrl;
+const {reqAdd,reqGet,projectListDataNew,selbusinessList,userstoryFilesList ,downFile} = Common.restUrl;
 
 let _bfunc_typeFn = (val)=>{
     let _name = false;
@@ -164,10 +164,15 @@ export default {
                             'a',
                             {
                                 style:{color:'#2d8cf0'},
-                                domProps:{href:params.row.url,target:"_blank"},
+                                attrs:{
+                                    id:"id"+params.row.fileId,
+                                },
+                                key:"key"+params.row.fileId,
+                                ref:"ref"+params.row.fileId,
+                                //domProps:{href:params.row.url,target:"_blank"},
                                 on: {
                                     click: () => {
-                                        
+                                        this.listFileDown(params)
                                     }
                                 }
                             },
@@ -193,6 +198,18 @@ export default {
         }
     },
     methods:{
+        //下载文件 start
+        listFileDown(params){
+            let URL = downFile + params.row.url;
+            let fileName = params.row.fileName;
+            let param = {
+                key:params.row.fileId,
+                filename:fileName,
+            }
+            
+            return Common.DownFile(defaultAXIOS,this,URL,param,fileName)
+        },
+        //下载文件 end
         getFilesList(URL){
             let _params = {
                 version:this.data.version,

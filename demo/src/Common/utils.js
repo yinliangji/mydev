@@ -296,6 +296,42 @@ export default class Utils extends CommonRest {
       }  
       return blob;  
     }
+
+    //两个数组返回相同值的对象的值
+    static Unique(arr1 = [],arr2 = []){
+        let Num = [];
+        let fn = (val,Arr)=>{
+            let Index = Arr.findIndex(item => item.value == val);
+            return Index != -1 ? Index : false;
+        }
+        for(let i=0;i<arr1.length;i++){
+            if(fn(arr1[i].value,arr2) !== false){
+                Num.push(arr1[i].value)
+            }
+        }
+        return Num
+    }
+
+    //删除数组N个元素
+    static DelArrN(arr,val,attr){
+      if(arr && Array.isArray(arr) && arr.length && val){
+        for (let i = arr.length - 1; i >= 0; i--) {
+          if(attr){
+            if (arr[i][attr] === val) {
+              arr.splice(i, 1);
+            }
+          }else{
+            if (arr[i] === val) {
+              arr.splice(i, 1);
+            }
+          }
+          
+        }
+        
+      }else{
+        return false;
+      }
+    }
    
     
 }

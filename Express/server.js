@@ -1393,20 +1393,135 @@ app.all('/agile/search_busfunc/', function(req, res) {
 });
 
 
-let searchBusfunc = (val1 = 200, val2 = 1, val3 = 3) => {
+let searchBusfunc1 = (val1 = 200, val2 = 1, val3 = 3) => {
+    /*
+    "list|6": [
+        {
+            bfunc_id: /[a-zA-Z]{5,8}/,
+            bfunc_name: "@name",
+            logic_sys_name:"@title",
+            create_date:"@date(yyyy-MM-dd)",
+            "version|+1":1,
+            "value|+10":1,
+            label:"@cname",
+            who:"itm",
+        },
+    ],
+    */
     return Mock.mock({
-        "status": val1,
-        "message": "mockDataList xxxxxxx",
+        "status": "success",
+        "message": "searchBusfunc1 xxxxxxx",
         data: {
-            "list|6": [
+           "list": [
                 {
                     bfunc_id: /[a-zA-Z]{5,8}/,
                     bfunc_name: "@name",
                     logic_sys_name:"@title",
                     create_date:"@date(yyyy-MM-dd)",
-                    "version|+1":1,
-                    "value|+10":1,
-                    label:"@cname",
+                    "version":1,
+                    "value":1,
+                    label:"a-abc",
+                    who:"itm",
+                },
+                {
+                    bfunc_id: /[a-zA-Z]{5,8}/,
+                    bfunc_name: "@name",
+                    logic_sys_name:"@title",
+                    create_date:"@date(yyyy-MM-dd)",
+                    "version":1,
+                    "value":2,
+                    label:"aa-abc",
+                    who:"itm",
+                },
+                {
+                    bfunc_id: /[a-zA-Z]{5,8}/,
+                    bfunc_name: "@name",
+                    logic_sys_name:"@title",
+                    create_date:"@date(yyyy-MM-dd)",
+                    "version":1,
+                    "value":3,
+                    label:"aaa-abc",
+                    who:"itm",
+                },
+            ],
+        },
+    })
+    
+}
+let searchBusfunc2 = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "searchBusfunc2 xxxxxxx",
+        data: {
+           "list": [
+                {
+                    bfunc_id: /[a-zA-Z]{5,8}/,
+                    bfunc_name: "@name",
+                    logic_sys_name:"@title",
+                    create_date:"@date(yyyy-MM-dd)",
+                    "version":1,
+                    "value":11,
+                    label:"b-abc",
+                    who:"itm",
+                },
+                {
+                    bfunc_id: /[a-zA-Z]{5,8}/,
+                    bfunc_name: "@name",
+                    logic_sys_name:"@title",
+                    create_date:"@date(yyyy-MM-dd)",
+                    "version":1,
+                    "value":12,
+                    label:"bb-abc",
+                    who:"itm",
+                },
+                {
+                    bfunc_id: /[a-zA-Z]{5,8}/,
+                    bfunc_name: "@name",
+                    logic_sys_name:"@title",
+                    create_date:"@date(yyyy-MM-dd)",
+                    "version":1,
+                    "value":13,
+                    label:"bbb-abc",
+                    who:"itm",
+                },
+            ],
+        },
+    })
+}
+let searchBusfunc3 = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "searchBusfunc2 xxxxxxx",
+        data: {
+           "list": [
+                {
+                    bfunc_id: /[a-zA-Z]{5,8}/,
+                    bfunc_name: "@name",
+                    logic_sys_name:"@title",
+                    create_date:"@date(yyyy-MM-dd)",
+                    "version":1,
+                    "value":101,
+                    label:"c-abc",
+                    who:"itm",
+                },
+                {
+                    bfunc_id: /[a-zA-Z]{5,8}/,
+                    bfunc_name: "@name",
+                    logic_sys_name:"@title",
+                    create_date:"@date(yyyy-MM-dd)",
+                    "version":1,
+                    "value":102,
+                    label:"cc-abc",
+                    who:"itm",
+                },
+                {
+                    bfunc_id: /[a-zA-Z]{5,8}/,
+                    bfunc_name: "@name",
+                    logic_sys_name:"@title",
+                    create_date:"@date(yyyy-MM-dd)",
+                    "version":1,
+                    "value":103,
+                    label:"ccc-abc",
                     who:"itm",
                 },
             ],
@@ -1416,11 +1531,19 @@ let searchBusfunc = (val1 = 200, val2 = 1, val3 = 3) => {
 
 
 app.all('/agile/search_busfunc2/', function(req, res) {
-
     let resVal
     let Json
-    Json =  searchBusfunc(req.body.myStatus)   
-    resVal = searchBusfunc(req.body.myStatus, req.body.page, req.body.pageline);
+    if(trueorfalse == 0){
+        Json =  searchBusfunc1(req.body.myStatus)   
+        resVal = searchBusfunc1(req.body.myStatus, req.body.page, req.body.pageline);
+    }else if(trueorfalse == 1){
+        Json =  searchBusfunc2(req.body.myStatus) 
+        resVal = searchBusfunc2(req.body.myStatus, req.body.page, req.body.pageline);
+
+    }else{
+        Json =  searchBusfunc3(req.body.myStatus)   
+        resVal = searchBusfunc3(req.body.myStatus, req.body.page, req.body.pageline);     
+    }    
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
@@ -1431,11 +1554,11 @@ app.all('/agile/search_busfunc2/', function(req, res) {
 
 
 let list_busfunc = (val1 = 200, val2 = 1, val3 = 3) => {
-    return Mock.mock({
+    let mk = Mock.mock({
         "status": val1,
         "message": "mockDataList xxxxxxx",
         data: {
-            "list|3-6": [
+            "list|1-3": [
                 {
                     bfunc_id: /[a-zA-Z]{5,8}/,
                     bfunc_name: "@name",
@@ -1462,7 +1585,83 @@ let list_busfunc = (val1 = 200, val2 = 1, val3 = 3) => {
                 },
             ],
         },
-    })
+    });
+    let pushObj = [
+        {
+            bfunc_id: "version_1|value_1|label_a-abc",
+            bfunc_name: "name",
+            logic_sys_name:"核心银行业务处理系统",
+            create_date:"0000-00-00",
+            version:1,
+            value:1,
+            label:"a-abc",
+
+            bfunc_desc: "version_1|value_1|label_a-abc",
+            bfunc_status: 2,
+            bfunc_type: 2,
+            create_person:"cname",
+            id:100000000,
+            logic_sys_no:"Z0250",
+            operation_step:"<p>列表HTML文字</p>",
+            remark1:"",
+            remark2:"",
+            req_id:"RQ-Pj1800110-6",
+            req_name:"title",
+            synergetic_relation:"title",
+            us_id:"US-HP18000030-01-2111111",
+
+        },
+        {
+            bfunc_id: "version_1|value_11|label_b-abc",
+            bfunc_name: "name",
+            logic_sys_name:"核心银行业务处理系统",
+            create_date:"0000-00-00",
+            version:1,
+            value:11,
+            label:"b-abc",
+
+            bfunc_desc: "version_1|value_11|label_b-abc",
+            bfunc_status: 2,
+            bfunc_type: 2,
+            create_person:"cname",
+            id:100000000,
+            logic_sys_no:"Z0250",
+            operation_step:"<p>列表HTML文字</p>",
+            remark1:"",
+            remark2:"",
+            req_id:"RQ-Pj1800110-6",
+            req_name:"title",
+            synergetic_relation:"title",
+            us_id:"US-HP18000030-01-2111111",
+
+        },
+        {
+            bfunc_id: "version_1|value_101|label_c-abc",
+            bfunc_name: "name",
+            logic_sys_name:"核心银行业务处理系统",
+            create_date:"0000-00-00",
+            version:1,
+            value:101,
+            label:"c-abc",
+
+            bfunc_desc: "version_1|value_11|label_b-abc",
+            bfunc_status: 2,
+            bfunc_type: 2,
+            create_person:"cname",
+            id:100000000,
+            logic_sys_no:"Z0250",
+            operation_step:"<p>列表HTML文字</p>",
+            remark1:"",
+            remark2:"",
+            req_id:"RQ-Pj1800110-6",
+            req_name:"title",
+            synergetic_relation:"title",
+            us_id:"US-HP18000030-01-2111111",
+
+        },
+    ]
+    mk.data.list.push(...pushObj)
+    return mk;
 }
 
 app.all('/agile/list_busfunc2/', function(req, res) {
@@ -1472,7 +1671,11 @@ app.all('/agile/list_busfunc2/', function(req, res) {
     Json =  list_busfunc(req.body.myStatus)   
     resVal = list_busfunc(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
+    //console.log("resVal==>", resVal);
+    
+     
+    
+    console.log("Json==>", Json,Json.data.list);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
     res.json(Json);

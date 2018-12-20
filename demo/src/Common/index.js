@@ -569,21 +569,46 @@ export default class Common extends Utils {
       }
     }
     //搜索--添加菜单
-    static ProjectGroupFN(FUN, that, URL, params,ARR,thatEle){
+    static ProjectGroupFN(FUN, that, URL, params,ARR,thatEle,actionObj){
       FUN(URL,params,{timeout:60000,method:'get'}).then((response) => {
           let myData = response.data;
           console.log("<======【checkSearch Allgroup】***response+++",response,myData,"====>");
           that.inputLoad = false;
           that.formValidate.AddGroupList[ARR].groupList = [];
           let _List = myData.data ? myData.data.list : myData.list;
-          if(typeof(ARR)  == "number"){
-              if(thatEle && thatEle.temp && thatEle.temp.length){
-                  let _tempArr = Common.returnDelArr(that.formValidate.AddGroupList[ARR].group,_List);
-                  that.formValidate.AddGroupList[ARR].groupList.push(...thatEle.temp,..._tempArr);
 
-              }else{
-                  that.formValidate.AddGroupList[ARR].groupList.push(..._List);
+          let actionList = (arr1,arr2)=>{
+            if(actionObj && actionObj.busTable){
+              let L = [];
+              arr2 ? L.push(...arr1,...arr2) : L.push(...arr1);
+              let T = actionObj.busTable;
+              let N = super.Unique(L,T);
+              for(let i=0;i<N.length;i++){
+                super.DelArrN(L,N[i],"value")
               }
+              return L
+            }else{
+              return false
+            }
+          }
+          if(typeof(ARR)  == "number"){
+            let AddGroupList_ARR = that.formValidate.AddGroupList[ARR];
+            if(thatEle && thatEle.temp && thatEle.temp.length){
+              let _tempArr = Common.returnDelArr(AddGroupList_ARR.group,_List);
+              let _tempList = actionList(_tempArr);
+              if(_tempList){
+                AddGroupList_ARR.groupList.push(...thatEle.temp,..._tempList);
+              }else{
+                AddGroupList_ARR.groupList.push(...thatEle.temp,..._tempArr);  
+              }
+            }else{
+              let _tempList = actionList(_List);
+              if(_tempList){
+                AddGroupList_ARR.groupList.push(..._tempList);
+              }else{
+                AddGroupList_ARR.groupList.push(..._List);  
+              }
+            }
           }
       }).catch( (error) => {
           console.log(error);

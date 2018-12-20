@@ -661,15 +661,10 @@ export default {
             Common.AddCheckSerch(this,"已有业务功能","xxxxx",false,false,"");
         },
         projectGroupFn(URL,params = {},ARR,thatEle){
-            Common.ProjectGroupFN(defaultAXIOS,this,URL,params,ARR,thatEle);
-            setTimeout(()=>{
-                let L = this.formValidate.AddGroupList[0].groupList;
-                let T = this.tableData3;
-                let N = this.unique(L,T);
-                for(let i=0;i<N.length;i++){
-                    L.splice(L.findIndex(item => item.value == N[i]),1)
-                }
-            },300)
+            let OBJ = {
+                busTable:this.tableData3,
+            }
+            Common.ProjectGroupFN(defaultAXIOS,this,URL,params,ARR,thatEle,OBJ);
         },
         unique(arr1 = [],arr2 = []){
             let Num = [];
@@ -700,7 +695,7 @@ export default {
             });
             this.$Message.error(MSG);
         },
-        viewBusData(URL){
+        viewBusData(URL,refresh){
             let _params = {prj_id:Common.GETprjid(this,Common),us_id:this.formValidate.userstory_id,req_id:this.formValidate.req_id,}
             return defaultAXIOS(URL,_params,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
@@ -824,10 +819,12 @@ export default {
             this.serchCurDelTagNull = Index;
             this.tableDataCur = false;
 
-
             this.tableData3.splice(i,1);
             this.tableData3Length = this.tableData3.length;
-            return;
+
+            if(window.location.port == "9000"){
+                return;    
+            }
             this.viewBusData(userstoryListBusfunc).then(()=>{
                 this.tableData3Length = this.tableData3.length;
                 this.setCacheMenuData();
@@ -883,9 +880,12 @@ export default {
                 this.serchCurDelTagVal = false;
                 this.serchCurDelTagNull = false;
 
-                // this.viewBusData(userstoryListBusfunc).then(()=>{},(error)=>{
-                //     this.showError(error)
-                // })
+                if(window.location.port == "9000"){
+                    return;    
+                }
+                this.viewBusData(userstoryListBusfunc,true).then(()=>{},(error)=>{
+                    this.showError(error)
+                })
                 
 
             },(error)=>{
@@ -1146,12 +1146,14 @@ h4{
 #hidden {
     visibility: hidden;
 }
+
 #serchReq .ivu-select-item-selected{
     display: none;
 }
 #serchReq .ivu-tag .ivu-icon-ios-close-empty{
     display: none !important;
-}    
+}
+   
 .crumbs {
     display: inline-block;
     max-width: 15em;

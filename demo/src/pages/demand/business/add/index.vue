@@ -297,7 +297,6 @@ export default {
         //this.nextBtn = false;//临时
         this.selbusinessListFn(addBusfuncQueryCombox,{prjSn:Common.GETprjid(this,Common),prj_id:Common.GETprjid(this,Common)}).then((res)=>{
             this.nextBtn = false;
-            console.error(res);
             if(res && res.typeList && Array.isArray(res.typeList) && res.typeList.length){
                 let temp = res.typeList.find(item=>item.bfunc_type_name == "新增");
                 this.formValidate.bfunc_type = temp && temp.bfunc_type ? temp.bfunc_type : "";

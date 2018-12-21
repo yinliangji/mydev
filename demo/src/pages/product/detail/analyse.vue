@@ -556,21 +556,20 @@ export default {
     },
     watch: {
         TASKID(){
-            if(this.TASKID){
-            
-                this.viewBusData(userstoryListBusfunc).then(()=>{
-                    this.tableData3Length = this.tableData3.length;
-                    this.setCacheMenuData();
-                },(error)=>{
-                    this.showError(error);
-                })
-                this.addCheckSerch().then((res)=>{},(error)=>{});//搜索查询
-            }
         },
-        Data(){
-            if(this.Data){
-                this.formValidate = this.Data;    
-            }
+        "Data.userstory_id"(){
+            this.formValidate = this.Data;
+            setTimeout(()=>{
+                if(this.Data.userstory_id && this.TASKID){
+                    this.viewBusData(userstoryListBusfunc).then(()=>{
+                        this.tableData3Length = this.tableData3.length;
+                        this.setCacheMenuData();
+                    },(error)=>{
+                        this.showError(error);
+                    })
+                    this.addCheckSerch().then((res)=>{},(error)=>{});//搜索查询    
+                }    
+            },1)
         },
         //查询搜索开始
         "formValidate.AddGroupList"(curVal,oldVal){
@@ -648,17 +647,18 @@ export default {
         console.log("需求分析--updated-------",this.formValidate)
     },
     mounted(){
-        if(this.TASKID){
-            this.formValidate = this.Data;
-
-            this.viewBusData(userstoryListBusfunc).then(()=>{
-                this.tableData3Length = this.tableData3.length;
-                this.setCacheMenuData();
-            },(error)=>{
-                this.showError(error);
-            })
-            this.addCheckSerch().then((res)=>{},(error)=>{});//搜索查询
-        }
+        setTimeout(()=>{
+            if(this.TASKID && this.Data.userstory_id){
+                this.formValidate = this.Data;
+                this.viewBusData(userstoryListBusfunc).then(()=>{
+                    this.tableData3Length = this.tableData3.length;
+                    this.setCacheMenuData();
+                },(error)=>{
+                    this.showError(error);
+                })
+                this.addCheckSerch().then((res)=>{},(error)=>{});//搜索查询
+            }
+        },1)
     },
     components: {
         Buspop,

@@ -72,7 +72,7 @@ export default {
         
     },
     watch: {
-        Data(){
+        "Data.req_name"(){
             if(this.Data){
                 this.formValidate = this.Data;    
             }

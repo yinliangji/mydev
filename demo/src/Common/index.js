@@ -244,7 +244,7 @@ export default class Common extends Utils {
       }
 
 
-      if (process.env.NODE_ENV === 'production' && (window.location.href.indexOf("debug=true") == -1 || !super.getCookie("debug") )) {
+      if (process.env.NODE_ENV === 'production' && (window.location.href.indexOf("consoleLog=true") == -1 || !super.getCookie("consoleLog") )) {
         console.log(MET+" | "+URL);
         console.log(JSON.stringify(ERR));
       }else{

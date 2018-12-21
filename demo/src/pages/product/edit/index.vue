@@ -24,14 +24,14 @@
                             <Col span="12">
                                 <FormItem label="责任人" >
                                     <!-- <span>{{formValidate.charger}}</span> -->
-                                    <Select filterable v-model="formValidate.nick_name" placeholder="请选择事项类型">
+                                    <Select filterable v-model="formValidate.nick_name" placeholder="请选择责任人">
                                         <Option v-for="(item,index) in chargerList" :key="index" :value="item.value">{{item.label}}</Option>
                                     </Select>
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                <FormItem label="故事类型" prop="userstory_type">
-                                    <Select v-model="formValidate.userstory_type" placeholder="请选择事项类型">
+                                    <Select v-model="formValidate.userstory_type" placeholder="请选择故事类型">
                                         <Option v-for="(item,index) in userstory_typeList" :key="index" :value="item.value">{{item.label}}</Option>
                                         <!-- <Option value="1">用户需求</Option>
                                         <Option value="2">生产问题</Option>

@@ -384,7 +384,7 @@ export default {
                 {
                     title: '操作',
                     key: 'action',
-                    width: 150,
+                    width: 170,
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
@@ -431,7 +431,7 @@ export default {
                                         this.goDevelopmentFn(params.index)
                                     }
                                 }
-                            }, '事项'),
+                            }, '工作项'),
                             
                         ]);
                     }

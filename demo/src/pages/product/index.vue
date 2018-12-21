@@ -609,7 +609,7 @@ export default {
                 {
                     title: '操作',
                     key: 'action',
-                    width: 260,
+                    width: 290,
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
@@ -658,7 +658,7 @@ export default {
                                         this.goAddDevelopmentFn(params.index)
                                     }
                                 }
-                            }, '添加事项'),
+                            }, '添加工作项'),
                             h('Button', {
                                 props: {
                                     type: 'success',
@@ -671,7 +671,7 @@ export default {
                                         this.goDevelopmentFn(params.index);
                                     }
                                 }
-                            }, '事项看板')
+                            }, '工作项看板')
                         ]);
                     }
                 }

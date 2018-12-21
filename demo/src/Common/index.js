@@ -633,6 +633,8 @@ export default class Common extends Utils {
           myReftemp: "selfRefRole",//修改添加角色
       }
       that.formValidate.AddGroupList.push(_tempObj);
+      return Promise.resolve(that.formValidate);
+
     }
     //搜搜--向穿梭增加删除项
     static SelectChange(that){

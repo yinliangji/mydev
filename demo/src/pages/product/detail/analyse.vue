@@ -273,11 +273,7 @@ export default {
                 return Promise.reject(error);
                 
             });
-            // setTimeout(()=>{
-            //     this.delpopIsLoading = B;
-            //     this.delpopIsShow = B;
-            //     this.deleteBus(this.tableDataCur)
-            // },1)
+            
             
         },
         delpopOpenFn(B){
@@ -307,7 +303,7 @@ export default {
                 this.serchCurDelTagVal = false;//禁止删除功能--增加
                 this.selfChangeItemAdd(this.popsItem,this.formValidate.AddGroupList[0].groupList,this.tableData3);
             }else if(this.isPopsAdd == "-"){
-                //this.selfChangeItemRemove(this.popsItem,this.tableData3)//禁止删除功能--增加
+                //this.selfChangeItemRemove(this.popsItem,this.tableData3)//禁止删除功能--注释掉
             }
         },
         addCheckSerch(){

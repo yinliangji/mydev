@@ -452,9 +452,15 @@ h4{
     display: none;
 }
 
+#serchReq .ivu-tag-checked{
+    display: none;
+}
+
+
 #serchReq .ivu-tag .ivu-icon-ios-close-empty{
     display: none !important;
 }
+
    
 .crumbs {
     display: inline-block;

@@ -302,11 +302,12 @@ export default {
         selectChange(ITEM){
             console.log(ITEM,"selectChange",this.isPopsAdd ,this.popsItem );
             Common.SelectChange(this);
-            this.serchCurDelTagVal = false;
+            //this.serchCurDelTagVal = false; //禁止删除功能--注释掉
             if(this.isPopsAdd == "+"){
+                this.serchCurDelTagVal = false;//禁止删除功能--增加
                 this.selfChangeItemAdd(this.popsItem,this.formValidate.AddGroupList[0].groupList,this.tableData3);
             }else if(this.isPopsAdd == "-"){
-                this.selfChangeItemRemove(this.popsItem,this.tableData3)
+                //this.selfChangeItemRemove(this.popsItem,this.tableData3)//禁止删除功能--增加
             }
         },
         addCheckSerch(){
@@ -526,6 +527,15 @@ export default {
             });
         },
         busListAdd(params){
+            if(!params.value){
+                if(params.value !== 0){
+                    this.serchDisabled = false;
+                    document.getElementsByClassName("ivu-select-dropdown")[0].removeAttribute("id");
+                    this.serchCurDelTagVal = false;
+                    return
+                }
+            }
+
             this.saveBusListData(userstoryRelative,params).then((res)=>{
                 this.Message((val=>val == "minus" ? "删除成功":"添加成功")(params.add));
                 this.serchDisabled = false;
@@ -624,7 +634,7 @@ export default {
                         params.who = setPro(myObj,"who");
                     }
                    
-                    
+
 
                     this.busListAdd(params);
                     this.serchCurDelTagVal = false;

@@ -1286,33 +1286,9 @@ export default {
 						_arr = []
 					}
 					//EventBus.$emit('storyBindSort');
-					
-
-
-                	
                 }else{
                 	this.showError("没有数据");
                 }
-
-
-                //cardList
-                //
-             	//    {
-	            //   taskId: "#US0001",
-	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-	            //   userName: "user1",
-	            //   userId: "userId_01",
-	            //   groupId: "group_01",
-	            //   bgColor: { background: "#b3ecec" },
-	            //   taskStateStr: "未开始",
-	            //   taskState: "01",
-	            //   headPortrait: require("@/assets/images/user_02.png"),
-	            //   taskName:"",
-	            // },
-
-                
-
-
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);

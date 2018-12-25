@@ -23,6 +23,13 @@
             </Page>
             <p>总共{{tableDAtaTatol}}条记录</p>
         </div>
+
+        <Delpop
+            @delpopClose = "delpopCloseFn"
+            @delpopEnter = "delpopEnterFn" 
+            :isShow = "delpopIsShow"
+            :isLoading = "delpopIsLoading"
+        />
     </div>
 </template>
 <script>
@@ -30,8 +37,8 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const { fileDownList,fileUpload,downFile} = Common.restUrl;
-
+const { fileDownList,fileUpload,downFile,fileDelete} = Common.restUrl;
+import Delpop from '@/components/delectAlert'
 export default {
     props: {
         USID: {
@@ -44,29 +51,32 @@ export default {
     },
     watch:{
         USID(){
-            this.formValidate.userstory_id = this.USID;
             if(this.USID){
+                this.formValidate.userstory_id = this.USID;
                 this.init(this.USID);
             }
         },
     },
     beforecreated(){
-        console.log("beforecreated----用户故事附件---")
+        console.log("beforecreated----用户故事附件---",this.formValidate)
     },
     created(){
-        console.log("created----用户故事附件---")
+        console.log("created----用户故事附件---",this.formValidate)
     },
     beforeUpdate(){
-        console.log("beforeUpdate---用户故事附件----")
+        console.log("beforeUpdate---用户故事附件----",this.formValidate)
     },
     updated(){
-        console.log("updated----用户故事附件---")
+        console.log("updated----用户故事附件---",this.formValidate)
     },
     mounted(){
+        this.formValidate.userstory_id = this.USID;
         this.init(this.USID);
     },
     data() {
         return {
+            delPath_file:"",
+            tableDataCur:false,
             tableDAtaTatol:0,
             tableDAtaPageLine:5,
             tableDAtaPageCurrent:1,
@@ -143,10 +153,89 @@ export default {
             formValidate:{
                 userstory_id:"",
             },
+            //删除弹出--start
+            delpopIsShow:false,
+            delpopIsLoading:false,
+            //删除弹出--end
             
         }
     },
     methods:{
+        //删除文件开始
+        tableDel(i,path){
+            this.delPath_file = path;
+            this.delpopOpenFn(true);
+            this.tableDataCur = i;
+        },
+
+        //删除文件结束
+        //删除窗口 -start
+        delpopCloseFn(B){
+            this.delpopIsShow = B;
+            this.delPath_file = "";
+            this.tableDataCur = false;
+        },
+        delpopEnterFn(B){
+            defaultAXIOS(fileDelete,{file_path:this.delPath_file,fileId:this.tableData[this.tableDataCur].fileId,id:Common.GETID(this,Common),taskId:this.formValidate.userstory_id},{timeout:2000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======用户故事***文件删除+++",response,myData,"======>");
+                let STAUUS = myData.status ? myData.status : myData.message
+                if(STAUUS.indexOf("success") != -1){
+                    this.delpopIsLoading = B;
+                    this.delpopIsShow = B;
+                    this.Message("删除完成");
+                    this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.userstory_id)
+                    this.tableDAtaPageCurrent = 1;
+                    return Promise.resolve(STAUUS)
+
+                }else{
+                    this.delpopIsLoading = B;
+                    this.delpopIsShow = B;
+                    this.error('删除失败');
+                    return Promise.reject(STAUUS);
+                }
+            }).catch( (error) => {
+                this.showError(error);
+                return Promise.reject(error);
+            });
+            /* ============== */
+            return
+
+            let URL = userstorydelete;
+            let params = {
+                us_id:this.tableData3[this.tableDataCur].us_id || this.formValidate.userstory_id,
+                bfunc_id:this.tableData3[this.tableDataCur].bfunc_id,
+                version:this.tableData3[this.tableDataCur].version,
+            }
+            return defaultAXIOS(URL,params,{timeout:20000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======product 业务列表删除***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    this.delpopIsLoading = B;
+                    this.delpopIsShow = B;
+                    this.deleteBus(this.tableDataCur)
+                    this.Message("删除完成")
+                    return Promise.resolve(myData.status)                    
+                }else{
+                    this.delpopIsLoading = B;
+                    this.delpopIsShow = B;
+                    this.error(myData.message)
+                    return Promise.reject(myData.status);
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.delpopIsLoading = B;
+                this.delpopIsShow = B;
+                return Promise.reject(error);
+                
+            });
+            
+            
+        },
+        delpopOpenFn(B){
+            this.delpopIsShow = B;
+        },
+        //删除窗口 -end
     	//下载文件 start
         listFileDown(params){
             let URL = downFile + params.row.url;
@@ -171,22 +260,24 @@ export default {
             this.showError("添加失败");
             return Promise.reject("添加失败");
         },
+        Message(MSG = "保存完成"){
+            Common.CommonMessage(this,MSG)
+        },
+        error(MSG = "错误") {
+            Common.CommonError(this,MSG)
+        },
         handleSuccess(res,file,list){
 
             this.listUpFile(fileUpload,Common.GETID(this,Common),this.formValidate.userstory_id).then(()=>{
-                this.$Notice.config({
-                      top:100,
-                      duration: 2
-                  });
-
-                this.$Notice.success({title:"添加成功"})
+                this.Message("添加成功")
+                console.error(this.formValidate)
                 this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.userstory_id)
                 this.tableDAtaPageCurrent = 1;
 
-
             },(error)=>{
                 console.log(error);
-                this.showError(error);
+                this.error(JSON.stringify(error))
+                //this.showError(error);
             })
             
             
@@ -240,6 +331,9 @@ export default {
         showError(ERR){
             Common.CommonError(this,ERR);
         },
+    },
+    components: {
+        Delpop,
     },
 }
 </script>

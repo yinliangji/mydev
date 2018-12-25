@@ -222,7 +222,7 @@ export default {
             buspopIsLoading:false,
             buspopData:false,
             //业务弹出--end
-            ////删除弹出--start
+            //删除弹出--start
             delpopIsShow:false,
             delpopIsLoading:false,
             //删除弹出--end
@@ -334,19 +334,11 @@ export default {
         },
         //查询搜索结束
         //相关业务功能列表--start
-        Message(msg = "保存完成"){
-            this.$Message.config({
-                top: 250,
-                duration: 3
-            });
-            this.$Message.success(msg);
+        Message(MSG = "保存完成"){
+            Common.CommonMessage(this,MSG)
         },
         error(MSG = "错误") {
-            this.$Message.config({
-                top: 250,
-                duration: 3
-            });
-            this.$Message.error(MSG);
+            Common.CommonError(this,MSG)
         },
         viewBusData(URL,refresh){
             let _params = {prj_id:Common.GETprjid(this,Common),us_id:this.formValidate.userstory_id,req_id:this.formValidate.req_id,}

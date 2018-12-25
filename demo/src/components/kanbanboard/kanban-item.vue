@@ -4,132 +4,101 @@
     @click="itemClick(item)" 
     class="card-wrapper"
     
-    :groupId="item.groupId"
     :state="item.taskStatus"
     :taskid="item.taskId"
     :detailid="item.detail_id"
-
+    :groupId="item.groupId"
+    :nickname="item.nickName"
     >
       <div class="card-wrap">
-          <Card :style="{'background':item.bgcolor}">
-            <div class="circle-wrapper">
-                <p class="circle">
-                    <Icon type="record" :size="12"></Icon>
-                </p>
-                <span class="taskId">{{item.taskId}}</span>
-            </div>
 
-              <p class="item-content">{{item.taskName}}</p>
-              <!-- <p class="item-content">{{item.description}}</p> -->
-              <p class="item-name">
-                <span class="user_name">
-                    {{item.userName}}
-                </span>
-                <img :src="item.headPortrait" class="user_nameImg"/>
-
-              </p>
-
-            </Card>
+        <p class="item-content">
+          <span class="levelText" :style="{'background':item.bgcolor}">
+            {{levelText(item.bgcolor)}}
+          </span>
+          {{item.taskName}}
+        </p>
+        <p class="item-name">
+          <span class="user_name">
+              {{item.userName}}
+          </span>
+          <img :src="item.headPortrait" width="21" height="21" />
+        </p>
       </div>
-
   </div>
-
-
 </template>
 
 <script>
-  import { EventBus } from '@/tools';
-
-  import Sortable from 'sortablejs';
-
-  export default {
-    props: {
-      item: {
-        type: Object,
-        default: function(){
-          return {}
-        }
-      },
-
-      Group: {
-        type: Boolean,
-
-      },
-
-    },
-    mounted() {
-      document.body.ondrop = function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-      };
-     this.bindSortable(this.item.userId, this.groupId);
-
-    },
-    methods: {
-      itemClick(info){
-        EventBus.$emit('clickItem', info);
-      },
-      bindSortable(moveId, groupId) {
-        let vm = this;
-        let todoList = document.getElementById(moveId);
-
-        Sortable.create(todoList, {
-          group: {
-            name: 'list',
-            pull: true
-          },
-          animation: 120,
-          ghostClass: 'placeholder-style',
-          fallbackClass: 'iview-admin-cloned-item',
-          onMove: function(evt, originalEvent){
-
-            if(vm.Group){ // 分组时移动
-              if(evt.from.getAttribute('groupId') == evt.to.getAttribute('groupId')){
-                return;
-              }else{
-                return false;
-              }
-            }else{
-              if(evt.from.getAttribute('groupId') !== evt.to.getAttribute('groupId')){
-                return;
-              }else{
-                return;
-              }
-            }
-
-          },
-          onEnd: function(evt){
-            console.log(evt);
-            EventBus.$emit('moveEnd', {evt/*,item: vm.item*/});
-          }
-        });
-
+import { EventBus } from '@/tools';
+export default {
+  props: {
+    item: {
+      type: Object,
+      default: function(){
+        return {}
       }
     },
+    Group: {
+      type: Boolean,
+    },
+  },
+  mounted() {
+  },
+  methods: {
+    levelText(color){
+      if(color=="#FE4514" || color=="#FE4515"){
+        return "高"
+      }else if(color=="#12C37A"){
+        return "中"
+      }else if(color=="#FEB159"){
+        return "低"
+      }else{
+        return "低"
+      }
+    },
+    itemClick(info){
+      EventBus.$emit('clickItem', info);
+    },
 
-  }
+  },
+
+}
 </script>
 
 <style scoped>
-  .card-wrapper {
-
-    min-height: 10px;
-
-  }
+levelText{
+  padding: 4px 4px;
+  float: left;
+  color: #fff;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+.card-wrapper {
+  padding: 4px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  /*min-height: 10px;*/
+}
 .card-wrap{
   cursor: pointer;
+  /*
   margin-right: 10px;
   margin-bottom: 10px;
+  */
+ font-size: 12px;
 }
-  .kanban-item {
-    width: 100px;
-    height: auto;
-  }
-  .circle-wrapper{
-    text-align: left;
-     color: rgb(43, 174, 233);
-  }
-
+.kanban-item {
+  width: 100px;
+  height: auto;
+}
+.circle-wrapper{
+  text-align: left;
+  /*color: rgb(43, 174, 233);*/
+}
+.ivu-card:hover{
+  box-shadow: 0px 0px 0px;
+}
 
 .circle{
     width: 16px;
@@ -144,18 +113,31 @@
   .item-content {
     /* text-align: center; */
     padding-top: 4px;
+    overflow: hidden;
+    height: 30px;
+    margin-bottom: 6px;
+    line-height: 13px;
   }
 
   .item-name {
     text-align: right;
   }
   span.user_name{
+    /*
     position: relative;
     top:8px;
+    */
   }
-  .user_nameImg{ position: relative;top:6px;}
+  .user_nameImg{ 
+    position: relative;
+    top:6px;
+  }
   span.taskId{
-    display: inline;
+    display: inline-block;
+    width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
   }
 </style>

@@ -118,13 +118,13 @@ export default {
   },
   watch:{
     cardList(data){
-      console.error("cardList=",data)
+      
     },
     groupList(data){
-      console.error("groupList=",data)
+      
     },
     statusList(data){
-      console.error("statusList=",data)
+      
     },
 
     
@@ -240,7 +240,7 @@ export default {
     beforeDestroy(){
       console.log('开发看板 》》》》》》')
       EventBus.$off("bindSort",this.bindSortId);
-      EventBus.$off("storyBindSort",this.bindSortId);
+      EventBus.$off("storyBindSort",this.bindStorySortId);
     },
   },
   computed: {

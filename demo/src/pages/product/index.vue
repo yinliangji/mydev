@@ -181,12 +181,12 @@
 					<div class="listBox" v-show="currentView == 'kanbanboard'" id="kanbanboard">
 						<!-- :groupList="[]" :groupList="groupList"  -->
 						<kanbanboard
-							:idDisabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
+							:isDisabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])"
 							:sortdisabled="true" 
 							:cardList="cardLists" 
 							:statusList="statusLists" 
 							:groupList="groupList" 
-							:Group="false" 
+							:Group="true" 
 							/>
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div>
@@ -1049,7 +1049,7 @@ export default {
 
 			defaultAXIOS(storySetChange,{id:_params.ID,userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======agile storySetChange***response+++",response,myData,"======>");
+                console.log("<======用户故事 状态改变***response+++",response,myData,"======>");
                 if(myData.status.indexOf("success") == -1){
                 	this.showError(storySetChange+"|返回结果错误");
                 }else{
@@ -1094,9 +1094,6 @@ export default {
             // 点击卡片方法
             console.log(" 点击卡片方法 ::: ", info);
             this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
-            // this.$router.push({
-            //   path: "/product/detail"
-            // });
         },
         searchHandle(info) {
             // 查询方法
@@ -1212,9 +1209,8 @@ export default {
 			this.cardListBase=[],
             this.statusListBase=[],
 			defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
-                //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("<======product KanBanFn ***response+++",response,myData,"======>");
+                console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
                 if(myData && myData.length){
                 	
                 	let _temp = {};
@@ -1286,6 +1282,7 @@ export default {
 						_arr = []
 					}
 					//EventBus.$emit('storyBindSort');
+					EventBus.$emit('bindSort');
                 }else{
                 	this.showError("没有数据");
                 }

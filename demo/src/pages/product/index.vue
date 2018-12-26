@@ -179,7 +179,7 @@
 				    	</div>
 					</div>
 					<div class="listBox" v-show="currentView == 'kanbanboard'" id="kanbanboard">
-						<!-- :groupList="[]" :groupList="groupList"  -->
+						<!-- :groupList="[]" :groupList="groupList" :sortdisabled="true"  -->
 						<kanbanboard
 							:isDisabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])"
 							:sortdisabled="true" 

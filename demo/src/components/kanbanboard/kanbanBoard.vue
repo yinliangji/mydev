@@ -1,22 +1,22 @@
 <template>
   <Layout >
-    <content>
+    <content id="board">
       <p span="4" v-if="groupList.length > 0" class="left_border"></p>
       <div class="row-wrapper">
         <Row :gutter="16" type="flex" justify="start" align="middle">
-          <Col span="3" style="padding-left:12px;padding-right:10px;" v-if="groupList.length > 0">
+          <Col span="3" class="topColumnFirst" v-if="groupList.length > 0">
             <div class="centerHeaderTitle">
               {{groupList[0].text}}
             </div>
           </Col>
-          <Col :span="statusSize" style="padding-right:4px;padding-left:4px;" v-for="(item, index) in statusList" :key="index">
+          <Col :span="statusSize" class="topColumn"  v-for="(item, index) in statusList" :key="index">
             <kanbanContentHeader :text="item.stateStr" :taskNumber="item.taskNumber"></kanbanContentHeader>
           </Col>
         </Row>
       </div>
       <!--有分组-->
       <div class="row-wrapper" v-for="(itemGroup, index) in groupLists" v-if="groupList.length > 0">
-        <Row :gutter="16" type="flex" justify="start" align="middle">
+        <Row :gutter="16" type="flex" justify="start" align="top">
           <Col span="3" v-if="groupLists.length > 0">
             <div class="centerHeader" v-if="sortdisabled">
               {{itemGroup.text}}
@@ -25,13 +25,12 @@
               {{itemGroup.text}}
             </div>
             <div>
-              <Button v-if="sortdisabled" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)" style="margin:6px auto 0;display:block;" >添加用户故事</Button>
-              <Button v-else  type="success" @click="addNewTask(itemGroup.groupId)" style="margin:6px auto 0;display:block;" >添加工作项</Button>
+              <Button v-if="sortdisabled" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >添加用户故事</Button>
+              <Button v-else  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" >添加工作项</Button>
             </div>
           </Col>
-          <Col :span="statusSize" style="padding-right:4px;padding-left:4px;" v-for="(items, index) in statusList"  :key="index">
-            <div :id="'kb'+itemGroup.groupId+'_'+items.state" :state="items.state" :groupid="itemGroup.groupId" style="border:1px dashed #ddd;min-height:64px;border-radius:4px;">
-
+          <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
+            <div :id="'kb'+itemGroup.groupId+'_'+items.state" :state="items.state" :groupid="itemGroup.groupId" class="rowBox">
               <kanbanItem
                 :key="cardIndex"
                 :item = "value"
@@ -47,8 +46,8 @@
       <!--无分组-->
       <div class="row-wrapper" v-if="groupList.length == 0">
         <Row :gutter="16" type="flex" justify="start" align="top">
-          <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" >
-            <div :id="'stateId_'+items.state" :state="items.state" style="border:1px dashed #ccc;min-height:100px;">
+          <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
+            <div :id="'stateId_'+items.state" :state="items.state" class="rowBox rowBox2">
               <kanbanItem
                   :key="keys"
                   :item = "value"
@@ -136,9 +135,51 @@ export default {
     };
     EventBus.$on("bindSort",this.bindSortId);
     EventBus.$on("storyBindSort",this.bindStorySortId);
-
+    setTimeout(()=>{
+      this.autoHeight();  
+    },1000)
+           
   },
   methods:{
+    autoHeight(){
+      setTimeout(()=>{
+        this.delHeight();
+      },1)
+      setTimeout(()=>{
+        this.setHeight();
+      },2)      
+    },
+    setHeight(){
+      let Doms = document.getElementById("board").getElementsByClassName("row-wrapper");
+      let inArr = [];
+      let Max = "";
+      if(Doms.length > 1){
+        for(let i=1;i<Doms.length;i++){
+          let Col = Doms[i].getElementsByClassName("ivu-col");
+          for(let j=0;j<Col.length;j++){
+            inArr.push(Col[j].offsetHeight)
+            //console.error(Col[j],Col[j].offsetHeight+"-----"+i+"------"+j)
+          }
+          Max = Math.max.apply(null,inArr);
+          for(let k=0;k<Col.length;k++){
+            Col[k].style.height = Max+"px";
+          }
+          inArr = [];
+          Max = "";
+        }
+      }
+    },
+    delHeight(){
+      let Doms = document.getElementById("board").getElementsByClassName("row-wrapper");
+      if(Doms.length > 1){
+        for(let i=1;i<Doms.length;i++){
+          let Col = Doms[i].getElementsByClassName("ivu-col");
+          for(let k=0;k<Col.length;k++){
+            Col[k].style.height = "auto";
+          }
+        }
+      }
+    },
     addItem(req_id){
       this.$router.push({path:'/product/add',query:{req_id}})
     },
@@ -199,6 +240,7 @@ export default {
       return _sortId;
     },
     bindSortable(moveId){
+
       let vm = this;
       let todoList = document.getElementById(moveId);
       Sortable.create(todoList,{
@@ -229,9 +271,11 @@ export default {
           if(vm.Group){
             console.log('moveEnd 》》》》》》')
             EventBus.$emit("moveEnd",{evt});
+            vm.autoHeight();
           }else{
             console.log('story moveEnd 》》》》》》',ent);
             EventBus.$emit("storyMoveEnd",{evt});
+            vm.autoHeight();
           }
 
         },
@@ -261,6 +305,36 @@ export default {
 </script>
 
 <style scoped>
+.topColumn{
+  padding-right:4px;
+  padding-left:4px;
+}
+.topColumnFirst{
+  padding-left:12px;
+  padding-right:10px;
+}
+.addMissionBtn{
+  margin:6px auto 0;
+  display:block;
+}
+.addUsBtn{
+  margin:6px auto 0;display:block;
+}
+
+.rowBox{
+  border:1px dashed #ddd;
+  min-height:64px;
+  border-radius:4px;
+  height: 100%;
+}
+.rowBox2{
+  border:1px dashed #ccc;
+  min-height:100px;
+}
+.Column{
+  padding-right:4px;
+  padding-left:4px;
+}
 .ivu-layout-header {
   background: #fff;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);

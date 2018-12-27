@@ -42,7 +42,7 @@
                                     查询
                                 </Button>
                                 <Button class="_cancelSerchBtn" @click="cancelSerchAll">
-                                    重填
+                                    重置
                                 </Button>
                             </Col>
                             
@@ -221,10 +221,19 @@ export default {
                     type: 'html',
                     renderHeader: (h, params) => {
                         return h('div', {
-                            attrs:{title:"根据需求项分解为更细粒度的用户故事的完成情况"}
+                            style: {position:'relative',},
                         }, [
-                            h('span', {}, '用户故事情况'),
-                            //h('Icon', {props:{type: 'ios-help'},}, ''),
+                            h('span', {}, '用户故事情况 '),
+                            h('Icon', {
+                                props:{type: 'ios-help-outline',size:"16",color:"#80848f"},
+                                style: {position:'absolute',right:'-15px',top:'10%'},
+                                attrs:{title:"根据需求项分解为更细粒度的用户故事的完成情况"},
+                            }, ''),
+                            /*
+                            h('Tooltip', {props:{content: '根据需求项分解为更细粒度的用户故事的完成情况',placement:"right"},}, [
+                                h('Icon', {props:{type: 'ios-help-outline',size:"16",color:"#80848f"},}, ''),
+                                ]),
+                            */
                             h('br'),
                             h('span', {}, '(上线 / 未上线)')
                         ]);
@@ -371,6 +380,7 @@ export default {
                 this.formValidate[i] = "";
             }
             this.$refs.formValidate.resetFields();
+            this.serchAll();
         },
         serchAll(){
             let ID = Common.GETID(this,Common)

@@ -211,7 +211,7 @@ app.all('/project/queryPrj_fromUser/', function(req, res) {
 
 let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
-        "status": val1,
+        "status": "success",
         "message": "mockDataList xxxxxxx",
         "prj_name":"prj_name_xxxxxx",
         "product_name":"product_name_xxxxxxxx",

@@ -98,7 +98,7 @@
 							</Col>
 							<Col span="4" style="text-align: left" class="serchBtnBox">
 								<Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
-								<Button class="cancelSerchBtn" @click="cancelSerchAll">重填</Button>
+								<Button class="cancelSerchBtn" @click="cancelSerchAll">重置</Button>
 							</Col>
 						</Row>
 						<div class="formValidateMoreBtnBox" :class="isShowMoreShow ?'arrUp':'arrDown'" @click="isShowMoreShow = !isShowMoreShow">
@@ -1284,7 +1284,7 @@ export default {
 					//EventBus.$emit('storyBindSort');
 					EventBus.$emit('bindSort');
                 }else{
-                	this.showError("没有数据");
+                	this.showError(URL+"_没有数据");
                 }
             }).catch( (error) => {
                 console.log(error);

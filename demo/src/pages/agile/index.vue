@@ -89,7 +89,7 @@
                             </Col>
                             <Col span="4" style="text-align: left" class="serchBtnBox">
                                 <Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
-                                <Button class="cancelSerchBtn" @click="cancelSerchAll">重填</Button>
+                                <Button class="cancelSerchBtn" @click="cancelSerchAll">重置</Button>
                             </Col>
                             
                         </Row>

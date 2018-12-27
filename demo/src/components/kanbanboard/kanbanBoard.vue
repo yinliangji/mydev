@@ -113,10 +113,14 @@ export default {
     return {
       sortId:[],
       storySortId:[],
+      cssText:"",
     };
   },
   watch:{
     cardList(data){
+      setTimeout(()=>{
+        this.autoHeight();  
+      },10)
       
     },
     groupList(data){
@@ -175,6 +179,10 @@ export default {
         for(let i=1;i<Doms.length;i++){
           let Col = Doms[i].getElementsByClassName("ivu-col");
           for(let k=0;k<Col.length;k++){
+            // if(!this.cssText){
+            //   this.cssText = Col[k].getAttribute("style");  
+            // }
+            //Col[k].setAttribute("style",this.cssText);
             Col[k].style.height = "auto";
           }
         }
@@ -334,6 +342,7 @@ export default {
 .Column{
   padding-right:4px;
   padding-left:4px;
+  transition: all 1s;
 }
 .ivu-layout-header {
   background: #fff;

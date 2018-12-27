@@ -1,6 +1,6 @@
 <template>
     <Modal ref="addPop" v-model="modaAdd" :title="ADDorEDIT?'添加':'编辑'" @on-ok="submitAdd"  ok-text="提交" :loading="modal_add_loading" @on-cancel="cancel" visible="true">
-        <Form :model="formItem" :label-width="100" :rules="ruleValidate" ref="formValidate">
+        <Form :model="formItem" :label-width="100" :rules="ruleValidate" ref="formValidate" style="width:95%;">
             <!-- <FormItem label="所属项目" prop="prj_id">
                 <Select v-model="formItem.prj_id" placeholder="请选择所属项目">
                     <Option v-for="(item,index) in prj_idList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -9,28 +9,34 @@
             <FormItem label="所属项目" >
                 <p>{{formItem.prj_name}}</p>
             </FormItem>
-            <FormItem label="需求项名称" prop="req_name">
-                <Input v-model="formItem.req_name" placeholder="请输入需求项名称"></Input>
+            
+
+            <FormItem label="需求项类型" prop="prj_type">
+                <RadioGroup v-model="formItem.prj_type">
+                    <Radio label="1">
+                        立项&nbsp;
+                        <ToolTip placement="top-start" :T="1" content="在ITM中立项的项目对应的需求项" />
+                    </Radio>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Radio label="2">
+                        自研&nbsp;
+                        <ToolTip placement="top-start" :T="1" content="非立项项目对应的需求项" />
+                    </Radio>
+                </RadioGroup>
             </FormItem>
             
             
             <FormItem label="需求项编号" prop="req_id" v-show="formItem.prj_type  == 2 ? false : true" >
                 <Input v-model="formItem.req_id"  :disabled="formItem.prj_type  == 1 ? false : true" placeholder="请输入需求项编号"></Input>
-                <p v-show="formItem.prj_type  != 2 ? false : true">【需求项编号】自动生成</p>
+                <!-- <p v-show="formItem.prj_type  != 2 ? false : true">【需求项编号】自动生成</p> -->
+                <ToolTip  content="项目在ITM中对应的需求项编号" />
             </FormItem>
             <FormItem label="需求项编号" v-show="formItem.prj_type  != 2 ? false : true">
                 <p >【项目在ITM中对应的需求项编号】</p>
                 <!-- v-if="formItem.prj_type  == 2 ? false : true" -->
             </FormItem>
-            <FormItem label="需求项类型" prop="prj_type">
-                <RadioGroup v-model="formItem.prj_type">
-                    <Tooltip content="在ITM中立项的项目对应的需求项" placement="top-start">
-                        <Radio label="1">立项 <Icon type="ios-help"></Icon></Radio>
-                    </Tooltip>
-                    <Tooltip content="非立项项目对应的需求项" placement="top-start">
-                        <Radio label="2">自研 <Icon type="ios-help"></Icon></Radio>
-                    </Tooltip>
-                </RadioGroup>
+            <FormItem label="需求项名称" prop="req_name">
+                <Input v-model="formItem.req_name" placeholder="请输入需求项名称"></Input>
             </FormItem>
             <FormItem label="提出部门" prop="req_submitter">
                 <Input v-model="formItem.req_submitter" placeholder="请输入提出部门"></Input>

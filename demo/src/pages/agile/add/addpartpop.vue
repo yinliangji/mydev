@@ -62,7 +62,6 @@ export default {
     },
     data () {
         const validatePart = (rule, value, callback) => {
-            console.log(value)
             if(!value){
                 return callback(new Error('内容不能为空！'));    
             }else{

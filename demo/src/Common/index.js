@@ -1633,7 +1633,42 @@ export default class Common extends Utils {
           }
       };
     }
+    //过滤项目列表（）里银行名称的内容
+    static ReplaceAgileListStr(_Common,str){
+      return filterParentheses(str)
+      
+    }
 
+}
+function filterParentheses(str){
+  let check = (STR = "")=>{
+          return str.indexOf(STR) != -1 ? true : false;
+      }
+      let isTrue = (fn)=>{
+       let IS1  = fn("(") && fn(")") ? /\((\S*)\)/ : false;
+       let IS2  = fn("（") && fn("）") ? /（(\S*)）/ : false;
+       let IS3  = fn("(") && fn("）") ? /\((\S*)）/ : false;
+       let IS4  = fn("（") && fn(")") ? /（(\S*)\)/ : false;
+       if(IS1){
+        return IS1;
+       }else if(IS2){
+        return IS2;
+       }else if(IS3){
+        return IS3;
+       }else if(IS4){
+        return IS4;
+       }else{
+        return false;
+       }
+      }
+      let myCheck = isTrue(check);
+      if(myCheck){
+        let _str = str.match(myCheck)[1];
+        let replaceTxt = _str.indexOf("-") != -1 ? _str.match(/(\S*)\-/)[1] : _str;
+        return str.replace(_str,replaceTxt)
+      }else{
+        return str
+      }
 }
 function fileterStr(STR){
   let strArr = "";

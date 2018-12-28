@@ -38,7 +38,7 @@
     					<Row>
                             <Col span="12">
                                 <FormItem label="开始时间" prop="start_time">
-                            		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"  :value="formValidate.start_time" v-model="formValidate.start_time"></DatePicker>
+                            		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"  :value="formValidate.start_time" v-model="formValidate.start_time" ></DatePicker>
                         		</FormItem>
                             </Col>
                             <Col span="12">

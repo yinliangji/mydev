@@ -200,12 +200,9 @@ const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDevel
 export default {
 	name: 'aglie',
     mounted(){
-
+        
         let auth_list = ()=>{
             this.getPermissionFn(getPermission).then((result)=>{
-                
-
-
                 this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
                 setTimeout(()=>{
                     EVENT.emit("SIDER1",result);

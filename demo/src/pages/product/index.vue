@@ -990,15 +990,14 @@ export default {
 	    	let _sprint = this.storyGetConditionFn(storyGetCondition,"sprint",ID);
 
 	    	return Promise.all([_sprint]).then((REP)=>{
-	    		//return Promise.resolve(true)
-	    		
+	    		this.sprintList.unshift({label:"未规划迭代",value:"0"})
 			    return defaultAXIOS(URL,{prj_id:ID},{timeout:20000,method:'get'}).then((response) => {
 	                let myData = response.data;
 	                console.log("<======agile getDefSpring***response+++",response,myData,"======>");
 	                if(myData && myData.data && !isNaN(myData.data-0) ){
 	                	return Promise.resolve(myData.data)
 	                }else{
-	                	return Promise.resolve("")
+	                	return Promise.resolve(false)
 	                	//return Promise.reject("无法获取当前迭代,data不存在");
 	                }
 	                
@@ -1123,7 +1122,7 @@ export default {
 		selectMenuFn(N){
 
 			let ID = N;
-			Common.setStorageAndCookie(Common,"id",N)
+			//Common.setStorageAndCookie(Common,"id",N)
 			defaultAXIOS(projectDetail+ID,{},{timeout:2000,method:'get'}).then((response) => {
 			    let myData = response.data;
 			    console.log("<======detail***response+++",response,myData,"+++detail***response======>");
@@ -1136,16 +1135,11 @@ export default {
 			    let DATA = myData.data ? myData.data : myData
 			    let prodId = DATA.prod_id?DATA.prod_id : DATA.prod 
 			    if(DATA.prj_id){
-			    	Common.setStorageAndCookie(Common,'prj_id',DATA.prj_id);
+			    	//Common.setStorageAndCookie(Common,'prj_id',DATA.prj_id);
 			    }else{
-			    	Common.setStorageAndCookie(Common,'prj_id',"");
+			    	//Common.setStorageAndCookie(Common,'prj_id',"");
 			    }
 			    if(prodId){
-
-					//Common.setCookie("prj_id",DATA.prj_id);
-		            //localStorage.setItem('prj_id', DATA.prj_id);
-		            //Common.setCookie("prod_id",prodId);
-		            //localStorage.setItem('prod_id',prodId);
 		            Common.setStorageAndCookie(Common,'prod_id',prodId);
 			    }else{
 			    	Common.setStorageAndCookie(Common,'prod_id',"");

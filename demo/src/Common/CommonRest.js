@@ -82,7 +82,7 @@ CommonRest.restUrl = {
     /****express 敏捷项目列表ITM get****/
 
     "syncSearch": process.env.BASE_URL + "/prj/sync_search/",
-    /****express 敏捷项目添加角色人员 get ****/
+    /****express 敏捷项目添加ITM get ****/
 
     "projectOutputExecl": process.env.BASE_URL + "/designer/application_erro/",
     /****express 敏捷项目导出word get ****/

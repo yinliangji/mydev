@@ -115,9 +115,6 @@ export default {
             return arr.find(item=>item.id == val);
         },
         changeCurProject(data) {
-            
-            this.$emit("changeSelect",this.curProject);
-            
             this.setCookie("prjId", data);
             this.setCookie("id", data);
             let prjSn = this._getPrjSn(data);
@@ -133,6 +130,7 @@ export default {
                     break
                 }
             }
+            this.$emit("changeSelect",this.curProject);
             this.$emit("sendData",this.checkGet(this.curProject || "",this.projectList));
         },
         _getPrjSn(prjId){

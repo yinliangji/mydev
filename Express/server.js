@@ -858,7 +858,7 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                         "id":5,
                     },
                     {
-                        "nick_name":"来咧",
+                        "nick_name":"赖磊",
                         "prj_id":"prj00010",
                         "role_name":"icdp_devTeam",
                         "user_name":"lailie",
@@ -1021,7 +1021,7 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
                         "id":5,
                     },
                     {
-                        "nick_name":"来咧",
+                        "nick_name":"赖磊",
                         "prj_id":"prj00010",
                         "role_name":"icdp_devTeam",
                         "user_name":"lailie",
@@ -1113,7 +1113,7 @@ app.all('/get_prod/', function(req, res) {
 
 
 
-let GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
+let GroupList = (val1 = 200, val2 = "", val3 = 3) => {
     return Mock.mock({
         "status": val1,
         "message": "mockDataList xxxxxxx",
@@ -1121,53 +1121,54 @@ let GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
             "list": [
                 {
                     value: 'New York',
-                    label: 'New York人1',
+                    label: 'New York人1@'+val2,
                     "who|1":["icdp","itm"],
                     prj_id: 'New York',
                     prj_name: 'New York人1',
                 },
                 {
                     value: 'London',
-                    label: 'London人2',
+                    label: 'London人2@'+val2,
                     "who|1":["icdp","itm"],
                     prj_id: 'London',
                     prj_name: 'London人2',
                 },
                 {
                     value: 'Sydney',
-                    label: 'Sydney人3',
+                    label: 'Sydney人3@'+val2,
                     "who|1":["icdp","itm"],
                     prj_id: 'Sydney',
                     prj_name: 'Sydney人3',
                 },
                 {
                     value: 'Ottawa',
-                    label: 'Ottawa人4',
+                    label: 'Ottawa人4@'+val2,
                     "who|1":["icdp","itm"],
                     prj_id: 'Ottawa',
                     prj_name: 'Ottawa人4',
                 },
                 {
                     value: 'Paris',
-                    label: 'Paris人5',
+                    label: 'Paris人5@'+val2,
                     "who|1":["icdp","itm"],
                     prj_id: 'Paris',
                     prj_name: 'Paris人5',
                 },
                 {
                     value: 'Canberra',
-                    label: 'Canberra人6',
+                    label: 'Canberra人6@'+val2,
                     "who|1":["icdp","itm"],
                     prj_id: 'Canberra',
                     prj_name: 'Canberra人6',
                 }
             ],
-
         },
+        "__value2__page": val2,
+        "__value3__pageline": val3,
     })
 }
 
-let _GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
+let _GroupList = (val1 = 200, val2 = "", val3 = 3) => {
     return Mock.mock({
         "status": val1,
         "message": "mockDataList xxxxxxx",
@@ -1175,53 +1176,54 @@ let _GroupList = (val1 = 200, val2 = 1, val3 = 3) => {
             "list": [
                 {
                     value: '_New York',
-                    label: '_New York人1',
+                    label: '_New York人1@'+val2,
                     "who|1":["_icdp","_itm"],
                     prj_id: '_New York',
                     prj_name: '_New York人1',
                 },
                 {
                     value: '_London',
-                    label: '_London人2',
+                    label: '_London人2@'+val2,
                     "who|1":["_icdp","_itm"],
                     prj_id: '_London',
                     prj_name: '_London人2',
                 },
                 {
                     value: '_Sydney',
-                    label: '_Sydney人3',
+                    label: '_Sydney人3@'+val2,
                     "who|1":["_icdp","_itm"],
                     prj_id: '_Sydney',
                     prj_name: '_Sydney人3',
                 },
                 {
                     value: '_Ottawa',
-                    label: '_Ottawa人4',
+                    label: '_Ottawa人4@'+val2,
                     "who|1":["_icdp","_itm"],
                     prj_id: '_Ottawa',
                     prj_name: '_Ottawa人4',
                 },
                 {
                     value: '_Paris',
-                    label: '_Paris人5',
+                    label: '_Paris人5@'+val2,
                     "who|1":["_icdp","_itm"],
                     prj_id: '_Paris',
                     prj_name: '_Paris人5',
                 },
                 {
                     value: '_Canberra',
-                    label: '_Canberra人6',
+                    label: '_Canberra人6@'+val2,
                     "who|1":["_icdp","_itm"],
                     prj_id: '_Canberra',
                     prj_name: '_Canberra人6',
                 }
             ],
-
         },
+        "__value2__page": val2,
+        "__value3__pageline": val3,
     })
 }
 
-let GroupList_ = (val1 = 200, val2 = 1, val3 = 3) => {
+let GroupList_ = (val1 = 200, val2 = "", val3 = 3) => {
     return Mock.mock({
         "status": val1,
         "message": "mockDataList xxxxxxx",
@@ -1229,70 +1231,72 @@ let GroupList_ = (val1 = 200, val2 = 1, val3 = 3) => {
             "list": [
                 {
                     value: 'New York_',
-                    label: 'New York_人1',
+                    label: 'New York_人1@'+val2,
                     "who|1":["icdp_","itm_"],
                     prj_id: 'New York_',
                     prj_name: 'New York_人1',
                 },
                 {
                     value: 'London_',
-                    label: 'London_人2',
+                    label: 'London_人2@'+val2,
                     "who|1":["icdp_","itm_"],
                     prj_id: 'London_',
                     prj_name: 'London_人2',
                 },
                 {
                     value: 'Sydney_',
-                    label: 'Sydney_人3',
+                    label: 'Sydney_人3@'+val2,
                     "who|1":["icdp_","itm_"],
                     prj_id: 'Sydney_',
                     prj_name: 'Sydney_人3',
                 },
                 {
                     value: 'Ottawa_',
-                    label: 'Ottawa_人4',
+                    label: 'Ottawa_人4@'+val2,
                     "who|1":["icdp_","itm_"],
                     prj_id: 'Ottawa_',
                     prj_name: 'Ottawa_人4',
                 },
                 {
                     value: 'Paris_',
-                    label: 'Paris_人5',
+                    label: 'Paris_人5@'+val2,
                     "who|1":["icdp_","itm_"],
                     prj_id: 'Paris_',
                     prj_name: 'Paris_人5',
                 },
                 {
                     value: 'Canberra_',
-                    label: 'Canberra_人6',
+                    label: 'Canberra_人6@'+val2,
                     "who|1":["icdp_","itm_"],
                     prj_id: 'Canberra_',
                     prj_name: 'Canberra_人6',
                 }
             ],
-
         },
+        "__value2__page": val2,
+        "__value3__pageline": val3,
     })
 }
 
 let trueorfalse = 0;
 app.all('/agile/getUsers/', function(req, res) {
 
+    let val2 = req.query && req.query.userName ? req.query.userName : "";
     let resVal
     let Json
     if(trueorfalse == 0){
-        Json =  GroupList(req.body.myStatus)   
-        resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+        Json =  GroupList(req.body.myStatus,val2)   
+        //resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
     }else if(trueorfalse == 1){
-        Json =  _GroupList(req.body.myStatus) 
-        resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+        Json =  _GroupList(req.body.myStatus,val2) 
+        //resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
 
     }else{
-        Json =  GroupList_(req.body.myStatus)   
-        resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+        Json =  GroupList_(req.body.myStatus,val2)   
+        //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
     }
-    console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
+    console.log("req==>", req.body,req.query);
+    console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
     res.json(Json);
@@ -1301,21 +1305,22 @@ app.all('/agile/getUsers/', function(req, res) {
 
 app.all('/prj/sync_search/', function(req, res) {
 
+    let val2 = req.query && req.query.userName ? req.query.userName : "";
     let resVal
     let Json
     if(trueorfalse == 0){
-        Json =  GroupList(req.body.myStatus)   
-        resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+        Json =  GroupList(req.body.myStatus,val2)   
+        //resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
     }else if(trueorfalse == 1){
-        Json =  _GroupList(req.body.myStatus) 
-        resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+        Json =  _GroupList(req.body.myStatus,val2) 
+        //resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
 
     }else{
-        Json =  GroupList_(req.body.myStatus)   
-        resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+        Json =  GroupList_(req.body.myStatus,val2)   
+        //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
     }
     console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
+    console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
     res.json(Json);
@@ -1323,22 +1328,22 @@ app.all('/prj/sync_search/', function(req, res) {
 });
 
 app.all('/system/loglist/', function(req, res) {
-
+    let val2 = req.query && req.query.name ? req.query.name : "";
     let resVal
     let Json
     if(trueorfalse == 0){
-        Json =  GroupList(req.body.myStatus)   
-        resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+        Json =  GroupList(req.body.myStatus,val2)   
+        //resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
     }else if(trueorfalse == 1){
-        Json =  _GroupList(req.body.myStatus) 
-        resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+        Json =  _GroupList(req.body.myStatus,val2) 
+        //resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
 
     }else{
-        Json =  GroupList_(req.body.myStatus)   
-        resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+        Json =  GroupList_(req.body.myStatus,val2)   
+        //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
     }
     console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
+    console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
     res.json(Json);
@@ -1348,21 +1353,22 @@ app.all('/system/loglist/', function(req, res) {
 
 app.all('/system/phylist/', function(req, res) {
 
+    let val2 = req.query && req.query.name ? req.query.name : "";
     let resVal
     let Json
     if(trueorfalse == 0){
-        Json =  GroupList(req.body.myStatus)   
-        resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+        Json =  GroupList(req.body.myStatus,val2)   
+        //resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
     }else if(trueorfalse == 1){
-        Json =  _GroupList(req.body.myStatus) 
-        resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+        Json =  _GroupList(req.body.myStatus,val2) 
+        //resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
 
     }else{
-        Json =  GroupList_(req.body.myStatus)   
-        resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+        Json =  GroupList_(req.body.myStatus,val2)   
+        //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
     }
     console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
+    console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
     res.json(Json);
@@ -1371,21 +1377,22 @@ app.all('/system/phylist/', function(req, res) {
 
 app.all('/agile/search_busfunc/', function(req, res) {
 
+    let val2 = req.query && req.query.userName ? req.query.userName : "";
     let resVal
     let Json
     if(trueorfalse == 0){
-        Json =  GroupList(req.body.myStatus)   
-        resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+        Json =  GroupList(req.body.myStatus,val2)   
+        //resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
     }else if(trueorfalse == 1){
-        Json =  _GroupList(req.body.myStatus) 
-        resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+        Json =  _GroupList(req.body.myStatus,val2) 
+        //resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
 
     }else{
-        Json =  GroupList_(req.body.myStatus)   
-        resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+        Json =  GroupList_(req.body.myStatus,val2)   
+        //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
     }
     console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
+    console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
     res.json(Json);
@@ -1393,7 +1400,7 @@ app.all('/agile/search_busfunc/', function(req, res) {
 });
 
 
-let searchBusfunc1 = (val1 = 200, val2 = 1, val3 = 3) => {
+let searchBusfunc1 = (val1 = 200, val2 = "", val3 = 3) => {
     /*
     "list|6": [
         {
@@ -1420,7 +1427,7 @@ let searchBusfunc1 = (val1 = 200, val2 = 1, val3 = 3) => {
                     create_date:"@date(yyyy-MM-dd)",
                     "version":1,
                     "value":1,
-                    label:"a-abc",
+                    label:"a-abc@"+val2,
                     who:"itm",
                 },
                 {
@@ -1430,7 +1437,7 @@ let searchBusfunc1 = (val1 = 200, val2 = 1, val3 = 3) => {
                     create_date:"@date(yyyy-MM-dd)",
                     "version":1,
                     "value":2,
-                    label:"aa-abc",
+                    label:"aa-abc@"+val2,
                     who:"itm",
                 },
                 {
@@ -1440,15 +1447,17 @@ let searchBusfunc1 = (val1 = 200, val2 = 1, val3 = 3) => {
                     create_date:"@date(yyyy-MM-dd)",
                     "version":1,
                     "value":3,
-                    label:"aaa-abc",
+                    label:"aaa-abc@"+val2,
                     who:"itm",
                 },
             ],
         },
+        "__value2__page": val2,
+        "__value3__pageline": val3,
     })
     
 }
-let searchBusfunc2 = (val1 = 200, val2 = 1, val3 = 3) => {
+let searchBusfunc2 = (val1 = 200, val2 = "", val3 = 3) => {
     return Mock.mock({
         "status": "success",
         "message": "searchBusfunc2 xxxxxxx",
@@ -1461,7 +1470,7 @@ let searchBusfunc2 = (val1 = 200, val2 = 1, val3 = 3) => {
                     create_date:"@date(yyyy-MM-dd)",
                     "version":1,
                     "value":11,
-                    label:"b-abc",
+                    label:"b-abc@"+val2,
                     who:"itm",
                 },
                 {
@@ -1471,7 +1480,7 @@ let searchBusfunc2 = (val1 = 200, val2 = 1, val3 = 3) => {
                     create_date:"@date(yyyy-MM-dd)",
                     "version":1,
                     "value":12,
-                    label:"bb-abc",
+                    label:"bb-abc@"+val2,
                     who:"itm",
                 },
                 {
@@ -1481,14 +1490,16 @@ let searchBusfunc2 = (val1 = 200, val2 = 1, val3 = 3) => {
                     create_date:"@date(yyyy-MM-dd)",
                     "version":1,
                     "value":13,
-                    label:"bbb-abc",
+                    label:"bbb-abc@"+val2,
                     who:"itm",
                 },
             ],
         },
+        "__value2__page": val2,
+        "__value3__pageline": val3,
     })
 }
-let searchBusfunc3 = (val1 = 200, val2 = 1, val3 = 3) => {
+let searchBusfunc3 = (val1 = 200, val2 = "", val3 = 3) => {
     return Mock.mock({
         "status": "success",
         "message": "searchBusfunc2 xxxxxxx",
@@ -1501,7 +1512,7 @@ let searchBusfunc3 = (val1 = 200, val2 = 1, val3 = 3) => {
                     create_date:"@date(yyyy-MM-dd)",
                     "version":1,
                     "value":101,
-                    label:"c-abc",
+                    label:"c-abc@"+val2,
                     who:"itm",
                 },
                 {
@@ -1511,7 +1522,7 @@ let searchBusfunc3 = (val1 = 200, val2 = 1, val3 = 3) => {
                     create_date:"@date(yyyy-MM-dd)",
                     "version":1,
                     "value":102,
-                    label:"cc-abc",
+                    label:"cc-abc@"+val2,
                     who:"itm",
                 },
                 {
@@ -1521,11 +1532,13 @@ let searchBusfunc3 = (val1 = 200, val2 = 1, val3 = 3) => {
                     create_date:"@date(yyyy-MM-dd)",
                     "version":1,
                     "value":103,
-                    label:"ccc-abc",
+                    label:"ccc-abc@"+val2,
                     who:"itm",
                 },
             ],
         },
+        "__value2__page": val2,
+        "__value3__pageline": val3,
     })
 }
 
@@ -1535,17 +1548,17 @@ app.all('/agile/search_busfunc2/', function(req, res) {
     let Json
     if(trueorfalse == 0){
         Json =  searchBusfunc1(req.body.myStatus)   
-        resVal = searchBusfunc1(req.body.myStatus, req.body.page, req.body.pageline);
+        //resVal = searchBusfunc1(req.body.myStatus, req.body.page, req.body.pageline);
     }else if(trueorfalse == 1){
         Json =  searchBusfunc2(req.body.myStatus) 
-        resVal = searchBusfunc2(req.body.myStatus, req.body.page, req.body.pageline);
+        //resVal = searchBusfunc2(req.body.myStatus, req.body.page, req.body.pageline);
 
     }else{
         Json =  searchBusfunc3(req.body.myStatus)   
-        resVal = searchBusfunc3(req.body.myStatus, req.body.page, req.body.pageline);     
+        //resVal = searchBusfunc3(req.body.myStatus, req.body.page, req.body.pageline);     
     }    
     console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
+    console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
     res.json(Json);
@@ -1761,7 +1774,7 @@ let Role = (val1 = 200, val2 = 1, val3 = 3) => {
                         "id":5,
                     },
                     {
-                        "nick_name":"来咧",
+                        "nick_name":"赖磊",
                         "prj_id":"prj00010",
                         "role_name":"icdp_devTeam",
                         "user_name":"lailie",
@@ -1791,31 +1804,11 @@ app.all('/agile/getUsersByRole', function(req, res) {
 
 let Condition = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock([
-        {
-            "value":"奇慧超",
-            
-            "key":4,
-        },
-        {
-            "value":"黄永华",
-            
-            "key":5,
-        },
-        {
-            "value":"来咧",
-            
-            "key":6,
-        },
-        {
-            "value":"殷良骥",
-           
-            "key":7,
-        },
-        {
-            "value":"谢蓓",
-           
-            "key":"xiebei.zh",
-        },
+        {"value":"齐慧超(qihuichao)","key":4,},
+        {"value":"黄永华(huangyonghua)","key":5,},
+        {"value":"赖磊(lailei)","key":6,},
+        {"value":"殷良骥(yinliangji)","key":7,},
+        {"value":"谢蓓(xiebei)","key":"xiebei.zh",},
     ])
 }
 
@@ -1847,29 +1840,46 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
                 {value:"低",key:"3"},
             ],
             req_id:[
-                {"value":"奇慧超","key":4,},
-                {"value":"黄永华","key":5,},
-                {"value":"来咧","key":6,},
-                {"value":"殷良骥","key":7,},
+                // {"value":"奇慧超","key":4,},
+                // {"value":"黄永华","key":5,},
+                // {"value":"赖磊","key":6,},
+                // {"value":"殷良骥","key":7,},
+                {"value":"req_id_齐慧超(qihuichao)","key":4,},
+                {"value":"req_id_黄永华(huangyonghua)","key":5,},
+                {"value":"req_id_赖磊(lailei)","key":6,},
+                {"value":"req_id_殷良骥(yinliangji)","key":7,},
             ],
             charger:[
-                {"value":"奇慧超","key":4,},
-                {"value":"黄永华","key":5,},
-                {"value":"来咧","key":6,},
-                {"value":"殷良骥","key":7,},
-                {"value":"谢蓓","key":"xiebei.zh",},
+                // {"value":"奇慧超","key":4,},
+                // {"value":"黄永华","key":5,},
+                // {"value":"赖磊","key":6,},
+                // {"value":"殷良骥","key":7,},
+                // {"value":"谢蓓","key":"xiebei.zh",},
+                {"value":"齐慧超(qihuichao)","key":4,},
+                {"value":"黄永华(huangyonghua)","key":5,},
+                {"value":"赖磊(lailei)","key":6,},
+                {"value":"殷良骥(yinliangji)","key":7,},
+                {"value":"谢蓓(xiebei)","key":"xiebei.zh",},
             ],
             learn_concern:[
-                {"value":"奇慧超","key":4,},
-                {"value":"黄永华","key":5,},
-                {"value":"来咧","key":6,},
-                {"value":"殷良骥","key":7,},
+                // {"value":"奇慧超","key":4,},
+                // {"value":"黄永华","key":5,},
+                // {"value":"赖磊","key":6,},
+                // {"value":"殷良骥","key":7,},
+                {"value":"learn_concern_齐慧超(qihuichao)","key":4,},
+                {"value":"learn_concern_黄永华(huangyonghua)","key":5,},
+                {"value":"learn_concern_赖磊(lailei)","key":6,},
+                {"value":"learn_concern_殷良骥(yinliangji)","key":7,},
             ],
             sprint:[
-                {"value":"奇慧超","key":4,},
-                {"value":"黄永华","key":5,},
-                {"value":"来咧","key":6,},
-                {"value":"殷良骥","key":7,},
+                // {"value":"奇慧超","key":4,},
+                // {"value":"黄永华","key":5,},
+                // {"value":"赖磊","key":6,},
+                // {"value":"殷良骥","key":7,},
+                {"value":"sprint_齐慧超(qihuichao)","key":4,},
+                {"value":"sprint_黄永华(huangyonghua)","key":5,},
+                {"value":"sprint_赖磊(lailei)","key":6,},
+                {"value":"sprint_殷良骥(yinliangji)","key":7,},
             ],
             
         }

@@ -646,7 +646,7 @@ export default {
                             }, '编辑'),
                             h('Button', {
                                 props: {
-                                    type: 'info',
+                                    type: 'success',
                                     size: 'small'
                                 },
                                 style: {
@@ -661,7 +661,7 @@ export default {
                             }, '添加工作项'),
                             h('Button', {
                                 props: {
-                                    type: 'success',
+                                    type: 'info',
                                     size: 'small'
                                 },
 

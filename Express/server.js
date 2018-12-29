@@ -1295,7 +1295,7 @@ app.all('/agile/getUsers/', function(req, res) {
         Json =  GroupList_(req.body.myStatus,val2)   
         //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
     }
-    console.log("req==>", req.body,req.query);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
     console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
@@ -1319,7 +1319,7 @@ app.all('/prj/sync_search/', function(req, res) {
         Json =  GroupList_(req.body.myStatus,val2)   
         //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
     }
-    console.log("req==>", req.body);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
     console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
@@ -1342,7 +1342,7 @@ app.all('/system/loglist/', function(req, res) {
         Json =  GroupList_(req.body.myStatus,val2)   
         //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
     }
-    console.log("req==>", req.body);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
     console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
@@ -1367,7 +1367,7 @@ app.all('/system/phylist/', function(req, res) {
         Json =  GroupList_(req.body.myStatus,val2)   
         //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
     }
-    console.log("req==>", req.body);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
     console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
@@ -1391,7 +1391,7 @@ app.all('/agile/search_busfunc/', function(req, res) {
         Json =  GroupList_(req.body.myStatus,val2)   
         //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
     }
-    console.log("req==>", req.body);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
     console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)
@@ -1544,20 +1544,21 @@ let searchBusfunc3 = (val1 = 200, val2 = "", val3 = 3) => {
 
 
 app.all('/agile/search_busfunc2/', function(req, res) {
+    let val2 = req.query && req.query.userName ? req.query.userName : "";
     let resVal
     let Json
     if(trueorfalse == 0){
-        Json =  searchBusfunc1(req.body.myStatus)   
+        Json =  searchBusfunc1(req.body.myStatus,val2)   
         //resVal = searchBusfunc1(req.body.myStatus, req.body.page, req.body.pageline);
     }else if(trueorfalse == 1){
-        Json =  searchBusfunc2(req.body.myStatus) 
+        Json =  searchBusfunc2(req.body.myStatus,val2) 
         //resVal = searchBusfunc2(req.body.myStatus, req.body.page, req.body.pageline);
 
     }else{
-        Json =  searchBusfunc3(req.body.myStatus)   
+        Json =  searchBusfunc3(req.body.myStatus,val2)   
         //resVal = searchBusfunc3(req.body.myStatus, req.body.page, req.body.pageline);     
     }    
-    console.log("req==>", req.body);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
     console.log("Json==>", Json);
     trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
     console.log(trueorfalse)

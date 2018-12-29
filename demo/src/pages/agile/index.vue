@@ -200,7 +200,8 @@ const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDevel
 export default {
 	name: 'aglie',
     mounted(){
-        
+
+
         let auth_list = ()=>{
             this.getPermissionFn(getPermission).then((result)=>{
                 this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
@@ -356,7 +357,12 @@ export default {
                     render: (h, params) => {
                         return h(
                             'span',
-                            Common.FileterStr(params.row.manager)//params.row.manager.replace(/\|/g,"、")
+                            {
+                                "class":{txtBlock:true,txtBlockNone:false},
+                                attrs:{title:Common.ReplaceAgileListTitleStr(params.row.manager)},
+                            },
+                            Common.ReplaceAgileListStr(Common,Common.FileterStr(params.row.manager))
+                            //Common.FileterStr(params.row.manager)//params.row.manager.replace(/\|/g,"、")
                         );
                     }
                 },
@@ -401,7 +407,7 @@ export default {
                             // }, '需求项'),
                             h('Button', {
                                 props: {
-                                    type: 'success',
+                                    type: 'primary',
                                     size: 'small'
                                 },
                                 style: {

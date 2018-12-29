@@ -1635,8 +1635,17 @@ export default class Common extends Utils {
     }
     //过滤项目列表（）里银行名称的内容
     static ReplaceAgileListStr(_Common,str){
-      return filterParentheses(str)
-      
+      let txt = str.indexOf("、") != -1 ? "、" : "|";
+      let _str = str.split("、");
+      for(let i=0;i<_str.length;i++){
+        _str[i] = filterParentheses(_str[i]);
+        _str[i] = _str[i].replace(/\(/g,"（").replace(/\)/g,"）");
+      }
+      return _str.join("、")
+    }
+    //替换|的内容为、
+    static ReplaceAgileListTitleStr(str){
+      return str.replace(/\|/g," 、 ")
     }
 
 }

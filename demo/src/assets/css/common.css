@@ -390,7 +390,6 @@ h3.Title:before {
 a.txtBlock {
     color: #2d8cf0;
     overflow: hidden;
-    
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -398,7 +397,13 @@ a.txtBlock {
 a.txtBlockNone{
     color: #2d8cf0;
 }
-
+span.txtBlock {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.1em;
+}
 /* 表格列表相关 end */
 /* 页面 内容头部 start */
 #BoxPT > .ivu-card-body {

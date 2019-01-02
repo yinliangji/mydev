@@ -382,6 +382,14 @@ export default {
   font-weight: 600;
 }
 .centerHeader {
+  width: 110px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 12px;
+  height: 36px;
+  overflow: hidden;
+  line-height: 18px;
+  /*
   width: 100px;
   background: #33cccc;
   border-top-left-radius: 5px;
@@ -392,6 +400,7 @@ export default {
   line-height: 32px;
   text-align: center;
   font-size: 14px;
+  */
 }
 .pointer{
   cursor: pointer;

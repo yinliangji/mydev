@@ -90,6 +90,9 @@ CommonRest.restUrl = {
     "projectOutputWord": process.env.BASE_URL + "/designer/project_id/",
     /****express 敏捷项目导出word get ****/
 
+    "projectAddCustomizedGroup": process.env.BASE_URL + "/agile/getUsersxxxxxxxxxxxx/",
+    /****express 敏捷项目添加 get****/
+
 
 
     /*****************************************/

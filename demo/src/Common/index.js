@@ -512,7 +512,7 @@ export default class Common extends Utils {
       })
     }
     //添加角色2--不通用
-    static  addPartPopBox3(name,that){
+    static  addPartPopBox3(name,that,partName){
       let _tempObj = {
         myRef: "selfRef",
         group: [],
@@ -520,14 +520,15 @@ export default class Common extends Utils {
         myLabel: "",
         myValue: "",
         delBtn: true,
-        groupName: "",
+        groupName: that.popIsInput?that.popIsInput:"",
         required: true,
         modaAdd:false,//添加角色修改
         grouptemp:[],//修改添加角色
         groupListtemp: [],//修改添加角色
         myReftemp: "selfRefRole",//修改添加角色
       }
-      _tempObj.myLabel = that.formPartValidate.addGroupList.length ? that.formPartValidate.addGroupList.filter((item) => {
+      //that.formPartValidate.addGroupList.length
+      _tempObj.myLabel = !that.popIsInput ? that.formPartValidate.addGroupList.filter((item) => {
         return item.value == that.formPartValidate.partName
       })[0].label : that.formPartValidate.partName;
       _tempObj.myValue = that.formPartValidate.partName;

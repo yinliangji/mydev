@@ -149,8 +149,7 @@
                             </Row>
                         </div>
                     </div>
-
-
+                    
 					<h3 class="Title"><span>成员信息</span></h3>
                     <div class="fromBox fromBox2">
                         
@@ -161,7 +160,7 @@
                             <Button type="success" @click="addpart">添加角色</Button>
                         </div>
                         <div class="newAddGroup">
-                            <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index>1">
+                            <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index>1 && myItem.groupName === ''">
                                 <Col span="20">
                                     <FormItem 
                                         :label="myItem.myLabel" 
@@ -225,11 +224,65 @@
                                 </Col>
                             </Row>
                         </div>
-                        
-                                
-
-                      
                     </div>
+                    <!--  添加小组信息start  -->
+                    <h3 class="Title"><span>小组信息</span></h3>
+                    <div class="fromBox fromBox2">
+                        <div class="addpartBox">
+                            <Button type="success" @click="addpart('isShowInput')">添加小组</Button>
+                        </div>
+                        <div class="newAddGroup">
+                            <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index>1 && myItem.groupName !== ''">
+                                <Col span="20">
+                                    <FormItem 
+                                        :label="myItem.myLabel" 
+                                        :prop="'AddGroupList.'+index+'.group'"
+                                        :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                                         
+                                        :ref="myItem.myRef+index" 
+                                        :class="myItem.myRef+index"
+                                        >
+                                        <div :id="'roleBox_'+index">
+                                            <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" closable @on-close="roleClose">
+                                                {{ item.label}}
+                                            </Tag>
+                                            <Button 
+                                                icon="ios-plus-empty" 
+                                                type="dashed" 
+                                                size="small" 
+                                                @click="addRole(index)"
+                                                >
+                                                添加人员
+                                            </Button>
+                                            <Modal 
+                                                :ref="myItem.myReftemp+index" 
+                                                :class="myItem.myReftemp+index" 
+                                                v-model="formValidate.AddGroupList[index].modaAdd" 
+                                                :title="'添加'+formValidate.AddGroupList[index].myLabel+'人员'" 
+                                                @on-ok="submitRole(index)"  
+                                                ok-text="添加"
+                                                @on-cancel="cancelRole(index)"
+                                                >
+                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
+                                                    <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
+                                                        {{ item.label }}
+                                                    </Option>
+                                                </Select>
+                                            </Modal>
+                                        </div>
+                                    </FormItem>
+
+                                    
+
+                                </Col>
+                                <Col span="1">&nbsp;</Col>
+                                <Col span="3">
+                                    <Button v-if="myItem.delBtn"  type="error" long  @click="groupDel(index)">删除角色</Button>
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
+                    <!--  添加小组信息end  -->
                     <FormItem>
     					<Button type="primary" :loading="modal_add_loading" @click="submitAdd">
     				        <span v-if="!modal_add_loading">提交</span>
@@ -251,7 +304,7 @@
         </Modal>    
 
       
-        <AddPartPop :isShow="partAdd" :data="formPartValidate.addGroupList" :items="formValidate.AddGroupList" @closeAddPartPop="partCancel3" @sendAddPartPop="submitPart3" />
+        <AddPartPop :isShow="partAdd" :data="formPartValidate.addGroupList" :items="formValidate.AddGroupList" @closeAddPartPop="partCancel3" @sendAddPartPop="submitPart3" :isInput="popIsInput" />
 
         <Modal v-model="modaDelete" width="300">
             <p slot="header" style="color:#f60;text-align:center">
@@ -277,7 +330,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,listModule,publishUser,logicSystem,phySystem} = Common.restUrl;
+const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,listModule,publishUser,logicSystem,phySystem,projectAddCustomizedGroup} = Common.restUrl;
 import Store from '@/vuex/store'
 import AddPartPop from '@/pages/agile/add/addpartpop';
 
@@ -552,6 +605,8 @@ export default {
 
             inputLoad:false,
 
+            popIsInput:false,//添加小组信息
+
 
 
 
@@ -567,37 +622,54 @@ export default {
                 myRef:"selfRef",
                 group:[],
                 groupList:[],
-                myLabel:"总体组",
+                myLabel:"默认--总体组",
                 delBtn:false,
-                groupName:"allgroupList",
+                groupName:projectAddCustomizedGroup,
                 required:true,
+                modaAdd:false,//修改添加角色
+                grouptemp:[],//修改添加角色
+                groupListtemp: [],//修改添加角色
+                myReftemp: "selfRefRole",//修改添加角色
+
             },
             {
                 myRef:"selfRef",
                 group:[],
                 groupList:[],
-                myLabel:"项目经理",
+                myLabel:"默认--项目经理",
                 delBtn:false,
-                groupName:"managerGroupList",
+                groupName:projectAddCustomizedGroup,
                 required:false,
+                modaAdd:false,//修改添加角色
+                grouptemp:[],//修改添加角色
+                groupListtemp: [],//修改添加角色
+                myReftemp: "selfRefRole",//修改添加角色
             },
             {
                 myRef:"selfRef",
                 group:[],
                 groupList:[],
-                myLabel:"开发组",
+                myLabel:"默认--开发组",
                 delBtn:true,
-                groupName:"developerGroupList",
+                groupName:projectAddCustomizedGroup,
                 required:false,
+                modaAdd:false,//修改添加角色
+                grouptemp:[],//修改添加角色
+                groupListtemp: [],//修改添加角色
+                myReftemp: "selfRefRole",//修改添加角色
             },
             {
                 myRef:"selfRef",
                 group:[],
                 groupList:[],
-                myLabel:"测试组",
+                myLabel:"默认--测试组",
                 delBtn:true,
-                groupName:"testerGroupList",
+                groupName:projectAddCustomizedGroup,
                 required:false,
+                modaAdd:false,//修改添加角色
+                grouptemp:[],//修改添加角色
+                groupListtemp: [],//修改添加角色
+                myReftemp: "selfRefRole",//修改添加角色
             },
         ];
         this.defaultSystem = [
@@ -631,6 +703,10 @@ export default {
         ];
         this.formValidate.AddGroupList = []//this.defaultGroup;
         this.formValidate.AddGroupList = this.defaultSystem;
+
+        this.formValidate.AddGroupList.push(...this.defaultGroup);//添加小组信息
+
+
 
         this.addTeamFn(addTeam);
 
@@ -762,7 +838,8 @@ export default {
             
         },
 
-        addpart(){
+        addpart(isPopShowInput){
+            this.popIsInput = isPopShowInput == "isShowInput" ? projectAddCustomizedGroup : false;//添加小组信息
             this.partAdd = true;
         },
         

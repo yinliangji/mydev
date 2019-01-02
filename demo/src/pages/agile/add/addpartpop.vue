@@ -1,8 +1,9 @@
 <template>
-    <Modal ref="addPartPop" v-model="partAdd" title="添加角色" @on-ok="submitPart('addPartPopBox')" @on-cancel="partCancel('addPartPopBox')"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
+    <Modal ref="addPartPop" v-model="partAdd" :title="isInput?'添加小组':'添加角色'" @on-ok="submitPart('addPartPopBox')" @on-cancel="partCancel('addPartPopBox')"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
         <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
-            <FormItem label="角色名称" prop="partName">
-                <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8" v-if="!formPartValidate.addGroupList.length"></Input>
+            <FormItem :label="isInput?'小组名称':'角色名称'" prop="partName">
+                <!-- <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8" v-if="!formPartValidate.addGroupList.length"></Input> -->
+                <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多八个字）" :maxlength="8" v-if="isInput"></Input>
                 <Select v-model="formPartValidate.partName" placeholder="请选择角色" v-else>
                     <Option v-for="(item,index) in formPartValidate.addGroupList" :value="item.value" :key="index">{{ item.label }}</Option>
                 </Select>
@@ -35,6 +36,12 @@ export default {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
                 return [];
+            }
+        },
+        isInput: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
             }
         },
     },

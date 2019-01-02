@@ -1279,6 +1279,32 @@ let GroupList_ = (val1 = 200, val2 = "", val3 = 3) => {
 }
 
 let trueorfalse = 0;
+
+
+app.all('/agile/getUsersxxxxxxxxxxxx/', function(req, res) {
+
+    let val2 = req.query && req.query.name ? req.query.name : "";
+    let resVal
+    let Json
+    if(trueorfalse == 0){
+        Json =  GroupList(req.body.myStatus,val2)   
+        //resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+    }else if(trueorfalse == 1){
+        Json =  _GroupList(req.body.myStatus,val2) 
+        //resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+
+    }else{
+        Json =  GroupList_(req.body.myStatus,val2)   
+        //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+    }
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
+    console.log("Json==>", Json);
+    trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
+    console.log(trueorfalse)
+    res.json(Json);
+    res.end()
+});
+
 app.all('/agile/getUsers/', function(req, res) {
 
     let val2 = req.query && req.query.userName ? req.query.userName : "";

@@ -8,7 +8,7 @@
                     <Option v-for="(item,index) in formPartValidate.addGroupList" :value="item.value" :key="index">{{ item.label }}</Option>
                 </Select>
             </FormItem>
-            <p>若下拉列表中没有合适的角色，请联系我们 <span style="color:red;">010-63314458</span> 帮您提供更多新的角色。</p>
+            <p v-if="!isInput">若下拉列表中没有合适的角色，请联系我们 <span style="color:red;">010-63314458</span> 帮您提供更多新的角色。</p>
         </Form>
     </Modal>
 </template>

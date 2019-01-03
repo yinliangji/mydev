@@ -225,9 +225,9 @@
                             </Row>
                         </div>
                     </div>
-                    <!--  添加小组信息start  -->
-                    <h3 class="Title"><span>小组信息</span></h3>
-                    <div class="fromBox fromBox2">
+                    <!--  添加小组信息start v-if="false"以后去掉 -->
+                    <h3 class="Title" v-if="false"><span>小组信息</span></h3>
+                    <div class="fromBox fromBox2" v-if="false">
                         <div class="addpartBox">
                             <Button type="success" @click="addpart('isShowInput')">添加小组</Button>
                         </div>
@@ -581,9 +581,6 @@ export default {
                 businessName:"",
             },
             modaAdd: false,
-
-
-
             
             partAdd: false,
             modaDelete: false,
@@ -602,9 +599,7 @@ export default {
                 ],
                 
             },
-
             inputLoad:false,
-
             popIsInput:false,//添加小组信息
 
 
@@ -701,9 +696,11 @@ export default {
             },
             
         ];
-        this.formValidate.AddGroupList = []//this.defaultGroup;
+        this.formValidate.AddGroupList = []
         this.formValidate.AddGroupList = this.defaultSystem;
 
+        
+        this.defaultGroup = [];//添加小组信息以后去掉
         this.formValidate.AddGroupList.push(...this.defaultGroup);//添加小组信息
 
 

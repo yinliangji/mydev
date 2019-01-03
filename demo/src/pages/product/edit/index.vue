@@ -575,11 +575,10 @@ export default {
         getStoryEditFn(DATA){
             for (let i in this.formValidate){
                 if(i == "manhour"){
-                    
                     let temp;
-                    if(DATA.manHours.toString().indexOf("/") != -1){
+                    if(Common.replaceNullFn(DATA.manHours).toString().indexOf("/") != -1){
                         temp = "/"
-                    }else if(DATA.manHours.toString().indexOf("|") != -1){
+                    }else if(Common.replaceNullFn(DATA.manHours).toString().indexOf("|") != -1){
                         temp = ""
                     }
                     temp = temp? DATA.manHours.split(temp)[1] : DATA.manHours;

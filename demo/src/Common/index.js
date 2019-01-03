@@ -243,8 +243,14 @@ export default class Common extends Utils {
           URL = "无";
       }
 
+      let isShowOpen;
+      if(window.location.href.indexOf("consoleLog=true") != -1 || super.getCookie("consoleLog")){
+        isShowOpen = false;
+      }else{
+        isShowOpen = true;
+      }
 
-      if (process.env.NODE_ENV === 'production' && (window.location.href.indexOf("consoleLog=true") == -1 || !super.getCookie("consoleLog") )) {
+      if (process.env.NODE_ENV === 'production' && isShowOpen) {
         console.log(MET+" | "+URL);
         console.log(JSON.stringify(ERR));
       }else{
@@ -1574,6 +1580,8 @@ export default class Common extends Utils {
     static replaceNullFn(val){
       if(val === null || val === "null" || val === undefined ||  val === "undefined" ||  val === false ||  val === "false" || val === NaN || val === "NaN" || val === "NaN-aN-aN"){
         return "";
+      }else if(val == 0 || val == "0"){
+        return val
       }else{
         return val || "";
       }

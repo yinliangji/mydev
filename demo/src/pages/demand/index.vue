@@ -59,7 +59,7 @@
                     
                     <div class="tableBtnBox">
                         <Row>
-                            <Col span="14">
+                            <Col span="4">
                                 <Button 
                                     type="success" 
                                     @click="addItem2"
@@ -80,7 +80,16 @@
                                 </Button>
                                 
                             </Col>
-                            <Col span="10">
+                            <Col span="2" >
+                                <img :src="currentView == 'developList' ? developListImgCur : developListImg" 
+                                @click="showList" class="cursor" title="用户故事列表">
+                            </Col>
+                            <Col span="2" >
+                                <img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
+                                @click="showTask" class="cursor" title="用户故事看板">
+                            </Col>
+                            
+                            <Col span="16">
                                 <Button 
                                     type="primary"
                                     @click="toBusiness"
@@ -102,13 +111,34 @@
                         </Row>
                         
                     </div>
-                    
-                    <Table border ref="selection" :columns="columns" :data="tableData" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
-                    <div class="pageBox" v-if="tableData.length">
-                        <Page :current="tableDAtaPageCurrent" :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize" show-elevator></Page>
-                        <p>总共{{tableDAtaTatol}}条记录</p>
+                    <div class="tableContBox" v-show="currentView == 'developList'">
+                    
+                        <Table border ref="selection" :columns="columns" :data="tableData" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
+
+                        <div class="pageBox" v-if="tableData.length">
+                            <Page :current="tableDAtaPageCurrent" :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize" show-elevator></Page>
+                            <p>总共{{tableDAtaTatol}}条记录</p>
+                        </div>
                     </div>
+
+                    <div class="listBox" id="kanbanboard_demand" v-show="currentView == 'kanbanboard'">
+                        <!-- :groupList="[]" :groupList="groupList" :sortdisabled="true"  -->
+                        <kanbanboard
+                            :isDisabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])"
+                            :sortdisabled="true" 
+                            :cardList="cardLists" 
+                            :statusList="statusLists" 
+                            :groupList="[]" 
+                            :Group="true" 
+                            />
+                    </div>
+
+
+                    
+
+
+
                 </div>
 
             </div>
@@ -144,11 +174,13 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAll,getPermission,projectDetail,reqDelect} = Common.restUrl;
+const {reqAll,getPermission,projectDetail,reqDelect,storySetChange,storyGetKanBan} = Common.restUrl;
 
 import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 import Addtablepop from "./addtablepop";
 import ITMpop from "./itmpop2";
+import kanbanboard from "@/components/kanbanboard";
+import { EventBus } from "@/tools";
 export default {
     name: 'demand',
     data () {
@@ -316,6 +348,23 @@ export default {
 
             isShowITMPop:false,
 
+            //看板start
+            currentView: "developList",//developList//kanbanboard
+            developListImg:require("../../assets/images/product-list.png"),
+            developListImgCur:require("../../assets/images/product-listCur.png"),
+            kanbanboardImg:require("../../assets/images/product-kanban.png"),
+            kanbanboardImgCur:require("../../assets/images/product-kanbanCur.png"),
+            groupList:[
+                { text: "所属需求项" },
+            ],
+            statusList:[
+            ],
+            cardList:[
+            ],
+            cardListBase:[],
+            statusListBase:[],
+            //看板end
+
 
 
         }
@@ -325,8 +374,21 @@ export default {
         let ID = Common.GETID(this,Common) ? Common.GETID(this,Common) : this.$router.push('/agile');
         
         //this.getPermissionFn(getPermission);
+        
+        /*
         this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
         this.tableDAtaPageCurrent = 1;
+        */
+       this.getInfoFn(ID);
+
+
+
+
+        EventBus.$on("moveEnd", this.moveEnd);
+        EventBus.$on("clickItem", this.clicked);
+        EventBus.$on("search", this.searchHandle);
+        EventBus.$on("addTask", this.addNewTask);
+        EventBus.$on("storyMoveEnd", this.moveEnd);
 
     },
     beforeUpdate(){
@@ -336,6 +398,234 @@ export default {
         console.log("demand--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
+        getInfoFn(ID,isShowList){
+            if(this.currentView == "kanbanboard"){
+                this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+            }else{
+                this.tableDataAjaxFn(reqAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID);
+            }
+            
+            
+
+            
+
+        },
+        //看板开始
+        showList() {
+            let CurView = "developList";
+            this.currentView = CurView;
+            Common.SetSession("CurView_demand",CurView);
+            setTimeout(()=>{
+                this.getInfoFn(this.getID(),"showList")
+            },350)
+        },
+        showTask(){
+            let CurView = "kanbanboard"
+            this.currentView = CurView;
+            Common.SetSession("CurView_demand",CurView);
+            setTimeout(()=>{
+                this.getInfoFn(this.getID(),"showTask")
+            },350)
+        },
+        storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
+            this.cardList = [];
+            this.statusList = [];
+            this.cardListBase=[],
+            this.statusListBase=[],
+            defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
+                if(myData && myData.length){
+                    
+                    let _temp = {};
+                    let reqArr = [];
+                    for(let i=0;i<myData.length;i++){
+                        if(myData[i].list && myData[i].list.length){
+                            for(let j=0;j<myData[i].list.length;j++){
+                                reqArr.push(myData[i].list[j].req_id)
+                            }
+                        }
+                        //
+                        _temp.stateStr = myData[i].userstory_status;
+                        _temp.taskNumber = Number(myData[i].count);
+                        _temp.state = "0"+(i+1);
+                        this.statusList.push(_temp);
+                        this.statusListBase.push(_temp);
+                        _temp = {};
+                    }
+
+                    let reqArr2 = Array.from(new Set(reqArr));
+                    let checkreqName = (val)=>{
+                        let _temp
+                        if(this.req_idList){
+                            _temp = this.req_idList.find((item)=>{
+                                return val == item.value
+                            })
+                            if(_temp && _temp.label){
+                                return {text:_temp.label,groupId:val+""}
+                            }else{
+                                return false;
+                            }
+                        }else{
+                            return false;
+                        }
+                    }
+                    this.groupList = [];
+                    this.groupList.push({text:"所属需求项"});
+                    for(let k=0;k<reqArr2.length;k++){
+                        let _CN = checkreqName(reqArr2[k]);
+                        if(_CN){this.groupList.push(_CN)}
+                    }
+
+                    let _arr = [];
+                    let _Obj = {};
+                    
+                    
+                    for(let i=0;i<myData.length;i++){
+
+                    
+                        for(let j=0;j<myData[i].list.length;j++){
+                            _Obj.taskStatus = "0"+(i+1);
+                            _Obj.taskId = ""+myData[i].list[j].userstory_id;
+                            _Obj.description = "description_"+ i +"_"+j;
+                            _Obj.userName = myData[i].list[j].charger;
+                            _Obj.userId = "userId_"+ i +"_"+j;
+                            _Obj.groupId = myData[i].list[j].req_id+"";
+                            //_Obj.bgColor = { background: ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi) };
+                            _Obj.bgcolor = ((C)=>{if(C==1){return '#FE4515'}else if(C==2){return '#12C37A'}else if(C==3){return '#FEB159'}else{return '#ffffff'}})(myData[i].list[j].proi);
+                            _Obj.taskStateStr = myData[i].userstory_status;
+                            _Obj.headPortrait =   require("@/assets/images/user_02.png"); //"/assets/images/user_02.png";
+                            _Obj.taskName = myData[i].list[j].userstory_name;
+                            _Obj.nickName = myData[i].list[j].charger
+                            _Obj.detail_id = myData[i].list[j].id
+                            _arr.push(_Obj);
+                            _Obj = {}
+                        }
+                        this.cardList.push(..._arr);
+                        this.cardListBase.push(..._arr);
+                        _arr = []
+                    }
+                    //EventBus.$emit('storyBindSort');
+                    EventBus.$emit('bindSort');
+                }else{
+                    this.showError(URL+"_没有数据");
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+
+        },
+        changeStateNumber(info){
+            let _statusBase = this.statusListBase;
+            let toState = info.evt.to.getAttribute('state');
+            let fromState = info.evt.from.getAttribute('state');
+
+            if(toState == fromState){
+                return;
+            }else{
+                _statusBase.forEach((item,index)=>{
+                    //if(info.item.askStatus == item.state){
+                    //if(info.evt.item.getAttribute('state') == item.state){
+                    if(fromState == item.state){
+                        item.taskNumber = parseFloat(item.taskNumber) - 1
+                    }
+                    if(item.state == toState){
+                        item.taskNumber = parseFloat(item.taskNumber) + 1
+                    }
+                });
+                this.statusListBase = [];
+                this.statusListBase.push(..._statusBase)
+            }
+
+            
+        },
+        changeMovedStatus(info){
+            let _params = {};
+            _params.taskId = info.evt.item.getAttribute('taskid');
+            //_params.ID = info.item.detail_id;
+            _params.ID = info.evt.item.getAttribute('detailid');
+            _params.taskStatus = info.evt.to.getAttribute('state');
+
+            defaultAXIOS(storySetChange,{id:_params.ID,userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======用户故事 状态改变***response+++",response,myData,"======>");
+                if(myData.status.indexOf("success") == -1){
+                    this.showError(storySetChange+"|返回结果错误");
+                }else{
+                    this.cardpopList = [];
+                    
+                    if(myData.no_complete_task_list && Array.isArray(myData.no_complete_task_list) && myData.no_complete_task_list.length){
+                        this.cardpop = true;
+                        this.cardpopList = myData.no_complete_task_list;
+                        let statusFn = (Num)=>{
+                            let Status = "未知";
+                            if(Num == 1){
+                                Status = "未开始";
+                            }else if(Num == 2){
+                                Status = "设计开发";
+                            }else if(Num == 3){
+                                Status = "测试";
+                            }else if(Num == 4){
+                                Status = "发布";
+                            }else if(Num == 5){
+                                Status = "上线";
+                            }
+                            return Status
+                        }
+                        this.cardpopList.forEach((item)=>{
+                            item.task_statusCN = statusFn(item.task_status);
+                        })
+                    }
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+        moveEnd(info) {
+            // 移动卡片结束后
+            console.log(" 移动卡片结束后 :::", info);
+            this.changeStateNumber(info);
+            this.changeMovedStatus(info);
+        },
+        clicked(info) {
+            // 点击卡片方法
+            console.log(" 点击卡片方法 ::: ", info);
+            this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
+        },
+        searchHandle(info) {
+            // 查询方法
+            console.log("查询  ::: ", info);
+        },
+        addNewTask() {
+            //点击跳转页面
+            // this.$router.push({
+            //   path: "/development/add"
+            // });
+        },
+        //看板结束
+        tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",req_name = "",req_id = "",req_submitter = ""){
+
+            this.getPrjidFn(projectDetail,id).then((prj_id)=>{
+
+                this.reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter)
+                .then(()=>{})
+                .catch((error)=>{
+                    console.log(error);
+                    this.showError(error);
+                })
+
+            }).catch((error)=>{
+                console.log(error);
+                this.showError(error);
+            })
+            
+        },
+        getID(){
+            return Common.GETID(this,Common);
+        },
         goUserStory(i){
             Common.SetSession("REQ_ID",this.tableData[i].id)
             this.$router.push({path: '/product', query: {board: true}})
@@ -422,23 +712,7 @@ export default {
                 return Promise.reject("获取prj_id失败");
             });
         },
-        tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",req_name = "",req_id = "",req_submitter = ""){
 
-            this.getPrjidFn(projectDetail,id).then((prj_id)=>{
-
-                this.reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter)
-                .then(()=>{})
-                .catch((error)=>{
-                    console.log(error);
-                    this.showError(error);
-                })
-
-            }).catch((error)=>{
-                console.log(error);
-                this.showError(error);
-            })
-            
-        },
         reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter){
             return defaultAXIOS(URL,{page,limit,data,id,prj_id:id,req_name,req_id,req_submitter},{timeout:20000,method:'get'})
             .then((response) => {
@@ -620,6 +894,25 @@ export default {
         ADDorEDITpop,
         Addtablepop,
         ITMpop,
+        kanbanboard,
+    },
+    computed: {
+        cardLists(){
+            return this.cardListBase;
+        },
+        statusLists(){
+            return this.statusListBase;
+        },
+    },
+    watch: {
+        '$route' (to, from) {
+            
+            if(to.query.board && to.query.board == "true"){
+                this.currentView = "kanbanboard";
+            }else{
+                this.currentView = "developList";
+            }
+        },
     },
 }
 </script>
@@ -642,7 +935,17 @@ export default {
     padding-top:20px;
     overflow: hidden;
 }
-
+</style>
+<style>
+#kanbanboard_demand .row-wrapper:first-of-type{
+    min-height: 32px;
+}
+#kanbanboard_demand .row-wrapper:nth-of-type(2){
+    min-height: 300px;
+}
+#kanbanboard_demand .row-wrapper {
+    
+}
 </style>
 
 

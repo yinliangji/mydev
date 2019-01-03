@@ -115,7 +115,7 @@ EVENT.on("USER",(result)=>{
   console.log(result,"<=====***====EVENT.on USER")
 });
 (function(){
-    let GetCookie = function(name) {
+    var GetCookie = function (name) {
         var arr,reg = new RegExp("(^| )"+name+"=([^;]*)(;|$)");
         if(arr = document.cookie.match(reg)){
             return unescape(arr[2]); 
@@ -123,13 +123,14 @@ EVENT.on("USER",(result)=>{
             return null; 
         }
     }
-    if (process.env.NODE_ENV === 'production' && (window.location.href.indexOf("consoleLog=true") == -1 ||  !GetCookie("consoleLog"))) {
+    var isLog = window.location.href.indexOf("consoleLog=true") != -1 || GetCookie("consoleLog") ? false : true;
+    var isLogError = window.location.href.indexOf("consoleError=true") != -1 || GetCookie("consoleError") ? false : true;
+    if (process.env.NODE_ENV === 'production' && isLog) {
         console.log = function () { }
     }
-    if (process.env.NODE_ENV === 'production' && (window.location.href.indexOf("consoleError=true") == -1 ||  !GetCookie("consoleError"))) {
+    if (process.env.NODE_ENV === 'production' && isLogError) {
         console.error = function () { }
     }
-
 })()
 
 

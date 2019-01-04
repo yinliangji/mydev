@@ -27,13 +27,20 @@
 
 <style scoped>
 .content-header{
+  background: #f0d0a2;
+  height: 30px;
+  border-radius: 4px;
+  line-height: 30px;
+  text-align: center;
+  /*
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   background: #33cccc;
   height: 32px;
   line-height: 32px;
   text-align: center;
-    text-indent: 10px;
+  text-indent: 10px;
+  */
 }
 
 .content-header .title{

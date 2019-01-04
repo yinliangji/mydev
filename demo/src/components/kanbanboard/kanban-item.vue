@@ -20,9 +20,11 @@
         </p>
         <p class="item-name">
           <span class="user_name">
-              {{item.userName}}
+              <!-- {{item.userName}} -->
+              {{item.nickName}}
           </span>
-          <img :src="item.headPortrait" width="21" height="21" />
+          <!-- <img :src="item.headPortrait" width="21" height="21" /> -->
+          <img :src="headPortrait" width="21" height="21" />
         </p>
       </div>
   </div>
@@ -61,12 +63,17 @@ export default {
     },
 
   },
+  data () {
+    return {
+      headPortrait:require("../../assets/images/tx.png"),
+    }
+  },
 
 }
 </script>
 
 <style scoped>
-levelText{
+.levelText{
   padding: 4px 4px;
   float: left;
   color: #fff;

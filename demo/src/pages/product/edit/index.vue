@@ -24,7 +24,7 @@
                             <Col span="12">
                                 <FormItem label="责任人" >
                                     <!-- <span>{{formValidate.charger}}</span> -->
-                                    <Select filterable v-model="formValidate.nick_name" placeholder="请选择责任人">
+                                    <Select filterable clearable v-model="formValidate.nick_name" placeholder="请选择责任人">
                                         <Option v-for="(item,index) in chargerList" :key="index" :value="item.value">{{item.label}}</Option>
                                     </Select>
                                 </FormItem>
@@ -133,7 +133,7 @@
 
                     <div class="fromBox">
                         <FormItem label="所属需求项" prop="req_id">
-                            <Select v-model="formValidate.req_id" placeholder="请选择所属需求项">
+                            <Select filterable clearable v-model="formValidate.req_id" placeholder="请选择所属需求项">
                                 <Option v-for="(item , index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
                             </Select>
                             <ToolTip :W="135" content="此用户故事来源的需求项" />

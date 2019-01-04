@@ -830,6 +830,9 @@ export default {
 
 		//Common.RemoveSession("allSession");
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
+		
+
+
 
     	EventBus.$on("moveEnd", this.moveEnd);
         EventBus.$on("clickItem", this.clicked);
@@ -937,10 +940,15 @@ export default {
 		getInfoFn(ID,isShowList){
 			let _myAllSession = Common.GetSession("allSession");
 		    this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
-		    	
 		    	if(!_myAllSession || (_myAllSession && !JSON.parse(_myAllSession).hasOwnProperty("sprint"))){
 		    		if(!isShowList){
-		    			this.formValidate.sprint = sprint+"";
+		    			if(_myAllSession && JSON.parse(_myAllSession).hasOwnProperty("sprint")){
+		    				this.formValidate.sprint = JSON.parse(_myAllSession).sprint+"";
+		    			}else if(_myAllSession && !JSON.parse(_myAllSession).hasOwnProperty("sprint")){
+		    				this.formValidate.sprint = "";
+		    			}else{
+		    				this.formValidate.sprint = sprint+"";
+		    			}
 		    		}
 		    	}
 
@@ -1084,12 +1092,18 @@ export default {
             });
 		},
 		moveEnd(info) {
+			if(window.location.hash.indexOf(this.$router.history.current.path) == -1){
+				return
+			}
             // 移动卡片结束后
             console.log(" 移动卡片结束后 :::", info);
             this.changeStateNumber(info);
             this.changeMovedStatus(info);
         },
         clicked(info) {
+        	if(window.location.hash.indexOf(this.$router.history.current.path) == -1){
+				return
+			}
             // 点击卡片方法
             console.log(" 点击卡片方法 ::: ", info);
             this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})

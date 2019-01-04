@@ -1,5 +1,5 @@
 <template>
-  <Layout >
+  <Layout id="boardWrapper">
     <content id="board">
       <p span="4" v-if="groupList.length > 0" class="left_border"></p>
       <div class="row-wrapper">
@@ -105,7 +105,7 @@ export default {
     Group: {
       type: Boolean,
       default: function() {
-        return false;
+        return true;
       }
     },
   },
@@ -251,6 +251,9 @@ export default {
 
       let vm = this;
       let todoList = document.getElementById(moveId);
+      if(!todoList){
+        return;
+      }
       Sortable.create(todoList,{
         group:{
           name:"list",
@@ -281,7 +284,7 @@ export default {
             EventBus.$emit("moveEnd",{evt});
             vm.autoHeight();
           }else{
-            console.log('story moveEnd 》》》》》》',ent);
+            console.log('story moveEnd 》》》》》》',evt);
             EventBus.$emit("storyMoveEnd",{evt});
             vm.autoHeight();
           }
@@ -313,6 +316,9 @@ export default {
 </script>
 
 <style scoped>
+#boardWrapper{
+  background: #fff;
+}
 .topColumn{
   padding-right:4px;
   padding-left:4px;

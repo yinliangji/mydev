@@ -25,6 +25,8 @@ app.use(bodyParser.json());
 //app.use(bodyParser.text());//运用中间件，对请求体的文本进行解析
 app.use(express.static("static/vConsole"))
 
+
+
 let mockData = () => {
     return Mock.mock({
         "status": 200,
@@ -215,7 +217,7 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
         "message": "mockDataList xxxxxxx",
         "prj_name":"prj_name_xxxxxx",
         "product_name":"product_name_xxxxxxxx",
-        "rows|3-5": [{
+        "rows|3-4": [{
             "id|+1": 1,
             "detail_id": 1,
             "userstory_id": 1,
@@ -225,17 +227,19 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             "nick_name":"谢蓓",
             //"charger": "@name",
             //"nick_name":"@cname",
-            "userstory_status|1-6": 1,
+            "userstory_status|0-8": 0,
             //"sprint_id": "迭代1",
             "proi|1-5": 1,
             "manHours": "10",
             "mission": "10",
             "phycics_sys_id": "phycics_sys_id",
             "icon": "/assets/images/user_02.png",
+            "complete_task|1-100":0,
+            not_complete_task:"106",
 
             "actual_online_time":"",
            
-            "created_time":"2018-08-20 16:16:37",
+            "created_time":"@date(yyyy-MM-dd)",
             "last_chg_time":"",
             "last_chgr":"",
             "learn_concern":"",
@@ -244,25 +248,16 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             
             "proposer":"",
             "proposer_department":"",
-            "req_id|+1":1,
+            "req_id|+1":4,
             "req_name":"",
-            "sprint": 26,
-            "sprint_name":26,
+            "sprint|+1": 4,
+            "sprint_name|+1":4,
             "userstory_desc":"故事描述123123",
 
             "prj_id":"prj_id_xxxxxx",
             "prj_name":"敏捷项目0000",
             "prod_id":"product1",
             "product_name":"product_name_xxxxxxxx",
-
-
-
-
-            
-           
-            
-            
-
 
 
             "__value2__page": val2,
@@ -1840,7 +1835,7 @@ let Condition = (val1 = 200, val2 = 1, val3 = 3) => {
 }
 
 app.all('/userstory/getUserstoryCondition', function(req, res) {
-    let resVal = Condition(req.body.myStatus, req.body.page, req.body.pageline);
+    //let resVal = Condition(req.body.myStatus, req.body.page, req.body.pageline);
     //console.log("req==>", req.body);
     //console.log("resVal==>", resVal);
     
@@ -1853,9 +1848,18 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
                 {value:"用户需求",key:"1"},
                 {value:"生产问题",key:"2"},
                 {value:"自主创新",key:"3"},
-            ]
-            ,
+            ],
             userstory_status:[
+                {value:"废弃",key:"0"},
+                {value:"提出",key:"1"},
+                {value:"设计分析",key:"2"},
+                {value:"开发测试",key:"3"},
+                {value:"用户验收测试",key:"4"},
+                {value:"待投产",key:"5"},
+                {value:"已投产",key:"6"},
+                {value:"停滞",key:"7"},
+            ],
+            _userstory_status:[
                 {value:"提出",key:"1"},
                 {value:"开发中",key:"2"},
                 {value:"测试",key:"3"},
@@ -1873,7 +1877,7 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
                 // {"value":"殷良骥","key":7,},
                 {"value":"req_id_齐慧超(qihuichao)","key":4,},
                 {"value":"req_id_黄永华(huangyonghua)","key":5,},
-                {"value":"req_id_赖磊(lailei)","key":6,},
+                {"value":"req_id_赖磊(lailei)@需求完成","key":6,},
                 {"value":"req_id_殷良骥(yinliangji)","key":7,},
             ],
             charger:[
@@ -2886,8 +2890,16 @@ app.all('/agile/deleteFile/', function(req, res) {
     res.end()
 });
 
+let deleteUserstory = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status|1": ["success","fail"],
+        "message": "message xxxxxxx",
+    })
+}
+
 app.all('/userstory/deleteUserstory/', function(req, res) {
-    res.json({status: "success",message: "delete_list success",});
+    //res.json({status: "success",message: "delete_list success",});
+    res.json(deleteUserstory(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
 

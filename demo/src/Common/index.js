@@ -1113,7 +1113,7 @@ export default class Common extends Utils {
               }
               
             }
-            return Promise.resolve("true")
+            return Promise.resolve(myData)
             
           }else{
               return Promise.reject("false");
@@ -1295,13 +1295,14 @@ export default class Common extends Utils {
     
     
     //翻译故事状态--不通用
-    static StatusFn(N,STR=""){
+    static StatusFn(N,STR="",that){
 
       let Lable = "未知"
-      if(this[STR+"List"] && this[STR+"List"].length){
-        for(let j=0;j<this[STR+"List"].length;j++){
-          if(this[STR+"List"][j].value == N){
-            Lable = this[STR+"List"][j].label
+      //console.error(that[STR+"List"])
+      if(that[STR+"List"] && that[STR+"List"].length){
+        for(let j=0;j<that[STR+"List"].length;j++){
+          if(that[STR+"List"][j].value == N){
+            Lable = that[STR+"List"][j].label
           }
         }
       }else{

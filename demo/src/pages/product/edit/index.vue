@@ -69,35 +69,24 @@
                             </Col>
                         </Row> -->  
 
-
-                        <Row>
-                            <Col span="12">
-                                <FormItem label="状态" prop="userstory_status">
-                                    <RadioGroup v-model="formValidate.userstory_status">
-                                        <Radio :disabled="item.value == formValidate.userstory_status ? false : true" v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
-                                        <!-- <Radio label="1">提出</Radio>
-                                        <Radio label="2">开发中</Radio>
-                                        <Radio label="3">测试</Radio>
-                                        <Radio label="4">上线</Radio> -->
-                                    </RadioGroup>
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                               <FormItem label="优先级" prop="proi">
-                                    <RadioGroup v-model="formValidate.proi">
-                                        <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
-                                        <!-- <Radio label="1">高</Radio>
-                                        <Radio label="2">中</Radio>
-                                        <Radio label="3">低</Radio> -->
-                                       
-                                    </RadioGroup>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                       
-                        
-
-                        
+                        <FormItem label="状态" prop="userstory_status">
+                            <RadioGroup v-model="formValidate.userstory_status">
+                                <Radio :disabled="item.value == formValidate.userstory_status ? false : true" v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
+                                <!-- <Radio label="1">提出</Radio>
+                                <Radio label="2">开发中</Radio>
+                                <Radio label="3">测试</Radio>
+                                <Radio label="4">上线</Radio> -->
+                            </RadioGroup>
+                        </FormItem>
+                        <FormItem label="优先级" prop="proi">
+                            <RadioGroup v-model="formValidate.proi">
+                                <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
+                                <!-- <Radio label="1">高</Radio>
+                                <Radio label="2">中</Radio>
+                                <Radio label="3">低</Radio> -->
+                               
+                            </RadioGroup>
+                        </FormItem>
 
                         <FormItem label="故事描述">
                             <Input v-model="formValidate.userstory_desc" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写故事描述"></Input>
@@ -409,6 +398,8 @@ export default {
             proiList:[],
             userstory_typeList:[],
             userstory_statusList:[],
+            NewStatusList:[
+            ],
 
             chargerList:[],
             //查询搜索开始
@@ -435,6 +426,8 @@ export default {
             
             let _DATA = JSON.parse(this.$router.history.current.query.DATA)
 
+
+
             this.getStoryEditFn(_DATA)
             this.storyGetSprintFn(storyGetSprint,ID,ID,_DATA.prod_id)
             this.storyGetReqFn(storyGetReq,ID,ID,_DATA.prod_id);
@@ -442,7 +435,7 @@ export default {
 
             //this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
             //this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
-            this.storyGetConditionFn(storyGetCondition,"proi",ID);
+            this.storyGetConditionFn(storyGetCondition,"proi",ID)
 
             this.publishUserFn(publishUser);
 
@@ -518,10 +511,11 @@ export default {
             //return Common.PublishUser(defaultAXIOS,this,URL,params)
         },
         storyGetConditionFn(URL,condition,prj_id){
-            return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","proi","charger"]);
+            return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","proi","charger","sprint","req_id"]);
             //Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
         },
         storyGetReqFn(URL = "",id,prj_id,prod_id){
+            return
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======product get storyGetReq***response+++",response,myData,"======>");
@@ -547,6 +541,7 @@ export default {
             });
         },
         storyGetSprintFn(URL = "",id,prj_id,prod_id){
+            return
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======product get sprintlist***response+++",response,myData,"======>");
@@ -579,9 +574,9 @@ export default {
                     if(Common.replaceNullFn(DATA.manHours).toString().indexOf("/") != -1){
                         temp = "/"
                     }else if(Common.replaceNullFn(DATA.manHours).toString().indexOf("|") != -1){
-                        temp = ""
+                        temp = "|"
                     }
-                    temp = temp? DATA.manHours.split(temp)[1] : DATA.manHours;
+                    temp = temp? DATA.manHours.split(temp)[1] : Common.replaceNullFn(DATA.manHours);
                     this.formValidate.manhour = Number(temp)
                 }else if(i == "AddGroupList" || i == "bfunc"){
                 }else{

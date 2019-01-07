@@ -45,33 +45,28 @@
                                 <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                         </FormItem> -->
-                    <Row>
-                        
-                        <Col span="12">
-                            <FormItem label="状态" prop="userstory_status">
-                                <RadioGroup v-model="formValidate.userstory_status">
-                                    <Radio :disabled="item.value == formValidate.userstory_status ? false : true" v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
-                                    <!-- <Radio label="1">提出</Radio>
-                                    <Radio label="2">开发中</Radio>
-                                    <Radio label="3">测试</Radio>
-                                    <Radio label="4">上线</Radio> -->
-                                </RadioGroup>
-                            </FormItem>
-                        </Col>
-                        <Col span="12">
-                            <FormItem label="优先级" prop="proi">
-                                <RadioGroup v-model="formValidate.proi">
+                    
+                    <FormItem label="状态" prop="userstory_status">
+                        <RadioGroup v-model="formValidate.userstory_status">
+                            <Radio :disabled="item.value == formValidate.userstory_status ? false : true" v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
+                            <!-- <Radio label="1">提出</Radio>
+                            <Radio label="2">开发中</Radio>
+                            <Radio label="3">测试</Radio>
+                            <Radio label="4">上线</Radio> -->
+                        </RadioGroup>
+                    </FormItem>
+                    <FormItem label="优先级" prop="proi">
+                        <RadioGroup v-model="formValidate.proi">
 
-                                    <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
-                                
-                                    <!-- <Radio label="1">高</Radio>
-                                    <Radio label="2">中</Radio>
-                                    <Radio label="3">低</Radio> -->
-                                   
-                                </RadioGroup>
-                            </FormItem>
-                        </Col>
-                    </Row>
+                            <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
+                        
+                            <!-- <Radio label="1">高</Radio>
+                            <Radio label="2">中</Radio>
+                            <Radio label="3">低</Radio> -->
+                           
+                        </RadioGroup>
+                    </FormItem>
+                        
 
                         
 
@@ -347,6 +342,7 @@ export default {
                 date: '',
                 time: '',
             },
+
             req_idList:[
                 // {
                 //     value: 'New York',
@@ -424,6 +420,8 @@ export default {
             proiList:[],
             userstory_typeList:[],
             userstory_statusList:[],
+            NewStatusList:[
+            ],
 
             chargerList:[],
 
@@ -462,7 +460,13 @@ export default {
 
                 //this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
                 //this.storyGetConditionFn(storyGetCondition,"proi",ID);
-                this.storyGetConditionFn(storyGetCondition,"userstory_type",ID).then(()=>{
+                this.storyGetConditionFn(storyGetCondition,"userstory_type",ID).then((res)=>{
+
+                    if(this.req_idList && Array.isArray(this.req_idList) && this.req_idList.length){
+                        Common.DelArrN_indexOf(this.req_idList,"@需求完成","label")
+                    }else{
+                        this.goDemand();
+                    }
                     
                     Common.AddChargerMenu(this,"charger",chargerObj);
                     this.formValidate.nick_name = "";
@@ -487,6 +491,17 @@ export default {
         }
     },
     methods:{
+        goDemand(){
+            this.$Modal.confirm({
+                title: '请先添加需求项',
+                content: '<p>此项目尚未添加需求项，请先添加需求项</p>',
+                okText: '添加需求项',
+                cancelText: '关闭',
+                onOk:()=>{
+                    this.$router.push('/demand');
+                },
+            });
+        },
         //查询搜索开始
         modifyTagData(D){
             Common.ModifyTagData(D,this)
@@ -519,7 +534,7 @@ export default {
         },
 
         storyGetConditionFn(URL,condition,prj_id){
-            return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","proi","charger"]);
+            return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","proi","charger","sprint","req_id"]);
             //Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
         },
         storyGetReqFn(URL = "",id,prj_id,prod_id){
@@ -581,6 +596,9 @@ export default {
                     this.formValidate.prj_name = _data.prj_name;
                     this.formValidate.product_name = _data.product_name;
 
+
+
+                    /*
                     // 添加迭代下拉
                     if(_data.getSprintsByPrj && Array.isArray(_data.getSprintsByPrj) && _data.getSprintsByPrj.length){
                         let _tempObj = {};
@@ -615,20 +633,11 @@ export default {
                                 this.$router.push('/demand');
                             },
                         });
-                        /*
-                        this.$Modal.warning({
-                            title:"请先添加需求项",
-                            content:"此项目尚未添加需求项，请先添加需求项",
-                            okText:"添加需求项",
-                            onOk:()=>{
-                                this.$router.push('/demand');
-                            },
-                        })
-                        */
-
                         //this.showError(URL+"_没有数据");
                     }
                     //
+                    */
+                    
 
                 }else{
                     this.showError(myData);

@@ -25,7 +25,7 @@
               {{itemGroup.text}}
             </div>
             <div>
-              <Button v-if="sortdisabled" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >添加用户故事</Button>
+              <Button v-if="sortdisabled" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >添加用户故事</Button>
               <Button v-else  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" >添加工作项</Button>
             </div>
           </Col>
@@ -145,6 +145,10 @@ export default {
            
   },
   methods:{
+    btnIsShow(txt = ""){
+      let str = "@需求完成";
+      return txt.indexOf(str) != -1 ? false  : true;
+    },
     autoHeight(){
       setTimeout(()=>{
         this.delHeight();

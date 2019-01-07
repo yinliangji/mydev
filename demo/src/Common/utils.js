@@ -331,6 +331,27 @@ export default class Utils extends CommonRest {
         return false;
       }
     }
+
+    //删除数组N个元素
+    static DelArrN_indexOf(arr,val,attr){
+      if(arr && Array.isArray(arr) && arr.length && val){
+        for (let i = arr.length - 1; i >= 0; i--) {
+          if(attr){
+            if (arr[i][attr].indexOf(val) != -1) {
+              arr.splice(i, 1);
+            }
+          }else{
+            if (arr[i].indexOf(val) != -1) {
+              arr.splice(i, 1);
+            }
+          }
+          
+        }
+        
+      }else{
+        return false;
+      }
+    }
     
 }
 

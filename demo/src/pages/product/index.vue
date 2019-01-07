@@ -296,6 +296,7 @@ export default {
         }
     },
 	data() {
+		let that = this;
 		return {
 			isShowMoreShow:false,
 			//--------
@@ -529,8 +530,8 @@ export default {
                             'span',
                             {
                                 style:{
-                                	color:"white",
-                                	background:Common.StatusColorFn(params.row.userstory_status),
+                                	//color:"white",
+                                	//background:Common.StatusColorFn(params.row.userstory_status),
                                 	padding:'0.5em',
                                 	display:"inline-block",
                                 	borderRadius:"3px",
@@ -538,7 +539,7 @@ export default {
                                 },
                                 //domProps:{href:"###"},
                             },
-                            Common.StatusFn(params.row.userstory_status)
+                            Common.StatusFn(params.row.userstory_status,"userstory_status",that)
                             //params.row.userstory_status//1 提出 2 开发中 3测试 4上线
                             
                         )
@@ -579,15 +580,15 @@ export default {
                 },
                 {
                     title: '工时|实际|预计',
-                    key: 'manHours',
+                    key: 'task',
                     type: 'html',
                     align: 'center',
-                    width: 100,
+                    width: 120,
                     renderHeader: (h, params) => {
 				        return h('div', {}, [
-				            h('span', {}, '工时'),
+				            h('span', {}, '工作项个数'),
 				            h('br'),
-				            h('span', {}, '实际 / 预计')
+				            h('span', {}, '(已完成 | 全部)')
 				        ]);
 				    }
                 },
@@ -763,6 +764,8 @@ export default {
              //        label: '上线'
              //    },
             ],
+            NewStatusList:[
+            ],
             req_idList:[],
             proiList:[
             	// {
@@ -823,22 +826,20 @@ export default {
     },
 
 	mounted(){
-		
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 		this.getPermissionFn(getPermission);
 		this.getInfoFn(ID);
 
 		//Common.RemoveSession("allSession");
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
-		
 
-
-
+		/* 看板开始 */
     	EventBus.$on("moveEnd", this.moveEnd);
         EventBus.$on("clickItem", this.clicked);
+        EventBus.$on("storyMoveEnd", this.moveEnd);
         EventBus.$on("search", this.searchHandle);
         EventBus.$on("addTask", this.addNewTask);
-        EventBus.$on("storyMoveEnd", this.moveEnd);
+        /* 看板结束 */
 		
 	},
 	methods:{
@@ -901,7 +902,7 @@ export default {
                 }else{
                     this.delpopIsLoading = B;
                     this.delpopIsShow = B;
-                    Common.CommonError(this,myData.message)
+                    Common.CommonError(this,myData.message);
                     return Promise.reject(myData.status);
                 }
             }).catch( (error) => {
@@ -1023,6 +1024,7 @@ export default {
 
 			
 		},
+		/* 看板开始 */
 		changeStateNumber(info){
 			let _statusBase = this.statusListBase;
 			let toState = info.evt.to.getAttribute('state');
@@ -1092,7 +1094,7 @@ export default {
             });
 		},
 		moveEnd(info) {
-			if(window.location.hash.indexOf(this.$router.history.current.path) == -1){
+			if(window.location.hash.indexOf("/product") == -1){
 				return
 			}
             // 移动卡片结束后
@@ -1101,7 +1103,7 @@ export default {
             this.changeMovedStatus(info);
         },
         clicked(info) {
-        	if(window.location.hash.indexOf(this.$router.history.current.path) == -1){
+        	if(window.location.hash.indexOf("/product") == -1){
 				return
 			}
             // 点击卡片方法
@@ -1118,7 +1120,117 @@ export default {
             //   path: "/development/add"
             // });
         },
+        showList() {
+			let CurView = "developList";
+			this.currentView = CurView;
+			Common.SetSession("CurView",CurView);
+			setTimeout(()=>{
+				this.getInfoFn(this.getID(),"showList")
+			},350)
+		},
+		showTask(){
+			let CurView = "kanbanboard"
+			this.currentView = CurView;
+			Common.SetSession("CurView",CurView);
+			setTimeout(()=>{
+				this.getInfoFn(this.getID(),"showTask")
+			},350)
+		},
+		resetKanbanboard(){
+			this.cardListBase=[];
+			this.statusListBase=[];
+			this.groupList=[{ text: "所属需求项" }];
+		},
+		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
+			this.cardList = [];
+			this.statusList = [];
+			this.cardListBase=[],
+            this.statusListBase=[],
+			defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
+                if(myData && myData.length){
+                	
+                	let _temp = {};
+                	let reqArr = [];
+                	for(let i=0;i<myData.length;i++){
+                		if(myData[i].list && myData[i].list.length){
+                			for(let j=0;j<myData[i].list.length;j++){
+                				reqArr.push(myData[i].list[j].req_id)
+                			}
+                		}
+                		//
+                		_temp.stateStr = myData[i].userstory_status;
+                		_temp.taskNumber = Number(myData[i].count);
+                		_temp.state = "0"+(i+1);
+                		this.statusList.push(_temp);
+                		this.statusListBase.push(_temp);
+                		_temp = {};
+                	}
 
+                	let reqArr2 = Array.from(new Set(reqArr));
+                	let checkreqName = (val)=>{
+                		let _temp
+                		if(this.req_idList){
+                			_temp = this.req_idList.find((item)=>{
+	                			return val == item.value
+	                		})
+	                		if(_temp && _temp.label){
+	                			return {text:_temp.label,groupId:val+""}
+	                		}else{
+	                			return false;
+	                		}
+                		}else{
+                			return false;
+                		}
+                	}
+                	this.groupList = [];
+                	this.groupList.push({text:"所属需求项"});
+                	for(let k=0;k<reqArr2.length;k++){
+                		let _CN = checkreqName(reqArr2[k]);
+                		if(_CN){this.groupList.push(_CN)}
+                	}
+
+	            	let _arr = [];
+					let _Obj = {};
+					
+					
+					for(let i=0;i<myData.length;i++){
+
+					
+						for(let j=0;j<myData[i].list.length;j++){
+							_Obj.taskStatus = "0"+(i+1);
+							_Obj.taskId = ""+myData[i].list[j].userstory_id;
+							_Obj.description = "description_"+ i +"_"+j;
+							_Obj.userName = myData[i].list[j].charger;
+							_Obj.userId = "userId_"+ i +"_"+j;
+							_Obj.groupId = myData[i].list[j].req_id+"";
+							//_Obj.bgColor = { background: ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi) };
+							_Obj.bgcolor = ((C)=>{if(C==1){return '#FE4515'}else if(C==2){return '#12C37A'}else if(C==3){return '#FEB159'}else{return '#ffffff'}})(myData[i].list[j].proi);
+							_Obj.taskStateStr = myData[i].userstory_status;
+							_Obj.headPortrait =   require("@/assets/images/user_02.png"); //"/assets/images/user_02.png";
+							_Obj.taskName = myData[i].list[j].userstory_name;
+							_Obj.nickName = myData[i].list[j].charger
+							_Obj.detail_id = myData[i].list[j].id
+							_arr.push(_Obj);
+							_Obj = {}
+						}
+						this.cardList.push(..._arr);
+						this.cardListBase.push(..._arr);
+						_arr = []
+					}
+					//EventBus.$emit('storyBindSort');
+					EventBus.$emit('bindSort');
+                }else{
+                	this.showError(URL+"_没有数据");
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+
+		},
+        /* 看板结束 */
 
 		authIs(KEY){
 			return Common.auth(this,KEY)            
@@ -1211,102 +1323,17 @@ export default {
             
 
         },
-		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
-			this.cardList = [];
-			this.statusList = [];
-			this.cardListBase=[],
-            this.statusListBase=[],
-			defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
-                if(myData && myData.length){
-                	
-                	let _temp = {};
-                	let reqArr = [];
-                	for(let i=0;i<myData.length;i++){
-                		if(myData[i].list && myData[i].list.length){
-                			for(let j=0;j<myData[i].list.length;j++){
-                				reqArr.push(myData[i].list[j].req_id)
-                			}
-                		}
-                		//
-                		_temp.stateStr = myData[i].userstory_status;
-                		_temp.taskNumber = Number(myData[i].count);
-                		_temp.state = "0"+(i+1);
-                		this.statusList.push(_temp);
-                		this.statusListBase.push(_temp);
-                		_temp = {};
-                	}
-
-                	let reqArr2 = Array.from(new Set(reqArr));
-                	let checkreqName = (val)=>{
-                		let _temp
-                		if(this.req_idList){
-                			_temp = this.req_idList.find((item)=>{
-	                			return val == item.value
-	                		})
-	                		if(_temp && _temp.label){
-	                			return {text:_temp.label,groupId:val+""}
-	                		}else{
-	                			return false;
-	                		}
-                		}else{
-                			return false;
-                		}
-                	}
-                	this.groupList = [];
-                	this.groupList.push({text:"所属需求项"});
-                	for(let k=0;k<reqArr2.length;k++){
-                		let _CN = checkreqName(reqArr2[k]);
-                		if(_CN){this.groupList.push(_CN)}
-                	}
-
-	            	let _arr = [];
-					let _Obj = {};
-					
-					
-					for(let i=0;i<myData.length;i++){
-
-					
-						for(let j=0;j<myData[i].list.length;j++){
-							_Obj.taskStatus = "0"+(i+1);
-							_Obj.taskId = ""+myData[i].list[j].userstory_id;
-							_Obj.description = "description_"+ i +"_"+j;
-							_Obj.userName = myData[i].list[j].charger;
-							_Obj.userId = "userId_"+ i +"_"+j;
-							_Obj.groupId = myData[i].list[j].req_id+"";
-							//_Obj.bgColor = { background: ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi) };
-							_Obj.bgcolor = ((C)=>{if(C==1){return '#FE4515'}else if(C==2){return '#12C37A'}else if(C==3){return '#FEB159'}else{return '#ffffff'}})(myData[i].list[j].proi);
-							_Obj.taskStateStr = myData[i].userstory_status;
-							_Obj.headPortrait =   require("@/assets/images/user_02.png"); //"/assets/images/user_02.png";
-							_Obj.taskName = myData[i].list[j].userstory_name;
-							_Obj.nickName = myData[i].list[j].charger
-							_Obj.detail_id = myData[i].list[j].id
-							_arr.push(_Obj);
-							_Obj = {}
-						}
-						this.cardList.push(..._arr);
-						this.cardListBase.push(..._arr);
-						_arr = []
-					}
-					//EventBus.$emit('storyBindSort');
-					EventBus.$emit('bindSort');
-                }else{
-                	this.showError(URL+"_没有数据");
-                }
-            }).catch( (error) => {
-                console.log(error);
-                this.showError(error);
-            });
-
-		},
+		
 		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
             defaultAXIOS(URL,{page,limit,data,id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======***用户故事列表+++",response,myData,"======>");
                 this.tableData = myData.rows;
-                this.tableData.forEach(item=>item.manHours = "0/"+item.manHours)
+                this.tableData.forEach(item=>item.manHours = "0 | "+item.manHours)
+                this.tableData.forEach(item=>item.task = item.complete_task+" | "+((item.complete_task-0)+(item.not_complete_task-0)))
                 this.tableDAtaTatol = myData.page_rows;
+
+
 
             }).catch( (error) => {
                 console.log(error);
@@ -1365,7 +1392,7 @@ export default {
 		},
 		goAddDevelopmentFn (index) {
 			Common.GoUserstorySession(Common,this);
-            this.$router.push({path: '/development/add', query: {board: true,myid:this.tableData[index].id}})
+            this.$router.push({path: '/development/add', query: {board: true,sptId:this.tableData[index].sprint,usId:this.tableData[index].id}})
         },
 		goDevelopmentFn (index) {
 			Common.GoUserstorySession(Common,this);
@@ -1381,27 +1408,7 @@ export default {
                 content: `Name：${this.data6[index].name}<br>Age：${this.data6[index].age}<br>Address：${this.data6[index].address}`
             })
         },
-		showList() {
-			let CurView = "developList";
-			this.currentView = CurView;
-			Common.SetSession("CurView",CurView);
-			setTimeout(()=>{
-				this.getInfoFn(this.getID(),"showList")
-			},350)
-		},
-		showTask(){
-			let CurView = "kanbanboard"
-			this.currentView = CurView;
-			Common.SetSession("CurView",CurView);
-			setTimeout(()=>{
-				this.getInfoFn(this.getID(),"showTask")
-			},350)
-		},
-		resetKanbanboard(){
-			this.cardListBase=[];
-			this.statusListBase=[];
-			this.groupList=[{ text: "所属需求项" }];
-		},
+		
 		resetList(){
 			this.tableData = [];
 		},

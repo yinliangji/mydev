@@ -349,14 +349,11 @@ export default {
                     this.GetDetail = myData;
                     for(let i in myData){
                         if(i == "proi"){
-                            //this.formValidate[i] = proiFn(myData[i],i)
                             this.formValidate[i] = Common.ProiFn(myData[i],i)
                         }else if(i == "userstory_type"){
-                            //this.formValidate[i] = typeFn(myData[i],i)
                             this.formValidate[i] = Common.TypeFn(myData[i],i)
                         }else if(i == "userstory_status"){
-                            //this.formValidate[i] = statusFn(myData[i],i)
-                            this.formValidate[i] = Common.StatusFn(myData[i],i)
+                            this.formValidate[i] = Common.StatusFn(myData[i],i,this)
                         }
                         else{
                             this.formValidate[i] = myData[i]

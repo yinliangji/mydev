@@ -9,10 +9,11 @@
     :detailid="item.detail_id"
     :groupId="item.groupId"
     :nickname="item.nickName"
+    :class="isDraggable(myRole,myAside,item.nickName)"
     >
       <div class="card-wrap">
 
-        <p class="item-content">
+        <p class="item-content" :title="item.taskName">
           <span class="levelText" :style="{'background':item.bgcolor}">
             {{levelText(item.bgcolor)}}
           </span>
@@ -24,7 +25,7 @@
               {{item.nickName}}
           </span>
           <!-- <img :src="item.headPortrait" width="21" height="21" /> -->
-          <img :src="headPortrait" width="21" height="21" />
+          <img v-show="myAside == 'product'? false:true" :src="headPortrait" width="21" height="21" />
         </p>
       </div>
   </div>
@@ -32,6 +33,7 @@
 
 <script>
 import { EventBus } from '@/tools';
+import Common from '@/Common';
 export default {
   props: {
     item: {
@@ -43,10 +45,42 @@ export default {
     Group: {
       type: Boolean,
     },
+    myAside: {//判断栏目
+      type: [Boolean,String,Number],
+      default: function() {
+        return false;
+      }
+    },
+    myRole: {//判断权限
+      type: [Boolean,String,Number],
+      default: function() {
+        return false;
+      }
+    },
+  },
+  watch:{
+    myRole(data){
+      
+    },
+    myAside(data){
+      
+    },
   },
   mounted() {
+    
   },
   methods: {
+    isDraggable(r,a,n){//myRole,myAside,item.nickName
+      if(a == "product"){
+        if(r == "icdp_projManager"){
+          return "isDraggable"
+        }else{
+          return n.indexOf(Common.getCookie("username")) != -1 ? "isDraggable" : "";
+        }
+      }else{
+        return "isDraggable"
+      }
+    },
     levelText(color){
       if(color=="#FE4514" || color=="#FE4515"){
         return "高"
@@ -65,6 +99,7 @@ export default {
   },
   data () {
     return {
+      my_role:false,
       headPortrait:require("../../assets/images/tx.png"),
     }
   },

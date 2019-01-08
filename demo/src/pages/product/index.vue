@@ -182,11 +182,13 @@
 						<!-- :groupList="[]" :groupList="groupList" :sortdisabled="true"  -->
 						<kanbanboard
 							:isDisabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])"
-							:sortdisabled="true" 
+							:sortdisabled="false" 
 							:cardList="cardLists" 
 							:statusList="statusLists" 
 							:groupList="groupList" 
-							:Group="true" 
+							:Group="true"
+							:aside="'product'"
+							:role="borderRole" 
 							/>
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div>
@@ -677,6 +679,10 @@ export default {
                     }
                 }
             ],
+            borderRole:false,
+            cardListBase:[],
+            statusListBase:[],
+            //看板结束
 	        tableData: [
      			//{
 					// userstory_name: '用户故事1',
@@ -795,8 +801,7 @@ export default {
             sprintList:[],
             prj_permission:[],
             identity:"",
-            cardListBase:[],
-            statusListBase:[],
+            
             
 
             cardpop:false,
@@ -1056,6 +1061,8 @@ export default {
 			_params.ID = info.evt.item.getAttribute('detailid');
 			_params.taskStatus = info.evt.to.getAttribute('state');
 
+
+
 			defaultAXIOS(storySetChange,{id:_params.ID,userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======用户故事 状态改变***response+++",response,myData,"======>");
@@ -1063,7 +1070,8 @@ export default {
                 	this.showError(storySetChange+"|返回结果错误");
                 }else{
                 	this.cardpopList = [];
-                	
+                	return;
+
                 	if(myData.no_complete_task_list && Array.isArray(myData.no_complete_task_list) && myData.no_complete_task_list.length){
                 		this.cardpop = true;
                 		this.cardpopList = myData.no_complete_task_list;
@@ -1146,9 +1154,14 @@ export default {
 			this.statusList = [];
 			this.cardListBase=[],
             this.statusListBase=[],
-			defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
+			defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint,username:Common.getCookie("username"),prjSn:Common.getCookie("prjSn")},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
+                if(myData.status == "success" ){
+                	this.borderRole = myData.role;
+                }
+                myData = myData.data ? myData.data : myData;
                 console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
+
                 if(myData && myData.length){
                 	
                 	let _temp = {};
@@ -1224,6 +1237,7 @@ export default {
                 }else{
                 	this.showError(URL+"_没有数据");
                 }
+
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);

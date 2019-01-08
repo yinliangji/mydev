@@ -2,11 +2,11 @@
   <div class="content-header">
      <span class="title">
         {{text}}
+        <span class="number" v-show="myAside == 'product'? true:false">
+         {{taskNumber}}
+        </span>
      </span>
-     <span>
-        数量 {{taskNumber}}
-     </span>
-                
+     <span v-show="myAside == 'product'? false:true">数量{{taskNumber}}</span>
   </div>
 </template>
 <script>
@@ -17,7 +17,15 @@
       },
       taskNumber: {
         type: [String,Number]
-      }
+      },
+      //
+      myAside: {//判断栏目
+        type: [Boolean,String,Number],
+        default: function() {
+          return false;
+        }
+      },
+      //
     },
     data(){
       return {}
@@ -32,6 +40,7 @@
   border-radius: 4px;
   line-height: 30px;
   text-align: center;
+  
   /*
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -46,6 +55,21 @@
 .content-header .title{
   font-weight: 600;
   font-size: 14px;
+  position: relative;
 
+}
+.number{
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 12px;
+  height: 1.2em;
+  line-height: 1.2em;
+  padding-right: 3px;
+  padding-left: 3px;
+  background: red;
+  color: white;
+  border-radius: 4px;
+  transform:translate(100%,-80%);
 }
 </style>

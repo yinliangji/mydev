@@ -10,7 +10,7 @@
             </div>
           </Col>
           <Col :span="statusSize" class="topColumn"  v-for="(item, index) in statusList" :key="index">
-            <kanbanContentHeader :text="item.stateStr" :taskNumber="item.taskNumber"></kanbanContentHeader>
+            <kanbanContentHeader :myAside="aside" :text="item.stateStr" :taskNumber="item.taskNumber"></kanbanContentHeader>
           </Col>
         </Row>
       </div>
@@ -18,20 +18,22 @@
       <div class="row-wrapper" v-for="(itemGroup, index) in groupLists" v-if="groupList.length > 0">
         <Row :gutter="16" type="flex" justify="start" align="top">
           <Col span="3" v-if="groupLists.length > 0">
-            <div class="centerHeader" v-if="sortdisabled">
+            <div class="centerHeader" v-if="aside">
               {{itemGroup.text}}
             </div>
             <div class="centerHeader pointer" @click="toStory(itemGroup.groupId)" v-else>
               {{itemGroup.text}}
             </div>
             <div>
-              <Button v-if="sortdisabled" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >添加用户故事</Button>
+              <Button v-if="aside" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >添加用户故事</Button>
               <Button v-else  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" >添加工作项</Button>
             </div>
           </Col>
           <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
             <div :id="'kb'+itemGroup.groupId+'_'+items.state" :state="items.state" :groupid="itemGroup.groupId" class="rowBox">
               <kanbanItem
+                :myAside = "aside"
+                :myRole="role"
                 :key="cardIndex"
                 :item = "value"
                 :Group = true
@@ -49,6 +51,8 @@
           <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
             <div :id="'stateId_'+items.state" :state="items.state" class="rowBox rowBox2">
               <kanbanItem
+                  :myAside = "aside"
+                  :myRole="role"
                   :key="keys"
                   :item = "value"
                   :Group = false
@@ -69,7 +73,7 @@ import kanbanHeader from "./kanban-header";
 import kanbanContentHeader from "./kanbancontent-header";
 import kanbanItem from "./kanban-item";
 import Sortable from "sortablejs";
-
+import Common from '@/Common';
 export default {
   props: {
     cardList: {
@@ -108,6 +112,18 @@ export default {
         return true;
       }
     },
+    aside: {//判断栏目
+      type: [Boolean,String,Number],
+      default: function() {
+        return false;
+      }
+    },
+    role: {//判断权限
+      type: [Boolean,String,Number],
+      default: function() {
+        return false;
+      }
+    },
   },
   data() {
     return {
@@ -115,6 +131,18 @@ export default {
       storySortId:[],
       cssText:"",
     };
+  },
+  created(){
+    console.log("看板 kanbanboard--created-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
+  },
+  beforecreated(){
+    console.log("看板 kanbanboard--beforecreated-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
+  },
+  beforeUpdate(){
+    console.log("看板 kanbanboard--beforeUpdate-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
+  },
+  updated(){
+    console.log("看板 kanbanboard--updated-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
   },
   watch:{
     cardList(data){
@@ -124,15 +152,18 @@ export default {
       
     },
     groupList(data){
-      
     },
     statusList(data){
+    },
+    role(data){
       
     },
 
     
   },
   mounted(){
+    
+
     document.body.ondrop = function(event){
       event.preventDefault();
       event.stopPropagation();
@@ -158,6 +189,7 @@ export default {
       },2)      
     },
     setHeight(){
+      let addSpace = this.aside == "product" && this.role != "icdp_projManager" ? 50 : 0;
       let Doms = document.getElementById("board").getElementsByClassName("row-wrapper");
       let inArr = [];
       let Max = "";
@@ -170,7 +202,7 @@ export default {
           }
           Max = Math.max.apply(null,inArr);
           for(let k=0;k<Col.length;k++){
-            Col[k].style.height = Max+"px";
+            Col[k].style.height = Max+addSpace+"px";
           }
           inArr = [];
           Max = "";
@@ -254,14 +286,51 @@ export default {
     bindSortable(moveId){
 
       let vm = this;
+      let that = vm;
       let todoList = document.getElementById(moveId);
       if(!todoList){
         return;
       }
       Sortable.create(todoList,{
+        draggable: ".isDraggable",
         group:{
           name:"list",
-          pull:true,
+          
+          pull:function(Old,New,Ele,Evt){
+
+            if(that.aside && that.aside == "product"){
+              //product star
+              return true
+              //product end
+            }else{
+              return true
+            }
+            //console.error("**pull old Sortable==>",Old,"**pull new Sortable==>",New,"***pull HTML元素==>",Ele,"**pull DragEvent==>",Evt);
+            if(New.el.id == "kb6_01" || New.el.id == "kb6_02"){
+              return false
+            }else {
+              return true
+            }
+            
+          },
+          put:function(Old,New,Ele,Evt){
+            if(that.aside && that.aside == "product"){
+              //product star
+              return true
+              //product end
+            }else{
+              return true
+            }
+            //console.error("**put old Sortable==>",Old,"**put new Sortable==>",New,"***put HTML元素==>",Ele,"**put DragEvent==>",Evt);
+            if(Old.el.id == "kb6_01" || Old.el.id == "kb6_02" || Old.el.id == "kb6_03"){
+              return false
+            }else {
+              return true
+            }
+          },
+          
+          //pull:["#kb6_01", "#kb5_01"],//["foo", "bar"]
+          //revertClone:true,
         },
         animation:120,
         ghostClass:"placeholder-style",
@@ -456,5 +525,8 @@ export default {
 }
 .kanbanItemBox{
   
+}
+.ivu-col-span-2{
+  width: 10.8%;
 }
 </style>

@@ -523,7 +523,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
             },
             {
                 count:4,
-                userstory_status:"开发中",
+                userstory_status:"设计分析",
                 list:[
                     {
                         userstory_name:"userstory_name_5",
@@ -561,7 +561,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
             },
             {
                 count:2,
-                userstory_status:"测试",
+                userstory_status:"开发测试",
                 list:[
                     {
                         userstory_name:"userstory_name_9",
@@ -584,7 +584,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
             },
             {
                 count:2,
-                userstory_status:"上线",
+                userstory_status:"用户验收测试",
                 list:[
                     {
                         userstory_name:"userstory_name_11",
@@ -604,7 +604,99 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                     },
                    
                 ]
-            }
+            },
+            {
+                count:2,
+                userstory_status:"待投产",
+                list:[
+                    {
+                        userstory_name:"userstory_name_13",
+                        userstory_id:113,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:13,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_14",
+                        userstory_id:114,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:14,
+                        "req_id|1":[5,6],
+                    },
+                   
+                ]
+            },
+            {
+                count:2,
+                userstory_status:"已投产",
+                list:[
+                    {
+                        userstory_name:"userstory_name_15",
+                        userstory_id:115,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:15,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_16",
+                        userstory_id:116,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:16,
+                        "req_id|1":[5,6],
+                    },
+                   
+                ]
+            },
+            {
+                count:2,
+                userstory_status:"停滞",
+                list:[
+                    {
+                        userstory_name:"userstory_name_17",
+                        userstory_id:117,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:17,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_18",
+                        userstory_id:118,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:18,
+                        "req_id|1":[5,6],
+                    },
+                   
+                ]
+            },
+            {
+                count:2,
+                userstory_status:"废弃",
+                list:[
+                    {
+                        userstory_name:"userstory_name_19",
+                        userstory_id:119,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:19,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_20",
+                        userstory_id:120,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:20,
+                        "req_id|1":[5,6],
+                    },
+                   
+                ]
+            },
         ],
         "role|1":["icdp_projManager","icdp_teamLeader"],
     })

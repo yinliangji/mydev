@@ -126,11 +126,13 @@
                         <!-- :groupList="[]" :groupList="groupList" :sortdisabled="true"  -->
                         <kanbanboard
                             :isDisabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])"
-                            :sortdisabled="true" 
+                            :sortdisabled="false" 
                             :cardList="cardLists" 
                             :statusList="statusLists" 
                             :groupList="[]" 
-                            :Group="true" 
+                            :Group="true"
+                            :aside="'demand'"
+                            :boardName="'productBoard'"  
                             />
                     </div>
 
@@ -381,21 +383,24 @@ export default {
         */
        this.getInfoFn(ID);
 
-
-
-
-        EventBus.$on("moveEnd", this.moveEnd);
-        EventBus.$on("clickItem", this.clicked);
-        EventBus.$on("search", this.searchHandle);
-        EventBus.$on("addTask", this.addNewTask);
-        EventBus.$on("storyMoveEnd", this.moveEnd);
-
+       this.EventBusRegister();
+    },
+    beforecreated(){
+        console.log("项目需求项--beforecreated-------",this.formValidate)
+    },
+    created(){
+        console.log("项目需求项--created-------",this.formValidate);
+        if(this.$router.history.current.query.board && this.$router.history.current.query.board == "true"){
+            this.currentView = "kanbanboard";
+        }else{
+            this.currentView = "developList";
+        }
     },
     beforeUpdate(){
-        console.log("demand--beforeUpdate--","this.isShowITMPop==>",this.isShowITMPop)
+        console.log("项目需求项--beforeUpdate--","this.isShowITMPop==>",this.isShowITMPop)
     },
     updated(){
-        console.log("demand--updated--","this.isShowITMPop==>",this.isShowITMPop)
+        console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
         getInfoFn(ID,isShowList){
@@ -411,6 +416,17 @@ export default {
 
         },
         //看板开始
+        EventBusRegister(){
+            if(!EventBus.demand){
+                EventBus.$on("moveEnd", this.moveEnd);
+                EventBus.$on("clickItem", this.clicked);
+                EventBus.$on("search", this.searchHandle);
+                EventBus.$on("addTask", this.addNewTask);
+                //EventBus.$on("storyMoveEnd", this.moveEnd);
+                EventBus.$on("storyMoveEnd", ()=>{});
+                EventBus.demand = true;
+            }
+        },
         showList() {
             let CurView = "developList";
             this.currentView = CurView;
@@ -435,6 +451,7 @@ export default {
             defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
+                myData = myData.data ? myData.data : myData;
                 if(myData && myData.length){
                     
                     let _temp = {};
@@ -553,30 +570,7 @@ export default {
                 if(myData.status.indexOf("success") == -1){
                     this.showError(storySetChange+"|返回结果错误");
                 }else{
-                    this.cardpopList = [];
                     
-                    if(myData.no_complete_task_list && Array.isArray(myData.no_complete_task_list) && myData.no_complete_task_list.length){
-                        this.cardpop = true;
-                        this.cardpopList = myData.no_complete_task_list;
-                        let statusFn = (Num)=>{
-                            let Status = "未知";
-                            if(Num == 1){
-                                Status = "未开始";
-                            }else if(Num == 2){
-                                Status = "设计开发";
-                            }else if(Num == 3){
-                                Status = "测试";
-                            }else if(Num == 4){
-                                Status = "发布";
-                            }else if(Num == 5){
-                                Status = "上线";
-                            }
-                            return Status
-                        }
-                        this.cardpopList.forEach((item)=>{
-                            item.task_statusCN = statusFn(item.task_status);
-                        })
-                    }
                 }
                 
             }).catch( (error) => {
@@ -585,14 +579,20 @@ export default {
             });
         },
         moveEnd(info) {
+            if(window.location.hash.indexOf("/demand") == -1){
+                return
+            }
             // 移动卡片结束后
-            console.log(" 移动卡片结束后 :::", info);
+            console.log("demand 移动卡片结束后 :::", info);
             this.changeStateNumber(info);
             this.changeMovedStatus(info);
         },
         clicked(info) {
+            if(window.location.hash.indexOf("/demand") == -1){
+                return
+            }
             // 点击卡片方法
-            console.log(" 点击卡片方法 ::: ", info);
+            console.log("demand 点击卡片方法 ::: ", info);
             this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
         },
         searchHandle(info) {
@@ -905,14 +905,14 @@ export default {
         },
     },
     watch: {
-        '$route' (to, from) {
+        // '$route' (to, from) {
             
-            if(to.query.board && to.query.board == "true"){
-                this.currentView = "kanbanboard";
-            }else{
-                this.currentView = "developList";
-            }
-        },
+        //     if(to.query.board && to.query.board == "true"){
+        //         this.currentView = "kanbanboard";
+        //     }else{
+        //         this.currentView = "developList";
+        //     }
+        // },
     },
 }
 </script>

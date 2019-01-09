@@ -124,6 +124,12 @@ export default {
         return false;
       }
     },
+    boardName: {//判断权限
+      type: [Boolean,String,Number],
+      default: function() {
+        return "list";
+      }
+    },
   },
   data() {
     return {
@@ -294,7 +300,7 @@ export default {
       Sortable.create(todoList,{
         draggable: ".isDraggable",
         group:{
-          name:"list",
+          name:that.boardName,
           
           pull:function(Old,New,Ele,Evt){
 

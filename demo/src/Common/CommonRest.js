@@ -1,5 +1,6 @@
 "use strict"
 import CommonRestqhc from './CommonRestqhc';
+
 //export default class CommonRest extends CommonRestqhc
 export default class CommonRest {
     constructor() {
@@ -237,9 +238,6 @@ CommonRest.restUrl = {
 
     "addBusfuncQueryCombox": process.env.BASE_URL + "/agile/addBusfuncQueryCombox/",
     /****express 需求项目添加--所属逻辑子系统 get****/
-
-    
-
 }
 
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);
@@ -251,7 +249,6 @@ CommonRest.browser = {
     "isAndroid": /Android/ig.test(CommonRest.UA) || /linux/ig.test(CommonRest.UA),
     "isQQ": /\sQQ/ig.test(CommonRest.UA),
 }
-
 
 function addZUUL(val){
     if(val.indexOf("127.0.0.1:9090") != -1 || val.indexOf("127.0.0.1:8000") != -1){

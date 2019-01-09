@@ -188,7 +188,8 @@
 							:groupList="groupList" 
 							:Group="true"
 							:aside="'product'"
-							:role="borderRole" 
+							:role="borderRole"
+							:boardName="'productBoard'" 
 							/>
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div>
@@ -738,7 +739,7 @@ export default {
 
             },
             userstory_typeList:[
-            	// {
+             // {
              //        value: 1,
              //        label: '用户需求项'
              //    },
@@ -799,6 +800,7 @@ export default {
              //    },
             ],
             sprintList:[],
+            _sprint:false,
             prj_permission:[],
             identity:"",
             
@@ -839,11 +841,7 @@ export default {
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
 
 		/* 看板开始 */
-    	EventBus.$on("moveEnd", this.moveEnd);
-        EventBus.$on("clickItem", this.clicked);
-        EventBus.$on("storyMoveEnd", this.moveEnd);
-        EventBus.$on("search", this.searchHandle);
-        EventBus.$on("addTask", this.addNewTask);
+    	this.EventBusRegister();
         /* 看板结束 */
 		
 	},
@@ -972,7 +970,13 @@ export default {
 
 		    	//currentView: "developList",//developList//kanbanboard
 		    	if(this.currentView == "kanbanboard"){
-		    		this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+		    		Promise.all([this._sprint]).then((REP)=>{
+		    			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+		    		},()=>{
+		    			this.showError("没有获取到故事状态");
+		    		})
+
+
 		    	}else{
 		    		this.tableDataAjaxFn(storyAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
 		    	}
@@ -1001,9 +1005,9 @@ export default {
 			//   	let _proi =this.storyGetConditionFn(storyGetCondition,"proi",ID);
 			//   	let _charger =this.storyGetConditionFn(storyGetCondition,"charger",ID);
 			//   	let _learn_concern = this.storyGetConditionFn(storyGetCondition,"learn_concern",ID);
-	    	let _sprint = this.storyGetConditionFn(storyGetCondition,"sprint",ID);
+	    	this._sprint = this.storyGetConditionFn(storyGetCondition,"sprint",ID);
 
-	    	return Promise.all([_sprint]).then((REP)=>{
+	    	return Promise.all([this._sprint]).then((REP)=>{
 	    		this.sprintList.unshift({label:"未规划迭代",value:"0"})
 			    return defaultAXIOS(URL,{prj_id:ID},{timeout:20000,method:'get'}).then((response) => {
 	                let myData = response.data;
@@ -1029,7 +1033,19 @@ export default {
 
 			
 		},
+
 		/* 看板开始 */
+		EventBusRegister(){
+			if(!EventBus.product){
+				EventBus.$on("moveEnd", this.moveEnd);
+		        EventBus.$on("clickItem", this.clicked);
+		        EventBus.$on("storyMoveEnd", ()=>{});
+		        //EventBus.$on("storyMoveEnd", this.moveEnd);
+		        EventBus.$on("search", this.searchHandle);
+		        EventBus.$on("addTask", this.addNewTask);
+		        EventBus.product = true;
+	        }
+		},
 		changeStateNumber(info){
 			let _statusBase = this.statusListBase;
 			let toState = info.evt.to.getAttribute('state');
@@ -1061,9 +1077,11 @@ export default {
 			_params.ID = info.evt.item.getAttribute('detailid');
 			_params.taskStatus = info.evt.to.getAttribute('state');
 
+		
 
 
-			defaultAXIOS(storySetChange,{id:_params.ID,userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
+
+			defaultAXIOS(storySetChange,{id:_params.ID,username:Common.getCookie("username"),userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======用户故事 状态改变***response+++",response,myData,"======>");
                 if(myData.status.indexOf("success") == -1){
@@ -1075,23 +1093,9 @@ export default {
                 	if(myData.no_complete_task_list && Array.isArray(myData.no_complete_task_list) && myData.no_complete_task_list.length){
                 		this.cardpop = true;
                 		this.cardpopList = myData.no_complete_task_list;
-                		let statusFn = (Num)=>{
-                			let Status = "未知";
-                			if(Num == 1){
-                				Status = "未开始";
-                			}else if(Num == 2){
-                				Status = "设计开发";
-                			}else if(Num == 3){
-                				Status = "测试";
-                			}else if(Num == 4){
-                				Status = "发布";
-                			}else if(Num == 5){
-                				Status = "上线";
-                			}
-                			return Status
-                		}
+
                 		this.cardpopList.forEach((item)=>{
-                			item.task_statusCN = statusFn(item.task_status);
+                			item.task_statusCN = Common.StatusFn(item.task_status,"userstory_status",this);
                 		})
                 	}
                 }
@@ -1106,7 +1110,7 @@ export default {
 				return
 			}
             // 移动卡片结束后
-            console.log(" 移动卡片结束后 :::", info);
+            console.log("product 移动卡片结束后 :::", info);
             this.changeStateNumber(info);
             this.changeMovedStatus(info);
         },
@@ -1115,7 +1119,7 @@ export default {
 				return
 			}
             // 点击卡片方法
-            console.log(" 点击卡片方法 ::: ", info);
+            console.log("product 点击卡片方法 ::: ", info);
             this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
         },
         searchHandle(info) {
@@ -1175,7 +1179,15 @@ export default {
                 		//
                 		_temp.stateStr = myData[i].userstory_status;
                 		_temp.taskNumber = Number(myData[i].count);
-                		_temp.state = "0"+(i+1);
+
+                		let fn =(arr,val)=>{
+                			let obj = arr.find((item)=>{
+                				return item.label == val;
+                			})
+                			return obj.value || 0;
+                		}
+                		_temp.state = "0"+fn(this.userstory_statusList,_temp.stateStr);
+                		//_temp.state = "0"+(i+1);
                 		this.statusList.push(_temp);
                 		this.statusListBase.push(_temp);
                 		_temp = {};

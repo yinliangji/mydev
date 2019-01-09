@@ -1,4 +1,5 @@
 "use strict"
+import CommonRestinfReq from './CommonRestinfReq';
 export default class CommonRestqhc {
     constructor() {}
 }
@@ -18,3 +19,4 @@ CommonRestqhc.restUrl = {
     //qhc end
 
 }
+Object.setPrototypeOf(CommonRestqhc.restUrl,CommonRestinfReq.restUrl);

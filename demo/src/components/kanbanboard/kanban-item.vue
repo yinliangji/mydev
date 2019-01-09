@@ -153,6 +153,8 @@ export default {
     display: inline-block;
 }
   .item-content {
+    word-wrap: break-word;
+    word-break: normal;
     /* text-align: center; */
     padding-top: 4px;
     overflow: hidden;

@@ -1097,8 +1097,8 @@ export default class Common extends Utils {
               let _OBJ = {};
               let _arr = [];
               for(let i=0;i<arr.length;i++){
-                _OBJ.label = (arr[i].value || arr[i].sprint_name || arr[i].nick_name || arr[i].key)+"";
-                _OBJ.value = (arr[i].key || arr[i].sprint || arr[i].user_name)+"";
+                _OBJ.label = (arr[i].value || arr[i].sprint_name || arr[i].nick_name || arr[i].key || "")+"";
+                _OBJ.value = (arr[i].key || arr[i].sprint || arr[i].user_name || 0)+"";
                 _arr.push(_OBJ);
                 _OBJ = {};
               }
@@ -1298,7 +1298,6 @@ export default class Common extends Utils {
     static StatusFn(N,STR="",that){
 
       let Lable = "未知"
-      //console.error(that[STR+"List"])
       if(that[STR+"List"] && that[STR+"List"].length){
         for(let j=0;j<that[STR+"List"].length;j++){
           if(that[STR+"List"][j].value == N){
@@ -1789,7 +1788,3 @@ function toLoginPage(THAT = false){
 	}
 }
 window.toLoginPage = toLoginPage;
-
-
-
-

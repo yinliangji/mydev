@@ -78,7 +78,7 @@ export default {
           return n.indexOf(Common.getCookie("username")) != -1 ? "isDraggable" : "isOpacity";
         }
       }else if(a == "demand"){
-        return s == "07" || s == "08" ? "isDraggable" : "";
+        return s == "07" || s == "08" ? "isDraggable" : "isOpacity";
       }else{
         return "isDraggable"
       }
@@ -121,7 +121,7 @@ export default {
   height: 100%;
   background: black;
   content: "";
-  opacity:0.4;
+  opacity:0.3;
   border-radius:4px;
 }
 .levelText{

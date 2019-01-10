@@ -1194,6 +1194,13 @@ export default {
                 myData = myData.data ? myData.data : myData;
                 console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
 
+                let fn =(arr,val)=>{
+        			let obj = arr.find((item)=>{
+        				return item.label == val;
+        			})
+        			return obj.value || 0;
+        		}
+
                 if(myData && myData.length){
                 	
                 	let _temp = {};
@@ -1207,13 +1214,6 @@ export default {
                 		//
                 		_temp.stateStr = myData[i].userstory_status;
                 		_temp.taskNumber = Number(myData[i].count);
-
-                		let fn =(arr,val)=>{
-                			let obj = arr.find((item)=>{
-                				return item.label == val;
-                			})
-                			return obj.value || 0;
-                		}
                 		_temp.state = "0"+fn(this.userstory_statusList,_temp.stateStr);
                 		//_temp.state = "0"+(i+1);
                 		this.statusList.push(_temp);
@@ -1246,12 +1246,10 @@ export default {
 	            	let _arr = [];
 					let _Obj = {};
 					
-					
 					for(let i=0;i<myData.length;i++){
-
-					
 						for(let j=0;j<myData[i].list.length;j++){
-							_Obj.taskStatus = "0"+(i+1);
+							_Obj.taskStatus = "0"+fn(this.userstory_statusList,myData[i].userstory_status);
+							//_Obj.taskStatus = "0"+(i+1);
 							_Obj.taskId = ""+myData[i].list[j].userstory_id;
 							_Obj.description = "description_"+ i +"_"+j;
 							_Obj.userName = myData[i].list[j].charger;
@@ -1269,8 +1267,10 @@ export default {
 						}
 						this.cardList.push(..._arr);
 						this.cardListBase.push(..._arr);
+
 						_arr = []
 					}
+					console.error(this.cardListBase)
 					this.EventBusDispatch();
                 }else{
                 	this.showError(URL+"_没有数据");

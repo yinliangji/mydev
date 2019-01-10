@@ -30,11 +30,8 @@
             </div>
           </Col>
           <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
-            <div :id="'kb'+itemGroup.groupId+'_'+items.state" :state="items.state" :groupid="itemGroup.groupId" class="rowBox">
-              
-              <!-- v-if="itemGroup.groupId == value.groupId && value.taskStatus == items.state"
-                > -->
-              <!-- <kanbanItem
+            <div :id="'kb'+itemGroup.groupId+'_'+items.state" :state="items.state" :groupid="itemGroup.groupId" class="rowBox" :class="addSpace?'addSpaceBox':''">
+              <kanbanItem
                 :myAside = "aside"
                 :myRole="role"
                 :key="cardIndex"
@@ -43,14 +40,7 @@
                 v-for="(value, keys,cardIndex) in cardList"
                 v-if="itemGroup.groupId == value.groupId && value.taskStatus == items.state"
                 >
-               </kanbanItem> -->
-               <div v-for="(value, keys,cardIndex) in cardList">
-                i.groupId={{itemGroup.groupId}}<br />
-              v.groupId={{value.groupId}}<br />
-              v.taskStatus={{value.taskStatus}}<br />
-              i.state={{items.state}}<br />
-                 
-               </div>
+              </kanbanItem>
              </div>
           </Col>
         </Row>
@@ -147,6 +137,7 @@ export default {
       storySortId:[],
       cssText:"",
       IS:false,
+      addSpace:0,
     };
   },
   created(){
@@ -206,7 +197,7 @@ export default {
       },2)      
     },
     setHeight(){
-      let addSpace = this.aside == "product" && this.role != "icdp_projManager" ? 50 : 0;
+      this.addSpace = this.aside == "product" && this.role != "icdp_projManager" ? 50 : 0;
       let Doms = document.getElementById("board").getElementsByClassName("row-wrapper");
       let inArr = [];
       let Max = "";
@@ -218,7 +209,7 @@ export default {
           }
           Max = Math.max.apply(null,inArr);
           for(let k=0;k<Col.length;k++){
-            Col[k].style.height = Max+addSpace+"px";
+            Col[k].style.height = Max+this.addSpace+"px";
           }
           inArr = [];
           Max = "";
@@ -412,6 +403,18 @@ export default {
 </script>
 
 <style scoped>
+.addSpaceBox{
+  position: relative;
+}
+.addSpaceBox:before{
+  position: absolute;
+  bottom: 5px;
+  left:50%;
+  content: "向空白拖动";
+  font-size: 12px;
+  color:#bbbec4;
+  transform:translate(-50%,0);
+}
 #boardWrapper,#productBoardBox,#demandBoardBox{
   background: #fff;
 }

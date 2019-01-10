@@ -75,7 +75,7 @@ export default {
         if(r == "icdp_projManager"){
           return "isDraggable"
         }else{
-          return n.indexOf(Common.getCookie("username")) != -1 ? "isDraggable" : "";
+          return n.indexOf(Common.getCookie("username")) != -1 ? "isDraggable" : "isOpacity";
         }
       }else if(a == "demand"){
         return s == "07" || s == "08" ? "isDraggable" : "";
@@ -110,6 +110,20 @@ export default {
 </script>
 
 <style scoped>
+.isOpacity{
+  position: relative;
+}
+.isOpacity:after{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  content: "";
+  opacity:0.4;
+  border-radius:4px;
+}
 .levelText{
   padding: 4px 4px;
   float: left;

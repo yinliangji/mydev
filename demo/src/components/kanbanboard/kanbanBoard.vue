@@ -31,16 +31,26 @@
           </Col>
           <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
             <div :id="'kb'+itemGroup.groupId+'_'+items.state" :state="items.state" :groupid="itemGroup.groupId" class="rowBox">
-              <kanbanItem
+              
+              <!-- v-if="itemGroup.groupId == value.groupId && value.taskStatus == items.state"
+                > -->
+              <!-- <kanbanItem
                 :myAside = "aside"
                 :myRole="role"
                 :key="cardIndex"
                 :item = "value"
-                :Group = true
+                :Group = "true"
                 v-for="(value, keys,cardIndex) in cardList"
                 v-if="itemGroup.groupId == value.groupId && value.taskStatus == items.state"
                 >
-               </kanbanItem>
+               </kanbanItem> -->
+               <div v-for="(value, keys,cardIndex) in cardList">
+                i.groupId={{itemGroup.groupId}}<br />
+              v.groupId={{value.groupId}}<br />
+              v.taskStatus={{value.taskStatus}}<br />
+              i.state={{items.state}}<br />
+                 
+               </div>
              </div>
           </Col>
         </Row>
@@ -49,13 +59,13 @@
       <div class="row-wrapper" v-if="groupList.length == 0">
         <Row :gutter="16" type="flex" justify="start" align="top">
           <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
-            <div :id="'stateId_'+items.state" :state="items.state" class="rowBox rowBox2">
+            <div :id="'stateId_'+items.state" :state="items.state"  class="rowBox rowBox2">
               <kanbanItem
                   :myAside = "aside"
                   :myRole="role"
                   :key="keys"
                   :item = "value"
-                  :Group = false
+                  :Group = "false"
                   v-for="(value, keys) in cardList"
                   v-if=" value.taskStatus == items.state">
               </kanbanItem>
@@ -136,6 +146,7 @@ export default {
       sortId:[],
       storySortId:[],
       cssText:"",
+      IS:false,
     };
   },
   created(){
@@ -168,17 +179,17 @@ export default {
     
   },
   mounted(){
-    
-
+    //this.beforeDestroy();
     document.body.ondrop = function(event){
       event.preventDefault();
       event.stopPropagation();
     };
     EventBus.$on("bindSort",this.bindSortId);
-    EventBus.$on("storyBindSort",this.bindStorySortId);
+    //EventBus.$on("storyBindSort",this.bindStorySortId);
     setTimeout(()=>{
       this.autoHeight();  
-    },1000)
+    },1000);
+    
            
   },
   methods:{
@@ -204,7 +215,6 @@ export default {
           let Col = Doms[i].getElementsByClassName("ivu-col");
           for(let j=0;j<Col.length;j++){
             inArr.push(Col[j].offsetHeight)
-            //console.error(Col[j],Col[j].offsetHeight+"-----"+i+"------"+j)
           }
           Max = Math.max.apply(null,inArr);
           for(let k=0;k<Col.length;k++){
@@ -263,9 +273,17 @@ export default {
       });
     },
     bindSortId(){
+      if(this.IS){
+        return
+      }
+      this.IS = true;
       this.$nextTick(()=>{
         this.sortId = [];
-        this.sortId.push(...this.getSortId());
+        if(this.groupLists.length){
+          this.sortId.push(...this.getSortId());
+        }else{
+          this.sortId.push(...this.getStorySortId());
+        }
         if(this.sortId.length >0){
           this.sortId.forEach((sortIdItem,index)=>{
             this.bindSortable(sortIdItem)
@@ -290,24 +308,21 @@ export default {
       return _sortId;
     },
     bindSortable(moveId){
-
       let vm = this;
       let that = vm;
       let todoList = document.getElementById(moveId);
       if(!todoList){
         return;
       }
+
       Sortable.create(todoList,{
         draggable: ".isDraggable",
         group:{
           name:that.boardName,
           
           pull:function(Old,New,Ele,Evt){
-
             if(that.aside && that.aside == "product"){
-              //product star
               return true
-              //product end
             }else{
               return true
             }
@@ -321,9 +336,13 @@ export default {
           },
           put:function(Old,New,Ele,Evt){
             if(that.aside && that.aside == "product"){
-              //product star
               return true
-              //product end
+            }if(that.aside && that.aside == "demand"){
+              if(Old.el.id == "stateId_07" || Old.el.id == "stateId_08"){
+                return true
+              }else {
+                return false
+              }
             }else{
               return true
             }
@@ -334,8 +353,6 @@ export default {
               return true
             }
           },
-          
-          //pull:["#kb6_01", "#kb5_01"],//["foo", "bar"]
           //revertClone:true,
         },
         animation:120,
@@ -372,7 +389,7 @@ export default {
       });
     },
     beforeDestroy(){
-      console.log('开发看板 》》》》》》')
+      console.log('beforeDestroy开发看板 》》》》》》');
       EventBus.$off("bindSort",this.bindSortId);
       EventBus.$off("storyBindSort",this.bindStorySortId);
     },
@@ -395,7 +412,7 @@ export default {
 </script>
 
 <style scoped>
-#boardWrapper{
+#boardWrapper,#productBoardBox,#demandBoardBox{
   background: #fff;
 }
 .topColumn{
@@ -532,7 +549,10 @@ export default {
 .kanbanItemBox{
   
 }
-.ivu-col-span-2{
+#productBoardBox .ivu-col-span-2{
   width: 10.8%;
+}
+#demandBoardBox .ivu-col-span-2{
+  width: 12.4%;
 }
 </style>

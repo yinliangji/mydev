@@ -2,11 +2,11 @@
   <div class="content-header">
      <span class="title">
         {{text}}
-        <span class="number" v-show="myAside == 'product'? true:false">
+        <span class="number" v-show="myAside == 'product' || myAside == 'demand'? true:false">
          {{taskNumber}}
         </span>
      </span>
-     <span v-show="myAside == 'product'? false:true">数量{{taskNumber}}</span>
+     <span v-show="myAside == 'product' || myAside == 'demand'? false:true">数量{{taskNumber}}</span>
   </div>
 </template>
 <script>

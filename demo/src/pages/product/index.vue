@@ -189,8 +189,9 @@
 							:Group="true"
 							:aside="'product'"
 							:role="borderRole"
-							:boardName="'productBoard'" 
-							/>
+							:boardName="'productBoard'"
+							id="productBoardBox" 
+						/>
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div>
 
@@ -242,17 +243,19 @@ export default {
 		formValidate: {
             handler(val, oldVal) {
             	Common.SetSession("userstorySerchTemp",JSON.stringify(val))
-
-
                 // for(let I in val){
                 // 	Common.SetSession(I,val[I]);
                 // }
-
             },
             deep: true
         },
         tableDAtaPageCurrent(val, oldVal){
         	Common.SetSession("tableDAtaPageCurrent",val);
+        },
+        statusListBase: {
+            handler(val, oldVal) {
+            },
+            deep: true
         },
 	},
 	beforecreated(){
@@ -285,14 +288,14 @@ export default {
         	this.isShowMoreShow = false;
         }
 
-        console.log("product--created-------",this.formValidate)
+        console.log("用户故事列表--created-------",this.formValidate,this.statusListBase)
 
     },
     beforeUpdate(){
-        console.log("product--beforeUpdate-------",this.formValidate)
+        console.log("用户故事列表--beforeUpdate-------",this.formValidate,this.statusListBase)
     },
     updated(){
-        console.log("product--updated-------",this.formValidate)
+        console.log("用户故事列表--updated-------",this.formValidate,this.statusListBase)
 
         if(this.addtest){
             this.tabRowAddFn()
@@ -1035,28 +1038,42 @@ export default {
 		},
 
 		/* 看板开始 */
+      	EventBusCancel(){
+      		EventBus.$off("bindSort",this.bindSortId);
+      		EventBus.$off("storyBindSort",this.bindStorySortId);
+      	},
 		EventBusRegister(){
-			if(!EventBus.product){
+			if(!EventBus.productRegister){
 				EventBus.$on("moveEnd", this.moveEnd);
 		        EventBus.$on("clickItem", this.clicked);
 		        EventBus.$on("storyMoveEnd", ()=>{});
 		        //EventBus.$on("storyMoveEnd", this.moveEnd);
 		        EventBus.$on("search", this.searchHandle);
 		        EventBus.$on("addTask", this.addNewTask);
-		        EventBus.product = true;
+		        //EventBus.productRegister = true;
+	        }
+		},
+		EventBusDispatch(){
+			if(!EventBus.productDispatch){
+				//EventBus.$emit('storyBindSort');
+				EventBus.$emit('bindSort');
+		        //EventBus.productDispatch = true;
 	        }
 		},
 		changeStateNumber(info){
-			let _statusBase = this.statusListBase;
+			let _statusBase = _.cloneDeep(this.statusListBase);
+			//let _statusBase = this.statusListBase;
 			let toState = info.evt.to.getAttribute('state');
 			let fromState = info.evt.from.getAttribute('state');
-
+			
 			if(toState == fromState){
 				return;
 			}else{
+				this.statusListBase = [];
 				_statusBase.forEach((item,index)=>{
 					//if(info.item.askStatus == item.state){
 					//if(info.evt.item.getAttribute('state') == item.state){
+					
 					if(fromState == item.state){
 						item.taskNumber = parseFloat(item.taskNumber) - 1
 					}
@@ -1064,8 +1081,9 @@ export default {
 						item.taskNumber = parseFloat(item.taskNumber) + 1
 					}
 				});
-				this.statusListBase = [];
-				this.statusListBase.push(..._statusBase)
+				//this.statusListBase = _statusBase;
+				//this.$set(this.statusListBase[0],"taskNumber", 100)
+				this.statusListBase.push(..._statusBase);
 			}
 
 			
@@ -1077,10 +1095,6 @@ export default {
 			_params.ID = info.evt.item.getAttribute('detailid');
 			_params.taskStatus = info.evt.to.getAttribute('state');
 
-		
-
-
-
 			defaultAXIOS(storySetChange,{id:_params.ID,username:Common.getCookie("username"),userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======用户故事 状态改变***response+++",response,myData,"======>");
@@ -1089,11 +1103,9 @@ export default {
                 }else{
                 	this.cardpopList = [];
                 	return;
-
                 	if(myData.no_complete_task_list && Array.isArray(myData.no_complete_task_list) && myData.no_complete_task_list.length){
                 		this.cardpop = true;
                 		this.cardpopList = myData.no_complete_task_list;
-
                 		this.cardpopList.forEach((item)=>{
                 			item.task_statusCN = Common.StatusFn(item.task_status,"userstory_status",this);
                 		})
@@ -1110,17 +1122,33 @@ export default {
 				return
 			}
             // 移动卡片结束后
-            console.log("product 移动卡片结束后 :::", info);
+            console.log("用户故事-移动卡片结束后 :::", info);
             this.changeStateNumber(info);
-            this.changeMovedStatus(info);
+            if(!EventBus.productMoveEnd){
+            	this.changeMovedStatus(info);
+            	console.log("用户故事-移动卡片结束后 ::: changeMovedStatus", info);
+            	EventBus.productMoveEnd = true;
+            	setTimeout(()=>{
+            		EventBus.productMoveEnd = false;
+            	},500)	
+            }
+            
         },
         clicked(info) {
         	if(window.location.hash.indexOf("/product") == -1){
 				return
 			}
             // 点击卡片方法
-            console.log("product 点击卡片方法 ::: ", info);
-            this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
+            console.log("用户故事-点击卡片方法 ::: ", info);
+            if(!EventBus.productClicked){
+            	console.log("用户故事-点击卡片方法 ::: this.$router.push", info);
+            	this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
+            	EventBus.productClicked = true;
+            	setTimeout(()=>{
+            		EventBus.productClicked = false;
+            	},500)	
+            }
+            
         },
         searchHandle(info) {
             // 查询方法
@@ -1149,15 +1177,15 @@ export default {
 			},350)
 		},
 		resetKanbanboard(){
-			this.cardListBase=[];
-			this.statusListBase=[];
-			this.groupList=[{ text: "所属需求项" }];
+			this.cardListBase = [];
+			this.statusListBase = [];
+			this.groupList = [{ text: "所属需求项" }];
 		},
 		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
 			this.cardList = [];
 			this.statusList = [];
-			this.cardListBase=[],
-            this.statusListBase=[],
+			this.cardListBase = [];
+            this.statusListBase = [];
 			defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint,username:Common.getCookie("username"),prjSn:Common.getCookie("prjSn")},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 if(myData.status == "success" ){
@@ -1192,7 +1220,6 @@ export default {
                 		this.statusListBase.push(_temp);
                 		_temp = {};
                 	}
-
                 	let reqArr2 = Array.from(new Set(reqArr));
                 	let checkreqName = (val)=>{
                 		let _temp
@@ -1244,8 +1271,7 @@ export default {
 						this.cardListBase.push(..._arr);
 						_arr = []
 					}
-					//EventBus.$emit('storyBindSort');
-					EventBus.$emit('bindSort');
+					this.EventBusDispatch();
                 }else{
                 	this.showError(URL+"_没有数据");
                 }

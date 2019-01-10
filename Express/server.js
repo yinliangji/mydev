@@ -711,6 +711,238 @@ app.all('/userstory/getUserStoryKanBan/', function(req, res) {
     res.end()
 });
 
+let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        status: "success", 
+        message: "ok" ,
+        data:[
+            {
+                count:4,
+                userstory_status:"提出",
+                list:[
+                    {
+                        userstory_name:"userstory_name_1",
+                        userstory_id:101,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:1,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_2",
+                        userstory_id:102,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:2,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_3",
+                        userstory_id:103,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:3,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_4",
+                        userstory_id:104,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:4,
+                        "req_id|1":[5,6],
+                    }
+                ]
+            },
+            {
+                count:4,
+                userstory_status:"价值分析",
+                list:[
+                    {
+                        userstory_name:"userstory_name_5",
+                        userstory_id:105,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:5,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_6",
+                        userstory_id:106,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:6,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_7",
+                        userstory_id:107,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:7,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_8",
+                        userstory_id:108,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:8,
+                        "req_id|1":[5,6],
+                    }
+                ]
+            },
+            {
+                count:2,
+                userstory_status:"已选中",
+                list:[
+                    {
+                        userstory_name:"userstory_name_9",
+                        userstory_id:109,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:9,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_10",
+                        userstory_id:110,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:10,
+                        "req_id|1":[5,6],
+                    },
+                   
+                ]
+            },
+            {
+                count:2,
+                userstory_status:"澄清",
+                list:[
+                    {
+                        userstory_name:"userstory_name_11",
+                        userstory_id:111,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:11,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_12",
+                        userstory_id:112,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:12,
+                        "req_id|1":[5,6],
+                    },
+                   
+                ]
+            },
+            {
+                count:2,
+                userstory_status:"开发中",
+                list:[
+                    {
+                        userstory_name:"userstory_name_13",
+                        userstory_id:113,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:13,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_14",
+                        userstory_id:114,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:14,
+                        "req_id|1":[5,6],
+                    },
+                   
+                ]
+            },
+            {
+                count:2,
+                userstory_status:"用户验收测试",
+                list:[
+                    {
+                        userstory_name:"userstory_name_15",
+                        userstory_id:115,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:15,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_16",
+                        userstory_id:116,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:16,
+                        "req_id|1":[5,6],
+                    },
+                   
+                ]
+            },
+            {
+                count:2,
+                userstory_status:"已上线",
+                list:[
+                    {
+                        userstory_name:"userstory_name_17",
+                        userstory_id:117,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:17,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_18",
+                        userstory_id:118,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:18,
+                        "req_id|1":[5,6],
+                    },
+                   
+                ]
+            },
+            {
+                count:2,
+                userstory_status:"确认完成",
+                list:[
+                    {
+                        userstory_name:"userstory_name_19",
+                        userstory_id:119,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:19,
+                        "req_id|1":[5,6],
+                    },
+                    {
+                        userstory_name:"userstory_name_20",
+                        userstory_id:120,
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        "proi|1":[1,2,3],
+                        id:20,
+                        "req_id|1":[5,6],
+                    },
+                   
+                ]
+            },
+        ],
+        "role|1":["icdp_projManager","icdp_teamLeader"],
+    })
+}
+
+app.all('/req/getRequirementKanBan/', function(req, res) {
+    let resVal = kanbanReqList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(kanbanReqList(req.body.myStatus));
+    res.end()
+});
+
 
 
 

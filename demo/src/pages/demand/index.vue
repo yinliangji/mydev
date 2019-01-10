@@ -132,8 +132,9 @@
                             :groupList="[]" 
                             :Group="true"
                             :aside="'demand'"
-                            :boardName="'productBoard'"  
-                            />
+                            :boardName="'demandBoard'" 
+                            id="demandBoardBox"
+                        />
                     </div>
 
 
@@ -176,7 +177,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAll,getPermission,projectDetail,reqDelect,storySetChange,storyGetKanBan} = Common.restUrl;
+const {reqAll,getPermission,projectDetail,reqDelect,storySetChange,getRequirementKanBan} = Common.restUrl;
 
 import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 import Addtablepop from "./addtablepop";
@@ -374,27 +375,25 @@ export default {
     mounted(){
         this.getPermissionFn(getPermission);
         let ID = Common.GETID(this,Common) ? Common.GETID(this,Common) : this.$router.push('/agile');
-        
+
         //this.getPermissionFn(getPermission);
-        
+
         /*
         this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
         this.tableDAtaPageCurrent = 1;
         */
-       this.getInfoFn(ID);
+        this.checkUrlBoard();
+        this.EventBusRegister();
+        this.getInfoFn(ID);
+       
 
-       this.EventBusRegister();
     },
     beforecreated(){
         console.log("项目需求项--beforecreated-------",this.formValidate)
     },
     created(){
         console.log("项目需求项--created-------",this.formValidate);
-        if(this.$router.history.current.query.board && this.$router.history.current.query.board == "true"){
-            this.currentView = "kanbanboard";
-        }else{
-            this.currentView = "developList";
-        }
+        this.checkUrlBoard();
     },
     beforeUpdate(){
         console.log("项目需求项--beforeUpdate--","this.isShowITMPop==>",this.isShowITMPop)
@@ -403,28 +402,42 @@ export default {
         console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
+        checkUrlBoard(){
+            if(this.$router.history.current.query.board){
+                this.currentView = "kanbanboard";
+            }else{
+                if(Common.GetSession("CurView_demand") && Common.GetSession("CurView_demand") == "kanbanboard"){
+                    this.currentView = "kanbanboard";
+                }else{
+                    this.currentView = "developList";    
+                }
+            }
+        },
         getInfoFn(ID,isShowList){
             if(this.currentView == "kanbanboard"){
-                this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+                this.storyGetKanBanFn(getRequirementKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
             }else{
                 this.tableDataAjaxFn(reqAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID);
             }
-            
-            
-
-            
-
         },
         //看板开始
+        EventBusDispatch(){
+            if(!EventBus.productDispatch){
+                //EventBus.$emit('storyBindSort');
+                EventBus.$emit('bindSort');
+                //EventBus.productDispatch = true;
+            }
+        },
         EventBusRegister(){
-            if(!EventBus.demand){
+            if(!EventBus.demandRegister){
                 EventBus.$on("moveEnd", this.moveEnd);
                 EventBus.$on("clickItem", this.clicked);
                 EventBus.$on("search", this.searchHandle);
                 EventBus.$on("addTask", this.addNewTask);
                 //EventBus.$on("storyMoveEnd", this.moveEnd);
                 EventBus.$on("storyMoveEnd", ()=>{});
-                EventBus.demand = true;
+                EventBus.demandRegister = false;
+
             }
         },
         showList() {
@@ -522,8 +535,10 @@ export default {
                         this.cardListBase.push(..._arr);
                         _arr = []
                     }
+                    this.EventBusDispatch();
                     //EventBus.$emit('storyBindSort');
-                    EventBus.$emit('bindSort');
+                    //EventBus.$emit('bindSort');
+
                 }else{
                     this.showError(URL+"_没有数据");
                 }
@@ -534,13 +549,15 @@ export default {
 
         },
         changeStateNumber(info){
-            let _statusBase = this.statusListBase;
+            //let _statusBase = this.statusListBase;
+            let _statusBase = _.cloneDeep(this.statusListBase);
             let toState = info.evt.to.getAttribute('state');
             let fromState = info.evt.from.getAttribute('state');
 
             if(toState == fromState){
                 return;
             }else{
+                this.statusListBase = [];
                 _statusBase.forEach((item,index)=>{
                     //if(info.item.askStatus == item.state){
                     //if(info.evt.item.getAttribute('state') == item.state){
@@ -551,11 +568,8 @@ export default {
                         item.taskNumber = parseFloat(item.taskNumber) + 1
                     }
                 });
-                this.statusListBase = [];
                 this.statusListBase.push(..._statusBase)
             }
-
-            
         },
         changeMovedStatus(info){
             let _params = {};
@@ -583,17 +597,41 @@ export default {
                 return
             }
             // 移动卡片结束后
-            console.log("demand 移动卡片结束后 :::", info);
+            //console.log("需求项-移动卡片结束后 :::", info);
+            //this.changeStateNumber(info);
+            //this.changeMovedStatus(info);
+
+            console.log("需求项-移动卡片结束后 :::", info);
             this.changeStateNumber(info);
-            this.changeMovedStatus(info);
+            if(!EventBus.demandMoveEnd){
+                this.changeMovedStatus(info);
+                console.log("需求项-移动卡片结束后 ::: changeMovedStatus", info);
+                EventBus.demandMoveEnd = true;
+                setTimeout(()=>{
+                    EventBus.demandMoveEnd = false;
+                },500)  
+            }
+
+
         },
         clicked(info) {
             if(window.location.hash.indexOf("/demand") == -1){
                 return
             }
             // 点击卡片方法
-            console.log("demand 点击卡片方法 ::: ", info);
-            this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
+            console.log("需求项-点击卡片方法 ::: ", info);
+            //this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
+            /*
+            if(!EventBus.demandClicked){
+                console.log("需求项-点击卡片方法 ::: this.$router.push", info);
+                this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
+                EventBus.demandClicked = true;
+                setTimeout(()=>{
+                    EventBus.demandClicked = false;
+                },500)  
+            }
+            */
+
         },
         searchHandle(info) {
             // 查询方法

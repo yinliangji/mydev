@@ -9,7 +9,7 @@
     :detailid="item.detail_id"
     :groupId="item.groupId"
     :nickname="item.nickName"
-    :class="isDraggable(myRole,myAside,item.nickName)"
+    :class="isDraggable(myRole,myAside,item.nickName,item.taskStatus)"
     >
       <div class="card-wrap">
 
@@ -25,7 +25,7 @@
               {{item.nickName}}
           </span>
           <!-- <img :src="item.headPortrait" width="21" height="21" /> -->
-          <img v-show="myAside == 'product'? false:true" :src="headPortrait" width="21" height="21" />
+          <img v-show="myAside == 'product' || myAside == 'demand'? false:true" :src="headPortrait" width="21" height="21" />
         </p>
       </div>
   </div>
@@ -70,13 +70,15 @@ export default {
     
   },
   methods: {
-    isDraggable(r,a,n){//myRole,myAside,item.nickName
+    isDraggable(r,a,n,s){//myRole,myAside,item.nickName,item.taskStatus
       if(a == "product"){
         if(r == "icdp_projManager"){
           return "isDraggable"
         }else{
           return n.indexOf(Common.getCookie("username")) != -1 ? "isDraggable" : "";
         }
+      }else if(a == "demand"){
+        return s == "07" || s == "08" ? "isDraggable" : "";
       }else{
         return "isDraggable"
       }

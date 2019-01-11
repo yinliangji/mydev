@@ -241,6 +241,9 @@ CommonRest.restUrl = {
 
     "getRequirementKanBan": process.env.BASE_URL + "/req/getRequirementKanBan/",
     /**** 需求项目添加--所属逻辑子系统 get****/
+
+    "reqSetChange": process.env.BASE_URL + "/req/setRequirementFinish/",
+    /**** 需求项目看板拖动 get****/
 }
 
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);

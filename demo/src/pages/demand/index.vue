@@ -177,7 +177,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAll,getPermission,projectDetail,reqDelect,storySetChange,getRequirementKanBan} = Common.restUrl;
+const {reqAll,getPermission,projectDetail,reqDelect,reqSetChange,getRequirementKanBan} = Common.restUrl;
 
 import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 import Addtablepop from "./addtablepop";
@@ -415,7 +415,7 @@ export default {
         },
         getInfoFn(ID,isShowList){
             if(this.currentView == "kanbanboard"){
-                this.storyGetKanBanFn(getRequirementKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+                this.storyGetKanBanFn(getRequirementKanBan,ID,this.formValidate.req_id,this.formValidate.req_name,this.formValidate.req_submitter,);
             }else{
                 this.tableDataAjaxFn(reqAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID);
             }
@@ -425,7 +425,7 @@ export default {
             if(!EventBus.productDispatch){
                 //EventBus.$emit('storyBindSort');
                 EventBus.$emit('bindSort');
-                //EventBus.productDispatch = true;
+                EventBus.productDispatch = false;
             }
         },
         EventBusRegister(){
@@ -456,15 +456,30 @@ export default {
                 this.getInfoFn(this.getID(),"showTask")
             },350)
         },
-        storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
+        storyGetKanBanFn(URL = "",id="",req_id = "",req_name = "",req_submitter = ""){
             this.cardList = [];
             this.statusList = [];
             this.cardListBase=[],
             this.statusListBase=[],
-            defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
+            defaultAXIOS(URL,{id:id,prj_id:id,req_id,req_name,req_submitter},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
+                let statusData = myData.status_data ? myData.status_data : false;
                 console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
                 myData = myData.data ? myData.data : myData;
+
+                let fn =(arr,val)=>{
+                    if(arr && Array.isArray(arr) && arr.length){
+                        let obj = arr.find((item)=>{
+                            return item.value == val;
+                        })
+                        return obj.key;
+                    }else{
+                        return false
+                    }
+                }
+
+                
+
                 if(myData && myData.length){
                     
                     let _temp = {};
@@ -476,9 +491,10 @@ export default {
                             }
                         }
                         //
-                        _temp.stateStr = myData[i].userstory_status;
+                        _temp.stateStr = myData[i].req_status;
                         _temp.taskNumber = Number(myData[i].count);
-                        _temp.state = "0"+(i+1);
+                        //_temp.state = "0"+(i+1);
+                        _temp.state = fn(statusData,myData[i].req_status) ? "0"+fn(statusData,myData[i].req_status) : "0"+(i+1);
                         this.statusList.push(_temp);
                         this.statusListBase.push(_temp);
                         _temp = {};
@@ -509,23 +525,26 @@ export default {
 
                     let _arr = [];
                     let _Obj = {};
+
                     
                     
                     for(let i=0;i<myData.length;i++){
 
                     
                         for(let j=0;j<myData[i].list.length;j++){
-                            _Obj.taskStatus = "0"+(i+1);
-                            _Obj.taskId = ""+myData[i].list[j].userstory_id;
-                            _Obj.description = "description_"+ i +"_"+j;
+                            //_Obj.taskStatus = "0"+(i+1);
+                            _Obj.taskStatus = fn(statusData,myData[i].req_status) ? "0"+fn(statusData,myData[i].req_status) : "0"+(i+1)
+                            _Obj.taskId = ""+myData[i].list[j].req_id;
+                            //_Obj.description = "description_"+ i +"_"+j;
+                            _Obj.description = myData[i].list[j].comment;
                             _Obj.userName = myData[i].list[j].charger;
                             _Obj.userId = "userId_"+ i +"_"+j;
                             _Obj.groupId = myData[i].list[j].req_id+"";
-                            //_Obj.bgColor = { background: ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi) };
+                            //_Obj.groupId = 10000+"";
                             _Obj.bgcolor = ((C)=>{if(C==1){return '#FE4515'}else if(C==2){return '#12C37A'}else if(C==3){return '#FEB159'}else{return '#ffffff'}})(myData[i].list[j].proi);
-                            _Obj.taskStateStr = myData[i].userstory_status;
-                            _Obj.headPortrait =   require("@/assets/images/user_02.png"); //"/assets/images/user_02.png";
-                            _Obj.taskName = myData[i].list[j].userstory_name;
+                            _Obj.taskStateStr = myData[i].req_status;
+                            _Obj.headPortrait =   require("@/assets/images/user_02.png");
+                            _Obj.taskName = myData[i].list[j].req_name;
                             _Obj.nickName = myData[i].list[j].charger
                             _Obj.detail_id = myData[i].list[j].id
                             _arr.push(_Obj);
@@ -577,12 +596,13 @@ export default {
             //_params.ID = info.item.detail_id;
             _params.ID = info.evt.item.getAttribute('detailid');
             _params.taskStatus = info.evt.to.getAttribute('state');
+            _params.nickname = info.evt.item.getAttribute('nickname');
 
-            defaultAXIOS(storySetChange,{id:_params.ID,userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
+            defaultAXIOS(reqSetChange,{id:_params.ID,status:_params.taskStatus.substring(1),charger:_params.nickname},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======用户故事 状态改变***response+++",response,myData,"======>");
                 if(myData.status.indexOf("success") == -1){
-                    this.showError(storySetChange+"|返回结果错误");
+                    this.showError(reqSetChange+"|返回结果错误");
                 }else{
                     
                 }

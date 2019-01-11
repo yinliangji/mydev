@@ -14,7 +14,7 @@
       <div class="card-wrap">
 
         <p class="item-content" :title="item.taskName">
-          <span class="levelText" :style="{'background':item.bgcolor}">
+          <span class="levelText" :style="{'background':item.bgcolor}" v-show="item.bgcolor.indexOf('ffffff') == -1">
             {{levelText(item.bgcolor)}}
           </span>
           {{item.taskName}}
@@ -115,14 +115,16 @@ export default {
 }
 .isOpacity:after{
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  left: 50%;
+  top: 50%;
+  width: 95%;
+  height: 90%;
+  transform:translate(-50%,-50%);
   background: black;
   content: "";
-  opacity:0.3;
+  opacity:0.15;
   border-radius:4px;
+  cursor: pointer;
 }
 .levelText{
   padding: 4px 4px;

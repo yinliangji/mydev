@@ -49,7 +49,7 @@
       <div class="row-wrapper" v-if="groupList.length == 0">
         <Row :gutter="16" type="flex" justify="start" align="top">
           <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
-            <div :id="'stateId_'+items.state" :state="items.state"  class="rowBox rowBox2">
+            <div :id="'stateId_'+items.state" :state="items.state"  class="rowBox rowBox2" :class="isPut.indexOf(items.state) == -1?'noPutBg':''">
               <kanbanItem
                   :myAside = "aside"
                   :myRole="role"
@@ -138,6 +138,8 @@ export default {
       cssText:"",
       IS:false,
       addSpace:0,
+      isPut:["07","08"],
+
     };
   },
   created(){
@@ -318,18 +320,23 @@ export default {
               return true
             }
             //console.error("**pull old Sortable==>",Old,"**pull new Sortable==>",New,"***pull HTML元素==>",Ele,"**pull DragEvent==>",Evt);
-            if(New.el.id == "kb6_01" || New.el.id == "kb6_02"){
-              return false
-            }else {
-              return true
-            }
+            // if(New.el.id == "kb6_01" || New.el.id == "kb6_02"){
+            //   return false
+            // }else {
+            //   return true
+            // }
             
           },
           put:function(Old,New,Ele,Evt){
             if(that.aside && that.aside == "product"){
               return true
             }if(that.aside && that.aside == "demand"){
-              if(Old.el.id == "stateId_07" || Old.el.id == "stateId_08"){
+              let fn = (arr,val)=>{
+                return arr.find((item)=>{
+                  return "stateId_"+item == val;
+                })
+              }
+              if(fn(that.isPut,Old.el.id)){//Old.el.id == "stateId_07" || Old.el.id == "stateId_08"
                 return true
               }else {
                 return false
@@ -338,11 +345,11 @@ export default {
               return true
             }
             //console.error("**put old Sortable==>",Old,"**put new Sortable==>",New,"***put HTML元素==>",Ele,"**put DragEvent==>",Evt);
-            if(Old.el.id == "kb6_01" || Old.el.id == "kb6_02" || Old.el.id == "kb6_03"){
-              return false
-            }else {
-              return true
-            }
+            // if(Old.el.id == "kb6_01" || Old.el.id == "kb6_02" || Old.el.id == "kb6_03"){
+            //   return false
+            // }else {
+            //   return true
+            // }
           },
           //revertClone:true,
         },
@@ -403,6 +410,9 @@ export default {
 </script>
 
 <style scoped>
+.noPutBg{
+  background: #f8f8f9;
+}
 .addSpaceBox{
   position: relative;
 }
@@ -414,6 +424,7 @@ export default {
   font-size: 12px;
   color:#bbbec4;
   transform:translate(-50%,0);
+  white-space: nowrap;
 }
 #boardWrapper,#productBoardBox,#demandBoardBox{
   background: #fff;

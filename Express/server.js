@@ -718,220 +718,211 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
         data:[
             {
                 count:4,
-                userstory_status:"提出",
+                req_status:"提出",
                 list:[
                     {
-                        userstory_name:"userstory_name_1",
-                        userstory_id:101,
+                        req_name:"req_name_1",
+                        req_id:"RQ-PJ1800130-101",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:1,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_2",
-                        userstory_id:102,
+                        req_name:"req_name_2",
+                        req_id:"RQ-PJ1800130-102",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:2,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_3",
-                        userstory_id:103,
+                        req_name:"req_name_3",
+                        req_id:"RQ-PJ1800130-103",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:3,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_4",
-                        userstory_id:104,
+                        req_name:"req_name_4",
+                        req_id:"RQ-PJ1800130-104",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:4,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     }
                 ]
             },
             {
                 count:4,
-                userstory_status:"价值分析",
+                req_status:"价值分析",
                 list:[
                     {
-                        userstory_name:"userstory_name_5",
-                        userstory_id:105,
+                        req_name:"req_name_5",
+                        req_id:"RQ-PJ1800130-105",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:5,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_6",
-                        userstory_id:106,
+                        req_name:"req_name_6",
+                        req_id:"RQ-PJ1800130-106",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:6,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_7",
-                        userstory_id:107,
+                        req_name:"req_name_7",
+                        req_id:"RQ-PJ1800130-107",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:7,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_8",
-                        userstory_id:108,
+                        req_name:"req_name_8",
+                        req_id:"RQ-PJ1800130-108",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:8,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     }
                 ]
             },
             {
                 count:2,
-                userstory_status:"已选中",
+                req_status:"已选中",
                 list:[
                     {
-                        userstory_name:"userstory_name_9",
-                        userstory_id:109,
+                        req_name:"req_name_9",
+                        req_id:"RQ-PJ1800130-109",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:9,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_10",
-                        userstory_id:110,
+                        req_name:"req_name_10",
+                        req_id:"RQ-PJ1800130-110",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:10,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                    
                 ]
             },
             {
                 count:2,
-                userstory_status:"澄清",
+                req_status:"澄清",
                 list:[
                     {
-                        userstory_name:"userstory_name_11",
-                        userstory_id:111,
+                        req_name:"req_name_11",
+                        req_id:"RQ-PJ1800130-111",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:11,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_12",
-                        userstory_id:112,
+                        req_name:"req_name_12",
+                        req_id:"RQ-PJ1800130-112",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:12,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                    
                 ]
             },
             {
                 count:2,
-                userstory_status:"开发中",
+                req_status:"开发测试",
                 list:[
                     {
-                        userstory_name:"userstory_name_13",
-                        userstory_id:113,
+                        req_name:"req_name_13",
+                        req_id:"RQ-PJ1800130-113",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:13,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_14",
-                        userstory_id:114,
+                        req_name:"req_name_14",
+                        req_id:"RQ-PJ1800130-114",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:14,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                    
                 ]
             },
             {
                 count:2,
-                userstory_status:"用户验收测试",
+                req_status:"验收测试",
                 list:[
                     {
-                        userstory_name:"userstory_name_15",
-                        userstory_id:115,
+                        req_name:"req_name_15",
+                        req_id:"RQ-PJ1800130-115",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:15,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_16",
-                        userstory_id:116,
+                        req_name:"req_name_16",
+                        req_id:"RQ-PJ1800130-116",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:16,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                    
                 ]
             },
             {
                 count:2,
-                userstory_status:"已上线",
+                req_status:"上线投产",
                 list:[
                     {
-                        userstory_name:"userstory_name_17",
-                        userstory_id:117,
+                        req_name:"req_name_17",
+                        req_id:"RQ-PJ1800130-117",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:17,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_18",
-                        userstory_id:118,
+                        req_name:"req_name_18",
+                        req_id:"RQ-PJ1800130-118",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:18,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                    
                 ]
             },
             {
                 count:2,
-                userstory_status:"确认完成",
+                req_status:"完成确认",
                 list:[
                     {
-                        userstory_name:"userstory_name_19",
-                        userstory_id:119,
+                        req_name:"req_name_19",
+                        req_id:"RQ-PJ1800130-119",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:19,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                     {
-                        userstory_name:"userstory_name_20",
-                        userstory_id:120,
+                        req_name:"req_name_20",
+                        req_id:"RQ-PJ1800130-120",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
-                        "proi|1":[1,2,3],
                         id:20,
-                        "req_id|1":[5,6],
+                        comment:"@title",
                     },
                    
                 ]
             },
         ],
         "role|1":["icdp_projManager","icdp_teamLeader"],
+        status_data:[
+            {value:"提出",key:"1"},
+            {value:"价值分析",key:"2"},
+            {value:"已选中",key:"3"},
+            {value:"澄清",key:"4"},
+            {value:"开发测试",key:"5"},
+            {value:"验收测试",key:"6"},
+            {value:"上线投产",key:"7"},
+            {value:"完成确认",key:"8"},
+        ],
+
     })
 }
 
@@ -2395,8 +2386,15 @@ app.all('/userstory/changeUserstoryStatus/', function(req, res) {
     }else{
         res.json({status:"success",no_complete_task_list:[]});
     }
-    
-    
+    res.end()
+});
+
+app.all('/req/setRequirementFinish/', function(req, res) {
+    let resVal = changeUserstoryStatus(req.body.myStatus, req.body.page, req.body.pageline);
+    //console.log("resVal==>", resVal);
+    console.log("req.body==>", req.body);
+    console.log("req==req/setRequirementFinish==>",req._parsedUrl.query);
+    res.json({status:"success",message:"改变成功"});
     res.end()
 });
 

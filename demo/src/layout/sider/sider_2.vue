@@ -37,6 +37,22 @@
 			<Icon type="document-text"></Icon>
 			<span>附件管理</span>
 		</MenuItem>
+		<MenuItem name="1-12">
+			<router-link  to="/dependManage" />
+			<Icon type="social-codepen-outline"></Icon>
+			<span>依赖管理</span>
+		</MenuItem>
+		<MenuItem name="1-15">
+			<router-link  to="/testCaseUrl" />
+			<Icon type="medkit"></Icon>
+			<span>测试案例与缺陷管理</span>
+		</MenuItem>
+		<MenuItem name="1-16">
+			<router-link  to="/setting" />
+			<Icon type="settings"></Icon>
+			<span>项目设置</span>
+		</MenuItem>
+
 	</aside>
 			
 </template>

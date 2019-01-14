@@ -25,7 +25,7 @@ export default {
 	name: 'sider_1',
 	data(){
 		return{
-			isShowMngAllBtn:false,
+			isShowMngAllBtn:true,
 		}
 	},
 	methods:{

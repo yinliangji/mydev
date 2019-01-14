@@ -63,6 +63,30 @@ const router = new Router({
                 }
             },
         },
+        {
+            path: '/userAdvice',
+            name: 'userAdvice',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/userAdvice/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_1"], resolve)
+                }
+            },
+        },
+        {
+            path: '/dependManage',
+            name: 'dependManage',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/dependManage/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
         //
         {
             path: '/agile/detail',
@@ -311,6 +335,54 @@ const router = new Router({
             components: {
                 Cont: resolve => {
                     require(["../pages/iteration/iteration"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
+        {
+            path: '/setting',
+            name: 'setting',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/setting/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
+        {
+            path: '/dataSynchro',
+            name: 'dataSynchro',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/dataSynchro/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_1"], resolve)
+                }
+            },
+        },
+        
+        {
+            path: '/testCaseUrl',
+            name: 'testCaseUrl',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/testCaseUrl/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },{
+            path: '/documents',
+            name: 'documents',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/documents/"], resolve)
                 },
                 Aside: resolve => {
                     require(["../layout/sider/sider_2"], resolve)

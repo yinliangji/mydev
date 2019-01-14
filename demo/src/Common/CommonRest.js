@@ -195,12 +195,6 @@ CommonRest.restUrl = {
     /**** 用户故事导出word get****/
 
 
-
-
-    
-
-
-
     /*****************************************/
 
     "getPermission": process.env.BASE_URL + "/auth/getPermissionfromUser/",
@@ -244,6 +238,11 @@ CommonRest.restUrl = {
 
     "reqSetChange": process.env.BASE_URL + "/req/setRequirementFinish/",
     /**** 需求项目看板拖动 get****/
+
+    /*****************************************/
+
+    "getUserByProjId": process.env.BASE_URL + "/agile/getUserByProjId/",
+    /**** 项目设置获取人员列表 get****/
 }
 
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);

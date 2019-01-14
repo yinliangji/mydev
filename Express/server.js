@@ -1594,29 +1594,6 @@ let GroupList_ = (val1 = 200, val2 = "", val3 = 3) => {
 let trueorfalse = 0;
 
 
-app.all('/agile/getUsersxxxxxxxxxxxx/', function(req, res) {
-
-    let val2 = req.query && req.query.name ? req.query.name : "";
-    let resVal
-    let Json
-    if(trueorfalse == 0){
-        Json =  GroupList(req.body.myStatus,val2)   
-        //resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
-    }else if(trueorfalse == 1){
-        Json =  _GroupList(req.body.myStatus,val2) 
-        //resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
-
-    }else{
-        Json =  GroupList_(req.body.myStatus,val2)   
-        //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
-    }
-    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
-    console.log("Json==>", Json);
-    trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
-    console.log(trueorfalse)
-    res.json(Json);
-    res.end()
-});
 
 app.all('/agile/getUsers/', function(req, res) {
 
@@ -3251,6 +3228,37 @@ app.all('/designer/project_id/', function(req, res) {
 });
 
 
+
+let GetUserByProjId = (val1 = 200, val2 = "", val3 = 3) => {
+    return Mock.mock([
+        {
+            nick_name: 'lihua3.zh(李华-中国建设银行)',
+            user_name: 'lihua3.zh',
+            prj_id:"PH1800040-01",
+            
+        },
+        {
+            nick_name: 'xiebei.zh(谢蓓-中国建设银行)',
+            user_name: 'xiebei.zh',
+            prj_id:"PH1800040-01",
+            
+        },
+        {
+            nick_name: 'lizhuo.zh(李卓-中国建设银行)',
+            user_name: 'lizhuo.zh',
+            prj_id:"PH1800040-01",
+        },
+        
+    ])
+}
+
+app.all('/agile/getUserByProjId/', function(req, res) {
+    let Json = GetUserByProjId(req.body.myStatus);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
+    console.log("Json==>", Json);
+    res.json(Json);
+    res.end()
+});
 
 
 /************qhc */

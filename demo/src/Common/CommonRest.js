@@ -242,7 +242,23 @@ CommonRest.restUrl = {
     /*****************************************/
 
     "getUserByProjId": process.env.BASE_URL + "/agile/getUserByProjId/",
-    /**** 项目设置获取人员列表 get****/
+    /**** 项目设置获取人员 get****/
+    
+    "addGroupUsers": process.env.BASE_URL + "/agile/groupmemagement/add_group_users/",
+    /**** 项目设置添加分组 post****/
+
+    "addUsers": process.env.BASE_URL + "/agile/groupmemagement/add_user/",
+    /**** 项目设置添加人员 post****/
+
+    "deleteMember": process.env.BASE_URL + "/agile/groupmemagement/delete_member/",
+    /**** 项目设置删除人员 post****/
+
+    "deleteGroup": process.env.BASE_URL + "/agile/groupmemagement/delete_group/",
+    /**** 项目设置删除人员 post****/
+
+    "listGroup": process.env.BASE_URL + "/agile/groupmemagement/list/",
+    /**** 项目设置删除人员 post****/
+
 }
 
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);

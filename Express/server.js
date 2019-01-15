@@ -3077,6 +3077,8 @@ app.all('/agile/relative_userstory/', function(req, res) {
 });
 
 
+
+
 let edit_bfunc2 = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": "success",
@@ -3206,12 +3208,12 @@ app.all('/userstory/deleteUserstory/', function(req, res) {
 });
 
 app.all('/exportExcelFile/usDetailExp/', function(req, res) {
-    res.json({status: "success",message: "delete_list success",});
+    res.json({status: "success",message: "usDetailExp success",});
     res.end()
 });
 
 app.all('/exportExcelFile/usBfuncExp/', function(req, res) {
-    res.json({status: "success",message: "delete_list success",});
+    res.json({status: "success",message: "usBfuncExp success",});
     res.end()
 });
 
@@ -3219,13 +3221,35 @@ app.all('/exportExcelFile/usBfuncExp/', function(req, res) {
 
 
 app.all('/designer/application_erro/', function(req, res) {
-    res.json({status: "success",message: "delete_list success",});
+    res.json({status: "success",message: "application_erro success",});
     res.end()
 });
 app.all('/designer/project_id/', function(req, res) {
-    res.json({status: "success",message: "delete_list success",});
+    res.json({status: "success",message: "project_id success",});
     res.end()
 });
+
+app.all('/agile/groupmemagement/add_group_users/', function(req, res) {
+    res.json({status: "success",message: "add_group_users success",data:"groupSnxxxxx"});
+    res.end()
+});
+
+app.all('/agile/groupmemagement/add_user/', function(req, res) {
+    res.json({status: "success",message: "add_users success"});
+    res.end()
+});
+
+app.all('/agile/groupmemagement/delete_member/', function(req, res) {
+    res.json({status: "success",message: "delete_member success"});
+    res.end()
+});
+
+app.all('/agile/groupmemagement/delete_group/', function(req, res) {
+    res.json({status: "success",message: "delete_group success"});
+    res.end()
+});
+
+
 
 
 
@@ -3254,6 +3278,74 @@ let GetUserByProjId = (val1 = 200, val2 = "", val3 = 3) => {
 
 app.all('/agile/getUserByProjId/', function(req, res) {
     let Json = GetUserByProjId(req.body.myStatus);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
+    console.log("Json==>", Json);
+    res.json(Json);
+    res.end()
+});
+
+
+let getSetGroup = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "detail xxxxxxx",
+        data: [
+            {
+                "group_sn":"groupSn_1",
+                "groupName":"产品经理",
+                "member":[
+                    {
+                        "nick_name":"李卓",
+                        "user_name":"lizhuo.zh",
+                    },
+                   
+                ],
+
+            },
+            {   
+                "group_sn":"groupSn_2",
+                "groupName":"项目经理",
+                member:[
+                    {
+                        "nick_name":"谢蓓",
+                        "user_name":"xiebei.zh",
+                    },
+                   
+                ],
+
+            },
+            {
+                "group_sn":"groupSn_3",
+                "groupName":"开发组",
+                "member":[
+                    {
+                        "nick_name":"奇慧超",
+                        "user_name":"qihuichao",
+                    },
+                    {
+                        "nick_name":"黄永华",
+                        "user_name":"huangyonghua",
+                       
+                    },
+                    {
+                        "nick_name":"赖磊",
+                        "user_name":"lailie",
+                    },
+                    {
+                        "nick_name":"殷良骥",
+                        "user_name":"yinliangji",
+                    },
+                ],
+
+            },
+        ],
+        
+        
+    })
+}
+
+app.all('/agile/groupmemagement/list/', function(req, res) {
+    let Json = getSetGroup(req.body.myStatus);
     console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
     console.log("Json==>", Json);
     res.json(Json);

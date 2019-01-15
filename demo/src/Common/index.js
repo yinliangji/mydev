@@ -1377,7 +1377,7 @@ export default class Common extends Utils {
     }
     //弹出添加角色--不通用
     static AddRole(that,i){
-      that.formValidate.AddGroupList[i].modaAdd = true
+      that.formValidate.AddGroupList[i].modaAdd = true;
     }
 
 

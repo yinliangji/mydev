@@ -27,7 +27,8 @@ export default {
 				'userAdvice':["1","1-11"],
 				'dependManage':["1","1-12"],
 				'testCaseUrl':["1","1-15"],
-				'setting':["1","1-16"],
+				'intfReq':["1","1-16"],
+				'setting':["1","1-17"],
 				
 
 			},
@@ -112,7 +113,9 @@ export default {
 			let page11 = "userAdvice";
 			let page12 = "dependManage";
 			let page15 = "testCaseUrl";
-			let page16 = "setting";
+			let page16 = "intfReq";
+			let page17 = "setting";
+			
 
 			if(to.path.indexOf(page8)!= -1){
 				this.side_menu(page8)
@@ -142,6 +145,8 @@ export default {
 				this.side_menu(page15)
 			}else if(to.path.indexOf(page16)!= -1){
 				this.side_menu(page16)
+			}else if(to.path.indexOf(page17)!= -1){
+				this.side_menu(page17)
 			}
 		}
 	},

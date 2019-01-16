@@ -8,64 +8,64 @@
                     <h3 class="Title"><span>基本信息</span></h3>
                     <div class="fromBox">
                        
-                    <FormItem label="所属产品" >
-                        <span>{{formValidate.product_name}}</span>
-                    </FormItem>
-              
-                    <FormItem label="所属项目" >
-                        <span>{{formValidate.prj_name}}</span>
-                    </FormItem>
+                        <FormItem label="所属产品" >
+                            <span>{{formValidate.product_name}}</span>
+                        </FormItem>
+                  
+                        <FormItem label="所属项目" >
+                            <span>{{formValidate.prj_name}}</span>
+                        </FormItem>
 
-                    
-                    <FormItem label="用户故事名称" prop="userstory_name">
-                        <Input v-model="formValidate.userstory_name" placeholder="请填用户故事名称"></Input>
-                    </FormItem>
-                    <Row>
-                        <Col span="12">
-                            <FormItem label="责任人"  prop="nick_name">
-                                <!-- <span>{{formValidate.charger}}</span> -->
-                                <Select filterable clearable v-model="formValidate.nick_name" placeholder="请选择责任人">
-                                    <Option v-for="(item,index) in chargerList" :key="index" :value="item.value">{{item.label}}</Option>
-                                </Select>
-                            </FormItem>
-                        </Col>
-                        <Col span="12">
-                            <FormItem label="故事类型" prop="userstory_type">
-                                <Select v-model="formValidate.userstory_type" placeholder="请选择故事类型">
-                                    <Option v-for="(item,index) in userstory_typeList" :key="index" :value="item.value">{{item.label}}</Option>
-                                    <!-- <Option value="1">用户需求</Option>
-                                    <Option value="2">生产问题</Option>
-                                    <Option value="3">自主创新</Option> -->
-                                </Select>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                        <!-- <FormItem label="业务模块" prop="business">
-                            <Select v-model="formValidate.business" multiple >
-                                <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                            </Select>
-                        </FormItem> -->
-                    
-                    <FormItem label="状态" prop="userstory_status">
-                        <RadioGroup v-model="formValidate.userstory_status">
-                            <Radio :disabled="item.value == formValidate.userstory_status ? false : true" v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
-                            <!-- <Radio label="1">提出</Radio>
-                            <Radio label="2">开发中</Radio>
-                            <Radio label="3">测试</Radio>
-                            <Radio label="4">上线</Radio> -->
-                        </RadioGroup>
-                    </FormItem>
-                    <FormItem label="优先级" prop="proi">
-                        <RadioGroup v-model="formValidate.proi">
-
-                            <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
                         
-                            <!-- <Radio label="1">高</Radio>
-                            <Radio label="2">中</Radio>
-                            <Radio label="3">低</Radio> -->
-                           
-                        </RadioGroup>
-                    </FormItem>
+                        <FormItem label="用户故事名称" prop="userstory_name">
+                            <Input v-model="formValidate.userstory_name" placeholder="请填用户故事名称"></Input>
+                        </FormItem>
+                        <Row>
+                            <Col span="12">
+                                <FormItem label="责任人"  prop="nick_name">
+                                    <!-- <span>{{formValidate.charger}}</span> -->
+                                    <Select filterable clearable v-model="formValidate.nick_name" placeholder="请选择责任人">
+                                        <Option v-for="(item,index) in chargerList" :key="index" :value="item.value">{{item.label}}</Option>
+                                    </Select>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem label="故事类型" prop="userstory_type">
+                                    <Select v-model="formValidate.userstory_type" placeholder="请选择故事类型">
+                                        <Option v-for="(item,index) in userstory_typeList" :key="index" :value="item.value">{{item.label}}</Option>
+                                        <!-- <Option value="1">用户需求</Option>
+                                        <Option value="2">生产问题</Option>
+                                        <Option value="3">自主创新</Option> -->
+                                    </Select>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                            <!-- <FormItem label="业务模块" prop="business">
+                                <Select v-model="formValidate.business" multiple >
+                                    <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                            </FormItem> -->
+                        
+                        <FormItem label="状态" prop="userstory_status">
+                            <RadioGroup v-model="formValidate.userstory_status">
+                                <Radio :disabled="item.value == formValidate.userstory_status ? false : true" v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
+                                <!-- <Radio label="1">提出</Radio>
+                                <Radio label="2">开发中</Radio>
+                                <Radio label="3">测试</Radio>
+                                <Radio label="4">上线</Radio> -->
+                            </RadioGroup>
+                        </FormItem>
+                        <FormItem label="优先级" prop="proi">
+                            <RadioGroup v-model="formValidate.proi">
+
+                                <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
+                            
+                                <!-- <Radio label="1">高</Radio>
+                                <Radio label="2">中</Radio>
+                                <Radio label="3">低</Radio> -->
+                               
+                            </RadioGroup>
+                        </FormItem>
                         
 
                         
@@ -134,11 +134,11 @@
                         </FormItem>
 
 
-                        <div class="transBox" v-show = "false" >
+                        <div class="transBox" v-show="false" >
                             <label class="transBoxTitle">关联业务功能</label>
                             <Row>
-                                <Col span="10">&nbsp;</Col>
-                                <Col span="14">
+                                <Col span="1">&nbsp;</Col>
+                                <Col span="23">
                                     <!-- 搜索选择开始 -->
                                     <div v-for="(myItem,index) in formValidate.AddGroupList" :key="index" >
                                         
@@ -187,6 +187,29 @@
 
                         </div>
                         
+                        <h3 class="Title"><span>依赖相关</span></h3>
+
+                        <FormItem label="添加依赖项" >
+                            <span style="position: relative;">
+                                <Tag 
+                                    v-for="(item,index) in dependList"
+                                    :value="index" 
+                                    :key="index" 
+                                    :name="index" 
+                                    closable 
+                                    @on-close="dependDel">
+                                    {{ item.depd_name}}
+                                </Tag>
+                                <Button 
+                                    icon="ios-plus-empty" 
+                                    type="dashed" 
+                                    size="small" 
+                                    @click="addDepend">
+                                    添加依赖项
+                                </Button>
+                                
+                            </span>
+                        </FormItem>
                         <FormItem label="" >
                             &nbsp;
                         </FormItem>
@@ -226,6 +249,32 @@
                
             </div>
         </Card>
+        <Modal 
+            :mask-closable="false"
+            v-model="dependonoff" 
+            title="添加依赖项"
+            ok-text="添加" 
+            @on-ok="submitDepend"  
+            @on-cancel="cancelDepend"
+            >
+            <Form 
+                ref="dependFormValidate" 
+                :model="dependFormValidate" 
+                :rules="dependruleValidate" 
+                :label-width="120" >
+                <div>
+                    <FormItem label="所属项目">
+                        {{formValidate.prj_name}}
+                    </FormItem>
+                    <FormItem label="依赖名称" prop="depd_name">
+                        <Input v-model="dependFormValidate.depd_name"  placeholder="请填写依赖名称"></Input>
+                    </FormItem>
+                    <FormItem label="依赖描述" prop="depd_desc">
+                        <Input v-model="dependFormValidate.depd_desc" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写依赖描述"></Input>
+                    </FormItem>
+                </div>
+            </Form>
+        </Modal>
         
     </div>
 </template>
@@ -237,7 +286,7 @@ import Trans from './trans'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAdd,storyAddGet,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no } = Common.restUrl;
+const {storyAdd,storyAddGet,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,developEditAxiosData,updateView} = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -431,6 +480,20 @@ export default {
             popsItem:false,
             //查询搜索结束
             
+            //依赖开始
+            depd_sn:"",
+            dependonoff:false,
+            dependList:[],
+            dependFormValidate:{
+                depd_name:"",
+                depd_desc:"",
+            },
+            dependruleValidate:{
+                depd_name:[{ required: true, message: '依赖项名称不能为空', trigger: 'blur' }],
+                depd_desc:[{ required: true, message: '依赖项描述不能为空', trigger: 'blur' }],
+            },
+            //依赖结束
+            
             
 
         }
@@ -491,6 +554,61 @@ export default {
         }
     },
     methods:{
+        //依赖开始
+        addDepend(){
+            this.dependonoff = true;
+        },
+        dependDel(event,name){
+            this.dependList.splice(name,1)
+        },
+        submitDepend(){
+            this.dependList.push({
+                depd_name:this.dependFormValidate.depd_name,
+                depd_desc:this.dependFormValidate.depd_desc,
+                depd_status:"1",
+            })
+            this.cancelDepend();
+        },
+        cancelDepend(){
+            this.dependFormValidate.depd_name = "";
+            this.dependFormValidate.depd_desc = "";
+        },
+        developEditAxios(){
+            let URL = developEditAxiosData;
+            let _params = {
+                depd_sn:this.depd_sn,
+                depd_main_type:2,
+                depd_list:this.dependList,
+            }
+            defaultAXIOS(URL,_params,{timeout:20000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======用户故事 编辑依赖***response+++",response,myData,"======>");
+                
+                
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+        updateView(){
+            let URL = updateView;
+            let _params = {
+                id:this.this.$route.query.devlopId,
+            }
+            defaultAXIOS(URL,_params,{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======用户故事 展示依赖***response+++",response,myData,"======>");
+                
+                
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+
+        },
+        //依赖结束
         goDemand(){
             this.$Modal.confirm({
                 title: '请先添加需求项',

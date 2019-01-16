@@ -84,14 +84,18 @@
                                             </Select>
 						                </FormItem>
 						            </Col>
-						            <Col span="2" style="text-align: center"><!-- 是否领导关心 --></Col>
+						            <Col span="2" style="text-align: center">小组名称</Col>
 						            <Col span="6">
 						                <!-- <FormItem >
 						                    <Select clearable v-model="formValidate.learn_concern" placeholder="请选择是否领导关心">
-						                    	
 					                            <Option v-for="(item,index) in learn_concernList" :value="item.value" :key="index">{{ item.label }}</Option>
 					                        </Select>
 						                </FormItem> -->
+						                <FormItem >
+						                    <Select clearable filterable v-model="formValidate.group_name" placeholder="请选择分组">
+					                            <Option v-for="(item,index) in group_nameList" :value="item.value" :key="index">{{ item.label }}</Option>
+					                        </Select>
+						                </FormItem>
 						            </Col>
 
 						        </Row>
@@ -739,6 +743,7 @@ export default {
                 charger:"",//负责人
                 learn_concern:"",//是否领导关心
                 sprint:"",//所属迭代
+                group_name:"",//查询分组
 
             },
             userstory_typeList:[
@@ -803,6 +808,7 @@ export default {
              //    },
             ],
             sprintList:[],
+            group_nameList:[],
             _sprint:false,
             prj_permission:[],
             identity:"",
@@ -862,6 +868,7 @@ export default {
 				charger:this.formValidate.charger,
 				learn_concern:this.formValidate.learn_concern,
 				sprint:this.formValidate.sprint,
+				group_name:this.formValidate.group_name,
 			}
 			let fileName = "用户故事Execl导出"
 			return Common.DownFile(defaultAXIOS,this,userstoryOutExcel,params,fileName);
@@ -879,6 +886,7 @@ export default {
 				charger:this.formValidate.charger,
 				learn_concern:this.formValidate.learn_concern,
 				sprint:this.formValidate.sprint,
+				group_name:this.formValidate.group_name,
 			}
 			let fileName = "用户故事Word导出.doc"
 			return Common.DownFile(defaultAXIOS,this,userstoryOutWord,params,fileName);
@@ -974,14 +982,14 @@ export default {
 		    	//currentView: "developList",//developList//kanbanboard
 		    	if(this.currentView == "kanbanboard"){
 		    		Promise.all([this._sprint]).then((REP)=>{
-		    			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+		    			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
 		    		},()=>{
 		    			this.showError("没有获取到故事状态");
 		    		})
 
 
 		    	}else{
-		    		this.tableDataAjaxFn(storyAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+		    		this.tableDataAjaxFn(storyAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
 		    	}
 	        	
 	        	
@@ -1181,12 +1189,12 @@ export default {
 			this.statusListBase = [];
 			this.groupList = [{ text: "所属需求项" }];
 		},
-		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
+		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = ""){
 			this.cardList = [];
 			this.statusList = [];
 			this.cardListBase = [];
             this.statusListBase = [];
-			defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint,username:Common.getCookie("username"),prjSn:Common.getCookie("prjSn")},{timeout:20000,method:'get'}).then((response) => {
+			defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint,group_name,username:Common.getCookie("username"),prjSn:Common.getCookie("prjSn")},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 if(myData.status == "success" ){
                 	this.borderRole = myData.role;
@@ -1344,7 +1352,7 @@ export default {
         },
 
 		storyGetConditionFn(URL,condition,prj_id){
-			return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
+			return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint","group_name"]);
 			//return Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
         },
         cancelSerchAll(){
@@ -1365,8 +1373,8 @@ export default {
 			this.optionSession();
 			Common.RemoveSession("REQ_ID");
 
-			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
-            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
+            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
             this.tableDAtaPageCurrent = 1;
             
             if(this.currentView == "kanbanboard"){}else{}
@@ -1376,8 +1384,8 @@ export default {
 
         },
 		
-		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = ""){
-            defaultAXIOS(URL,{page,limit,data,id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint},{timeout:20000,method:'get'}).then((response) => {
+		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = ""){
+            defaultAXIOS(URL,{page,limit,data,id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint,group_name},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======***用户故事列表+++",response,myData,"======>");
                 this.tableData = myData.rows;
@@ -1395,7 +1403,7 @@ export default {
 		changeCurrentPage(i) {
 			let ID = this.getID()
             //this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID)
-            this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint);
+            this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
             this.tableDAtaPageCurrent = i;
         },
         changePageSize(i) {

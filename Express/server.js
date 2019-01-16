@@ -437,7 +437,7 @@ app.all('/userstory/modifyUserstory/', function(req, res) {
     let resVal = listUserstoryList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
-    res.json([{ status: "success", message: "ok" ,}]);
+    res.json({ status: "success", message: "ok" ,});
     res.end()
 });
 
@@ -965,10 +965,10 @@ let Userstorydetail = (val1 = 200, val2 = 1, val3 = 3) => {
             
             "proposer":"",
             "proposer_department":"",
-            "req_id":"req_id_xxxxxx",
+            "req_id":"6",
             "req_name":"@title",
-            "sprint": 26,
-            "sprint_name":26,
+            "sprint": 6,
+            "sprint_name":6,
             "userstory_desc":"故事描述123123",
 
             "prj_id":"prj_id_xxxxxx",
@@ -2206,6 +2206,16 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
                 {"value":"sprint_黄永华(huangyonghua)","key":5,},
                 {"value":"sprint_赖磊(lailei)","key":6,},
                 {"value":"sprint_殷良骥(yinliangji)","key":7,},
+            ],
+            group_name:[
+                // {"value":"奇慧超","key":4,},
+                // {"value":"黄永华","key":5,},
+                // {"value":"赖磊","key":6,},
+                // {"value":"殷良骥","key":7,},
+                {"value":"group_name_齐慧超(qihuichao)","key":4,},
+                {"value":"group_name_黄永华(huangyonghua)","key":5,},
+                {"value":"group_name_赖磊(lailei)","key":6,},
+                {"value":"group_name_殷良骥(yinliangji)","key":7,},
             ],
             
         }

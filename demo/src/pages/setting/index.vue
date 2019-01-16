@@ -4,14 +4,14 @@
 		<selectMenu @changeSelect="selectMenuFn" @sendData="getSendData"></selectMenu>
 		<Card class="detailContBox">
 			<Tabs value="name1" type="card" >
-				<TabPane label="设置分组" name="name1">
+				<TabPane label="设置小组" name="name1">
 		        	<div class="baseInfoBox">
-		        		<!-- 分组开始 -->
+		        		<!-- 小组开始 -->
 		        		
 		        		<Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" >
 			        		<div class="fromBox fromBox2">
 			        			<div class="addpartBox">
-		                            <Button type="success" @click="addpart('addPartPopBox')">添加分组</Button>
+		                            <Button type="success" @click="addpart('addPartPopBox')">添加小组</Button>
 		                        </div>
 		                        <!--  -->
 		                        <div class="newAddGroup">
@@ -45,7 +45,7 @@
 		                                                ok-text="添加"
 		                                                @on-cancel="cancelRole(index)"
 		                                                >
-		                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
+		                                                <Select @on-change="onChange" @on-clear="onClear" @on-query-change="onQueryChange" @on-open-change="onOpenChange" v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
 		                                                    <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
 		                                                        {{ item.label }}
 		                                                    </Option>
@@ -58,7 +58,7 @@
 		                                <Col span="1">&nbsp;</Col>
 		                                <Col span="3">
 		                                    <Button v-if="myItem.delBtn"  type="error" long  @click="groupDel(index)">
-		                                    	删除分组
+		                                    	删除小组
 		                                	</Button>
 		                                </Col>
 		                            </Row>
@@ -67,9 +67,9 @@
 			        		</div>
 		        		</Form>
 
-		        		<Modal ref="addPartPop" v-model="partAdd" title="添加分组" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel('addPartPopBox')"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
+		        		<Modal ref="addPartPop" v-model="partAdd" title="添加小组" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel('addPartPopBox')"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
 				            <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
-				                <FormItem label="分组名称" prop="partName">
+				                <FormItem label="小组名称" prop="partName">
 				                    <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8"></Input>
 				                </FormItem>
 
@@ -93,7 +93,7 @@
 				                <Button type="primary" @click="delCancel">取消</Button>
 				            </div>
 				        </Modal>
-		        		<!-- 分组结束 -->
+		        		<!-- 小组结束 -->
 		        	</div>
 		        </TabPane>
 			</Tabs>
@@ -140,12 +140,27 @@ export default {
 
             },
             inputLoad:false,
+            onChangeData:false,
             
 		}	
 	},
 	watch:{
-		
-	},
+        
+        formValidate: {
+            handler(val, oldVal) {
+				// console.error("<==***开始*****")
+    //         	console.error(JSON.stringify(val.AddGroupList[2].group))
+    //         	console.error("********")
+    //         	console.error(JSON.stringify(oldVal.AddGroupList[2].group))
+    //         	console.error("****结束****===>")
+                if(val){
+                    
+                }
+            },
+            deep: true
+        },
+        
+    },
 	mounted(){
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 		this.addTeam(getUserByProjId,{projectId:ID}).then(()=>{
@@ -156,21 +171,17 @@ export default {
 
 	},
 	methods:{
-		selectMenuFn(N){
-			let ID = N;
-			this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
-			
-        },
+		
 		getID(){
 			return Common.GETID(this,Common);
 		},
-		//设置分组start
+		//设置小组start
 		
 		getGroupList(URL, params){
 			return defaultAXIOS(URL,params,{timeout:5000,method:'get'})
 			.then((response) => {
 				let myData = response.data;
-				console.log("<======【设置分组 获取分组】***response+++",response,myData,"====>");
+				console.log("<======【设置小组 获取小组】***response+++",response,myData,"====>");
 				let groupList = (Arr)=>{
                     let _demoObj = {};
                     let _demoArr = [];
@@ -247,7 +258,7 @@ export default {
 			return defaultAXIOS(URL,params,{timeout:5000,method:'get'})
 			.then((response) => {
 				let myData = response.data;
-				console.log("<======【设置分组 删除人员】***response+++",response,myData,"====>");
+				console.log("<======【设置小组 删除人员】***response+++",response,myData,"====>");
 				if(myData.status == "success"){
 					return Promise.resolve(myData)
 				}else{
@@ -294,7 +305,7 @@ export default {
 			return defaultAXIOS(URL,params,{timeout:5000,method:'get'})
 			.then((response) => {
 				let myData = response.data;
-				console.log("<======【设置分组 删除人员】***response+++",response,myData,"====>");
+				console.log("<======【设置小组 删除人员】***response+++",response,myData,"====>");
 				if(myData.status == "success"){
 					return Promise.resolve(myData)
 				}else{
@@ -337,12 +348,29 @@ export default {
 			this.formValidate.AddGroupList[i].groupListtemp = _memberList;
         },
         cancelRole(i){
-            Common.CancelRole(this,i)
+            Common.CancelRole(this,i);
+            this.onChangeData = false;
+        },
+        
+        onClear(){
+        	console.log("onClear")
+        },
+        onQueryChange(){
+        	console.log("onQueryChange")
+        },
+        onOpenChange(){
+        	console.log("onOpenChange")
+        },
+        onChange(val){
+        	console.log(val)
+        	this.onChangeData = val;
+
         },
         submitRole(i){
         	
             Common.SubmitRole(this,i,Common);
             let _member = [];
+            let __member = [];
             this.formValidate.AddGroupList[i].group.forEach((itme)=>{
             	let Item = itme
             	let obj = this.formValidate.AddGroupList[i].groupList.find((ITEM)=>{
@@ -353,15 +381,33 @@ export default {
             	})
             	_member.push(obj)
             })
-
             _member.forEach((item)=>{
             	item.user_name = item.value;
 				item.nick_name = item.label;
             })
+
+            
+
+
+            if(this.onChangeData && Array.isArray(this.onChangeData) && this.onChangeData.length){
+            	this.onChangeData.forEach((item)=>{
+            		let obj = _member.find((ITEM)=>{
+            			if(item == ITEM.value){
+            				return ITEM;	
+            			}
+            		})
+            		__member.push(obj)
+            	})
+            	_member = __member;
+            }else{
+            	_member = [];
+            }
+
             let _params = {
 				groupSn:this.formValidate.AddGroupList[i].myValue,
 				member:JSON.stringify(_member),
 			}
+			this.onChangeData = false;
             this.saveMember(addUsers,_params).then(()=>{
             	if(window.location.port == "9000"){
             		return
@@ -376,7 +422,7 @@ export default {
 			return defaultAXIOS(URL,params,{timeout:5000,method:'post'})
 			.then((response) => {
 				let myData = response.data;
-				console.log("<======【设置分组 保存人员】***response+++",response,myData,"====>");
+				console.log("<======【设置小组 保存人员】***response+++",response,myData,"====>");
 				if(myData.status == "success"){
 					return Promise.resolve(myData)
 				}else{
@@ -395,7 +441,7 @@ export default {
 			return defaultAXIOS(URL,params,{timeout:5000,method:'get'})
 			.then((response) => {
 				let myData = response.data;
-				console.log("<======【设置分组 获取人员】***response+++",response,myData,"====>");
+				console.log("<======【设置小组 获取人员】***response+++",response,myData,"====>");
 				let _tempObj = {};
 
 				if(myData && Array.isArray(myData) && myData.length){
@@ -431,7 +477,7 @@ export default {
 			return defaultAXIOS(URL,params,{timeout:5000,method:'post'})
 			.then((response) => {
 				let myData = response.data;
-				console.log("<======【设置分组 保存小组】***response+++",response,myData,"====>");
+				console.log("<======【设置小组 保存小组】***response+++",response,myData,"====>");
 				if(myData.status == "success" && myData.data){
 					return Promise.resolve(myData.data)
 				}else{
@@ -517,12 +563,14 @@ export default {
             Common.ErrorShow(ERR,this);
 
         },
-        //设置分组end
+        //设置小组end
 		getSendData(data){
             console.log(data,"<==========getSendData");
         },
         selectMenuFn(N){
             console.log(N,"<==========selectMenuFn");
+            let ID = N;
+			this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
         },
 
 	},

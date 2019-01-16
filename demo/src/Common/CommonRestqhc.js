@@ -16,6 +16,9 @@ CommonRestqhc.restUrl = {
     "downFile":process.env.BASE_URL,
     "selbusinessList": process.env.BASE_URL + "/agile/selectBusFuncStatus", //get 
     //开发任务
+    "developAddAxiosData":process.env.BASE_URL + "/devtask/add/",
+    "developEditAxiosData":process.env.BASE_URL + "/devtask/edit/",
+    "updateView":process.env.BASE_URL + "/devtask/updateView/",
     //qhc end
 
 }

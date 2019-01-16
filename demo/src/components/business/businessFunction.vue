@@ -147,7 +147,7 @@ export default {
             */
             setTimeout(()=>{
                 if(this.isShow && !this.isAddOrEdit){
-                    if(this.formValidate.logic_sys_no){
+                    if(this.formValidate.logic_sys_no && document.getElementById("logicSelect")){
                         let obj = this.logicList.find((item)=>{
                             return item.logic_sys_no == this.formData.logic_sys_no 
                         })

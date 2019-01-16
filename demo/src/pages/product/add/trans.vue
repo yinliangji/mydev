@@ -273,11 +273,11 @@ export default {
 
         },
         editBus(D){
-            
             this.IsView = false;
             let Index = this.dataL.findIndex((item)=>{
                 return D.bfunc_id == item.bfunc_id
             })
+            
             if(D.who){
                 this.$set(this.dataL[Index],"bfunc_name", D.bfunc_name);
                 this.$set(this.dataL[Index],"bfunc_status", D.bfunc_status);
@@ -293,6 +293,7 @@ export default {
                 this.dataL[Index].logic_sys_no = D.logic_sys_no;
                 
             }
+
 
             let _logic_sys_name = D.logic_sys_no ? this.logic_sys_nameFn(D.logic_sys_no,this.logicList): "";
             this.dataL[Index].logic_sys_name = _logic_sys_name
@@ -361,7 +362,6 @@ export default {
                 return;
             }
             if(val == "view" && fromdataObj.bfunc_id.indexOf("creatId_") != -1){
-
                
                 let _type2 = fromdataObj.bfunc_type ? ckeckObj(fromdataObj.bfunc_type,this.typeList,"bfunc_type","bfunc_type_name") : "";
                 let _logic2 = fromdataObj.logic_sys_no ? ckeckObj(fromdataObj.logic_sys_no,this.logicList,"logic_sys_no","logic_sys_name") : "";
@@ -379,6 +379,8 @@ export default {
                 this.isShowonoff = is;
                 return;
             }
+
+
 
             defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
                 let myData = response.data;

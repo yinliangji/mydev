@@ -427,6 +427,9 @@ export default {
             let _DATA = JSON.parse(this.$router.history.current.query.DATA)
 
 
+            console.error(JSON.stringify(_DATA))
+
+
 
             this.getStoryEditFn(_DATA)
             this.storyGetSprintFn(storyGetSprint,ID,ID,_DATA.prod_id)
@@ -647,7 +650,7 @@ export default {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product add***response+++",response,myData,"======>");
-                if(myData[0].status == "success"){
+                if(myData.status == "success"){
                     this.modal_add_loading = false;
                     this.formItemReset();
                     this.$refs.formValidate.resetFields();

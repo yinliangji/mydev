@@ -976,15 +976,22 @@ let Userstorydetail = (val1 = 200, val2 = 1, val3 = 3) => {
             "prod_id":"product1",
             "product_name":"product_name_xxxxxxxx",
 
-
-
-
-            
-           
-            
-            
-
-
+            "depd_list|2-10":[
+                {
+                    create_time:"@date(yyyy-MM-dd)",
+                    "created_user_username":"@cname",
+                    "depd_desc":"@title",
+                    "depd_id|5-8":/[a-zA-Z]/,
+                    "depd_main_type":2,
+                    "depd_name":"@cname",
+                    "depd_sn|+1":1,
+                    "depd_status":1,
+                    "id|+10":1,
+                    "modified_time":"@date(yyyy-MM-dd)",
+                    "modified_user_username":"@cname",
+                    "prj_id|+100":1,
+                }
+            ],
 
             "__value2__page": val2,
             "__value3__pageline": val3,
@@ -2623,6 +2630,7 @@ let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
             "prj_type|1": [1,2],
             "on_line":"1 | 5",
             "comment":"@title",
+            "status|1-8":1,
 
 
             "__value2__page": val2,

@@ -243,6 +243,18 @@ export default {
                     }
                 },
                 {
+                    title: '需求项状态',
+                    key: 'status',
+                    width: 100,
+                    align: 'center',
+                    // render: (h, params) => {
+                    //     return h(
+                    //         'span',
+                    //         Common.PrjTypeFn(params.row.status)
+                    //     );
+                    // }
+                },
+                {
                     title: '提出部门',
                     key: 'req_submitter',
                     align: 'center',

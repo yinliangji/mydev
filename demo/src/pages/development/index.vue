@@ -105,7 +105,15 @@
         </Row>
       </div>
 
-      <component :is="currentView" :cardList="cardList" :groupList="groupList" :statusList="statusList">
+      <component 
+        :is="currentView" 
+        :cardList="cardList" 
+        :groupList="groupList" 
+        :statusList="statusList"
+        :aside="'development'"
+        :boardName="'developmentBoard'" 
+        id="developmentBoardBox"
+        >
       </component>
     </div>
   </div>

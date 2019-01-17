@@ -560,6 +560,16 @@ export default {
                     key: 'sprint_name',
                     width: 90,
                     align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'span',
+                            {
+                                "class":{txtBlock:true,txtBlockNone:false},
+                                attrs:{title:params.row.sprint_name},
+                            },
+                            params.row.sprint_name
+                        );
+                    }
                 },
                 {
                     title: '优先级',

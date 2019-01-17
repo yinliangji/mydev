@@ -426,7 +426,7 @@ export default {
   transform:translate(-50%,0);
   white-space: nowrap;
 }
-#boardWrapper,#productBoardBox,#demandBoardBox{
+#boardWrapper,#productBoardBox,#demandBoardBox,#developmentBoardBox{
   background: #fff;
 }
 .topColumn{

@@ -249,38 +249,15 @@
                
             </div>
         </Card>
-        <Modal 
-            :mask-closable="false"
-            v-model="dependonoff" 
-            title="添加依赖项"
-            ok-text="添加" 
-            @on-ok="submitDepend"  
-            @on-cancel="cancelDepend"
-            >
-            <Form 
-                ref="dependFormValidate" 
-                :model="dependFormValidate" 
-                :rules="dependruleValidate" 
-                :label-width="120" >
-                <div>
-                    <FormItem label="所属项目">
-                        {{formValidate.prj_name}}
-                    </FormItem>
-                    <FormItem label="依赖名称" prop="depd_name">
-                        <Input v-model="dependFormValidate.depd_name"  placeholder="请填写依赖名称"></Input>
-                    </FormItem>
-                    <FormItem label="依赖描述" prop="depd_desc">
-                        <Input v-model="dependFormValidate.depd_desc" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写依赖描述"></Input>
-                    </FormItem>
-                </div>
-            </Form>
-        </Modal>
+        <Depend :prjName="formValidate.prj_name" :DependOnOff="dependonoff" @sendDepend="receiveDepend" @sendCloseDepend="receiveCloseDepend" />
         
     </div>
 </template>
 <script>
 import Store from '@/vuex/store'
 import Trans from './trans'
+import Depend from './depend'
+
 
 
 import API from '@/api'
@@ -481,17 +458,9 @@ export default {
             //查询搜索结束
             
             //依赖开始
+            dependList:[],
             depd_sn:"",
             dependonoff:false,
-            dependList:[],
-            dependFormValidate:{
-                depd_name:"",
-                depd_desc:"",
-            },
-            dependruleValidate:{
-                depd_name:[{ required: true, message: '依赖项名称不能为空', trigger: 'blur' }],
-                depd_desc:[{ required: true, message: '依赖项描述不能为空', trigger: 'blur' }],
-            },
             //依赖结束
             
             
@@ -561,17 +530,13 @@ export default {
         dependDel(event,name){
             this.dependList.splice(name,1)
         },
-        submitDepend(){
-            this.dependList.push({
-                depd_name:this.dependFormValidate.depd_name,
-                depd_desc:this.dependFormValidate.depd_desc,
-                depd_status:"1",
-            })
-            this.cancelDepend();
+        receiveDepend(obj){
+            this.dependList.push(obj);
+            this.dependonoff = false;
+            console.error(this.dependList)
         },
-        cancelDepend(){
-            this.dependFormValidate.depd_name = "";
-            this.dependFormValidate.depd_desc = "";
+        receiveCloseDepend(boo){
+            this.dependonoff = boo;
         },
         developEditAxios(){
             let URL = developEditAxiosData;
@@ -837,10 +802,12 @@ export default {
                 charger:_charger,//一对
                 nick_name:_nick_name,//一对
                 bfunc:_bfunc,
+                depd_main_type:2,
+                depd_list:this.dependList,
+                depd_sn:this.depd_sn,
             }
             
             defaultAXIOS(storyAdd,tempData,{timeout:20000,method:'post'}).then((response) => {
-                //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======product add***response+++",response,myData,"======>");
                 if(myData.status = "success"){
@@ -889,6 +856,7 @@ export default {
     },
     components: {
        Trans,
+       Depend,
     },
     watch:{
         //查询搜索开始

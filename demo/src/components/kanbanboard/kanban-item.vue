@@ -3,13 +3,13 @@
     :id="item.userId" 
     @click="itemClick(item)" 
     class="card-wrapper"
-    
+    :dependId="item.id"
     :state="item.taskStatus"
     :taskid="item.taskId"
     :detailid="item.detail_id"
     :groupId="item.groupId"
     :nickname="item.nickName"
-    :class="isDraggable(myRole,myAside,item.nickName,item.taskStatus)"
+    :class="isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson)"
     >
       <div class="card-wrap">
 
@@ -70,7 +70,7 @@ export default {
     
   },
   methods: {
-    isDraggable(r,a,n,s){//myRole,myAside,item.nickName,item.taskStatus
+    isDraggable(r,a,n,s,tp){//myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson
       if(a == "product"){
         if(r == "icdp_projManager"){
           return "isDraggable"
@@ -79,6 +79,8 @@ export default {
         }
       }else if(a == "demand"){
         return s == "07" || s == "08" ? "isDraggable" : "isOpacity";
+      }else if(a == "development"){
+        return tp ? "isDraggable" : "isOpacity";
       }else{
         return "isDraggable"
       }

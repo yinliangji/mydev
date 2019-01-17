@@ -180,6 +180,29 @@
                             </Row>
 
                         </div>
+                        <h3 class="Title"><span>依赖相关</span></h3>
+
+                        <FormItem label="添加依赖项" >
+                            <span style="position: relative;">
+                                <Tag 
+                                    v-for="(item,index) in dependList"
+                                    :value="index" 
+                                    :key="index" 
+                                    :name="index" 
+                                    closable 
+                                    @on-close="dependDel">
+                                    {{ item.depd_name}}
+                                </Tag>
+                                <Button 
+                                    icon="ios-plus-empty" 
+                                    type="dashed" 
+                                    size="small" 
+                                    @click="addDepend">
+                                    添加依赖项
+                                </Button>
+                                
+                            </span>
+                        </FormItem>
                         
                         <FormItem label="" >
                             &nbsp;
@@ -217,16 +240,18 @@
                
             </div>
         </Card>
+        <Depend :prjName="formValidate.prj_name" :DependOnOff="dependonoff" @sendDepend="receiveDepend" @sendCloseDepend="receiveCloseDepend" />
     </div>
 </template>
 <script>
 import Store from '@/vuex/store'
 import Trans from '@/pages/product/add/trans'
+import Depend from '@/pages/product/add/depend'
 
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyEdit,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,userstoryGetReturnbfunc} = Common.restUrl;
+const {storyEdit,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,userstoryGetReturnbfunc,storyGetDetail} = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -301,12 +326,12 @@ export default {
             modal_add_loading: false,
             editTableData:false,
             formValidate: {
-                
-                userstory_name: '',
+                userstory_id:"",
+                userstory_name: "",
                 userstory_type:"",
                 userstory_status:"",
                 proi:"",
-                userstory_desc: '',
+                userstory_desc:"",
                 sprint:"",
                 prj_name:"",
                 product_name:"",
@@ -410,6 +435,12 @@ export default {
             //穿梭开始
             toLeftData:false,
             //穿梭结束
+            
+            //依赖开始
+            dependList:[],
+            depd_sn:"",
+            dependonoff:false,
+            //依赖结束
         }
     },
     mounted(){
@@ -424,12 +455,8 @@ export default {
        
         if(this.$router.history.current.query.DATA){
             
-            let _DATA = JSON.parse(this.$router.history.current.query.DATA)
-
-
-            console.error(JSON.stringify(_DATA))
-
-
+            let _DATA = JSON.parse(this.$router.history.current.query.DATA);
+            this.formValidate.userstory_id = _DATA.userstory_id;
 
             this.getStoryEditFn(_DATA)
             this.storyGetSprintFn(storyGetSprint,ID,ID,_DATA.prod_id)
@@ -444,16 +471,53 @@ export default {
 
             this.userstoryGetReturnbfuncFn(userstoryGetReturnbfunc,Common.GETID(this,Common),Common.GETprjid(this,Common),_DATA.userstory_id)
 
-
-
-
-
+            this.storyGetDetailFn(storyGetDetail,((D)=>{return D ? D : _DATA.id})(_DATA.detail_id));
 
         }else{
             this.$router.push('/product');
         }
     },
     methods:{
+        storyGetDetailFn(URL = "",detail_id){
+            return defaultAXIOS(URL,{detail_id},{timeout:5000,method:'get'})
+            .then((response) => {
+                let myData = response.data;
+                console.log("<======product detail***response+++",response,myData,"======>");
+
+
+
+                if(Object.getOwnPropertyNames(myData).length >2){
+                    this.dependList = myData.depd_list;
+                    
+                    return Promise.resolve(myData)
+                }else{
+                    return Promise.reject("没有数据");
+                    
+                }
+
+            })
+            .catch( (error) => {
+                console.log(error);
+                this.showError(error);
+                return Promise.reject(error);
+                
+            });
+        },
+        //依赖开始
+        addDepend(){
+            this.dependonoff = true;
+        },
+        dependDel(event,name){
+            this.dependList.splice(name,1)
+        },
+        receiveDepend(obj){
+            this.dependList.push(obj);
+            this.dependonoff = false;
+        },
+        receiveCloseDepend(boo){
+            this.dependonoff = boo;
+        },
+        //依赖结束
         //穿梭开始
         userstoryGetReturnbfuncFn(URL = "",id,prj_id,us_id){
             defaultAXIOS(URL,{id,prj_id,us_id},{timeout:20000,method:'get'}).then((response) => {
@@ -644,6 +708,10 @@ export default {
                 charger:_charger,//一对
                 nick_name:_nick_name,//一对
                 bfunc:_bfunc,
+                userstory_id:this.formValidate.userstory_id,
+                depd_sn:this.formValidate.userstory_id,
+                depd_main_type:2,
+                depd_list:this.dependList,
             
             }
             defaultAXIOS(storyEdit,tempData,{timeout:20000,method:'post'}).then((response) => {
@@ -694,6 +762,7 @@ export default {
     },
     components: {
        Trans,
+       Depend,
     },
     watch:{
         //查询搜索开始

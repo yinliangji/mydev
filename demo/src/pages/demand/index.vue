@@ -887,6 +887,12 @@ export default {
                 this.error("请选择一项，进行编辑！")
                 return
             }
+
+
+            this.$router.push({path: '/demand/addEdit/', query: {DATA:JSON.stringify(this.actionArr)}})
+            return
+
+
             this.isShowAddPop2 = true;
             this.isAdd2 = false;
             this.tableDataRow2 = this.actionArr;
@@ -911,6 +917,8 @@ export default {
             }
         },
         addItem2(){
+            this.$router.push({path: '/demand/addEdit/', query: {}})
+            return
             this.isShowAddPop2 = true;
             this.isAdd2 = true;
         },

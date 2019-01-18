@@ -20,8 +20,9 @@
           {{item.taskName}}
         </p>
         <p class="item-name">
-          <span class="user_name">
-              <!-- {{item.userName}} -->
+          <span class="user_name" v-if="nicknameFormat(myAside == 'product' || myAside == 'demand')" v-html="chackSymbol(item.nickName)">
+          </span>
+          <span class="user_name" v-else>
               {{item.nickName}}
           </span>
           <!-- <img :src="item.headPortrait" width="21" height="21" /> -->
@@ -70,6 +71,22 @@ export default {
     
   },
   methods: {
+    chackSymbol(str){
+      if(Common.ChackSymbol(str,"()")){
+          let strArr = str.split("(")
+          return strArr[0]+"<br />("+strArr[1]
+        }else{
+          return ""+"<br />"+str
+        }
+    },
+    nicknameFormat(is){
+      if(is){
+        return true;
+      }else{
+        return false;
+      }
+
+    },
     isDraggable(r,a,n,s,tp){//myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson
       if(a == "product"){
         if(r == "icdp_projManager"){

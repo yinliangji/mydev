@@ -194,7 +194,6 @@ CommonRest.restUrl = {
     "userstoryOutWord": process.env.BASE_URL + "/exportExcelFile/usBfuncExp/",
     /**** 用户故事导出word get****/
 
-
     /*****************************************/
 
     "getPermission": process.env.BASE_URL + "/auth/getPermissionfromUser/",
@@ -238,6 +237,9 @@ CommonRest.restUrl = {
 
     "reqSetChange": process.env.BASE_URL + "/req/setRequirementFinish/",
     /**** 需求项目看板拖动 get****/
+
+    "getReqDepd": process.env.BASE_URL + "/req/getReqDepd/",
+    /**** 需求项目获取依赖项 get****/
 
     /*****************************************/
 

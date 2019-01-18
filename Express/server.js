@@ -3371,6 +3371,41 @@ app.all('/agile/groupmemagement/list/', function(req, res) {
 });
 
 
+let getReqDepd = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+            "status": "success",
+            "message": "getReqDepd xxxxxxx",
+            "data|2-10":[
+                {
+                    create_time:"@date(yyyy-MM-dd)",
+                    "created_user_username":"@cname",
+                    "depd_desc":"@title",
+                    "depd_id|5-8":/[a-zA-Z]/,
+                    "depd_main_type":2,
+                    "depd_name":"@cname",
+                    "depd_sn|+1":1,
+                    "depd_status":1,
+                    "id|+10":1,
+                    "modified_time":"@date(yyyy-MM-dd)",
+                    "modified_user_username":"@cname",
+                    "prj_id|+100":1,
+                }
+            ],
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        })
+}
+app.all('/req/getReqDepd/', function(req, res) {
+    let Json = getReqDepd(req.body.myStatus);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
+    console.log("Json==>", Json);
+    res.json(Json);
+    res.end()
+});
+
+
 /************qhc */
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({

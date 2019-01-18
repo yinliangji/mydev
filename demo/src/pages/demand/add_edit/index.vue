@@ -1,0 +1,397 @@
+<template>
+	<div class="pageContent">
+		<goAgile :go="'/demand'" :text="'返回需求项项列表'" :TOP="'5'" />
+		<Card>
+            <div class="aglieAddBox">
+            	<!--  -->
+            	<Form :model="formItem" :label-width="100" :rules="ruleValidate" ref="formValidate" style="width:95%;">
+		            <FormItem label="所属项目" >
+		                <p>{{formItem.prj_name}}</p>
+		            </FormItem>
+		            
+
+		            <FormItem label="需求项类型" prop="prj_type">
+		                <RadioGroup v-model="formItem.prj_type">
+		                    <Radio label="1">
+		                        立项&nbsp;
+		                        <ToolTip placement="top-start" :T="1" content="在ITM中立项的项目对应的需求项" />
+		                    </Radio>
+		                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		                    <Radio label="2">
+		                        自研&nbsp;
+		                        <ToolTip placement="top-start" :T="1" content="非立项项目对应的需求项" />
+		                    </Radio>
+		                </RadioGroup>
+		            </FormItem>
+		            
+		            
+		            <FormItem label="需求项编号" prop="req_id" v-show="formItem.prj_type  == 2 ? false : true" >
+		                <Input v-model="formItem.req_id"  :disabled="formItem.prj_type  == 1 ? false : true" placeholder="请输入需求项编号"></Input>
+		                <!-- <p v-show="formItem.prj_type  != 2 ? false : true">【需求项编号】自动生成</p> -->
+		                <ToolTip  content="项目在ITM中对应的需求项编号" />
+		            </FormItem>
+		            <FormItem label="需求项编号" v-show="formItem.prj_type  != 2 ? false : true">
+		                <p >【项目在ITM中对应的需求项编号】</p>
+		                <!-- v-if="formItem.prj_type  == 2 ? false : true" -->
+		            </FormItem>
+		            <FormItem label="需求项名称" prop="req_name">
+		                <Input v-model="formItem.req_name" placeholder="请输入需求项名称"></Input>
+		            </FormItem>
+		            <FormItem label="提出部门" prop="req_submitter">
+		                <Input v-model="formItem.req_submitter" placeholder="请输入提出部门"></Input>
+		            </FormItem>
+
+		            <FormItem label="添加依赖项" >
+                        <span style="position: relative;">
+                            <Tag 
+                                v-for="(item,index) in dependList"
+                                :value="index" 
+                                :key="index" 
+                                :name="index" 
+                                closable 
+                                @on-close="dependDel">
+                                {{ item.depd_name}}
+                            </Tag>
+                            <Button 
+                                icon="ios-plus-empty" 
+                                type="dashed" 
+                                size="small" 
+                                @click="addDepend">
+                                添加依赖项
+                            </Button>
+                            
+                        </span>
+                    </FormItem>
+
+		            <FormItem label="需求项描述" prop="comment" v-show="formItem.prj_type  != 2 ? false : true">
+		                <Input v-model="formItem.comment" type="textarea" :autosize="{minRows: 3,maxRows: 10}" placeholder="请填写需求项描述"></Input>
+		            </FormItem>
+
+		            <FormItem>
+    					<Button type="primary" :loading="modal_add_loading" @click="submitAdd">
+    				        <span v-if="!modal_add_loading">提交</span>
+    				        <span v-else>Loading...</span>
+    				    </Button>
+                        <Button type="ghost" style="margin-left: 8px" @click="cancel">返回</Button>
+                    </FormItem>
+		            
+
+		        </Form>
+            	<!--  -->
+            </div>
+        </Card>
+		<Depend :prjName="formItem.prj_name" :DependOnOff="dependonoff" @sendDepend="receiveDepend" @sendCloseDepend="receiveCloseDepend" />
+	</div>
+</template>
+<script>
+import API from '@/api'
+const {defaultAXIOS} = API;
+import Common from '@/Common';
+const {reqAdd,reqGet,reqEdit,projectListDataNew,getReqDepd} = Common.restUrl;
+import Depend from '@/pages/product/add/depend'
+export default {
+	data () {
+        const req_idCheck = (rule, value, callback) => {
+            if(this.formItem.prj_type  != 1){
+                callback()
+            }else{
+                //
+                if (!value) {
+                    return callback(new Error('不能为空！'));
+                }else if(value == "需求项编号已有"){
+                    return callback(new Error('需求项编号已有，请重填！'));
+
+                }else{
+                    callback()   
+                }
+                //
+            }
+        };        
+        return {
+            modaAdd: false,
+            modal_add_loading: false,
+            ADDorEDIT:true,
+            editTableData:false,
+            formItem: {
+                req_name:"",
+                req_id:"",
+                prj_type:"2",
+                req_submitter:"",
+                prj_id:"",
+                prj_name:"",
+                myId:"",
+                comment:"",
+            },
+
+            ruleValidate: {
+                req_name: [
+                    { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
+                req_id: [
+                    { required: true,validator: req_idCheck,  trigger: 'blur' }//message: '编号为空或重复！',
+                ],
+                req_submitter: [
+                    { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
+                comment: [
+                    { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
+            },
+            prj_idList:[
+                // {
+                //     value: '11',
+                //     label: '项目1'
+                // },
+            ],
+            //依赖开始
+            dependList:[],
+            depd_sn:"",
+            dependonoff:false,
+            //依赖结束
+        }
+    },
+    beforecreated(){
+        console.log("需求项添加或编辑--beforecreated--",this.formItem)
+    },
+    created(){
+        console.log("需求项添加或编辑--created--",this.formItem);
+        this.checkMenuListFn(projectListDataNew);
+    },
+    beforeUpdate(){
+        console.log("需求项添加或编辑--beforeUpdate--",this.formItem)
+    },
+    updated(){
+        console.log("需求项添加或编辑--updated--",this.formItem)
+    },
+	mounted(){
+		if(this.$router.history.current.query.DATA){
+			let _DATA = JSON.parse(this.$router.history.current.query.DATA);
+			this.getReqDepdFn(getReqDepd,{prjId:Common.GETID(this,Common)})
+			this.editFn(_DATA);
+		}
+	},
+	methods: {
+		//依赖开始
+		getReqDepdFn(URL,params = {}){
+			defaultAXIOS(URL,params,{timeout:5000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======需求项 获取依赖项***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                	this.dependList = myData.data;
+                }else{
+                    this.showError(myData.status);
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+		},
+        addDepend(){
+            this.dependonoff = true;
+        },
+        dependDel(event,name){
+            this.dependList.splice(name,1)
+        },
+        receiveDepend(obj){
+            this.dependList.push(obj);
+            this.dependonoff = false;
+        },
+        receiveCloseDepend(boo){
+            this.dependonoff = boo;
+        },
+        //依赖结束
+        editFn(data){
+            
+            if(data && Array.isArray(data)){
+                this.formItem.req_id = data[0].req_id+"";
+                this.formItem.req_name = data[0].req_name+"";
+                this.formItem.req_submitter = data[0].req_submitter+"";
+                this.formItem.prj_type = data[0].prj_type+"";
+                this.formItem.prj_id = Common.GETID(this,Common);
+                this.formItem.myId = data[0].id+"" || "";
+                this.formItem.comment = data[0].comment+"";
+
+            }
+        },
+        addItem(){
+            this.modaAdd = true;
+        },
+        formItemReset(){
+            this.formItem.req_name = "";
+            this.formItem.req_id = "";
+            this.formItem.req_submitter = "";
+            this.formItem.prj_type = "2";
+            this.formItem.prj_id = "";
+            this.editTableData = false;
+            this.formItem.myId = "";
+            this.formItem.comment = "";
+            this.dependList = [];
+            this.depd_sn = "";
+        },
+        submitAddData(){
+            let tempData = {
+                req_name: this.formItem.req_name,
+                req_id: this.formItem.req_id,
+                //req_id:this.formItem.prj_type == 2 ? "" : this.formItem.req_id,
+                req_submitter:this.formItem.req_submitter,
+                prj_type:this.formItem.prj_type,
+                prj_id:this.formItem.prj_id,
+                myId:this.formItem.myId,
+                comment:this.formItem.comment,
+
+                depd_main_type:1,
+                depd_list:this.dependList,
+                depd_sn:this.formItem.req_id,
+            }
+            
+            let URL = this.ADDorEDIT ? reqAdd : reqEdit;
+            defaultAXIOS(URL,tempData,{timeout:5000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======demand reqAdd***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+
+                    this.modaAdd = false;
+                    this.formItemReset();
+                    this.$refs.formValidate.resetFields();
+                    this.$router.push({path: '/demand/', query: {}})
+                    
+                }else{
+                    this.modaAdd = true;
+                    this.modal_add_loading = false;
+                    this.showError(myData.status);
+                }
+                
+            }).catch( (error) => {
+                console.log(error);
+                
+                this.modal_add_loading = false;
+                this.showError(error);
+            });
+            //
+           
+
+        },
+        submitAdd () {
+        	this.modal_add_loading = true;
+            this.checkReqId(reqGet,this.req_id,Common.GETID(this,Common))
+            .then(()=>{
+                this.$refs.formValidate.validate((valid)=>{//验证
+                    this.modal_add_loading = false;
+                    if(valid){
+                        this.submitAddData();
+                    }
+                })
+            },(error)=>{
+                console.log(error)
+                if(error == "需求项编号已有"){
+                    this.formItem.req_id = "需求项编号已有"
+                }
+                this.$refs.formValidate.validate();
+                this.formItem.req_id = "";
+
+            })
+            this.modal_add_loading = false;
+                this.$nextTick(() => {
+                  this.modal_add_loading = true;
+                });
+
+        },
+        cancel () {
+            this.formItemReset();
+            this.$refs.formValidate.resetFields();
+            this.$router.push('/demand');
+        },
+        checkReqId(URL,prj_id,req_id){
+
+            return defaultAXIOS(URL,{prj_id,req_id,debug:false},{timeout:60000,method:'get'})
+            .then((response) => {
+                let myData = response.data;
+                console.log("<======【demand reqGet get】***response+++",response,myData,"====>");
+                if(Array.isArray(myData.data)){
+                    if(!myData.data.length){
+                        return Promise.resolve(true);
+                    }else{
+                        return Promise.reject("需求项编号已有");
+                    }
+                }else{
+                    
+                    return Promise.reject("数据类型错误");
+                }
+            })
+            .catch( (error) => {
+                console.log(error);
+                if(error != "需求项编号已有"){
+                    this.showError(error);
+                }
+                return Promise.reject(error);
+            });  
+
+        },
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
+        },
+        checkMenuListFn(URL){
+            if(Common.getStorageAndCookie(this,Common,"prj_name") && Common.getStorageAndCookie(this,Common,"prjId")){
+                this.formItem.prj_id = Common.getStorageAndCookie(this,Common,"prjId");
+                this.formItem.prj_name = Common.getStorageAndCookie(this,Common,"prj_name");
+                return
+            }
+
+            defaultAXIOS(URL,{username:Common.getStorageAndCookie(this,Common,"username")},{timeout:5000,method:'get'})
+            .then((response) => {
+                let myData = response.data;
+                console.log("<======demand projectListDateNew***response+++",response,myData,"======>");
+                let _newData = myData.data ? myData.data : myData;
+                if(Array.isArray(_newData) && _newData.length){
+                    //
+                    let _tempObj = {};
+                    for(let i=0;i<_newData.length;i++){
+                        if(Common.GETID(this,Common) == _newData[i].id){
+                            this.formItem.prj_id = _newData[i].id+"";
+                            this.formItem.prj_name = _newData[i].prj_name+"";
+                        }
+                        _tempObj.value = _newData[i].id+"";
+                        _tempObj.label = _newData[i].prj_name+"";
+                        this.prj_idList.push(_tempObj);
+                        _tempObj = {}
+                    }
+                    //
+                }else{
+                    this.showError(URL+"_错误");
+                }
+                
+            })
+            .catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
+    },
+	components:{
+		Depend,
+		
+	},
+	watch:{
+        
+    },
+}
+</script>
+<style lang="less" scoped>
+@import './style.less';
+@import './style.css';
+.top,.bottom{
+    text-align: center;
+}
+.center{
+    width: 300px;
+    margin: 10px auto;
+    overflow: hidden;
+}
+.center-left{
+    float: left;
+}
+.center-right{
+    float: right;
+}
+</style>

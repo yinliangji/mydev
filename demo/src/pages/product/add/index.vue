@@ -533,7 +533,6 @@ export default {
         receiveDepend(obj){
             this.dependList.push(obj);
             this.dependonoff = false;
-            console.error(this.dependList)
         },
         receiveCloseDepend(boo){
             this.dependonoff = boo;

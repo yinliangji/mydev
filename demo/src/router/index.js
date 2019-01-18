@@ -377,12 +377,25 @@ const router = new Router({
                     require(["../layout/sider/sider_2"], resolve)
                 }
             },
-        },{
+        },
+        {
             path: '/documents',
             name: 'documents',
             components: {
                 Cont: resolve => {
                     require(["../pages/documents/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
+        {
+            path: '/demand/addEdit',
+            name: 'demandAddEdit',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/demand/add_edit"], resolve)
                 },
                 Aside: resolve => {
                     require(["../layout/sider/sider_2"], resolve)

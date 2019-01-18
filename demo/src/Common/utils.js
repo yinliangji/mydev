@@ -352,6 +352,16 @@ export default class Utils extends CommonRest {
         return false;
       }
     }
+    //是否包含莫格字符
+    static ChackSymbol(str,mark){
+      //"[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]"
+      let _mark = "["+mark+"]";
+      var pattern = new RegExp(_mark);
+      if (pattern.test(str)){
+        return true;
+      }
+      return false;
+    }
     
 }
 

@@ -148,11 +148,6 @@ export default {
         
         formValidate: {
             handler(val, oldVal) {
-				// console.error("<==***开始*****")
-    //         	console.error(JSON.stringify(val.AddGroupList[2].group))
-    //         	console.error("********")
-    //         	console.error(JSON.stringify(oldVal.AddGroupList[2].group))
-    //         	console.error("****结束****===>")
                 if(val){
                     
                 }

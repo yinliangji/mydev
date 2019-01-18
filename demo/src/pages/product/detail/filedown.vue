@@ -270,7 +270,6 @@ export default {
 
             this.listUpFile(fileUpload,Common.GETID(this,Common),this.formValidate.userstory_id).then(()=>{
                 this.Message("添加成功")
-                console.error(this.formValidate)
                 this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.userstory_id)
                 this.tableDAtaPageCurrent = 1;
 

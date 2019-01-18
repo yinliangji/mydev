@@ -166,14 +166,14 @@ export default {
 	mounted(){
 		if(this.$router.history.current.query.DATA){
 			let _DATA = JSON.parse(this.$router.history.current.query.DATA);
-			this.getReqDepdFn(getReqDepd,{prjId:Common.GETID(this,Common)})
+			this.getReqDepdFn(getReqDepd,{prjId:Common.GETID(this,Common),reqId:_DATA[0].id})
 			this.editFn(_DATA);
 		}
 	},
 	methods: {
 		//依赖开始
 		getReqDepdFn(URL,params = {}){
-			defaultAXIOS(URL,params,{timeout:5000,method:'post'}).then((response) => {
+			defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======需求项 获取依赖项***response+++",response,myData,"======>");
                 if(myData.status == "success"){

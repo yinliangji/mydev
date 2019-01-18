@@ -49,7 +49,7 @@
       <div class="row-wrapper" v-if="groupList.length == 0">
         <Row :gutter="16" type="flex" justify="start" align="top">
           <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
-            <div :id="'stateId_'+items.state" :state="items.state"  class="rowBox rowBox2" :class="isPut.indexOf(items.state) == -1?'noPutBg':''">
+            <div :id="'stateId_'+items.state" :state="items.state"  class="rowBox rowBox2"  :class="isPutFn(aside,isPut,items.state)">
               <kanbanItem
                   :myAside = "aside"
                   :myRole="role"
@@ -186,6 +186,14 @@ export default {
            
   },
   methods:{
+    isPutFn(a,p,s){//this.aside,this.isPut,items.state
+      if(a == "demand"){
+        return p.indexOf(s) == -1?'noPutBg':''
+      }else{
+        return "";
+      }
+      
+    },
     btnIsShow(txt = ""){
       let str = "@需求完成";
       return txt.indexOf(str) != -1 ? false  : true;

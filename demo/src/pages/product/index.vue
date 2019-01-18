@@ -1288,7 +1288,6 @@ export default {
 
 						_arr = []
 					}
-					console.error(this.cardListBase)
 					this.EventBusDispatch();
                 }else{
                 	this.showError(URL+"_没有数据");

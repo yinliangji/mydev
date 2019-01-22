@@ -1172,7 +1172,7 @@ export default class Common extends Utils {
       let _params = params ? params : {username:super.getCookie("username")}
     	return FUN(URL,_params,{timeout:20000,method:'get'}).then((response) => {
 			let myData = response.data;
-			console.log("<======agile getPermission***response+++",response,myData,"======>");
+			console.log("<======获取权限***response+++",response,myData,"======>");
 			if(myData.status =="success"){
 				if(myData.prj_permission && Array.isArray(myData.prj_permission) && myData.prj_permission.length){
 					that.prj_permission = myData.prj_permission;

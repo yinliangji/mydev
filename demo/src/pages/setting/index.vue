@@ -11,7 +11,7 @@
 		        		<Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" >
 			        		<div class="fromBox fromBox2">
 			        			<div class="addpartBox">
-		                            <Button type="success" @click="addpart('addPartPopBox')">添加小组</Button>
+		                            <Button type="success" @click="addpart('addPartPopBox')" :disabled="isModify">添加小组</Button>
 		                        </div>
 		                        <!--  -->
 		                        <div class="newAddGroup">
@@ -25,7 +25,7 @@
 		                                        :class="myItem.myRef+index"
 		                                        >
 		                                        <div :id="'roleBox_'+index">
-		                                            <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" :id="myItem.myValue+'_'+item.value+'_'+index+'_'+index2" closable @on-close="roleClose">
+		                                            <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" :id="myItem.myValue+'_'+item.value+'_'+index+'_'+index2" :closable="!isModify" @on-close="roleClose">
 		                                                {{ item.label}}
 		                                            </Tag>
 		                                            <Button 
@@ -33,6 +33,7 @@
 		                                                type="dashed" 
 		                                                size="small" 
 		                                                @click="addRole(index)"
+		                                                :disabled="isModify"
 		                                                >
 		                                                添加{{formValidate.AddGroupList[index].myLabel}}人员
 		                                            </Button>
@@ -57,7 +58,7 @@
 		                                </Col>
 		                                <Col span="1">&nbsp;</Col>
 		                                <Col span="3">
-		                                    <Button v-if="myItem.delBtn"  type="error" long  @click="groupDel(index)">
+		                                    <Button v-if="myItem.delBtn" :disabled="isModify"  type="error" long  @click="groupDel(index)">
 		                                    	删除小组
 		                                	</Button>
 		                                </Col>
@@ -105,14 +106,12 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {getUserByProjId,addGroupUsers,addUsers,deleteMember,deleteGroup,listGroup} = Common.restUrl;
+const {getUserByProjId,addGroupUsers,addUsers,deleteMember,deleteGroup,listGroup,getPermission} = Common.restUrl;
 export default {
 	components:{
-		
 	},
 	data () {
 		return {
-			
 			modaDelete: false,
             thisIndex:null,
 			partAdd: false,
@@ -137,36 +136,61 @@ export default {
                 ],
             },
             ruleValidate: {
-
             },
             inputLoad:false,
             onChangeData:false,
-            
+
+            prj_permission:false,
+			identity:false,
+			isModify:true,
 		}	
 	},
 	watch:{
-        
         formValidate: {
             handler(val, oldVal) {
                 if(val){
-                    
                 }
             },
             deep: true
         },
-        
+    },
+    beforecreated(){
+        console.log("分组设置--beforecreated-------",this.formPartValidate,this.formValidate,this.prj_permission,this.identity);
+    },
+    created(){
+        console.log("分组设置--created-------",this.formPartValidate,this.formValidate,this.prj_permission,this.identity);
+    },
+    beforeUpdate(){
+        console.log("分组设置--beforeUpdate-------",this.formPartValidate,this.formValidate,this.prj_permission,this.identity)
+    },
+    updated(){
+        console.log("分组设置--updated-------",this.formPartValidate,this.formValidate,this.prj_permission,this.identity)
     },
 	mounted(){
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
+
+
+		this.getPermissionFn(getPermission).then(()=>{
+			if(this.identity){
+				this.isModify = (this.identity == "SuperAdmin" || this.identity == "PlainAdmin") ? false  : true;
+			}else if(this.prj_permission && Array.isArray(this.prj_permission) && this.prj_permission.length){
+				this.isModify = (this.prj_permission.findIndex(item=>item == "icdp_projList_mng") != -1) ? false : true;
+			}else{
+				this.isModify = true;
+			}
+		},()=>{
+
+		});
+
 		this.addTeam(getUserByProjId,{projectId:ID}).then(()=>{
 			this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:ID});
 		},()=>{
-
 		})
-
 	},
 	methods:{
-		
+		getPermissionFn(URL){
+            return Common.GetPermission(defaultAXIOS,this,URL);
+        },
 		getID(){
 			return Common.GETID(this,Common);
 		},

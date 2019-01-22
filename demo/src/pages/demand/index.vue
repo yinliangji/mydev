@@ -678,6 +678,7 @@ export default {
         //看板结束
         tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",req_name = "",req_id = "",req_submitter = ""){
 
+            
             this.getPrjidFn(projectDetail,id).then((prj_id)=>{
 
                 this.reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter)
@@ -711,8 +712,9 @@ export default {
             this.isShowITMPop = is;
             if(!isCancel){
                 let ID = Common.GETID(this,Common)
-                this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
+                //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
                 this.tableDAtaPageCurrent = 1;
+                this.getInfoFn(ID);
             }
         },
         outinITM(){
@@ -731,9 +733,11 @@ export default {
         },
         selectMenuFn(N){
             let ID = N;
-            Common.setStorageAndCookie(Common,"id",ID)
-            this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
+            Common.setStorageAndCookie(Common,"id",ID);
             this.tableDAtaPageCurrent = 1;
+            this.getInfoFn(ID);
+            //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
+            
         },
         cancelSerchAll(){
             for(let i in this.formValidate){
@@ -744,13 +748,16 @@ export default {
         },
         serchAll(){
             let ID = Common.GETID(this,Common)
-            this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
+            //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
             this.tableDAtaPageCurrent = 1;
+            this.getInfoFn(ID);
+            
         },
         changeCurrentPage(i) {
-            let ID = Common.GETID(this,Common)
-            this.tableDataAjaxFn(reqAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
+            let ID = Common.GETID(this,Common);
             this.tableDAtaPageCurrent = i;
+            this.tableDataAjaxFn(reqAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
+            
         },
         changePageSize(i) {
         },
@@ -827,8 +834,9 @@ export default {
                     });
                     this.$Message.success('删除完成');
                     //this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
-                    this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));
                     this.tableDAtaPageCurrent = 1;
+                    this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));
+                    
                 }else{
                     this.actionArr = [];
                     this.modal_loading = false;
@@ -904,8 +912,12 @@ export default {
             this.tableDataRow2 = false;
             this.actionArr = [];
             this.$refs.selection.selectAll(false);
-            this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));
             this.tableDAtaPageCurrent = 1;
+            
+
+            this.getInfoFn(Common.GETID(this,Common));
+            //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));
+            
 
         },
         tableDataAddFn2(Data){

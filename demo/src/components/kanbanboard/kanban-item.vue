@@ -143,7 +143,8 @@ export default {
   content: "";
   opacity:0.15;
   border-radius:4px;
-  cursor: pointer;
+  pointer-events: none;
+  
 }
 .levelText{
   padding: 4px 4px;

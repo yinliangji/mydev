@@ -1655,6 +1655,31 @@ export default class Common extends Utils {
       return str.replace(/\|/g," 、 ")
     }
 
+    //看板拖动调接口
+    static ChangeStateNumber(that,attr,info){
+      let _statusBase = _.cloneDeep(that[attr]);
+      let toState = info.evt.to.getAttribute('state');
+      let fromState = info.evt.from.getAttribute('state');
+
+      if(toState == fromState){
+        return;
+      }else{
+        that[attr] = [];
+        _statusBase.forEach((item,index)=>{
+          
+          
+          if(fromState == item.state){
+            item.taskNumber = parseFloat(item.taskNumber) - 1
+          }
+          if(item.state == toState){
+            item.taskNumber = parseFloat(item.taskNumber) + 1
+          }
+        });
+        
+        that[attr].push(..._statusBase);
+      }
+    }
+
 }
 function filterParentheses(str){
   let check = (STR = "")=>{

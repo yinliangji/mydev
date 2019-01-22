@@ -134,6 +134,7 @@
                             :aside="'demand'"
                             :boardName="'demandBoard'" 
                             id="demandBoardBox"
+                            v-if="kanbanboardIsShow"
                         />
                     </div>
 
@@ -378,6 +379,7 @@ export default {
             ],
             cardListBase:[],
             statusListBase:[],
+            kanbanboardIsShow:true,
             //看板end
 
 
@@ -427,9 +429,9 @@ export default {
         },
         getInfoFn(ID,isShowList){
             if(this.currentView == "kanbanboard"){
-                this.storyGetKanBanFn(getRequirementKanBan,ID,this.formValidate.req_id,this.formValidate.req_name,this.formValidate.req_submitter,);
+                this.storyGetKanBanFn(getRequirementKanBan,ID,this.formValidate.req_id,this.formValidate.req_name,this.formValidate.req_submitter);
             }else{
-                this.tableDataAjaxFn(reqAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID);
+                this.tableDataAjaxFn(reqAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.req_id,this.formValidate.req_name,this.formValidate.req_submitter);
             }
         },
         //看板开始
@@ -580,6 +582,8 @@ export default {
 
         },
         changeStateNumber(info){
+            Common.ChangeStateNumber(this,"statusListBase",info);
+            /*
             //let _statusBase = this.statusListBase;
             let _statusBase = _.cloneDeep(this.statusListBase);
             let toState = info.evt.to.getAttribute('state');
@@ -601,14 +605,19 @@ export default {
                 });
                 this.statusListBase.push(..._statusBase)
             }
+            */
         },
         changeMovedStatus(info){
             let _params = {};
             _params.taskId = info.evt.item.getAttribute('taskid');
             //_params.ID = info.item.detail_id;
             _params.ID = info.evt.item.getAttribute('detailid');
-            _params.taskStatus = info.evt.to.getAttribute('state');
             _params.nickname = info.evt.item.getAttribute('nickname');
+            _params.taskStatus = info.evt.to.getAttribute('state');
+            _params.taskStatusFrom = info.evt.from.getAttribute('state');
+            if(_params.taskStatus == _params.taskStatusFrom){
+                return
+            }
 
             defaultAXIOS(reqSetChange,{id:_params.ID,status:_params.taskStatus.substring(1),charger:_params.nickname},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
@@ -732,10 +741,15 @@ export default {
             Common.GetPermission(defaultAXIOS,this,URL);
         },
         selectMenuFn(N){
+            this.kanbanboardIsShow = false;
             let ID = N;
             Common.setStorageAndCookie(Common,"id",ID);
             this.tableDAtaPageCurrent = 1;
-            this.getInfoFn(ID);
+
+            setTimeout(()=>{
+                this.kanbanboardIsShow = true;
+                this.getInfoFn(ID);
+            },400)
             //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
             
         },
@@ -749,8 +763,21 @@ export default {
         serchAll(){
             let ID = Common.GETID(this,Common)
             //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
-            this.tableDAtaPageCurrent = 1;
-            this.getInfoFn(ID);
+            
+
+            if(this.currentView == "kanbanboard"){
+                this.kanbanboardIsShow = false;
+                setTimeout(()=>{
+                    this.kanbanboardIsShow = true;
+                    this.tableDAtaPageCurrent = 1;
+                    this.getInfoFn(ID);
+                },10)
+            }else{
+                this.tableDAtaPageCurrent = 1;
+                this.getInfoFn(ID);
+            }
+            //this.tableDAtaPageCurrent = 1;
+            //this.getInfoFn(ID);
             
         },
         changeCurrentPage(i) {

@@ -195,6 +195,7 @@
 							:role="borderRole"
 							:boardName="'productBoard'"
 							id="productBoardBox" 
+							v-if="kanbanboardIsShow"
 						/>
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div>
@@ -315,11 +316,10 @@ export default {
             tableDataRow:false,
 			currentView: "developList",//developList//kanbanboard
 
-			developListImg:require("../../assets/images/product-list.png"),
-			developListImgCur:require("../../assets/images/product-listCur.png"),
-			kanbanboardImg:require("../../assets/images/product-kanban.png"),
-			kanbanboardImgCur:require("../../assets/images/product-kanbanCur.png"),
+			
 
+
+			//看板开始
 			groupList:[
 		        { text: "所属需求项" },
 		        // {
@@ -460,7 +460,17 @@ export default {
 	            //   headPortrait: require("@/assets/images/user_02.png")
 	            // }
 	        ],
-	        columns: [
+	        
+            borderRole:false,
+            cardListBase:[],
+            statusListBase:[],
+            kanbanboardIsShow:true,
+            developListImg:require("../../assets/images/product-list.png"),
+			developListImgCur:require("../../assets/images/product-listCur.png"),
+			kanbanboardImg:require("../../assets/images/product-kanban.png"),
+			kanbanboardImgCur:require("../../assets/images/product-kanbanCur.png"),
+            //看板结束
+            columns: [
 	        	{
                     title: '编号',
                     key: 'userstory_id',
@@ -697,10 +707,6 @@ export default {
                     }
                 }
             ],
-            borderRole:false,
-            cardListBase:[],
-            statusListBase:[],
-            //看板结束
 	        tableData: [
      			//{
 					// userstory_name: '用户故事1',
@@ -840,12 +846,14 @@ export default {
 
 	},
 	computed: {
+		//看板开始
 		cardLists(){
 			return this.cardListBase;
 		},
 		statusLists(){
 			return this.statusListBase;
 		},
+		//看板结束
         addtest() {
             return this.$store.state["ADD_DATA_TEST"].data
         },
@@ -856,12 +864,14 @@ export default {
 		this.getPermissionFn(getPermission);
 		this.getInfoFn(ID);
 
-		//Common.RemoveSession("allSession");
-		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
-
 		/* 看板开始 */
     	this.EventBusRegister();
         /* 看板结束 */
+
+		//Common.RemoveSession("allSession");
+		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
+
+		
 		
 	},
 	methods:{
@@ -1068,7 +1078,7 @@ export default {
 		        //EventBus.$on("storyMoveEnd", this.moveEnd);
 		        EventBus.$on("search", this.searchHandle);
 		        EventBus.$on("addTask", this.addNewTask);
-		        //EventBus.productRegister = true;
+		        EventBus.productRegister = false;
 	        }
 		},
 		EventBusDispatch(){
@@ -1079,11 +1089,13 @@ export default {
 	        }
 		},
 		changeStateNumber(info){
+			Common.ChangeStateNumber(this,"statusListBase",info);
+			/*
 			let _statusBase = _.cloneDeep(this.statusListBase);
 			//let _statusBase = this.statusListBase;
 			let toState = info.evt.to.getAttribute('state');
 			let fromState = info.evt.from.getAttribute('state');
-			
+
 			if(toState == fromState){
 				return;
 			}else{
@@ -1103,6 +1115,7 @@ export default {
 				//this.$set(this.statusListBase[0],"taskNumber", 100)
 				this.statusListBase.push(..._statusBase);
 			}
+			*/
 
 			
 		},
@@ -1112,7 +1125,10 @@ export default {
 			//_params.ID = info.item.detail_id;
 			_params.ID = info.evt.item.getAttribute('detailid');
 			_params.taskStatus = info.evt.to.getAttribute('state');
-
+			_params.taskStatusFrom = info.evt.from.getAttribute('state');
+			if(_params.taskStatus == _params.taskStatusFrom){
+				return
+			}
 			defaultAXIOS(storySetChange,{id:_params.ID,username:Common.getCookie("username"),userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======用户故事 状态改变***response+++",response,myData,"======>");
@@ -1315,7 +1331,7 @@ export default {
 
 
 		selectMenuFn(N){
-
+			this.kanbanboardIsShow = false;
 			let ID = N;
 			//Common.setStorageAndCookie(Common,"id",N)
 			defaultAXIOS(projectDetail+ID,{},{timeout:2000,method:'get'}).then((response) => {
@@ -1346,6 +1362,7 @@ export default {
 			    		this.formValidate[I] = "";
 			    	}
 			    }
+			    this.kanbanboardIsShow = true;
 			    this.getInfoFn(ID);
 
 
@@ -1381,16 +1398,24 @@ export default {
 			let ID = this.getID();
 			this.optionSession();
 			Common.RemoveSession("REQ_ID");
-
-			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
-            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
-            this.tableDAtaPageCurrent = 1;
-            
-            if(this.currentView == "kanbanboard"){}else{}
+            if(this.currentView == "kanbanboard"){
+            	this.kanbanboardIsShow = false;
+            	setTimeout(()=>{
+					this.kanbanboardIsShow = true;
+					this.boardList(ID);
+				},10)
+            }else{
+            	this.boardList(ID);
+            }
 
             //this.$router.push({path: '/product', query: {URL:storyAll,page:1,limit:this.tableDAtaPageLine,data:"",ID:ID,userstory_name:this.formValidate.userstory_name,userstory_id:this.formValidate.userstory_id,userstory_type:this.formValidate.userstory_type,userstory_status:this.formValidate.userstory_status,req_id:this.formValidate.req_id,proi:this.formValidate.proi,charger:this.formValidate.charger,learn_concern:this.formValidate.learn_concern,sprint:this.formValidate.sprint}})
             
 
+        },
+        boardList(ID){
+        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
+            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
+            this.tableDAtaPageCurrent = 1;
         },
 		
 		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = ""){

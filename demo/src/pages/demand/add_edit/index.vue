@@ -166,6 +166,7 @@ export default {
 	mounted(){
 		if(this.$router.history.current.query.DATA){
 			let _DATA = JSON.parse(this.$router.history.current.query.DATA);
+            this.ADDorEDIT = false;
 			this.getReqDepdFn(getReqDepd,{prjId:Common.GETID(this,Common),reqId:_DATA[0].id})
 			this.editFn(_DATA);
 		}

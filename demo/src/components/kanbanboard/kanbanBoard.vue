@@ -25,8 +25,8 @@
               {{itemGroup.text}}
             </div>
             <div>
-              <Button v-if="aside" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >添加用户故事</Button>
-              <Button v-else  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" >添加工作项</Button>
+              <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >添加用户故事</Button>
+              <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" >添加工作项</Button>
             </div>
           </Col>
           <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >

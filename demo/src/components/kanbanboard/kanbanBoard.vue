@@ -434,7 +434,7 @@ export default {
   transform:translate(-50%,0);
   white-space: nowrap;
 }
-#boardWrapper,#productBoardBox,#demandBoardBox,#developmentBoardBox{
+#boardWrapper,#productBoardBox,#demandBoardBox,#developmentBoardBox,#dependManageBoardBox{
   background: #fff;
 }
 .topColumn{
@@ -576,5 +576,11 @@ export default {
 }
 #demandBoardBox .ivu-col-span-2{
   width: 12.4%;
+}
+#developmentBoardBox .ivu-col-span-4{
+  width: 21.4%;
+}
+#dependManageBoardBox .ivu-col-span-4{
+  width: 19.7%;
 }
 </style>

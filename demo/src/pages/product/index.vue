@@ -858,6 +858,14 @@ export default {
             return this.$store.state["ADD_DATA_TEST"].data
         },
     },
+    beforeDestroy(){
+      EventBus.$off("moveEnd", this.moveEnd);
+      EventBus.$off("clickItem", this.clicked);
+      EventBus.$off("search", this.searchHandle);
+      EventBus.$off("addTask", this.addNewTask);
+      EventBus.$off("bindSort", this.bindSortId);
+      EventBus.$off("storyBindSort", this.bindSortId);
+    },
 
 	mounted(){
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
@@ -1176,6 +1184,7 @@ export default {
             console.log("用户故事-点击卡片方法 ::: ", info);
             if(!EventBus.productClicked){
             	console.log("用户故事-点击卡片方法 ::: this.$router.push", info);
+
             	this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
             	EventBus.productClicked = true;
             	setTimeout(()=>{

@@ -155,72 +155,73 @@ export default {
 </script>
 <style lang="less">
 .siderBox {
-  height:100%;
-  overflow-y:auto;
-  overflow-x:hidden;
-  background: #21488a;
-  //
-.siderMenu li a {
-	position:absolute;
-	left:0;
-	top: 0;
-	width: 100%;
 	height:100%;
-	z-index:10;
-}
-.siderMenu li>span{
-	padding-bottom: 1px;
-}
-.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu) {
-    color: white;
-}
-.siderMenu {
-	background: transparent;
-}
-.layout-con{
-    height: 100%;
-    width: 100%;
-}
-.triggerBtn {
-	position:absolute;
-	right:0;
-	top:50%;
-	z-index: 901;
-	cursor: pointer;
+	overflow-y:auto;
+	overflow-x:hidden;
+	background: #21488a;
+  //
+	.siderMenu li a {
+		position:absolute;
+		left:0;
+		top: 0;
+		width: 100%;
+		height:100%;
+		z-index:10;
+	}
+	.siderMenu li>span{
+		padding-bottom: 1px;
+	}
+	.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu), .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title-active:not(.ivu-menu-submenu) {
+	    color: white;
+	}
+	.siderMenu {
+		background: transparent;
+	}
+	.layout-con{
+	    height: 100%;
+	    width: 100%;
+	}
+	.triggerBtn {
+		position:absolute;
+		right:0;
+		top:50%;
+		z-index: 901;
+		cursor: pointer;
 
-}
-.menu-icon{
- 	transition: all .3s;
-}
-.rotate-icon{
- 	transform: rotate(-180deg);
-}
+	}
+	.menu-icon{
+	 	transition: all .3s;
+	}
+	.rotate-icon{
+	 	transform: rotate(-180deg);
+	}
 
-.menu-item span{
-    display: inline-block;
-    overflow: hidden;
-    width: 85px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    vertical-align: bottom;
-    transition: width .2s ease .2s;
-}
-.menu-item i{
-    transform: translateX(0px);
-    transition: font-size .2s ease, transform .2s ease;
-    vertical-align: middle;
-    font-size: 16px;
-}
-.collapsed-menu span{
-    width: 0px;
-    transition: width .2s ease;
-}
-.collapsed-menu i{
-    transform: translateX(5px);
-    transition: font-size .2s ease .2s, transform .2s ease .2s;
-    vertical-align: middle;
-    font-size: 22px;
-}
+	.menu-item span{
+	    display: inline-block;
+	    overflow: hidden;
+	    width: 85px;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	    vertical-align: bottom;
+	    transition: width .2s ease .2s;
+	}
+	.menu-item i{
+	    transform: translateX(0px);
+	    transition: font-size .2s ease, transform .2s ease;
+	    vertical-align: middle;
+	    font-size: 16px;
+	}
+	.collapsed-menu span{
+	    width: 0px;
+	    transition: width .2s ease;
+	}
+	.collapsed-menu i{
+		transform: translate(-11px,11px);
+	    //transform: translateX(5px);
+	    transition: font-size .2s ease .2s, transform .2s ease .2s;
+	    vertical-align: middle;
+	    font-size: 22px;
+	}
 
   
 }

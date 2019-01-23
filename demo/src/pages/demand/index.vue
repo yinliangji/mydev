@@ -386,6 +386,14 @@ export default {
 
         }
     },
+    beforeDestroy(){
+      EventBus.$off("moveEnd", this.moveEnd);
+      EventBus.$off("clickItem", this.clicked);
+      EventBus.$off("search", this.searchHandle);
+      EventBus.$off("addTask", this.addNewTask);
+      EventBus.$off("bindSort", this.bindSortId);
+      EventBus.$off("storyBindSort", this.bindSortId);
+    },
     mounted(){
         this.getPermissionFn(getPermission);
         let ID = Common.GETID(this,Common) ? Common.GETID(this,Common) : this.$router.push('/agile');
@@ -399,8 +407,6 @@ export default {
         this.checkUrlBoard();
         this.EventBusRegister();
         this.getInfoFn(ID);
-       
-
     },
     beforecreated(){
         console.log("项目需求项--beforecreated-------",this.formValidate)

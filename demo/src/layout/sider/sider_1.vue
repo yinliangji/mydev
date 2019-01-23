@@ -1,16 +1,16 @@
 <template>
 	<aside>
-		<MenuItem name="1-1">
+		<MenuItem name="1-1" title="敏捷项目列表">
 			<router-link  to="/agile" />
 			<Icon type="ios-bolt"></Icon>
 			<span>敏捷项目列表</span>
 		</MenuItem>
-		<MenuItem name="1-10">
+		<MenuItem name="1-10" title="数据同步">
 			<router-link  to="/dataSynchro" v-show="isShowMngAllBtn" />
 			<Icon type="shuffle"></Icon>
 			<span>数据同步</span>
 		</MenuItem>
-		<MenuItem name="1-11">
+		<MenuItem name="1-11" title="用户反馈">
 			<router-link  to="/userAdvice" v-show="isShowMngAllBtn" />
 			<Icon type="ios-people"></Icon>
 			<span>用户反馈</span>

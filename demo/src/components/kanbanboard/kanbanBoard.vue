@@ -208,10 +208,11 @@ export default {
     },
     setHeight(){
       this.addSpace = this.aside == "product" && this.role != "icdp_projManager" ? 50 : 0;
-      let Doms = document.getElementById("board").getElementsByClassName("row-wrapper");
+      let DOM = document.getElementById("board");
+      let Doms = DOM ? DOM.getElementsByClassName("row-wrapper") : false;
       let inArr = [];
       let Max = "";
-      if(Doms.length > 1){
+      if(Doms && Doms.length > 1){
         for(let i=1;i<Doms.length;i++){
           let Col = Doms[i].getElementsByClassName("ivu-col");
           for(let j=0;j<Col.length;j++){
@@ -227,8 +228,9 @@ export default {
       }
     },
     delHeight(){
-      let Doms = document.getElementById("board").getElementsByClassName("row-wrapper");
-      if(Doms.length > 1){
+      let DOM = document.getElementById("board");
+      let Doms = DOM ? DOM.getElementsByClassName("row-wrapper") : false;
+      if(Doms && Doms.length > 1){
         for(let i=1;i<Doms.length;i++){
           let Col = Doms[i].getElementsByClassName("ivu-col");
           for(let k=0;k<Col.length;k++){

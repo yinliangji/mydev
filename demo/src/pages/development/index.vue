@@ -9,25 +9,20 @@
     <div class="pageCon">
 
       <div class="newTop">
-        <h3 class="Title">开发任务管理</h3>
+        <h3 class="Title"><span>开发任务管理</span></h3>
         <Form>
           <Row>
-            <Col span="15">
+            <Col span="20">
             <Row>
               <Col span="3" style="text-align: center">
-              <div class="searchName">任务名称</div>
+                <div class="searchName">所属迭代</div>
               </Col>
               <Col span="5">
               <FormItem>
-                <Input placeholder="输入迭代名称" v-model="iterationName"></Input>
-              </FormItem>
-              </Col>
-              <Col span="3" style="text-align: center">
-              <div class="searchName">任务编号</div>
-              </Col>
-              <Col span="5">
-              <FormItem>
-                <Input placeholder="输入迭代编号" v-model="iterationNumber"></Input>
+                <Select ref="belongIteration" v-model="belongIteration" clearable @on-change="changStory"   placeholder="请选择迭代">
+                    <Option v-for="(item,index) in belongIterationList" :value="item.sp_id" :key="index">{{ item.sp_name }}</Option>
+                </Select>
+                <!-- <Input placeholder="输入迭代名称" v-model="iterationName"></Input> -->
               </FormItem>
               </Col>
               <Col span="3" style="text-align: center">
@@ -35,25 +30,10 @@
               </Col>
               <Col span="5">
               <FormItem>
-                <Input placeholder="输入迭代编号" v-model="needName"></Input>
-              </FormItem>
-              </Col>
-            </Row>
-            <Row v-if="isShowMoreShow">
-              <Col span="3" style="text-align: center">
-              <div class="searchName">任务状态</div>
-              </Col>
-              <Col span="5">
-              <FormItem>
-                <Input placeholder="输入迭代名称" v-model="taskStatus"></Input>
-              </FormItem>
-              </Col>
-              <Col span="3" style="text-align: center">
-              <div class="searchName">所属迭代</div>
-              </Col>
-              <Col span="5">
-              <FormItem>
-                <Input placeholder="输入迭代编号" v-model="belongIteration"></Input>
+                <!-- <Input placeholder="输入迭代编号" v-model="iterationNumber"></Input> -->
+                <Select ref="storyName" v-model="storyName" clearable filterable  placeholder="请选择用户故事">
+                    <Option v-for="(item,index) in storyNameList" :value="item.id" :key="index">{{ item.userstory_name }}</Option>
+                </Select>
               </FormItem>
               </Col>
               <Col span="3" style="text-align: center">
@@ -61,10 +41,78 @@
               </Col>
               <Col span="5">
               <FormItem>
-                <Input placeholder="输入迭代编号" v-model="personLiable"></Input>
+                <Select ref="personLiable" v-model="personLiable" clearable filterable  placeholder="请选择责任人">
+                    <Option v-for="(item,index) in personLiableList" :value="item.user_name" :key="index">{{ item.nick_name }}</Option>
+                </Select>
+                <!-- <Input placeholder="输入迭代编号" v-model="needName"></Input> -->
               </FormItem>
               </Col>
             </Row>
+            <Row v-if="isShowMoreShow">
+              <Col span="3" style="text-align: center">
+              <div class="searchName">工作项状态</div>
+              </Col>
+              <Col span="5">
+              <FormItem>
+                <Select ref="taskStatus" v-model="taskStatus" clearable   placeholder="请选择工作项状态">
+                    <Option v-for="(item,index) in taskStatusList" :value="item.id" :key="index">{{ item.name }}</Option>
+                </Select>
+                <!-- <Input placeholder="输入迭代名称" v-model="taskStatus"></Input> -->
+              </FormItem>
+              </Col>
+              <Col span="3" style="text-align: center">
+              <div class="searchName">工作项编号</div>
+              </Col>
+              <Col span="5">
+              <FormItem>
+                <Input placeholder="输入工作项编号编号" v-model="taskNumber" clearable ></Input>
+              </FormItem>
+              </Col>
+              <Col span="3" style="text-align: center">
+              <div class="searchName">工作项名称</div>
+              </Col>
+              <Col span="5">
+              <FormItem>
+                <Input placeholder="输入工作项名称" v-model="taskName" clearable></Input>
+              </FormItem>
+              </Col>
+            </Row>
+
+
+
+            <!--  -->
+            <Row v-if="isShowMoreShow">
+              <Col span="3" style="text-align: center">
+              <div class="searchName">工作项类型</div>
+              </Col>
+              <Col span="5">
+              <FormItem>
+                <Select ref="taskStyle" v-model="taskStyle" clearable   placeholder="请选择工作项类型">
+                    <Option v-for="(item,index) in taskStyleList" :value="item.id" :key="index">{{ item.name }}</Option>
+                </Select>
+                <!-- <Input placeholder="输入迭代名称" v-model="taskStatus"></Input> -->
+              </FormItem>
+              </Col>
+              <Col span="3" style="text-align: center">
+              <div class="searchName">小组名称</div>
+              </Col>
+              <Col span="5">
+              <FormItem>
+                <Select ref="taskGroupName" v-model="taskGroupName" clearable   placeholder="请选择小组名称">
+                    <Option v-for="(item,index) in taskGroupList" :value="item.group_sn" :key="index">{{ item.gropu_name }}</Option>
+                </Select>
+              </FormItem>
+              </Col>
+              <Col span="3" style="text-align: center">
+                &nbsp;
+              </Col>
+              <Col span="5">
+                &nbsp;
+              </Col>
+            </Row>
+            <!--  -->
+
+
             </Col>
             <Col span="4" style="text-align: left" class="serchBtnBox">
             <Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
@@ -79,7 +127,7 @@
       <div class="w80">
         <Row :gutter="16" style="margin-bottom:10px">
           <Col span="2" style="margin-right:10px;margin-top: -2px;">
-          <Button type="success" @click="addNewTask">添加任务</Button>
+          <Button type="success" :disabled="isShowMngAllBtn" @click="addNewTask">添加工作项</Button>
           </Col>
           <Col span="1">
           <img src="@/assets/images/product-list.png" @click="showList" class="cursor">
@@ -121,21 +169,51 @@
 
 <script>
 import { EventBus } from "@/tools";
-
 import kanbanboard from "@/components/kanbanboard";
 import developList from "@/pages/development/development";
+import Common from '@/Common';
+const {getSprintsByPrj,getUserstoryByPrjId,getTaskStatusSettings,getTaskTypeSettings,getUserByProjId,developListAxiosData,changeTaskStatus,getPermission,projectListDataNew,getDefaultSpringIdByPrj,queryCondition,getUserStoryBySprintMId} = Common.restUrl;
 export default {
     data() {
         return {
+            magicKanban:true,
+            sprints_story:[],
+            storyNameListClone:[],
+            picOnoff:true,
+            proName:"",
+            isShowMngAllBtn:false,
+            currentPage:1,
+            pageSize:10,
+            devListOrKanbanOnoff:true,
+            totalPage:0,
+            tableList:[],
             isShowMoreShow:false,
             //search
-            iterationName: "",
-            iterationNumber: "",
-            needName: "",
+            taskName:"",
+            taskNumber:"",
+            storyName:"",
             taskStatus: "",
             belongIteration: "",
             personLiable: "",
-            currentView: "developList"
+            currentView: "kanbanboard",
+            taskStyle:"",
+            taskGroupName:"",
+            storyNameList:[],
+            taskStatusList:[],
+            belongIterationList:[],
+            personLiableList:[],
+            taskStyleList:[],
+            taskGroupList:[],
+            //
+            cardListBase:[],
+            groupListBase:[],
+            statusListBase:[],
+            //groupList:[],
+            mytaskOnoff:false,
+            //
+            iterationName: "",
+            iterationNumber: "",
+            needName: "",
         };
     },
     created() {
@@ -152,48 +230,102 @@ export default {
         EventBus.$on("search", this.searchHandle);
         EventBus.$on("addTask", this.addNewTask);
     },
+    beforeDestroy(){
+      EventBus.$off("moveEnd", this.moveEnd);
+      EventBus.$off("clickItem", this.clicked);
+      EventBus.$off("search", this.searchHandle);
+      EventBus.$off("addTask", this.addNewTask);
+      EventBus.$off("bindSort", this.bindSortId);
+      EventBus.$off("storyBindSort", this.bindSortId);
+    },
     methods: {
-        moveEnd(info) {
-            // 移动卡片结束后
-            console.log(" 移动卡片结束后 :::", info);
-        },
-        clicked(info) {
-            // 点击卡片方法
-            console.log(" 点击卡片方法 ::: ", info);
-            this.$router.push({
-                path: "/development/detail",
-                // query: {
-                //     iterationName: params.row.name
-                // }
-            });
-        },
-        searchHandle(info) {
-            // 查询方法
-            console.log("查询  ::: ", info);
-        },
-        addNewTask() {
-            //点击跳转页面
-            this.$router.push({
-                path: "/development/add"
-            });
-        },
+      myTask(){
+        this.mytaskOnoff=!this.mytaskOnoff;
+        if(this.mytaskOnoff){
+          this.personLiable = this.getCookie("username");
+          if(!this.devListOrKanbanOnoff){
+            this.currentPage = 1;
+            this.MydevelopListAxios()
+          }else{
+            this.magicKanban = false;
+            setTimeout(()=>{
+              this.magicKanban = true;
+              this.MydevelopKanbanAxios();
+            },500)
+          }
 
-        // addNewTask(info) {
-        //   EventBus.$emit("addTask", info);
-        // },
-        showList() {
-            this.currentView = "developList";
-        },
-        showTask() {
-            this.currentView = "kanbanboard";
-        },
-        //分页
-        changeCurrentPage(i) {
-            alert(i);
-        },
-        changePageSize(i) {
-            alert(i);
+        }else{
+          this.personLiable = "";
+          this.$refs.personLiable.clearSingleSelect();
+          if(!this.devListOrKanbanOnoff){
+            this.currentPage = 1;
+            this.developListAxios()
+          }else{
+            this.magicKanban = false;
+            setTimeout(()=>{
+              this.magicKanban = true;
+              this.developKanbanAxios();
+            },500)
+          }
+
         }
+      },
+      changStory(data){
+        if(data){
+          for(let k in this.sprints_story){
+            if(k== data){
+              this.storyNameList = this.sprints_story[k]
+            }
+          }
+        }else{
+          this.storyNameList = this.storyNameListClone;
+        }
+      },
+      moveEnd(info) {
+          // 移动卡片结束后
+          console.log(" 移动卡片结束后 :::", info);
+      },
+      clicked(info) {
+        // if(window.location.hash.indexOf("/development") == -1){
+        //   return
+        // }
+         
+        // 点击卡片方法
+        console.log(" 点击卡片方法 ::: ", info);
+        this.$router.push({
+            path: "/development/detail",
+            // query: {
+            //     iterationName: params.row.name
+            // }
+        });
+      },
+      searchHandle(info) {
+          // 查询方法
+          console.log("查询  ::: ", info);
+      },
+      addNewTask() {
+          //点击跳转页面
+          this.$router.push({
+              path: "/development/add"
+          });
+      },
+
+      // addNewTask(info) {
+      //   EventBus.$emit("addTask", info);
+      // },
+      showList() {
+          this.currentView = "developList";
+      },
+      showTask() {
+          this.currentView = "kanbanboard";
+      },
+      //分页
+      changeCurrentPage(i) {
+          alert(i);
+      },
+      changePageSize(i) {
+          alert(i);
+      }
     },
     computed: {
         //所有卡片数据

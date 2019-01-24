@@ -890,7 +890,7 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                 ]
             },
             {
-                count:2,
+                count:3,
                 req_status:"完成确认",
                 list:[
                     {
@@ -905,6 +905,13 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         req_id:"RQ-PJ1800130-120",
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:20,
+                        comment:"@title",
+                    },
+                    {
+                        req_name:"req_name_21",
+                        req_id:"RQ-PJ1800130-121",
+                        "charger|1":["@cname","xiebei.zh(谢蓓)"],
+                        id:21,
                         comment:"@title",
                     },
                    

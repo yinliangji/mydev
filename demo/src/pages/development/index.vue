@@ -270,6 +270,16 @@ export default {
 
         }
       },
+      onrefreshListCurPage(i){
+        this.currentPage = i;
+        var devlopChooseObj = JSON.stringify(sessionStorage.getItem("developChoose"));
+        developChooseObj.currentPage = i;
+        sessionStorage.setItem("developChoose",JSON.stringify(developChooseObj));
+      },
+      onrefreshListPageSize(i){
+        this.pageSize = i;
+
+      },
       changStory(data){
         if(data){
           for(let k in this.sprints_story){
@@ -302,6 +312,58 @@ export default {
       searchHandle(info) {
           // 查询方法
           console.log("查询  ::: ", info);
+          if(this.personLiable = this.getCookie("username")){
+            this.mytaskOnoff = true;
+          }else{
+            this.mytaskOnoff = false;
+          }
+          let developChoose = {
+            group_sn:this.taskGroupName,
+            task_name:this.taskName,
+            task_style:this.taskStyle,
+            task_id:this.taskNumber,
+            charger:this.personLiable,
+            task_status:this.taskStatus,
+            sprint_id:this.belongIteration,
+            us_id:this.storyName,
+            currentPage:1,
+          };
+          sessionStorage.setItem("developChoose",JSON.stringify(developChoose));
+          if(!this.devListOrKanbanOnoff){
+            this.currentPage = 1;
+            this.developListAxios();
+          }else{
+            this.developKanbanAxios();
+          }
+      },
+      resetHandle(){
+        this.magicKanban = false;
+        this.taskName = "";
+        this.taskNumber = "";
+        this.storyName = "";
+        this.taskStatus = "";
+        this.belongIteration = "";
+        this.personLiable = "";
+        this.taskStyle = "";
+        this.taskGroupName = "";
+
+        this.$refs.belongIteration.clearSingleSelect();
+        this.$refs.storyName.clearSingleSelect();
+        this.$refs.personLiable.clearSingleSelect();
+        this.$refs.taskStatus.clearSingleSelect();
+        this.$refs.taskStyle.clearSingleSelect();
+        this.$refs.taskGroupName.clearSingleSelect();
+        sessionStorage.removeItem("developChoose");
+        this.mytaskOnoff = false;
+        setTimeout(()=>{
+          this.magicKanban = true;
+          if(!this.devListOrKanbanOnoff){
+            this.currentPage = 1;
+            this.developListAxios();
+          }else{
+            this.developKanbanAxios();
+          }
+        },500)
       },
       addNewTask() {
           //点击跳转页面

@@ -114,8 +114,9 @@
 
 
             </Col>
-            <Col span="4" style="text-align: left" class="serchBtnBox">
-            <Button type="primary" icon="ios-search" class="serchBtn">查询</Button>
+            <Col span="4" style="text-align: right" class="serchBtnBox">
+              <Button type="primary" icon="ios-search" class="serchBtn" @click="searchHandle">查询</Button>
+              <Button  class="serchBtn" @click="resetHandle">重置</Button>
             </Col>
           </Row>
           <div class="formValidateMoreBtnBox" @click="isShowMoreShow = !isShowMoreShow">
@@ -294,6 +295,8 @@ export default {
       moveEnd(info) {
           // 移动卡片结束后
           console.log(" 移动卡片结束后 :::", info);
+          this.changeStateNumber(info);
+          this.changeMovedStatus(info);
       },
       clicked(info) {
         // if(window.location.hash.indexOf("/development") == -1){
@@ -302,12 +305,22 @@ export default {
          
         // 点击卡片方法
         console.log(" 点击卡片方法 ::: ", info);
+        /*
         this.$router.push({
             path: "/development/detail",
             // query: {
             //     iterationName: params.row.name
             // }
         });
+        */
+        const {href} = this.$router.resolve({
+          path:"/development/detail",
+          query:{
+            taskId:info.taskId,
+            devlopId:info.id,
+          }
+        })
+        window.open(href,"_blank")
       },
       searchHandle(info) {
           // 查询方法
@@ -353,6 +366,7 @@ export default {
         this.$refs.taskStatus.clearSingleSelect();
         this.$refs.taskStyle.clearSingleSelect();
         this.$refs.taskGroupName.clearSingleSelect();
+
         sessionStorage.removeItem("developChoose");
         this.mytaskOnoff = false;
         setTimeout(()=>{
@@ -365,6 +379,176 @@ export default {
           }
         },500)
       },
+      queryConditionReset(){
+        this.taskName = "";
+        this.taskNumber = "";
+        this.storyName = "";
+        this.taskStatus = "";
+        this.belongIteration = "";
+        this.personLiable = "";
+        this.taskStyle = "";
+        this.taskGroupName = "";
+
+        this.$refs.belongIteration.clearSingleSelect();
+        this.$refs.storyName.clearSingleSelect();
+        this.$refs.personLiable.clearSingleSelect();
+        this.$refs.taskStatus.clearSingleSelect();
+        this.$refs.taskStyle.clearSingleSelect();
+        this.$refs.taskGroupName.clearSingleSelect();
+
+        sessionStorage.removeItem("developChoose");
+        this.mytaskOnoff = false;
+
+      },
+      getPermission(){
+        this.$axios({
+          method:"get",
+          url:getPermission,
+          params:{
+            username:this.getCookie("username"),
+          },
+        })
+        .then((res)=>{
+          if(res.data.status == "success"){
+            let devlopIndex = res.data.permission.findIndex(n=>n == "icdp_devTask_mng");
+            if(devlopIndex > -1){
+              this.isShowMngAllBtn = false;
+            }else{
+              this.isShowMngAllBtn = true;
+            }
+          }else if(res.data.status == "redirect"){
+            toLoginPage(this)
+          }
+        })
+      },
+      selectMenuFn(data){
+        Common.setStorageAndCookie(Common,"id",data);
+        this.setCookie("prjId",data);
+        sessionStorage.removeItem("developChoose");
+        this.$router.push({
+          path:"/development",
+        });
+        this.queryConkitionAxios();
+      },
+      queryConkitionAxios(){
+        this.$axios({
+          methon:"get",
+          url:queryCondition,
+          params:{
+            prj_id:this.getCookie("prjId"),
+          },
+        })
+        .then((res)=>{
+          this.queryConditionReset();
+          this.taskGroupList = res.data.prjGroup;
+          this.personLiableList = res.data.prjUser;
+          this.belongIterationList = res.data.sprintlist;
+          this.belongIterationList.unshift({
+            sp_id:0,
+            sp_name:"未规划迭代",
+          });
+          this.taskStyleList = res.data.typelist;
+          this.taskStatusList = res.data.statuslist;
+          this.storyNameList = res.data.userstory;
+          this.storyNameListClone = res.data.userstory;
+          this.sprints_story = res.data.sprints_story;
+          var developChooseObj = JSON.stringify(sessionStorage.getItem("developChoose"));
+          if(developChooseObj){
+            this.taskName = developChooseObj.task_name;
+            this.taskStyle = developChooseObj.task_type;
+            this.taskNumber = developChooseObj.task_id;
+            this.personLiable = developChooseObj.charger;
+            this.taskStatus = developChooseObj.task_status;
+            this.belongIteration = developChooseObj.sprint_id;
+            this.storyName = developChooseObj.us_id;
+            this.currentPage = developChooseObj.currentPage;
+            this.$nextTick(()=>{
+              this.developListAxios();
+              this.developKanbanAxios();
+              if(this.belongIteration){
+                for(let k in this.sprints_story){
+                  if(k == this.belongIteration){
+                    this.storyNameList = this.sprints_story[k]
+                  }
+                }
+              }else{
+                this.storyNameList = this.storyNameListClone;
+              }
+            });
+          }else{
+            this.$axios({
+              method:"get",
+              url:getDefaultSpringIdByPrj,
+              params:{
+                prj_id:this.getCookie("prjId"),
+              }
+            })
+            .then((res)=>{
+              this.belongIteration = res.data.data;
+              if(this.$route.query.us_name){
+                this.belongIteration = "";
+                this.storyName = this.$route.query.us_name + "";
+              }
+              if(this.$route.query.iterationId){
+                this.belongIteration = Number(this.$route.query.iterationId);
+              }
+              this.$nextTick(()=>{
+                this.developListAxios();
+                this.developKanbanAxios();
+                if(this.belongIteration){
+                  for(let k in this.sprints_story){
+                    if(k == this.belongIteration){
+                      this.storyNameList = this.sprints_story[k];
+                    }
+                  }
+                }else{
+                  this.storyNameList = this.storyNameListClone;
+                }
+              });
+            });
+          }
+        });
+      },
+      changeStateNumber(info){
+        let _statusBase = _.cloneDeep(this.statusListBase);
+        let toState = info.evt.to.getAttribute('state');
+        let fromState = info.evt.from.getAttribute('state');
+
+        if(toState == fromState){
+          return;
+        }else{
+          this.statusListBase = [];
+          _statusBase.forEach((item,index)=>{
+            if(fromState == item.state){
+              item.taskNumber = parseFloat(item.taskNumber) - 1
+            }
+            if(item.state == toState){
+              item.taskNumber = parseFloat(item.taskNumber) + 1
+            }
+          });
+          this.statusListBase.push(..._statusBase);
+        }
+      },
+      changeMovedStatus(info){
+        let _params = {};
+        _params.taskId = info.evt.item.getAttribute('taskid');
+        //_params.ID = info.item.detail_id;
+        _params.ID = info.evt.item.getAttribute('detailid');
+        _params.taskStatus = info.evt.to.getAttribute('state');
+        _params.taskStatusFrom = info.evt.from.getAttribute('state');
+        if(_params.taskStatus == _params.taskStatusFrom){
+          return
+        }
+        this.$axios({
+          method:"get",
+          url:changeTaskStatus,
+          params:_params,
+        })
+        .then(()=>{
+
+        })
+
+      },
       addNewTask() {
           //点击跳转页面
           this.$router.push({
@@ -376,10 +560,24 @@ export default {
       //   EventBus.$emit("addTask", info);
       // },
       showList() {
-          this.currentView = "developList";
+        this.picOnoff = false;
+        this.currentView = "developList";
+        this.devListOrKanbanOnoff = false;
+        if(this.mytaskOnoff){
+          this.MydevelopListAxios();
+        }else{
+          this.developListAxios();
+        }
       },
       showTask() {
-          this.currentView = "kanbanboard";
+        this.picOnoff = true;
+        this.currentView = "kanbanboard";
+        this.devListOrKanbanOnoff = true;
+        if(this.mytaskOnoff){
+          this.MydevelopKanbanAxios();
+        }else{
+          this.developKanbanAxios();
+        }
       },
       //分页
       changeCurrentPage(i) {
@@ -646,6 +844,9 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.pageContent{
+  overflow:hidden;
+}
 //头部
 .ivu-layout-header {
     background: #fff;

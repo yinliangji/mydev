@@ -273,6 +273,28 @@ export default {
         }
 
 
+        if(Common.GetSession("isClickedDelBtn")){
+        	if(Common.GetSession("userstorySerch")){
+        		let _allSession = JSON.parse(Common.GetSession("userstorySerch"));
+	        	for(let I in this.formValidate){
+	        		this.formValidate[I] = _allSession[I]
+	        	}
+	        	if(Common.GetSession("tableDAtaPageCurrent")){
+	        		this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") - 0;
+	        	}
+        	}else if(Common.GetSession("userstorySerchTemp")){
+        		let _allSession = JSON.parse(Common.GetSession("userstorySerch"));
+	        	for(let I in this.formValidate){
+	        		this.formValidate[I] = _allSession[I]
+	        	}
+	        	if(Common.GetSession("tableDAtaPageCurrent")){
+	        		this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") - 0;
+	        	}
+        	}
+        	Common.RemoveSession("isClickedDelBtn");
+        }
+
+
         Common.RemoveSession("userstorySerchTemp");
         if(Common.GetSession("allSession")){
         	let _allSession = JSON.parse(Common.GetSession("allSession"));
@@ -286,6 +308,9 @@ export default {
         	this.tableDAtaPageCurrent =_allSession.tableDAtaPageCurrent - 0;
         	//Common.SetSession("oldAllSession",Common.GetSession("allSession"));
         }
+        
+        
+        
 
         if(this.formValidate.userstory_status || this.formValidate.req_id || this.formValidate.proi || this.formValidate.userstory_type || this.formValidate.charger){
         	this.isShowMoreShow = true;	
@@ -848,6 +873,7 @@ export default {
 	computed: {
 		//看板开始
 		cardLists(){
+			this.cardListBase.forEach((item)=>{item.source = "userstory"})
 			return this.cardListBase;
 		},
 		statusLists(){
@@ -940,6 +966,9 @@ export default {
                     this.delpopIsShow = B;
                     Common.CommonMessage(this,"删除完成")
                     this.getInfoFn(this.getID());
+                    
+                    Common.SetSession("isClickedDelBtn",true);
+
                     return Promise.resolve(myData.status)                    
                 }else{
                     this.delpopIsLoading = B;
@@ -1303,13 +1332,22 @@ export default {
 							_Obj.taskStateStr = myData[i].userstory_status;
 							_Obj.headPortrait =   require("@/assets/images/user_02.png"); //"/assets/images/user_02.png";
 							_Obj.taskName = myData[i].list[j].userstory_name;
-							_Obj.nickName = myData[i].list[j].charger
-							_Obj.detail_id = myData[i].list[j].id
+							_Obj.nickName = myData[i].list[j].charger;
+							_Obj.detail_id = myData[i].list[j].id;
+
+							_Obj.source = "userstory";
+							_Obj.isDepd = myData[i].list[j].isDepd;
+							_Obj.isFile = myData[i].list[j].isFile;
+							_Obj.isFinish = myData[i].list[j].isFinish;
+							_Obj.task_count = myData[i].list[j].task_count;
+							_Obj.testCase = myData[i].list[j].testCase;
+
 							_arr.push(_Obj);
 							_Obj = {}
 						}
 						this.cardList.push(..._arr);
 						this.cardListBase.push(..._arr);
+						
 
 						_arr = []
 					}
@@ -1494,14 +1532,17 @@ export default {
             this.tableDataRow = false;
 		},
 		goAddDevelopmentFn (index) {
+			Common.RemoveSession("isClickedDelBtn");
 			Common.GoUserstorySession(Common,this);
             this.$router.push({path: '/development/add', query: {board: true,sptId:this.tableData[index].sprint,usId:this.tableData[index].id}})
         },
 		goDevelopmentFn (index) {
+			Common.RemoveSession("isClickedDelBtn");
 			Common.GoUserstorySession(Common,this);
             this.$router.push({path: '/development', query: {board: true,us_name:this.tableData[index].id}})
         },
 		goProductDetailFn (index) {
+			Common.RemoveSession("isClickedDelBtn");
 			Common.GoUserstorySession(Common,this);
             this.$router.push({path: '/product/detail', query: {detail_id: this.tableData[index].id}})
         },

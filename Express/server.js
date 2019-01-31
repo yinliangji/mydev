@@ -264,7 +264,7 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             "__value3__pageline": val3,
 
         }],
-        "page_rows|9-16": 3,
+        "page_rows|19-36": 3,
         "per_page|9-16": 3,
     })
 }
@@ -494,6 +494,12 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:1,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
+                        
                     },
                     {
                         userstory_name:"userstory_name_2",
@@ -502,6 +508,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:2,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                     {
                         userstory_name:"userstory_name_3",
@@ -510,6 +521,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:3,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                     {
                         userstory_name:"userstory_name_4",
@@ -518,6 +534,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:4,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     }
                 ]
             },
@@ -532,6 +553,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:5,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                     {
                         userstory_name:"userstory_name_6",
@@ -540,6 +566,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:6,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                     {
                         userstory_name:"userstory_name_7",
@@ -548,6 +579,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:7,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                     {
                         userstory_name:"userstory_name_8",
@@ -556,6 +592,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:8,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     }
                 ]
             },
@@ -570,6 +611,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:9,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                     {
                         userstory_name:"userstory_name_10",
@@ -578,6 +624,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:10,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                    
                 ]
@@ -593,6 +644,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:11,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                     {
                         userstory_name:"userstory_name_12",
@@ -601,6 +657,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:12,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                    
                 ]
@@ -616,6 +677,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:13,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                     {
                         userstory_name:"userstory_name_14",
@@ -624,6 +690,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:14,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                    
                 ]
@@ -639,6 +710,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:15,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                     {
                         userstory_name:"userstory_name_16",
@@ -647,6 +723,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:16,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                    
                 ]
@@ -662,6 +743,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:17,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                     {
                         userstory_name:"userstory_name_18",
@@ -670,6 +756,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:18,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                    
                 ]
@@ -685,6 +776,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:19,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                     {
                         userstory_name:"userstory_name_20",
@@ -693,6 +789,11 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "proi|1":[1,2,3],
                         id:20,
                         "req_id|1":[5,6],
+                        "isDepd|1":["no","yes"],
+                        "isFile|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "task_count|1-99":0,
+                        "testCase|1-99":0,
                     },
                    
                 ]
@@ -726,6 +827,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:1,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_2",
@@ -733,6 +837,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:2,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_3",
@@ -740,6 +847,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:3,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_4",
@@ -747,6 +857,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:4,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     }
                 ]
             },
@@ -760,6 +873,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:5,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_6",
@@ -767,6 +883,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:6,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_7",
@@ -774,6 +893,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:7,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_8",
@@ -781,6 +903,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:8,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     }
                 ]
             },
@@ -794,6 +919,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:9,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_10",
@@ -801,6 +929,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:10,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                    
                 ]
@@ -815,6 +946,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:11,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_12",
@@ -822,6 +956,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:12,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                    
                 ]
@@ -836,6 +973,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:13,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_14",
@@ -843,6 +983,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:14,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                    
                 ]
@@ -857,6 +1000,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:15,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_16",
@@ -864,6 +1010,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:16,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                    
                 ]
@@ -878,6 +1027,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:17,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_18",
@@ -885,6 +1037,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:18,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                    
                 ]
@@ -899,6 +1054,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:19,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_20",
@@ -906,6 +1064,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:20,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                     {
                         req_name:"req_name_21",
@@ -913,6 +1074,9 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "charger|1":["@cname","xiebei.zh(谢蓓)"],
                         id:21,
                         comment:"@title",
+                        "isDepd|1":["no","yes"],
+                        "isFinish|1":["finish","unfinish"],
+                        "us_counts|1-99":0,
                     },
                    
                 ]

@@ -19,6 +19,47 @@
           </span>
           {{item.taskName}}
         </p>
+        <!-- 顺序1:e0592b 2：7d2f74 3:00a6b6 4状态1:199c40 4状态2:db0102   -->
+        <!-- 工作项状态识别 -->
+        <p v-if="item.source=='task'" class="kananstatus">
+          <span class="iconBg" style="color:#7d2f74;font-size:22px;transform:rotate(35deg);font-weight:bold" v-if="item.isFile=='yes'">
+            <Icon type="paperclip"></Icon>
+          </span>
+
+          <span class="iconBg" style="font-size:20px" v-if="item.isDepend=='yes'" title="依赖项状态">
+            <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
+            <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
+          </span>
+        </p>
+        <!-- 用户故事标识状态 -->
+        <p v-if="item.source=='userstory'" class="kananstatus floatClear">
+          <span class="iconBg" style="background:#e0592b" title="工作项个数" >
+            {{item.task_count}}
+          </span>
+          <span class="iconBg" style="color:#7d2f74;font-size:22px;transform:rotate(35deg);font-weight:bold" v-if="item.isFile=='yes'">
+            <Icon type="paperclip"></Icon>
+          </span>
+          <span class="iconBg" style="background:#00a6b6" title="测试案例个数" >
+            {{item.testCase}}
+          </span>
+          <span class="iconBg" style="font-size:20px" v-if="item.isDepd=='yes'" title="依赖项状态">
+            <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
+            <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
+          </span>
+        </p>
+        <!-- 需求项标识状态 -->
+        <p v-if="item.source=='demand'" class="kananstatus floatClear">
+          <span class="iconBg" style="background:#e0592b" title="用户故事个数" >
+            {{item.us_counts}}
+          </span>
+          <span class="iconBg" style="font-size:20px" v-if="item.isDepd=='yes'" title="依赖项状态">
+            <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
+            <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
+          </span>
+        </p>
+
+
+
         <p class="item-name">
           <span class="user_name" v-if="nicknameFormat(myAside == 'product' || myAside == 'demand')" v-html="chackSymbol(item.nickName)">
           </span>
@@ -26,7 +67,7 @@
               {{item.nickName}}
           </span>
           <!-- <img :src="item.headPortrait" width="21" height="21" /> -->
-          <img v-show="myAside == 'product' || myAside == 'demand'? false:true" :src="headPortrait" width="21" height="21" />
+          <!-- <img v-show="myAside == 'product' || myAside == 'demand'? false:true" :src="headPortrait" width="21" height="21" /> -->
         </p>
       </div>
   </div>
@@ -129,6 +170,28 @@ export default {
 </script>
 
 <style scoped>
+.kananstatus{
+  overflow: hidden;
+  height: 20px;
+  float: left;
+}
+.floatClear{
+  clear: both;
+  float: none;
+}
+.iconBg{
+  display: block;
+  float: left;
+  font-size: 12px;
+  color: #fff;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  margin-right:4px;
+  text-align: center;
+  line-height: 18px;
+  vertical-align: top;
+}
 .isOpacity{
   position: relative;
 }
@@ -203,6 +266,8 @@ export default {
 
   .item-name {
     text-align: right;
+    line-height: 20px;
+    padding-right: 4px;
   }
   span.user_name{
     /*

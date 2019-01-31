@@ -567,6 +567,14 @@ export default {
                             _Obj.taskName = myData[i].list[j].req_name;
                             _Obj.nickName = myData[i].list[j].charger
                             _Obj.detail_id = myData[i].list[j].id
+
+
+                            _Obj.source = "demand";
+                            _Obj.isDepd = myData[i].list[j].isDepd;
+                            _Obj.isFinish = myData[i].list[j].isFinish;
+                            _Obj.us_counts = myData[i].list[j].us_counts;
+                            
+
                             _arr.push(_Obj);
                             _Obj = {}
                         }
@@ -874,7 +882,9 @@ export default {
                     this.actionArr = [];
                     this.modal_loading = false;
                     this.modaDelete = false;
-                    this.showError('删除失败');
+
+                    Common.CommonError(this,myData.message)
+                    //this.$Message.success(myData.message);
                 }
                 
 
@@ -1021,6 +1031,7 @@ export default {
     },
     computed: {
         cardLists(){
+            this.cardListBase.forEach((item)=>{item.source = "demand"})
             return this.cardListBase;
         },
         statusLists(){

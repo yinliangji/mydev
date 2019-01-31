@@ -1479,6 +1479,8 @@ export default class Common extends Utils {
     static LengthSession(){
       return sessionStorage.length;
     }
+
+    
     //设置用户故事分页和搜索还原--不通用
     static UserstorySession(_Common,that = false){
       if(that && that.$router.history.current.path.indexOf("detail") != -1){
@@ -1489,6 +1491,9 @@ export default class Common extends Utils {
       let allSession = _Common.GetSession("userstorySerch") ? JSON.parse(_Common.GetSession("userstorySerch")) : {};
       allSession.tableDAtaPageCurrent = _Common.GetSession("tableDAtaPageCurrent") ? _Common.GetSession("tableDAtaPageCurrent") : 1;
       _Common.SetSession("allSession",JSON.stringify(allSession));
+
+
+
       _Common.RemoveSession("tableDAtaPageCurrent");
       _Common.RemoveSession("userstorySerch");
       _Common.RemoveSession("oldAllSession");

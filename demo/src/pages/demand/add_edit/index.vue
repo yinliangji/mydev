@@ -244,6 +244,7 @@ export default {
                 depd_main_type:1,
                 depd_list:this.dependList,
                 depd_sn:this.formItem.req_id,
+                username:Common.getStorageAndCookie(this,Common,"username"),
             }
             
             let URL = this.ADDorEDIT ? reqAdd : reqEdit;

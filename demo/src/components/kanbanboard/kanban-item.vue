@@ -99,6 +99,12 @@ export default {
         return false;
       }
     },
+    myIsOperation: {//判断项目需求项权限
+      type: Boolean,
+      default: function() {
+        return false;
+      }
+    },
   },
   watch:{
     myRole(data){
@@ -136,7 +142,18 @@ export default {
           return n.indexOf(Common.getCookie("username")) != -1 ? "isDraggable" : "isOpacity";
         }
       }else if(a == "demand"){
-        return s == "07" || s == "08" ? "isDraggable" : "isOpacity";
+        if(s == "07" || s == "08"){
+          return !this.myIsOperation ? "isDraggable" : "isOpacity";
+        }else{
+          return "isOpacity"
+        }
+        
+        // if(!this.myIsOperation){
+        //   return "isDraggable"
+        // }else{
+        //   return s == "07" || s == "08" ? "isDraggable" : "isOpacity";
+        // }
+        
       }else if(a == "development"){
         return tp ? "isDraggable" : "isOpacity";
       }else{

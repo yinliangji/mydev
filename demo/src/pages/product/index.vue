@@ -238,12 +238,20 @@ const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,pr
 export default {
 	watch: {
 		'$route' (to, from) {
+
+			console.error(to, from,)
+
+			if(Common.GetSession("CurView")){
+				this.currentView = Common.GetSession("CurView");
+			}else{
+				if(to.query.board && to.query.board == "true"){
+		        	this.currentView = "kanbanboard";
+		        }else{
+		        	this.currentView = "developList";
+		        }
+			}
 			
-			if(to.query.board && to.query.board == "true"){
-	        	this.currentView = "kanbanboard";
-	        }else{
-	        	this.currentView = "developList";
-	        }
+			
 		},
 		formValidate: {
             handler(val, oldVal) {
@@ -896,6 +904,13 @@ export default {
 	mounted(){
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 		this.getPermissionFn(getPermission);
+
+		if(!Common.GetSession("CurView") && this.$route.query.board){
+			let CurView = "kanbanboard"
+			this.currentView = CurView;
+			Common.SetSession("CurView",CurView);
+		}
+
 		this.getInfoFn(ID);
 
 		/* 看板开始 */

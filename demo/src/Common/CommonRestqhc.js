@@ -18,8 +18,18 @@ CommonRestqhc.restUrl = {
     //开发任务
     "developAddAxiosData":process.env.BASE_URL + "/devtask/add/",
     "developEditAxiosData":process.env.BASE_URL + "/devtask/edit/",
+    "developListAxiosData":process.env.BASE_URL + "/devtask/list/",
     "updateView":process.env.BASE_URL + "/devtask/updateView/",
     //qhc end
+    "getUserStoryBySprintMId":process.env.BASE_URL + "/sprint/getUserStoryBySprintMId/",
+    "queryCondition":process.env.BASE_URL + "/devtask/queryCondition/",
+    "getDefaultSpringIdByPrj":process.env.BASE_URL + "/userstory/getDefaultSpringIdByPrj/",
+    "getSprintsByPrj": process.env.BASE_URL + "/sprint/getSprintsByPrj/",
+    "getUserstoryByPrjId":process.env.BASE_URL + "/userstory/getUserstoryByPrjId/",
+    "getTaskStatusSettings": process.env.BASE_URL + "/sprint/getTaskStatusSettings/",
+    "getTaskTypeSettings":process.env.BASE_URL + "/devtask/getTaskTypeSettings/",
+    "getUserByProjId":process.env.BASE_URL + "/agile/getUserByProjId/",
+    "changeTaskStatus":process.env.BASE_URL + "/devtask/changeTaskStatus/",
 
 }
 Object.setPrototypeOf(CommonRestqhc.restUrl,CommonRestinfReq.restUrl);

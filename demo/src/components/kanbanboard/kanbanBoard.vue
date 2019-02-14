@@ -32,6 +32,7 @@
           <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
             <div :id="'kb'+itemGroup.groupId+'_'+items.state" :state="items.state" :groupid="itemGroup.groupId" class="rowBox" :class="addSpace?'addSpaceBox':''">
               <kanbanItem
+                :myIsOperation = "isOperation"
                 :myAside = "aside"
                 :myRole="role"
                 :key="cardIndex"
@@ -51,6 +52,7 @@
           <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
             <div :id="'stateId_'+items.state" :state="items.state"  class="rowBox rowBox2"  :class="isPutFn(aside,isPut,items.state)">
               <kanbanItem
+                  :myIsOperation = "isOperation"
                   :myAside = "aside"
                   :myRole="role"
                   :key="keys"
@@ -101,6 +103,12 @@ export default {
       }
     },
     isDisabled: {
+      type: Boolean,
+      default: function() {
+        return false;
+      }
+    },
+    isOperation: {
       type: Boolean,
       default: function() {
         return false;

@@ -1,10 +1,10 @@
 <template>
   <div class="curPosition">
-    <Icon type="navicon-round"></Icon>
+    <Icon type="navicon-round" style="color:#01babc;font-size:16px;"></Icon>
 
     <span>选择项目</span>
-    <Select v-model="curProject" style="width:140px" @on-change="changeCurProject">
-      <Option v-for="item in projectList" :value="item.id" :key="item.id">{{ item.prj_name }}</Option>
+    <Select v-model="curProject" clearable filterable style="width:300px" @on-change="changeCurProject">
+      <Option v-for="(item,index) in projectList" :value="item.id" :key="index">{{ item.prj_name }}</Option>
     </Select>
   </div>
 </template>
@@ -17,10 +17,39 @@ export default {
     data() {
         return {
             projectList: [],
-            curProject: ""
+            curProject: "",
         };
     },
+    watch: {
+      '$route' (to, from) {
+       },
+       curProject(curVal,oldVal){
+
+       },
+    },
     methods: {
+        delUrlParam(url, ref) {
+            // 如果不包括此参数
+            if (url.indexOf(ref) == -1)
+                return url;
+            var arr_url = url.split('?');
+            var base = arr_url[0];
+            var arr_param = arr_url[1].split('&');
+            var index = -1;
+            for (let i = 0; i < arr_param.length; i++) {
+                var paired = arr_param[i].split('=');
+                if (paired[0] == ref) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index == -1) {
+                return url;
+            } else {
+                arr_param.splice(index, 1);
+                return base + "?" + arr_param.join('&');
+            }
+        },
         showProjectList(){
             var self = this;
             let username = this.getCookie("username");
@@ -45,6 +74,7 @@ export default {
                     self.$router.push({path:"/agile"});
                     return;
                 }
+                let _cur;
                 this.projectList = res.data.data;
                 
                 this.$nextTick(function(){
@@ -115,6 +145,24 @@ export default {
             return arr.find(item=>item.id == val);
         },
         changeCurProject(data) {
+            console.error(data)
+            if(!data){return}
+            if(this.$route.name == "Product"){
+                let _url = this.$route.fullPath
+                if( _url.indexOf("id=") != -1 || _url.indexOf("prj_id=") != -1 || _url.indexOf("prod_id=") != -1){
+                    if(_url.indexOf("id=") != -1){
+                        _url = this.delUrlParam(_url,"id");
+                    }
+                    if(_url.indexOf("prj_id=") != -1){
+                        _url = this.delUrlParam(_url,"prj_id");
+                    }
+                    if(_url.indexOf("prod_id=") != -1){
+                        _url = this.delUrlParam(_url,"prod_id");
+                    }
+                    this.$router.push({fullPath:_url})
+                }
+            }
+            
             this.setCookie("prjId", data);
             this.setCookie("id", data);
             let prjSn = this._getPrjSn(data);
@@ -148,6 +196,7 @@ export default {
                 }else{
                     this.setCookie("prjId","");
                     this.setCookie("id","");
+                    return 0;
                 }
             }
             return;

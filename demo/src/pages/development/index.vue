@@ -159,9 +159,16 @@
         :cardList="cardList" 
         :groupList="groupList" 
         :statusList="statusList"
+        :tableList="currentPage"
+        :totalPage="totalPage"
+        :getPermission="isShowMngAllBtn"
+        :mytaskOnoff="mytaskOnoff"
+        @refreshListCurPage="onrefreshListCurPage"
+        @refreshListPageSize="onrefreshListPageSize"
         :aside="'development'"
         :boardName="'developmentBoard'" 
         id="developmentBoardBox"
+        v-if="magicKanban"
         >
       </component>
     </div>
@@ -218,12 +225,24 @@ export default {
         };
     },
     created() {
-        if (this.$route.query.board) {
-            this.currentView = kanbanboard;
+      if(this.$route.query.devListOrKanbanOnoff){
+        this.currentView = "developList";
+        this.devListOrKanbanOnoff = false;
+        this.picOnoff = false;
+      }
+      if (this.$route.query.board) {
+          this.currentView = kanbanboard;
+      }
+      if (this.$route.query.watchKanban) {
+          this.currentView = kanbanboard;
+      }
+      let timer = setInterval(()=>{
+        if(this.getCookie("username")){
+          this.getPermission();
+          clearInterval(timer)
         }
-        if (this.$route.query.watchKanban) {
-            this.currentView = kanbanboard;
-        }
+      },1000);
+      this.queryConditionAxios();
     },
     mounted() {
         EventBus.$on("moveEnd", this.moveEnd);
@@ -428,9 +447,10 @@ export default {
         this.$router.push({
           path:"/development",
         });
-        this.queryConkitionAxios();
+        this.queryConditionAxios();
       },
-      queryConkitionAxios(){
+      queryConditionAxios(){
+        //return
         this.$axios({
           methon:"get",
           url:queryCondition,
@@ -585,182 +605,315 @@ export default {
       },
       changePageSize(i) {
           alert(i);
-      }
+      },
+      MydevelopListAxios(){
+        this.$axios({
+          method:"get",
+          url:developListAxiosData,
+          params:{
+            data:"",
+            page:this.currentPage,
+            limit:this.pageSize,
+            prj_id:this.getCookie("prjId"),
+            task_name:this.taskName,
+            task_type:this.taskStyle,
+            task_id:this.taskNumber,
+            charger:this.getCookie("username"),
+            task_status:this.taskStatus,
+            sprint_id:this.belongIteration,
+            us_id:this.storyName,
+            group_sn:this.taskGroupName,
+          }
+        })
+        .then((res)=>{
+          let tableListArr = [];
+          res.data.rows.forEach((item,index)=>{
+            item.nick_name = item.naic_name.split("_")[0]+")";
+          })
+          this.tableList = res.data.rows;
+          this.totalPage = parseInt(res.data.total);
+        })
+      },
+      MydevelopKanbanAxios(){
+        this.$axios({
+          method:"get",
+          url:developkanbanAxiosData,
+          params:{
+            prj_id:this.getCookie("prjId"),
+            task_name:this.taskName,
+            task_type:this.taskStyle,
+            task_id:this.taskNumber,
+            task_status:this.taskStatus,
+            sprint_id:this.belongIteration,
+            us_id:this.storyName,
+            cookieName:this.getCookie("username"),
+            group_sn:this.taskGroupName,
+          }
+        })
+        .then((res)=>{
+          if(res.data.role == "icdp_projManager"){
+            res.data.cardList.forEach((item)=>{
+              item.isTaskPerson = true;
+            })
+          };
+          this.cardListBase = res.data.cardList;
+          this.groupList = res.data.groupList;
+          this.statusListBase = res.data.statusList;
+          EventBus.$emit("bindSort");
+        })
+      },
+      developListAxios(){
+        this.$axios({
+          method:"get",
+          url:developListAxiosData,
+          params:{
+            data:"",
+            page:this.currentPage,
+            limit:this.pageSize,
+            prj_id:this.getCookie("prjId"),
+            task_name:this.taskName,
+            task_type:this.taskStyle,
+            task_id:this.taskNumber,
+            charger:this.personLiable,
+            task_status:this.taskStatus,
+            sprint_id:this.belongIteration,
+            us_id:this.storyName,
+            group_sn:this.taskGroupName,
+          }
+        })
+        .then((res)=>{
+          let tableListArr = [];
+          res.data.rows.forEach((item,index)=>{
+            item.nick_name = item.naic_name.split("_")[0]+")";
+          })
+          this.tableList = res.data.rows;
+          this.totalPage = parseInt(res.data.total);
+        })
+      },
+      developKanbanAxios(){
+        this.$axios({
+          method:"get",
+          url:developkanbanAxiosData,
+          params:{
+            prj_id:this.getCookie("prjId"),
+            task_name:this.taskName,
+            task_type:this.taskStyle,
+            task_id:this.taskNumber,
+            charger:this.personLiable,
+            task_status:this.taskStatus,
+            sprint_id:this.belongIteration,
+            us_id:this.storyName,
+            cookieName:this.getCookie("username"),
+            group_sn:this.taskGroupName,
+          }
+        })
+        .then((res)=>{
+          if(res.data.role == "icdp_projManager"){
+            res.data.cardList.forEach((item)=>{
+              item.isTaskPerson = true;
+            })
+          };
+          this.cardListBase = res.data.cardList;
+          this.groupList = res.data.groupList;
+          this.statusListBase = res.data.statusList;
+          EventBus.$emit("bindSort");
+        })
+      },
     },
     computed: {
         //所有卡片数据
         cardList: function() {
-            let _cardList = [
-                {
-                  groupId:12799,
-                  isTaskPerson:true,
-                  taskId: "TS-PJ1800150-US0001",
-                  nickName: "xiebei.zh(谢蓓)",
-                  taskName:"任务名1XXX",
-                  userId: "xiebei.zh",
-                  id:1,
-                  taskStatus: 1,
-                  bgcolor:"#FE4514",
-                  headPortrait:"xxx/xx.jpg",
-                },
-                {
-                  groupId:12800,
-                  isTaskPerson:true,
-                  taskId: "TS-PJ1800150-US0002",
-                  nickName: "xiebei.zh(谢蓓)",
-                  taskName:"任务名2XXX",
-                  userId: "xiebei.zh",
-                  id:2,
-                  taskStatus: 2,
-                  bgcolor:"#FEB159",
-                  headPortrait:"xxx/xx.jpg",
-                },
-                {
-                  groupId:12799,
-                  isTaskPerson:true,
-                  taskId: "TS-PJ1800150-US0003",
-                  nickName: "xiebei.zh(谢蓓)",
-                  taskName:"任务名3XXX",
-                  userId: "xiebei.zh",
-                  id:3,
-                  taskStatus: 4,
-                  bgcolor:"#FE4514",
-                  headPortrait:"xxx/xx.jpg",
-                },
-                {
-                  groupId:12605,
-                  isTaskPerson:false,
-                  taskId: "TS-PJ1800150-US0004",
-                  nickName: "xiebei.zh(谢蓓)",
-                  taskName:"任务名4XXX",
-                  userId: "xiebei.zh",
-                  id:4,
-                  taskStatus: 3,
-                  bgcolor:"#FEB159",
-                  headPortrait:"xxx/xx.jpg",
-                },
-                {
-                  groupId:12605,
-                  isTaskPerson:false,
-                  taskId: "TS-PJ1800150-US0005",
-                  nickName: "lizhuo.zh(李卓)",
-                  taskName:"任务名5XXX",
-                  userId: "lizhuo.zh",
-                  id:5,
-                  taskStatus: 2,
-                  bgcolor:"#FEB159",
-                  headPortrait:"xxx/xx.jpg",
-                },
-                /*
-                {
-                    taskId: "#US0001",
-                    taskName: "任务名1XXX",
-                    description:
-                        "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-                    userName: "user1",
-                    userId: "userId_01",
-                    groupId: "group_01",
-                    bgColor: { background: "#b3ecec" },
-                    taskStateStr: "未开始",
-                    taskState: "01",
-                    headPortrait: require("@/assets/images/user_02.png"),
-                    userNeed: "用户界面设计",
-                    iterations: "基础界面设计阶段"
-                },
-                {
-                    taskId: "#US0002",
-                    taskName: "任务名2XXX",
-                    description:
-                        "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-                    userName: "user1",
-                    userId: "userId_02",
-                    groupId: "group_02",
-                    bgColor: { background: "#f8d6af" },
-                    taskStateStr: "设计开发",
-                    taskState: "02",
-                    headPortrait: require("@/assets/images/user_02.png")
-                },
-                {
-                    taskId: "#US0003",
-                    taskName: "任务名3XXX",
-                    description:
-                        "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-                    userName: "user1",
-                    userId: "userId_03",
-                    groupId: "group_01",
-                    bgColor: { background: "#f8d6af" },
-                    taskStateStr: "设计开发",
-                    taskState: "02",
-                    headPortrait: require("@/assets/images/user_02.png")
-                },
-                {
-                    taskId: "#US0004",
-                    taskName: "任务名4XXX",
-                    description:
-                        "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-                    userName: "user1",
-                    userId: "userId_04",
-                    groupId: "group_03",
-                    bgColor: { background: "#f8d6af" },
-                    taskStateStr: "未开始",
-                    taskState: "01",
-                    headPortrait: require("@/assets/images/user_02.png")
-                },
-                {
-                    taskId: "#US0005",
-                    taskName: "任务名5XXX",
-                    description:
-                        "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-                    userName: "user1",
-                    userId: "userId_05",
-                    groupId: "group_01",
-                    bgColor: { background: "#f8d6af" },
-                    taskStateStr: "发布",
-                    taskState: "04",
-                    headPortrait: require("@/assets/images/user_02.png")
-                },
-                {
-                    taskId: "#US0006",
-                    taskName: "任务名6XXX",
-                    description:
-                        "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-                    userName: "user1",
-                    userId: "userId_06",
-                    groupId: "group_01",
-                    bgColor: { background: "#f8d6af" },
-                    taskStateStr: "上线",
-                    taskState: "01",
-                    headPortrait: require("@/assets/images/user_02.png")
-                },
-                {
-                    taskId: "#US0007",
-                    taskName: "任务名7XXX",
-                    description:
-                        "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-                    userName: "user1",
-                    userId: "userId_07",
-                    groupId: "group_01",
-                    bgColor: { background: "#f8d6af" },
-                    taskStateStr: "测试",
-                    taskState: "05",
-                    headPortrait: require("@/assets/images/user_02.png")
-                },
-                {
-                    taskId: "",
-                    taskName: "",
-                    description:
-                        "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
-                    userName: "",
-                    userId: "userId_08",
-                    groupId: "group_01",
-                    bgColor: { background: "#fff" },
-                    taskStateStr: "测试",
-                    taskState: "03",
-                    headPortrait: ""
+          
+          let _cardList = [
+              {
+                groupId:12799,
+                isTaskPerson:true,
+                taskId: "TS-PJ1800150-US0001",
+                nickName: "xiebei.zh(谢蓓)",
+                taskName:"任务名1XXX",
+                userId: "xiebei.zh",
+                id:1,
+                taskStatus: 1,
+                bgcolor:"#FE4514",
+                headPortrait:"xxx/xx.jpg",
+              },
+              {
+                groupId:12800,
+                isTaskPerson:true,
+                taskId: "TS-PJ1800150-US0002",
+                nickName: "xiebei.zh(谢蓓)",
+                taskName:"任务名2XXX",
+                userId: "xiebei.zh",
+                id:2,
+                taskStatus: 2,
+                bgcolor:"#FEB159",
+                headPortrait:"xxx/xx.jpg",
+              },
+              {
+                groupId:12799,
+                isTaskPerson:true,
+                taskId: "TS-PJ1800150-US0003",
+                nickName: "xiebei.zh(谢蓓)",
+                taskName:"任务名3XXX",
+                userId: "xiebei.zh",
+                id:3,
+                taskStatus: 4,
+                bgcolor:"#FE4514",
+                headPortrait:"xxx/xx.jpg",
+              },
+              {
+                groupId:12605,
+                isTaskPerson:false,
+                taskId: "TS-PJ1800150-US0004",
+                nickName: "xiebei.zh(谢蓓)",
+                taskName:"任务名4XXX",
+                userId: "xiebei.zh",
+                id:4,
+                taskStatus: 3,
+                bgcolor:"#FEB159",
+                headPortrait:"xxx/xx.jpg",
+              },
+              {
+                groupId:12605,
+                isTaskPerson:false,
+                taskId: "TS-PJ1800150-US0005",
+                nickName: "lizhuo.zh(李卓)",
+                taskName:"任务名5XXX",
+                userId: "lizhuo.zh",
+                id:5,
+                taskStatus: 2,
+                bgcolor:"#FEB159",
+                headPortrait:"xxx/xx.jpg",
+              },
+              /*
+              {
+                  taskId: "#US0001",
+                  taskName: "任务名1XXX",
+                  description:
+                      "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+                  userName: "user1",
+                  userId: "userId_01",
+                  groupId: "group_01",
+                  bgColor: { background: "#b3ecec" },
+                  taskStateStr: "未开始",
+                  taskState: "01",
+                  headPortrait: require("@/assets/images/user_02.png"),
+                  userNeed: "用户界面设计",
+                  iterations: "基础界面设计阶段"
+              },
+              {
+                  taskId: "#US0002",
+                  taskName: "任务名2XXX",
+                  description:
+                      "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+                  userName: "user1",
+                  userId: "userId_02",
+                  groupId: "group_02",
+                  bgColor: { background: "#f8d6af" },
+                  taskStateStr: "设计开发",
+                  taskState: "02",
+                  headPortrait: require("@/assets/images/user_02.png")
+              },
+              {
+                  taskId: "#US0003",
+                  taskName: "任务名3XXX",
+                  description:
+                      "设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+                  userName: "user1",
+                  userId: "userId_03",
+                  groupId: "group_01",
+                  bgColor: { background: "#f8d6af" },
+                  taskStateStr: "设计开发",
+                  taskState: "02",
+                  headPortrait: require("@/assets/images/user_02.png")
+              },
+              {
+                  taskId: "#US0004",
+                  taskName: "任务名4XXX",
+                  description:
+                      "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+                  userName: "user1",
+                  userId: "userId_04",
+                  groupId: "group_03",
+                  bgColor: { background: "#f8d6af" },
+                  taskStateStr: "未开始",
+                  taskState: "01",
+                  headPortrait: require("@/assets/images/user_02.png")
+              },
+              {
+                  taskId: "#US0005",
+                  taskName: "任务名5XXX",
+                  description:
+                      "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+                  userName: "user1",
+                  userId: "userId_05",
+                  groupId: "group_01",
+                  bgColor: { background: "#f8d6af" },
+                  taskStateStr: "发布",
+                  taskState: "04",
+                  headPortrait: require("@/assets/images/user_02.png")
+              },
+              {
+                  taskId: "#US0006",
+                  taskName: "任务名6XXX",
+                  description:
+                      "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+                  userName: "user1",
+                  userId: "userId_06",
+                  groupId: "group_01",
+                  bgColor: { background: "#f8d6af" },
+                  taskStateStr: "上线",
+                  taskState: "01",
+                  headPortrait: require("@/assets/images/user_02.png")
+              },
+              {
+                  taskId: "#US0007",
+                  taskName: "任务名7XXX",
+                  description:
+                      "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+                  userName: "user1",
+                  userId: "userId_07",
+                  groupId: "group_01",
+                  bgColor: { background: "#f8d6af" },
+                  taskStateStr: "测试",
+                  taskState: "05",
+                  headPortrait: require("@/assets/images/user_02.png")
+              },
+              {
+                  taskId: "",
+                  taskName: "",
+                  description:
+                      "未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+                  userName: "",
+                  userId: "userId_08",
+                  groupId: "group_01",
+                  bgColor: { background: "#fff" },
+                  taskStateStr: "测试",
+                  taskState: "03",
+                  headPortrait: ""
+              }
+              */
+          ];
+          /* 以后加上
+          let _cardList = this.carkListBase;
+          let _groups = this.groupList;
+          _cardList.forEach((cardItem,index)=>{
+            _groups.forEach((groupItem,index)=>{
+              if(cardItem.groupId == groupItem.groupId){
+                Object.assign(cardItem,{bgcolor:groupItem.bgcolor});
+                Object.assign(cardItem,{source:"task"});
+                if(groupItem.isStoryPerson){
+                  Object.assign(cardItem,{isTaskPerson:true});
                 }
-                */
-            ];
-            return _cardList;
+              }
+            })
+          });
+          _cardList.forEach((item)=>{
+            item.headPortrait = require("@/assets/images/user_02.png");
+          })
+          */
+
+          return _cardList;
         },
         //左侧分组数据
         groupList: function() {
@@ -833,6 +986,9 @@ export default {
                 }
                 */
             ];
+            /* 以后加上
+            let _statusList = this.statusListBase;
+            */
             return _statusList;
         }
     },
@@ -847,13 +1003,65 @@ export default {
 .pageContent{
   overflow:hidden;
 }
+.taskBtnAll{
+  width:92px;
+  height:32px;
+  text-align:center;
+  line-height:32px;
+  border-radius:4px;
+  color:#fff;
+  background-color: #18b566;
+  cursor:pointer;
+  font-size: 12px;
+}
+.mytaskBtn{
+  width:92px;
+  height: 32px;
+  text-align:center;
+  line-height:32px;
+  border-radius:4px;
+  color:#b2b2b2;
+  background-color: #fff;
+  cursor:pointer;
+  font-size: 12px;
+  border:1px solid #b2b2b2;
+}
+.w80{
+  overflow:hidden;
+  margin-bottom: 8px;
+}
+.fl10{
+  float: left;
+  margin-right: 6px;
+}
+.product-list{
+  background: url(../../assets/images/product-list.png) no-repeat;
+  width:80px;
+  height:30px;
+  cursor:pointer;
+  margin-top: 2px;
+}
+.product-kanban{
+  background: url(../../assets/images/product-kanban.png) no-repeat;
+  width:80px;
+  height:30px;
+  cursor:pointer;
+  margin-top: 2px;
+}
+.product-list.product-listCur{
+  background: url(../../assets/images/product-listCur.png) no-repeat;
+}
+.product-list.product-kanbanCur{
+  background: url(../../assets/images/product-kanbanCur.png) no-repeat;
+}
 //头部
 .ivu-layout-header {
     background: #fff;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
+span.high,span.middle,span.low {color:#fff;border-radius:2px;}
 span.high {
-    background: #f8d6af;
+    background: #FE4514;
     width: 100%;
     height: 25px;
     display: inline-block;
@@ -861,7 +1069,7 @@ span.high {
     text-align: center;
 }
 span.middle {
-    background: #b3ecec;
+    background: #12C37A;
     width: 100%;
     height: 25px;
     display: inline-block;
@@ -869,7 +1077,7 @@ span.middle {
     text-align: center;
 }
 span.low {
-    background: #f2e1f0;
+    background: #FEB159;
     width: 100%;
     height: 25px;
     display: inline-block;

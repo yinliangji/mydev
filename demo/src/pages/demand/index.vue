@@ -123,9 +123,10 @@
                     </div>
 
                     <div class="listBox" id="kanbanboard_demand" v-show="currentView == 'kanbanboard'">
-                        <!-- :groupList="[]" :groupList="groupList" :sortdisabled="true"  -->
+                        <!-- :groupList="[]" :groupList="groupList" :sortdisabled="true" :isOperation="false" -->
                         <kanbanboard
                             :isDisabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])"
+                            :isOperation="authIsNoneAdmin(['icdp_prjrequirement_confirm'])"
                             :sortdisabled="false" 
                             :cardList="cardLists" 
                             :statusList="statusLists" 
@@ -437,7 +438,7 @@ export default {
             if(this.currentView == "kanbanboard"){
                 this.storyGetKanBanFn(getRequirementKanBan,ID,this.formValidate.req_id,this.formValidate.req_name,this.formValidate.req_submitter);
             }else{
-                this.tableDataAjaxFn(reqAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.req_id,this.formValidate.req_name,this.formValidate.req_submitter);
+                this.tableDataAjaxFn(reqAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
             }
         },
         //看板开始
@@ -743,6 +744,10 @@ export default {
         outinITM(){
             
             this.isShowITMPop = true;
+        },
+        authIsNoneAdmin(KEY){
+            console.error(Common.auth2(this,KEY),KEY)
+            return Common.auth2(this,KEY)
         },
         authIs(KEY){
             return Common.auth(this,KEY)

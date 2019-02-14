@@ -286,6 +286,23 @@ export default class Common extends Utils {
       }
         
     }
+    //权限判断--不通用
+    static auth2(THIS,KEY){
+      let OBJ = THIS.prj_permission
+      if(KEY && Array.isArray(KEY) && KEY.length){
+          let _temp = true;
+          for(let i =0;i<KEY.length;i++){
+              if(!(KEY[i].indexOf("_view") != -1)){
+                  if(OBJ.findIndex((item)=>{return item == KEY[i]}) != -1){
+                      _temp = false
+                  }
+              }
+          }
+          return _temp
+      }else{
+          return true
+      }
+    }
 
     static AdminAuth(THIS,KEY){
       let OBJ = THIS.prj_permission;
@@ -1816,3 +1833,4 @@ function toLoginPage(THAT = false){
 	}
 }
 window.toLoginPage = toLoginPage;
+

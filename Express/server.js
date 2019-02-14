@@ -2484,13 +2484,67 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
             "icdp_projDetail_mng",//24
 
             "icdp_projList_view",//10
+
             //========
             //"icdp_projList_mng",//25
             "icdp_projList_edit",//21
+
             //=======
             "icdp_prjrequirement_mng",
             "icdp_prjrequirement_view",
             "icdp_prjrequirement_edit",
+            "icdp_prjrequirement_confirm",
+        ],
+        identity:"PlainAdmin",
+        //PlainAdmin
+        //SuperAdmin
+        //Admin
+    })
+}
+let getPermission2 = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        //"status": "fail",
+        //"status": "redirect",
+        "message": "mockDataList xxxxxxx",
+        prj_permission:[
+            "icdp_pipeline_view",//0
+            "icdp_proj_level",//1
+            "icdp_userStory_mng",//2
+            "icdp_codeRepo_mng",//3
+            "icdp_devTask_view",//4
+            "icdp_projOverview_view",//5
+            "icdp_mainportal_view",//6
+            "icdp_sprint_mng",//7
+            "icdp_devTask_mng",//8
+            "icdp_userStory_view",//9
+            
+            "icdp_pipelineLf_view",//11
+            "icdp_agile_view",//12
+            "icdp_projDetail_view",//13
+            "icdp_workbench_view",//14
+            "icdp_sshkey_mng",//15
+            "icdp_codeRepo_view",//16
+            "icdp_sshkey_view",//17
+            "icdp_devWorkbench_view",//18
+            "icdp_mngrWorkbench_view",//19
+            "icdp_pipeline_mng",//20
+            
+            "icdp_sprint_view",//22
+            "icdp_codeRepoLf_view",//23
+            "icdp_projDetail_mng",//24
+
+            "icdp_projList_view",//10
+
+            //========
+            //"icdp_projList_mng",//25
+            "icdp_projList_edit",//21
+
+            //=======
+            "icdp_prjrequirement_mng",
+            "icdp_prjrequirement_view",
+            "icdp_prjrequirement_edit",
+            //"icdp_prjrequirement_confirm",
         ],
         identity:"PlainAdmin",
         //PlainAdmin
@@ -2503,7 +2557,8 @@ app.all('/auth/getPermissionfromUser', function(req, res) {
     let resVal = getPermission(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
-    res.json(getPermission(req.body.myStatus));
+    Math.random() > 0.5 ? res.json(getPermission(req.body.myStatus)) : res.json(getPermission2(req.body.myStatus))
+    //res.json(getPermission(req.body.myStatus));
     res.end()
 });
 

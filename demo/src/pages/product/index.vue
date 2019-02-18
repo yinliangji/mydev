@@ -1340,6 +1340,7 @@ export default {
 							_Obj.taskId = ""+myData[i].list[j].userstory_id;
 							_Obj.description = "description_"+ i +"_"+j;
 							_Obj.userName = myData[i].list[j].charger;
+							_Obj.myUserName = myData[i].list[j].username;
 							_Obj.userId = "userId_"+ i +"_"+j;
 							_Obj.groupId = myData[i].list[j].req_id+"";
 							//_Obj.bgColor = { background: ((C)=>{if(C==1){return '#f8d6af'}else if(C==2){return '#b3ecec'}else{return '#f2e1f0 '}})(myData[i].list[j].proi) };

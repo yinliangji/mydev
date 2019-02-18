@@ -9,7 +9,7 @@
     :detailid="item.detail_id"
     :groupId="item.groupId"
     :nickname="item.nickName"
-    :class="isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson)"
+    :class="isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)"
     >
       <div class="card-wrap">
 
@@ -123,7 +123,7 @@ export default {
           let strArr = str.split("(")
           return strArr[0]+"<br />("+strArr[1]
         }else{
-          return ""+"<br />"+str
+          return str+"<br />"+""
         }
     },
     nicknameFormat(is){
@@ -134,12 +134,13 @@ export default {
       }
 
     },
-    isDraggable(r,a,n,s,tp){//myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson
+    isDraggable(r,a,n,s,tp,mus){
+      //myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName
       if(a == "product"){
         if(r == "icdp_projManager"){
           return "isDraggable"
         }else{
-          return n.indexOf(Common.getCookie("username")) != -1 ? "isDraggable" : "isOpacity";
+          return mus.indexOf(Common.getCookie("username")) != -1 ? "isDraggable" : "isOpacity";
         }
       }else if(a == "demand"){
         if(s == "07" || s == "08"){
@@ -277,7 +278,7 @@ export default {
     padding-top: 4px;
     overflow: hidden;
     height: 30px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     line-height: 13px;
   }
 

@@ -499,6 +499,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                         
                     },
                     {
@@ -513,6 +514,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                     {
                         userstory_name:"userstory_name_3",
@@ -526,6 +528,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                     {
                         userstory_name:"userstory_name_4",
@@ -539,6 +542,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     }
                 ]
             },
@@ -558,6 +562,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                     {
                         userstory_name:"userstory_name_6",
@@ -571,6 +576,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                     {
                         userstory_name:"userstory_name_7",
@@ -584,6 +590,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                     {
                         userstory_name:"userstory_name_8",
@@ -597,6 +604,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     }
                 ]
             },
@@ -616,6 +624,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                     {
                         userstory_name:"userstory_name_10",
@@ -629,6 +638,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                    
                 ]
@@ -649,6 +659,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                     {
                         userstory_name:"userstory_name_12",
@@ -662,6 +673,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                    
                 ]
@@ -682,6 +694,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                     {
                         userstory_name:"userstory_name_14",
@@ -695,6 +708,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                    
                 ]
@@ -715,6 +729,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                     {
                         userstory_name:"userstory_name_16",
@@ -728,6 +743,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                    
                 ]
@@ -748,6 +764,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                     {
                         userstory_name:"userstory_name_18",
@@ -761,6 +778,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                    
                 ]
@@ -781,6 +799,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                     {
                         userstory_name:"userstory_name_20",
@@ -794,6 +813,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
                         "testCase|1-99":0,
+                        "username|1":["lizhuo.zh","xiebei.zh"],
                     },
                    
                 ]

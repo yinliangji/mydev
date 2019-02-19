@@ -1,7 +1,13 @@
 <template>
   <div class="header" :class="header_position">
-    <img  v-bind:src="logo">
+    <a href="http://127.0.0.1:9000/#/agile"><img  v-bind:src="logo"></a>
     <div class="h_menu">
+      
+      <a href="http://127.0.0.1:9000/#/agile">敏捷</a> 
+      |
+      <a href="http://127.0.0.1:9000/#/maven">Maven仓库浏览</a> 
+      | 
+      <a href="http://127.0.0.1:9000/#/maven/produceSearch">Maven仓库浏览</a> 
       <a class="h_menu_btn" v-if=true  v-for="(v,i) in menujson" :href="v.menuUrl" target="_blank" >{{ v.menuName}}</a>
       <a class="h_menu_btn" v-else  v-for="(v,i) in menujson" :href="v.menuUrl"  target="_self" >{{ v.menuName}}</a>
     </div>
@@ -63,7 +69,10 @@
     watch:{
         agileData() {
             console.log(this.agileData,"header-agileData-头部")
-            this.EVENTUSER();
+            if(this.agileData){
+              this.EVENTUSER();
+            }
+            
         },
     },
     data(){
@@ -99,34 +108,39 @@
       }).catch((error)=>{})
 
 
-      this.$axios({
-        method: 'post',
-        url: process.env.BASE_URL+'/login_save?username=xiebei.zh&nickname=%E8%B0%A2%E8%93%93&success=true',
-        data: {}
-      }).then((parm)=>{
-        let setCookie = (name,value) => { 
-            var Days = 0.1; 
-            var exp = new Date(); 
-            exp.setTime(exp.getTime() + Days*24*60*60*1000);
-            document.cookie = name + "="+ decodeURIComponent (value) + ";expires=" + exp.toGMTString(); 
-            setTimeout(()=>{
-              
-            },3000) 
-        }
-        console.log("login_save==>",parm);
-        setCookie("username","xiebei.zh");
-        setCookie("nickname","%E8%B0%A2%E8%93%93");
-      }).catch((error)=>{
-
-      })
+      
 
     },
     methods:{
       EVENTUSER(){
+        this.$axios({
+          method: 'post',
+          url: process.env.BASE_URL+'/login_save?username=xiebei.zh&nickname=%E8%B0%A2%E8%93%93&success=true',
+          data: {}
+        }).then((parm)=>{
+          console.log("login_save =======*****=====>",parm,window.EVENT);
+          //
+          let setCookie = (name,value) => { 
+              var Days = 0.1; 
+              var exp = new Date(); 
+              exp.setTime(exp.getTime() + Days*24*60*60*1000);
+              document.cookie = name + "="+ decodeURIComponent (value) + ";expires=" + exp.toGMTString(); 
+              setTimeout(()=>{
+                
+              },3000) 
+          }
+          setCookie("username","xiebei.zh");
+          setCookie("nickname","%E8%B0%A2%E8%93%93");
+          
           if(window.EVENT){
             EVENT.emit("USER",{username:"xiebei.zh",nickname:"%E8%B0%A2%E8%93%93"});
-            console.log(JSON.stringify(window.EVENT),"<==========EVENT.emit")
+            console.log(JSON.stringify(window.EVENT),"<========== 头部 EVENT.emit")
           }
+          //
+        }).catch((error)=>{
+          alert(JSON.stringify(error))
+        })
+          
       },
       toLogin:function () {
         this.ruleForm = {};

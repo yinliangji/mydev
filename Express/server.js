@@ -2569,6 +2569,7 @@ let getPermission2 = (val1 = 200, val2 = 1, val3 = 3) => {
         identity:"PlainAdmin",
         //PlainAdmin
         //SuperAdmin
+        //PrjManager
         //Admin
     })
 }

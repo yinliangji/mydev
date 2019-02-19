@@ -29,6 +29,8 @@ export default {
 				'testCaseUrl':["1","1-15"],
 				'intfReq':["1","1-16"],
 				'setting':["1","1-17"],
+				'maven':["1","1-22"],
+				'maven/produceSearch':["1","1-23"],
 				
 
 			},
@@ -115,10 +117,14 @@ export default {
 			let page15 = "testCaseUrl";
 			let page16 = "intfReq";
 			let page17 = "setting";
+			let page22 = "maven";
+			let page23 = "maven/produceSearch";
 			
 
 			if(to.path.indexOf(page8)!= -1){
 				this.side_menu(page8)
+			}if(to.path.indexOf(page23)!= -1){
+				this.side_menu(page23)
 			}else  if(to.path.indexOf(home)!= -1){
 				this.side_menu(home)
 			}else if(to.path.indexOf(page2)!= -1){
@@ -147,6 +153,8 @@ export default {
 				this.side_menu(page16)
 			}else if(to.path.indexOf(page17)!= -1){
 				this.side_menu(page17)
+			}else if(to.path.indexOf(page22)!= -1){
+				this.side_menu(page22)
 			}
 		}
 	},

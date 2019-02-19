@@ -403,6 +403,32 @@ const router = new Router({
             },
         },
 
+
+        {
+            path: '/maven',
+            name: 'maven',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/repositories"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_repositories"], resolve)
+                }
+            },
+        },
+        {
+            path: '/maven/produceSearch',
+            name: 'produceSearch',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/repositories/producesearch"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_repositories"], resolve)
+                }
+            },
+        },
+
         //以后删除开始
 
         {

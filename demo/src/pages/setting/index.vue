@@ -1,5 +1,5 @@
 <template>
-	<div class="pageContent">
+	<div class="pageContent" id="settingPage">
 		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'7'" />
 		<selectMenu @changeSelect="selectMenuFn" @sendData="getSendData"></selectMenu>
 		<Card class="detailContBox">
@@ -71,7 +71,7 @@
 		        		<Modal ref="addPartPop" v-model="partAdd" title="添加小组" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel('addPartPopBox')"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
 				            <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
 				                <FormItem label="小组名称" prop="partName">
-				                    <Input v-model="formPartValidate.partName" placeholder="请输入角色名称（最多四个字）" :maxlength="8"></Input>
+				                    <Input v-model="formPartValidate.partName" placeholder="请输入角色名称" :maxlength="800"></Input>
 				                </FormItem>
 
 								<FormItem label="选择人员" prop="partNameList">
@@ -172,7 +172,7 @@ export default {
 
 		this.getPermissionFn(getPermission).then(()=>{
 			if(this.identity){
-				this.isModify = (this.identity == "SuperAdmin" || this.identity == "PlainAdmin") ? false  : true;
+				this.isModify = (this.identity == "SuperAdmin" || this.identity == "PlainAdmin" || this.identity == "PrjManager") ? false  : true;
 			}else if(this.prj_permission && Array.isArray(this.prj_permission) && this.prj_permission.length){
 				this.isModify = (this.prj_permission.findIndex(item=>item == "icdp_projList_mng") != -1) ? false : true;
 			}else{
@@ -611,4 +611,11 @@ export default {
     padding-bottom: 20px;
     text-align: left;
 }
+
+</style>
+<style lang="less">
+#settingPage .ivu-form-item-label{
+	overflow:hidden;
+	text-overflow: ellipsis;
+}	
 </style>

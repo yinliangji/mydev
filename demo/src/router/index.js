@@ -125,6 +125,18 @@ const router = new Router({
                 }
             },
         },
+        {
+            path: '/demand/detail',
+            name: 'demandDetail',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/demand/detail/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
 
         //
         {

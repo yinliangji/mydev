@@ -123,7 +123,7 @@ export default {
 
 			if(to.path.indexOf(page8)!= -1){
 				this.side_menu(page8)
-			}if(to.path.indexOf(page23)!= -1){
+			}else if(to.path.indexOf(page23)!= -1){
 				this.side_menu(page23)
 			}else  if(to.path.indexOf(home)!= -1){
 				this.side_menu(home)

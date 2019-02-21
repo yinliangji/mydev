@@ -71,7 +71,7 @@
 		        		<Modal ref="addPartPop" v-model="partAdd" title="添加小组" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel('addPartPopBox')"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
 				            <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
 				                <FormItem label="小组名称" prop="partName">
-				                    <Input v-model="formPartValidate.partName" placeholder="请输入角色名称" :maxlength="800"></Input>
+				                    <Input v-model="formPartValidate.partName" placeholder="请输入小组名称" :maxlength="100"></Input>
 				                </FormItem>
 
 								<FormItem label="选择人员" prop="partNameList">

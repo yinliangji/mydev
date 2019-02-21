@@ -1505,11 +1505,20 @@ export default class Common extends Utils {
           return;
         } 
       }
-      let allSession = _Common.GetSession("userstorySerch") ? JSON.parse(_Common.GetSession("userstorySerch")) : {};
+      //let allSession = _Common.GetSession("userstorySerch") ? JSON.parse(_Common.GetSession("userstorySerch")) : {};
+      let allSession = ((US,UST)=>{
+        if(US){
+          return JSON.parse(US)
+        }else if(UST){
+          return JSON.parse(UST)
+        }else{
+          return {};
+        }
+      })(_Common.GetSession("userstorySerch"),_Common.GetSession("userstorySerchTemp"))
+      
+
       allSession.tableDAtaPageCurrent = _Common.GetSession("tableDAtaPageCurrent") ? _Common.GetSession("tableDAtaPageCurrent") : 1;
       _Common.SetSession("allSession",JSON.stringify(allSession));
-
-
 
       _Common.RemoveSession("tableDAtaPageCurrent");
       _Common.RemoveSession("userstorySerch");

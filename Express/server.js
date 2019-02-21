@@ -3679,6 +3679,44 @@ app.all('/login_save', function(req, res) {
     res.json({});
     res.end()
 });
+
+
+
+
+let get_queryPublicRep = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message get_queryPublicRep",
+        pageRows:10,
+        "data|3-5": [{
+
+            "policy|1":["RELEASE","SNAPSHOT"],
+            "path":"http://xxxxx.xxxx.xx/xx/xx",
+            "repId|5-8": /[a-zA-Z]/,
+            "type|1":["proxy","group","hosted"],
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        }],
+
+        "total|20-30":1,
+    })
+}
+
+
+
+
+app.all('/maven/queryPublicRep/', function(req, res) {
+    let resVal = get_queryPublicRep(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(get_queryPublicRep(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+
 /*************qhc */
 /**
  * 监听9090端口

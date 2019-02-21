@@ -238,9 +238,6 @@ const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,pr
 export default {
 	watch: {
 		'$route' (to, from) {
-
-			console.error(to, from,)
-
 			if(Common.GetSession("CurView")){
 				this.currentView = Common.GetSession("CurView");
 			}else{
@@ -250,8 +247,6 @@ export default {
 		        	this.currentView = "developList";
 		        }
 			}
-			
-			
 		},
 		formValidate: {
             handler(val, oldVal) {
@@ -279,7 +274,6 @@ export default {
         if(this.addtest){
             this.tabRowAddFn()
         }
-
 
         if(Common.GetSession("isClickedDelBtn")){
         	if(Common.GetSession("userstorySerch")){

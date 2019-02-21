@@ -260,6 +260,11 @@ CommonRest.restUrl = {
     "listGroup": process.env.BASE_URL + "/agile/groupmemagement/list/",
     /**** 项目设置删除人员 post****/
 
+    /*****************************************/
+
+    "queryPublicRep": process.env.BASE_URL + "/maven/queryPublicRep/",
+    /**** Maven仓库 get****/
+
 }
 
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);

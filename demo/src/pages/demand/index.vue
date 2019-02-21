@@ -216,21 +216,21 @@ export default {
                 {
                     title: '需求项名称',
                     key: 'req_name',
-                    // render: (h, params) => {
-                    //     return h(
-                    //         'a',
-                    //         {
-                    //             style:{color:'#2d8cf0'},
-                    //             //domProps:{href:"###"},
-                    //             on: {
-                    //                 click: () => {
-                    //                     this.linkFn(params.index)
-                    //                 }
-                    //             }
-                    //         },
-                    //         params.row.name
-                    //     );
-                    // }
+                    render: (h, params) => {
+                        return h(
+                            'a',
+                            {
+                                style:{color:'#2d8cf0'},
+                                //domProps:{href:"###"},
+                                on: {
+                                    click: () => {
+                                        this.goDemandDetail(params.index);
+                                    }
+                                }
+                            },
+                            params.row.req_name
+                        );
+                    }
                 },
                 {
                     title: '需求项类型',
@@ -677,16 +677,16 @@ export default {
             // 点击卡片方法
             console.log("需求项-点击卡片方法 ::: ", info);
             //this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
-            /*
+            
             if(!EventBus.demandClicked){
                 console.log("需求项-点击卡片方法 ::: this.$router.push", info);
-                this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
+                this.$router.push({path: '/demand/detail', query: {reqList_id: info.detail_id,req_id:info.taskId }})
                 EventBus.demandClicked = true;
                 setTimeout(()=>{
                     EventBus.demandClicked = false;
                 },500)  
             }
-            */
+            
 
         },
         searchHandle(info) {
@@ -746,7 +746,6 @@ export default {
             this.isShowITMPop = true;
         },
         authIsNoneAdmin(KEY){
-            console.error(Common.auth2(this,KEY),KEY)
             return Common.auth2(this,KEY)
         },
         authIs(KEY){
@@ -1011,8 +1010,11 @@ export default {
             this.isAdd = true;
             this.tableDataRow = false;
         },
-        linkFn (index) {
-            this.$router.push('/baseinfo')
+        goDemandDetail (index) {
+            let queryObj = {};
+            queryObj.req_id = this.tableData[index].req_id;
+            queryObj.reqList_id = this.tableData[index].id;
+            this.$router.push({path: '/demand/detail', query:queryObj})
         },
         toLIstFn (index) {
             this.$router.push('/product')

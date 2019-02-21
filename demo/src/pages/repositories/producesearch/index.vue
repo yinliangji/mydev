@@ -1,10 +1,6 @@
 <template>
-  <div >
-    
-    制品搜索
-   
-       
-    
+  <div style="font-size:20px;">
+      制品搜索制作中
   </div>
 </template>
 
@@ -12,7 +8,7 @@
 
 
 export default {
-  name: 'app222',
+  name: 'producesearch',
   components: {
     
   },

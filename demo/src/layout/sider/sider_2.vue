@@ -45,7 +45,7 @@
 		<MenuItem name="1-15" title="测试案例与缺陷管理">
 			<router-link  to="/testCaseUrl" />
 			<Icon type="medkit"></Icon>
-			<span>测试案例与缺陷管理</span>
+			<span>测试案例管理</span>
 		</MenuItem>
 		<MenuItem name="1-17" title="项目设置">
 			<router-link  to="/setting" />

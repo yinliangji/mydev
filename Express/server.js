@@ -3514,6 +3514,16 @@ app.all('/agile/groupmemagement/delete_group/', function(req, res) {
     res.end()
 });
 
+app.all('/agile/groupmemagement/delete_group_leader/', function(req, res) {
+    res.json({status: "success",message: "delete_member success"});
+    res.end()
+});
+
+app.all('/agile/groupmemagement/add_leader/', function(req, res) {
+    res.json({status: "success",message: "add_users success"});
+    res.end()
+});
+
 
 
 
@@ -3556,8 +3566,9 @@ let getSetGroup = (val1 = 200, val2 = 1, val3 = 3) => {
         "message": "detail xxxxxxx",
         data: [
             {
-                "group_sn":"groupSn_1",
+                "group_sn":"groupSn-1",
                 "groupName":"产品经理",
+                group_leader:"",
                 "member":[
                     {
                         "nick_name":"李卓",
@@ -3568,8 +3579,13 @@ let getSetGroup = (val1 = 200, val2 = 1, val3 = 3) => {
 
             },
             {   
-                "group_sn":"groupSn_2",
+                "group_sn":"groupSn-2",
                 "groupName":"项目经理",
+                group_leader:
+                    {
+                        "nick_name":"谢蓓",
+                        "user_name":"xiebei.zh",
+                    },
                 member:[
                     {
                         "nick_name":"谢蓓",
@@ -3580,8 +3596,9 @@ let getSetGroup = (val1 = 200, val2 = 1, val3 = 3) => {
 
             },
             {
-                "group_sn":"groupSn_3",
+                "group_sn":"groupSn-3",
                 "groupName":"开发组",
+                group_leader:"",
                 "member":[
                     {
                         "nick_name":"奇慧超",

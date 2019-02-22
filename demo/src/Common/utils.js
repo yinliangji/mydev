@@ -118,6 +118,16 @@ export default class Utils extends CommonRest {
       return arr.find((item)=>{return item.value == val})
     }
 
+
+    //判断是否为对象
+    static IsObject(obj) {
+        return Object.prototype.toString.call(obj) === '[object Object]';
+    }
+
+    //判断是否为funciton
+    static IsArray(obj) {
+        return Object.prototype.toString.call(obj) === '[object Function]';
+    }
     
     //写cookies 
     static setCookie(name,value) { 

@@ -961,7 +961,7 @@ export default {
             let _join = "|";
             
             let _modules = Array.isArray(this.formValidate.modules) ? this.formValidate.modules.join(_join) : this.formValidate.modules;
-            let _createModule = ((createModule)=>{
+            let _createModule_ = ((createModule)=>{
                 let fn = (name)=>{
                     if(name.toString().indexOf("【") != -1 && name.toString().indexOf("】") != -1){
                         return true;
@@ -980,6 +980,7 @@ export default {
                     return createModule
                 }
             })(this.formValidate.createModule)
+            let _createModule =  Array.isArray(_createModule_) && _createModule_.length == 0 ? "" : _createModule_;
             // let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
             // let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
             let _start_time = Common.DateFormat(Common,this.formValidate.start_time);

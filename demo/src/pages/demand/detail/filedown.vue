@@ -250,7 +250,7 @@ export default {
         init(usID){
             //Common.GETprjid(this,Common)
             let us_ID = usID? usID : this.formValidate.req_id;
-            this.actionUrl = fileUpload+"?taskId="+us_ID+"&type=2&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
+            this.actionUrl = fileUpload+"?taskId="+us_ID+"&type=8&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
 
             this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),usID)
             this.tableDAtaPageCurrent = 1;

@@ -24,7 +24,25 @@
 		                                        :ref="myItem.myRef+index" 
 		                                        :class="myItem.myRef+index"
 		                                        >
+		                                        <div :id="'@roleBox_'+index">
+		                                        	<div class="ivu-tag">小组长：</div>
+		                                        	<Tag v-for="(item,index3) in myItem.groupLeader" :value="item.value" :key="index3" :name="index3" :id="'@'+myItem.myValue+'_'+item.value+'_'+index+'_'+index3" :closable="!isModify" @on-close="roleCloseGL">
+		                                                {{ item.label}}
+		                                            </Tag>
+		                                            <Button 
+														v-show="myItem.groupLeader.length==0"
+		                                                icon="ios-plus-empty" 
+		                                                type="dashed" 
+		                                                size="small" 
+		                                                @click="addRoleGL(index)"
+		                                                :disabled="isModify"
+		                                                >
+		                                                添加{{formValidate.AddGroupList[index].myLabel}}小组长
+		                                            </Button>
+
+		                                    	</div>
 		                                        <div :id="'roleBox_'+index">
+		                                        	<div class="ivu-tag">小组员：</div>
 		                                            <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" :id="myItem.myValue+'_'+item.value+'_'+index+'_'+index2" :closable="!isModify" @on-close="roleClose">
 		                                                {{ item.label}}
 		                                            </Tag>
@@ -37,23 +55,37 @@
 		                                                >
 		                                                添加{{formValidate.AddGroupList[index].myLabel}}人员
 		                                            </Button>
-		                                            <Modal 
-		                                                :ref="myItem.myReftemp+index" 
-		                                                :class="myItem.myReftemp+index" 
-		                                                v-model="formValidate.AddGroupList[index].modaAdd" 
-		                                                :title="'添加'+formValidate.AddGroupList[index].myLabel+'人员'" 
-		                                                @on-ok="submitRole(index)"  
-		                                                ok-text="添加"
-		                                                @on-cancel="cancelRole(index)"
-		                                                >
-		                                                <Select @on-change="onChange" @on-clear="onClear" @on-query-change="onQueryChange" @on-open-change="onOpenChange" v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
-		                                                    <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
-		                                                        {{ item.label }}
-		                                                    </Option>
-		                                                </Select>
-		                                            </Modal>
+		                                            
 		                                        </div>
+		                                        <Modal 
+	                                                :ref="myItem.myReftemp+index" 
+	                                                :class="myItem.myReftemp+index" 
+	                                                v-model="formValidate.AddGroupList[index].modaAdd" 
+	                                                :title="'添加'+formValidate.AddGroupList[index].myLabel+''" 
+	                                                @on-ok="submitFn(index)"  
+	                                                ok-text="添加"
+	                                                @on-cancel="cancelRole(index)"
+	                                                >
+	                                                <Select 
+	                                                	@on-change="onChange" 
+	                                                	@on-clear="onClear" 
+	                                                	@on-query-change="onQueryChange" 
+	                                                	@on-open-change="onOpenChange" 
+	                                                	v-model="myItem.grouptemp" 
+	                                                	:id="'sel'+index" 
+	                                                	:filterable="false"
+	                                                	:loading="inputLoad"  
+	                                                	:multiple="!myItem.groupLeaderAddBtnClick" 
+	                                                	:placeholder="'请输入内容并选择【'+myItem.myLabel+'】'"
+	                                                	>
+	                                                    <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
+	                                                        {{ item.label }}
+	                                                    </Option>
+	                                                </Select>
+	                                            </Modal>
+
 		                                    </FormItem>
+		                                    
 
 		                                </Col>
 		                                <Col span="1">&nbsp;</Col>
@@ -69,11 +101,16 @@
 		        		</Form>
 
 		        		<Modal ref="addPartPop" v-model="partAdd" title="添加小组" @on-ok="submitPart('addPartPopBox')" on-cancel="partCancel('addPartPopBox')"  ok-text="确定"  visible="true" :loading="formPartValidate.loading">
-				            <Form  :label-width="80" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
+				            <Form  :label-width="100" ref="addPartPopBox" :model="formPartValidate" :rules="rulePartValidate">
 				                <FormItem label="小组名称" prop="partName">
 				                    <Input v-model="formPartValidate.partName" placeholder="请输入小组名称" :maxlength="100"></Input>
 				                </FormItem>
 
+								<FormItem label="选择小组长" prop="groupLeaderList">
+				                	<Select v-model="formPartValidate.groupLeaderList" placeholder="请选择小组长" >
+				                        <Option v-for="(item,index) in formPartValidate.memberList" :value="item.value" :key="index">{{ item.label }}</Option>
+				                    </Select>
+				                </FormItem>
 								<FormItem label="选择人员" prop="partNameList">
 				                	<Select v-model="formPartValidate.partNameList" multiple placeholder="请选择人员" >
 				                        <Option v-for="(item,index) in formPartValidate.memberList" :value="item.value" :key="index">{{ item.label }}</Option>
@@ -106,7 +143,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {getUserByProjId,addGroupUsers,addUsers,deleteMember,deleteGroup,listGroup,getPermission} = Common.restUrl;
+const {getUserByProjId,addGroupUsers,addUsers,deleteMember,deleteGroup,listGroup,getPermission,deleteGroupLeader,addGroupLeader} = Common.restUrl;
 export default {
 	components:{
 	},
@@ -125,6 +162,7 @@ export default {
                 ],
                 partNameList:[],
                 memberList:[],
+                groupLeaderList:"",
                 //formPartValidate.partName formPartValidate.memberList
             },
             rulePartValidate: {
@@ -132,8 +170,16 @@ export default {
                     { required: true, message: '请填写', trigger: 'blur' }
                 ],
                 partNameList: [
+                    { required: false, type: 'array', message: '请选择',  trigger: 'change' }
+                ],
+                groupLeaderList: [
+                    { required: false, message: '请选择', trigger: 'change' }
+                ],
+                /*
+                groupLeaderList: [
                     { required: true, type: 'array', message: '请选择',  trigger: 'change' }
                 ],
+                */
             },
             ruleValidate: {
             },
@@ -155,16 +201,16 @@ export default {
         },
     },
     beforecreated(){
-        console.log("分组设置--beforecreated-------",this.formPartValidate,this.formValidate,this.prj_permission,this.identity);
+        console.log("分组设置--beforecreated-------",this.formPartValidate,this.formValidate);
     },
     created(){
-        console.log("分组设置--created-------",this.formPartValidate,this.formValidate,this.prj_permission,this.identity);
+        console.log("分组设置--created-------",this.formPartValidate,this.formValidate);
     },
     beforeUpdate(){
-        console.log("分组设置--beforeUpdate-------",this.formPartValidate,this.formValidate,this.prj_permission,this.identity)
+        console.log("分组设置--beforeUpdate-------",this.formPartValidate,this.formValidate)
     },
     updated(){
-        console.log("分组设置--updated-------",this.formPartValidate,this.formValidate,this.prj_permission,this.identity)
+        console.log("分组设置--updated-------",this.formPartValidate,this.formValidate)
     },
 	mounted(){
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
@@ -227,6 +273,20 @@ export default {
                         return  [];
                     }
                 }
+                let groupLeader = (obj)=>{
+                    if(obj && Common.IsObject(obj)){
+                    	if(obj.user_name && obj.nick_name){
+                    		obj.value = obj.user_name;
+                    		obj.label = obj.nick_name;
+                    		return [obj];
+                    	}else{
+                    		return  [];
+                    	}
+                    }else{
+                        return  [];
+                    }
+                }
+
 				if(myData && myData.status == "success"){
 					this.formValidate.AddGroupList = [];
 					let _tempObj
@@ -246,18 +306,20 @@ export default {
 	                            grouptemp:[],//修改添加角色
 	                            groupListtemp: [],//修改添加角色
 	                            myReftemp: "selfRefRole",//修改添加角色
+	                            groupLeader:[],//小组长
+	                            groupLeaderAddBtnClick:false,//小组长添加按钮
 	                        }
 
 	                        _tempObj.myLabel = myData.data[J].groupName;
 	                        _tempObj.myValue = myData.data[J].group_sn;
 	                        _tempObj.groupList = groupList(myData.data[J].member);
 	                        _tempObj.group = group(myData.data[J].member); 
+	                        _tempObj.groupLeader = groupLeader(myData.data[J].group_leader);
 	                        this.formValidate.AddGroupList.push(_tempObj);
 	                        _tempObj = false;
 	                    }
                     	//
                     }
-
 					return Promise.resolve(myData)
 				}else{
 					this.showError(URL+"_错误");
@@ -338,6 +400,24 @@ export default {
 			  return Promise.reject(error);
 			});   
     	},
+    	deleteGLeader(URL, params){
+			return defaultAXIOS(URL,params,{timeout:5000,method:'get'})
+			.then((response) => {
+				let myData = response.data;
+				console.log("<======【设置小组 删除小组长】***response+++",response,myData,"====>");
+				if(myData.status == "success"){
+					return Promise.resolve(myData)
+				}else{
+					this.showError(URL+"_错误");
+					return Promise.reject(myData);
+				}
+			})
+			.catch( (error) => {
+			  console.log(error);
+			  this.showError(error);
+			  return Promise.reject(error);
+			});   
+    	},
 		roleClose (event, name) {
 			Common.RoleClose(this,event, name);
             let el = event.path[1].getAttribute("id").split("_");
@@ -346,6 +426,34 @@ export default {
 				user_name:el[1],
 			}
             this.deleteMember(deleteMember,_params).then(()=>{
+            	if(window.location.port == "9000"){
+            		return
+            	}
+            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
+            }, ()=>{
+            	
+            })
+        },
+        roleCloseGL (event, name) {
+			//
+			let I = Number(event.path[2].getAttribute("id").split("_")[1])
+		    this.formValidate.AddGroupList[I].groupLeader.splice(name, 1);
+            let el = event.path[1].getAttribute("id").split("_");
+            
+            let _group_leader_nickname = (()=>{
+            	let obj = this.formPartValidate.memberList.find((item)=>{
+	            	return item.value == el[1]
+	            });
+	            return obj ? obj.label : "";
+	        })()
+            let _params = {
+            	group_leader_username:el[1],
+            	group_leader_nickname:_group_leader_nickname,
+				groupSn:el[0].substring(1),
+				prjSn:Common.GETprjid(this,Common),
+				//user_name:el[1],
+			}
+            this.deleteGLeader(deleteGroupLeader,_params).then(()=>{
             	if(window.location.port == "9000"){
             		return
             	}
@@ -364,6 +472,15 @@ export default {
 			this.formValidate.AddGroupList[i].groupList.forEach((item)=>{
 				Common.DelArrN(_memberList,item.value,"value")	
 			})
+			this.formValidate.AddGroupList[i].groupListtemp = _memberList;
+        },
+        addRoleGL(i){
+            Common.AddRole(this,i,true);
+            this.menuCheckGL(i);
+        },
+        menuCheckGL(i){
+        	this.formValidate.AddGroupList[i].groupListtemp = [];
+        	let _memberList = _.cloneDeep(this.formPartValidate.memberList);
 			this.formValidate.AddGroupList[i].groupListtemp = _memberList;
         },
         cancelRole(i){
@@ -385,9 +502,48 @@ export default {
         	this.onChangeData = val;
 
         },
+        submitFn(i){
+        	this.formValidate.AddGroupList[i].groupLeaderAddBtnClick ? this.submitRoleGL(i) : this.submitRole(i);
+        },
+        submitRoleGL(i){
+        	let List = this.formValidate.AddGroupList;
+			if(List[i].grouptemp && List[i].groupListtemp && Array.isArray(List[i].groupListtemp) && List[i].groupListtemp.length){
+				let obj = List[i].groupListtemp.find((item)=>{
+					return item.value ? item.value == List[i].grouptemp : item.user_name == List[i].grouptemp
+				})
+				if(obj){
+					if(!obj.user_name && obj.value){
+						obj.user_name = obj.value;
+					}
+					if(!obj.nick_name && obj.label){
+						obj.nick_name = obj.label;
+					}
+					List[i].groupLeader.push(obj)
+				}
+			}
+
+			List[i].grouptemp = [];
+			List[i].groupListtemp = [];
+
+        	let _params = {
+				groupSn:this.formValidate.AddGroupList[i].myValue,
+				group_leader:JSON.stringify(List[i].groupLeader[0]),
+			}
+			this.onChangeData = false;
+            this.saveGroupLeader(addGroupLeader,_params).then(()=>{
+            	if(window.location.port == "9000"){
+            		return
+            	}
+            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
+
+            },()=>{
+            	
+            });
+
+        },
         submitRole(i){
-        	
             Common.SubmitRole(this,i,Common);
+
             let _member = [];
             let __member = [];
             this.formValidate.AddGroupList[i].group.forEach((itme)=>{
@@ -405,9 +561,6 @@ export default {
 				item.nick_name = item.label;
             })
 
-            
-
-
             if(this.onChangeData && Array.isArray(this.onChangeData) && this.onChangeData.length){
             	this.onChangeData.forEach((item)=>{
             		let obj = _member.find((ITEM)=>{
@@ -421,11 +574,12 @@ export default {
             }else{
             	_member = [];
             }
-
+            
             let _params = {
 				groupSn:this.formValidate.AddGroupList[i].myValue,
 				member:JSON.stringify(_member),
 			}
+            
 			this.onChangeData = false;
             this.saveMember(addUsers,_params).then(()=>{
             	if(window.location.port == "9000"){
@@ -442,6 +596,24 @@ export default {
 			.then((response) => {
 				let myData = response.data;
 				console.log("<======【设置小组 保存人员】***response+++",response,myData,"====>");
+				if(myData.status == "success"){
+					return Promise.resolve(myData)
+				}else{
+					this.showError(URL+"_错误");
+					return Promise.reject(myData);
+				}
+			})
+			.catch( (error) => {
+			  console.log(error);
+			  this.showError(error);
+			  return Promise.reject(error);
+			});   
+    	},
+    	saveGroupLeader(URL, params){
+			return defaultAXIOS(URL,params,{timeout:5000,method:'post'})
+			.then((response) => {
+				let myData = response.data;
+				console.log("<======【设置小组 保存小组长】***response+++",response,myData,"====>");
 				if(myData.status == "success"){
 					return Promise.resolve(myData)
 				}else{
@@ -536,6 +708,8 @@ export default {
 						grouptemp:[],//修改添加角色
 						groupListtemp: [],//修改添加角色
 						myReftemp: "selfRefRole",//修改添加角色
+						groupLeader:[],//小组长
+						groupLeaderAddBtnClick:false,//小组长添加按钮
 					}
 
 					_tempObj.myLabel = that.formPartValidate.addGroupList.length ? that.formPartValidate.addGroupList.filter((item) => {
@@ -552,12 +726,36 @@ export default {
 						item.nick_name = item.label;
 					})
 
+					_tempObj.groupLeader = ((val)=>{
+						let obj = that.formPartValidate.memberList.find((item)=>{
+							return item.value == val;
+						}) || "";
+						return obj ? [
+							(()=>{
+								if(!obj.user_name && obj.value){
+									obj.user_name = obj.value;
+								}
+								if(!obj.nick_name && obj.label){
+									obj.nick_name = obj.label;
+								}
+								return obj;
+							})()
+						] : [];
+					})(that.formPartValidate.groupLeaderList)
+					let _group_leader = _tempObj.groupLeader.length ? JSON.stringify(_tempObj.groupLeader[0]) : "";
+					let _prjSn = Common.GETprjid(that,Common);
+					let _member = JSON.stringify(_tempObj.groupList);
+					let _id = that.getID();
+					let _group_name = _tempObj.myLabel;
+
 					let _params = {
-						id:that.getID(),
-						group_name:_tempObj.myLabel,
-						prjSn:Common.GETprjid(that,Common),
-						member:JSON.stringify(_tempObj.groupList),
+						id:_id,
+						group_name:_group_name,
+						prjSn:_prjSn,
+						member:_member,
+						group_leader:_group_leader,
 					}
+
 					that.saveTeam(addGroupUsers,_params).then((res)=>{
 						_tempObj.myValue = res;
 						that.formValidate.AddGroupList.push(_tempObj);

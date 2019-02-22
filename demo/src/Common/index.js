@@ -1391,8 +1391,10 @@ export default class Common extends Utils {
       that.formValidate.AddGroupList[I].groupList.splice(name, 1);
     }
     //弹出添加角色--不通用
-    static AddRole(that,i){
+    static AddRole(that,i,glBtn = false){
+      that.formValidate.AddGroupList[i].groupLeaderAddBtnClick = glBtn;
       that.formValidate.AddGroupList[i].modaAdd = true;
+      
     }
 
 

@@ -252,13 +252,20 @@ CommonRest.restUrl = {
     /**** 项目设置添加人员 post****/
 
     "deleteMember": process.env.BASE_URL + "/agile/groupmemagement/delete_member/",
-    /**** 项目设置删除人员 post****/
+    /**** 项目设置删除人员 get****/
 
     "deleteGroup": process.env.BASE_URL + "/agile/groupmemagement/delete_group/",
-    /**** 项目设置删除人员 post****/
+    /**** 项目设置删除人员 get****/
 
     "listGroup": process.env.BASE_URL + "/agile/groupmemagement/list/",
     /**** 项目设置删除人员 post****/
+
+    "deleteGroupLeader": process.env.BASE_URL + "/agile/groupmemagement/delete_group_leader/",
+    /**** 项目设置删除组长 get****/
+
+    "addGroupLeader": process.env.BASE_URL + "/agile/groupmemagement/add_leader/",
+    /**** 项目设置添加分组 post****/
+
 
     /*****************************************/
 

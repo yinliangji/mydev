@@ -2928,6 +2928,7 @@ app.all('/req/updateReq/', function(req, res) {
 
 
 app.all('/userstory/getDefaultSpringIdByPrj/', function(req, res) {
+    //res.json({ status: "success",data:"" });
     res.json({ status: "success",data:"6" });
     res.end()
 });

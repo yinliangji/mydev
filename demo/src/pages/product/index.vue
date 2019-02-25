@@ -1044,7 +1044,6 @@ export default {
 
 		    	this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent") - 0 : 1;
 
-
 		    	//currentView: "developList",//developList//kanbanboard
 		    	if(this.currentView == "kanbanboard"){
 		    		Promise.all([this._sprint]).then((REP)=>{
@@ -1052,15 +1051,9 @@ export default {
 		    		},()=>{
 		    			this.showError("没有获取到故事状态");
 		    		})
-
-
 		    	}else{
 		    		this.tableDataAjaxFn(storyAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
 		    	}
-	        	
-	        	
-
-
 	        },(error)=>{
 	        	console.log(error);
 	            this.showError(error);
@@ -1074,7 +1067,6 @@ export default {
 
 		},
 		getDefSpringFn(URL,ID){
-
 
 			// let _userstory_type = this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
 			//   	let _userstory_status =this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
@@ -1092,7 +1084,7 @@ export default {
 	                if(myData && myData.data && !isNaN(myData.data-0) ){
 	                	return Promise.resolve(myData.data)
 	                }else{
-	                	return Promise.resolve(false)
+	                	return myData.data === "" ? Promise.resolve(myData.data) : Promise.reject(false)
 	                	//return Promise.reject("无法获取当前迭代,data不存在");
 	                }
 	                

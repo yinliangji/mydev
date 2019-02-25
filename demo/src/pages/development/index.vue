@@ -429,7 +429,8 @@ export default {
         })
         .then((res)=>{
           if(res.data.status == "success"){
-            let devlopIndex = res.data.permission.findIndex(n=>n == "icdp_devTask_mng");
+            let _permission = res.data.permission ? res.data.permission : res.data.prj_permission;
+            let devlopIndex = _permission.findIndex(n=>n == "icdp_devTask_mng");
             if(devlopIndex > -1){
               this.isShowMngAllBtn = false;
             }else{

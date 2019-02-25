@@ -25,7 +25,7 @@
 		                                        :class="myItem.myRef+index"
 		                                        >
 		                                        <div :id="'@roleBox_'+index">
-		                                        	<div class="ivu-tag">小组长：</div>
+		                                        	<div class="ivu-tag" style="cursor:default;">小组长：</div>
 		                                        	<Tag v-for="(item,index3) in myItem.groupLeader" :value="item.value" :key="index3" :name="index3" :id="'@'+myItem.myValue+'_'+item.value+'_'+index+'_'+index3" :closable="!isModify" @on-close="roleCloseGL">
 		                                                {{ item.label}}
 		                                            </Tag>
@@ -42,7 +42,7 @@
 
 		                                    	</div>
 		                                        <div :id="'roleBox_'+index">
-		                                        	<div class="ivu-tag">小组员：</div>
+		                                        	<div class="ivu-tag" style="cursor:default;">小组员：</div>
 		                                            <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" :id="myItem.myValue+'_'+item.value+'_'+index+'_'+index2" :closable="!isModify" @on-close="roleClose">
 		                                                {{ item.label}}
 		                                            </Tag>
@@ -528,6 +528,7 @@ export default {
         	let _params = {
 				groupSn:this.formValidate.AddGroupList[i].myValue,
 				group_leader:JSON.stringify(List[i].groupLeader[0]),
+				prjSn:Common.GETprjid(this,Common),
 			}
 			this.onChangeData = false;
             this.saveGroupLeader(addGroupLeader,_params).then(()=>{

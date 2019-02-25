@@ -3670,7 +3670,236 @@ app.all('/req/getReqDepd/', function(req, res) {
 });
 
 
+
+
+
+
+
+
+
+
 /************qhc */
+
+app.all('/devtask/changeTaskStatus/', function(req, res) {
+    res.json({success:true,status: "success",message: "add_users success"});
+    res.end()
+});
+
+
+let devtaskList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+            "success":true,
+            "status": "success",
+            "message": "getReqDepd xxxxxxx",
+
+            limit:10,
+            page:1,
+            page_rows:10,
+            pageno:1,
+            rows:[],
+            table_id:"listview_table",
+            total:5,
+            
+           
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        })
+}
+app.all('/devtask/list/', function(req, res) {
+    let Json = devtaskList(req.body.myStatus);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
+    console.log("Json==>", Json);
+    res.json(Json);
+    res.end()
+});
+
+
+let queryCondition = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+            "success":true,
+            "status": "success",
+            "message": "getReqDepd xxxxxxx",
+            "prjGroup":[],
+            "prjUser":[],
+            prj_name:"new1",
+            "product_name":"一体化研发平台",
+            sprintlist:[],
+            sprints_story:{
+                "1":[],
+                "11":[],
+                "21":[],
+            },
+            statuslist:[],
+            typelist:[],
+            userstory:[],
+           
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        })
+}
+app.all('/devtask/queryCondition/', function(req, res) {
+    let Json = queryCondition(req.body.myStatus);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
+    console.log("Json==>", Json);
+    res.json(Json);
+    res.end()
+});
+
+let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+            "success":true,
+            "status": "success",
+            "message": "getReqDepd xxxxxxx",
+            "statusList":[
+                {
+                    stateStr: "新建",
+                    state: 1,
+                    taskNumber: 3
+                },
+                {
+                    stateStr: "进行中",
+                    state: 2,
+                    taskNumber: 4
+                },
+                {
+                    stateStr: "完成",
+                    state: 3,
+                    taskNumber: 5
+                },
+                {
+                    stateStr: "废弃",
+                    state: 4,
+                    taskNumber: 6
+                },
+            ],
+            "groupList":[
+                {
+                    text: "用户故事"
+                },
+                {
+                    bgcolor:"FEB159",
+                    isStoryPerson:false,
+                    text: "用户登录",
+                    groupId: 12799
+                },
+                {
+                    bgcolor:"FE4514",
+                    isStoryPerson:true,
+                    text: "创建代码仓库",
+                    groupId: 12800
+                },
+                {
+                    bgcolor:"FEB159",
+                    isStoryPerson:true,
+                    text: "未知项1",
+                    groupId: 12605
+                }
+            ],
+            cardList:[
+                {
+                    isDepend:"no",
+                    isFile:"no",
+                    isFinish:"",
+                    isTaskPerson:true,
+
+                    groupId:12799,
+                    taskId: "TS-PJ1800150-US0001",
+                    nickName: "xiebei.zh(谢蓓)",
+                    taskName:"任务名1XXX",
+                    userId: "xiebei.zh",
+                    id:1,
+                    taskStatus: 1,
+                    bgcolor:"#FE4514",
+                    headPortrait:"xxx/xx.jpg",
+                },
+                {
+                    isDepend:"no",
+                    isFile:"no",
+                    isFinish:"",
+                    isTaskPerson:true,
+                    
+                    groupId:12800,
+                    isTaskPerson:true,
+                    taskId: "TS-PJ1800150-US0002",
+                    nickName: "xiebei.zh(谢蓓)",
+                    taskName:"任务名2XXX",
+                    userId: "xiebei.zh",
+                    id:2,
+                    taskStatus: 2,
+                    bgcolor:"#FEB159",
+                    headPortrait:"xxx/xx.jpg",
+                },
+                {
+                    isDepend:"no",
+                    isFile:"no",
+                    isFinish:"",
+                    isTaskPerson:true,
+                    
+                    groupId:12799,
+                    isTaskPerson:true,
+                    taskId: "TS-PJ1800150-US0003",
+                    nickName: "xiebei.zh(谢蓓)",
+                    taskName:"任务名3XXX",
+                    userId: "xiebei.zh",
+                    id:3,
+                    taskStatus: 4,
+                    bgcolor:"#FE4514",
+                    headPortrait:"xxx/xx.jpg",
+                },
+                {
+                    isDepend:"no",
+                    isFile:"no",
+                    isFinish:"",
+                    isTaskPerson:true,
+                    
+                    groupId:12605,
+                    isTaskPerson:false,
+                    taskId: "TS-PJ1800150-US0004",
+                    nickName: "xiebei.zh(谢蓓)",
+                    taskName:"任务名4XXX",
+                    userId: "xiebei.zh",
+                    id:4,
+                    taskStatus: 3,
+                    bgcolor:"#FEB159",
+                    headPortrait:"xxx/xx.jpg",
+                },
+                {
+                    isDepend:"no",
+                    isFile:"no",
+                    isFinish:"",
+                    isTaskPerson:true,
+                    
+                    groupId:12605,
+                    isTaskPerson:false,
+                    taskId: "TS-PJ1800150-US0005",
+                    nickName: "lizhuo.zh(李卓)",
+                    taskName:"任务名5XXX",
+                    userId: "lizhuo.zh",
+                    id:5,
+                    taskStatus: 2,
+                    bgcolor:"#FEB159",
+                    headPortrait:"xxx/xx.jpg",
+                },
+            ],
+
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        })
+}
+app.all('/devtask/get_kanban_data/', function(req, res) {
+    let Json = get_kanban_data(req.body.myStatus);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
+    console.log("Json==>", Json);
+    res.json(Json);
+    res.end()
+});
+
+
 let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": val1,

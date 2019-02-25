@@ -48,7 +48,7 @@
               </FormItem>
               </Col>
             </Row>
-            <Row v-if="isShowMoreShow">
+            <Row v-show="isShowMoreShow">
               <Col span="3" style="text-align: center">
               <div class="searchName">工作项状态</div>
               </Col>
@@ -81,7 +81,7 @@
 
 
             <!--  -->
-            <Row v-if="isShowMoreShow">
+            <Row v-show="isShowMoreShow">
               <Col span="3" style="text-align: center">
               <div class="searchName">工作项类型</div>
               </Col>
@@ -180,7 +180,7 @@ import { EventBus } from "@/tools";
 import kanbanboard from "@/components/kanbanboard";
 import developList from "@/pages/development/development";
 import Common from '@/Common';
-const {getSprintsByPrj,getUserstoryByPrjId,getTaskStatusSettings,getTaskTypeSettings,getUserByProjId,developListAxiosData,changeTaskStatus,getPermission,projectListDataNew,getDefaultSpringIdByPrj,queryCondition,getUserStoryBySprintMId} = Common.restUrl;
+const {getSprintsByPrj,getUserstoryByPrjId,getTaskStatusSettings,getTaskTypeSettings,getUserByProjId,developListAxiosData,changeTaskStatus,getPermission,projectListDataNew,getDefaultSpringIdByPrj,queryCondition,getUserStoryBySprintMId,developkanbanAxiosData} = Common.restUrl;
 export default {
     data() {
         return {
@@ -216,7 +216,7 @@ export default {
             cardListBase:[],
             groupListBase:[],
             statusListBase:[],
-            //groupList:[],
+            groupList:[],//替换
             mytaskOnoff:false,
             //
             iterationName: "",
@@ -724,7 +724,7 @@ export default {
         //所有卡片数据
         cardList: function() {
           
-          let _cardList = [
+          let __cardList = [
               {
                 groupId:12799,
                 isTaskPerson:true,
@@ -894,8 +894,8 @@ export default {
               }
               */
           ];
-          /* 以后加上
-          let _cardList = this.carkListBase;
+          /* 以后加上 */
+          let _cardList = this.cardListBase;
           let _groups = this.groupList;
           _cardList.forEach((cardItem,index)=>{
             _groups.forEach((groupItem,index)=>{
@@ -911,12 +911,12 @@ export default {
           _cardList.forEach((item)=>{
             item.headPortrait = require("@/assets/images/user_02.png");
           })
-          */
+          
 
           return _cardList;
         },
         //左侧分组数据
-        groupList: function() {
+        __groupList: function() {
             let _groupList = [
                 { text: "用户故事" },
                 {
@@ -936,7 +936,7 @@ export default {
         },
         //水平显示任务数
         statusList: function() {
-            let _statusList = [
+            let __statusList = [
                 {
                     stateStr: "未开始",
                     state: 1,
@@ -986,9 +986,8 @@ export default {
                 }
                 */
             ];
-            /* 以后加上
+            /* 以后加上 */
             let _statusList = this.statusListBase;
-            */
             return _statusList;
         }
     },

@@ -20,6 +20,8 @@ CommonRestqhc.restUrl = {
     "developEditAxiosData":process.env.BASE_URL + "/devtask/edit/",
     "developListAxiosData":process.env.BASE_URL + "/devtask/list/",
     "updateView":process.env.BASE_URL + "/devtask/updateView/",
+
+    "developkanbanAxiosData":process.env.BASE_URL + "/devtask/get_kanban_data/",
     //qhc end
     "getUserStoryBySprintMId":process.env.BASE_URL + "/sprint/getUserStoryBySprintMId/",
     "queryCondition":process.env.BASE_URL + "/devtask/queryCondition/",

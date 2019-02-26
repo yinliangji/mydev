@@ -10,14 +10,34 @@
             </BreadcrumbItem>
         </Breadcrumb>
         <Card>
-            
+            <div class="editBtn">
+                <!-- :disabled="authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])"  -->
+                <Button 
+                    type="warning" 
+                    @click="editItemFn"
+                    class="editBtn"
+                    long
+                    size="small"
+                    v-show="(TabsCur == 'name1') ? true : false"
+                    >
+                    编辑
+                </Button>
+            </div>
             <Tabs :value="TabsCur" type="card" :capture-focus="false" @on-click="tabsHandle" >
                 
-                <TabPane label="项目需求项附件" name="name1">
+                <TabPane label="项目需求项详情" name="name1">
                     <div class="baseInfoBox" >
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
                         <div class="tableBox">
-                            <FileDownLoad :REQID="formValidate.req_id" v-if="TabsCur == 'name1'" />
+                            <InfoTable :Data="formValidate" v-if="TabsCur == 'name1'" />
+                        </div>
+                    </div>
+                </TabPane>
+                <TabPane label="项目需求项附件" name="name2">
+                    <div class="baseInfoBox" >
+                        <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
+                        <div class="tableBox">
+                            <FileDownLoad :REQID="formValidate.req_id" v-if="TabsCur == 'name2'" />
                         </div>
                     </div>
                 </TabPane>
@@ -31,8 +51,9 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 import Store from '@/vuex/store'
-const {getPermission} = Common.restUrl;
+const {getPermission,DetailReq} = Common.restUrl;
 import FileDownLoad from './filedown'
+import InfoTable from './info'
 
 export default {
     data () {
@@ -40,6 +61,23 @@ export default {
             
             formValidate: {
                 req_id:"",
+                detail_id:"",
+
+                status:"",
+                comment:"",
+                remark:"",
+                status_name:"",
+                start_time:"",
+                req_submitter:"",
+                prj:"",
+                create_user:"",
+                end_time:"",
+                
+                settle_time:"",
+                req_name:"",
+                prj_type:"",
+                id:"",
+                prj_type_name:"",
             },
 
             prj_permission:[],
@@ -57,10 +95,17 @@ export default {
     mounted(){
 
         let ID = Common.GETID(this,Common)
-        let REQ_ID = Common.getStorageAndCookie(this,Common,"req_id")
+        let REQ_ID = Common.getStorageAndCookie(this,Common,"req_id");
+        this.detail_id = Common.getStorageAndCookie(this,Common,"reqList_id");
         if(ID && REQ_ID){
             this.formValidate.req_id = REQ_ID;
             this.getPermissionFn(getPermission).then((result)=>{
+                if(this.detail_id){
+                    this.GetDetail(DetailReq,this.detail_id)
+                }else{
+                    Common.CommonError(this,"没有detail_id")
+                }
+                
             },()=>{
                 this.showError("权限不足，不能有任何动作");
             })
@@ -83,6 +128,63 @@ export default {
         console.log("项目需求项detail--updated-------",this.formValidate)
     },
     methods: {
+        editItemFn(){
+            let _query = {
+                DATA: JSON.stringify(this.formValidate)
+            }
+            this.$router.push({path: '/demand/addEdit', query:_query})
+            
+        },
+        GetDetail(URL = "",detail_id){
+            return defaultAXIOS(URL,{detail_id},{timeout:5000,method:'get'})
+            .then((response) => {
+                let myData = response.data;
+                console.log("<====== 项目需求项详情***response+++",response,myData,"======>");
+                if(myData.status == "success" && myData.data && Object.getOwnPropertyNames(myData.data).length >2){
+                    for(let i in myData.data){
+                        if(i == "start_time" || i == "end_time"){
+                            this.formValidate[i] = Common.replaceNullFn(myData.data[i])
+                        }else{
+                            this.formValidate[i] = myData.data[i]
+                        }
+
+                    }
+                    return Promise.resolve(myData.data)                    
+
+                }else{
+                    return Promise.reject("错误");
+                    this.showError("URL_错误");
+                }
+                /*
+
+                if(Object.getOwnPropertyNames(myData).length >2){
+                    this.GetDetail = myData;
+                    for(let i in myData){
+                        if(i == "proi"){
+                            this.formValidate[i] = Common.ProiFn(myData[i],i)
+                        }else if(i == "userstory_type"){
+                            this.formValidate[i] = Common.TypeFn(myData[i],i)
+                        }else if(i == "userstory_status"){
+                            this.formValidate[i] = Common.StatusFn(myData[i],i,this)
+                        }
+                        else{
+                            this.formValidate[i] = myData[i]
+                        }
+                    }
+                    return Promise.resolve(myData.id)
+                }else{
+                    return Promise.reject("没有数据");
+                    //this.showError("没有数据");
+                }
+                */
+
+            })
+            .catch( (error) => {
+                console.log(error);
+                return Promise.reject(error);
+                //this.showError(error);
+            });
+        },
         //tabs - start
         tabsHandle(name){
             this.TabsCur = name;
@@ -102,6 +204,7 @@ export default {
     },
     components: {
         FileDownLoad,
+        InfoTable,
     },
     watch:{
     },

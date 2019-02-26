@@ -843,6 +843,12 @@ export default {
                 if(myData.status == "success"){
                     this.tableData = myData.data;
                     this.tableDAtaTatol = myData.total;
+
+                    for(let i=0;i<this.tableData.length;i++){
+                        this.tableData[i].start_time = this.tableData[i].start_time || "";
+                        this.tableData[i].end_time = this.tableData[i].end_time || "";
+                    }
+
                 }else{
                     return Promise.reject(URL+"_错误");
                 }

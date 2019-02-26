@@ -240,6 +240,12 @@ CommonRest.restUrl = {
     "getReqDepd": process.env.BASE_URL + "/req/getReqDepd/",
     /**** 需求项目获取依赖项 get****/
 
+    "DetailReq": process.env.BASE_URL + "/req/DetailReq/",
+    /**** 需求项目详情 get****/
+
+    "getPrjTime": process.env.BASE_URL + "/req/prj_time/",
+    /**** 需求项目详情 get****/
+
     /*****************************************/
 
     "getUserByProjId": process.env.BASE_URL + "/agile/getUserByProjId/",

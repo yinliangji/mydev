@@ -1638,14 +1638,29 @@ export default class Common extends Utils {
       });
     }
     //检查结束日期
-    static checkEndDate(that){
+    static checkEndDate(that,fnParams = false){
+
       return (rule, value, callback)=>{
+        let _form = fnParams ? that.formItem : that.formValidate;
+        let _itemEndTime = that.itemEndTime ? new Date(that.itemEndTime).getTime() : false;
+
         if (value) {
-            let Timer = new Date(value).getTime() - new Date(that.formValidate.start_time).getTime();
-            if(Timer >= 0){
+            let Timer = new Date(value).getTime() - new Date(_form.start_time).getTime();
+            let TimerItemEndTime = _itemEndTime ? _itemEndTime - new Date(value).getTime() : false;
+            if(TimerItemEndTime){
+              if(TimerItemEndTime >= 0 && Timer >= 0){
                 callback()
-            }else{
+              }else if(TimerItemEndTime < 0){
+                return callback(new Error('结束日期晚于此项目的【结束日期】！'));
+              }else{
                 return callback(new Error('结束日期早于开始日期！'));
+              }
+            }else{
+              if(Timer >= 0){
+                  callback()
+              }else{
+                  return callback(new Error('结束日期早于开始日期！'));
+              }
             }
         }else if(!value){
             return callback(new Error('请选择日期！'));

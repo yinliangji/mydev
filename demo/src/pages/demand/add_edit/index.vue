@@ -4,78 +4,94 @@
 		<Card>
             <div class="aglieAddBox">
             	<!--  -->
-            	<Form :model="formItem" :label-width="100" :rules="ruleValidate" ref="formValidate" style="width:95%;">
-		            <FormItem label="所属项目" >
-		                <p>{{formItem.prj_name}}</p>
-		            </FormItem>
-		            
+            	<Form :model="formItem" :label-width="100" :rules="ruleValidate" ref="formValidate" style="width:100%;">
+                    <h3 class="Title"><span>项目需求项{{ADDorEDIT?"添加":"编辑"}}</span></h3>
+                    <div class="fromBox">
+    		            <FormItem label="所属项目" >
+    		                <p>{{formItem.prj_name}}</p>
+    		            </FormItem>
+    		            
 
-		            <FormItem label="需求项类型" prop="prj_type">
-		                <RadioGroup v-model="formItem.prj_type">
-		                    <Radio label="1">
-		                        立项&nbsp;
-		                        <ToolTip placement="top-start" :T="1" content="在ITM中立项的项目对应的需求项" />
-		                    </Radio>
-		                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		                    <Radio label="2">
-		                        自研&nbsp;
-		                        <ToolTip placement="top-start" :T="1" content="非立项项目对应的需求项" />
-		                    </Radio>
-		                </RadioGroup>
-		            </FormItem>
-		            
-		            
-		            <FormItem label="需求项编号" prop="req_id" v-show="formItem.prj_type  == 2 ? false : true" >
-		                <Input v-model="formItem.req_id"  :disabled="formItem.prj_type  == 1 ? false : true" placeholder="请输入需求项编号"></Input>
-		                <!-- <p v-show="formItem.prj_type  != 2 ? false : true">【需求项编号】自动生成</p> -->
-		                <ToolTip  content="项目在ITM中对应的需求项编号" />
-		            </FormItem>
-		            <FormItem label="需求项编号" v-show="formItem.prj_type  != 2 ? false : true">
-		                <p >【项目在ITM中对应的需求项编号】</p>
-		                <!-- v-if="formItem.prj_type  == 2 ? false : true" -->
-		            </FormItem>
-		            <FormItem label="需求项名称" prop="req_name">
-		                <Input v-model="formItem.req_name" placeholder="请输入需求项名称"></Input>
-		            </FormItem>
-		            <FormItem label="提出部门" prop="req_submitter">
-		                <Input v-model="formItem.req_submitter" placeholder="请输入提出部门"></Input>
-		            </FormItem>
+    		            <FormItem label="需求项类型" prop="prj_type">
+    		                <RadioGroup v-model="formItem.prj_type">
+    		                    <Radio label="1">
+    		                        立项&nbsp;
+    		                        <ToolTip placement="top-start" :T="1" content="在ITM中立项的项目对应的需求项" />
+    		                    </Radio>
+    		                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    		                    <Radio label="2">
+    		                        自研&nbsp;
+    		                        <ToolTip placement="top-start" :T="1" content="非立项项目对应的需求项" />
+    		                    </Radio>
+    		                </RadioGroup>
+    		            </FormItem>
+    		            
+    		            
+    		            <FormItem label="需求项编号" prop="req_id" v-show="formItem.prj_type  == 2 ? false : true" >
+    		                <Input v-model="formItem.req_id"  :disabled="formItem.prj_type  == 1 ? false : true" placeholder="请输入需求项编号"></Input>
+    		                <!-- <p v-show="formItem.prj_type  != 2 ? false : true">【需求项编号】自动生成</p> -->
+    		                <ToolTip  content="项目在ITM中对应的需求项编号" />
+    		            </FormItem>
+    		            <FormItem label="需求项编号" v-show="formItem.prj_type  != 2 ? false : true">
+    		                <p >【项目在ITM中对应的需求项编号】</p>
+    		                <!-- v-if="formItem.prj_type  == 2 ? false : true" -->
+    		            </FormItem>
+    		            <FormItem label="需求项名称" prop="req_name">
+    		                <Input v-model="formItem.req_name" placeholder="请输入需求项名称"></Input>
+    		            </FormItem>
+                        <Row>
+                            <Col span="12">
+                                <FormItem label="开始时间" prop="start_time">
+                                    <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"  :value="formItem.start_time" v-model="formItem.start_time" ></DatePicker>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                 <FormItem label="结束时间" prop="end_time">
+                                    <DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择结束日期" v-model="formItem.end_time" ></DatePicker>
+                                </FormItem>
+                            </Col>
+                        </Row>
+    		            <FormItem label="提出部门" prop="req_submitter">
+    		                <Input v-model="formItem.req_submitter" placeholder="请输入提出部门"></Input>
+    		            </FormItem>
 
-		            <FormItem label="添加依赖项" >
-                        <span style="position: relative;">
-                            <Tag 
-                                v-for="(item,index) in dependList"
-                                :value="index" 
-                                :key="index" 
-                                :name="index" 
-                                closable 
-                                @on-close="dependDel">
-                                {{ item.depd_name}}
-                            </Tag>
-                            <Button 
-                                icon="ios-plus-empty" 
-                                type="dashed" 
-                                size="small" 
-                                @click="addDepend">
-                                添加依赖项
-                            </Button>
-                            
-                        </span>
-                    </FormItem>
+    		            <FormItem label="添加依赖项" >
+                            <span style="position: relative;">
+                                <Tag 
+                                    v-for="(item,index) in dependList"
+                                    :value="index" 
+                                    :key="index" 
+                                    :name="index" 
+                                    closable 
+                                    @on-close="dependDel">
+                                    {{ item.depd_name}}
+                                </Tag>
+                                <Button 
+                                    icon="ios-plus-empty" 
+                                    type="dashed" 
+                                    size="small" 
+                                    @click="addDepend">
+                                    添加依赖项
+                                </Button>
+                                
+                            </span>
+                        </FormItem>
 
-		            <FormItem label="需求项描述" prop="comment" v-show="formItem.prj_type  != 2 ? false : true">
-		                <Input v-model="formItem.comment" type="textarea" :autosize="{minRows: 3,maxRows: 10}" placeholder="请填写需求项描述"></Input>
-		            </FormItem>
+    		            <FormItem label="需求项描述" prop="comment" v-show="formItem.prj_type  != 2 ? false : true">
+    		                <Input v-model="formItem.comment" type="textarea" :autosize="{minRows: 3,maxRows: 10}" placeholder="请填写需求项描述"></Input>
+    		            </FormItem>
+                        <FormItem label="需求项备注" prop="remark" >
+                            <Input v-model="formItem.remark" type="textarea" :autosize="{minRows: 3,maxRows: 10}" placeholder="请填写需求项备注"></Input>
+                        </FormItem>
 
-		            <FormItem>
-    					<Button type="primary" :loading="modal_add_loading" @click="submitAdd">
-    				        <span v-if="!modal_add_loading">提交</span>
-    				        <span v-else>Loading...</span>
-    				    </Button>
-                        <Button type="ghost" style="margin-left: 8px" @click="cancel">返回</Button>
-                    </FormItem>
-		            
-
+    		            <FormItem>
+        					<Button type="primary" :loading="modal_add_loading" @click="submitAdd">
+        				        <span v-if="!modal_add_loading">提交</span>
+        				        <span v-else>Loading...</span>
+        				    </Button>
+                            <Button type="ghost" style="margin-left: 8px" @click="cancel">返回</Button>
+                        </FormItem>
+                    </div>
 		        </Form>
             	<!--  -->
             </div>
@@ -87,10 +103,12 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAdd,reqGet,reqEdit,projectListDataNew,getReqDepd} = Common.restUrl;
+const {reqAdd,reqGet,reqEdit,projectListDataNew,getReqDepd,getPrjTime} = Common.restUrl;
 import Depend from '@/pages/product/add/depend'
 export default {
 	data () {
+        let _this = this;
+        const validateDateEnd = Common.checkEndDate(this,"formItem");
         const req_idCheck = (rule, value, callback) => {
             if(this.formItem.prj_type  != 1){
                 callback()
@@ -108,10 +126,21 @@ export default {
             }
         };        
         return {
+            options3: {
+                disabledDate (date) {
+                    if(_this.formItem.start_time){
+                        return date && date.valueOf() < _this.formItem.start_time.getTime() + 86400000;//24*60*1000*60
+                    }else{
+                        //return date && date.valueOf() < Date.now() - 86400000;//24*60*1000*60
+                    }
+                    
+                }
+            },
             modaAdd: false,
             modal_add_loading: false,
             ADDorEDIT:true,
             editTableData:false,
+            itemEndTime:"",
             formItem: {
                 req_name:"",
                 req_id:"",
@@ -121,6 +150,9 @@ export default {
                 prj_name:"",
                 myId:"",
                 comment:"",
+                start_time:"",
+                end_time:"",
+                remark:"",
             },
 
             ruleValidate: {
@@ -135,6 +167,16 @@ export default {
                 ],
                 comment: [
                     { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
+                remark: [
+                    { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
+                start_time: [
+                     { required: true, type: 'date', message: '请选择日期！', trigger: 'change' }
+                 ],
+                end_time: [//
+                    { required: true, type: 'date', validator: validateDateEnd, trigger: 'change' }
+                    //{ required: false, type: 'date', message: 'Please select the date', trigger: 'change' }
                 ],
             },
             prj_idList:[
@@ -164,14 +206,30 @@ export default {
         console.log("需求项添加或编辑--updated--",this.formItem)
     },
 	mounted(){
+        this.getTimerPrj(getPrjTime,{prj_id:Common.GETID(this,Common)})
 		if(this.$router.history.current.query.DATA){
 			let _DATA = JSON.parse(this.$router.history.current.query.DATA);
+            _DATA = Array.isArray(_DATA) ? _DATA : [_DATA];
             this.ADDorEDIT = false;
 			this.getReqDepdFn(getReqDepd,{prjId:Common.GETID(this,Common),reqId:_DATA[0].id})
 			this.editFn(_DATA);
 		}
 	},
 	methods: {
+        getTimerPrj(URL,params = {}){
+            defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======需求项 获取项目时间***response+++",response,myData,"======>");
+                if(myData.status == "success"){
+                    this.itemEndTime = myData.data.end_time;
+                }else{
+                    this.showError(myData.status);
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });
+        },
 		//依赖开始
 		getReqDepdFn(URL,params = {}){
 			defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
@@ -203,8 +261,10 @@ export default {
         },
         //依赖结束
         editFn(data){
-            
             if(data && Array.isArray(data)){
+                this.formItem.start_time = data[0].start_time+"";
+                this.formItem.end_time = data[0].end_time+"";
+
                 this.formItem.req_id = data[0].req_id+"";
                 this.formItem.req_name = data[0].req_name+"";
                 this.formItem.req_submitter = data[0].req_submitter+"";
@@ -212,6 +272,7 @@ export default {
                 this.formItem.prj_id = Common.GETID(this,Common);
                 this.formItem.myId = data[0].id+"" || "";
                 this.formItem.comment = data[0].comment+"";
+                this.formItem.remark = data[0].remark+"";
 
             }
         },
@@ -219,6 +280,11 @@ export default {
             this.modaAdd = true;
         },
         formItemReset(){
+
+            this.formItem.start_time = "";
+            this.formItem.end_time = "";
+            this.formItem.remark = "";
+
             this.formItem.req_name = "";
             this.formItem.req_id = "";
             this.formItem.req_submitter = "";
@@ -229,9 +295,16 @@ export default {
             this.formItem.comment = "";
             this.dependList = [];
             this.depd_sn = "";
+            
         },
         submitAddData(){
+            let _start_time = Common.DateFormat(Common,this.formItem.start_time);
+            let _end_time = Common.DateFormat(Common,this.formItem.end_time);
             let tempData = {
+                start_time:_start_time,
+                end_time:_end_time,
+                remark:this.formItem.remark,
+
                 req_name: this.formItem.req_name,
                 req_id: this.formItem.req_id,
                 //req_id:this.formItem.prj_type == 2 ? "" : this.formItem.req_id,
@@ -282,6 +355,8 @@ export default {
                     this.modal_add_loading = false;
                     if(valid){
                         this.submitAddData();
+                    }else{
+                        Common.CommonWarning(this,"有必选的还未填写或不正确！");
                     }
                 })
             },(error)=>{
@@ -395,5 +470,8 @@ export default {
 }
 .center-right{
     float: right;
+}
+.fromBox {
+    width: 80%;
 }
 </style>

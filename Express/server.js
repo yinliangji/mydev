@@ -2878,6 +2878,9 @@ let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
             "on_line":"1 | 5",
             "comment":"@title",
             "status|1-8":1,
+            "start_time":"@date(yyyy-MM-dd)",
+            "end_time":"@date(yyyy-MM-dd)",
+            remark:"@title",
 
 
             "__value2__page": val2,
@@ -3672,6 +3675,39 @@ app.all('/req/getReqDepd/', function(req, res) {
 
 
 
+let DetailReq = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "getReqDepd xxxxxxx",
+        "data":{
+            status:1,
+            comment:"@title",
+            status_name:"带实施",
+            "start_time|1":["null",null,"@date(yyyy-MM-dd)"],
+            req_submitter:"开发部",
+            prj:83,
+            create_user:"",
+            "end_time|1":["null",null,"@date(yyyy-MM-dd)"],
+            req_id:"RQ-PJ1800150-82",
+            "settle_time":"@date(yyyy-MM-dd)",
+            "req_name|5-8":/[a-zA-Z0-9]/,
+            prj_type:"2",
+            id:10039,
+            prj_type_name:"自研",
+            remark:"@title",
+            
+        },
+        "__value2__page": val2,
+        "__value3__pageline": val3,
+    })
+}
+app.all('/req/DetailReq/', function(req, res) {
+    let Json = DetailReq(req.body.myStatus);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
+    console.log("Json==>", Json);
+    res.json(Json);
+    res.end()
+});
 
 
 
@@ -3961,6 +3997,16 @@ app.all('/maven/queryPublicRep/', function(req, res) {
     res.json(get_queryPublicRep(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
+
+
+
+
+
+app.all('/req/prj_time/', function(req, res) {
+    res.json({status: "success",message: "add_users success",data:{end_time:"2019-05-01"}});
+    res.end()
+});
+
 
 
 

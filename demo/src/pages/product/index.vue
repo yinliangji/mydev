@@ -1037,8 +1037,6 @@ export default {
 		    		if(!isShowList){
 		    			if(Common.GetSession("isClickedDelBtn")){
 		    				let _temp = Common.GetSession("userstorySerch") || Common.GetSession("userstorySerchTemp") || false;
-
-		    				console.error(Common.GetSession("isClickedDelBtn"),_temp,11111)
 		    				this.formValidate.sprint = _temp ? JSON.parse(_temp).sprint : sprint+"";
 		    				Common.RemoveSession("isClickedDelBtn");
 		    			}else if(_myAllSession && JSON.parse(_myAllSession).hasOwnProperty("sprint")){

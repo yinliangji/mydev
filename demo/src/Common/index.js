@@ -1135,7 +1135,6 @@ export default class Common extends Utils {
               if(special == "sprintList"){
                 that[special].unshift({label:"未规划迭代",value:"0"})
               }
-              console.error(that[special])
             }
             return Promise.resolve(myData)
             

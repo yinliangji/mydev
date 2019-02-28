@@ -1103,7 +1103,7 @@ export default class Common extends Utils {
     }
 
     //获取搜索下拉菜单全部--不通用
-    static GetConditionAll(FUN,that,URL, condition,prj_id,all){
+    static GetConditionAll(FUN,that,URL, condition,prj_id,all,special){
       //
       return FUN(URL,{condition,prj_id},{timeout:20000,method:'get'})
       .then((response) => {
@@ -1125,10 +1125,17 @@ export default class Common extends Utils {
               if(that[all[i]+"List"]){
                 that[all[i]+"List"] = [];
                 that[all[i]+"List"] = objFn(myData[all[i]]);
+
               }else{
                 return Promise.reject("没有"+all[i]+"List");
               }
               
+            }
+            if(special && that[special]){
+              if(special == "sprintList"){
+                that[special].unshift({label:"未规划迭代",value:"0"})
+              }
+              console.error(that[special])
             }
             return Promise.resolve(myData)
             

@@ -111,16 +111,25 @@
                         </div>
 			        </FormItem>
 			    </Form>
-			    <div class="tableBox">
-					<div class="tagBox">
+			    <div class="tableBox" style="position:relative;">
+			    	<ToolTip 
+			    		:L="350" 
+			    		:T="25" 
+			    		:Z="10" 
+			    		:W="230"  
+			    		content="1.提出（新建用户故事未开始处理）<br>2.设计分析（写测试案例、提交设计文档等附件）<br>3.开发测试（提交代码，开始单元测试）<br>4.用户验收测试（所有工作项都已完成）<br>5.待投产（发布版本审核通过，关联了用户故事）<br>6.已投产（用户故事投产成功）<br>7.停滞（实施过程中由于某些原因暂停实施）<br>8.废弃（废弃不再实施的用户故事）" 
+			    	/>
+					<div class="tagBox" >
+	
 						<Row :gutter="10" align="middle">
+							
 							<Col span="3" >
 								<Button 
 									class="addBtnBox"
 									type="success"  
 									@click="addItem"
 									:disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
-								>
+									>
 									添加用户故事
 								</Button>
 								
@@ -135,6 +144,7 @@
 								@click="showTask" class="cursor" title="用户故事看板">
 							</Col>
 							<Col span="17" style="text-align:right;" >
+
 								<Button 
 									class="addBtnBox"
 									icon="ios-download-outline"
@@ -159,6 +169,7 @@
 								</Button>
 								
 								&nbsp;
+
 							</Col>
 							<!--
 							<Col span="1" v-if="currentView == 'kanbanboard'">
@@ -299,8 +310,8 @@ export default {
 
         Common.RemoveSession("userstorySerchTemp");
         if(Common.GetSession("allSession")){
-        	let _allSession = JSON.parse(Common.GetSession("allSession"));
 
+        	let _allSession = JSON.parse(Common.GetSession("allSession"));
         	for(let I in this.formValidate){
         		this.formValidate[I] = _allSession[I]
         		if(I != "sprint"){
@@ -1021,9 +1032,16 @@ export default {
 		getInfoFn(ID,isShowList){
 			let _myAllSession = Common.GetSession("allSession");
 		    this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
+
 		    	if(!_myAllSession || (_myAllSession && !JSON.parse(_myAllSession).hasOwnProperty("sprint"))){
 		    		if(!isShowList){
-		    			if(_myAllSession && JSON.parse(_myAllSession).hasOwnProperty("sprint")){
+		    			if(Common.GetSession("isClickedDelBtn")){
+		    				let _temp = Common.GetSession("userstorySerch") || Common.GetSession("userstorySerchTemp") || false;
+
+		    				console.error(Common.GetSession("isClickedDelBtn"),_temp,11111)
+		    				this.formValidate.sprint = _temp ? JSON.parse(_temp).sprint : sprint+"";
+		    				Common.RemoveSession("isClickedDelBtn");
+		    			}else if(_myAllSession && JSON.parse(_myAllSession).hasOwnProperty("sprint")){
 		    				this.formValidate.sprint = JSON.parse(_myAllSession).sprint+"";
 		    			}else if(_myAllSession && !JSON.parse(_myAllSession).hasOwnProperty("sprint")){
 		    				this.formValidate.sprint = "";
@@ -1077,7 +1095,7 @@ export default {
 	    	this._sprint = this.storyGetConditionFn(storyGetCondition,"sprint",ID);
 
 	    	return Promise.all([this._sprint]).then((REP)=>{
-	    		this.sprintList.unshift({label:"未规划迭代",value:"0"})
+	    		//this.sprintList.unshift({label:"未规划迭代",value:"0"})
 			    return defaultAXIOS(URL,{prj_id:ID},{timeout:20000,method:'get'}).then((response) => {
 	                let myData = response.data;
 	                console.log("<======agile getDefSpring***response+++",response,myData,"======>");
@@ -1128,33 +1146,6 @@ export default {
 		},
 		changeStateNumber(info){
 			Common.ChangeStateNumber(this,"statusListBase",info);
-			/*
-			let _statusBase = _.cloneDeep(this.statusListBase);
-			//let _statusBase = this.statusListBase;
-			let toState = info.evt.to.getAttribute('state');
-			let fromState = info.evt.from.getAttribute('state');
-
-			if(toState == fromState){
-				return;
-			}else{
-				this.statusListBase = [];
-				_statusBase.forEach((item,index)=>{
-					//if(info.item.askStatus == item.state){
-					//if(info.evt.item.getAttribute('state') == item.state){
-					
-					if(fromState == item.state){
-						item.taskNumber = parseFloat(item.taskNumber) - 1
-					}
-					if(item.state == toState){
-						item.taskNumber = parseFloat(item.taskNumber) + 1
-					}
-				});
-				//this.statusListBase = _statusBase;
-				//this.$set(this.statusListBase[0],"taskNumber", 100)
-				this.statusListBase.push(..._statusBase);
-			}
-			*/
-
 			
 		},
 		changeMovedStatus(info){
@@ -1427,7 +1418,7 @@ export default {
         },
 
 		storyGetConditionFn(URL,condition,prj_id){
-			return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint","group_name"]);
+			return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint","group_name"],"sprintList");
 			//return Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
         },
         cancelSerchAll(){

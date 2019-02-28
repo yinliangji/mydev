@@ -1,8 +1,8 @@
 <template>
-    <div class="TooltipWrap" :style="L?'right:auto;left:'+L+'px;top:'+T+'px':'top:'+T+'px'">
+    <div class="TooltipWrap" :style="L?'right:auto;left:'+L+'px;top:'+T+'px;z-index:'+Z+';':'top:'+T+'px;z-index:'+Z+';'">
         <Tooltip  :placement="placement">
             <div slot="content" :style="'white-space:normal;width:'+W+'px;'">
-                {{content}}
+                <div v-html="content"></div>
             </div>
             <Icon type="ios-help-outline" :size="size" :color="color"></Icon>
         </Tooltip>
@@ -58,6 +58,12 @@ export default {
                 return 4;
             }
         },
+        Z:{
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return "auto";
+            }
+        },
 
     },
     mounted(){
@@ -69,7 +75,11 @@ export default {
 </script>
 <style lang="less" scoped>
 .TooltipWrap{
-    width:24px;height: 24px; position: absolute; right: -28px;top:4px;
+    width:24px;
+    height: 24px; 
+    position: absolute; 
+    right: -28px;
+    top:4px;
 }
 
 </style>

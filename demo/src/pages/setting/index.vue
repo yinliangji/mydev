@@ -230,8 +230,7 @@ export default {
 
 		this.addTeam(getUserByProjId,{projectId:ID}).then(()=>{
 			this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:ID});
-		},()=>{
-		})
+		},()=>{})
 	},
 	methods:{
 		getPermissionFn(URL){
@@ -635,6 +634,7 @@ export default {
 				let myData = response.data;
 				console.log("<======【设置小组 获取人员】***response+++",response,myData,"====>");
 				let _tempObj = {};
+				this.formPartValidate.memberList = [];
 
 				if(myData && Array.isArray(myData) && myData.length){
 					for(var i=0;i<myData.length;i++){
@@ -788,7 +788,13 @@ export default {
         selectMenuFn(N){
             console.log(N,"<==========selectMenuFn");
             let ID = N;
-			this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
+			//this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
+
+
+			this.addTeam(getUserByProjId,{projectId:ID}).then(()=>{
+				this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:ID});
+			},()=>{})
+
         },
 
 	},

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>'
+<body style="font-size: 18px; font-family: 'Microsoft YaHei';background-color: #f0f0f0">
+	<h3 style="text-align: center;">ie配置方法</h3>
+	<pre style="width: 1000px; margin: 0 auto; padding: 30px; border: 1px dashed #999">
+<b>第一步： 配置 babel-polyfill</b>
+	1: 在package.json 中引入
+		"devDependencies":{
+			"babel-polyfill": '^6.26.0',
+		}
+	2: 在main.js中引入
+		import 'babel-polyfill'
+	3：在vuex中的index中引入
+		import 'babel-polyfill'
+	4: 在build文件夹中，webpack.base.conf.js引入
+		entry: {
+		 app: ["babel-polyfill", "./src/main.js"]
+		}
+
+<b>第二步: 将要替代的iview引入到node_modules,</b>
+	注意： package.json中iview的版本要跟引入的一致
+
+	截至到这个时候可以试试运行看看，如果有问题 再执行下面的部分
+
+<b>第三步： 解决promise未定义的问题</b>
+
+	1：安装babel-preset-es2015
+		将包放入node_modules， 并在在package.json 中引入
+		"devDependencies":{
+			"babel-preset-es2015": '^6.24.1',
+		}
+	2. 在.babelrc文件中引入
+		{
+			"presets" [
+				"stage-2",
+				"es2015"
+			],
+		}
+
+<b>第四步: 换新的头部</b>
+
+<b>第五步： 放包的路径 ftp：128.196.0.125</b>
+		/npm/data/devops/eclipse/workdir/马艳菊/
+	</pre>
+</body>
+</html>

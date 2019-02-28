@@ -3712,6 +3712,55 @@ app.all('/req/DetailReq/', function(req, res) {
 
 
 
+let getRequirementStatList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "getReqDepd xxxxxxx",
+        "data":[
+            {
+               param_name:"待实施",
+               param_id:1,
+            },
+            {
+               param_name:"分析中",
+               param_id:2,
+            },
+            {
+               param_name:"迭代中",
+               param_id:3,
+            },
+            {
+               param_name:"设计",
+               param_id:4,
+            },
+            {
+               param_name:"开发中",
+               param_id:5,
+            },
+            {
+               param_name:"用户验收测试",
+               param_id:6,
+            },
+            {
+               param_name:"已上线",
+               param_id:7,
+            },
+            {
+               param_name:"确认完成",
+               param_id:8,
+            },
+        ],
+        "__value2__page": val2,
+        "__value3__pageline": val3,
+    })
+}
+app.all('/req/getRequirementStatList/', function(req, res) {
+    let Json = getRequirementStatList(req.body.myStatus);
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
+    console.log("Json==>", Json);
+    res.json(Json);
+    res.end()
+});
 
 
 

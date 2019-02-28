@@ -10,26 +10,31 @@
                         <Row class="serchInputBox">
                             <Col span="20">
                                 <Row class="SerchBox">
-                                    <Col span="2" style="text-align: center">需求项名称</Col>
-                                    <Col span="6">
+                                    <Col span="3" style="text-align: center">需求项名称</Col>
+                                    <Col span="9">
                                         <FormItem >
                                             <Input clearable v-model="formValidate.req_name" placeholder="输入需求项名称"></Input>
                                         </FormItem>
                                     </Col>
-                                    <Col span="2" style="text-align: center">需求项编号</Col>
-                                    <Col span="6">
+                                    <Col span="3" style="text-align: center">需求项编号</Col>
+                                    <Col span="9">
                                         <FormItem >
                                             <Input clearable v-model="formValidate.req_id" placeholder="输入需求项编号"></Input>
                                         </FormItem>
                                     </Col>
-                                    <Col span="2" style="text-align: center">需求项状态</Col>
-                                    <Col span="6">
-                                        <FormItem >
-                                            <Select ref="Sprint" clearable v-model="formValidate.req_stat"  placeholder="请选择需求项状态">
-                                                <Option v-for="(item,index) in req_statList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                            </Select>
+                                   <!--  <Col span="3" style="text-align: left" class="serchBtnBox">
+                                        <Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
+                                        <Button class="cancelSerchBtn" @click="cancelSerchAll">重填</Button>
+                                    </Col> -->
+                                    <!-- <Col span="3" style="text-align: center">提出人 </Col>
+                                    <Col span="4">
+                                       <FormItem >
+                                            <Input clearable v-model="formValidate.req_submitter" placeholder="输入提出人"></Input>
                                         </FormItem>
-                                    </Col>
+                                    </Col> -->
+
+
+                                    
                                 </Row>
                             </Col>
                             <Col span="4" style="text-align: left" class="serchBtnBox">
@@ -40,19 +45,18 @@
                                     重置
                                 </Button>
                             </Col>
+                            
                         </Row>
+                        <!--
+                        <div class="formValidateMoreBtnBox">
+                            <Icon type="chevron-down" color="#ed3f14"></Icon>
+                        </div>
+                        -->
                     </FormItem>
                 </Form>
 
-                <div class="tableBox" style="position:relative;">
-                    <ToolTip 
-                        placement="bottom-start"
-                        :L="390" 
-                        :T="25" 
-                        :Z="10" 
-                        :W="230"  
-                        content="1.提出（需求创建未开始处理）<br>2.价值分析（需求至少拆分成一个用户故事）<br>3.已选中（至少有一个用户故事被规划到某次迭代）<br>4.澄清（至少有一个用户故事进入开发阶段测试）<br>5.开发中（至少有一个用户故事进入开发测试阶段）<br>6.用户验收测试（所有用户故事都已进入用户验收测试）<br>7.已上线（所有用户故事都已上线）<br>8.确认完成（业务人员确认需求已完成）" 
-                    />
+                <div class="tableBox">
+                    
                     <div class="tableBtnBox">
                         <Row>
                             <Col span="4">
@@ -180,7 +184,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAll,getPermission,projectDetail,reqDelect,reqSetChange,getRequirementKanBan,getRequirementStatList} = Common.restUrl;
+const {reqAll,getPermission,projectDetail,reqDelect,reqSetChange,getRequirementKanBan} = Common.restUrl;
 
 import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 import Addtablepop from "./addtablepop";
@@ -191,7 +195,6 @@ export default {
     name: 'demand',
     data () {
         return {
-            req_statList:[],
             isShowAddPop:false,
             isAdd:true,
             tableDataRow:false,
@@ -360,7 +363,6 @@ export default {
                 req_name:"",
                 req_id:"",
                 req_submitter:"",
-                req_stat:"",
             },
 
             prj_permission:[],
@@ -400,7 +402,7 @@ export default {
     },
     mounted(){
         this.getPermissionFn(getPermission);
-        let ID = this.getID() ? this.getID() : this.$router.push('/agile');
+        let ID = Common.GETID(this,Common) ? Common.GETID(this,Common) : this.$router.push('/agile');
 
         //this.getPermissionFn(getPermission);
 
@@ -410,7 +412,6 @@ export default {
         */
         this.checkUrlBoard();
         this.EventBusRegister();
-        this.getRequirementStatListFn(getRequirementStatList,this.getID(),Common.GETprjid(this,Common));
         this.getInfoFn(ID);
     },
     beforecreated(){
@@ -427,44 +428,6 @@ export default {
         console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
-        getRequirementStatListFn(URL = "",id="",prjSn = ""){
-            
-            defaultAXIOS(URL,{id,prjSn},{timeout:20000,method:'get'}).then((response) => {
-                let myData = response.data;
-                
-                console.log("<======获取需求项状态 ***response+++",response,myData,"======>");
-
-                let req_statFn = (arr)=>{
-                    let _arr = [];
-                    let _obj = {};
-                    arr.forEach((item)=>{
-                        _obj.label = item.param_name+"";
-                        _obj.value = item.param_id+"";
-                        _arr.push(_obj);
-                        _obj = {};
-                    })
-                    return _arr;
-                }
-
-                if(myData.status == "success"){
-
-                    if(myData.data && Array.isArray(myData.data) && myData.data.length){
-                        this.req_statList = [];
-                        this.req_statList = req_statFn(myData.data)
-                    }
-
-                }else{
-                    this.showError(URL+"_没有数据");
-                }
-
-                
-
-            }).catch( (error) => {
-                console.log(error);
-                this.showError(error);
-            });
-
-        },
         checkUrlBoard(){
             if(this.$router.history.current.query.board){
                 this.currentView = "kanbanboard";
@@ -478,9 +441,9 @@ export default {
         },
         getInfoFn(ID,isShowList){
             if(this.currentView == "kanbanboard"){
-                this.storyGetKanBanFn(getRequirementKanBan,ID,this.formValidate.req_id,this.formValidate.req_name,this.formValidate.req_submitter,this.formValidate.req_stat);
+                this.storyGetKanBanFn(getRequirementKanBan,ID,this.formValidate.req_id,this.formValidate.req_name,this.formValidate.req_submitter);
             }else{
-                this.tableDataAjaxFn(reqAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter,this.formValidate.req_stat);
+                this.tableDataAjaxFn(reqAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
             }
         },
         //看板开始
@@ -519,12 +482,12 @@ export default {
                 this.getInfoFn(this.getID(),"showTask")
             },350)
         },
-        storyGetKanBanFn(URL = "",id="",req_id = "",req_name = "",req_submitter = "",req_stat = ""){
+        storyGetKanBanFn(URL = "",id="",req_id = "",req_name = "",req_submitter = ""){
             this.cardList = [];
             this.statusList = [];
             this.cardListBase=[],
             this.statusListBase=[],
-            defaultAXIOS(URL,{id:id,prj_id:id,req_id,req_name,req_submitter,req_stat},{timeout:20000,method:'get'}).then((response) => {
+            defaultAXIOS(URL,{id:id,prj_id:id,req_id,req_name,req_submitter},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 let statusData = myData.status_data ? myData.status_data : false;
                 console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
@@ -640,6 +603,29 @@ export default {
         },
         changeStateNumber(info){
             Common.ChangeStateNumber(this,"statusListBase",info);
+            /*
+            //let _statusBase = this.statusListBase;
+            let _statusBase = _.cloneDeep(this.statusListBase);
+            let toState = info.evt.to.getAttribute('state');
+            let fromState = info.evt.from.getAttribute('state');
+
+            if(toState == fromState){
+                return;
+            }else{
+                this.statusListBase = [];
+                _statusBase.forEach((item,index)=>{
+                    //if(info.item.askStatus == item.state){
+                    //if(info.evt.item.getAttribute('state') == item.state){
+                    if(fromState == item.state){
+                        item.taskNumber = parseFloat(item.taskNumber) - 1
+                    }
+                    if(item.state == toState){
+                        item.taskNumber = parseFloat(item.taskNumber) + 1
+                    }
+                });
+                this.statusListBase.push(..._statusBase)
+            }
+            */
         },
         changeMovedStatus(info){
             let _params = {};
@@ -719,14 +705,13 @@ export default {
             // });
         },
         //看板结束
-        tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",req_name = "",req_id = "",req_submitter = "",req_stat = ""){
+        tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",req_name = "",req_id = "",req_submitter = ""){
+
             
             this.getPrjidFn(projectDetail,id).then((prj_id)=>{
 
-                this.reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter,req_stat)
-                .then(()=>{
-
-                })
+                this.reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter)
+                .then(()=>{})
                 .catch((error)=>{
                     console.log(error);
                     this.showError(error);
@@ -802,7 +787,6 @@ export default {
             let ID = Common.GETID(this,Common)
             //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
             
-            
 
             if(this.currentView == "kanbanboard"){
                 this.kanbanboardIsShow = false;
@@ -822,7 +806,7 @@ export default {
         changeCurrentPage(i) {
             let ID = Common.GETID(this,Common);
             this.tableDAtaPageCurrent = i;
-            this.tableDataAjaxFn(reqAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter,this.formValidate.req_stat);
+            this.tableDataAjaxFn(reqAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
             
         },
         changePageSize(i) {
@@ -856,8 +840,8 @@ export default {
             });
         },
 
-        reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter,req_stat){
-            return defaultAXIOS(URL,{page,limit,data,id,prj_id:id,req_name,req_id,req_submitter,req_stat},{timeout:20000,method:'get'})
+        reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter){
+            return defaultAXIOS(URL,{page,limit,data,id,prj_id:id,req_name,req_id,req_submitter},{timeout:20000,method:'get'})
             .then((response) => {
                 let myData = response.data;
                 console.log("<======demand**reqAll*response+++",response,myData.data,"======>");

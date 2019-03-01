@@ -113,12 +113,11 @@
 			    </Form>
 			    <div class="tableBox" style="position:relative;">
 			    	<ToolTip 
-			    		placement="right"
-			    		:L="330" 
+			    		:L="350" 
 			    		:T="25" 
 			    		:Z="10" 
-			    		:W="270"  
-			    		content="用户故事状态说明：<br>1.提出（新建用户故事未开始处理）<br>2.设计分析（写测试案例、提交设计文档等附件）<br>3.开发测试（提交代码，开始单元测试）<br>4.用户验收测试（所有工作项都已完成）<br>5.待投产（发布版本审核通过，关联了用户故事）<br>6.已投产（用户故事投产成功）<br>7.停滞（实施过程中由于某些原因暂停实施）<br>8.废弃（废弃不再实施的用户故事）" 
+			    		:W="230"  
+			    		content="1.提出（新建用户故事未开始处理）<br>2.设计分析（写测试案例、提交设计文档等附件）<br>3.开发测试（提交代码，开始单元测试）<br>4.用户验收测试（所有工作项都已完成）<br>5.待投产（发布版本审核通过，关联了用户故事）<br>6.已投产（用户故事投产成功）<br>7.停滞（实施过程中由于某些原因暂停实施）<br>8.废弃（废弃不再实施的用户故事）" 
 			    	/>
 					<div class="tagBox" >
 	
@@ -355,12 +354,150 @@ export default {
             tableDataRow:false,
 			currentView: "developList",//developList//kanbanboard
 
+			
+
+
 			//看板开始
 			groupList:[
 		        { text: "所属需求项" },
+		        // {
+		        //   text: "用户登录1",
+		        //   groupId: "group_01"
+		        // },
+		        // {
+		        //   text: "创建代码仓库",
+		        //   groupId: "group_02"
+		        // },
+		        // {
+		        //   text: "未知项",
+		        //   groupId: "group_03"
+		        // },
 			],
-			statusList:[],
-			cardList:[],
+			statusList:[
+				// {
+				//   stateStr: "提出",
+				//   state: "01",
+				//   taskNumber: "3"
+				// },
+				// {
+				//   stateStr: "开发中",
+				//   state: "02",
+				//   taskNumber: "4"
+				// },
+				// {
+				//   stateStr: "测试",
+				//   state: "03",
+				//   taskNumber: "5"
+				// },
+				// {
+				//   stateStr: "上线",
+				//   state: "04",
+				//   taskNumber: "6"
+				// },
+
+
+				// {
+				//   stateStr: "上线",
+				//   state: "05",
+				//   taskNumber: "3"
+				// }
+			],
+			cardList:[
+				
+	            // {
+
+	            // 	taskState: "01",	
+	            //  	taskId: "#US0001",
+	            //  	description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //  	userName: "user1",
+	            //  	userId: "userId_01",
+	            //  	groupId: "group_01",
+	            //  	bgColor: { background: "#b3ecec" },
+	            //  	taskStateStr: "未开始",
+	              
+	            //  	headPortrait: require("@/assets/images/user_02.png"),
+	            //  	taskName:"",
+	            // },
+	            // {
+	            //   taskId: "#US0002",
+	            //   description:"设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_02",
+	            //   groupId: "group_02",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "设计开发",
+	            //   taskState: "02",
+	            //   headPortrait: require("@/assets/images/user_02.png"),
+	            //   taskName:"",
+	            // },
+	            // {
+	            //   taskId: "#US0003",
+	            //   description:"设计开发-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_03",
+	            //   groupId: "group_01",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "测试",
+	            //   taskState: "02",
+	            //   headPortrait: require("@/assets/images/user_02.png"),
+	            //   taskName:"",
+	            // },
+	            // {
+	            //   taskId: "#US0004",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_04",
+	            //   groupId: "group_03",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "测试",
+	            //   taskState: "01",
+	            //   headPortrait: require("@/assets/images/user_02.png")
+	            // },
+	            // {
+	            //   taskId: "#US0005",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_05",
+	            //   groupId: "group_01",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "测试",
+	            //   taskState: "04",
+	            //   headPortrait: require("@/assets/images/user_02.png")
+	            // },
+	            // {
+	            //   taskId: "#US0006",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_06",
+	            //   groupId: "group_01",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "测试",
+	            //   taskState: "01",
+	            //   headPortrait: require("@/assets/images/user_02.png")
+	            // },
+	            // {
+	            //   taskId: "#US0007",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_07",
+	            //   groupId: "group_01",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "测试",
+	            //   taskState: "01",
+	            //   headPortrait: require("@/assets/images/user_02.png")
+	            // },
+	            // {
+	            //   taskId: "#US0008",
+	            //   description:"未开始-提供用户登录功能1,IMG提供用户登录功能1,提供用户登录功能1,提供用户登录功能1,提供用户登录功能1",
+	            //   userName: "user1",
+	            //   userId: "userId_08",
+	            //   groupId: "group_01",
+	            //   bgColor: { background: "#f8d6af" },
+	            //   taskStateStr: "测试",
+	            //   taskState: "03",
+	            //   headPortrait: require("@/assets/images/user_02.png")
+	            // }
+	        ],
 	        
             borderRole:false,
             cardListBase:[],
@@ -608,7 +745,44 @@ export default {
                     }
                 }
             ],
-	        tableData: [],
+	        tableData: [
+     			//{
+					// userstory_name: '用户故事1',
+					// userstory_id: 18,
+					// userstory_type: '产品需求项',
+					// charger:"谢呗",
+					// userstory_status:"已完成",
+					// sprint_id:"迭代1",
+					// proi:"1",
+					// manHours:"20 | 10",
+					// mission:"5 | 10",
+					// icon: require("@/assets/images/user_02.png")
+     			//},
+     			//{
+					// name: '用户故事2',
+					// num: 24,
+					// describe: '产品需求项',
+					// person:"谢呗2",
+					// status:"处理中",
+					// Iteration:"迭代2",
+					// priority:"2",
+					// manHours:"20 | 10",
+					// mission:"5 | 10",
+					// icon: require("@/assets/images/user_02.png")
+     			//},
+     			//{
+					// name: '用户故事3',
+					// num: 24,
+					// describe: '产品需求项',
+					// person:"谢呗3",
+					// status:"未开始",
+					// Iteration:"迭代3",
+					// priority:"3",
+					// manHours:"20 | 10",
+					// mission:"5 | 10",
+					// icon: require("@/assets/images/user_02.png")
+     			//},
+            ],
             tableDataCur:"",
             tableDAtaTatol:0,
             tableDAtaPageLine:10,
@@ -626,14 +800,67 @@ export default {
                 group_name:"",//查询分组
 
             },
-            userstory_typeList:[],
-            userstory_statusList:[],
+            userstory_typeList:[
+             // {
+             //        value: 1,
+             //        label: '用户需求项'
+             //    },
+             //    {
+             //        value: 2,
+             //        label: '生产问题'
+             //    },
+             //    {
+             //        value: 3,
+             //        label: '自主创新'
+             //    },
+               
+            ],
+            userstory_statusList:[
+            	// {
+             //        value: 1,
+             //        label: '提出'
+             //    },
+             //    {
+             //        value: 2,
+             //        label: '开发'
+             //    },
+             //    {
+             //        value: 3,
+             //        label: '测试'
+             //    },
+             //    {
+             //        value: 4,
+             //        label: '上线'
+             //    },
+            ],
             NewStatusList:[
             ],
             req_idList:[],
-            proiList:[],
+            proiList:[
+            	// {
+             //        value: 1,
+             //        label: '高'
+             //    },
+             //    {
+             //        value: 2,
+             //        label: '中'
+             //    },
+             //    {
+             //        value: 3,
+             //        label: '低'
+             //    },
+            ],
             chargerList:[],
-            learn_concernList:[],
+            learn_concernList:[
+            	// {
+             //        value: 1,
+             //        label: '是'
+             //    },
+             //    {
+             //        value: 2,
+             //        label: '否'
+             //    },
+            ],
             sprintList:[],
             group_nameList:[],
             _sprint:false,
@@ -648,9 +875,6 @@ export default {
             delpopIsShow:false,
             delpopIsLoading:false,
             //删除弹出--end
-            
-            clickTime:true,
-            
 		}
 	},
 	components: {
@@ -779,6 +1003,11 @@ export default {
                 return Promise.reject(error);
                 
             });
+            // setTimeout(()=>{
+            //     this.delpopIsLoading = B;
+            //     this.delpopIsShow = B;
+            //     this.deleteBus(this.tableDataCur)
+            // },1)
             
         },
         delpopOpenFn(B){
@@ -833,27 +1062,16 @@ export default {
 
 		    	//currentView: "developList",//developList//kanbanboard
 		    	
-		    	let searchParams = [
-		    		this.formValidate.userstory_name,
-		    		this.formValidate.userstory_id,
-		    		this.formValidate.userstory_type,
-		    		this.formValidate.userstory_status,
-		    		this.formValidate.req_id,
-		    		this.formValidate.proi,
-		    		this.formValidate.charger,
-		    		this.formValidate.learn_concern,
-		    		this.formValidate.sprint,
-		    		this.formValidate.group_name
-		    	]
+		    	let searchParams = []
 
 		    	if(this.currentView == "kanbanboard"){
 		    		Promise.all([this._sprint]).then((REP)=>{
-		    			this.storyGetKanBanFn(storyGetKanBan,ID,...searchParams);
+		    			this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
 		    		},()=>{
 		    			this.showError("没有获取到故事状态");
 		    		})
 		    	}else{
-		    		this.tableDataAjaxFn(storyAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,...searchParams);
+		    		this.tableDataAjaxFn(storyAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
 		    	}
 	        },(error)=>{
 	        	console.log(error);
@@ -868,15 +1086,13 @@ export default {
 
 		},
 		getDefSpringFn(URL,ID){
-			/*
-			let _userstory_type = this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
-		   	let _userstory_status =this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
-		   	let _req_id =this.storyGetConditionFn(storyGetCondition,"req_id",ID);
-		   	let _proi =this.storyGetConditionFn(storyGetCondition,"proi",ID);
-		   	let _charger =this.storyGetConditionFn(storyGetCondition,"charger",ID);
-		   	let _learn_concern = this.storyGetConditionFn(storyGetCondition,"learn_concern",ID);
-			*/
-			   	
+
+			// let _userstory_type = this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
+			//   	let _userstory_status =this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
+			//   	let _req_id =this.storyGetConditionFn(storyGetCondition,"req_id",ID);
+			//   	let _proi =this.storyGetConditionFn(storyGetCondition,"proi",ID);
+			//   	let _charger =this.storyGetConditionFn(storyGetCondition,"charger",ID);
+			//   	let _learn_concern = this.storyGetConditionFn(storyGetCondition,"learn_concern",ID);
 	    	this._sprint = this.storyGetConditionFn(storyGetCondition,"sprint",ID);
 
 	    	return Promise.all([this._sprint]).then((REP)=>{
@@ -1035,38 +1251,23 @@ export default {
 			this.statusList = [];
 			this.cardListBase = [];
             this.statusListBase = [];
-
-            let defaultAXIOSParams = {
-            	id:id,
-            	prj_id:id,
-            	userstory_name,
-            	userstory_id,
-            	userstory_type,
-            	userstory_status,
-            	req_id,
-            	proi,
-            	charger,
-            	learn_concern,
-            	sprint,
-            	group_name,
-            	username:Common.getCookie("username"),
-            	prjSn:Common.getCookie("prjSn")
-            }
-
-			defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
+			defaultAXIOS(URL,{id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint,group_name,username:Common.getCookie("username"),prjSn:Common.getCookie("prjSn")},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 if(myData.status == "success" ){
                 	this.borderRole = myData.role;
                 }
                 myData = myData.data ? myData.data : myData;
                 console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
+
                 let fn =(arr,val)=>{
         			let obj = arr.find((item)=>{
         				return item.label == val;
         			})
         			return obj.value || 0;
         		}
+
                 if(myData && myData.length){
+                	
                 	let _temp = {};
                 	let reqArr = [];
                 	for(let i=0;i<myData.length;i++){
@@ -1075,6 +1276,7 @@ export default {
                 				reqArr.push(myData[i].list[j].req_id)
                 			}
                 		}
+                		//
                 		_temp.stateStr = myData[i].userstory_status;
                 		_temp.taskNumber = Number(myData[i].count);
                 		_temp.state = "0"+fn(this.userstory_statusList,_temp.stateStr);
@@ -1103,12 +1305,8 @@ export default {
                 	this.groupList.push({text:"所属需求项"});
                 	for(let k=0;k<reqArr2.length;k++){
                 		let _CN = checkreqName(reqArr2[k]);
-                		if(_CN){
-                			this.groupList.push(_CN)
-                		}
+                		if(_CN){this.groupList.push(_CN)}
                 	}
-
-
 
 	            	let _arr = [];
 					let _Obj = {};
@@ -1138,14 +1336,13 @@ export default {
 							_Obj.task_count = myData[i].list[j].task_count;
 							_Obj.testCase = myData[i].list[j].testCase;
 
-							_Obj.taskDesc = myData[i].list[j].taskDesc  || "";
-							_Obj.depdDesc = myData[i].list[j].depdDesc  || "";
-
 							_arr.push(_Obj);
 							_Obj = {}
 						}
 						this.cardList.push(..._arr);
 						this.cardListBase.push(..._arr);
+						
+
 						_arr = []
 					}
 					this.EventBusDispatch();
@@ -1157,6 +1354,7 @@ export default {
                 console.log(error);
                 this.showError(error);
             });
+
 		},
         /* 看板结束 */
 
@@ -1238,15 +1436,6 @@ export default {
 
         },
 		serchAll(){
-			if(!this.clickTime){
-				return
-			}else{
-				this.clickTime = false;
-				setTimeout(()=>{
-					this.clickTime = true;
-				},1500)
-			}
-
 			let ID = this.getID();
 			this.optionSession();
 			Common.RemoveSession("REQ_ID");
@@ -1260,48 +1449,18 @@ export default {
             	this.boardList(ID);
             }
 
-
-
             //this.$router.push({path: '/product', query: {URL:storyAll,page:1,limit:this.tableDAtaPageLine,data:"",ID:ID,userstory_name:this.formValidate.userstory_name,userstory_id:this.formValidate.userstory_id,userstory_type:this.formValidate.userstory_type,userstory_status:this.formValidate.userstory_status,req_id:this.formValidate.req_id,proi:this.formValidate.proi,charger:this.formValidate.charger,learn_concern:this.formValidate.learn_concern,sprint:this.formValidate.sprint}})
             
 
         },
         boardList(ID){
-        	let searchParams = [
-        		this.formValidate.userstory_name,
-        		this.formValidate.userstory_id,
-        		this.formValidate.userstory_type,
-        		this.formValidate.userstory_status,
-        		this.formValidate.req_id,
-        		this.formValidate.proi,
-        		this.formValidate.charger,
-        		this.formValidate.learn_concern,
-        		this.formValidate.sprint,
-        		this.formValidate.group_name
-        	];
-        	this.storyGetKanBanFn(storyGetKanBan,ID,...searchParams);
-            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,...searchParams);
+        	this.storyGetKanBanFn(storyGetKanBan,ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
+            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
             this.tableDAtaPageCurrent = 1;
         },
 		
 		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = ""){
-			let defaultAXIOSParams = {
-				page,
-				limit,
-				data,
-				id:id,
-				prj_id:id,
-				userstory_name,
-				userstory_id,
-				userstory_type,
-				userstory_status,
-				req_id,
-				proi,
-				charger,
-				learn_concern,
-				sprint,group_name
-			};
-            defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
+            defaultAXIOS(URL,{page,limit,data,id:id,prj_id:id,userstory_name,userstory_id,userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint,group_name},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======***用户故事列表+++",response,myData,"======>");
                 this.tableData = myData.rows;
@@ -1319,19 +1478,7 @@ export default {
 		changeCurrentPage(i) {
 			let ID = this.getID()
             //this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID)
-            let searchParams = [
-            	this.formValidate.userstory_name,
-            	this.formValidate.userstory_id,
-            	this.formValidate.userstory_type,
-            	this.formValidate.userstory_status,
-            	this.formValidate.req_id,
-            	this.formValidate.proi,
-            	this.formValidate.charger,
-            	this.formValidate.learn_concern,
-            	this.formValidate.sprint,
-            	this.formValidate.group_name
-            ];
-            this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID,...searchParams);
+            this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.userstory_name,this.formValidate.userstory_id,this.formValidate.userstory_type,this.formValidate.userstory_status,this.formValidate.req_id,this.formValidate.proi,this.formValidate.charger,this.formValidate.learn_concern,this.formValidate.sprint,this.formValidate.group_name);
             this.tableDAtaPageCurrent = i;
         },
         changePageSize(i) {

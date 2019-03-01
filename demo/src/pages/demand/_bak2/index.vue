@@ -46,12 +46,12 @@
 
                 <div class="tableBox" style="position:relative;">
                     <ToolTip 
-                        placement="right"
-                        :L="365" 
+                        placement="bottom-start"
+                        :L="390" 
                         :T="25" 
                         :Z="10" 
-                        :W="300"  
-                        content="需求项状态说明：<br>1.提出（需求创建未开始处理）<br>2.价值分析（需求至少拆分成一个用户故事）<br>3.已选中（至少有一个用户故事被规划到某次迭代）<br>4.澄清（至少有一个用户故事进入开发阶段测试）<br>5.开发中（至少有一个用户故事进入开发测试阶段）<br>6.用户验收测试（所有用户故事都已进入用户验收测试）<br>7.已上线（所有用户故事都已上线）<br>8.确认完成（业务人员确认需求已完成）" 
+                        :W="230"  
+                        content="1.提出（需求创建未开始处理）<br>2.价值分析（需求至少拆分成一个用户故事）<br>3.已选中（至少有一个用户故事被规划到某次迭代）<br>4.澄清（至少有一个用户故事进入开发阶段测试）<br>5.开发中（至少有一个用户故事进入开发测试阶段）<br>6.用户验收测试（所有用户故事都已进入用户验收测试）<br>7.已上线（所有用户故事都已上线）<br>8.确认完成（业务人员确认需求已完成）" 
                     />
                     <div class="tableBtnBox">
                         <Row>
@@ -332,7 +332,26 @@ export default {
                     }
                 }
             ],
-            tableData: [],
+            tableData: [
+                // {
+                //     req_name: '项目名称1',
+                //     req_id: 18,
+                //     req_submitter: '10%',
+
+                // },
+                // {
+                //     req_name: 'Jim Green',
+                //     req_id: 24,
+                //     req_submitter: '102%',
+
+                // },
+                // {
+                //     req_name: 'Joe Black',
+                //     req_id: 30,
+                //     req_submitter: '12%',
+
+                // },
+            ],
             tableDAtaTatol:0,
             tableDAtaPageLine:10,
             tableDAtaPageCurrent:1,
@@ -366,7 +385,6 @@ export default {
             statusListBase:[],
             kanbanboardIsShow:true,
             //看板end
-            clickTime:true,
 
 
 
@@ -410,9 +428,12 @@ export default {
     },
     methods: {
         getRequirementStatListFn(URL = "",id="",prjSn = ""){
+            
             defaultAXIOS(URL,{id,prjSn},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
+                
                 console.log("<======获取需求项状态 ***response+++",response,myData,"======>");
+
                 let req_statFn = (arr)=>{
                     let _arr = [];
                     let _obj = {};
@@ -424,18 +445,25 @@ export default {
                     })
                     return _arr;
                 }
+
                 if(myData.status == "success"){
+
                     if(myData.data && Array.isArray(myData.data) && myData.data.length){
                         this.req_statList = [];
                         this.req_statList = req_statFn(myData.data)
                     }
+
                 }else{
                     this.showError(URL+"_没有数据");
                 }
+
+                
+
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);
             });
+
         },
         checkUrlBoard(){
             if(this.$router.history.current.query.board){
@@ -449,22 +477,10 @@ export default {
             }
         },
         getInfoFn(ID,isShowList){
-            let searchParamsKB = [
-                this.formValidate.req_id,
-                this.formValidate.req_name,
-                this.formValidate.req_submitter,
-                this.formValidate.req_stat
-            ];
-            let searchParamsLI = [
-                this.formValidate.req_name,
-                this.formValidate.req_id,
-                this.formValidate.req_submitter,
-                this.formValidate.req_stat
-            ]
             if(this.currentView == "kanbanboard"){
-                this.storyGetKanBanFn(getRequirementKanBan,ID,...searchParamsKB);
+                this.storyGetKanBanFn(getRequirementKanBan,ID,this.formValidate.req_id,this.formValidate.req_name,this.formValidate.req_submitter,this.formValidate.req_stat);
             }else{
-                this.tableDataAjaxFn(reqAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,...searchParamsLI);
+                this.tableDataAjaxFn(reqAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter,this.formValidate.req_stat);
             }
         },
         //看板开始
@@ -506,17 +522,9 @@ export default {
         storyGetKanBanFn(URL = "",id="",req_id = "",req_name = "",req_submitter = "",req_stat = ""){
             this.cardList = [];
             this.statusList = [];
-            this.cardListBase=[];
-            this.statusListBase=[];
-            let defaultAXIOSParams = {
-                id:id,
-                prj_id:id,
-                req_id,
-                req_name,
-                req_submitter,
-                req_stat
-            }
-            defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
+            this.cardListBase=[],
+            this.statusListBase=[],
+            defaultAXIOS(URL,{id:id,prj_id:id,req_id,req_name,req_submitter,req_stat},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 let statusData = myData.status_data ? myData.status_data : false;
                 console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
@@ -532,6 +540,9 @@ export default {
                         return false
                     }
                 }
+
+                
+
                 if(myData && myData.length){
                     
                     let _temp = {};
@@ -577,8 +588,12 @@ export default {
 
                     let _arr = [];
                     let _Obj = {};
+
+                    
                     
                     for(let i=0;i<myData.length;i++){
+
+                    
                         for(let j=0;j<myData[i].list.length;j++){
                             //_Obj.taskStatus = "0"+(i+1);
                             _Obj.taskStatus = fn(statusData,myData[i].req_status) ? "0"+fn(statusData,myData[i].req_status) : "0"+(i+1)
@@ -595,13 +610,13 @@ export default {
                             _Obj.taskName = myData[i].list[j].req_name;
                             _Obj.nickName = myData[i].list[j].charger
                             _Obj.detail_id = myData[i].list[j].id
+
+
                             _Obj.source = "demand";
                             _Obj.isDepd = myData[i].list[j].isDepd;
                             _Obj.isFinish = myData[i].list[j].isFinish;
                             _Obj.us_counts = myData[i].list[j].us_counts;
-
-                            _Obj.usDesc = myData[i].list[j].usDesc || "";
-                            _Obj.depdDesc = myData[i].list[j].depdDesc || "";
+                            
 
                             _arr.push(_Obj);
                             _Obj = {}
@@ -705,9 +720,12 @@ export default {
         },
         //看板结束
         tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",req_name = "",req_id = "",req_submitter = "",req_stat = ""){
+            
             this.getPrjidFn(projectDetail,id).then((prj_id)=>{
+
                 this.reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter,req_stat)
                 .then(()=>{
+
                 })
                 .catch((error)=>{
                     console.log(error);
@@ -781,16 +799,6 @@ export default {
             this.serchAll();
         },
         serchAll(){
-
-            if(!this.clickTime){
-                return
-            }else{
-                this.clickTime = false;
-                setTimeout(()=>{
-                    this.clickTime = true;
-                },1500)
-            }
-            
             let ID = Common.GETID(this,Common)
             //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
             
@@ -814,13 +822,7 @@ export default {
         changeCurrentPage(i) {
             let ID = Common.GETID(this,Common);
             this.tableDAtaPageCurrent = i;
-            let searchParams = [
-                this.formValidate.req_name,
-                this.formValidate.req_id,
-                this.formValidate.req_submitter,
-                this.formValidate.req_stat
-            ]
-            this.tableDataAjaxFn(reqAll,i,this.tableDAtaPageLine,"",ID,...searchParams);
+            this.tableDataAjaxFn(reqAll,i,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter,this.formValidate.req_stat);
             
         },
         changePageSize(i) {
@@ -855,18 +857,7 @@ export default {
         },
 
         reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter,req_stat){
-            let defaultAXIOSParams = {
-                page,
-                limit,
-                data,
-                id,
-                prj_id:id,
-                req_name,
-                req_id,
-                req_submitter,
-                req_stat
-            }
-            return defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'})
+            return defaultAXIOS(URL,{page,limit,data,id,prj_id:id,req_name,req_id,req_submitter,req_stat},{timeout:20000,method:'get'})
             .then((response) => {
                 let myData = response.data;
                 console.log("<======demand**reqAll*response+++",response,myData.data,"======>");

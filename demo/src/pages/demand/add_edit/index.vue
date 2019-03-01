@@ -30,10 +30,11 @@
     		            <FormItem label="需求项编号" prop="req_id" v-show="formItem.prj_type  == 2 ? false : true" >
     		                <Input v-model="formItem.req_id"  :disabled="formItem.prj_type  == 1 ? false : true" placeholder="请输入需求项编号"></Input>
     		                <!-- <p v-show="formItem.prj_type  != 2 ? false : true">【需求项编号】自动生成</p> -->
-    		                <ToolTip  content="项目在ITM中对应的需求项编号" />
+    		                <ToolTip  content="项目在icdp自动生成需求编号" />
+                            
     		            </FormItem>
     		            <FormItem label="需求项编号" v-show="formItem.prj_type  != 2 ? false : true">
-    		                <p >【项目在ITM中对应的需求项编号】</p>
+    		                <p >【项目在icdp自动生成需求编号】</p>
     		                <!-- v-if="formItem.prj_type  == 2 ? false : true" -->
     		            </FormItem>
     		            <FormItem label="需求项名称" prop="req_name">

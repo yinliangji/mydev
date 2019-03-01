@@ -19,21 +19,20 @@
           </span>
           {{item.taskName}}
         </p>
-        <!-- 顺序1:e0592b 2：7d2f74 3:00a6b6 4状态1:199c40 4状态2:db0102   -->
-        <!-- 工作项状态识别 -->
+        <!-- 顺序1工作项颜色#e0592b 2附件颜色#7d2f74 3测试案例颜色#00a6b6 4依赖项状态完成颜色#199c40，未完成颜色#db0102   -->
+        <!-- 工作项状态识别 显示包括附件、依赖项状态 -->
         <p v-if="item.source=='task'" class="kananstatus">
           <span class="iconBg" style="color:#7d2f74;font-size:22px;transform:rotate(35deg);font-weight:bold" v-if="item.isFile=='yes'">
             <Icon type="paperclip"></Icon>
           </span>
-
-          <span class="iconBg" style="font-size:20px" v-if="item.isDepend=='yes'" title="依赖项状态">
+          <span class="iconBg" style="font-size:20px" v-if="item.isDepend=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'">
             <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
             <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
           </span>
         </p>
-        <!-- 用户故事标识状态 -->
+        <!-- 用户故事标识状态 显示包括工作项个数、附件、测试案例个数、依赖项状态 -->
         <p v-if="item.source=='userstory'" class="kananstatus floatClear">
-          <span class="iconBg" style="background:#e0592b" title="工作项个数" >
+          <span class="iconBg" style="background:#e0592b" :title="item.taskDesc ? item.taskDesc : '工作项个数'" >
             {{item.task_count}}
           </span>
           <span class="iconBg" style="color:#7d2f74;font-size:22px;transform:rotate(35deg);font-weight:bold" v-if="item.isFile=='yes'">
@@ -42,24 +41,21 @@
           <span class="iconBg" style="background:#00a6b6" title="测试案例个数" >
             {{item.testCase}}
           </span>
-          <span class="iconBg" style="font-size:20px" v-if="item.isDepd=='yes'" title="依赖项状态">
+          <span class="iconBg" style="font-size:20px" v-if="item.isDepd=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'">
             <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
             <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
           </span>
         </p>
         <!-- 需求项标识状态 -->
         <p v-if="item.source=='demand'" class="kananstatus floatClear">
-          <span class="iconBg" style="background:#e0592b" title="用户故事个数" >
+          <span class="iconBg" style="background:#e0592b" :title="item.usDesc ? item.usDesc : '用户故事个数'" >
             {{item.us_counts}}
           </span>
-          <span class="iconBg" style="font-size:20px" v-if="item.isDepd=='yes'" title="依赖项状态">
+          <span class="iconBg" style="font-size:20px" v-if="item.isDepd=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'">
             <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
             <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
           </span>
         </p>
-
-
-
         <p class="item-name">
           <span class="user_name" v-if="nicknameFormat(myAside == 'product' || myAside == 'demand')" v-html="chackSymbol(item.nickName)">
           </span>

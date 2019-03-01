@@ -1,5 +1,5 @@
 <template>
-    <div class="TooltipWrap" :style="L?'right:auto;left:'+L+'px;top:'+T+'px;z-index:'+Z+';':'top:'+T+'px;z-index:'+Z+';'">
+    <div id="TooltipWrap" class="TooltipWrap" :style="L?'right:auto;left:'+L+'px;top:'+T+'px;z-index:'+Z+';':'top:'+T+'px;z-index:'+Z+';'">
         <Tooltip  :placement="placement">
             <div slot="content" :style="'white-space:normal;width:'+W+'px;'">
                 <div v-html="content"></div>
@@ -12,7 +12,6 @@
 export default {
 	data() {
 		return {
-			
 		}
 	},
 	props: {
@@ -81,5 +80,12 @@ export default {
     right: -28px;
     top:4px;
 }
-
+.ivu-tooltip-inner{
+    max-width:500px;
+}
+</style>
+<style >
+#TooltipWrap .ivu-tooltip-inner{
+    max-width:500px;
+}
 </style>

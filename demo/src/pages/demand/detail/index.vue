@@ -97,6 +97,7 @@ export default {
         let ID = Common.GETID(this,Common)
         let REQ_ID = Common.getStorageAndCookie(this,Common,"req_id");
         this.detail_id = Common.getStorageAndCookie(this,Common,"reqList_id");
+        
         if(ID && REQ_ID){
             this.formValidate.req_id = REQ_ID;
             this.getPermissionFn(getPermission).then((result)=>{

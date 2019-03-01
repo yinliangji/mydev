@@ -1,12 +1,12 @@
 <template>
-    <div class="pageContent">
+	<div class="pageContent">
         <Card id="BoxPT">
             <div class="aglieBox">
-                <h3 class="Title"><span>敏捷项目列表</span></h3>
-                <Form ref="formValidate" class="formValidate">
+            	<h3 class="Title"><span>敏捷项目列表</span></h3>
+            	<Form ref="formValidate" class="formValidate">
 
-                    <FormItem >
-                        <Row class="serchInputBox">
+			        <FormItem >
+			            <Row class="serchInputBox">
                             <Col span="20">
                                 <Row class="SerchBox">
                                     <Col span="2" style="text-align: center">项目名称</Col>
@@ -99,27 +99,27 @@
                             <Icon type="chevron-down" color="#fff" ></Icon>
                         </div>
                         
-                    </FormItem>
+			        </FormItem>
 
-                </Form>
+			    </Form>
 
-                <div class="tableBox">
-                    <div class="tableBtnBox">
-                        <Button 
+				<div class="tableBox">
+					<div class="tableBtnBox">
+						<Button 
                             type="success" 
                             :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
                             @click="addItemFn" 
                             >
                             添加
                         </Button>
-                        <Button 
+					    <Button 
                             type="warning" 
                             :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
                             @click="editItemFn"
                             >
                             编辑
                         </Button>
-                        <Button 
+					    <Button 
                             type="error" 
                             :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
                             @click="deleteTableItem"
@@ -133,8 +133,8 @@
                             >
                             从ITM导入项目
                         </Button>
-                    </div>
-                    <Table border stripe  ref="selection" :columns="columns" :data="tableData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
+					</div>
+			    	<Table border stripe  ref="selection" :columns="columns" :data="tableData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
                    
 
@@ -142,11 +142,11 @@
                     <!-- <Button @click="handleSelectAll(true)" v-if="!allSelectTableRome">设置全选</Button>
                     <Button @click="handleSelectAll(false)" v-else>全部取消</Button> -->
 
-                    <div class="pageBox" v-if="tableData.length">
-                        <Page :current="tableDAtaPageCurrent" :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
-                        <p>总共{{tableDAtaTatol}}条记录</p>
-                    </div>
-                </div>
+			    	<div class="pageBox" v-if="tableData.length">
+			    		<Page :current="tableDAtaPageCurrent" :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
+			    		<p>总共{{tableDAtaTatol}}条记录</p>
+			    	</div>
+			    </div>
             </div>
         </Card>
         <!-- <Modal v-model="modaDelete" width="360">
@@ -184,7 +184,7 @@
         <ItmPop :isShow="isShowItm" @itmClose="itmCloseFn" />
         <!-- <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" /> -->
 
-    </div>
+	</div>
 </template>
 <script>
 import AddItemPop from "./additempop";
@@ -198,7 +198,7 @@ import Common from '@/Common';
 const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission,projectAddGroup} = Common.restUrl;
 
 export default {
-    name: 'aglie',
+	name: 'aglie',
     mounted(){
 
 
@@ -298,7 +298,7 @@ export default {
             modaDelete: false,
             modal_loading: false,
             columns: [
-                {
+            	{
                     type: 'selection',
                     width: 60,
                     align: 'center'
@@ -440,7 +440,18 @@ export default {
                     }
                 }
             ],
-            tableData: [],
+            tableData: [
+                // {
+                //     prj_name: '项目名称1',
+                //     prj_id: 18,
+                //     prj_desc: '项目描述1',
+                //     prj_manager:"项目经理1",
+                //     start_time:"2012-10-10",
+                //     end_time:"2012-10-10",
+                //     prod_name:"产品1",
+                // },
+               
+            ],
 
             tableDAtaTatol:0,
             tableDAtaPageLine:10,
@@ -513,17 +524,7 @@ export default {
         },
 
         serchAll(){
-            let searchParams = [
-                this.formValidate.prj_name,
-                this.formValidate.prj_id,
-                this.formValidate.start_time,
-                this.formValidate.end_time,
-                this.formValidate.icdp_projManager,
-                this.formValidate.icdp_agileCoach,
-                this.formValidate.icdp_devTeam,
-                this.formValidate.icdp_testTeam
-            ]
-            this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine,...searchParams);
+            this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine,this.formValidate.prj_name,this.formValidate.prj_id,this.formValidate.start_time,this.formValidate.end_time,this.formValidate.icdp_projManager,this.formValidate.icdp_agileCoach,this.formValidate.icdp_devTeam,this.formValidate.icdp_testTeam);
             this.tableDAtaPageCurrent = 1;
         },
         byRoleFn(URL,roleName){
@@ -551,17 +552,7 @@ export default {
             });
         },
         changeCurrentPage(i) {
-            let searchParams = [
-                this.formValidate.prj_name,
-                this.formValidate.prj_id,
-                this.formValidate.start_time,
-                this.formValidate.end_time,
-                this.formValidate.icdp_projManager,
-                this.formValidate.icdp_agileCoach,
-                this.formValidate.icdp_devTeam,
-                this.formValidate.icdp_testTeam
-            ]
-            this.tableDataAjaxFn(projectAll,i,this.tableDAtaPageLine,...searchParams);
+            this.tableDataAjaxFn(projectAll,i,this.tableDAtaPageLine,this.formValidate.prj_name,this.formValidate.prj_id,this.formValidate.start_time,this.formValidate.end_time,this.formValidate.icdp_projManager,this.formValidate.icdp_agileCoach,this.formValidate.icdp_devTeam,this.formValidate.icdp_testTeam);
             this.tableDAtaPageCurrent = i;
         },
         changePageSize(i) {
@@ -574,19 +565,8 @@ export default {
         tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = ""){
             let starttimeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
             let endtimeFromet = end_time ? end_time.Format("yyyy-MM-dd") : "";
-            let defaultAXIOSParams = {
-                page,pageline,
-                prj_name,
-                prj_id,
-                start_time:starttimeFromet,
-                end_time:endtimeFromet,
-                icdp_projManager,
-                icdp_agileCoach,
-                icdp_devTeam,
-                icdp_testTeam,
-                username:Common.getStorageAndCookie(this,Common,"username")
-            }
-            defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
+            defaultAXIOS(URL,{page,pageline,prj_name,prj_id,start_time:starttimeFromet,end_time:endtimeFromet,icdp_projManager,icdp_agileCoach,icdp_devTeam,icdp_testTeam,username:Common.getStorageAndCookie(this,Common,"username")},{timeout:20000,method:'get'}).then((response) => {
+                //alert(JSON.stringify(response))
                 let myData = response.data;
                 console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");
                 if(myData.status == "success"){
@@ -688,6 +668,27 @@ export default {
             }).catch( (error) => {
                 this.showError(error);
             });
+
+            /*
+            setTimeout(() => {
+                for(let i=0;i<this.tableData.length;i++){
+                    for(let j=0;j<this.actionArr.length;j++){
+                        if(JSON.stringify(this.tableData[i]).indexOf(JSON.stringify(this.actionArr[j])) != -1){
+                            console.log(i)
+                            this.tableData.splice(i, 1);//删除
+                        }
+                    }
+                }
+                this.actionArr = [];
+                this.modal_loading = false;
+                this.modaDelete = false;
+                this.$Message.config({
+                    top: 250,
+                    duration: 3
+                });
+                this.$Message.success('删除完成');
+            }, 1000);
+            */
         },
         cancel(){
           this.modaDelete = false;
@@ -722,7 +723,7 @@ export default {
         onSelectFn(S,R){
             console.log("<===*onSelectFn*===Sel->",S,"<-Sel======ROW->",R,"<-ROW===*onSelectFn*===>")
         },
-        handleSelectAll (status) {
+    	handleSelectAll (status) {
             this.$refs.selection.selectAll(status);
         },
         goAgileDetailFn (I,P) {
@@ -820,11 +821,11 @@ export default {
     overflow: hidden;
 }
 .tableBox{
-    padding-top: 20px;
+	padding-top: 20px;
 }
 .tableBtnBox{
-    padding-top:0;
-    padding-bottom:10px;
+	padding-top:0;
+	padding-bottom:10px;
 }
 
 /* ------ITM---- */

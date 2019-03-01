@@ -500,6 +500,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                         
                     },
                     {
@@ -515,6 +518,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                     {
                         userstory_name:"userstory_name_3",
@@ -529,6 +535,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                     {
                         userstory_name:"userstory_name_4",
@@ -543,6 +552,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     }
                 ]
             },
@@ -563,6 +575,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                     {
                         userstory_name:"userstory_name_6",
@@ -577,6 +592,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                     {
                         userstory_name:"userstory_name_7",
@@ -591,6 +609,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                     {
                         userstory_name:"userstory_name_8",
@@ -605,6 +626,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     }
                 ]
             },
@@ -625,6 +649,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                     {
                         userstory_name:"userstory_name_10",
@@ -639,6 +666,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                    
                 ]
@@ -660,6 +690,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                     {
                         userstory_name:"userstory_name_12",
@@ -674,6 +707,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                    
                 ]
@@ -695,6 +731,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                     {
                         userstory_name:"userstory_name_14",
@@ -709,6 +748,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                    
                 ]
@@ -730,6 +772,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                     {
                         userstory_name:"userstory_name_16",
@@ -744,6 +789,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                    
                 ]
@@ -765,6 +813,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                     {
                         userstory_name:"userstory_name_18",
@@ -779,6 +830,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                    
                 ]
@@ -800,6 +854,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                     {
                         userstory_name:"userstory_name_20",
@@ -814,6 +871,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "task_count|1-99":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
+                        "taskDesc":"工作项个数->@title",
+                        "depdDesc":"依赖项状态->@title",
+
                     },
                    
                 ]
@@ -850,6 +910,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_2",
@@ -860,6 +922,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_3",
@@ -870,6 +934,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_4",
@@ -880,6 +946,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     }
                 ]
             },
@@ -896,6 +964,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_6",
@@ -906,6 +976,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_7",
@@ -916,6 +988,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_8",
@@ -926,6 +1000,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     }
                 ]
             },
@@ -942,6 +1018,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_10",
@@ -952,6 +1030,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                    
                 ]
@@ -969,6 +1049,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_12",
@@ -979,6 +1061,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                    
                 ]
@@ -996,6 +1080,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_14",
@@ -1006,6 +1092,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                    
                 ]
@@ -1023,6 +1111,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_16",
@@ -1033,6 +1123,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                    
                 ]
@@ -1050,6 +1142,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_18",
@@ -1060,6 +1154,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                    
                 ]
@@ -1077,6 +1173,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_20",
@@ -1087,6 +1185,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                     {
                         req_name:"req_name_21",
@@ -1097,6 +1197,8 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "isDepd|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "us_counts|1-99":0,
+                        "usDesc":"用户故事个数->@title",
+                        "depdDesc":"依赖项状态->@title",
                     },
                    
                 ]

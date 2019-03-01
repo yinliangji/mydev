@@ -26,7 +26,7 @@
                             <Col span="12">
                                 <FormItem label="项目类型" prop="prj_type">
                                     <RadioGroup v-model="formValidate.prj_type">
-                                        <Radio title="在ITM中已立项的项目" label="1">立研</Radio>
+                                        <Radio title="在ITM中已立项的项目" label="1">立项</Radio>
                                         <Radio title="非立项项目" label="2">自研</Radio>
                                         <ToolTip :L="105"  content="立项：在ITM中已立项的项目　　　自研：非立项项目" />
                                         

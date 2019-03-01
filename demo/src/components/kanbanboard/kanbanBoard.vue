@@ -18,7 +18,7 @@
       <div class="row-wrapper" v-for="(itemGroup, index) in groupLists" v-if="groupList.length > 0">
         <Row :gutter="16" type="flex" justify="start" align="top">
           <Col span="3" v-if="groupLists.length > 0">
-            <div class="centerHeader" v-if="aside">
+            <div class="centerHeader pointer" @click="toStory(itemGroup.groupId,'us')" v-if="aside=='product'">
               {{itemGroup.text}}
             </div>
             <div class="centerHeader pointer" @click="toStory(itemGroup.groupId)" v-else>
@@ -263,14 +263,30 @@ export default {
         }
       })
     },
-    toStory(id){
-      const {href}=this.$router.resolve({
-        path:"product/detail",
-        query:{
-          detail_id:id,
+    toStory(id,column){
+      let obj;
+      if(column){
+        return
+        obj = {
+          path:"demand/detail",
+          query:{
+            reqList_id:id,
+          }
         }
-      });
+
+      }else{
+        obj = {
+          path:"product/detail",
+          query:{
+            detail_id:id,
+          }
+        }
+        
+      }
+
+      const {href}=this.$router.resolve(obj);
       window.open(href,"_blank")
+      
     },
     bindStorySortId(){
       this.$nextTick(()=>{

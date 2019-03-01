@@ -1373,7 +1373,7 @@ export default class Common extends Utils {
       let Lable = "未知"
       if(STR){
         if(STR == 1){
-          Lable = "立研"
+          Lable = "立项"
         }else if(STR == 2){
           Lable = "自研"
         }

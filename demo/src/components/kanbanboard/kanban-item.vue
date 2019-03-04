@@ -22,7 +22,7 @@
         <!-- 顺序1工作项颜色#e0592b 2附件颜色#7d2f74 3测试案例颜色#00a6b6 4依赖项状态完成颜色#199c40，未完成颜色#db0102   -->
         <!-- 工作项状态识别 显示包括附件、依赖项状态 -->
         <p v-if="item.source=='task'" class="kananstatus">
-          <span class="iconBg" style="color:#7d2f74;font-size:22px;transform:rotate(35deg);font-weight:bold" v-if="item.isFile=='yes'">
+          <span class="iconBg" :class="'isFile'" v-if="item.isFile=='yes'" title="有附件">
             <Icon type="paperclip"></Icon>
           </span>
           <span class="iconBg" style="font-size:20px" v-if="item.isDepend=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'">
@@ -35,7 +35,7 @@
           <span class="iconBg" style="background:#e0592b" :title="item.taskDesc ? item.taskDesc : '工作项个数'" >
             {{item.task_count}}
           </span>
-          <span class="iconBg" style="color:#7d2f74;font-size:22px;transform:rotate(35deg);font-weight:bold" v-if="item.isFile=='yes'">
+          <span class="iconBg" :class="'isFile'" v-if="item.isFile=='yes'" title="有附件">
             <Icon type="paperclip"></Icon>
           </span>
           <span class="iconBg" style="background:#00a6b6" title="测试案例个数" >
@@ -50,6 +50,9 @@
         <p v-if="item.source=='demand'" class="kananstatus floatClear">
           <span class="iconBg" style="background:#e0592b" :title="item.usDesc ? item.usDesc : '用户故事个数'" >
             {{item.us_counts}}
+          </span>
+          <span class="iconBg" :class="'isFile'"  v-if="item.isFile=='yes'" title="有附件">
+            <Icon type="paperclip"></Icon>
           </span>
           <span class="iconBg" style="font-size:20px" v-if="item.isDepd=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'">
             <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
@@ -205,6 +208,12 @@ export default {
   text-align: center;
   line-height: 18px;
   vertical-align: top;
+}
+.isFile{
+  color:#7d2f74;
+  font-size:22px;
+  transform:rotate(35deg);
+  font-weight:bold
 }
 .isOpacity{
   position: relative;

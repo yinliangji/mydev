@@ -597,6 +597,7 @@ export default {
                             _Obj.detail_id = myData[i].list[j].id
                             _Obj.source = "demand";
                             _Obj.isDepd = myData[i].list[j].isDepd;
+                            _Obj.isFile = myData[i].list[j].isFile || "";
                             _Obj.isFinish = myData[i].list[j].isFinish;
                             _Obj.us_counts = myData[i].list[j].us_counts;
 

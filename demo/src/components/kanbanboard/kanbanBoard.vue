@@ -2,7 +2,7 @@
   <Layout id="boardWrapper">
     <content id="board">
       <p span="4" v-if="groupList.length > 0" class="left_border"></p>
-      <div class="row-wrapper">
+      <div class="row-wrapper" id="kanbanHeader">
         <Row :gutter="16" type="flex" justify="start" align="middle">
           <Col span="3" class="topColumnFirst" v-if="groupList.length > 0">
             <div class="centerHeaderTitle">
@@ -18,11 +18,11 @@
       <div class="row-wrapper" v-for="(itemGroup, index) in groupLists" v-if="groupList.length > 0">
         <Row :gutter="16" type="flex" justify="start" align="top">
           <Col span="3" v-if="groupLists.length > 0">
-            <div class="centerHeader pointer" @click="toStory(itemGroup.groupId,'us')" v-if="aside=='product'">
-              {{itemGroup.text}}
+            <div class="centerHeader" @click="toStory(itemGroup,'us')" v-if="aside=='product'">
+              <a>{{itemGroup.text}}</a>
             </div>
-            <div class="centerHeader pointer" @click="toStory(itemGroup.groupId)" v-else>
-              {{itemGroup.text}}
+            <div class="centerHeader" @click="toStory(itemGroup)" v-else>
+              <a>{{itemGroup.text}}</a>
             </div>
             <div>
               <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >添加用户故事</Button>
@@ -188,10 +188,9 @@ export default {
     EventBus.$on("bindSort",this.bindSortId);
     //EventBus.$on("storyBindSort",this.bindStorySortId);
     setTimeout(()=>{
-      this.autoHeight();  
+      this.autoHeight();
+      this.kanbanScrollFn();
     },1000);
-    
-           
   },
   methods:{
     isPutFn(a,p,s){//this.aside,this.isPut,items.state
@@ -213,6 +212,58 @@ export default {
       setTimeout(()=>{
         this.setHeight();
       },2)      
+    },
+    kanbanScrollFn(){
+
+      
+
+      if(this.$route.path == "/demand" || this.$route.path ==  "/product" || this.$route.path ==  "/development" || this.$route.path ==  "/dependManage"){}else{return};
+      let that = this;
+      let gap = that.$route.path == "/demand" || that.$route.path ==  "/product" ? 5 : 0;
+      
+      let headerBoxH = document.getElementsByClassName("headerBox")[0] ? document.getElementsByClassName("headerBox")[0].offsetHeight : false;//
+      let mainDom = document.getElementById("main");
+      let ivuRowFlexDomW;
+      let kanbanHeaderDomH;
+      if(!headerBoxH && !mainDom){return}
+
+      let kanbanHeaderDom = document.getElementById("kanbanHeader")?document.getElementById("kanbanHeader"):false;
+
+      let ivuRowFlexDom = kanbanHeaderDom && kanbanHeaderDom.getElementsByClassName("ivu-row-flex")[0] ?kanbanHeaderDom.getElementsByClassName("ivu-row-flex")[0] : false;
+      let boardDom = document.getElementById("board") ? document.getElementById("board") : false;
+
+      if(!ivuRowFlexDomW){ivuRowFlexDomW = ivuRowFlexDom.offsetWidth;}
+      if(!kanbanHeaderDomH){kanbanHeaderDomH = kanbanHeaderDom.offsetHeight;}  
+
+      mainDom.onscroll= function(){
+        if(that.$route.path == "/demand" || that.$route.path ==  "/product" || that.$route.path ==  "/development" || that.$route.path ==  "/dependManage"){}else{return};
+
+        kanbanHeaderDom = kanbanHeaderDom ? kanbanHeaderDom : document.getElementById("kanbanHeader");
+        ivuRowFlexDom = ivuRowFlexDom ? ivuRowFlexDom : kanbanHeaderDom.getElementsByClassName("ivu-row-flex")[0];
+
+        let boardDom = boardDom ? boardDom : document.getElementById("board");
+        if(!kanbanHeaderDom && !boardDom && !ivuRowFlexDom){return}
+        if(!ivuRowFlexDomW){ivuRowFlexDomW = ivuRowFlexDom.offsetWidth;}
+        if(!kanbanHeaderDomH){kanbanHeaderDomH = kanbanHeaderDom.offsetHeight;}
+
+        boardDom.style.position = "relative";
+        let rectObject = boardDom.getBoundingClientRect();
+        let num = rectObject.top - headerBoxH; 
+        if(num + 10 < 0){
+          kanbanHeaderDom.style.height = kanbanHeaderDomH+"px";
+          ivuRowFlexDom.style.top = Math.abs(num-gap) + "px";
+          ivuRowFlexDom.style.position = "absolute";
+          ivuRowFlexDom.style.width = ivuRowFlexDomW ? ivuRowFlexDomW+"px" : "100%";
+          ivuRowFlexDom.style.left = "0";
+          ivuRowFlexDom.style.zIndex = "100";
+          
+        }else{
+          kanbanHeaderDom.removeAttribute('style');
+          ivuRowFlexDom.removeAttribute('style');
+          ivuRowFlexDom.style.marginLeft = "-8px";
+          ivuRowFlexDom.style.marginRight = "-8px";
+        }
+      }
     },
     setHeight(){
       this.addSpace = this.aside == "product" && this.role != "icdp_projManager" ? 50 : 0;
@@ -263,27 +314,22 @@ export default {
         }
       })
     },
-    toStory(id,column){
-      let obj;
-      if(column){
-        return
-        obj = {
-          path:"demand/detail",
-          query:{
-            reqList_id:id,
-          }
+    toStory(IG,column){
+      let obj =  column && column == 'us' ? 
+      {
+        path:"demand/detail",
+        query:{
+          reqList_id:IG.groupId,
+          req_id:IG.reqID,
         }
-
-      }else{
-        obj = {
-          path:"product/detail",
-          query:{
-            detail_id:id,
-          }
-        }
-        
       }
-
+      :
+      {
+        path:"product/detail",
+        query:{
+          detail_id:IG.groupId,
+        }
+      }
       const {href}=this.$router.resolve(obj);
       window.open(href,"_blank")
       
@@ -441,8 +487,16 @@ export default {
   },
   
 };
-</script>
 
+
+
+let kanbanScrollFn = ()=>{
+  
+
+}
+//kanbanScrollFn();
+
+</script>
 <style scoped>
 .noPutBg{
   background: #f8f8f9;
@@ -609,4 +663,7 @@ export default {
 #dependManageBoardBox .ivu-col-span-4{
   width: 19.7%;
 }
+
+
+
 </style>

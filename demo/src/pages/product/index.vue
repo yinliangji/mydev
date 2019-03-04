@@ -1091,7 +1091,11 @@ export default {
 	                			return val == item.value
 	                		})
 	                		if(_temp && _temp.label){
-	                			return {text:_temp.label,groupId:val+""}
+	                			return {
+	                				text:_temp.label,
+	                				groupId:val+"",
+	                				reqID:_temp.reqID || "",
+	                			}
 	                		}else{
 	                			return false;
 	                		}
@@ -1103,13 +1107,8 @@ export default {
                 	this.groupList.push({text:"所属需求项"});
                 	for(let k=0;k<reqArr2.length;k++){
                 		let _CN = checkreqName(reqArr2[k]);
-                		if(_CN){
-                			this.groupList.push(_CN)
-                		}
+                		if(_CN){this.groupList.push(_CN)}
                 	}
-
-
-
 	            	let _arr = [];
 					let _Obj = {};
 					

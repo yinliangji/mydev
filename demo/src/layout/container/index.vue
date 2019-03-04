@@ -1,5 +1,5 @@
 <template>
-	<Layout class="main">
+	<Layout class="main" id="main">
 		<PageLoading v-if="ispageLoading" />
 		<Content class="container">
 			<router-view class="ContView" name="Cont" />

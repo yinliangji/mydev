@@ -189,7 +189,7 @@ export default {
     //EventBus.$on("storyBindSort",this.bindStorySortId);
     setTimeout(()=>{
       this.autoHeight();
-      this.kanbanScrollFn();
+      this.kanbanScrollFn();//以后加上
     },1000);
   },
   methods:{
@@ -219,7 +219,7 @@ export default {
 
       if(this.$route.path == "/demand" || this.$route.path ==  "/product" || this.$route.path ==  "/development" || this.$route.path ==  "/dependManage"){}else{return};
       let that = this;
-      let gap = that.$route.path == "/demand" || that.$route.path ==  "/product" ? 5 : 0;
+      let gap = that.$route.path == "/demand" || that.$route.path ==  "/product" ? 0 : 0;
       
       let headerBoxH = document.getElementsByClassName("headerBox")[0] ? document.getElementsByClassName("headerBox")[0].offsetHeight : false;//
       let mainDom = document.getElementById("main");
@@ -249,6 +249,7 @@ export default {
         boardDom.style.position = "relative";
         let rectObject = boardDom.getBoundingClientRect();
         let num = rectObject.top - headerBoxH; 
+        let numberBox = that.$route.path == "/demand" || that.$route.path ==  "/product" ? kanbanHeaderDom.getElementsByClassName("number") : false;
         if(num + 10 < 0){
           kanbanHeaderDom.style.height = kanbanHeaderDomH+"px";
           ivuRowFlexDom.style.top = Math.abs(num-gap) + "px";
@@ -256,12 +257,28 @@ export default {
           ivuRowFlexDom.style.width = ivuRowFlexDomW ? ivuRowFlexDomW+"px" : "100%";
           ivuRowFlexDom.style.left = "0";
           ivuRowFlexDom.style.zIndex = "100";
+
           
+
+          if(numberBox && numberBox.length){
+            for(let i=0;i<numberBox.length;i++){
+              numberBox[i].style.top = "5px";
+            }
+          }
+          
+
+          //number
+
         }else{
           kanbanHeaderDom.removeAttribute('style');
           ivuRowFlexDom.removeAttribute('style');
           ivuRowFlexDom.style.marginLeft = "-8px";
           ivuRowFlexDom.style.marginRight = "-8px";
+          if(numberBox && numberBox.length){
+            for(let i=0;i<numberBox.length;i++){
+              numberBox[i].removeAttribute('style');
+            }
+          }
         }
       }
     },

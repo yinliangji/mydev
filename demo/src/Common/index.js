@@ -1384,6 +1384,39 @@ export default class Common extends Utils {
       return Lable;
       
     }
+    //翻译依赖项状态--不通用
+    static DepdStatusFn(STR=""){
+      let _name = false;
+      if(STR == 1){
+          _name = "提出"
+      }else if(STR == 2){
+          _name = "进行中"
+      }else if(STR == 3){
+          _name = "已解决"
+      }else if(STR == 4){
+          _name = "停滞"
+      }else if(STR == 5){
+          _name = "废弃"
+      }else{
+          _name = "未知"
+      }
+      return _name;
+    }
+
+    //翻译依赖项类型--不通用
+    static DepdTypeFn(STR=""){
+      let _name = false;
+      if(STR == 1){
+          _name = "需求项"
+      }else if(STR == 2){
+          _name = "用户故事"
+      }else if(STR == 3){
+          _name = "工作项"
+      }else{
+          _name = "未知"
+      }
+      return _name;
+    }
 
     //角色添加弹出--不通用
     static CancelRole(that,i){
@@ -1542,6 +1575,11 @@ export default class Common extends Utils {
       _Common.RemoveSession("userstorySerch");
       _Common.RemoveSession("tableDAtaPageCurrent");
       _Common.RemoveSession("oldAllSession");
+    }
+    //删除用户故事分页和搜索还原--不通用
+    static DelectDemandSession(_Common){
+      _Common.RemoveSession("demandSerch");
+      _Common.RemoveSession("allDemandSession");
     }
     //用户故事分页和搜索跳转还原--不通用
     static GoUserstorySession(_Common,that){

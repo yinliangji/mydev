@@ -82,7 +82,7 @@ export default {
                 return false;
             }
         },
-        addLoading: {
+        isLoading: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
                 return false;
@@ -101,7 +101,6 @@ export default {
             this.modaAdd = this.isShow;
         },
         data(){
-            console.log(this.data,"000000000000")
             this.formValidate.bfunc_id = this.data.bfunc_id;
             this.formValidate.bfunc_name = this.data.bfunc_name;
             this.formValidate.logic_sys_no = this.data.logic_sys_name;
@@ -133,7 +132,7 @@ export default {
     data() {
         return {
             modaAdd: false,
-            modal_add_loading: this.addLoading,
+            modal_add_loading: this.isLoading,
             formValidate:{
                 bfunc_id:"",
                 bfunc_name:"",

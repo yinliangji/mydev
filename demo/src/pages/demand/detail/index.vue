@@ -58,7 +58,6 @@ import InfoTable from './info'
 export default {
     data () {
         return {
-            
             formValidate: {
                 req_id:"",
                 detail_id:"",
@@ -119,8 +118,8 @@ export default {
         console.log("项目需求项detail--beforecreated-------",this.formValidate)
     },
     created(){
-        console.log("项目需求项detail--created-------",this.formValidate)
-        
+        console.log("项目需求项detail--created-------",this.formValidate);
+        this.changeDemandSerch();
     },
     beforeUpdate(){
         console.log("项目需求项detail--beforeUpdate-------",this.formValidate)
@@ -129,6 +128,12 @@ export default {
         console.log("项目需求项detail--updated-------",this.formValidate)
     },
     methods: {
+        changeDemandSerch(){
+            if(Common.GetSession("demandSerch")){
+                Common.SetSession("allDemandSession",Common.GetSession("demandSerch"));
+                Common.RemoveSession("demandSerch");
+            }
+        },
         editItemFn(){
             let _query = {
                 DATA: JSON.stringify(this.formValidate)

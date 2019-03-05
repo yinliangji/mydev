@@ -158,7 +158,8 @@ export default {
                 prj_id:"",
                 prj_name:"",
                 prod_id:"",
-                product_name:"",  
+                product_name:"",
+                depd_list:[],  
                 AddGroupList:[],//搜索查询
                 bfunc:[],//弹出业务窗口           
             },

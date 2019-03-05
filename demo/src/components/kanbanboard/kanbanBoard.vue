@@ -530,6 +530,18 @@ let kanbanScrollFn = ()=>{
   color:#bbbec4;
   transform:translate(-50%,0);
   white-space: nowrap;
+
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  transform:translate(0,0);
+  height: 45px;
+  text-align: center;
+  line-height: 45px;
+  border-radius: 4px;
+  border: 1px dotted transparent; 
+  color: transparent;
+  background: transparent;
 }
 #boardWrapper,#productBoardBox,#demandBoardBox,#developmentBoardBox,#dependManageBoardBox{
   background: #fff;

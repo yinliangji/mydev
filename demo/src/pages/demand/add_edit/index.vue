@@ -212,11 +212,21 @@ export default {
 			let _DATA = JSON.parse(this.$router.history.current.query.DATA);
             _DATA = Array.isArray(_DATA) ? _DATA : [_DATA];
             this.ADDorEDIT = false;
+            this.changeDemandSerch();
 			this.getReqDepdFn(getReqDepd,{prjId:Common.GETID(this,Common),reqId:_DATA[0].id})
 			this.editFn(_DATA);
 		}
 	},
 	methods: {
+        changeDemandSerch(){
+            if(this.ADDorEDIT){
+                Common.RemoveSession("demandSerch");
+                Common.RemoveSession("allDemandSession");
+            }else if(Common.GetSession("demandSerch")){
+                Common.SetSession("allDemandSession",Common.GetSession("demandSerch"));
+                Common.RemoveSession("demandSerch");
+            }
+        },
         getTimerPrj(URL,params = {}){
             defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;

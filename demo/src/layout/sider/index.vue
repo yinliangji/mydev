@@ -49,6 +49,7 @@ export default {
 		side_menu(param){
 			//增加搜索条件和分页
 			if(param.indexOf("product") != -1 || param.indexOf("development") != -1){
+				Common.DelectDemandSession(Common);
 				if(param.indexOf("development") != -1){
 					if(this.$router.history.current.query.us_name || this.$router.history.current.query.myid){
 						Common.UserstorySession(Common);
@@ -56,8 +57,11 @@ export default {
 						Common.DelectUserstorySession(Common)
 					}
 				}
+			}else if(param.indexOf("demand") != -1){
 			}else{
-				Common.DelectUserstorySession(Common)
+				Common.DelectUserstorySession(Common);
+				Common.DelectDemandSession(Common);
+				
 			}
 			//增加搜索条件和分页 
 

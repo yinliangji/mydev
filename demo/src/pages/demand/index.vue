@@ -399,6 +399,7 @@ export default {
         console.log("项目需求项--beforecreated-------",this.formValidate)
     },
     created(){
+        this.getSerachCondition();
         console.log("项目需求项--created-------",this.formValidate);
         this.checkUrlBoard();
     },
@@ -516,6 +517,7 @@ export default {
                 req_submitter,
                 req_stat
             }
+            this.serachCondition({req_name,req_id,req_submitter,req_stat});
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 let statusData = myData.status_data ? myData.status_data : false;
@@ -774,6 +776,33 @@ export default {
             //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
             
         },
+        //记住搜索条件开始
+        getSerachCondition(){
+            if(Common.GetSession("allDemandSession") || Common.GetSession("demandSerch")){
+                let _allDemandSession = JSON.parse(Common.GetSession("allDemandSession")) || JSON.parse(Common.GetSession("demandSerch"));
+                let {tableDAtaPageCurrent,req_name,req_id,req_submitter,req_stat} = _allDemandSession
+                this.tableDAtaPageCurrent = tableDAtaPageCurrent ? tableDAtaPageCurrent : 1;
+                this.formValidate.req_name = req_name ? req_name : "";
+                this.formValidate.req_id = req_id ? req_id : "";
+                this.formValidate.req_submitter = req_submitter ? req_submitter : "";
+                this.formValidate.req_stat = req_stat ? req_stat : "";
+                Common.RemoveSession("allDemandSession");
+            }
+        },
+        serachCondition(val){
+            if(Common.IsObject(val)){
+                val.tableDAtaPageCurrent = this.tableDAtaPageCurrent;
+            }
+            Common.RemoveSession("demandSerch");
+            Common.SetSession("demandSerch",JSON.stringify(val));
+        },
+        
+        optionSession(){
+            Common.RemoveSession("allSession");
+            Common.RemoveSession("demandSerch");
+            Common.RemoveSession("REQ_ID");
+        },
+        //技术搜索条件结束
         cancelSerchAll(){
             for(let i in this.formValidate){
                 this.formValidate[i] = "";
@@ -794,7 +823,7 @@ export default {
             
             let ID = Common.GETID(this,Common)
             //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
-            
+            this.optionSession();
             
 
             if(this.currentView == "kanbanboard"){
@@ -867,6 +896,7 @@ export default {
                 req_submitter,
                 req_stat
             }
+            this.serachCondition({req_name,req_id,req_submitter,req_stat});
             return defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'})
             .then((response) => {
                 let myData = response.data;
@@ -1083,6 +1113,20 @@ export default {
         },
     },
     watch: {
+        /*
+        formValidate: {
+            handler(val, oldVal) {
+                if(Common.GetSession("userstorySerchTemp")){
+                    Common.RemoveSession("userstorySerchTemp");
+                }
+                Common.SetSession("userstorySerchTemp",JSON.stringify(val))
+            },
+            deep: true
+        },
+        tableDAtaPageCurrent(val, oldVal){
+            Common.SetSession("tableDAtaPageCurrent",val);
+        },
+        */
         // '$route' (to, from) {
             
         //     if(to.query.board && to.query.board == "true"){

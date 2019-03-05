@@ -879,10 +879,10 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                 ]
             },
         ],
-        "role|1":["icdp_projManager","icdp_teamLeader"],
+        "role|1":["_icdp_projManager","icdp_teamLeader"],
     })
 }
-
+//"role|1":["icdp_projManager","icdp_teamLeader"],
 
 app.all('/userstory/getUserStoryKanBan/', function(req, res) {
     let resVal = kanbanList(req.body.myStatus, req.body.page, req.body.pageline);
@@ -2989,7 +2989,7 @@ let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
             "__value3__pageline": val3,
 
         }],
-        "total|3-9": 3,
+        "total|23-29": 3,
     })
 }
 
@@ -3797,6 +3797,22 @@ let DetailReq = (val1 = 200, val2 = 1, val3 = 3) => {
             id:10039,
             prj_type_name:"自研",
             remark:"@title",
+            "depd_list|2-10":[
+                {
+                    create_time:"@date(yyyy-MM-dd)",
+                    "created_user_username":"@cname",
+                    "depd_desc":"@title",
+                    "depd_id|5-8":/[a-zA-Z]/,
+                    "depd_main_type":2,
+                    "depd_name":"@cname",
+                    "depd_sn|+1":1,
+                    "depd_status":1,
+                    "id|+10":1,
+                    "modified_time":"@date(yyyy-MM-dd)",
+                    "modified_user_username":"@cname",
+                    "prj_id|+100":1,
+                }
+            ],
             
         },
         "__value2__page": val2,

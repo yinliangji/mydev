@@ -1,4 +1,5 @@
 <template>
+  <div>
     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
       <tbody>
         <tr>
@@ -26,7 +27,14 @@
           <th width="11%">创建人</th>
           <td>{{ formValidate.create_user | FALSEINFO}}</td>
         </tr>
-
+        <tr>
+          <th>依赖项</th>
+          <td colspan="5">
+            <span v-for="(item,index) in formValidate.depd_list" :key="index" class="depdTxt">
+              【<a @click="depdPop(item,index)">{{item.depd_name}}</a>】<em v-if="index != formValidate.depd_list.length-1">、</em>
+            </span>
+          </td>
+        </tr>
         
         <tr>
           <th>需求项描述</th>
@@ -39,12 +47,20 @@
         
       </tbody>
     </table>
+    <Depdepd 
+        @buspopClose = "depdpopCloseFn"
+        :data="depdpopData"
+        :isShow = "depdpopIsShow"
+        :isLoading = "depdpopIsLoading"
+    />
+  </div>
 </template>
 <script>
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 const {} = Common.restUrl;
+import Depdepd from '@/pages/product/detail/depdpop'
 export default {
     props: {
         Data: {
@@ -87,14 +103,32 @@ export default {
                 prj_id:"",
                 prj_name:"",
                 prod_id:"",
-                product_name:"",  
+                product_name:"",
+                depd_list:[],    
                 AddGroupList:[],//搜索查询
                 bfunc:[],//弹出业务窗口           
             },
+            //业务弹出--start
+            depdpopIsShow:false,
+            depdpopIsLoading:false,
+            depdpopData:false,
+            //业务弹出--end
             
         }
     },
     methods: {
+      //业务窗口 -start
+      depdpopCloseFn(B){
+          this.depdpopIsShow = B;
+      },
+      depdpopOpenFn(B,i,d){
+          this.depdpopData = d;
+          this.depdpopIsShow = B;
+      },
+      //业务窗口 -end
+      depdPop(d,i){
+        this.depdpopOpenFn(true,i,d)
+      },
     },
     watch: {
         Data(){
@@ -105,23 +139,23 @@ export default {
         },
     },
     created() {
+      console.log("项目需求项detail--详情--created-------",this.formValidate)
     },
     beforeUpdate(){
+      console.log("项目需求项detail--详情--beforeUpdate-------",this.formValidate)
         
     },
     updated(){
-        
+      console.log("项目需求项detail--详情--updated-------",this.formValidate)
     },
     mounted(){
         this.formValidate = this.Data;
     },
+    components: {
+      Depdepd,
+    },
 }
-
-
 </script>
-
 <style lang="less" scoped>
-
-
 </style>
 

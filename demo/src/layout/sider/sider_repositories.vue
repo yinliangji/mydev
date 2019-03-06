@@ -10,6 +10,12 @@
 			<Icon type="pinpoint"></Icon>
 			<span>制品搜索</span>
 		</MenuItem>
+		<MenuItem name="1-24" title="Maven仓库概览">
+			<router-link to="/maven/warehouseView" />
+			<Icon type="stats-bars"></Icon>
+			<span class="mavenBrowse">Maven仓库概览</span>
+		</MenuItem>
+
 	</aside>
 </template>
 <script>

@@ -8,3 +8,38 @@ https://www.jianshu.com/p/71bb3cf19095
 
 
 sftp://128.196.28.253，用户名和密码都是net，放到/home/ap/net/jmeter脚本/APTS-共享文档/参考代码，这个目录下，好不？
+
+
+(function() {
+  Object.setPrototypeOf = Object.setPrototypeOf || ({__proto__: []} instanceof Array ? setProtoOf : mixinProperties);
+
+  function setProtoOf(obj, proto) {
+    obj.__proto__ = proto;
+    return obj;
+  }
+
+  function mixinProperties(obj, proto) {
+    for (const prop in proto) {
+      if (!obj.hasOwnProperty(prop)) {
+        obj[prop] = proto[prop];
+      }
+    }
+    return obj;
+  }
+})();
+
+
+import '@babel/polyfill';
+Object.setPrototypeOf = require('setprototypeof');
+
+window.console = window.console || (function(){ 
+var c = {}; c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile = c.clear = c.exception = c.trace = c.assert = function(){}; 
+return c; 
+})();
+
+/*main.js下*/
+ import promise from 'es6-promise'
+ promise.polyfill()
+
+
+"es6-promise": "^4.2.6",

@@ -31,6 +31,7 @@ export default {
 				'setting':["1","1-17"],
 				'maven':["1","1-22"],
 				'maven/produceSearch':["1","1-23"],
+				'maven/warehouseView':["1","1-24"],
 				
 
 			},
@@ -123,10 +124,13 @@ export default {
 			let page17 = "setting";
 			let page22 = "maven";
 			let page23 = "maven/produceSearch";
+			let page24 = "maven/warehouseView";
 			
 
 			if(to.path.indexOf(page8)!= -1){
 				this.side_menu(page8)
+			}else if(to.path.indexOf(page24)!= -1){
+				this.side_menu(page24)
 			}else if(to.path.indexOf(page23)!= -1){
 				this.side_menu(page23)
 			}else  if(to.path.indexOf(home)!= -1){

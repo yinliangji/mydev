@@ -440,6 +440,18 @@ const router = new Router({
                 }
             },
         },
+        {
+            path: '/maven/warehouseView',
+            name: 'warehouseView',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/repositories/warehouseView"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_repositories"], resolve)
+                }
+            },
+        },
 
         //以后删除开始
 

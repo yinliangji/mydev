@@ -13,6 +13,22 @@
                         </div>
                     </div>
                 </TabPane>
+                <TabPane label="每日活跃用户量" name="name2">
+                    <div class="baseInfoBox">
+                        <!-- <h3 class="Title"><span>用户故事基本信息</span></h3> -->
+                        <div class="tableBox">
+                            <Activevalue v-if="TabsCur == 'name2'" />
+                        </div>
+                    </div>
+                </TabPane>
+                <TabPane label="活跃用户列表" name="name3">
+                    <div class="baseInfoBox">
+                        <!-- <h3 class="Title"><span>用户故事基本信息</span></h3> -->
+                        <div class="tableBox">
+                            <Userlist v-if="TabsCur == 'name3'" />
+                        </div>
+                    </div>
+                </TabPane>
             </Tabs>
         </Card>
     </div>
@@ -24,11 +40,16 @@ const {defaultAXIOS} = API;
 import Common from '@/Common';
 const {queryPublicRep} = Common.restUrl;
 import Downvalue from './downvalue'
+import Activevalue from './activevalue'
+import Userlist from './userlist'
+
 
 export default {
 	name: 'warehouseView',
 	components: {
 		Downvalue,
+        Activevalue,
+        Userlist,
 	},
 	data() {
 		return {

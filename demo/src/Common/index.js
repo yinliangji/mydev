@@ -1683,25 +1683,47 @@ export default class Common extends Utils {
       });
     }
     //检查结束日期
-    static checkEndDate(that,fnParams = false){
+    static checkEndDate(that,fnParams,column){
 
       return (rule, value, callback)=>{
         let _form = fnParams ? that.formItem : that.formValidate;
         let _itemEndTime = that.itemEndTime ? new Date(that.itemEndTime).getTime() : false;
-
         if (value) {
+            let oneDay = 86400000;//24*60*1000*60
+            let oneMonth = oneDay*31;
             let Timer = new Date(value).getTime() - new Date(_form.start_time).getTime();
             let TimerItemEndTime = _itemEndTime ? _itemEndTime - new Date(value).getTime() : false;
+            let Column = new Date(value).getTime() - new Date(_form.start_time).getTime();
+            let isTimer = Timer >= 0 ? true : false;
+            let isOneMonth = (Column <= oneMonth) ? true: false;
+
+
             if(TimerItemEndTime){
-              if(TimerItemEndTime >= 0 && Timer >= 0){
+              //
+              if(TimerItemEndTime >= 0 && isTimer){
                 callback()
               }else if(TimerItemEndTime < 0){
                 return callback(new Error('结束日期晚于此项目的【结束日期】！'));
               }else{
                 return callback(new Error('结束日期早于开始日期！'));
               }
+              //
+            }else if(column && column == "downvalue"){
+              //
+              if(isTimer && isOneMonth){
+                  callback()
+              }else if(!isTimer && !isOneMonth){
+                return callback(new Error('【结束日期早于开始日期】和【结束日期大于开始日期30天】！'));
+              }else if(!isTimer && isOneMonth){
+                return callback(new Error('结束日期早于开始日期！'));
+              }else if(isTimer && !isOneMonth){
+                return callback(new Error('结束日期必须小于开始日期30天！'));
+              }else{
+                  return callback(new Error('日期选择错误，重新选择！'));
+              }
+              //
             }else{
-              if(Timer >= 0){
+              if(isTimer){
                   callback()
               }else{
                   return callback(new Error('结束日期早于开始日期！'));
@@ -1714,6 +1736,7 @@ export default class Common extends Utils {
         }
       };
     }
+
     //检查添加角色是否重复
     static checkPart(that){
       return (rule, value, callback) => {

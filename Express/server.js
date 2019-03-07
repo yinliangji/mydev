@@ -4177,6 +4177,77 @@ app.all('/req/prj_time/', function(req, res) {
 
 
 
+
+
+let getDayDownCount = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message getDayDownCount",
+        "data|30": [{
+            date:"@date(yyyy-MM-dd)",
+            "value|100-10000":0,
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+
+        }],
+    })
+}
+
+
+
+
+app.all('/maven/getDayDownCount/', function(req, res) {
+    let resVal = getDayDownCount(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(getDayDownCount(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+app.all('/maven/getDayActiveUserDownCount/', function(req, res) {
+    let resVal = getDayDownCount(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(getDayDownCount(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+
+
+
+
+
+let getDayActiveUserList = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message getDayActiveUserList",
+        "data|10": [{
+            "ip|1":["255.255.255.255","192.168.1.1"],
+            "value|100-10000":0,
+            time:"@date(yyyy-MM-dd)",
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+        }],
+        "total|20-30":0,
+        "pagetotal|20-30":0,
+    })
+}
+
+
+
+
+app.all('/maven/getDayActiveUserList/', function(req, res) {
+    let resVal = getDayActiveUserList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(getDayActiveUserList(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+
+
 /*************qhc */
 /**
  * 监听9090端口

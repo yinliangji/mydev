@@ -279,7 +279,16 @@ CommonRest.restUrl = {
     /*****************************************/
 
     "queryPublicRep": process.env.BASE_URL + "/maven/queryPublicRep/",
-    /**** Maven仓库 get****/
+    /**** Maven公共仓库 get****/
+
+    "getDayDownCount": process.env.BASE_URL + "/maven/getDayDownCount/",
+    /**** Maven仓库概览每日下载量 get****/
+
+    "getDayActiveUserDownCount": process.env.BASE_URL + "/maven/getDayActiveUserDownCount/",
+    /**** Maven仓库概览每日活跃用户下载量 get****/
+
+    "getDayActiveUserList": process.env.BASE_URL + "/maven/getDayActiveUserList/",
+    /**** Maven仓库概览活跃用户列表 get****/
 
 }
 

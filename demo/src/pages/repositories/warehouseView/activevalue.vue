@@ -35,11 +35,8 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {getDayDownCount} = Common.restUrl;
-//import Condition from './Condition.js'
+const {getDayActiveUserDownCount} = Common.restUrl;
 const Condition = require('./condition.js');//记住搜索条件开始
-
-
 export default {
     props: {
         Data: {
@@ -53,11 +50,9 @@ export default {
         let _this = this;
         const validateDateEnd = Common.checkEndDate(this,false,"downvalue");
         return {
-
             optionsEndTime: {
                 disabledDate (date) {
                     if(_this.formValidate.start_time){
-                        let aaa;
                         return date &&  (date.valueOf() < _this.formValidate.start_time.getTime());
                     }else{
                         //return date && date.valueOf() > new Date().getTime();
@@ -94,18 +89,19 @@ export default {
         },
         submitDate(dateObj){
             let _start_time = Common.DateFormat(Common,this.formValidate.start_time);
-            let _end_time = Common.DateFormat(Common,this.formValidate.end_time);
+            let _end_time =  Common.DateFormat(Common,this.formValidate.end_time);
             let tempData = dateObj ? dateObj : {
                 startDate:_start_time,
                 endDate:_end_time,
             }
-            this.getDate(getDayDownCount,tempData);
+            this.getDate(getDayActiveUserDownCount,tempData);
+            
+
         },
-        
         getDate(URL,param = {}){
             this.dateList = [];
             this.valueList = [];
-            Condition.serachCondition(Common,this,JSON,this.formValidate,"downvalueSerch");
+            Condition.serachCondition(Common,this,JSON,this.formValidate,"activevalueSerch");
             defaultAXIOS(URL,param,{timeout:5000,method:'post'}).then((response) => {
                 let myData = response.data;
                 console.log("<====== 每日下载量 时间搜索***response+++",response,myData,"======>");
@@ -140,7 +136,7 @@ export default {
         drawChart() {
             let option = {
                 title: {
-                    text: '每日下载量'
+                    text: '每日活跃用户量'
                 },
                 tooltip: {
                     trigger: 'axis'
@@ -166,18 +162,16 @@ export default {
                     type: 'category',
                     boundaryGap: false,
                     data: this.dateList,
-                    //data: ['周一','周二','周三','周四','周五','周六','周日'],
                 },
                 yAxis: {
                     type: 'value'
                 },
                 series: [
                     {
-                        name:'下载量',
+                        name:'活跃用户量',
                         type:'line',
                         stack: '总量',
                         data:this.valueList,
-                        //data:[120, 132, 101, 134, 90, 230, 210],
                     },
                 ]
             };
@@ -191,9 +185,9 @@ export default {
         },
     },
     created() {
-        Condition.getSerachCondition(Common,this,"downvalueSerch");
+        Condition.getSerachCondition(Common,this,"activevalueSerch");
         console.log("每日下载量--created-------",this.formValidate,this.dateList,this.valueList);
-        
+
     },
     beforeUpdate(){
         console.log("每日下载量--beforeUpdate-------",this.formValidate,this.dateList,this.valueList)
@@ -202,14 +196,7 @@ export default {
         console.log("每日下载量--updated-------",this.formValidate,this.dateList,this.valueList)
     },
     mounted(){
-        
-        if(this.formValidate.start_time || this.formValidate.end_time){
-            this.submitDate({startDate:this.formValidate.start_time,endDate:this.formValidate.end_time});
-        }else{
-            this.submitDate({startDate:Common.DateFormat(Common,new Date().getTime()-  86400000*30),endDate:Common.DateFormat(Common,new Date().getTime())});
-        }
-
-        
+        this.submitDate({startDate:Common.DateFormat(Common,new Date().getTime()-  86400000*30),endDate:Common.DateFormat(Common,new Date().getTime())});
     },
 }
 </script>

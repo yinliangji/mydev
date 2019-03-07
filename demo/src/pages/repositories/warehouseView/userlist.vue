@@ -157,8 +157,9 @@ export default {
             let searchParams = [
                 this.formValidate.start_time,
             ]
-            this.tableDataAjaxFn(getDayActiveUserList,i,this.tableDAtaPageLine,...searchParams);
             this.tableDAtaPageCurrent = i;
+            this.tableDataAjaxFn(getDayActiveUserList,i,this.tableDAtaPageLine,...searchParams);
+            
         },
         changePageSize(i) {
 

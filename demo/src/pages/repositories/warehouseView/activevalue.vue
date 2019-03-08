@@ -27,7 +27,7 @@
                 </Row>
             </FormItem>
         </Form>
-        <div class="drawChartBox" ref="drawChartBox"></div>
+        <div class="drawChartBox" ref="drawChartBoxActive"></div>
     </div>
 </template>
 <script>
@@ -102,7 +102,7 @@ export default {
             this.dateList = [];
             this.valueList = [];
             Condition.serachCondition(Common,this,JSON,this.formValidate,"activevalueSerch");
-            defaultAXIOS(URL,param,{timeout:5000,method:'post'}).then((response) => {
+            defaultAXIOS(URL,param,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<====== 每日下载量 时间搜索***response+++",response,myData,"======>");
                 if(myData.status == "success"){
@@ -111,7 +111,8 @@ export default {
                             this.valueList.push(item.value+"");
                             let dateArr = item.date.split("-");
                             let dateArrStr = dateArr.length == 2 ? dateArr[0]+"月-"+dateArr[1]+"日" : dateArr[1]+"月-"+dateArr[2]+"日";
-                            this.dateList.push(dateArrStr);
+                            //this.dateList.push(dateArrStr);
+                            this.dateList.push(item.date);
                         }) 
                     }
                     this.drawChart();
@@ -142,12 +143,12 @@ export default {
                     trigger: 'axis'
                 },
                 legend: {
-                    data:['下载量']
+                    data:['活跃用户量']
                 },
                 grid: {
                     left: '3%',
                     right: '5%',
-                    bottom: '3%',
+                    bottom: '4%',
                     containLabel: true
                 },
                 toolbox: {
@@ -175,9 +176,17 @@ export default {
                     },
                 ]
             };
-            let myChart = this.$echarts.init(this.$refs.drawChartBox);
+            let myChart = this.$echarts.init(this.$refs.drawChartBoxActive);
             myChart.setOption(option);
+            myChart.on('click',(params)=>{
+                this.$emit("sendDate",params.name);
+            }); 
 
+            
+
+        },
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
         },
     },
     watch: {
@@ -199,6 +208,7 @@ export default {
         this.submitDate({startDate:Common.DateFormat(Common,new Date().getTime()-  86400000*30),endDate:Common.DateFormat(Common,new Date().getTime())});
     },
 }
+
 </script>
 
 <style lang="less" scoped>

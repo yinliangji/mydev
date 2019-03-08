@@ -5,14 +5,14 @@
                 <Row class="serchInputBox">
                     <Col span="12">
                         <Row class="SerchBox">
-                            <Col span="3" style="text-align: center">查询时间</Col>
-                            <Col span="9">
-                                <FormItem>
-                                    <DatePicker clearable :options="optionsStartTime" placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择查询时间" v-model="formValidate.start_time"></DatePicker>
+                            <Col span="4" style="text-align: center">ip地址搜索</Col>
+                            <Col span="10">
+                                <FormItem prop="ipaddress">
+                                    <Input v-model="formValidate.ipaddress" placeholder="请填写ip地址"></Input>
                                 </FormItem>
                             </Col>
-                            
-                            <Col span="12">
+                            <Col span="1" style="text-align: center">&nbsp;</Col>
+                            <Col span="9">
                                 <Button type="primary" icon="ios-search" class="_serchBtn" @click="serchAll">
                                     查询
                                 </Button>
@@ -39,7 +39,7 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {getDayActiveUserList} = Common.restUrl;
+const {queryUserRecordsByIp} = Common.restUrl;
 const Condition = require('./condition.js');//记住搜索条件开始
 export default {
     props: {
@@ -50,20 +50,31 @@ export default {
             }
         },
     },
+    watch: {
+        Data(D){
+            
+        },
+    },
     data () {
         let _this = this;
+        const checkIP = (rule, value, callback)=>{
+            let regIPv4 = /(?=(\b|\D))(((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))(?=(\b|\D))/g
+            let regIPv6 = /^([\\da-fA-F]{1,4}:){7}([\\da-fA-F]{1,4})$/g
+            if (value) {
+                return callback();
+                return regIPv4.test(value) || regIPv6.test(value) ? callback() : callback(new Error('内容不是IP！'))
+            }else{
+                return callback(new Error('请填写内容，不能为空！'));
+            }
+        }
         return {
-            optionsStartTime: {
-                disabledDate (date) {
-                    return date && date.valueOf() > (new Date().getTime() - 86400000);
-                }
-            },
+           
             formValidate: {
-                start_time:"",
+                ipaddress:"",
             },
             ruleValidate: {
-                start_time: [
-                     { required: true, type: 'date', message: '请选择日期！', trigger: 'change' }
+                ipaddress: [
+                    { required: true, type: 'string', validator: checkIP, trigger: 'blur' }
                 ],
             },
             //列表开始
@@ -73,24 +84,6 @@ export default {
                     key: 'ip',
                     width: 350,
                     align: 'center',
-                    render: (h, params) => {
-                        return h(
-                            'a',
-                            {
-                                //style:{color:'#2d8cf0'},
-                                //attrs:{title:"xxxxx",href:"###"},
-                                //domProps:{innerHTML:"内容",},
-                                "class":{txtBlock:true,txtBlockNone:false},
-                                //attrs:{title:params.row.prj_name},
-                                on: {
-                                    click: () => {
-                                        this.goIpSearchFn(params.index,params.row)
-                                    }
-                                }
-                            },
-                            params.row.ip
-                        );
-                    }
                 },
                 {
                     title: '下载数量',
@@ -103,6 +96,7 @@ export default {
                 },
             ],
             tableData: [],
+
             tableDAtaTatol:0,
             tableDAtaPageLine:10,
             tableDAtaPageCurrent:1,
@@ -113,16 +107,20 @@ export default {
     },
     methods: {
         //列表开始
-        goIpSearchFn(i,obj){
-            this.$emit("sendIP",obj.ip);
-        },
-        tableDataAjaxFn(URL = "",page = 1,limit = 3,start_time = ""){
+        tableDataAjaxFn(URL = "",page = 1,limit = 3,ipaddress = ""){
+            if(!ipaddress){return}
+            let delSpace = (str)=>{
+                    let Str = str.replace(/<\/?[^>]*>/gim,"");//去掉所有的html标记
+                    let result = Str.replace(/(^\s+)|(\s+$)/g,"");//去掉前后空格
+                    return  result.replace(/\s/g,"");//去除文章中间空格
+            }
             let defaultAXIOSParams = {
                 page,
                 limit,
-                startDate:start_time,
+                ip:delSpace(ipaddress),
             }
-            Condition.serachCondition(Common,this,JSON,this.formValidate,"userlistSerch");
+            Condition.serachCondition(Common,this,JSON,this.formValidate,"iplistSearch");
+            
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======maven 活跃用户列表***response+++",response,myData.data.list,"======>");
@@ -139,10 +137,10 @@ export default {
         },
         changeCurrentPage(i) {
             let searchParams = [
-                this.formValidate.start_time,
+                this.formValidate.ipaddress,
             ]
             this.tableDAtaPageCurrent = i;
-            this.tableDataAjaxFn(getDayActiveUserList,i,this.tableDAtaPageLine,...searchParams);
+            this.tableDataAjaxFn(queryUserRecordsByIp,i,this.tableDAtaPageLine,...searchParams);
             
         },
         changePageSize(i) {
@@ -160,26 +158,20 @@ export default {
         },
         //列表结束
         formItemReset(){
-            this.formValidate.start_time = "";
+            this.formValidate.ipaddress = "";
             
             this.$refs.formValidate.resetFields();
         },
         submitDate(dateObj){
-            let _start_time = Common.DateFormat(Common,this.formValidate.start_time);
-            
             let tempData = dateObj ? dateObj : {
-                startDate:_start_time,
+                ip:this.formValidate.ipaddress,
             }
             let searchParams = [
-                tempData.startDate,
+                tempData.ip,
             ];
-
-            this.tableDataAjaxFn(getDayActiveUserList,this.tableDAtaPageCurrent,this.tableDAtaPageLine,...searchParams);
-
+            this.tableDataAjaxFn(queryUserRecordsByIp,this.tableDAtaPageCurrent,this.tableDAtaPageLine,...searchParams);
         },
         serchAll(){
-            this.submitDate();
-            return
             this.$refs.formValidate.validate((valid)=>{//验证
                 if(valid){
                     this.submitDate();                    
@@ -191,13 +183,13 @@ export default {
         },
         drawChart() {
         },
-    },
-    watch: {
-        Data(D){
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
         },
     },
+    
     created() {
-        Condition.getSerachCondition(Common,this,"userlistSerch",this.Data);
+        Condition.getSerachCondition(Common,this,"iplistSearch",this.Data);
         console.log("每日下载量--created-------",this.formValidate)
     },
     beforeUpdate(){
@@ -207,7 +199,9 @@ export default {
         console.log("每日下载量--updated-------",this.formValidate)
     },
     mounted(){
-        this.tableDataAjaxFn(getDayActiveUserList,this.tableDAtaPageCurrent,this.tableDAtaPageLine,Common.DateFormat(Common,new Date().getTime() - 86400000));
+
+
+        this.tableDataAjaxFn(queryUserRecordsByIp,this.tableDAtaPageCurrent,this.tableDAtaPageLine,this.formValidate.ipaddress);
     },
 }
 </script>

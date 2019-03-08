@@ -57,7 +57,6 @@ export default {
             optionsEndTime: {
                 disabledDate (date) {
                     if(_this.formValidate.start_time){
-                        let aaa;
                         return date &&  (date.valueOf() < _this.formValidate.start_time.getTime());
                     }else{
                         //return date && date.valueOf() > new Date().getTime();
@@ -106,7 +105,7 @@ export default {
             this.dateList = [];
             this.valueList = [];
             Condition.serachCondition(Common,this,JSON,this.formValidate,"downvalueSerch");
-            defaultAXIOS(URL,param,{timeout:5000,method:'post'}).then((response) => {
+            defaultAXIOS(URL,param,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<====== 每日下载量 时间搜索***response+++",response,myData,"======>");
                 if(myData.status == "success"){
@@ -115,7 +114,8 @@ export default {
                             this.valueList.push(item.value+"");
                             let dateArr = item.date.split("-");
                             let dateArrStr = dateArr.length == 2 ? dateArr[0]+"月-"+dateArr[1]+"日" : dateArr[1]+"月-"+dateArr[2]+"日";
-                            this.dateList.push(dateArrStr);
+                            //this.dateList.push(dateArrStr);
+                            this.dateList.push(item.date);
                         }) 
                     }
                     this.drawChart();
@@ -151,7 +151,7 @@ export default {
                 grid: {
                     left: '3%',
                     right: '5%',
-                    bottom: '3%',
+                    bottom: '4%',
                     containLabel: true
                 },
                 toolbox: {
@@ -183,7 +183,13 @@ export default {
             };
             let myChart = this.$echarts.init(this.$refs.drawChartBox);
             myChart.setOption(option);
+            myChart.on('click',(params)=>{
+                console.log(params)
+            });
 
+        },
+        showError(ERR){
+            Common.ErrorShow(ERR,this);
         },
     },
     watch: {

@@ -51,6 +51,8 @@ export default {
 			//增加搜索条件和分页
 			if(param.indexOf("product") != -1 || param.indexOf("development") != -1){
 				Common.DelectDemandSession(Common);
+				Common.DelectWarehouseViewSession(Common);
+
 				if(param.indexOf("development") != -1){
 					if(this.$router.history.current.query.us_name || this.$router.history.current.query.myid){
 						Common.UserstorySession(Common);
@@ -59,10 +61,15 @@ export default {
 					}
 				}
 			}else if(param.indexOf("demand") != -1){
+				Common.DelectWarehouseViewSession(Common);
+				Common.DelectUserstorySession(Common);
+			}else if(param.indexOf("warehouseView") != -1){
+				Common.DelectDemandSession(Common);
+				Common.DelectUserstorySession(Common);
 			}else{
 				Common.DelectUserstorySession(Common);
 				Common.DelectDemandSession(Common);
-				
+				Common.DelectWarehouseViewSession(Common);
 			}
 			//增加搜索条件和分页 
 

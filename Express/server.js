@@ -4204,7 +4204,7 @@ app.all('/maven/getDayDownCount/', function(req, res) {
     res.end()
 });
 
-app.all('/maven/getDayActiveUserDownCount/', function(req, res) {
+app.all('/maven/getDayActiveUserCount/', function(req, res) {
     let resVal = getDayDownCount(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);
@@ -4238,6 +4238,23 @@ let getDayActiveUserList = (val1 = 200, val2 = 1, val3 = 3) => {
 
 
 app.all('/maven/getDayActiveUserList/', function(req, res) {
+    let resVal = getDayActiveUserList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(getDayActiveUserList(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+app.all('/maven/queryUserRecordsByIp/', function(req, res) {
+    let resVal = getDayActiveUserList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(getDayActiveUserList(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+app.all('/maven/getDownTopGroupByIp/', function(req, res) {
     let resVal = getDayActiveUserList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);

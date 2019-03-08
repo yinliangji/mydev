@@ -284,12 +284,17 @@ CommonRest.restUrl = {
     "getDayDownCount": process.env.BASE_URL + "/maven/getDayDownCount/",
     /**** Maven仓库概览每日下载量 get****/
 
-    "getDayActiveUserDownCount": process.env.BASE_URL + "/maven/getDayActiveUserDownCount/",
+    "getDayActiveUserDownCount": process.env.BASE_URL + "/maven/getDayActiveUserCount/",
     /**** Maven仓库概览每日活跃用户下载量 get****/
 
     "getDayActiveUserList": process.env.BASE_URL + "/maven/getDayActiveUserList/",
     /**** Maven仓库概览活跃用户列表 get****/
 
+    "queryUserRecordsByIp": process.env.BASE_URL + "/maven/queryUserRecordsByIp/",
+    /**** Maven仓库概览根据ip搜索使用记录 get****/
+
+    "getDownTopGroupByIp": process.env.BASE_URL + "/maven/getDownTopGroupByIp/",
+    /**** Maven仓库概览下载排行榜 get****/
 }
 
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);

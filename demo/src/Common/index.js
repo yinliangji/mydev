@@ -1576,10 +1576,17 @@ export default class Common extends Utils {
       _Common.RemoveSession("tableDAtaPageCurrent");
       _Common.RemoveSession("oldAllSession");
     }
-    //删除用户故事分页和搜索还原--不通用
+    //删除项目需求项分页和搜索还原--不通用
     static DelectDemandSession(_Common){
       _Common.RemoveSession("demandSerch");
       _Common.RemoveSession("allDemandSession");
+    }
+    //删除Maven仓库概览和搜索还原--不通用
+    static DelectWarehouseViewSession(_Common){
+      _Common.RemoveSession("downvalueSerch");
+      _Common.RemoveSession("activevalueSerch");
+      _Common.RemoveSession("userlistSerch");
+      _Common.RemoveSession("iplistSearch");
     }
     //用户故事分页和搜索跳转还原--不通用
     static GoUserstorySession(_Common,that){

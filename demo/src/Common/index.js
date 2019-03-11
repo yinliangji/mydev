@@ -736,12 +736,13 @@ export default class Common extends Utils {
     static GETID(that,_Common,From){
       let ID = false;
       let key = "id";
+      let key2 = "prjId";
       if(From == "inCookie"){
-        ID = getCookieFn(that,_Common,key);
+        ID = getCookieFn(that,_Common,key2) || getCookieFn(that,_Common,key);
       }else if(From == "inLocalStorage"){
-        ID = getLocalStorageFn(that,_Common,key);
+        ID = getLocalStorageFn(that,_Common,key2) || getLocalStorageFn(that,_Common,key);
       }else{
-        ID = getSCFn(that,_Common,key);
+        ID = getSCFn(that,_Common,key2) || getSCFn(that,_Common,key);
       }
       return ID;
     }
@@ -764,12 +765,13 @@ export default class Common extends Utils {
     static GETprjid(that,_Common,From){
       let prj_ID = false;
       let key = "prj_id";
+      let key2 = "prjSn";
       if(From == "inCookie"){
-        prj_ID = getCookieFn(that,_Common,key);
+        prj_ID = getCookieFn(that,_Common,key2) || getCookieFn(that,_Common,key);
       }else if(From == "inLocalStorage"){
-        prj_ID = getLocalStorageFn(that,_Common,key);
+        prj_ID = getLocalStorageFn(that,_Common,key2) || getLocalStorageFn(that,_Common,key);
       }else{
-        prj_ID = getSCFn(that,_Common,key);
+        prj_ID = getSCFn(that,_Common,key2) || getSCFn(that,_Common,key);
       }
       return prj_ID;
     }

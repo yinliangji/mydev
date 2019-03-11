@@ -226,15 +226,13 @@
                     <Button type="primary" @click="cancel">取消</Button>
                 </div>
             </Modal> 
-
-
 	</div>
 </template>
 <script>
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectDetail,listModule,getPermission,fileDownList,downFile,fileUpload,fileDelete,projectOutputWord,projectOutputExecl} = Common.restUrl;
+const {projectDetail,listModule,getPermission,fileDownList,downFile,fileUpload,fileDelete,projectOutputWord,projectOutputExecl,proByUser} = Common.restUrl;
 export default {
 	data () {
         return {
@@ -354,11 +352,41 @@ export default {
             delPath_file:"",
         }
     },
+    inject:["reload"],
+    beforecreated(){
+        console.log("项目详情页--beforecreated-------");
+    },
+    created(){
+        console.log("项目详情页--created-------");
+    },
+    beforeUpdate(){
+        console.log("项目详情页--beforeUpdate-------")
+    },
+    updated(){
+        console.log("项目详情页--updated-------")
+    },
     mounted(){
-    	if(Common.GETID(this,Common)){
+        if(this.$router.history.current.query.from && this.$router.history.current.query.from == "nav"){
             let myID = Common.GETID(this,Common);
-    		Common.setStorageAndCookie(Common,"id",myID)
+            this.getMainListFn(proByUser).then((response)=>{
+                let result = response.find(item=>item == myID)
+                if(!result){
+                    result = response[0];
+                }
+                this.tableDataAjaxFn(projectDetail,result).then((res)=>{
+                    this.$router.push({path: '/agile/detail', query: {id:result,prj_id:res}});
+                    this.reload();
+                },()=>{
 
+                })
+
+            },()=>{
+                this.$router.push({path: '/agile'});
+            })
+        }else if(Common.GETID(this,Common)){
+            
+            let myID = Common.GETID(this,Common);
+    		Common.setStorageAndCookie(Common,"id",myID);
     		this.tableDataAjaxFn(projectDetail,myID).then((prj_id)=>{
                 this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,myID,prj_id)
                 this.tableDAtaPageCurrent = 1;
@@ -366,12 +394,8 @@ export default {
                 console.log(error);
                 this.showError(error);
             })
-
-            
-
-
     	}else{
-    		//if(localStorage.getItem('id')){
+            
             if(Common.GETID(this,Common)){
     			this.tableDataAjaxFn(projectDetail,Common.GETID(this,Common)).then((prj_id)=>{
                     this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),prj_id)
@@ -381,23 +405,45 @@ export default {
                     console.log(error);
                     this.showError(error);
                 })
-
-                
-
-                
     		}else{
     			this.$router.push({path: '/agile'})
     		}
-    		
     	}
-
         this.getPermissionFn(getPermission)
-
-        
-    	
     },
     
     methods: {
+        getMainListFn(URL = "",page = 1,pageline = 10){
+            let username = Common.getCookie("username");
+            if(!username){return Promise.reject("没有username")}
+            let defaultAXIOSParams = {
+                page,
+                pageline,
+                username,
+            }
+            return defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======主键列表***response+++",response,myData.data.list,"+++agile***response======>");
+                if(myData.status == "success"){
+                    if(myData.data && Array.isArray(myData.data) && myData.data.length){
+                        let list = [];
+                        myData.data.forEach((item)=>{
+                            list.push(item+"");
+                        })
+                        return Promise.resolve(list);    
+                    }else{
+                        return Promise.reject(myData);
+                    }
+                }else{
+                    this.showError(URL+"_错误");
+                    return Promise.reject(myData.status);
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+                return Promise.reject(error);
+            });
+        },
         getSendData(data){
             console.log(data,"<==========getSendData");
         },

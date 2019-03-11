@@ -140,7 +140,8 @@ export default {
         drawChart() {
             let option = {
                 title: {
-                    text: '每日下载量'
+                    text: '每日下载量(已去重)',
+                    
                 },
                 tooltip: {
                     trigger: 'axis'

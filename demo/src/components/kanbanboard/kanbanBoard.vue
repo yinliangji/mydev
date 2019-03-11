@@ -19,10 +19,10 @@
         <Row :gutter="16" type="flex" justify="start" align="top">
           <Col span="3" v-if="groupLists.length > 0">
             <div class="centerHeader" @click="toStory(itemGroup,'us')" v-if="aside=='product'">
-              <a>{{itemGroup.text}}</a>
+              <a class="txtBlock" :title="itemGroup.text">{{itemGroup.text}}</a>
             </div>
             <div class="centerHeader" @click="toStory(itemGroup)" v-else>
-              <a>{{itemGroup.text}}</a>
+              <a class="txtBlock" :title="itemGroup.text">{{itemGroup.text}}</a>
             </div>
             <div>
               <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >添加用户故事</Button>

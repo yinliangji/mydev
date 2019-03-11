@@ -205,6 +205,7 @@ export default {
         console.log("每日下载量--updated-------",this.formValidate,this.dateList,this.valueList)
     },
     mounted(){
+        
         this.submitDate({startDate:Common.DateFormat(Common,new Date().getTime()-  86400000*30),endDate:Common.DateFormat(Common,new Date().getTime())});
     },
 }

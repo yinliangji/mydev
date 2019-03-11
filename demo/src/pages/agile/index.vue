@@ -727,9 +727,13 @@ export default {
         },
         goAgileDetailFn (I,P) {
 
-            Common.setStorageAndCookie(Common,"id",this.tableData[I].id)
-            Common.setStorageAndCookie(Common,"prj_id",this.tableData[I].prj_id)
-            Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id)
+            Common.setStorageAndCookie(Common,"id",this.tableData[I].id);
+            Common.setStorageAndCookie(Common,"prjId",this.tableData[I].id);
+
+            Common.setStorageAndCookie(Common,"prj_id",this.tableData[I].prj_id);
+            Common.setStorageAndCookie(Common,"prjSn",this.tableData[I].prj_id);
+            
+            Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id);
             
             /*
             Common.setCookie("id",this.tableData[I].id);

@@ -80,7 +80,7 @@ export default {
                                 //style:{color:'#2d8cf0'},
                                 //attrs:{title:"xxxxx",href:"###"},
                                 //domProps:{innerHTML:"内容",},
-                                "class":{txtBlock:true,txtBlockNone:false},
+                                //"class":{txtBlock:true,txtBlockNone:false},
                                 //attrs:{title:params.row.prj_name},
                                 on: {
                                     click: () => {
@@ -128,7 +128,7 @@ export default {
                 console.log("<======maven 活跃用户列表***response+++",response,myData.data.list,"======>");
                 if(myData.status == "success"){
                     this.tableData = myData.data;
-                    this.tableDAtaTatol = myData.total;
+                    this.tableDAtaTatol = myData.count || myData.total;
                 }else{
                     this.showError(URL+"_错误");
                 }
@@ -207,7 +207,8 @@ export default {
         console.log("每日下载量--updated-------",this.formValidate)
     },
     mounted(){
-        this.tableDataAjaxFn(getDayActiveUserList,this.tableDAtaPageCurrent,this.tableDAtaPageLine,Common.DateFormat(Common,new Date().getTime() - 86400000));
+        let _start_time = this.formValidate.start_time ? (typeof this.formValidate.start_time == "string" ? this.formValidate.start_time : Common.DateFormat(Common,this.formValidate.start_time)) : Common.DateFormat(Common,new Date().getTime() - 86400000);
+        this.tableDataAjaxFn(getDayActiveUserList,this.tableDAtaPageCurrent,this.tableDAtaPageLine,_start_time);
     },
 }
 </script>

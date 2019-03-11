@@ -2,13 +2,32 @@
 	<Layout class="main" id="main">
 		<PageLoading v-if="ispageLoading" />
 		<Content class="container">
-			<router-view class="ContView" name="Cont" />
+			<router-view v-if="isHidden" class="ContView" name="Cont" />
 		</Content>
 	</Layout>
 </template>
 <script>
 import PageLoading from '@/components/pageLoading'
 export default {
+	data(){
+		return {
+			isHidden:true,
+		}
+	},
+	provide(){
+		return {
+			reload:this.reload,
+		}
+	},
+	methods:{
+		reload(){
+			this.isHidden = false;
+			this.$nextTick(()=>{
+				this.isHidden = true;
+			})
+		},
+	},
+	//
 	components: {
 		PageLoading,
 	},

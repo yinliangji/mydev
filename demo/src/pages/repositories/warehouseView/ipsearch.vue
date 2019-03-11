@@ -126,7 +126,7 @@ export default {
                 console.log("<======maven 活跃用户列表***response+++",response,myData.data.list,"======>");
                 if(myData.status == "success"){
                     this.tableData = myData.data;
-                    this.tableDAtaTatol = myData.total;
+                    this.tableDAtaTatol = myData.count || myData.total;
                 }else{
                     this.showError(URL+"_错误");
                 }

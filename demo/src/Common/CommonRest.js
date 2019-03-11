@@ -18,7 +18,11 @@ CommonRest.restUrl = {
     /**** 敏捷项目添加 post****/
 
     "projectDetail": process.env.BASE_URL + "/project/detail/",
-    /**** 敏捷项目添加 post****/
+    /**** 敏捷项目详情获取 get****/
+
+    "proByUser": process.env.BASE_URL + "/project/proByUser/",
+    /**** 敏捷项目详情获取主键ID数组 get****/
+
 
     "projectAllgroup": process.env.BASE_URL + "/project/allgroup/",
     /**** 敏捷项目添加总体组 get****/

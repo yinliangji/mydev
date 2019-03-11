@@ -4118,6 +4118,7 @@ let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {
             "status": "进行中"
         }],
         "total|3-9": 3,
+        "count|3-9": 3,
         "per_page|3-9": 3,
     })
 }
@@ -4151,6 +4152,8 @@ let get_queryPublicRep = (val1 = 200, val2 = 1, val3 = 3) => {
         }],
 
         "total|20-30":1,
+        "count|20-30":1,
+        
     })
 }
 
@@ -4173,9 +4176,6 @@ app.all('/req/prj_time/', function(req, res) {
     res.json({status: "success",message: "add_users success",data:{end_time:"2019-05-01"}});
     res.end()
 });
-
-
-
 
 
 
@@ -4263,6 +4263,10 @@ app.all('/maven/getDownTopGroupByIp/', function(req, res) {
 });
 
 
+app.all('/project/proByUser/', function(req, res) {
+    res.json({status: "success",message: "proByUser success",data:[1,2,3,4,5,6,7,8,9]});
+    res.end()
+});
 
 
 /*************qhc */

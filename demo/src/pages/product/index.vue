@@ -208,6 +208,7 @@
 							:boardName="'productBoard'"
 							id="productBoardBox" 
 							v-if="kanbanboardIsShow"
+							@addUS="addItem"
 						/>
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div>
@@ -216,7 +217,24 @@
 			    </div>
 			</div>
 		</Card>
-		<!-- <ADDorEDITpop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow"  /> -->
+		
+		<AddPop 
+			:isShow="isShowAddPop" 
+			:isAdd="isAdd" 
+			:addLoading="true" 
+			@popClose="popCloseFn"  
+			@tableDataAdd="tableDataAddFn"
+			:UserstorytypeList="userstory_typeList"
+			:UserstorystatusList="userstory_statusList"
+			:ProiList="proiList"
+			:ChargerList="chargerList"
+			:ReqidList="req_idList"
+			:SprintList="sprintList"
+			:CurrentReqId="currentReqId" 
+
+			ref="AddPopDom"
+		/>
+		
 		<Modal v-model="cardpop" width="500" @on-cancel="cardpopClose">
             <p slot="header" style="color:#f60;text-align:center">
                 <Icon type="information-circled"></Icon>
@@ -240,7 +258,7 @@
 <script>
 import { EventBus } from "@/tools";
 import kanbanboard from "@/components/kanbanboard";
-import ADDorEDITpop from "./add_or_edit_pop";
+import AddPop from "./addpop";
 
 import API from '@/api'
 const {defaultAXIOS} = API;
@@ -352,6 +370,7 @@ export default {
 			//--------
 			isShowAddPop:false,
             isAdd:true,
+            currentReqId:"",
             tableDataRow:false,
 			currentView: "developList",//developList//kanbanboard
 
@@ -655,7 +674,7 @@ export default {
 	},
 	components: {
 		kanbanboard,
-		ADDorEDITpop,
+		AddPop,
 		Delpop,
 
 	},
@@ -674,12 +693,12 @@ export default {
         },
     },
     beforeDestroy(){
-      EventBus.$off("moveEnd", this.moveEnd);
-      EventBus.$off("clickItem", this.clicked);
-      EventBus.$off("search", this.searchHandle);
-      EventBus.$off("addTask", this.addNewTask);
-      EventBus.$off("bindSort", this.bindSortId);
-      EventBus.$off("storyBindSort", this.bindSortId);
+		EventBus.$off("moveEnd", this.moveEnd);
+		EventBus.$off("clickItem", this.clicked);
+		EventBus.$off("search", this.searchHandle);
+		EventBus.$off("addTask", this.addNewTask);
+		EventBus.$off("bindSort", this.bindSortId);
+		EventBus.$off("storyBindSort", this.bindSortId);
     },
 
 	mounted(){
@@ -691,18 +710,13 @@ export default {
 			this.currentView = CurView;
 			Common.SetSession("CurView",CurView);
 		}
-
 		this.getInfoFn(ID);
-
 		/* 看板开始 */
     	this.EventBusRegister();
         /* 看板结束 */
-
+        EventBus.$on("ReLoad",this.reLoad);
 		//Common.RemoveSession("allSession");
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
-
-		
-		
 	},
 	methods:{
 		optputExecl(){
@@ -720,7 +734,7 @@ export default {
 				sprint:this.formValidate.sprint,
 				group_name:this.formValidate.group_name,
 			}
-			let fileName = "用户故事Execl导出"
+			let fileName = "用户故事Excel导出"
 			return Common.DownFile(defaultAXIOS,this,userstoryOutExcel,params,fileName);
 		},
 		optputWord(){
@@ -1356,12 +1370,12 @@ export default {
             }
 
 		},
-		addItem(){
-			this.$router.push('/product/add')
-            return;
-			// console.log("this.isShowAddPop",this.isShowAddPop)
-			// this.isShowAddPop = true;
-   			// this.isAdd = true;
+		addItem(obj,req_id){
+			//this.$router.push('/product/add')
+            //return;
+            this.currentReqId = req_id ? req_id : "";
+			this.isShowAddPop = true;
+   			this.isAdd = true;
 		},
 		editItem(I){
 			Common.GoUserstorySession(Common,this);
@@ -1372,10 +1386,16 @@ export default {
             // this.isAdd = false;
             // this.tableDataRow = this.tableData[I]
 		},
-		popCloseFn(){
+		popCloseFn(is,obj){
 			this.isShowAddPop = false;
             this.isAdd = true;
             this.tableDataRow = false;
+            if(obj){
+            	this.reLoad();
+            }
+		},
+		reLoad(){
+			this.reload();
 		},
 		goAddDevelopmentFn (index) {
 			Common.RemoveSession("isClickedDelBtn");
@@ -1402,7 +1422,8 @@ export default {
 		resetList(){
 			this.tableData = [];
 		},
-	}
+	},
+	inject:["reload"],
 }
 </script>
 <style lang="less" scoped>

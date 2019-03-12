@@ -176,7 +176,6 @@
     </div>
 </template>
 <script>
-
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
@@ -394,6 +393,7 @@ export default {
         this.EventBusRegister();
         this.getRequirementStatListFn(getRequirementStatList,this.getID(),Common.GETprjid(this,Common));
         this.getInfoFn(ID);
+        EventBus.$on("ReLoad",this.reLoad);
     },
     beforecreated(){
         console.log("项目需求项--beforecreated-------",this.formValidate)
@@ -1136,6 +1136,7 @@ export default {
         //     }
         // },
     },
+    inject:["reload"],
 }
 </script>
 <style lang="less" scoped>

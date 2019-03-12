@@ -391,6 +391,18 @@ const router = new Router({
             },
         },
         {
+            path: '/bugUrl',
+            name: 'bugUrl',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/bugUrl/"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
+        {
             path: '/documents',
             name: 'documents',
             components: {

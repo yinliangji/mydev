@@ -74,7 +74,7 @@
                                     @click="addDepend">
                                     添加依赖项
                                 </Button>
-                                
+                                <ToolTip  placement="top-start" :T="-4" content="建议针对项目组外部依赖项的跟踪" />
                             </span>
                         </FormItem>
 

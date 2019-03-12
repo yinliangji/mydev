@@ -320,7 +320,8 @@ export default {
       }
     },
     addItem(req_id){
-      this.$router.push({path:'/product/add',query:{req_id}})
+      this.$emit("addUS",{},req_id)
+      //this.$router.push({path:'/product/add',query:{req_id}})
     },
     addNewTask(id){
       this.$router.push({

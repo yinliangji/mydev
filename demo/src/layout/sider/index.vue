@@ -8,6 +8,7 @@
 </template>
 <script>
 import Common from '@/Common';
+import { EventBus } from "@/tools";
 export default {
 	name: 'sider',
 	data(){
@@ -27,7 +28,8 @@ export default {
 				'userAdvice':["1","1-11"],
 				'dependManage':["1","1-12"],
 				'testCaseUrl':["1","1-15"],
-				'intfReq':["1","1-16"],
+				'bugUrl':["1","1-16"],
+				//'intfReq':["1","1-18"],
 				'setting':["1","1-17"],
 				'maven':["1","1-22"],
 				'maven/produceSearch':["1","1-23"],
@@ -42,6 +44,7 @@ export default {
 	methods:{
 		collapsedSider () {
 	        this.$refs.SiderBox.toggleCollapse();
+	        EventBus.$emit('ReLoad',true);
 	    },
 	    onOpenChange(name){
 			console.log(name)
@@ -127,7 +130,7 @@ export default {
 			let page11 = "userAdvice";
 			let page12 = "dependManage";
 			let page15 = "testCaseUrl";
-			let page16 = "intfReq";
+			let page16 = "bugUrl";
 			let page17 = "setting";
 			let page22 = "maven";
 			let page23 = "maven/produceSearch";

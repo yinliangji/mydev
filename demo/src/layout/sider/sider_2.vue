@@ -47,6 +47,11 @@
 			<Icon type="medkit"></Icon>
 			<span>测试案例管理</span>
 		</MenuItem>
+		<MenuItem name="1-16" title="缺陷管理">
+			<router-link to="/bugUrl"  />
+			<Icon type="alert-circled"></Icon>
+			<span>缺陷管理</span>
+		</MenuItem>
 		<MenuItem name="1-17" title="项目设置">
 			<router-link  to="/setting" />
 			<Icon type="settings"></Icon>

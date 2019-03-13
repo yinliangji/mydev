@@ -303,6 +303,9 @@ CommonRest.restUrl = {
     "searchJarByKey": process.env.BASE_URL + "/maven/searchJarByKey/",
     /**** Maven制品搜索 post****/
 
+    "searchJarByGav": process.env.BASE_URL + "/maven/searchJarByGav/",
+    /**** Maven制品搜索 post****/
+
     "getAllRepId": process.env.BASE_URL + "/maven/getAllRepId/",
     /**** Maven制品搜索获取仓库repid get****/
     "queryJarDetailByGav": process.env.BASE_URL + "/maven/queryJarDetailByGav/",

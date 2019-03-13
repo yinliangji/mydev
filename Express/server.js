@@ -4301,6 +4301,14 @@ app.all('/maven/searchJarByKey/', function(req, res) {
     res.end()
 });
 
+app.all('/maven/searchJarByGav/', function(req, res) {
+    let resVal = searchJarByKey(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(searchJarByKey(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
 
 app.all('/maven/getAllRepId/', function(req, res) {
     res.json({status: "success",message: "proByUser success",data:["all","id1","id2",3,4,5,6,7,8,9]});

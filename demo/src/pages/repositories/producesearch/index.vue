@@ -103,7 +103,7 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {searchJarByKey,getAllRepId} = Common.restUrl;
+const {searchJarByKey,searchJarByGav,getAllRepId} = Common.restUrl;
 import DetailPop from './detailpop'
 export default {
 	name: 'producesearch',
@@ -268,7 +268,6 @@ export default {
 
         },
         tableDataAjaxFn(URL = "",params = {}){
-
             defaultAXIOS(URL,params,{timeout:20000,method:'post'}).then((response) => {
                 let myData = response.data;
                 console.log("<======maven 制品搜索***response+++",response,myData.data,"======>");
@@ -283,7 +282,6 @@ export default {
                 this.showError(error);
             });
         },
-        
         submitDate(val){
             let tempData = val == "keyword" ? {
                 repId:this.formValidate.repId,
@@ -294,7 +292,8 @@ export default {
                 artifactId:this.formValidate.artifactId,
                 version:this.formValidate.version,
             }
-            this.tableDataAjaxFn(searchJarByKey,tempData);
+            let URL = val == "keyword" ? searchJarByKey : searchJarByGav;
+            this.tableDataAjaxFn(URL,tempData);
         },
         changeCurrentPage(i) {
         },

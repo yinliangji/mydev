@@ -23,6 +23,7 @@
             </div>
             <div class="centerHeader" @click="toStory(itemGroup)" v-else>
               <a class="txtBlock" :title="itemGroup.text">{{itemGroup.text}}</a>
+              <!-- <span class="imgStatus">已完成</span> -->
             </div>
             <div>
               <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >添加用户故事</Button>
@@ -147,7 +148,7 @@ export default {
       IS:false,
       addSpace:0,
       isPut:["07","08"],
-
+      imgStatus:require("@/assets/images/user_02.png"),
     };
   },
   created(){
@@ -215,8 +216,6 @@ export default {
     },
     kanbanScrollFn(){
 
-      
-
       if(this.$route.path == "/demand" || this.$route.path ==  "/product" || this.$route.path ==  "/development" || this.$route.path ==  "/dependManage"){}else{return};
       let that = this;
       let gap = that.$route.path == "/demand" || that.$route.path ==  "/product" ? 0 : 0;
@@ -258,16 +257,11 @@ export default {
           ivuRowFlexDom.style.left = "0";
           ivuRowFlexDom.style.zIndex = "100";
 
-          
-
           if(numberBox && numberBox.length){
             for(let i=0;i<numberBox.length;i++){
               numberBox[i].style.top = "5px";
             }
           }
-          
-
-          //number
 
         }else{
           kanbanHeaderDom.removeAttribute('style');
@@ -324,13 +318,14 @@ export default {
       //this.$router.push({path:'/product/add',query:{req_id}})
     },
     addNewTask(id){
-      this.$router.push({
-        path:'/development/add',
-        query:{
-          addOrModifyStatus:true,
-          userStoryId:id,
-        }
-      })
+      // this.$router.push({
+      //   path:'/development/add',
+      //   query:{
+      //     addOrModifyStatus:true,
+      //     userStoryId:id,
+      //   }
+      // })
+      this.$emit("userStoryIdFn",id);
     },
     toStory(IG,column){
       let obj =  column && column == 'us' ? 
@@ -516,6 +511,11 @@ let kanbanScrollFn = ()=>{
 
 </script>
 <style scoped>
+.imgStatus{
+  background: #f0d0a2; 
+  border-radius:4px; 
+  padding: 4px;
+}
 .noPutBg{
   background: #f8f8f9;
 }

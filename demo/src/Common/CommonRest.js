@@ -299,6 +299,14 @@ CommonRest.restUrl = {
 
     "getDownTopGroupByIp": process.env.BASE_URL + "/maven/getDownTopGroupByIp/",
     /**** Maven仓库概览下载排行榜 get****/
+
+    "searchJarByKey": process.env.BASE_URL + "/maven/searchJarByKey/",
+    /**** Maven制品搜索 post****/
+
+    "getAllRepId": process.env.BASE_URL + "/maven/getAllRepId/",
+    /**** Maven制品搜索获取仓库repid get****/
+    "queryJarDetailByGav": process.env.BASE_URL + "/maven/queryJarDetailByGav/",
+    /**** Maven制品搜索获取详情 post****/
 }
 
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);

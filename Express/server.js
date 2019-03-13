@@ -4269,6 +4269,78 @@ app.all('/project/proByUser/', function(req, res) {
 });
 
 
+
+
+let searchJarByKey = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message getDayActiveUserList",
+        "data|10": [{
+            "repId|5-8": /[a-zA-Z]/,
+            "groupId|5-8": /[a-zA-Z0-9]/,
+            "artifactId|5-8": /[a-zA-Z]/,
+            "version|1-100":0,
+            "type|1":["jar","pom","java-source"],
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+        }],
+        "count|20-30":0,
+        "total|20-30":0,
+        "pagetotal|20-30":0,
+    })
+}
+
+
+
+
+app.all('/maven/searchJarByKey/', function(req, res) {
+    let resVal = searchJarByKey(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(searchJarByKey(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+app.all('/maven/getAllRepId/', function(req, res) {
+    res.json({status: "success",message: "proByUser success",data:["all","id1","id2",3,4,5,6,7,8,9]});
+    res.end()
+});
+
+
+
+let queryJarDetailByGav = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message getDayActiveUserList",
+        "data|4": [{
+            "fileName|1": ["file1.rar","file2.rar"],
+            "url|1": ["//www.baidu.com/","//www.sohu.com/"],
+            "xml|1": ["<w><v>vw</v></w>","<m><z>mz</z></m>"],
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+        }],
+        "count|20-30":0,
+        "total|20-30":0,
+        "pagetotal|20-30":0,
+    })
+}
+
+
+
+
+app.all('/maven/queryJarDetailByGav/', function(req, res) {
+    let resVal = queryJarDetailByGav(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(queryJarDetailByGav(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+
+
+
 /*************qhc */
 /**
  * 监听9090端口

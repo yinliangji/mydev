@@ -4231,6 +4231,7 @@ let getDayActiveUserList = (val1 = 200, val2 = 1, val3 = 3) => {
         }],
         "total|20-30":0,
         "pagetotal|20-30":0,
+        "totalDown|100-1000":0,
     })
 }
 
@@ -4264,7 +4265,7 @@ app.all('/maven/getDownTopGroupByIp/', function(req, res) {
 
 
 app.all('/project/proByUser/', function(req, res) {
-    res.json({status: "success",message: "proByUser success",data:[1,2,3,4,5,6,7,8,9]});
+    res.json({status: "success",message: "proByUser success",data:[3,1,2,4,5,6,7,8,9]});
     res.end()
 });
 

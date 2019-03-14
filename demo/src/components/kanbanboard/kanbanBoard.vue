@@ -23,10 +23,10 @@
             </div>
             <div class="centerHeader" @click="toStory(itemGroup)" v-else>
               <a class="txtBlock" :title="itemGroup.text">{{itemGroup.text}}</a>
-              <!-- <span class="imgStatus">已完成</span> -->
+              <span class="imgStatus">{{itemGroup.us_status}}</span>
             </div>
             <div>
-              <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >添加用户故事</Button>
+              <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >快捷添加</Button>
               <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" >添加工作项</Button>
             </div>
           </Col>

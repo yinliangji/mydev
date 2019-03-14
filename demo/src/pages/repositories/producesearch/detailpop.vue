@@ -1,8 +1,10 @@
 <template>
-    <Modal ref="busPop" v-model="modaAdd" title="浏览" @on-ok="ok" @on-cancel="cancel" ok-text="关闭" :loading="modal_add_loading" width="800px">
+    <Modal id="proSearchDetailPop" ref="busPop" v-model="modaAdd" title="浏览" @on-ok="ok" @on-cancel="cancel" ok-text="关闭" :loading="modal_add_loading" width="800px">
         <div class="productAddBox" id="depdPopBox">
             <div class="tableBox">
-                <p>ICDP中央仓库可能需要从远程仓库缓存一下资源，如超时，稍后再次下载即可！</p>
+                <p>
+                    ICDP中央仓库可能需要从远程仓库缓存一下资源，如超时，稍后再次下载即可！<br><br>
+                </p>
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
                   <tbody>
                     <tr>
@@ -19,7 +21,7 @@
                                 >{{item.fileName}}
                             </a>
                         </td>
-                        <th style="color:white;text-align:left;padding-left:1em;background: #999;position:relative;">
+                        <th style="background: none;color:#495060;text-align:left;padding-left:1em;position:relative;">
                             <pre>{{item.xml}}</pre>
                             <input 
                                 :id="'copy_'+index" 
@@ -46,9 +48,6 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 const {queryJarDetailByGav} = Common.restUrl;
-
-
-
 export default {
     props: {
         isShow: {
@@ -164,6 +163,9 @@ export default {
 
 </style>
 <style>
+#proSearchDetailPop .ivu-btn-text {
+    visibility: hidden;
+}
 .copyinput{
     border:none;
     opacity:0;

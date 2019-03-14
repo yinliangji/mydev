@@ -208,7 +208,7 @@
 							:boardName="'productBoard'"
 							id="productBoardBox" 
 							v-if="kanbanboardIsShow"
-							@addUS="addItem"
+							@addUS="speedAddItem"
 						/>
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div>
@@ -1371,8 +1371,13 @@ export default {
 
 		},
 		addItem(obj,req_id){
-			//this.$router.push('/product/add')
-            //return;
+			this.$router.push('/product/add')
+            return;
+            this.currentReqId = req_id ? req_id : "";
+			this.isShowAddPop = true;
+   			this.isAdd = true;
+		},
+		speedAddItem(obj,req_id){
             this.currentReqId = req_id ? req_id : "";
 			this.isShowAddPop = true;
    			this.isAdd = true;

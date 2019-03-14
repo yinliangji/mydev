@@ -1,12 +1,14 @@
 <template>
-  <div class="curPosition">
-    <Icon type="navicon-round" style="color:#01babc;font-size:16px;"></Icon>
+    <div class="curPosition">
+        <Icon type="navicon-round" style="color:#01babc;font-size:16px;"></Icon>
 
-    <span>选择项目</span>
-    <Select v-model="curProject" clearable filterable style="width:300px" @on-change="changeCurProject">
-      <Option v-for="(item,index) in projectList" :value="item.id" :key="index">{{ item.prj_name }}</Option>
-    </Select>
-  </div>
+        <span>选择项目</span>
+        <Select v-model="curProject" clearable filterable style="width:300px" @on-change="changeCurProject">
+            <Option v-for="(item,index) in projectList" :value="item.id" :key="index">{{ item.prj_name }}</Option>
+        </Select>
+        <a v-if="isTestBtn" @click="testBtn">from=nav</a>
+        <a v-if="isTestBtn" @click="testBtn2">maven</a>
+    </div>
 </template>
 
 <script>
@@ -18,6 +20,7 @@ export default {
         return {
             projectList: [],
             curProject: "",
+            isTestBtn:window.location.href.indexOf('//127.0.0.1:') != -1 ? true : false,
         };
     },
     watch: {
@@ -28,6 +31,12 @@ export default {
        },
     },
     methods: {
+        testBtn(){
+            this.$router.push({path: '/agile/detail', query: {from:"nav"}});
+        },
+        testBtn2(){
+            this.$router.push({path: '/maven'});
+        },
         delUrlParam(url, ref) {
             // 如果不包括此参数
             if (url.indexOf(ref) == -1)
@@ -145,7 +154,6 @@ export default {
             return arr.find(item=>item.id == val);
         },
         changeCurProject(data) {
-            console.error(data)
             if(!data){return}
             if(this.$route.name == "Product"){
                 let _url = this.$route.fullPath
@@ -171,7 +179,7 @@ export default {
             
             let prjNumArr = this.projectList;
             for(var i=0;i<prjNumArr.length;i++){
-                if(this.getCookie("prjId") == prjNumArr[i].id){
+                if(this.getCookie("prjId") == prjNumArr[i].id || this.getCookie("id") == prjNumArr[i].id){
                     sessionStorage.setItem("QprjNumber",prjNumArr[i].prj_id);
                     sessionStorage.setItem("QprjName",prjNumArr[i].prj_name);
                     this.setCookie("prj_name",prjNumArr[i].prj_name);

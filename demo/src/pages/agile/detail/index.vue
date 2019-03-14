@@ -1,5 +1,5 @@
 <template>
-	<div class="pageContent">
+	<div class="pageContent" v-show="detailBoxIsHidden">
 		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'7'" />
 		<selectMenu @changeSelect="selectMenuFn" @sendData="getSendData"></selectMenu>
        
@@ -229,6 +229,7 @@
 	</div>
 </template>
 <script>
+import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
@@ -238,7 +239,7 @@ export default {
         return {
         	modaAdd: false,
             modal_add_loading: true,
-
+            detailBoxIsHidden:true,
             technologyORbusiness:true,
             formItem: {
                 technologyName:"",
@@ -358,6 +359,58 @@ export default {
     },
     created(){
         console.log("项目详情页--created-------");
+        if(this.$router.history.current.query.from && this.$router.history.current.query.from == "nav"){
+            this.delectLocalStorage();
+            let userName = Common.getStorageAndCookie(this,Common,"username");
+            let myID = Common.GETID(this,Common,"inCookie");
+            let exeFn = ()=>{
+                this.getPermissionFn(getPermission).then((RESULT)=>{
+
+                    setTimeout(()=>{
+                        EVENT.emit("SIDER1",RESULT);
+                    },500);
+                    this.getMainListFn(proByUser).then((response)=>{
+                        let result = response.find(item=>item == myID)
+                        if(!result){
+                            result = response[0];
+                        }
+                        this.tableDataAjaxFn(projectDetail,result).then((res)=>{
+                            this.$router.push({path: '/agile/detail', query: {id:result,prj_id:res}});
+                            this.reload();
+                        },()=>{
+
+                        })
+                    },()=>{
+                        this.$router.push({path: '/agile'});
+                    })
+                   
+                },()=>{
+                    this.showError("权限不足，不能有任何动作,跳转的列表页！");
+                    this.$router.push({path: '/agile'});
+                })
+            }
+            EVENT.on("USER",(result)=>{
+                if(Common.getStorageAndCookie(this,Common,"username")){
+                    console.log('EVENT.on("USER",(result) -- exeFn()',result);
+                    exeFn();
+                }
+            })
+            if(userName){
+                console.log('直接执行 exeFn()');
+                exeFn();
+            }else{
+                if(window.myNumber){return}
+                console.log('直接执行 Store.dispatch');
+                Store.dispatch('EVENT_EMIT/incrementAsync', {isEmit: false,})
+                setTimeout(()=>{
+                    Store.dispatch('EVENT_EMIT/incrementAsync', {isEmit: "true",})
+                    window.myNumber = false;
+                },1)
+                window.myNumber = true;
+                
+            }
+        }
+
     },
     beforeUpdate(){
         console.log("项目详情页--beforeUpdate-------")
@@ -367,24 +420,7 @@ export default {
     },
     mounted(){
         if(this.$router.history.current.query.from && this.$router.history.current.query.from == "nav"){
-            let myID = Common.GETID(this,Common);
-            this.getMainListFn(proByUser).then((response)=>{
-                let result = response.find(item=>item == myID)
-                if(!result){
-                    result = response[0];
-                }
-                this.tableDataAjaxFn(projectDetail,result).then((res)=>{
-                    this.$router.push({path: '/agile/detail', query: {id:result,prj_id:res}});
-                    this.reload();
-                },()=>{
-
-                })
-
-            },()=>{
-                this.$router.push({path: '/agile'});
-            })
         }else if(Common.GETID(this,Common)){
-            
             let myID = Common.GETID(this,Common);
     		Common.setStorageAndCookie(Common,"id",myID);
     		this.tableDataAjaxFn(projectDetail,myID).then((prj_id)=>{
@@ -394,13 +430,15 @@ export default {
                 console.log(error);
                 this.showError(error);
             })
+            this.getPermissionFn(getPermission)
     	}else{
+            this.$router.push({path: '/agile'})
             
+            /*
             if(Common.GETID(this,Common)){
     			this.tableDataAjaxFn(projectDetail,Common.GETID(this,Common)).then((prj_id)=>{
                     this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),prj_id)
                     this.tableDAtaPageCurrent = 1;
-                
                 },(error)=>{
                     console.log(error);
                     this.showError(error);
@@ -408,11 +446,20 @@ export default {
     		}else{
     			this.$router.push({path: '/agile'})
     		}
+            */
     	}
-        this.getPermissionFn(getPermission)
+        
     },
     
     methods: {
+        delectLocalStorage(){
+            localStorage.removeItem("id");
+            localStorage.removeItem("prjId");
+            localStorage.removeItem("prjSn");
+            localStorage.removeItem("prj_id");
+            localStorage.removeItem("prj_name");
+            localStorage.removeItem("prod_id");
+        },
         getMainListFn(URL = "",page = 1,pageline = 10){
             let username = Common.getCookie("username");
             if(!username){return Promise.reject("没有username")}
@@ -579,7 +626,8 @@ export default {
             return Common.auth(this,KEY)
         },
         getPermissionFn(URL){
-            Common.GetPermission(defaultAXIOS,this,URL);
+            //Common.GetPermission(defaultAXIOS,this,URL);
+            return Common.GetPermission(defaultAXIOS,this,URL);
         },
         outputExecl(){
             let params = {

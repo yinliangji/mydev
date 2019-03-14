@@ -94,12 +94,14 @@ export default {
                 },
                 {
                     title: '下载数量',
-                    key: 'value'
+                    key: 'value',
+                    sortable: true,
                 },
                 {
                     title: '使用时间',
                     key: 'time',
                     align: 'center',
+                    sortable: true,
                 },
             ],
             tableData: [],

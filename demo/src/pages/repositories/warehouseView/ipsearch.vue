@@ -87,17 +87,31 @@ export default {
                 },
                 {
                     title: '下载数量',
-                    key: 'value'
+                    key: 'value',
+                    sortable: true,
+                    renderHeader: (h, params) => {
+                        return h('span', {}, [
+                            h('span', {}, '下载数量'),
+                            h('span', {
+                                style: {fontSzie:'12px',color:"#666",fontWeight:"normal",},
+                            }, '(下载总数:'),
+                            h('span', {
+                                style: {fontSzie:'12px',color:"#666",fontWeight:"normal",},
+                            }, this.tableDAtaTatolDown+')'),
+                        ]);
+                    },
                 },
                 {
                     title: '使用时间',
                     key: 'time',
                     align: 'center',
+                    sortable: true,
                 },
             ],
             tableData: [],
 
             tableDAtaTatol:0,
+            tableDAtaTatolDown:0,
             tableDAtaPageLine:10,
             tableDAtaPageCurrent:1,
             actionArr:[],
@@ -127,6 +141,7 @@ export default {
                 if(myData.status == "success"){
                     this.tableData = myData.data;
                     this.tableDAtaTatol = myData.count || myData.total;
+                    this.tableDAtaTatolDown = myData.totalDown || 0;
                 }else{
                     this.showError(URL+"_错误");
                 }

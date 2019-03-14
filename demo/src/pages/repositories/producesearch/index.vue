@@ -159,27 +159,32 @@ export default {
                     title: '仓库',
                     key: 'repId',
                     align: 'center',
+                    sortable: true,
                     
                 },
                 {
                     title: 'groupId',
                     key: 'groupId',
                     align: 'center',
+                    sortable: true,
                 },
                 {
                     title: 'artifactId',
                     key: 'artifactId',
                     align: 'center',
+                    sortable: true,
                 },
                 {
                     title: 'version',
                     key: 'version',
                     align: 'center',
+                    sortable: true,
                 },
                 {
                     title: 'packaging',
                     key: 'type',
                     align: 'center',
+                    sortable: true,
                 },
                 {   title: '操作',
                     key: 'action',

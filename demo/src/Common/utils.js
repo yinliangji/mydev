@@ -147,13 +147,22 @@ export default class Utils extends CommonRest {
     } 
 
     //删除cookies 
-    static delCookie(name) { 
-        var path = ";path=/";
-        var exp = new Date(); 
-        exp.setTime(exp.getTime() - 1); 
-        var cval=getCookie(name); 
-        if(cval!=null) 
-            document.cookie= name + "="+cval+path+";expires="+exp.toGMTString(); 
+    static delCookie(name) {
+      let getCookie = (name)=> { 
+          var arr,reg = new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+          if(arr = document.cookie.match(reg)){
+              return unescape(arr[2]); 
+          }else{ 
+              return null; 
+          }
+      } 
+      var path = ";path=/";
+      var exp = new Date(); 
+      exp.setTime(exp.getTime() - 1); 
+      var cval=getCookie(name); 
+      if(cval!=null){ 
+        document.cookie= name + "="+cval+path+";expires="+exp.toGMTString(); 
+      }
     }
     //使用示例 
     // setCookie("name","hayden"); 

@@ -47,7 +47,7 @@
                 <div class="tableBox" style="position:relative;">
                     <ToolTip 
                         placement="right"
-                        :L="365" 
+                        :L="ToolTipL" 
                         :T="25" 
                         :Z="10" 
                         :W="300"  
@@ -87,7 +87,7 @@
                             </Col>
                             <Col span="2" >
                                 <img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
-                                @click="showTask" class="cursor" title="用户故事看板">
+                                @click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn2">
                             </Col>
                             
                             <Col span="16">
@@ -190,6 +190,7 @@ export default {
     name: 'demand',
     data () {
         return {
+            ToolTipL:400,
             req_statList:[],
             isShowAddPop:false,
             isAdd:true,
@@ -380,6 +381,9 @@ export default {
       EventBus.$off("storyBindSort", this.bindSortId);
     },
     mounted(){
+
+        this.ToolTipL = Common.HelpLeft("kanbanShowBtn2");
+        
         this.getPermissionFn(getPermission);
         let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 

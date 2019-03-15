@@ -366,10 +366,10 @@ export default {
                         );
                     }
                 },
-                {
-                    title: '所属产品',
-                    key: 'prod_name'
-                },
+                // {
+                //     title: '所属产品',
+                //     key: 'prod_name'
+                // },
                 {
                     title: '开始时间',
                     key: 'start_time',

@@ -14,7 +14,7 @@
 		                            <Button type="success" @click="addpart('addPartPopBox')" :disabled="isModify">添加小组</Button>
 		                        </div>
 		                        <!--  -->
-		                        <div class="newAddGroup">
+		                        <div class="newAddGroup" id="settingAddBox">
 		                            <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" >
 		                                <Col span="20">
 		                                    <FormItem 
@@ -822,5 +822,20 @@ export default {
 #settingPage .ivu-form-item-label{
 	overflow:hidden;
 	text-overflow: ellipsis;
+}
+#settingAddBox > div {
+	border-bottom: 1px dashed #ccc;
+	margin-bottom: 5px;
+}
+#settingAddBox > div .ivu-form-item {
+	margin-bottom: 10px;
+}
+#settingAddBox > div:last-of-type{
+	border:none;
+	margin-bottom: 0;
+}
+#settingAddBox > div:first-of-type{
+	border-top:1px dashed #ccc;
+	padding-top: 5px;
 }	
 </style>

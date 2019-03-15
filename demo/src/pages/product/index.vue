@@ -114,7 +114,7 @@
 			    <div class="tableBox" style="position:relative;">
 			    	<ToolTip 
 			    		placement="right"
-			    		:L="330" 
+			    		:L="ToolTipL" 
 			    		:T="25" 
 			    		:Z="10" 
 			    		:W="270"  
@@ -142,7 +142,7 @@
 							</Col>
 							<Col span="2" >
 								<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
-								@click="showTask" class="cursor" title="用户故事看板">
+								@click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn">
 							</Col>
 							<Col span="17" style="text-align:right;" >
 
@@ -366,6 +366,7 @@ export default {
 	data() {
 		let that = this;
 		return {
+			ToolTipL:400,
 			isShowMoreShow:false,
 			//--------
 			isShowAddPop:false,
@@ -702,6 +703,9 @@ export default {
     },
 
 	mounted(){
+		
+		this.ToolTipL = Common.HelpLeft("kanbanShowBtn");
+
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 		this.getPermissionFn(getPermission);
 

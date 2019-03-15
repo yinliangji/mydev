@@ -347,38 +347,7 @@ export default {
         let _this = this;
         const validateDateEnd = Common.checkEndDate(this);
         const validatePart = Common.checkPart(this);
-        /*
-        const validateDateEnd = (rule, value, callback) => {
-            if (value) {
-                let Timer = new Date(value).getTime() - new Date(this.formValidate.start_time).getTime();
-                if(Timer >= 0){
-                    callback()
-                }else{
-                    return callback(new Error('结束日期早于开始日期！'));
-                }
-            }else{
-                callback()  
-            }
-        };
-
-        const validatePart = (rule, value, callback) => {
-            console.log(value)
-            if(!value){
-                return callback(new Error('内容不能为空！'));    
-            }else{
-                if(this.formValidate.AddGroupList.length){
-                    for(var i=0;i<this.formValidate.AddGroupList.length;i++){
-                        if(this.formValidate.AddGroupList[i].myValue == (value+"")){
-                            return callback(new Error('内容重复！')); 
-                        }
-                    }
-                    callback()
-                }else{
-                    callback()
-                }
-            }
-        };
-        */
+       
         return {
             options3: {
                 disabledDate (date) {
@@ -412,56 +381,14 @@ export default {
                 testerGroup:[],
                 prj_id:'',
 
-
-
-
-
-                
-                // date:[],
-                // startTime: '',
-                // endTime: '',
-                // manager:"", 
-                // developer:"", 
-                // tester:"", 
-                // maintainer:"", 
-                // technology: [],
-                // moudle:"",
-                // group:"",
             },
-            prod_idList: [
-                // {
-                //   "id":1 ,
-                //   "product_id":"x000001",
-                //   "product_name":"product",
-                 
-                // }
-                // {
-                //     value: 'New York1',
-                //     label: 'New York总体组人1'
-                // },
-            ],
-            AddGroupList:[
-
-            ],
-            allgroupList: [
-               
-            ],
-            managerGroupList: [
-               
-            ],
-            developerGroupList: [
-               
-            ],
-            testerGroupList: [
-               
-            ],
-            
-            moduleList: [
-                // {
-                //     value: '模块1-1',
-                //     label: '模块1'
-                // },
-            ],
+            prod_idList: [],
+            AddGroupList:[],
+            allgroupList: [],
+            managerGroupList: [],
+            developerGroupList: [],
+            testerGroupList: [],
+            moduleList: [],
             ruleValidate: {
                 prod_id: [
                     { required: false,type: 'string',  message: 'Please select gender', trigger: 'change' }
@@ -561,18 +488,14 @@ export default {
                 partName: [
                     { required: true, validator: validatePart,  trigger: 'blur' }
                 ],
-                
             },
-
             inputLoad:false,
-
-            
         }
     },
     mounted(){
         this.addTeamFn(addTeam)
 
-        let ID = Common.GETID(this,Common) ? Common.GETID(this,Common) : "";
+        let ID = Common.GETID(this,Common,"inUrl") ? Common.GETID(this,Common,"inUrl") : "";
         let PRJ_ID = Common.GETprjid(this,Common) ? Common.GETprjid(this,Common) : "";
         this.projectGetProdFn(projectGetProd,{id:ID,prj_id:PRJ_ID});
         if(ID && PRJ_ID){
@@ -787,9 +710,6 @@ export default {
                 }
                 addsystem(phy,myData.phySystem)
                 addsystem(_log,myData.logicSystem)
-
-                
-
                 
                 let checkSystem = (arr,lab)=>{
                     let check = arr.findIndex(
@@ -807,8 +727,6 @@ export default {
                     !checkSystem(this.formValidate.AddGroupList,"物理子系统") && this.formValidate.AddGroupList.unshift(phy);
                 },1)
 
-                
-
                 this.formValidate.prj_type = this.formValidate.prj_type+"";
 
                 this.formValidate.pid = this.formValidate.pid ? this.formValidate.pid+"" : "";
@@ -821,10 +739,6 @@ export default {
                     }
                 }
 
-                
-
-                 //     value: 'New York1',
-                //     label: 'New York总体组人1'
                 let groupList = (Arr)=>{
                     let _demoObj = {};
                     let _demoArr = [];
@@ -853,15 +767,10 @@ export default {
                     }
                 }
 
-
-                //let roleUserInfo = myData.data.role_user_info ?
                 if(myData.role_user_info && myData.role_user_info.length){
-                    
-
                     
                     let _tempObj = false;
                     for(var J=0;J< myData.role_user_info.length;J++){
-
 
                         _tempObj = {
                             myRef:"selfRef",
@@ -883,18 +792,12 @@ export default {
                         _tempObj.groupList = groupList(myData.role_user_info[J].member);
                         _tempObj.group = group(myData.role_user_info[J].member); 
                         //_tempObj.groupList = [{"value":"lizhuo.zh","label":"李卓"}]; 
-                       
                         
                         this.formValidate.AddGroupList.push(_tempObj);
                         _tempObj = false;
                     }
                     //
                 }
-
-
-
-
-
 
             }).catch( (error) => {
                 console.log(error);
@@ -1021,20 +924,7 @@ export default {
                 logicSystem:_logicSystem,//子系统
                 phySystem:_phySystem,//子系统
 
-
-               
-                // allgroup: this.formValidate.allgroup.join(_join),
-                // managerGroup: this.formValidate.managerGroup.join(_join),
-                // developerGroup: this.formValidate.developerGroup.join(_join),
-                // testerGroup: this.formValidate.testerGroup.join(_join),
                 
-                //num: parseInt(Math.random()*100),
-                //manager:"经理",
-                //group:"group|group",
-                // startTime:new Date(this.formValidate.date[0]).Format("yyyy-MM-dd"),
-                // endTime:new Date(this.formValidate.date[1]).Format("yyyy-MM-dd"),
-                // startTime:this.formValidate.startDate,
-                // endTime:this.formValidate.endDate,
             }
 
             //projectEdit

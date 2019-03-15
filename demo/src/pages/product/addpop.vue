@@ -13,14 +13,14 @@
             </FormItem>
 
             <Row>
-                <Col span="12">
+                <Col span="10">
                    <FormItem label="优先级" prop="proi">
                         <RadioGroup v-model="formValidate.proi">
                             <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
                         </RadioGroup>
                     </FormItem>
                 </Col>
-                <Col span="12">
+                <Col span="14">
                      <FormItem label="责任人"  prop="charger">
                         <Select filterable clearable v-model="formValidate.charger" placeholder="请选择责任人">
                             <Option v-for="(item,index) in chargerList" :key="index" :value="item.value">{{item.label}}</Option>
@@ -41,7 +41,7 @@
             </FormItem>
 
             <FormItem label="所属需求项" prop="req_id">
-                <Select ref="req_idSelect" filterable clearable v-model="formValidate.req_id" placeholder="请选择所属需求项">
+                <Select ref="req_idSelect" disabled filterable  v-model="formValidate.req_id" placeholder="请选择所属需求项">
                     <Option v-for="(item , index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
                 </Select>
                 <ToolTip :W="135" content="此用户故事来源的需求项" />

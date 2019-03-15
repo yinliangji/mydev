@@ -18,16 +18,16 @@
       <div class="row-wrapper" v-for="(itemGroup, index) in groupLists" v-if="groupList.length > 0">
         <Row :gutter="16" type="flex" justify="start" align="top">
           <Col span="3" v-if="groupLists.length > 0">
-            <div class="centerHeader" @click="toStory(itemGroup,'us')" v-if="aside=='product'">
-              <a class="txtBlock" :title="itemGroup.text">{{itemGroup.text}}</a>
+            <div class="centerHeader" v-if="aside=='product'">
+              <a class="txtBlock" @click="toStory(itemGroup,'us')" :title="itemGroup.text">{{itemGroup.text}}</a>
             </div>
-            <div class="centerHeader" @click="toStory(itemGroup)" v-else>
-              <a class="txtBlock" :title="itemGroup.text">{{itemGroup.text}}</a>
+            <div class="centerHeader" v-else>
+              <a class="txtBlock" @click="toStory(itemGroup)" :title="itemGroup.text">{{itemGroup.text}}</a>
               <span class="imgStatus">{{itemGroup.us_status}}</span>
             </div>
             <div>
-              <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" >快捷添加</Button>
-              <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" >添加工作项</Button>
+              <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" title="快速添加用户故事" >快捷添加</Button>
+              <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" >快捷添加工作项</Button>
             </div>
           </Col>
           <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
@@ -231,8 +231,8 @@ export default {
       let ivuRowFlexDom = kanbanHeaderDom && kanbanHeaderDom.getElementsByClassName("ivu-row-flex")[0] ?kanbanHeaderDom.getElementsByClassName("ivu-row-flex")[0] : false;
       let boardDom = document.getElementById("board") ? document.getElementById("board") : false;
 
-      if(!ivuRowFlexDomW){ivuRowFlexDomW = ivuRowFlexDom.offsetWidth;}
-      if(!kanbanHeaderDomH){kanbanHeaderDomH = kanbanHeaderDom.offsetHeight;}  
+      ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
+      kanbanHeaderDomH = kanbanHeaderDom.offsetHeight ? kanbanHeaderDom.offsetHeight : 41;
 
       mainDom.onscroll= function(){
         if(that.$route.path == "/demand" || that.$route.path ==  "/product" || that.$route.path ==  "/development" || that.$route.path ==  "/dependManage"){}else{return};
@@ -242,8 +242,9 @@ export default {
 
         let boardDom = boardDom ? boardDom : document.getElementById("board");
         if(!kanbanHeaderDom && !boardDom && !ivuRowFlexDom){return}
-        if(!ivuRowFlexDomW){ivuRowFlexDomW = ivuRowFlexDom.offsetWidth;}
-        if(!kanbanHeaderDomH){kanbanHeaderDomH = kanbanHeaderDom.offsetHeight;}
+
+        ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
+        kanbanHeaderDomH = kanbanHeaderDom.offsetHeight ? kanbanHeaderDom.offsetHeight : 41;
 
         boardDom.style.position = "relative";
         let rectObject = boardDom.getBoundingClientRect();
@@ -620,7 +621,7 @@ let kanbanScrollFn = ()=>{
   margin: 0 auto;
   text-align: center;
   font-size: 12px;
-  height: 36px;
+  min-height: 36px;
   overflow: hidden;
   line-height: 18px;
   /*

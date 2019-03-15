@@ -741,6 +741,8 @@ export default class Common extends Utils {
         ID = getCookieFn(that,_Common,key2) || getCookieFn(that,_Common,key);
       }else if(From == "inLocalStorage"){
         ID = getLocalStorageFn(that,_Common,key2) || getLocalStorageFn(that,_Common,key);
+      }else if(From == "inUrl"){
+        ID = getUrlFn(that,_Common,key2) || getUrlFn(that,_Common,key); 
       }else{
         ID = getSCFn(that,_Common,key2) || getSCFn(that,_Common,key);
       }
@@ -755,6 +757,8 @@ export default class Common extends Utils {
         detailID = getCookieFn(that,_Common,key);
       }else if(From == "inLocalStorage"){
         detailID = getLocalStorageFn(that,_Common,key);
+      }else if(From == "inUrl"){
+        detailID = getUrlFn(that,_Common,key); 
       }else{
         detailID = getSCFn(that,_Common,key);
       }
@@ -770,6 +774,8 @@ export default class Common extends Utils {
         prj_ID = getCookieFn(that,_Common,key2) || getCookieFn(that,_Common,key);
       }else if(From == "inLocalStorage"){
         prj_ID = getLocalStorageFn(that,_Common,key2) || getLocalStorageFn(that,_Common,key);
+      }else if(From == "inUrl"){
+        prj_ID = getUrlFn(that,_Common,key2) || getUrlFn(that,_Common,key); 
       }else{
         prj_ID = getSCFn(that,_Common,key2) || getSCFn(that,_Common,key);
       }
@@ -785,6 +791,8 @@ export default class Common extends Utils {
         prod_ID = getCookieFn(that,_Common,key);
       }else if(From == "inLocalStorage"){
         prod_ID = getLocalStorageFn(that,_Common,key);
+      }else if(From == "inUrl"){
+        prod_ID = getUrlFn(that,_Common,key); 
       }else{
         prod_ID = getSCFn(that,_Common,key);
       }
@@ -1805,6 +1813,14 @@ export default class Common extends Utils {
       }
     }
 
+    //看板帮助问号居左的位置
+    static HelpLeft(id){
+      let kbDOM = document.getElementById(id);
+      let sbDOM = document.getElementById("SiderBox");
+      let sbDOMLeft = sbDOM ? sbDOM.offsetWidth : 180;
+      return kbDOM ? kbDOM.getBoundingClientRect().left - (sbDOMLeft-70) : 330
+    }
+
 }
 function filterParentheses(str){
   let check = (STR = "")=>{
@@ -1868,6 +1884,11 @@ function fileterStr2(STR){
   }
   return strArr
 }
+
+function getUrlFn(that,_Common,name){
+  return that.$router.history.current.query[name] ? that.$router.history.current.query[name] : false;
+}
+
 function getSCFn(that,_Common,name){
   let result = false;
   if(that.$router.history.current.query[name]){
@@ -1878,7 +1899,6 @@ function getSCFn(that,_Common,name){
      result = localStorage.getItem(name)
   }
   return result
-
 }
 function getCookieFn(that,_Common,name){
   return _Common.getCookie(name) ? _Common.getCookie(name) : false;

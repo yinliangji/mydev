@@ -3988,19 +3988,22 @@ let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
                     bgcolor:"FEB159",
                     isStoryPerson:false,
                     text: "用户登录",
-                    groupId: 12799
+                    groupId: 12799,
+                    "us_status|1":["提出","设计分析"],
                 },
                 {
                     bgcolor:"FE4514",
                     isStoryPerson:true,
                     text: "创建代码仓库",
-                    groupId: 12800
+                    groupId: 12800,
+                    "us_status|1":["提出","设计分析"],
                 },
                 {
                     bgcolor:"FEB159",
                     isStoryPerson:true,
                     text: "未知项1",
-                    groupId: 12605
+                    groupId: 12605,
+                    "us_status|1":["提出","设计分析"],
                 }
             ],
             cardList:[

@@ -1,7 +1,7 @@
 <template>
 	<div class="pageContent" v-show="detailBoxIsHidden">
-		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'7'" />
-		<selectMenu @changeSelect="selectMenuFn" @sendData="getSendData"></selectMenu>
+		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'7'"  />
+		<selectMenu @changeSelect="selectMenuFn" @sendData="getSendData" :Init="isSelectMenuInit"></selectMenu>
        
         <Card class="detailContBox">
             <div class="editBtn3">
@@ -237,6 +237,7 @@ const {projectDetail,listModule,getPermission,fileDownList,downFile,fileUpload,f
 export default {
 	data () {
         return {
+            isSelectMenuInit:this.$router.history.current.query.from && this.$router.history.current.query.from == "nav" ? true : false,
         	modaAdd: false,
             modal_add_loading: true,
             detailBoxIsHidden:true,
@@ -360,7 +361,7 @@ export default {
     created(){
         console.log("项目详情页--created-------");
         if(this.$router.history.current.query.from && this.$router.history.current.query.from == "nav"){
-            this.delectLocalStorage();
+            Common.DelectLocalStorage(Common);
             let userName = Common.getStorageAndCookie(this,Common,"username");
             let myID = Common.GETID(this,Common,"inCookie");
             let exeFn = ()=>{
@@ -377,6 +378,7 @@ export default {
                         this.tableDataAjaxFn(projectDetail,result).then((res)=>{
                             this.$router.push({path: '/agile/detail', query: {id:result,prj_id:res}});
                             this.reload();
+                            //this.isSelectMenuInit = false;
                         },()=>{
 
                         })
@@ -423,6 +425,8 @@ export default {
         }else if(Common.GETID(this,Common)){
             let myID = Common.GETID(this,Common);
     		Common.setStorageAndCookie(Common,"id",myID);
+            Common.setStorageAndCookie(Common,"prjId",myID);
+
     		this.tableDataAjaxFn(projectDetail,myID).then((prj_id)=>{
                 this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,myID,prj_id)
                 this.tableDAtaPageCurrent = 1;
@@ -452,14 +456,6 @@ export default {
     },
     
     methods: {
-        delectLocalStorage(){
-            localStorage.removeItem("id");
-            localStorage.removeItem("prjId");
-            localStorage.removeItem("prjSn");
-            localStorage.removeItem("prj_id");
-            localStorage.removeItem("prj_name");
-            localStorage.removeItem("prod_id");
-        },
         getMainListFn(URL = "",page = 1,pageline = 10){
             let username = Common.getCookie("username");
             if(!username){return Promise.reject("没有username")}
@@ -644,7 +640,7 @@ export default {
             return Common.DownFile(defaultAXIOS,this,projectOutputWord,params,fileName);
         },
         editItemFn(){
-            this.$router.push({path: '/agile/edit', query: {id: Common.GETID(this,Common),prj_id:Common.GETprjid(this,Common)}})
+            this.$router.push({path: '/agile/edit', query: {id: Common.GETID(this,Common),prj_id:Common.GETprjid(this,Common),from:"detail"}})
         },
         selectMenuFn(N){
             Common.setStorageAndCookie(Common,"id",N)

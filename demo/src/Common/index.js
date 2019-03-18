@@ -744,7 +744,7 @@ export default class Common extends Utils {
       }else if(From == "inUrl"){
         ID = getUrlFn(that,_Common,key2) || getUrlFn(that,_Common,key); 
       }else{
-        ID = getSCFn(that,_Common,key2) || getSCFn(that,_Common,key);
+        ID = getSCFn(that,_Common,key) || getSCFn(that,_Common,key2);
       }
       return ID;
     }
@@ -777,7 +777,7 @@ export default class Common extends Utils {
       }else if(From == "inUrl"){
         prj_ID = getUrlFn(that,_Common,key2) || getUrlFn(that,_Common,key); 
       }else{
-        prj_ID = getSCFn(that,_Common,key2) || getSCFn(that,_Common,key);
+        prj_ID = getSCFn(that,_Common,key) || getSCFn(that,_Common,key2);
       }
       return prj_ID;
     }
@@ -1598,6 +1598,17 @@ export default class Common extends Utils {
       _Common.RemoveSession("userlistSerch");
       _Common.RemoveSession("iplistSearch");
     }
+
+    //删除常用LocalStorage--不通用
+    static DelectLocalStorage(_Common){
+      localStorage.removeItem("id");
+      localStorage.removeItem("prjId");
+      localStorage.removeItem("prjSn");
+      localStorage.removeItem("prj_id");
+      localStorage.removeItem("prj_name");
+      localStorage.removeItem("prod_id");
+    }
+
     //用户故事分页和搜索跳转还原--不通用
     static GoUserstorySession(_Common,that){
       if(_Common.GetSession("userstorySerch")){

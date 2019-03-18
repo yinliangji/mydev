@@ -1,24 +1,23 @@
 <template>
   <Layout id="boardWrapper">
     <content id="board">
-      <p v-if="groupList.length > 0" class="left_border" :style="'left:'+ (firstColumn - 0) +'px;'"></p>
+      <p span="4" v-if="groupList.length > 0" class="left_border"></p>
       <div class="row-wrapper" id="kanbanHeader">
-        <Row :gutter="0" class="kanbanHeaderBox" id="kanbanHeaderBox"  align="middle">
-
-          <Col style="width:121px;"  class="topColumnFirst" v-if="groupList.length > 0">
+        <Row :gutter="16" type="flex" justify="start" align="middle">
+          <Col span="3" class="topColumnFirst" v-if="groupList.length > 0">
             <div class="centerHeaderTitle">
               {{groupList[0].text}}
             </div>
           </Col>
-          <Col class="topColumn"  v-for="(item, index) in statusList" :key="index">
+          <Col :span="statusSize" class="topColumn"  v-for="(item, index) in statusList" :key="index">
             <kanbanContentHeader :myAside="aside" :text="item.stateStr" :taskNumber="item.taskNumber" />
           </Col>
         </Row>
       </div>
       <!--有分组-->
-      <div class="row-wrapper"  v-for="(itemGroup, index) in groupLists" v-if="groupList.length > 0">
-        <Row :gutter="0" class="kanbanBox" align="top">
-          <Col :style="'width:'+((firstColumn - 0) + 1)+'px;'" class="ColumnFirst" v-if="groupLists.length > 0">
+      <div class="row-wrapper" v-for="(itemGroup, index) in groupLists" v-if="groupList.length > 0">
+        <Row :gutter="16" type="flex" justify="start" align="top">
+          <Col span="3" v-if="groupLists.length > 0">
             <div class="centerHeader" v-if="aside=='product'">
               <a class="txtBlock" @click="toStory(itemGroup,'us')" :title="itemGroup.text">{{itemGroup.text}}</a>
             </div>
@@ -31,7 +30,7 @@
               <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" title="快速添加工作项">快捷添加</Button>
             </div>
           </Col>
-          <Col class="Column" v-for="(items, index) in statusList"  :key="index"  >
+          <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
             <div :id="'kb'+itemGroup.groupId+'_'+items.state" :state="items.state" :groupid="itemGroup.groupId" class="rowBox" :class="addSpace?'addSpaceBox':''">
               <kanbanItem
                 :myIsOperation = "isOperation"
@@ -49,9 +48,9 @@
         </Row>
       </div>
       <!--无分组-->
-      <div class="row-wrapper"   v-if="groupList.length == 0">
-        <Row :gutter="0" class="kanbanBox" align="top">
-          <Col class="Column" v-for="(items, index) in statusList"  :key="index"  >
+      <div class="row-wrapper" v-if="groupList.length == 0">
+        <Row :gutter="16" type="flex" justify="start" align="top">
+          <Col :span="statusSize" v-for="(items, index) in statusList"  :key="index" class="Column" >
             <div :id="'stateId_'+items.state" :state="items.state"  class="rowBox rowBox2"  :class="isPutFn(aside,isPut,items.state)">
               <kanbanItem
                   :myIsOperation = "isOperation"
@@ -134,23 +133,12 @@ export default {
         return false;
       }
     },
-    boardName: {//
+    boardName: {//判断权限
       type: [Boolean,String,Number],
       default: function() {
         return "list";
       }
     },
-    firstColumn: {//左侧宽度
-      type: [Boolean,String,Number],
-      default: function() {
-        return 120;
-      }
-    },
-
-
-
-
-
   },
   data() {
     return {
@@ -228,45 +216,6 @@ export default {
     },
     kanbanScrollFn(){
 
-      let columnW = (kbdom,rwdom,topcol,col)=>{
-        let everyWArr = [];
-
-        let kbHeaderBoxDom = document.getElementById(kbdom);;
-        if(!kbHeaderBoxDom){
-          console.log("没有 "+kbdom)
-          return;
-        }
-        let topColumnDom = kbHeaderBoxDom.getElementsByClassName(topcol);
-        if(!topColumnDom.length){
-          console.log(kbdom+" 的 "+topcol+" 是0")
-          return;
-        }
-
-        for(let i = 0;i < topColumnDom.length;i++){
-          everyWArr.push(topColumnDom[i].offsetWidth);
-        }
-
-        let rowWrapperDoms = document.getElementsByClassName("row-wrapper");
-        if(rowWrapperDoms <= 1){
-          console.log("没有 "+rwdom+"或者只有一个"+rwdom)
-          return;
-        }
-        for(let j = 1;j<rowWrapperDoms.length;j++){
-          for(let k = 0;k < topColumnDom.length;k++){
-            if(rowWrapperDoms[j].getElementsByClassName(col).length){
-              //flex-basis:auto; -ms-flex-preferred-size:auto;
-              //rowWrapperDoms[j].getElementsByClassName(col)[k].style.width = everyWArr[k]+"px"
-              rowWrapperDoms[j].getElementsByClassName(col)[k].setAttribute("style","width:"+ everyWArr[k]+"px;flex-basis:auto; -ms-flex-preferred-size:auto;")
-            }else{
-              console.log(rwdom+"dom-->"+j+" 没有 "+col)
-              return
-            }
-            
-          }
-        }
-      }
-
-
       if(this.$route.path == "/demand" || this.$route.path ==  "/product" || this.$route.path ==  "/development" || this.$route.path ==  "/dependManage"){}else{return};
       let that = this;
       let gap = that.$route.path == "/demand" || that.$route.path ==  "/product" ? 0 : 0;
@@ -275,33 +224,24 @@ export default {
       let mainDom = document.getElementById("main");
       let ivuRowFlexDomW;
       let kanbanHeaderDomH;
-      if(!headerBoxH || !mainDom){
-        console.log("没有 headerBoxH mainDom");
-        return;
-      }
+      if(!headerBoxH && !mainDom){return}
 
       let kanbanHeaderDom = document.getElementById("kanbanHeader")?document.getElementById("kanbanHeader"):false;
 
-      let ivuRowFlexDom = kanbanHeaderDom && document.getElementById("kanbanHeaderBox") ? document.getElementById("kanbanHeaderBox") : false;
+      let ivuRowFlexDom = kanbanHeaderDom && kanbanHeaderDom.getElementsByClassName("ivu-row-flex")[0] ?kanbanHeaderDom.getElementsByClassName("ivu-row-flex")[0] : false;
       let boardDom = document.getElementById("board") ? document.getElementById("board") : false;
-
-      columnW("kanbanHeaderBox","row-wrapper","topColumn","Column");
 
       ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
       kanbanHeaderDomH = kanbanHeaderDom.offsetHeight ? kanbanHeaderDom.offsetHeight : 41;
 
       mainDom.onscroll= function(){
         if(that.$route.path == "/demand" || that.$route.path ==  "/product" || that.$route.path ==  "/development" || that.$route.path ==  "/dependManage"){}else{return};
+
         kanbanHeaderDom = kanbanHeaderDom ? kanbanHeaderDom : document.getElementById("kanbanHeader");
+        ivuRowFlexDom = ivuRowFlexDom ? ivuRowFlexDom : kanbanHeaderDom.getElementsByClassName("ivu-row-flex")[0];
 
-        ivuRowFlexDom = ivuRowFlexDom ? ivuRowFlexDom : document.getElementById("kanbanHeaderBox");
         let boardDom = boardDom ? boardDom : document.getElementById("board");
-        if(!kanbanHeaderDom || !boardDom || !ivuRowFlexDom){
-          console.log("没有 kanbanHeaderDom boardDom ivuRowFlexDom");
-          return;
-        }
-
-        columnW("kanbanHeaderBox","rowWrapper","topColumn","Column");
+        if(!kanbanHeaderDom && !boardDom && !ivuRowFlexDom){return}
 
         ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
         kanbanHeaderDomH = kanbanHeaderDom.offsetHeight ? kanbanHeaderDom.offsetHeight : 41;
@@ -327,8 +267,8 @@ export default {
         }else{
           kanbanHeaderDom.removeAttribute('style');
           ivuRowFlexDom.removeAttribute('style');
-          //ivuRowFlexDom.style.marginLeft = "-8px";
-          //ivuRowFlexDom.style.marginRight = "-8px";
+          ivuRowFlexDom.style.marginLeft = "-8px";
+          ivuRowFlexDom.style.marginRight = "-8px";
           if(numberBox && numberBox.length){
             for(let i=0;i<numberBox.length;i++){
               numberBox[i].removeAttribute('style');
@@ -600,60 +540,14 @@ export default {
 #boardWrapper,#productBoardBox,#demandBoardBox,#developmentBoardBox,#dependManageBoardBox{
   background: #fff;
 }
-.kanbanHeaderBox {
-  display: flex;
-  flex-flow:row  nowrap;/* flex-direction: row;flex-wrap: nowrap; */
-  justify-content: flex-start;
-  align-items:stretch;
-  align-content:stretch;
+.topColumn{
+  padding-right:4px;
+  padding-left:4px;
 }
 .topColumnFirst{
-  padding-left:0px;
-  padding-right:4px;
-  background:rgba(255,0,0,0.0); 
+  padding-left:12px;
+  padding-right:10px;
 }
-.topColumn{
-  flex: 1 1 1px;/* flex-grow:1; flex-shrink:1; flex-basis:1px; */
-  padding-right:2px;
-  padding-left:2px;
-}
-.kanbanHeaderBox > div.topColumn:last-of-type{
-  padding-right: 0;
-}
-
-
-
-.kanbanBox {
-  display: flex;
-  flex-flow:row  nowrap;/* flex-direction: row;flex-wrap: nowrap; */
-  justify-content: flex-start;
-  align-items:stretch;
-  align-content:stretch;
-}
-
-.ColumnFirst{
-  padding-left:0px;
-  padding-right:4px;
-  background:rgba(255,0,0,0.0); 
-}
-
-.Column{
-  flex: 1 1 1px;/* flex-grow:1; flex-shrink:1; flex-basis:auto; */
-  padding-right:2px;
-  padding-left:2px;
-  transition: all 1s;
-
-  /* flex-basis:auto; */
-
-}
-.kanbanBox > div.Column:last-of-type{
-  padding-right: 0;
-}
-
-
-
-
-
 .addMissionBtn{
   margin:6px auto 0;
   display:block;
@@ -672,7 +566,11 @@ export default {
   border:1px dashed #ccc;
   min-height:100px;
 }
-
+.Column{
+  padding-right:4px;
+  padding-left:4px;
+  transition: all 1s;
+}
 .ivu-layout-header {
   background: #fff;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
@@ -686,11 +584,9 @@ export default {
 
 .left_border {
   position: absolute;
-  /*left: 11.5%;*/
+  left: 11.5%;
   border-right: 1px dashed #ddd;
   height: 100%;
-  left: 120px;
-
 }
 
 .leftHeader {

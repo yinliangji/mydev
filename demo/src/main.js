@@ -49,7 +49,7 @@ Vue.use(VueQuillEditor)
 //富文本编辑框结束
 
 /* 通用开始 */
-Vue.filter('FALSEINFO', value => { // 交易明细
+Vue.filter('FALSEINFO', value => { 
     if (!value) {
         if(value === 0 || value === "0"){
             return value

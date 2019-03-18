@@ -190,8 +190,7 @@ export default {
 .kananstatus{
   overflow: hidden;
   height: 20px;
-  margin-left: 4px;
-
+  float: left;
 }
 .floatClear{
   clear: both;
@@ -221,17 +220,11 @@ export default {
 }
 .isOpacity:after{
   position: absolute;
-  /* left: 50%;
+  left: 50%;
   top: 50%;
   width: 95%;
   height: 90%;
-  transform:translate(-50%,-50%); */
-  left: 1px;
-  top: 1px;
-  right: 1px;
-  bottom: 1px;
-
-
+  transform:translate(-50%,-50%);
   background: black;
   content: "";
   opacity:0.15;
@@ -247,21 +240,14 @@ export default {
   margin-right: 4px;
 }
 .card-wrapper {
-  box-sizing: border-box;
-  overflow: hidden;
+  padding: 4px;
   margin-bottom: 4px;
   border-radius: 4px;
   border: 1px solid #ddd;
-
-
   /*min-height: 10px;*/
 }
 .card-wrap{
   cursor: pointer;
-
-  box-sizing: border-box;
-  position: relative;
-
   /*
   margin-right: 10px;
   margin-bottom: 10px;
@@ -299,8 +285,6 @@ export default {
     height: 30px;
     margin-bottom: 8px;
     line-height: 13px;
-
-    margin-left: 4px;
   }
 
   .item-name {

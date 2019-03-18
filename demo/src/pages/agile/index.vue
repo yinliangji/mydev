@@ -274,13 +274,11 @@ export default {
     },
     beforecreated(){
         console.log("agile--beforecreated-------",this.tableData,this.ITMitem);
-        Common.delStorageAndCookie(Common,"detail_id")
-
     },
     created(){
         console.log("agile--created-------",this.tableData,this.ITMitem);
-
-        
+        Common.delStorageAndCookie(Common,"detail_id");
+        Common.DelectLocalStorage(Common);
     },
     beforeUpdate(){
         console.log("agile--beforeUpdate-------",this.tableData,this.ITMitem)

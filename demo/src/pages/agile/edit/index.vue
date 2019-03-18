@@ -493,18 +493,19 @@ export default {
         }
     },
     mounted(){
-        this.addTeamFn(addTeam)
-
+        
         let ID = Common.GETID(this,Common,"inUrl") ? Common.GETID(this,Common,"inUrl") : "";
-        let PRJ_ID = Common.GETprjid(this,Common) ? Common.GETprjid(this,Common) : "";
-        this.projectGetProdFn(projectGetProd,{id:ID,prj_id:PRJ_ID});
+        let PRJ_ID = Common.GETprjid(this,Common,"inUrl") ? Common.GETprjid(this,Common,"inUrl") : "";
         if(ID && PRJ_ID){
+            this.addTeamFn(addTeam);
+            this.projectGetProdFn(projectGetProd,{id:ID,prj_id:PRJ_ID});
             this.projectEditFn(projectEdit,{id:ID,prj_id:PRJ_ID});
         }else{
+            Common.CommonError(this,"没有获取到prjId或id 和 prjSn或prj_id")
             this.resetData();
         }
 
-        this.listModuleFn(listModule,((ID)=>{return ID?{id:ID}:{id:""}})(Common.GETID(this,Common)))
+        this.listModuleFn(listModule,((Id)=>{return Id?{id:Id}:{id:""}})(Common.GETID(this,Common,"inUrl")))
         .then((res)=>{
             let fn = (obj)=>{
                 return obj.label+"【"+obj.value+"】";            
@@ -905,7 +906,8 @@ export default {
             let _pid = this.formValidate.pid ? this.formValidate.pid : ""
 
             let tempData = {
-                id:Common.GETID(this,Common),
+                id:Common.GETID(this,Common,"inUrl"),
+                prjId:Common.GETID(this,Common,"inUrl"),
                 prj_type:this.formValidate.prj_type,
                 prj_name: this.formValidate.prj_name,
                 start_time:_start_time,
@@ -918,6 +920,7 @@ export default {
                 pid:this.formValidate.prod_id,
                 AddGroupList:JSON.stringify(this.formValidate.AddGroupList),
                 prj_id: this.formValidate.prj_id,
+                prjSn: this.formValidate.prj_id,
                 proj_role:_proj_role,
                 pid:_pid,
 
@@ -936,7 +939,19 @@ export default {
                     this.modal_add_loading = false;
                     this.formItemReset();
                     this.$refs.formValidate.resetFields();
-                    this.$router.push('/agile');
+
+                    if(this.$router.history.current.query.from == "detail"){
+                        let urlObj = {
+                            id: this.$router.history.current.query.id,
+                            prjId: this.$router.history.current.query.id,
+                            prj_id:this.$router.history.current.query.prj_id,
+                            prjSn:this.$router.history.current.query.prj_id,
+                        }
+                        this.$router.push({path: '/agile/detail', query: urlObj})
+                    }else{
+                        this.$router.push('/agile');
+                    }
+
                 }else{
                     this.modal_add_loading = false;
                     this.showError(myData.status);
@@ -963,7 +978,19 @@ export default {
         cancel () {
             this.formItemReset();
             this.$refs.formValidate.resetFields();
-            this.$router.push('/agile');
+
+            if(this.$router.history.current.query.from == "detail"){
+                let urlObj = {
+                    id: this.$router.history.current.query.id,
+                    prjId: this.$router.history.current.query.id,
+                    prj_id:this.$router.history.current.query.prj_id,
+                    prjSn:this.$router.history.current.query.prj_id,
+                }
+                this.$router.push({path: '/agile/detail', query: urlObj})
+            }else{
+                this.$router.push('/agile');
+            }
+            
         },
         handleClose (event, name) {
             let getStr = (string,str_after,str_before)=>{

@@ -1,7 +1,6 @@
 <template>
-    <div class="curPosition">
+    <div class="curPosition" id="curPosition" ref="curPosition">
         <Icon type="navicon-round" style="color:#01babc;font-size:16px;"></Icon>
-
         <span>选择项目</span>
         <Select v-model="curProject" clearable filterable style="width:300px" @on-change="changeCurProject">
             <Option v-for="(item,index) in projectList" :value="item.id" :key="index">{{ item.prj_name }}</Option>
@@ -12,23 +11,41 @@
 </template>
 
 <script>
+import API from '@/api'
+const {defaultAXIOS} = API;
 import {getUrlParam,_findIndex,_findItem} from "@/base/base"
 import Common from "@/Common";
 const { projectListDataNew } = Common.restUrl;
 export default {
+    name: 'curPosition',
+    props: {
+        Init: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
+    },
+    watch: {
+        '$route' (to, from) {
+        },
+        curProject(curVal,oldVal){
+        },
+        Init(curVal,oldVal){
+            console.error("Init",this.Init)
+            if(!curVal){
+                this.showProjectList();        
+            }
+        },
+        
+    },
+    
     data() {
         return {
             projectList: [],
             curProject: "",
             isTestBtn:window.location.href.indexOf('//127.0.0.1:') != -1 ? true : false,
         };
-    },
-    watch: {
-      '$route' (to, from) {
-       },
-       curProject(curVal,oldVal){
-
-       },
     },
     methods: {
         testBtn(){
@@ -59,96 +76,123 @@ export default {
                 return base + "?" + arr_param.join('&');
             }
         },
+        mySetCookie(name,val){
+            if(val && name && (name == "prjId" || name == "id")){
+                this.setCookie("prjId",val);
+                this.setCookie("id",val);
+                return true;
+            }else if(val && name && (name == "prjSn" || name == "prj_id")){
+                this.setCookie("prjSn",val);
+                this.setCookie("prj_id",val);
+                return true;
+            }else if(val,name){
+                this.setCookie(name,val);
+                return true;
+            }else{
+                return false;
+            }
+
+        },
+        isTrue(val){
+            return (val || val == 0 || val == "0") && val != "false" && val != "null" && val != "undefined" && val != "NaN" && val != "NaN-aN-aN" ? true : false;
+        },
+        isReturnValue(val){
+            return this.isTrue(val) ? val :false; 
+        },
         showProjectList(){
             var self = this;
             let username = this.getCookie("username");
             if(!username){
-                if(document.location.hostname === "128.192.63.30"){
-                    console.error("http://128.192.184.4:8020/icdp?apptype=app03");
-
-                }else if(document.location.hostname === "128.196.0.127"){
-                    console.error("http://128.194.224.146:8000/icdp?apptype=app03");
-                }
+                Common.CommonError(this,"没有获取到username 无法获取项目列表")
                 return;
             }
-            this.$axios({
-                method: "get",
-                url: projectListDataNew,
-                params:{
-                    username:username,
-                },
-            }).then(res => {
-                
+            let params = {
+                username:username,
+            }
+            defaultAXIOS(projectListDataNew,params,{timeout:20000,method:'get'}).then(res => {
                 if(res.status != 200){
-                    self.$router.push({path:"/agile"});
+                    this.$router.push({path:"/agile"});
                     return;
                 }
                 let _cur;
-                this.projectList = res.data.data;
-                
-                this.$nextTick(function(){
-
-                    let prjIdUrl = this._getUrlParam();
-                    let prjIdCookie = this._getCookie();
-
-                    console.log("prjIdUrl=",prjIdUrl,"prjIdUrl=",prjIdUrl)
-
-                    if(prjIdUrl || prjIdUrl === 0){
-                        if(prjIdUrl === 0){
-                            this.setCookie("prjId","");
-                            this.setCookie("id","");
-                            this.$router.push({path:"/agile"});
-                        }else{
-                            this.curProject = parseInt(prjIdUrl);
-                            this.setCookie("prjId",prjIdUrl);
-                            this.setCookie("id",prjIdUrl);
-
+                this.projectList = [];
+                if(res.data.data && Array.isArray(res.data.data) && res.data.data.length){
+                    res.data.data.forEach((item)=>{
+                        if(item.id && !item.prjId){
+                            item.prjId = item.id;
                         }
-                        console.log("prjIdUrl || prjIdUrl === 0",prjIdUrl,prjIdUrl)
-                    }else if(!prjIdUrl && prjIdCookie){
+                        if(item.prj_id && !item.prjSn){
+                            item.prjSn = item.prj_id;
+                        }
+                        this.projectList.push(item);
+                    }) 
+                }else if(res.data.data && Array.isArray(res.data.data) && res.data.data.length == 0){
+                    Common.CommonError(this,"没有项目");
+                    return
+                }else{
+                    Common.CommonError(this,"获取项目失败");
+                    return
+                }
+                
+                this.$nextTick(()=>{
+                    let prjIdUrl = this._getUrlParam();//从url获取id或prjId并在projectList 里发现相同的id或prjId
+                    let prjIdCookie = this._getCookie();//从cookie获取id或prjId并在projectList 里发现相同的id或prjId
+                    let myGetOutID =  this.isReturnValue(getUrlParam("prjId")) || this.isReturnValue(getUrlParam("id")) || this.isReturnValue(this.getCookie("prjId")) || this.isReturnValue(this.getCookie("id"));
+                    console.log("prjIdUrl=",prjIdUrl," prjIdCookie=",prjIdCookie," myGetOutID=",myGetOutID);
+                    if(!this.isTrue(myGetOutID)){
+                        let ID = this.isReturnValue(this.projectList[0].prjId) || this.isReturnValue(this.projectList[0].id);
+                        setTimeout(()=>{
+                            let myGetInID = this.isReturnValue(getUrlParam("prjId")) || this.isReturnValue(getUrlParam("id")) || this.isReturnValue(this.getCookie("prjId")) || this.isReturnValue(this.getCookie("id"));
+                            if(!this.isTrue(myGetInID)){
+                                this.curProject = ID;
+                                this.mySetCookie("prjId",ID);
+                                this.mySetCookie("prj_name",this.projectList[0].prj_name);
+                                let prjSn = this._getPrjSn(ID);
+                                let isResult = prjSn ? this.mySetCookie("prjSn",prjSn) : this.mySetCookie("prjSn","");
+                                sessionStorage.setItem("QprjNumber",(this.isReturnValue(prjNumArr[i].prjSn) || this.isReturnValue(prjNumArr[i].prj_id)));
+                                sessionStorage.setItem("QprjName",prjNumArr[i].prj_name);
+                                this.$emit("sendData",this.projectList[0]);
+                                console.log("用默认projectList第一条");
+                            }
+                        },2000)
+                        console.log("没有获取到prjId或id 等待2秒");
+                    }else if(prjIdUrl == false && prjIdCookie == false){
+                        Common.CommonError(this,"选择项目列表【projectList】里没有匹配的prjId或id");
+                        this.$emit("sendData",false);
+                        console.log("选择项目列表【projectList】里没有匹配的prjId或id");
+                        return
+                    }else if(prjIdUrl != false){
+                        this.curProject = parseInt(prjIdUrl);
+                        this.mySetCookie("prjId",prjIdUrl);
+                        this.nextStep();
+                        console.log("prjIdUrl != false",prjIdUrl)
+                    }else if(prjIdCookie != false){
                         this.curProject = parseInt(prjIdCookie);
-                        this.setCookie("prjId",prjIdCookie);
-                        this.setCookie("id",prjIdCookie);
-                        console.log("!prjIdUrl && prjIdCookie",prjIdUrl,prjIdCookie)
-                    }else if(!prjIdUrl && !prjIdCookie){
-                        this.curProject = self.projectList[0].id;
-                        this.setCookie("prjId",self.projectList[0].id);
-                        this.setCookie("id",self.projectList[0].id);
-                        this.setCookie("prj_name",self.projectList[0].prj_name);
-                        console.log("!prjIdUrl && !prjIdCookie",prjIdUrl,prjIdCookie)
+                        this.nextStep();
+                        console.log("prjIdCookie != false",prjIdCookie)
                     }else{
-                        this.curProject = "";
-                        this.setCookie("prjId","");
-                        this.setCookie("id","");
-                        console.log("else")
-                        this.$router.push({path:"/agile"});
-
+                        Common.CommonError(this,"没有获取到prjId或id 回到agile")
+                        this.$emit("sendData",false);
+                        console.log("else");
+                        return
                     }
-
-                    let prjSn = this._getPrjSn(this.curProject);
-                    this.setCookie("prjSn",prjSn);
-                    this.setCookie("prj_id",prjSn);
-
-
-                    let prjNumArr = this.projectList;
-
-                    for(var i=0;i<prjNumArr.length;i++){
-                        if(this.getCookie("prjId") == prjNumArr[i].id){
-                            sessionStorage.setItem("QprjNumber",prjNumArr[i].prj_id);
-                            sessionStorage.setItem("QprjName",prjNumArr[i].prj_name);
-                            this.setCookie("prj_name",prjNumArr[i].prj_name);
-                            break
-                        }
-                    }
-
-                    this.$emit("sendData",this.checkGet(this.curProject || "",this.projectList));
-
                 })
-                
-
-                //this.curProject = res.data.data[0].id;
-                //document.cookie = "prj_id" + "=" + res.data.data[0].id + "; ";
             });
+        },
+        nextStep(){
+            let prjSn = this._getPrjSn(this.curProject);
+            prjSn ? this.mySetCookie("prjSn",prjSn) : this.mySetCookie("prjSn","");
+            let ID = this.isReturnValue(this.getCookie("prjId")) || this.isReturnValue(this.getCookie("id"));
+            let prjNumArr = this.projectList;
+            for(var i=0;i<prjNumArr.length;i++){
+                if(ID == (this.isReturnValue(prjNumArr[i].prjId) || this.isReturnValue(prjNumArr[i].id))){
+                    sessionStorage.setItem("QprjNumber",(this.isReturnValue(prjNumArr[i].prjSn) || this.isReturnValue(prjNumArr[i].prj_id)));
+                    sessionStorage.setItem("QprjName",prjNumArr[i].prj_name);
+                    this.mySetCookie("prj_name",prjNumArr[i].prj_name);
+                    break
+                }
+            }
+            this.$emit("sendData",this.checkGet(this.curProject || "",this.projectList));
         },
         checkGet(val,arr){
             return arr.find(item=>item.id == val);
@@ -156,93 +200,77 @@ export default {
         changeCurProject(data) {
             if(!data){return}
             if(this.$route.name == "Product"){
-                let _url = this.$route.fullPath
-                if( _url.indexOf("id=") != -1 || _url.indexOf("prj_id=") != -1 || _url.indexOf("prod_id=") != -1){
-                    if(_url.indexOf("id=") != -1){
-                        _url = this.delUrlParam(_url,"id");
+                let _url = this.$route.fullPath;
+                let isID = _url.indexOf("prjId=") != -1 || _url.indexOf("id=") != -1 || false;
+                let isPSN = _url.indexOf("prj_id=") != -1 || _url.indexOf("prj_id=") != -1 || false;
+                let isProdID =  _url.indexOf("prod_id=") != -1 || false;
+                if( isID || isPSN || isProdID){
+                    if(isID){
+                        let ID = _url.indexOf("prjId=") != -1 ? "prjId" : "id";
+                        _url = this.delUrlParam(_url,ID);
                     }
-                    if(_url.indexOf("prj_id=") != -1){
-                        _url = this.delUrlParam(_url,"prj_id");
+                    if(isPSN){
+                        let PSN = _url.indexOf("prjSn=") != -1 ? "prjSn" : "prj_id";
+                        _url = this.delUrlParam(_url,PSN);
                     }
-                    if(_url.indexOf("prod_id=") != -1){
+                    if(isProdID){
                         _url = this.delUrlParam(_url,"prod_id");
                     }
                     this.$router.push({fullPath:_url})
                 }
             }
-            
-            this.setCookie("prjId", data);
-            this.setCookie("id", data);
+            this.mySetCookie("prjId",data);
             let prjSn = this._getPrjSn(data);
-            this.setCookie("prj_id",prjSn);
-            this.setCookie("prjSn",prjSn);
-            
+            prjSn ? this.mySetCookie("prjSn",prjSn) : this.mySetCookie("prjSn","");
+
+
+            let ID = this.isReturnValue(this.getCookie("prjId")) || this.isReturnValue(this.getCookie("id"));
             let prjNumArr = this.projectList;
             for(var i=0;i<prjNumArr.length;i++){
-                if(this.getCookie("prjId") == prjNumArr[i].id || this.getCookie("id") == prjNumArr[i].id){
-                    sessionStorage.setItem("QprjNumber",prjNumArr[i].prj_id);
+                if(ID == (this.isReturnValue(prjNumArr[i].prjId) || this.isReturnValue(prjNumArr[i].id))){ 
+                    sessionStorage.setItem("QprjNumber",(this.isReturnValue(prjNumArr[i].prjSn) || this.isReturnValue(prjNumArr[i].prj_id)));
                     sessionStorage.setItem("QprjName",prjNumArr[i].prj_name);
-                    this.setCookie("prj_name",prjNumArr[i].prj_name);
+                    this.mySetCookie("prj_name",prjNumArr[i].prj_name);
                     break
                 }
             }
-            this.$emit("changeSelect",this.curProject);
-            this.$emit("sendData",this.checkGet(this.curProject || "",this.projectList));
+            this.$emit("changeSelect",data);
+            this.$emit("sendData",this.checkGet(data || "",this.projectList));
         },
-        _getPrjSn(prjId){
-            let curPrj = _findItem(this.projectList,"id",prjId);
-            return curPrj.prj_id;
-
+        _getPrjSn(pId){
+            let isPrjId = this.projectList.every((item)=>{return item.prjId ? true : false});
+            let isId = this.projectList.every((item)=>{return item.prjId ? true : false});
+            let ID = isPrjId ? "prjId" : (isId ? "id" : "");  
+            let curPrj = _findItem(this.projectList,ID,pId);
+            return curPrj ? (this.isTrue(curPrj.prj_id) ? curPrj.prj_id : false) : false;
         },
         _getUrlParam(){
-            let prjId = getUrlParam("id");
-            let hasIdIndex;
-            if(prjId){
-                hasIdIndex = _findIndex(this.projectList,"id",prjId);
-                if(hasIdIndex >= 0){
-                    return prjId;
-                }else{
-                    this.setCookie("prjId","");
-                    this.setCookie("id","");
-                    return 0;
-                }
+            let prjId = this.isReturnValue(getUrlParam("prjId")) || this.isReturnValue(getUrlParam("id"));
+            let isPrjId = this.projectList.every((item)=>{return item.prjId ? true : false})
+            let isId = this.projectList.every((item)=>{return item.prjId ? true : false})
+            let ID = isPrjId ? "prjId" : (isId ? "id" : "");  
+            if(prjId && ID){
+                return _findIndex(this.projectList,ID,prjId) >= 0 ? prjId : false;
+            }else{
+                return false;    
             }
-            return;
         },
         _getCookie(){
-            let prjId = this.getCookie("prjId") || this.getCookie("id");
-            let hasCookieIndex;
+            let prjId = this.isReturnValue(this.getCookie("prjId")) || this.isReturnValue(this.getCookie("id"));
+            let ID = this.getCookie("prjId") ? "prjId" : "id";
             if(prjId){
-                hasCookieIndex = _findIndex(this.projectList,"id",prjId);
-                if(hasCookieIndex >= 0){
-                    return prjId;
-                }else{
-                    this.setCookie("prjId","");
-                    this.setCookie("id","");
-                }
+                return _findIndex(this.projectList,ID,prjId)  >= 0 ? prjId : false; 
+            }else{
+                return false;    
             }
-            return;
         },
-        getCookieId(key){
-            let search = key+"=";
-            let begin = document.cookie.indexOf(search);
-            if(begin != -1 ){
-                begin += search.length;
-                let end = document.cookie.indexOf(";",begin);
-                if(end == -1){end = document.cookie.length;}
-                return unescape(document.cookie.substring(begin,end))
-            }
-            return 
-        },
-
     },
     created(){
-      this.showProjectList();
+        if(!this.Init){
+            this.showProjectList();        
+        }
     },
     mounted() {
-        //sessionStorage.setItem("prj_id", this.curProject);
-        //document.cookie = "prj_id" + "=" + this.curProject + "; ";
-
     }
 };
 </script>

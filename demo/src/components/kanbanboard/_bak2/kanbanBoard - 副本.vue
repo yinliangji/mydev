@@ -14,8 +14,8 @@
             </Checkbox>
           </div>
           <CheckboxGroup v-model="checkAllGroup" @on-change="funnelAllChange"  class="funnelGroupBox">
-            <Checkbox :label="item.value" v-for="(item,index) in userstoryStatusList" :key="index">
-              <span>{{item.label}}</span>
+            <Checkbox :label="item.state" v-for="(item,index) in statusList" :key="index">
+              <span>{{item.stateStr}}</span>
             </Checkbox>
           </CheckboxGroup>
           <div class="funnelBtnBox">
@@ -23,6 +23,8 @@
                 <span v-if="!funnelLoading">筛选</span>
                 <span v-else>...</span>
             </Button>
+            &nbsp;
+            <Button  size="small">重置</Button>
           </div>
         </div>
       </span>
@@ -174,17 +176,7 @@ export default {
         return 120;
       }
     },
-    UserstorystatusList: {//故事状态
-      type: [Boolean,String,Number,Array],
-      default: function() {
-        return [];
-      }
-    },
   },
-
-
-
-
   data() {
     return {
       sortId:[],
@@ -199,7 +191,6 @@ export default {
       indeterminate: false,
       checkAll: false,
       checkAllGroup: [],
-      userstoryStatusList:[],
       //筛选结束
     };
   },
@@ -228,10 +219,6 @@ export default {
       this.checkAllGroup = this.funnelAllSelect();
       this.checkAll = this.checkAllGroup.length ? true : false;
     },
-    UserstorystatusList(data){
-      this.userstoryStatusList = this.statusListFn(data);
-      
-    },
     role(data){
       
     },
@@ -239,11 +226,6 @@ export default {
     
   },
   mounted(){
-    if(!this.userstoryStatusList.length){
-      this.userstoryStatusList = this.statusListFn();
-    }
-    console.error("mounted this.userstoryStatusList",this.userstoryStatusList)
-    
     document.body.ondrop = function(event){
       event.preventDefault();
       event.stopPropagation();
@@ -257,27 +239,6 @@ export default {
   },
   methods:{
     //筛选开始
-    statusListFn(data){
-      let obj = {};
-      let arr = [];
-      if(data && Array.isArray(data) && data.length){
-        //this.userstoryStatusList = [];
-        data.forEach((item)=>{
-          if((item.value - 0) < 10){
-            obj.value = "0"+item.value;
-          }else{
-            obj.value = item.value + "";
-          }
-          obj.label = item.label;
-          arr.push(obj);
-          obj = {};
-
-        })
-      }
-      let copy = [{"value":"01","label":"提出"},{"value":"02","label":"设计分析"},{"value":"06","label":"开发测试"},{"value":"03","label":"用户验收测试"},{"value":"04","label":"待投产"},{"value":"05","label":"已投产"},{"value":"07","label":"停滞"},{"value":"00","label":"废弃"}]
-      return arr.length ? arr : copy;
-      
-    },
     funnelAllSelect(arr){
       let temp = [];
       if(this.statusList && Array.isArray(this.statusList) && this.statusList.length){
@@ -289,19 +250,7 @@ export default {
     },
     funnelFn () {
         this.funnelLoading = true;
-        let newArr = [];
-        if(!this.statusList.length || !this.checkAllGroup.length){
-          console.log(this.statusList,this.checkAllGroup);
-          return
-        }
-        for(let i=0;i<this.checkAllGroup.length;i++){
-          this.statusList.forEach((item)=>{
-            if(item.state == this.checkAllGroup[i]){
-              newArr.push(item);
-            }
-          })
-        }
-        this.$emit("sendCheckbox",newArr,this.checkAllGroup,this.checkAll)
+
     },
     funnelCheckAll () {
       this.checkAll = !this.checkAll;

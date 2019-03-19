@@ -456,6 +456,7 @@ export default {
         if(this.$router.history.current.query.DATA){
             
             let _DATA = JSON.parse(this.$router.history.current.query.DATA);
+            console.log("_DATA=",_DATA)
             this.formValidate.userstory_id = _DATA.userstory_id;
 
             this.getStoryEditFn(_DATA)

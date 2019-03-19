@@ -115,7 +115,8 @@
                                                 ok-text="添加"
                                                 @on-cancel="cancelRole(index)"
                                                 >
-                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
+                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入用户ID或者中文名进行搜索添加'">
+                                                    <!-- 【'+myItem.myLabel+'】 -->
                                                     <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
                                                         {{ item.label }}
                                                     </Option>
@@ -191,7 +192,8 @@
                                                 ok-text="添加"
                                                 @on-cancel="cancelRole(index)"
                                                 >
-                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
+                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入用户ID或者中文名进行搜索添加'">
+                                                    <!-- 【'+myItem.myLabel+'】 -->
                                                     <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
                                                         {{ item.label }}
                                                     </Option>
@@ -263,7 +265,8 @@
                                                 ok-text="添加"
                                                 @on-cancel="cancelRole(index)"
                                                 >
-                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'">
+                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入用户ID或者中文名进行搜索添加'">
+                                                    <!-- 【'+myItem.myLabel+'】 -->
                                                     <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
                                                         {{ item.label }}
                                                     </Option>

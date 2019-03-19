@@ -3,7 +3,7 @@
 		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'7'" />
 		<selectMenu @changeSelect="selectMenuFn" @sendData="getSendData"></selectMenu>
 		<Card class="detailContBox">
-			<Tabs value="name1" type="card" >
+			<Tabs :value="TabsCur" type="card" :capture-focus="false" @on-click="tabsHandle">
 				<TabPane label="设置小组" name="name1">
 		        	<div class="baseInfoBox">
 		        		<!-- 小组开始 -->
@@ -134,8 +134,14 @@
 		        		<!-- 小组结束 -->
 		        	</div>
 		        </TabPane>
+		        <TabPane label="用户故事设置" name="name2">
+		        	<div class="baseInfoBox">
+		        		<!-- 用户故事设置开始 -->
+				       <UserstorySet :Data="false" v-if="TabsCur == 'name2'" />
+		        		<!-- 用户故事设置结束 -->
+		        	</div>
+		        </TabPane>
 			</Tabs>
-				
 		</Card>
 	</div>
 </template>
@@ -144,8 +150,10 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 const {getUserByProjId,addGroupUsers,addUsers,deleteMember,deleteGroup,listGroup,getPermission,deleteGroupLeader,addGroupLeader} = Common.restUrl;
+import UserstorySet from './userstorySet'
 export default {
 	components:{
+		UserstorySet,
 	},
 	data () {
 		return {
@@ -189,6 +197,9 @@ export default {
             prj_permission:false,
 			identity:false,
 			isModify:true,
+			//-- tabs start
+            TabsCur:"name1",
+            //-- tabs end
 		}	
 	},
 	watch:{
@@ -205,6 +216,10 @@ export default {
     },
     created(){
         console.log("分组设置--created-------",this.formPartValidate,this.formValidate);
+        let _TabsCur = this.$router.history.current.query.TabsCur
+        if(_TabsCur){
+            this.TabsCur = _TabsCur;
+        }
     },
     beforeUpdate(){
         console.log("分组设置--beforeUpdate-------",this.formPartValidate,this.formValidate)
@@ -233,6 +248,11 @@ export default {
 		},()=>{})
 	},
 	methods:{
+		//tabs - start
+        tabsHandle(name){
+            this.TabsCur = name;
+        },
+        //tabs -end
 		getPermissionFn(URL){
             return Common.GetPermission(defaultAXIOS,this,URL);
         },
@@ -646,13 +666,13 @@ export default {
 					return Promise.resolve(myData)
 				}else{
 					console.log(URL+"没有信息");
-			  		this.showError(URL+"没有信息");
+			  		//this.showError(URL+"没有信息");
 			  		return Promise.reject(myData);
 				}
 			})
 			.catch( (error) => {
 			  console.log(error);
-			  this.showError(error);
+			  //this.showError(error);
 			  return Promise.reject(error);
 			});   
     	},

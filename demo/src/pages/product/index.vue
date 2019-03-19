@@ -209,7 +209,10 @@
 							id="productBoardBox" 
 							v-if="kanbanboardIsShow"
 							@addUS="speedAddItem"
+							@sendCheckbox="acceptCheckbox"
+							:UserstorystatusList="((d)=>{return d})(userstory_statusLists)"
 						/>
+						
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
 					</div>
 
@@ -358,7 +361,6 @@ export default {
     },
     updated(){
         console.log("用户故事列表--updated-------",this.formValidate,this.statusListBase)
-
         if(this.addtest){
             this.tabRowAddFn()
         }
@@ -688,6 +690,10 @@ export default {
 		statusLists(){
 			return this.statusListBase;
 		},
+		userstory_statusLists(){
+			return this.userstory_statusList;
+		},
+		
 		//看板结束
         addtest() {
             return this.$store.state["ADD_DATA_TEST"].data
@@ -723,6 +729,17 @@ export default {
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
 	},
 	methods:{
+		//所属需求项 多选开始
+		acceptCheckbox(obj,arr,val){
+			//this.kanbanboardIsShow = false;
+			let temp = [];
+			arr.forEach((item)=>{
+				let str = item.substr(0, 1) == "0" || item.substr(0, 1) === "0" ? item.slice(1) : item;
+				temp.push(str);
+			})
+			this.serchAll({},JSON.stringify(temp));
+		},
+		//所属需求项 多选结束
 		optputExecl(){
 			let params = {
 				id:this.getID(),
@@ -1048,7 +1065,7 @@ export default {
 			this.statusListBase = [];
 			this.groupList = [{ text: "所属需求项" }];
 		},
-		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = ""){
+		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = "",USS = ""){
 			this.cardList = [];
 			this.statusList = [];
 			this.cardListBase = [];
@@ -1068,7 +1085,8 @@ export default {
             	sprint,
             	group_name,
             	username:Common.getCookie("username"),
-            	prjSn:Common.getCookie("prjSn")
+            	prjSn:Common.getCookie("prjSn"),
+            	uss:this.ussArr(USS,this.statusLists),
             }
 
 			defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
@@ -1254,7 +1272,7 @@ export default {
 			Common.RemoveSession("userstorySerchTemp");
 
         },
-		serchAll(){
+		serchAll(evt,uss = ""){
 			if(!this.clickTime){
 				return
 			}else{
@@ -1264,6 +1282,7 @@ export default {
 				},1500)
 			}
 
+			let _uss = uss ? uss : this.ussArr(uss,this.statusLists);
 			let ID = this.getID();
 			this.optionSession();
 			Common.RemoveSession("REQ_ID");
@@ -1271,10 +1290,10 @@ export default {
             	this.kanbanboardIsShow = false;
             	setTimeout(()=>{
 					this.kanbanboardIsShow = true;
-					this.boardList(ID);
+					this.boardList(ID,_uss);
 				},10)
             }else{
-            	this.boardList(ID);
+            	this.boardList(ID,_uss);
             }
 
 
@@ -1283,7 +1302,7 @@ export default {
             
 
         },
-        boardList(ID){
+        boardList(ID,uss = ""){
         	let searchParams = [
         		this.formValidate.userstory_name,
         		this.formValidate.userstory_id,
@@ -1294,14 +1313,29 @@ export default {
         		this.formValidate.charger,
         		this.formValidate.learn_concern,
         		this.formValidate.sprint,
-        		this.formValidate.group_name
+        		this.formValidate.group_name,
+        		uss,
         	];
         	this.storyGetKanBanFn(storyGetKanBan,ID,...searchParams);
             this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,...searchParams);
             this.tableDAtaPageCurrent = 1;
         },
+        ussArr(Uss,arr){
+			let temp = [];
+			if(Uss){
+				return Uss;
+			}else{
+				if(arr && Array.isArray(arr) && arr.length){
+					arr.forEach((item)=>{
+						let str = item.state.substr(0, 1) == "0" || item.state.substr(0, 1) === "0" ? item.state.slice(1) : item.state;
+						temp.push(str);
+					})	
+				}
+				return JSON.stringify(temp);
+			}
+		},
 		
-		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = ""){
+		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = "",USS = ""){
 			let defaultAXIOSParams = {
 				page,
 				limit,
@@ -1316,7 +1350,9 @@ export default {
 				proi,
 				charger,
 				learn_concern,
-				sprint,group_name
+				sprint,
+				group_name,
+				uss:this.ussArr(USS,this.statusLists),
 			};
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
@@ -1446,7 +1482,7 @@ export default {
 .tagBox{
 	background: #fff;
     box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding-left:5px;
 }
 .addBtnBox {

@@ -851,11 +851,10 @@ app.all('/sprint/getSprintsByPrj', function(req, res) {
 });
 
 
-let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
-    return Mock.mock({
-        status: "success", 
-        message: "ok" ,
-        data:[
+let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
+    console.log("num=====",num)
+    let data = [];
+    let _data = [
             {
                 count:4,
                 userstory_status:"提出",
@@ -1043,7 +1042,6 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "depdDesc":"依赖项状态->@title",
 
                     },
-                   
                 ]
             },
             {
@@ -1084,7 +1082,6 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "depdDesc":"依赖项状态->@title",
 
                     },
-                   
                 ]
             },
             {
@@ -1166,7 +1163,6 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "depdDesc":"依赖项状态->@title",
 
                     },
-                   
                 ]
             },
             {
@@ -1207,7 +1203,6 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "depdDesc":"依赖项状态->@title",
 
                     },
-                   
                 ]
             },
             {
@@ -1249,11 +1244,18 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "depdDesc":"依赖项状态->@title",
 
                     },
-                    
-                   
                 ]
             },
-        ],
+        ];
+    let _num = num ? num : 8;
+    for(let i=0;i<_num;i++){
+        data.push(_data[i])
+    }
+    console.error("data======",data)
+    return Mock.mock({
+        status: "success", 
+        message: "ok" ,
+        data:data,
         "role|1":["_icdp_projManager","icdp_teamLeader"],
     })
 }
@@ -1261,9 +1263,20 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3) => {
 
 app.all('/userstory/getUserStoryKanBan/', function(req, res) {
     let resVal = kanbanList(req.body.myStatus, req.body.page, req.body.pageline);
-    console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
-    res.json(kanbanList(req.body.myStatus));
+    console.log("req==看板>", req._parsedUrl.query);
+    let arr = req._parsedUrl.query.split("&");
+    let str = "";
+    
+    for(let i=0;i<arr.length;i++){
+        if(arr[i].indexOf("uss") != -1){
+            str = arr[i];
+        }
+    }
+    str = decodeURIComponent(str).split("=")[1];
+    arr = JSON.parse(str)
+    //console.log("resVal==看板>", resVal);
+    let num = str ? arr.length : 8;
+    res.json(kanbanList("","","",num));
     res.end()
 });
 

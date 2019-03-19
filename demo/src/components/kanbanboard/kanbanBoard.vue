@@ -182,9 +182,6 @@ export default {
     },
   },
 
-
-
-
   data() {
     return {
       sortId:[],
@@ -205,6 +202,9 @@ export default {
   },
   created(){
     console.log("看板 kanbanboard--created-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId);
+    if(!this.userstoryStatusList.length){
+      this.userstoryStatusList = window.userstoryStatusList;
+    }
   },
   beforecreated(){
     console.log("看板 kanbanboard--beforecreated-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
@@ -230,6 +230,7 @@ export default {
     },
     UserstorystatusList(data){
       this.userstoryStatusList = this.statusListFn(data);
+      window.userstoryStatusList = this.userstoryStatusList;
       
     },
     role(data){
@@ -239,10 +240,6 @@ export default {
     
   },
   mounted(){
-    if(!this.userstoryStatusList.length){
-      this.userstoryStatusList = this.statusListFn();
-    }
-    console.error("mounted this.userstoryStatusList",this.userstoryStatusList)
     
     document.body.ondrop = function(event){
       event.preventDefault();
@@ -274,9 +271,7 @@ export default {
 
         })
       }
-      let copy = [{"value":"01","label":"提出"},{"value":"02","label":"设计分析"},{"value":"06","label":"开发测试"},{"value":"03","label":"用户验收测试"},{"value":"04","label":"待投产"},{"value":"05","label":"已投产"},{"value":"07","label":"停滞"},{"value":"00","label":"废弃"}]
-      return arr.length ? arr : copy;
-      
+      return arr
     },
     funnelAllSelect(arr){
       let temp = [];

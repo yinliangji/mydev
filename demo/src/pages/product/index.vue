@@ -210,7 +210,7 @@
 							v-if="kanbanboardIsShow"
 							@addUS="speedAddItem"
 							@sendCheckbox="acceptCheckbox"
-							:UserstorystatusList="((d)=>{return d})(userstory_statusLists)"
+							:UserstorystatusList="userstory_statusLists"
 						/>
 						
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
@@ -1295,6 +1295,7 @@ export default {
             }else{
             	this.boardList(ID,_uss);
             }
+
 
 
 

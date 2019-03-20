@@ -1,8 +1,8 @@
 <template>
   <Layout class="boardWrapper">
-    <div class="tool" id="tool" ref="tool">
+    <div class="tool" id="tool" ref="tool" v-show="aside == 'product'">
       <span class="funnelBox">
-        <Icon type="funnel" size="16" class="funnelIcon"></Icon>
+        <Icon type="funnel" size="18" class="funnelIcon"></Icon>
         <div class="funnelOption">
           <div class="funnelAllBox">
             <Checkbox
@@ -21,12 +21,12 @@
           <div class="funnelBtnBox">
             <Button type="primary" size="small" :loading="funnelLoading" @click="funnelFn">
                 <span v-if="!funnelLoading">筛选</span>
-                <span v-else>...</span>
+                <span v-else>等待</span>
             </Button>
           </div>
         </div>
       </span>
-      <Icon type="android-settings" size="16"></Icon>
+      <Icon type="android-settings" size="18" class="settingIcon" @click="goSetting"></Icon>
     </div>
     <content id="board">
       <p v-if="groupList.length > 0" class="left_border" :style="'left:'+ (firstColumn - 0) +'px;'"></p>
@@ -174,7 +174,7 @@ export default {
         return 120;
       }
     },
-    UserstorystatusList: {//故事状态
+    MenuStatusList: {//菜单状态
       type: [Boolean,String,Number,Array],
       default: function() {
         return [];
@@ -190,7 +190,10 @@ export default {
       IS:false,
       addSpace:0,
       isPut:["07","08"],
+      isUsPut:[],
       imgStatus:require("@/assets/images/user_02.png"),
+      Warning:"",
+      noPut:[],
       //筛选开始
       funnelLoading:false,
       indeterminate: false,
@@ -202,9 +205,6 @@ export default {
   },
   created(){
     console.log("看板 kanbanboard--created-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId);
-    if(!this.userstoryStatusList.length){
-      this.userstoryStatusList = window.userstoryStatusList;
-    }
   },
   beforecreated(){
     console.log("看板 kanbanboard--beforecreated-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
@@ -226,12 +226,10 @@ export default {
     },
     statusList(data){
       this.checkAllGroup = this.funnelAllSelect();
-      this.checkAll = this.checkAllGroup.length ? true : false;
     },
-    UserstorystatusList(data){
+    MenuStatusList(data){
       this.userstoryStatusList = this.statusListFn(data);
-      window.userstoryStatusList = this.userstoryStatusList;
-      
+      this.checkAll = this.checkAllGroup.length == this.userstoryStatusList.length ? true : false;
     },
     role(data){
       
@@ -254,6 +252,9 @@ export default {
   },
   methods:{
     //筛选开始
+    goSetting(evt){
+      this.$router.push({path: '/setting', query: {TabsCur:"name2",}})
+    },
     statusListFn(data){
       let obj = {};
       let arr = [];
@@ -283,12 +284,17 @@ export default {
       return temp;
     },
     funnelFn () {
-        this.funnelLoading = true;
         let newArr = [];
+        if(this.checkAllGroup.length < 1){
+          Common.CommonWarning(this,"至少选择一项");
+          return;
+        }
         if(!this.statusList.length || !this.checkAllGroup.length){
           console.log(this.statusList,this.checkAllGroup);
           return
         }
+        
+        this.funnelLoading = true;
         for(let i=0;i<this.checkAllGroup.length;i++){
           this.statusList.forEach((item)=>{
             if(item.state == this.checkAllGroup[i]){
@@ -308,15 +314,26 @@ export default {
         }
         */
         this.indeterminate = false;
+        let fn = (arr)=>{
+          let myArr = [];
+          if(arr && Array.isArray(arr) && arr.length){
+            arr.forEach((item)=>{
+              myArr.push(item.value) 
+            })
+          }
+          return myArr;
+        }
 
         if (this.checkAll) {
-            this.checkAllGroup = this.funnelAllSelect();
+          this.checkAllGroup = fn(this.userstoryStatusList);
+            //this.checkAllGroup = this.funnelAllSelect();
         } else {
             this.checkAllGroup = [];
         }
     },
     funnelAllChange (data) {
-        if (data.length == this.statusList.length) {
+      console.log(data.length,this.statusList.length,data)
+        if (data.length == this.userstoryStatusList.length) {
             //this.indeterminate = false;
             this.checkAll = true;
         } else if (data.length > 0) {
@@ -604,21 +621,40 @@ export default {
             
           },
           put:function(Old,New,Ele,Evt){
+
+            let fn = (arr,val)=>{
+              return arr.find((item)=>{
+                return "stateId_"+item == val;
+              })
+            }
+            let fnUs = (arr,val,gId)=>{
+              return arr.find((item)=>{
+                return "kb"+gId+"_"+item == val;
+              })
+            }
+
             if(that.aside && that.aside == "product"){
-              return true
-            }if(that.aside && that.aside == "demand"){
-              let fn = (arr,val)=>{
-                return arr.find((item)=>{
-                  return "stateId_"+item == val;
-                })
+
+              if(fnUs(that.isUsPut,Old.el.id,Ele.getAttribute("groupid"))){
+                that.Warning = "有工作项，不能废弃"
+                return false
+              }else{
+                that.Warning = "";
+                return true                
               }
-              if(fn(that.isPut,Old.el.id)){//Old.el.id == "stateId_07" || Old.el.id == "stateId_08"
+              
+            }if(that.aside && that.aside == "demand"){
+
+              if(fn(that.isPut,Old.el.id)){
                 return true
               }else {
                 return false
               }
+
             }else{
+
               return true
+
             }
             //console.error("**put old Sortable==>",Old,"**put new Sortable==>",New,"***put HTML元素==>",Ele,"**put DragEvent==>",Evt);
             // if(Old.el.id == "kb6_01" || Old.el.id == "kb6_02" || Old.el.id == "kb6_03"){
@@ -649,16 +685,42 @@ export default {
           }
         },
         onEnd:function(evt){
+          if(that.noPut.length){
+            console.error(that.noPut.length,that.noPut[0])
+            document.getElementById(that.noPut[0]).removeAttribute('style');
+          }
           if(vm.Group){
             console.log('moveEnd 》》》》》》')
-            EventBus.$emit("moveEnd",{evt});
+            EventBus.$emit("moveEnd",{evt},that.Warning);
             vm.autoHeight();
           }else{
             console.log('story moveEnd 》》》》》》',evt);
-            EventBus.$emit("storyMoveEnd",{evt});
+            EventBus.$emit("storyMoveEnd",{evt},that.Warning);
             vm.autoHeight();
           }
 
+        },
+        onStart: function (evt) {
+          that.Warning = "";
+          that.isUsPut = [];
+          let N = evt.item.getAttribute("data-taskcount") - 0;
+          let gId = evt.item.getAttribute("groupid");
+          if(N == 0 || N == "0"){
+          }else{
+            let obj = that.statusList.find((item)=>{
+              return item.stateStr == "废弃";
+            })
+            if(obj){
+              that.isUsPut.push(obj.state);
+              that.noPut = [];
+              that.noPut.push("kb"+gId+"_"+obj.state)
+              let Dom = document.getElementById(that.noPut[0]);
+              if(Dom){
+                Dom.style.background = "#e4e4e4";
+              }
+               
+            }
+          }          
         },
       });
     },
@@ -687,8 +749,12 @@ export default {
 </script>
 <style scoped>
 /* 筛选开始 */
+.settingIcon {
+  cursor: pointer;
+}
 .boardWrapper {
   position: relative;
+  min-height: 300px;
 }
 .tool {
   text-align: right;
@@ -701,7 +767,6 @@ export default {
   padding-bottom:6px;
   margin-bottom:6px;
   overflow: hidden;
-  padding-left:7px;
   padding-top: 10px; 
 }
 .funnelGroupBox{
@@ -713,13 +778,21 @@ export default {
 .funnelGroupBox > label {
   display: block;
   text-align: left;
-  padding-left:7px;
   padding-bottom: 5px;
+  overflow: hidden;
 }
+.funnelAllBox , .funnelGroupBox > label {
+  padding-left:18px;
+}
+
+
 .funnelGroupBox > label .ivu-checkbox + span {
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
+  display: block;
+  margin-left: 20px;
+  padding-top: 2px;
 }
 
 .funnelAllBox > label {
@@ -736,22 +809,22 @@ export default {
 .funnelOption{
   position: absolute;
   background: white;
-  width: 140px;
-  
-
+  width: 160px;
   right: -2px;
   top: -5px;
   border: 1px solid #ddd;
-  z-index: 200;
+  z-index: 250;
   padding-top:0px;
 
   background-color: #fff;
   background-clip: padding-box;
   border-radius: 4px;
   box-shadow: 0 1px 6px rgba(0,0,0,.2); 
-  /* opacity: 0;
+  
+  opacity: 0;
   transition: all 1s;
-  pointer-events: none; */
+  pointer-events: none;
+
 }
 .funnelBox:hover .funnelOption {
   opacity: 1;
@@ -760,7 +833,31 @@ export default {
 .funnelBox {
   position: relative;
   margin-right: 5px;
+  z-index: 200;
 }
+
+.funnelBox:before{
+  position: absolute;
+  content: "";
+  width: 200%;
+  height: 320%;
+  right: 0;
+  top: -20px;
+  background: red;
+  z-index: 210;
+  opacity: 0.0;
+
+}
+/*
+.funnelBox:hover:before{
+  width: 160px;
+  height: 200px;
+  background: red;
+  opacity: 0.2;
+  z-index: 260;
+  pointer-events: none;
+}
+*/
 /* 筛选结束 */
 
 .imgStatus{
@@ -769,7 +866,7 @@ export default {
   padding: 4px;
 }
 .noPutBg{
-  background: #f8f8f9;
+  background:#e4e4e4 /*#f8f8f9*/;
 }
 .addSpaceBox{
   position: relative;
@@ -848,10 +945,6 @@ export default {
 .kanbanBox > div.Column:last-of-type{
   padding-right: 0;
 }
-
-
-
-
 
 .addMissionBtn{
   margin:6px auto 0;
@@ -989,7 +1082,9 @@ export default {
 #dependManageBoardBox .ivu-col-span-4{
   width: 19.7%;
 }
-
-
-
+</style>
+<style>
+.funnelGroupBox > label .ivu-checkbox {
+  float: left;
+}
 </style>

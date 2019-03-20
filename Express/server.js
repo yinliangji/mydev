@@ -869,7 +869,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "isDepd|1":["no","yes"],
                         "isFile|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
-                        "task_count|1-99":0,
+                        "task_count|0-0":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
@@ -887,7 +887,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "isDepd|1":["no","yes"],
                         "isFile|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
-                        "task_count|1-99":0,
+                        "task_count|0-0":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
@@ -3025,7 +3025,7 @@ app.all('/req/addReq/', function(req, res) {
 });
 
 app.all('/req/deleteReq/', function(req, res) {
-    res.json({ status: "success" });
+    res.json({ status: "success" ,message:"req/deleteReq 删除完成"});
     res.end()
 });
 

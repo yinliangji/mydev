@@ -10,6 +10,7 @@
     :groupId="item.groupId"
     :nickname="item.nickName"
     :class="isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)"
+    :data-taskCount="item.task_count"
     >
       <div class="card-wrap">
 

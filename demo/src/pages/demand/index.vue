@@ -137,6 +137,8 @@
                             :boardName="'demandBoard'" 
                             id="demandBoardBox"
                             v-if="kanbanboardIsShow"
+                            @sendCheckbox="acceptCheckbox"
+                            :MenuStatusList="menuStatusList"
                         />
                     </div>
 
@@ -350,6 +352,7 @@ export default {
             isShowITMPop:false,
 
             //看板start
+            menuStatusList:[],
             currentView: "developList",//developList//kanbanboard
             developListImg:require("../../assets/images/product-list.png"),
             developListImgCur:require("../../assets/images/product-listCur.png"),
@@ -473,6 +476,9 @@ export default {
             }
         },
         //看板开始
+        acceptCheckbox(obj,arr,val){
+            console.log(obj,arr,val)           
+        },
         EventBusDispatch(){
             if(!EventBus.productDispatch){
                 //EventBus.$emit('storyBindSort');
@@ -948,7 +954,8 @@ export default {
                         top: 250,
                         duration: 3
                     });
-                    this.$Message.success('删除完成');
+
+                    this.$Message.success(myData.message);
                     //this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
                     this.tableDAtaPageCurrent = 1;
                     this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));
@@ -1113,6 +1120,13 @@ export default {
             return this.cardListBase;
         },
         statusLists(){
+            this.menuStatusList = [];
+            this.statusListBase.forEach((item)=>{
+                let obj = {};
+                obj.value = item.state;
+                obj.label = item.stateStr;
+                this.menuStatusList.push(obj);
+            })
             return this.statusListBase;
         },
     },

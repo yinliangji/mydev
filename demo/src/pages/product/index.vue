@@ -210,7 +210,7 @@
 							v-if="kanbanboardIsShow"
 							@addUS="speedAddItem"
 							@sendCheckbox="acceptCheckbox"
-							:UserstorystatusList="userstory_statusLists"
+							:MenuStatusList="menuStatusList"
 						/>
 						
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
@@ -378,6 +378,7 @@ export default {
 			currentView: "developList",//developList//kanbanboard
 
 			//看板开始
+			menuStatusList:[],
 			groupList:[
 		        { text: "所属需求项" },
 			],
@@ -688,6 +689,8 @@ export default {
 			return this.cardListBase;
 		},
 		statusLists(){
+			this.menuStatusList = [];
+			this.menuStatusList = _.cloneDeep(this.userstory_statusList);
 			return this.statusListBase;
 		},
 		userstory_statusLists(){
@@ -1000,12 +1003,15 @@ export default {
                 this.showError(error);
             });
 		},
-		moveEnd(info) {
+		moveEnd(info,val) {
 			if(window.location.hash.indexOf("/product") == -1){
 				return
 			}
             // 移动卡片结束后
             console.log("用户故事-移动卡片结束后 :::", info);
+            if(val){
+            	Common.CommonWarning(this,val)
+            }
             this.changeStateNumber(info);
             if(!EventBus.productMoveEnd){
             	this.changeMovedStatus(info);
@@ -1483,7 +1489,7 @@ export default {
 .tagBox{
 	background: #fff;
     box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     padding-left:5px;
 }
 .addBtnBox {

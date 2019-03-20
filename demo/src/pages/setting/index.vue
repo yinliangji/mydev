@@ -134,7 +134,7 @@
 		        		<!-- 小组结束 -->
 		        	</div>
 		        </TabPane>
-		        <TabPane label="用户故事设置" name="name2">
+		        <TabPane label="用户故事状态设置" name="name2">
 		        	<div class="baseInfoBox">
 		        		<!-- 用户故事设置开始 -->
 				       <UserstorySet :Data="false" v-if="TabsCur == 'name2'" />
@@ -251,6 +251,7 @@ export default {
 		//tabs - start
         tabsHandle(name){
             this.TabsCur = name;
+            this.$router.push({path: '/setting', query: {TabsCur:name,}})
         },
         //tabs -end
 		getPermissionFn(URL){

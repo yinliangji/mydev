@@ -464,6 +464,18 @@ const router = new Router({
                 }
             },
         },
+        {
+            path: '/milestone',
+            name: 'milestone',
+            components: {
+                Cont: resolve => {
+                    require(["../pages/milestone/milestone"], resolve)
+                },
+                Aside: resolve => {
+                    require(["../layout/sider/sider_2"], resolve)
+                }
+            },
+        },
 
         //以后删除开始
 

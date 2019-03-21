@@ -52,6 +52,11 @@
 			<Icon type="alert-circled"></Icon>
 			<span>缺陷管理</span>
 		</MenuItem>
+		<MenuItem name="1-25" title="里程碑">
+			<router-link  to="/milestone" />
+			<Icon type="android-hand"></Icon>
+			<span>里程碑</span>
+		</MenuItem>
 		<MenuItem name="1-17" title="项目设置">
 			<router-link  to="/setting" />
 			<Icon type="settings"></Icon>

@@ -2,7 +2,15 @@
   <Layout class="boardWrapper">
     <div class="tool" id="tool" ref="tool" v-show="aside == 'product'">
       <span class="funnelBox">
-        <Icon type="funnel" size="18" class="funnelIcon"></Icon>
+        <!-- <Icon type="funnel" size="18" class="funnelIcon"></Icon> -->
+        <div class="ivu-poptip funnelIcon">
+          <div class="ivu-poptip-rel">
+            <span class="ivu-table-filter">
+              <i class="ivu-icon ivu-icon-funnel" style="color:#495060;font-weight:900;"></i>
+            </span> 
+          </div> 
+          <!---->
+        </div>
         <div class="funnelOption">
           <div class="funnelAllBox">
             <Checkbox
@@ -685,9 +693,11 @@ export default {
           }
         },
         onEnd:function(evt){
-          if(that.noPut.length){
-            console.error(that.noPut.length,that.noPut[0])
-            document.getElementById(that.noPut[0]).removeAttribute('style');
+          if(that.noPut.length && that.aside && that.aside == "product"){
+            let DOM = document.getElementById(that.noPut[0]);
+            if(DOM){
+              DOM.removeAttribute('style');  
+            }
           }
           if(vm.Group){
             console.log('moveEnd 》》》》》》')
@@ -701,26 +711,28 @@ export default {
 
         },
         onStart: function (evt) {
-          that.Warning = "";
-          that.isUsPut = [];
-          let N = evt.item.getAttribute("data-taskcount") - 0;
-          let gId = evt.item.getAttribute("groupid");
-          if(N == 0 || N == "0"){
-          }else{
-            let obj = that.statusList.find((item)=>{
-              return item.stateStr == "废弃";
-            })
-            if(obj){
-              that.isUsPut.push(obj.state);
-              that.noPut = [];
-              that.noPut.push("kb"+gId+"_"+obj.state)
-              let Dom = document.getElementById(that.noPut[0]);
-              if(Dom){
-                Dom.style.background = "#e4e4e4";
+          if(that.aside && that.aside == "product"){
+            that.Warning = "";
+            that.isUsPut = [];
+            let N = evt.item.getAttribute("data-taskcount") - 0;
+            let gId = evt.item.getAttribute("groupid");
+            if(N == 0 || N == "0"){
+            }else{
+              let obj = that.statusList.find((item)=>{
+                return item.stateStr == "废弃";
+              })
+              if(obj){
+                that.isUsPut.push(obj.state);
+                that.noPut = [];
+                that.noPut.push("kb"+gId+"_"+obj.state)
+                let Dom = document.getElementById(that.noPut[0]);
+                if(Dom){
+                  Dom.style.background = "#e4e4e4";
+                }
+                 
               }
-               
             }
-          }          
+          }
         },
       });
     },
@@ -804,7 +816,8 @@ export default {
 }
 .funnelIcon {
   position: relative;
-  z-index: 210;
+  z-index: 260;
+  transform:translate(0%,-12%);
 }
 .funnelOption{
   position: absolute;
@@ -824,7 +837,7 @@ export default {
   opacity: 0;
   transition: all 1s;
   pointer-events: none;
-
+  
 }
 .funnelBox:hover .funnelOption {
   opacity: 1;

@@ -11,13 +11,14 @@
         </Breadcrumb>
         <Card>
             <div class="editBtn">
-                <!-- :disabled="authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])"  -->
+                <!--   -->
                 <Button 
                     type="warning" 
                     @click="editItemFn"
                     class="editBtn"
                     long
                     size="small"
+                    :disabled="authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])"
                     v-show="(TabsCur == 'name1') ? true : false"
                     >
                     编辑

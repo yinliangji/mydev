@@ -60,6 +60,7 @@
             </div>
             <div class="centerHeader" v-else>
               <a class="txtBlock" @click="toStory(itemGroup)" :title="itemGroup.text">{{itemGroup.text}}</a>
+              <div style="overflow:hidden;height:5px;">&nbsp;</div>
               <span class="imgStatus">{{itemGroup.us_status}}</span>
             </div>
             <div>
@@ -727,7 +728,8 @@ export default {
                 that.noPut.push("kb"+gId+"_"+obj.state)
                 let Dom = document.getElementById(that.noPut[0]);
                 if(Dom){
-                  Dom.style.background = "#e4e4e4";
+                  //Dom.style.background = "#e4e4e4";
+                  Dom.setAttribute("style","background:#e4e4e4;webkit-transform: rotateY(180deg);-moz-transform: rotateY(180deg);-o-transform: rotateY(180deg);-ms-transform: rotateY(180deg);transform: rotateY(180deg);")
                 }
                  
               }
@@ -950,11 +952,58 @@ export default {
   flex: 1 1 1px;/* flex-grow:1; flex-shrink:1; flex-basis:auto; */
   padding-right:2px;
   padding-left:2px;
-  transition: all 1s;
+  /*transition: all 0.1s;*/
 
   /* flex-basis:auto; */
 
+  -webkit-perspective: 500;
+    -moz-perspective: 500;
+    -ms-perspective: 500;
+    perspective: 500;
+    -ms-transform: perspective(500px);
+    -moz-transform: perspective(500px);
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+
 }
+
+
+
+.rowBox{
+  border:1px dashed #ddd;
+  min-height:64px;
+  border-radius:4px;
+  height: 100%;
+  
+
+  -webkit-transform: rotateY(0deg);
+  -moz-transform: rotateY(0deg);
+  -o-transform: rotateY(0deg);
+  -ms-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+  
+  /*
+  -webkit-transition: 2s;
+  -moz-transition: 2s;
+  -o-transition: 2s;
+  -ms-transition: 2s;
+  transition: 2s;
+  */
+    /* transition: all 1s; */
+  transition:all 1.5s;
+
+
+}
+.rowBox2{
+  border:1px dashed #ccc;
+  min-height:100px;
+}
+
 .kanbanBox > div.Column:last-of-type{
   padding-right: 0;
 }
@@ -967,16 +1016,7 @@ export default {
   margin:6px auto 0;display:block;
 }
 
-.rowBox{
-  border:1px dashed #ddd;
-  min-height:64px;
-  border-radius:4px;
-  height: 100%;
-}
-.rowBox2{
-  border:1px dashed #ccc;
-  min-height:100px;
-}
+
 
 .ivu-layout-header {
   background: #fff;

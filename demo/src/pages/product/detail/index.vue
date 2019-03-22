@@ -17,10 +17,11 @@
         </Breadcrumb>
         <Card>
             <div class="editBtn">
+                <!-- :disabled="authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])"  -->
                 <Button 
                     type="warning" 
                     @click="editItemFn"
-                    :disabled="authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])" 
+                    :disabled="iSauth(formValidate.editStatus)"
                     class="editBtn"
                     long
                     size="small"
@@ -161,7 +162,8 @@ export default {
                 product_name:"",
                 depd_list:[],  
                 AddGroupList:[],//搜索查询
-                bfunc:[],//弹出业务窗口           
+                bfunc:[],//弹出业务窗口  
+                editStatus:"",         
             },
             userstory_typeList:[],
             userstory_statusList:[],
@@ -282,6 +284,19 @@ export default {
         console.log("用户故事detail--updated-------",this.formValidate)
     },
     methods: {
+        iSauth(KEY){
+            let key;
+            if(KEY){
+                if(KEY != "false" || KEY != "null" || KEY != "undefined"){
+                    key = true;
+                }else{
+                    key = false;
+                }
+            }else{
+                key = false;
+            }
+            return !key;
+        },
         //wy start
         copydata(to,from){
             Object.assign(to,from)
@@ -341,7 +356,7 @@ export default {
             Common.ErrorShow(ERR,this);
         },
         storyGetDetailFn(URL = "",detail_id){
-            return defaultAXIOS(URL,{detail_id},{timeout:5000,method:'get'})
+            return defaultAXIOS(URL,{detail_id,username:Common.getCookie("username")},{timeout:5000,method:'get'})
             .then((response) => {
                 let myData = response.data;
                 console.log("<======product detail***response+++",response,myData,"======>");

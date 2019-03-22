@@ -137,7 +137,7 @@
 		        <TabPane label="用户故事状态设置" name="name2">
 		        	<div class="baseInfoBox">
 		        		<!-- 用户故事设置开始 -->
-				       <UserstorySet :Data="false" v-if="TabsCur == 'name2'" />
+				       <UserstorySet :Data="false" v-if="TabsCur == 'name2'" ref="UserstorySet" />
 		        		<!-- 用户故事设置结束 -->
 		        	</div>
 		        </TabPane>
@@ -811,7 +811,7 @@ export default {
             let ID = N;
 			//this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
 
-
+			this.$refs.UserstorySet.showkanban();
 			this.addTeam(getUserByProjId,{projectId:ID}).then(()=>{
 				this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:ID});
 			},()=>{})

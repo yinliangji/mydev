@@ -576,7 +576,8 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
-                                domProps:{disabled:this.authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])},
+                                //domProps:{disabled:this.authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])},
+                                domProps:{disabled:this.iSauth(params.row.editStatus)},
                                 on: {
                                     click: () => {
                                         this.deleteTableLine(params.index)
@@ -591,7 +592,8 @@ export default {
                                 style: {
                                     marginRight: '5px'
                                 },
-                                domProps:{disabled:this.authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])},
+                                //domProps:{disabled:this.authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])},
+                                domProps:{disabled:this.iSauth(params.row.editStatus)},
                                 on: {
                                     click: () => {
                                         //this.show(params.index)
@@ -734,7 +736,6 @@ export default {
 	methods:{
 		//所属需求项 多选开始
 		acceptCheckbox(obj,arr,val){
-			//this.kanbanboardIsShow = false;
 			let temp = [];
 			arr.forEach((item)=>{
 				let str = item.substr(0, 1) == "0" || item.substr(0, 1) === "0" ? item.slice(1) : item;
@@ -1062,9 +1063,10 @@ export default {
 			let CurView = "kanbanboard"
 			this.currentView = CurView;
 			Common.SetSession("CurView",CurView);
+			this.kanbanboardIsShow = false;
 			setTimeout(()=>{
 				this.getInfoFn(this.getID(),"showTask")
-			},350)
+			},1)
 		},
 		resetKanbanboard(){
 			this.cardListBase = [];
@@ -1072,6 +1074,7 @@ export default {
 			this.groupList = [{ text: "所属需求项" }];
 		},
 		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = "",USS = ""){
+			this.kanbanboardIsShow = true;
 			this.cardList = [];
 			this.statusList = [];
 			this.cardListBase = [];
@@ -1200,6 +1203,19 @@ export default {
             });
 		},
         /* 看板结束 */
+        iSauth(KEY){
+        	let key;
+        	if(KEY){
+        		if(KEY != "false" || KEY != "null" || KEY != "undefined"){
+        			key = true;
+        		}else{
+        			key = false;
+        		}
+        	}else{
+        		key = false;
+        	}
+        	return !key;
+        },
 
 		authIs(KEY){
 			return Common.auth(this,KEY)            
@@ -1246,7 +1262,7 @@ export default {
 			    		this.formValidate[I] = "";
 			    	}
 			    }
-			    this.kanbanboardIsShow = true;
+			    //this.kanbanboardIsShow = true;
 			    this.getInfoFn(ID);
 
 
@@ -1295,7 +1311,7 @@ export default {
             if(this.currentView == "kanbanboard"){
             	this.kanbanboardIsShow = false;
             	setTimeout(()=>{
-					this.kanbanboardIsShow = true;
+					//this.kanbanboardIsShow = true;
 					this.boardList(ID,_uss);
 				},10)
             }else{
@@ -1323,8 +1339,13 @@ export default {
         		this.formValidate.group_name,
         		uss,
         	];
-        	this.storyGetKanBanFn(storyGetKanBan,ID,...searchParams);
-            this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,...searchParams);
+        	if(this.currentView == "kanbanboard"){
+        		this.storyGetKanBanFn(storyGetKanBan,ID,...searchParams);
+        	}else{
+        		this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID,...searchParams);	
+        	}
+        	
+            
             this.tableDAtaPageCurrent = 1;
         },
         ussArr(Uss,arr){
@@ -1359,6 +1380,7 @@ export default {
 				learn_concern,
 				sprint,
 				group_name,
+				username:Common.getCookie("username"),
 				uss:this.ussArr(USS,this.statusLists),
 			};
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {

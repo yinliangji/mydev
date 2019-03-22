@@ -510,11 +510,13 @@ export default {
             let CurView = "kanbanboard"
             this.currentView = CurView;
             Common.SetSession("CurView_demand",CurView);
+            this.kanbanboardIsShow = false;
             setTimeout(()=>{
                 this.getInfoFn(this.getID(),"showTask")
             },350)
         },
         storyGetKanBanFn(URL = "",id="",req_id = "",req_name = "",req_submitter = "",req_stat = ""){
+            this.kanbanboardIsShow = true;
             this.cardList = [];
             this.statusList = [];
             this.cardListBase=[];
@@ -780,7 +782,7 @@ export default {
             this.tableDAtaPageCurrent = 1;
 
             setTimeout(()=>{
-                this.kanbanboardIsShow = true;
+                //this.kanbanboardIsShow = true;
                 this.getInfoFn(ID);
             },400)
             //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
@@ -839,7 +841,7 @@ export default {
             if(this.currentView == "kanbanboard"){
                 this.kanbanboardIsShow = false;
                 setTimeout(()=>{
-                    this.kanbanboardIsShow = true;
+                    //this.kanbanboardIsShow = true;
                     this.tableDAtaPageCurrent = 1;
                     this.getInfoFn(ID);
                 },10)

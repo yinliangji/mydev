@@ -632,6 +632,8 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             "prod_id":"product1",
             "product_name":"product_name_xxxxxxxx",
 
+            "editStatus|1":[true,false],
+
 
             "__value2__page": val2,
             "__value3__pageline": val3,
@@ -1220,7 +1222,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "isDepd|1":["no","yes"],
                         "isFile|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
-                        "task_count|1-99":0,
+                        "task_count|0-0":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
@@ -1237,7 +1239,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "isDepd|1":["no","yes"],
                         "isFile|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
-                        "task_count|1-99":0,
+                        "task_count|0-0":0,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
@@ -1656,6 +1658,8 @@ let Userstorydetail = (val1 = 200, val2 = 1, val3 = 3) => {
             "prj_name":"敏捷项目0000",
             "prod_id":"product1",
             "product_name":"product_name_xxxxxxxx",
+
+            "editStatus|1":[true,true],
 
             "depd_list|2-10":[
                 {

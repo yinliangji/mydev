@@ -85,43 +85,43 @@ export default {
         UserstorytypeList: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
-                return false;
+                return [];
             }
         },
         UserstorystatusList: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
-                return false;
+                return [];
             }
         },
         ProiList: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
-                return false;
+                return [];
             }
         },
         ChargerList: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
-                return false;
+                return [];
             }
         },
         ChargerList: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
-                return false;
+                return [];
             }
         },
         SprintList: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
-                return false;
+                return [];
             }
         },
         ReqidList: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
-                return false;
+                return [];
             }
         },
 
@@ -159,6 +159,9 @@ export default {
         },
         UserstorystatusList(D){
             this.userstory_statusList = D;
+            if(D && Array.isArray(D) && D.length){
+                this.formValidate.userstory_status = D[0] && D[0].value ? D[0].value+"" : ""
+            }
         },
         ProiList(D){
             this.proiList = D;
@@ -248,11 +251,13 @@ export default {
         }
     },
     methods:{
-      
         formItemReset(){
             this.formValidate.userstory_name = '';
             this.formValidate.userstory_type = "1";
-            this.formValidate.userstory_status = "1";
+            
+            this.formValidate.userstory_status = ((L)=>{if(L && Array.isArray(L) && L.length){return L[0] && L[0].value ? [0].value+"" : ""}else{return ""}})(this.userstory_statusList)
+            ;
+
             this.formValidate.proi = "3";
             this.formValidate.prj_name = "";
             this.formValidate.product_name = "";

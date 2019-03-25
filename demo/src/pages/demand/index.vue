@@ -667,7 +667,7 @@ export default {
                 this.showError(error);
             });
         },
-        moveEnd(info) {
+        moveEnd(info,val) {
             if(window.location.hash.indexOf("/demand") == -1){
                 return
             }
@@ -677,6 +677,9 @@ export default {
             //this.changeMovedStatus(info);
 
             console.log("需求项-移动卡片结束后 :::", info);
+            if(val){
+                Common.CommonWarning(this,val)
+            }
             this.changeStateNumber(info);
             if(!EventBus.demandMoveEnd){
                 this.changeMovedStatus(info);

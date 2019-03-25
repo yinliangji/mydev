@@ -46,7 +46,7 @@
               {{groupList[0].text}}
             </div>
           </Col>
-          <Col class="topColumn"  v-for="(item, index) in myStatusList" :key="index">
+          <Col class="topColumn"  v-for="(item, index) in statusList" :key="index">
             <kanbanContentHeader :myAside="aside" :text="item.stateStr" :taskNumber="item.taskNumber" />
           </Col>
         </Row>
@@ -68,7 +68,7 @@
               <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" title="快速添加工作项">快捷添加</Button>
             </div>
           </Col>
-          <Col class="Column" v-for="(items, index) in myStatusList"  :key="index"  >
+          <Col class="Column" v-for="(items, index) in statusList"  :key="index"  >
             <div :id="'kb'+itemGroup.groupId+'_'+items.state" :state="items.state" :groupid="itemGroup.groupId" class="rowBox" :class="addSpace?'addSpaceBox':''">
               <kanbanItem
                 :myIsOperation = "isOperation"
@@ -88,7 +88,7 @@
       <!--无分组-->
       <div class="row-wrapper"   v-if="groupList.length == 0">
         <Row :gutter="0" class="kanbanBox" align="top">
-          <Col class="Column" v-for="(items, index) in myStatusList"  :key="index"  >
+          <Col class="Column" v-for="(items, index) in statusList"  :key="index"  >
             <div :id="'stateId_'+items.state" :state="items.state"  class="rowBox rowBox2"  :class="isPutFn(aside,isPut,items.state)">
               <kanbanItem
                   :myIsOperation = "isOperation"
@@ -235,8 +235,6 @@ export default {
     groupList(data){
     },
     statusList(data){
-      this.myStatusList = [];
-      this.myStatusList = data;
       this.checkAllGroup = this.funnelAllSelect();
     },
     MenuStatusList(data){

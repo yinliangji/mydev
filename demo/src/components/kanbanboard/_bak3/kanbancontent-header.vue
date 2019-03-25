@@ -1,13 +1,10 @@
 <template>
   <div class="content-header">
-     <span class="title" v-if="myAside == 'product' || myAside == 'demand'? true:false" >
+     <span class="title">
         <mark>{{text}}</mark>
-        <span class="number" >
+        <span class="number" v-show="myAside == 'product' || myAside == 'demand'? true:false">
          {{taskNumber}}
         </span>
-     </span>
-     <span class="title" v-else>
-       {{text}}
      </span>
      <span v-show="myAside == 'product' || myAside == 'demand'? false:true">数量{{taskNumber}}</span>
   </div>

@@ -336,7 +336,7 @@ export default {
             formValidate: {
                 userstory_name: '',
                 userstory_type:"1",
-                userstory_status:"1",
+                userstory_status:"",
                 proi:"3",
                 userstory_desc: '',
                 sprint:"",
@@ -493,6 +493,11 @@ export default {
                 //this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
                 //this.storyGetConditionFn(storyGetCondition,"proi",ID);
                 this.storyGetConditionFn(storyGetCondition,"userstory_type",ID).then((res)=>{
+
+                    if(this.userstory_statusList && Array.isArray(this.userstory_statusList) && this.userstory_statusList.length){
+                        this.formValidate.userstory_status = this.userstory_statusList[0] && this.userstory_statusList[0].value ? this.userstory_statusList[0].value+"" : ""
+                    }
+
 
                     if(this.req_idList && Array.isArray(this.req_idList) && this.req_idList.length){
                         Common.DelArrN_indexOf(this.req_idList,"@需求完成","label")

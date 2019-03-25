@@ -1594,7 +1594,7 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                 ]
             },
         ],
-        "role|1":["icdp_projManager","icdp_teamLeader"],
+        "role|1":["icdp_projManager","icdp_teamLeader","icdp_teamLeader"],
         status_data:[
             {value:"提出",key:"1"},
             {value:"价值分析",key:"2"},

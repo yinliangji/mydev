@@ -249,8 +249,8 @@ export default {
   width: 95%;
   height: 90%;
   transform:translate(-50%,-50%); */
-  left: 3px;
-  top: 3px;
+  left: 1px;
+  top: 1px;
   right: 1px;
   bottom: 1px;
 
@@ -271,23 +271,20 @@ export default {
 }
 .card-wrapper {
   box-sizing: border-box;
-  
+  overflow: hidden;
   margin-bottom: 2px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  min-height: 30px;
+  margin-left: 2px;
+  margin-right: 2px;
   position: relative;
-  padding-bottom: 2px;
-  padding-top:2px; 
 }
 .card-wrap{
   cursor: pointer;
 
   box-sizing: border-box;
   position: relative;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  margin-left: 2px;
-  margin-right: 2px;
-  min-height: 30px;
-  overflow: hidden;
 
   /*
   margin-right: 10px;

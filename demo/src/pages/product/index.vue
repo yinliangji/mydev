@@ -1109,7 +1109,10 @@ export default {
         			let obj = arr.find((item)=>{
         				return item.label == val;
         			})
-        			return obj.value || 0;
+        			if(!obj || !obj.value){
+        				this.showError("obj是"+obj);
+        			}
+        			return obj && obj.value ? ((obj.value-0) <10 ? "0"+obj.value : obj.value+"") : 0;
         		}
                 if(myData && myData.length){
                 	let _temp = {};
@@ -1122,7 +1125,7 @@ export default {
                 		}
                 		_temp.stateStr = myData[i].userstory_status;
                 		_temp.taskNumber = Number(myData[i].count);
-                		_temp.state = "0"+fn(this.userstory_statusList,_temp.stateStr);
+                		_temp.state = fn(this.userstory_statusList,_temp.stateStr);
                 		//_temp.state = "0"+(i+1);
                 		this.statusList.push(_temp);
                 		this.statusListBase.push(_temp);
@@ -1159,7 +1162,7 @@ export default {
 					
 					for(let i=0;i<myData.length;i++){
 						for(let j=0;j<myData[i].list.length;j++){
-							_Obj.taskStatus = "0"+fn(this.userstory_statusList,myData[i].userstory_status);
+							_Obj.taskStatus = fn(this.userstory_statusList,myData[i].userstory_status);
 							//_Obj.taskStatus = "0"+(i+1);
 							_Obj.taskId = ""+myData[i].list[j].userstory_id;
 							_Obj.description = "description_"+ i +"_"+j;

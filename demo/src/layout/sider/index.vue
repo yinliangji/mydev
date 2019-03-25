@@ -45,7 +45,7 @@ export default {
 	methods:{
 		collapsedSider () {
 	        this.$refs.SiderBox.toggleCollapse();
-	        EventBus.$emit('ReLoad',true);
+	        //EventBus.$emit('ReLoad',true);
 	    },
 	    onOpenChange(name){
 			console.log(name)

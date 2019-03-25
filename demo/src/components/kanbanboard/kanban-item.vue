@@ -272,9 +272,9 @@ export default {
 .card-wrapper {
   box-sizing: border-box;
   
-  margin-bottom: 2px;
+  margin-bottom: 0px;
   position: relative;
-  padding-bottom: 2px;
+  padding-bottom: px;
   padding-top:2px; 
 }
 .card-wrap{

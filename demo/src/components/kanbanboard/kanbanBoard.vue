@@ -977,7 +977,7 @@ export default {
 
 
 .rowBox{
-  padding-top: 2px;
+  padding-top: 0px;
   border:1px dashed #ddd;
   min-height:64px;
   border-radius:4px;

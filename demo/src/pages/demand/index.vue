@@ -385,7 +385,10 @@ export default {
     },
     mounted(){
 
-        this.ToolTipL = Common.HelpLeft("kanbanShowBtn2");
+        this.helpToLeft();
+        EventBus.$on("HelpIcon",this.helpToLeft);
+
+        
         
         this.getPermissionFn(getPermission);
         let ID = this.getID() ? this.getID() : this.$router.push('/agile');
@@ -417,6 +420,9 @@ export default {
         console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
+        helpToLeft(){
+            this.ToolTipL = Common.HelpLeft("kanbanShowBtn2");
+        },
         getRequirementStatListFn(URL = "",id="",prjSn = ""){
             defaultAXIOS(URL,{id,prjSn},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;

@@ -46,7 +46,7 @@
               {{groupList[0].text}}
             </div>
           </Col>
-          <Col class="topColumn"  v-for="(item, index) in myStatusList" :key="index">
+          <Col class="topColumn" :id="'TC-'+item.state"  v-for="(item, index) in myStatusList" :key="index">
             <kanbanContentHeader :myAside="aside" :text="item.stateStr" :taskNumber="item.taskNumber" />
           </Col>
         </Row>
@@ -68,7 +68,7 @@
               <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" title="快速添加工作项">快捷添加</Button>
             </div>
           </Col>
-          <Col class="Column" v-for="(items, index) in myStatusList"  :key="index"  >
+          <Col class="Column" v-for="(items, index) in myStatusList" :key="index" :id="'C-'+itemGroup.groupId+'_'+items.state" :data-G="itemGroup.groupId" :data-S="items.state" >
             <div :id="'kb'+itemGroup.groupId+'_'+items.state" :state="items.state" :groupid="itemGroup.groupId" class="rowBox" :class="addSpace?'addSpaceBox':''">
               <kanbanItem
                 :myIsOperation = "isOperation"
@@ -88,7 +88,7 @@
       <!--无分组-->
       <div class="row-wrapper"   v-if="groupList.length == 0">
         <Row :gutter="0" class="kanbanBox" align="top">
-          <Col class="Column" v-for="(items, index) in myStatusList"  :key="index"  >
+          <Col class="Column" v-for="(items, index) in myStatusList"  :key="index" :id="'C-'+itemGroup.groupId+'_'+items.state" :data-G="itemGroup.groupId" :data-S="items.state" >
             <div :id="'stateId_'+items.state" :state="items.state"  class="rowBox rowBox2"  :class="isPutFn(aside,isPut,items.state)">
               <kanbanItem
                   :myIsOperation = "isOperation"
@@ -261,6 +261,7 @@ export default {
       this.autoHeight();
       this.kanbanScrollFn();//以后加上
     },1000);
+    EventBus.$on("KBScroll",this.kanbanScrollFn);
   },
   methods:{
     //筛选开始
@@ -314,7 +315,44 @@ export default {
             }
           })
         }
-        this.$emit("sendCheckbox",newArr,this.checkAllGroup,this.checkAll)
+        this.$emit("sendCheckbox",newArr,this.checkAllGroup,this.checkAll);
+        this.funnelLoading = false;
+
+        let all = [];
+        this.myStatusList.forEach((item)=>{
+          all.push(item.state);
+        })
+        let gId = [];
+        this.groupLists.forEach((item)=>{
+          gId.push(item.groupId);
+        })
+        let C = new Set(this.checkAllGroup);
+        let A = new Set(all);
+        let dif = new Set([...A].filter(x => !C.has(x)));
+        dif = Array.from(dif);
+        
+        let allId = [];
+
+        for(let j=0;j<gId.length;j++){
+          all.forEach((item)=>{
+            document.getElementById("C-"+gId[j]+"_"+item).removeAttribute('title');
+            document.getElementById("TC-"+item).removeAttribute('title');
+          })
+        }
+        for(let j=0;j<gId.length;j++){
+          dif.forEach((item)=>{
+            //allId.push("C-"+gId[j]+"_"+item);
+            document.getElementById("C-"+gId[j]+"_"+item).setAttribute("title","none");
+            document.getElementById("TC-"+item).setAttribute("title","none");
+          })
+        }
+
+
+        console.error(this.checkAllGroup,all,dif,gId,allId)
+        this.kanbanScrollFn("collapsedSider");
+
+
+
     },
     funnelCheckAll () {
       this.checkAll = !this.checkAll;
@@ -377,7 +415,14 @@ export default {
         this.setHeight();
       },2)      
     },
-    kanbanScrollFn(){
+    kanbanScrollFn(val){
+      if(val == "collapsedSider"){
+        document.getElementById("main").scrollTop = document.getElementById("main").scrollTop + 1;
+        setTimeout(()=>{
+          document.getElementById("main").scrollTop = document.getElementById("main").scrollTop - 1;
+        },500)  
+      }
+      
 
       let columnW = (kbdom,rwdom,topcol,col)=>{
         let everyWArr = [];
@@ -438,7 +483,9 @@ export default {
 
       columnW("kanbanHeaderBox","row-wrapper","topColumn","Column");
 
-      ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
+      //ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
+      ivuRowFlexDomW = kanbanHeaderDom && kanbanHeaderDom.offsetWidth ? kanbanHeaderDom.offsetWidth : 1131;
+
       kanbanHeaderDomH = kanbanHeaderDom.offsetHeight ? kanbanHeaderDom.offsetHeight : 41;
 
       mainDom.onscroll= function(){
@@ -454,7 +501,8 @@ export default {
 
         columnW("kanbanHeaderBox","rowWrapper","topColumn","Column");
 
-        ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
+        //ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
+        ivuRowFlexDomW = kanbanHeaderDom && kanbanHeaderDom.offsetWidth ? kanbanHeaderDom.offsetWidth : 1131;
         kanbanHeaderDomH = kanbanHeaderDom.offsetHeight ? kanbanHeaderDom.offsetHeight : 41;
 
         boardDom.style.position = "relative";
@@ -726,9 +774,16 @@ export default {
             let gId = evt.item.getAttribute("groupid");
             if(N == 0 || N == "0"){
             }else{
+              /*
               let obj = that.statusList.find((item)=>{
                 return item.stateStr == "废弃";
               })
+              */
+              let filterObj = that.statusList.filter((item)=>{
+                return item.stateStr == "废弃";
+              })
+              let obj = filterObj && filterObj.length ? filterObj[filterObj.length - 1] : false;
+
               if(obj){
                 that.isUsPut.push(obj.state);
                 that.noPut = [];
@@ -973,7 +1028,9 @@ export default {
     -ms-transform-style: preserve-3d;
 
 }
-
+[title=none]{
+  display: none;
+}
 
 
 .rowBox{

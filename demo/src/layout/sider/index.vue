@@ -1,9 +1,9 @@
 <template>
-	<Sider id="SiderBox" ref="SiderBox" collapsible :collapsed-width="65" v-model="isCollapsed" class="siderBox"  hide-trigger>
+	<Sider id="SiderBox" ref="SiderBox" collapsible :collapsed-width="65" v-model="isCollapsed" class="siderBox"  hide-trigger @on-collapse="onCollapse">
 		<Menu :active-name="currentMenu" theme="dark" width="auto" :class="menuitemClasses" @on-open-change="onOpenChange" ref="side_menu" class="siderMenu">
 			<router-view name="Aside" />
 		</Menu>
-		<Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '-12px 8px 0 0'}" type="chevron-left" size="24" class="triggerBtn" color="white" ></Icon>
+		<Icon @click.native="collapsedSider" :class="rotateIcon"  type="chevron-left" size="24" class="triggerBtn" color="white"  ></Icon>
 	</Sider>
 </template>
 <script>
@@ -43,9 +43,17 @@ export default {
 		}
 	},
 	methods:{
+		onCollapse(is){
+			console.log("onCollapse",is);
+			
+			//EventBus.$emit('ReLoad',true);
+			setTimeout(()=>{
+				EventBus.$emit('HelpIcon',"help");
+	        	EventBus.$emit('KBScroll',"collapsedSider");
+	        },500)
+		},
 		collapsedSider () {
 	        this.$refs.SiderBox.toggleCollapse();
-	        //EventBus.$emit('ReLoad',true);
 	    },
 	    onOpenChange(name){
 			console.log(name)
@@ -221,6 +229,14 @@ export default {
 	}
 	.menu-icon{
 	 	transition: all .3s;
+	 	background:rgba(255,255,255,0.5);
+	 	margin: -12px 0px 0 0;
+	 	/*
+	 	position:absolute;
+	 	right:0;
+	 	top:50%;
+	 	*/
+
 	}
 	.rotate-icon{
 	 	transform: rotate(-180deg);

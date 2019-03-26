@@ -1829,7 +1829,7 @@ export default class Common extends Utils {
       let kbDOM = document.getElementById(id);
       let sbDOM = document.getElementById("SiderBox");
       let sbDOMLeft = sbDOM ? sbDOM.offsetWidth : 180;
-      return kbDOM ? kbDOM.getBoundingClientRect().left - (sbDOMLeft-70) : 330
+      return kbDOM ? kbDOM.getBoundingClientRect().left - (sbDOMLeft-120) : 330
     }
 
 }

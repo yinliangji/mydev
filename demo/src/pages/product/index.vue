@@ -186,8 +186,9 @@
 						</Row>
 					</div>
 
-
+					
 					<div class="tableContBox" v-show="currentView == 'developList'">
+						<div style="height:29px;">&nbsp;</div>
 						<Table stripe border :columns="columns" :data="tableData"  />
 						<div class="pageBox" v-if="tableData.length">
 				    		<Page :current="tableDAtaPageCurrent" :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" show-elevator @on-change="changeCurrentPage" @on-page-size-change="changePageSize"></Page>
@@ -393,6 +394,7 @@ export default {
 			developListImgCur:require("../../assets/images/product-listCur.png"),
 			kanbanboardImg:require("../../assets/images/product-kanban.png"),
 			kanbanboardImgCur:require("../../assets/images/product-kanbanCur.png"),
+			database:[],
             //看板结束
             columns: [
 	        	{
@@ -715,7 +717,10 @@ export default {
 
 	mounted(){
 		
-		this.ToolTipL = Common.HelpLeft("kanbanShowBtn");
+		
+		this.helpToLeft();
+		EventBus.$on("HelpIcon",this.helpToLeft);
+
 
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 		this.getPermissionFn(getPermission);
@@ -734,14 +739,75 @@ export default {
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
 	},
 	methods:{
+		helpToLeft(){
+			this.ToolTipL = Common.HelpLeft("kanbanShowBtn");
+		},
 		//所属需求项 多选开始
 		acceptCheckbox(obj,arr,val){
+
+			return
+			
 			let temp = [];
 			arr.forEach((item)=>{
 				let str = item.substr(0, 1) == "0" || item.substr(0, 1) === "0" ? item.slice(1) : item;
 				temp.push(str);
 			})
-			this.serchAll({},JSON.stringify(temp));
+			
+			
+
+
+
+			
+			Common.SetSession("acceptCheck",JSON.stringify(this.addZero(temp)));
+			
+			
+			
+			this.statusListBase = this.acceptData(this.addZero(temp),this.statusList);
+			
+			setTimeout(()=>{
+				EventBus.$emit('KBScroll',"collapsedSider");
+			},500)
+			
+
+			//this.serchAll({},JSON.stringify(temp));
+		},
+		acceptData(arrC,arrl){
+			let _arr = [];
+			let temp = [];
+			let _myarr = [];
+			if(arrC && Array.isArray(arrC) && arrC.length && arrl && Array.isArray(arrl) && arrl.length){
+				arrl.forEach((item)=>{
+					temp.push(item.state)
+				})
+				for(let j=0;j<temp.length;j++){
+					arrC.forEach((item)=>{
+						if(item == temp[j]){
+							_myarr.push(item)	
+						}
+							
+					})
+
+				}
+
+				for(let i = 0;i < _myarr.length;i++){
+					let obj = arrl.find(item => item.state == _myarr[i]);
+					if(obj){_arr.push(obj)}
+				}
+
+				console.error(arrC,temp,_myarr)
+			}
+			return _arr
+		},
+		addZero(arr){
+			let _arr = [];
+			arr.forEach((item)=>{
+				if((item.substr(0, 1) != "0" && ((item - 0) < 10)) || item == "0"){
+					_arr.push("0"+item)
+				}else{
+					_arr.push(item)
+				}
+			})
+			return _arr
 		},
 		//所属需求项 多选结束
 		optputExecl(){
@@ -1074,6 +1140,7 @@ export default {
 			this.groupList = [{ text: "所属需求项" }];
 		},
 		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = "",USS = ""){
+
 			this.kanbanboardIsShow = true;
 			this.cardList = [];
 			this.statusList = [];
@@ -1095,8 +1162,10 @@ export default {
             	group_name,
             	username:Common.getCookie("username"),
             	prjSn:Common.getCookie("prjSn"),
-            	uss:this.ussArr(USS,this.statusLists),
+            	uss:"[]",//this.ussArr(USS,this.statusLists),
             }
+
+
 
 			defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
@@ -1131,6 +1200,8 @@ export default {
                 		this.statusListBase.push(_temp);
                 		_temp = {};
                 	}
+                	
+
                 	let reqArr2 = Array.from(new Set(reqArr));
                 	let checkreqName = (val)=>{
                 		let _temp
@@ -1384,7 +1455,7 @@ export default {
 				sprint,
 				group_name,
 				username:Common.getCookie("username"),
-				uss:this.ussArr(USS,this.statusLists),
+				uss:"[]",//this.ussArr(USS,this.statusLists)
 			};
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;

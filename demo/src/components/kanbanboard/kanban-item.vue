@@ -252,7 +252,7 @@ export default {
   left: 3px;
   top: 3px;
   right: 1px;
-  bottom: 1px;
+  bottom: 0px;
 
 
   background: black;

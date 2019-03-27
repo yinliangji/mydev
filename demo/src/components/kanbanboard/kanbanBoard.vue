@@ -88,7 +88,7 @@
       <!--无分组-->
       <div class="row-wrapper"   v-if="groupList.length == 0">
         <Row :gutter="0" class="kanbanBox" align="top">
-          <Col class="Column" v-for="(items, index) in myStatusList"  :key="index" :id="'C-'+itemGroup.groupId+'_'+items.state" :data-G="itemGroup.groupId" :data-S="items.state" >
+          <Col class="Column" v-for="(items, index) in myStatusList"  :key="index" :id="'C-'+items.groupId+'_'+items.state" :data-G="items.groupId" :data-S="items.state" >
             <div :id="'stateId_'+items.state" :state="items.state"  class="rowBox rowBox2"  :class="isPutFn(aside,isPut,items.state)">
               <kanbanItem
                   :myIsOperation = "isOperation"
@@ -228,7 +228,8 @@ export default {
   watch:{
     cardList(data){
       setTimeout(()=>{
-        this.autoHeight();  
+        this.autoHeight();
+        this.kanbanScrollFn("collapsedSider");
       },10)
       
     },
@@ -237,7 +238,9 @@ export default {
     statusList(data){
       this.myStatusList = [];
       this.myStatusList = data;
-      this.checkAllGroup = this.funnelAllSelect();
+      if(!this.checkAllGroup.length){
+        this.checkAllGroup = this.funnelAllSelect();  
+      }
     },
     MenuStatusList(data){
       this.userstoryStatusList = this.statusListFn(data);
@@ -259,8 +262,9 @@ export default {
     //EventBus.$on("storyBindSort",this.bindStorySortId);
     setTimeout(()=>{
       this.autoHeight();
-      this.kanbanScrollFn();//以后加上
+      this.kanbanScrollFn("collapsedSider");
     },1000);
+    
     EventBus.$on("KBScroll",this.kanbanScrollFn);
   },
   methods:{
@@ -333,23 +337,34 @@ export default {
         
         let allId = [];
 
-        for(let j=0;j<gId.length;j++){
+        if(gId.length){
+          for(let j=0;j<gId.length;j++){
+            all.forEach((item)=>{
+              document.getElementById("C-"+gId[j]+"_"+item).removeAttribute('title');
+              document.getElementById("TC-"+item).removeAttribute('title');
+            })
+          }
+          for(let j=0;j<gId.length;j++){
+            dif.forEach((item)=>{
+              //allId.push("C-"+gId[j]+"_"+item);
+              document.getElementById("C-"+gId[j]+"_"+item).setAttribute("title","hidden");
+              document.getElementById("TC-"+item).setAttribute("title","hidden");
+            })
+          }
+        }else{
           all.forEach((item)=>{
-            document.getElementById("C-"+gId[j]+"_"+item).removeAttribute('title');
             document.getElementById("TC-"+item).removeAttribute('title');
           })
-        }
-        for(let j=0;j<gId.length;j++){
           dif.forEach((item)=>{
-            //allId.push("C-"+gId[j]+"_"+item);
-            document.getElementById("C-"+gId[j]+"_"+item).setAttribute("title","none");
-            document.getElementById("TC-"+item).setAttribute("title","none");
+            document.getElementById("TC-"+item).setAttribute("title","hidden");
           })
         }
+        
+        setTimeout(()=>{
+          this.kanbanScrollFn("collapsedSider");
+        },500)
 
-
-        console.error(this.checkAllGroup,all,dif,gId,allId)
-        this.kanbanScrollFn("collapsedSider");
+        
 
 
 
@@ -488,7 +503,7 @@ export default {
 
       kanbanHeaderDomH = kanbanHeaderDom.offsetHeight ? kanbanHeaderDom.offsetHeight : 41;
 
-      mainDom.onscroll= function(){
+      let myscroll = ()=>{
         if(that.$route.path == "/demand" || that.$route.path ==  "/product" || that.$route.path ==  "/development" || that.$route.path ==  "/dependManage"){}else{return};
         kanbanHeaderDom = kanbanHeaderDom ? kanbanHeaderDom : document.getElementById("kanbanHeader");
 
@@ -535,6 +550,9 @@ export default {
           }
         }
       }
+      myscroll();
+
+      mainDom.onscroll= myscroll
     },
     setHeight(){
       this.addSpace = this.aside == "product" && this.role != "icdp_projManager" ? 50 : 0;
@@ -1014,8 +1032,8 @@ export default {
   flex: 1 1 1px;/* flex-grow:1; flex-shrink:1; flex-basis:auto; */
   padding-right:2px;
   padding-left:2px;
-  /*transition: all 0.1s;*/
-
+  
+  
   /* flex-basis:auto; */
 
   -webkit-perspective: 500;
@@ -1027,9 +1045,27 @@ export default {
     -moz-transform-style: preserve-3d;
     -ms-transform-style: preserve-3d;
 
+
+    
+
 }
-[title=none]{
-  display: none;
+[id^="C-"]{
+  transition: all 0.5s ease-out 0s;
+}
+[id^="TC-"]{
+  transition: all 0.5s ease-out 0s;
+}
+[title=hidden]{
+  width: 0 !important;
+  overflow: hidden !important;
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+
+  /*transition: all 0.5s ease-out 0s;*/
+
+  /*display: none;*/
 }
 
 

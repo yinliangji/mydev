@@ -744,31 +744,17 @@ export default {
 		},
 		//所属需求项 多选开始
 		acceptCheckbox(obj,arr,val){
-
-			return
-			
 			let temp = [];
 			arr.forEach((item)=>{
 				let str = item.substr(0, 1) == "0" || item.substr(0, 1) === "0" ? item.slice(1) : item;
 				temp.push(str);
 			})
-			
-			
-
-
-
-			
 			Common.SetSession("acceptCheck",JSON.stringify(this.addZero(temp)));
-			
-			
-			
+			return
 			this.statusListBase = this.acceptData(this.addZero(temp),this.statusList);
-			
 			setTimeout(()=>{
 				EventBus.$emit('KBScroll',"collapsedSider");
 			},500)
-			
-
 			//this.serchAll({},JSON.stringify(temp));
 		},
 		acceptData(arrC,arrl){
@@ -1048,7 +1034,12 @@ export default {
 			if(_params.taskStatus == _params.taskStatusFrom){
 				return
 			}
-			defaultAXIOS(storySetChange,{id:_params.ID,username:Common.getCookie("username"),userstory_status:_params.taskStatus.substring(1)},{timeout:20000,method:'get'}).then((response) => {
+			let myParams = {
+				id:_params.ID,
+				username:Common.getCookie("username"),
+				userstory_status:((N)=>{return (N-0) < 10 ? N.substring(1) : N})(_params.taskStatus),
+			}
+			defaultAXIOS(storySetChange,myParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======用户故事 状态改变***response+++",response,myData,"======>");
                 if(myData.status.indexOf("success") == -1){

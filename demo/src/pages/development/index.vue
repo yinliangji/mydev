@@ -130,10 +130,10 @@
           <Col span="2" style="margin-right:10px;margin-top: -2px;">
           <Button type="success" :disabled="isShowMngAllBtn" @click="addNewTask">添加工作项</Button>
           </Col>
-          <Col span="1">
+          <Col span="2">
           <img src="@/assets/images/product-list.png" @click="showList" class="cursor">
           </Col>
-          <Col span="1">
+          <Col span="2">
           <img src="@/assets/images/product-kanban.png" @click="showTask" class="cursor">
           </Col>
           <Col span="1">
@@ -269,7 +269,7 @@ export default {
           }else{
             this.magicKanban = false;
             setTimeout(()=>{
-              this.magicKanban = true;
+              //this.magicKanban = true;
               this.MydevelopKanbanAxios();
             },500)
           }
@@ -283,7 +283,7 @@ export default {
           }else{
             this.magicKanban = false;
             setTimeout(()=>{
-              this.magicKanban = true;
+              //this.magicKanban = true;
               this.developKanbanAxios();
             },500)
           }
@@ -389,7 +389,7 @@ export default {
         sessionStorage.removeItem("developChoose");
         this.mytaskOnoff = false;
         setTimeout(()=>{
-          this.magicKanban = true;
+          //this.magicKanban = true;
           if(!this.devListOrKanbanOnoff){
             this.currentPage = 1;
             this.developListAxios();
@@ -584,20 +584,32 @@ export default {
         this.picOnoff = false;
         this.currentView = "developList";
         this.devListOrKanbanOnoff = false;
+
+        this.magicKanban = false;
         if(this.mytaskOnoff){
-          this.MydevelopListAxios();
+          setTimeout(()=>{
+            this.MydevelopListAxios();
+          },500)
         }else{
-          this.developListAxios();
+          setTimeout(()=>{
+            this.developListAxios();
+          },500)
         }
       },
       showTask() {
         this.picOnoff = true;
         this.currentView = "kanbanboard";
         this.devListOrKanbanOnoff = true;
+
+        this.magicKanban = false;
         if(this.mytaskOnoff){
-          this.MydevelopKanbanAxios();
+          setTimeout(()=>{
+            this.MydevelopKanbanAxios();
+          },500)
         }else{
-          this.developKanbanAxios();
+          setTimeout(()=>{
+            this.developKanbanAxios();
+          },500)
         }
       },
       //分页
@@ -608,6 +620,7 @@ export default {
           alert(i);
       },
       MydevelopListAxios(){
+        this.magicKanban = true;
         this.$axios({
           method:"get",
           url:developListAxiosData,
@@ -636,6 +649,7 @@ export default {
         })
       },
       MydevelopKanbanAxios(){
+        this.magicKanban = true;
         this.$axios({
           method:"get",
           url:developkanbanAxiosData,
@@ -664,6 +678,7 @@ export default {
         })
       },
       developListAxios(){
+        this.magicKanban = true;
         this.$axios({
           method:"get",
           url:developListAxiosData,
@@ -692,6 +707,7 @@ export default {
         })
       },
       developKanbanAxios(){
+        this.magicKanban = true;
         this.$axios({
           method:"get",
           url:developkanbanAxiosData,

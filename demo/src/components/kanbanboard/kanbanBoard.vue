@@ -434,7 +434,7 @@ export default {
       if(val == "collapsedSider"){
         document.getElementById("main").scrollTop = document.getElementById("main").scrollTop + 1;
         setTimeout(()=>{
-          document.getElementById("main").scrollTop = document.getElementById("main").scrollTop - 1;
+          //document.getElementById("main").scrollTop = document.getElementById("main").scrollTop - 1;
         },500)  
       }
       

@@ -111,41 +111,23 @@
                         </div>
 			        </FormItem>
 			    </Form>
-			    <div class="tableBox" style="position:relative;">
-			    	<ToolTip 
-			    		placement="right"
-			    		:L="ToolTipL" 
-			    		:T="25" 
-			    		:Z="10" 
-			    		:W="270"  
-			    		content="用户故事状态说明：<br>1.提出（新建用户故事未开始处理）<br>2.设计分析（写测试案例、提交设计文档等附件）<br>3.开发测试（提交代码，开始单元测试）<br>4.用户验收测试（所有工作项都已完成）<br>5.待投产（发布版本审核通过，关联了用户故事）<br>6.已投产（用户故事投产成功）<br>7.停滞（实施过程中由于某些原因暂停实施）<br>8.废弃（废弃不再实施的用户故事）" 
-			    	/>
-					<div class="tagBox" >
-	
-						<Row :gutter="10" align="middle">
-							
-							<Col span="3" >
-								<Button 
-									class="addBtnBox"
-									type="success"  
-									@click="addItem"
-									:disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
-									>
-									添加用户故事
-								</Button>
-								
-							</Col>
-							
-							<Col span="2" >
-								<img :src="currentView == 'developList' ? developListImgCur : developListImg" 
-								@click="showList" class="cursor" title="用户故事列表">
-							</Col>
-							<Col span="2" >
-								<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
-								@click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn">
-							</Col>
-							<Col span="17" style="text-align:right;" >
+			    <div class="tableBox">
 
+			    	<!--
+					<Col span="1" v-if="currentView == 'kanbanboard'">
+						<span class="high">高</span>
+					</Col>
+					<Col span="1" v-if="currentView == 'kanbanboard'">
+						<span class="middle">中</span>
+					</Col>
+					<Col span="1" v-if="currentView == 'kanbanboard'">
+						<span class="low">低</span>
+					</Col>
+					-->
+			    	
+					<div class="tagBox" >
+						<div style="" class="tagBar">
+							<div  class="tagBarRight">
 								<Button 
 									class="addBtnBox"
 									icon="ios-download-outline"
@@ -170,20 +152,41 @@
 								</Button>
 								
 								&nbsp;
+							</div>
+							<div class="tagBarLeft">
+								<Button 
+									class="addBtnBox"
+									type="success"  
+									@click="addItem"
+									:disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
+									>
+									添加用户故事
+								</Button>
+							</div>
+							<div class="tagBarLeft">
+								<img :src="currentView == 'developList' ? developListImgCur : developListImg" 
+								@click="showList" class="cursor" title="用户故事列表">
+							</div>
+							<div class="tagBarLeft">
+								<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
+								@click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn">
+							</div>
+							<div style="position:relative;" class="tagBarLeft">
+								<ToolTip 
+						    		placement="right"
+						    		:L="-2" 
+						    		:T="7" 
+						    		:Z="10" 
+						    		:W="270"  
+						    		content="用户故事状态说明：<br>1.提出（新建用户故事未开始处理）<br>2.设计分析（写测试案例、提交设计文档等附件）<br>3.开发测试（提交代码，开始单元测试）<br>4.用户验收测试（所有工作项都已完成）<br>5.待投产（发布版本审核通过，关联了用户故事）<br>6.已投产（用户故事投产成功）<br>7.停滞（实施过程中由于某些原因暂停实施）<br>8.废弃（废弃不再实施的用户故事）" 
+					    		/>
+				    		</div>
+				    		<div class="hack">&nbsp;</div>
+							
+						</div>
 
-							</Col>
-							<!--
-							<Col span="1" v-if="currentView == 'kanbanboard'">
-								<span class="high">高</span>
-							</Col>
-							<Col span="1" v-if="currentView == 'kanbanboard'">
-								<span class="middle">中</span>
-							</Col>
-							<Col span="1" v-if="currentView == 'kanbanboard'">
-								<span class="low">低</span>
-							</Col>
-							-->
-						</Row>
+					
+						
 					</div>
 
 					
@@ -1569,69 +1572,69 @@ export default {
 @import './style.less';
 @import './style.css';
 
-.tableBox{
-	padding-top: 20px;
+	.tableBox{
+		padding-top: 20px;
 
-}
-.tagBox{
-	background: #fff;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-    margin-bottom: 5px;
-    padding-left:5px;
-}
-.addBtnBox {
-	transform: translate(0, -15%);
-}
-.listBox {
-	overflow: hidden;
-	position:relative;
-}
-span.high {
-  background: #FE4515;
-  width: 100%;
-  height: 25px;
-  display: inline-block;
-  line-height: 25px;
-  text-align: center;
-  color:white;
-}
-span.middle {
-  background: #12C37A;
-  width: 100%;
-  height: 25px;
-  display: inline-block;
-  line-height: 25px;
-  text-align: center;
-  color:white;
-}
-span.low {
-  background: #FEB159;
-  width: 100%;
-  height: 25px;
-  display: inline-block;
-  line-height: 25px;
-  text-align: center;
-  color:white;
-}
-.pageBox {
-	padding-bottom:20px;
-	padding-top:20px;
-	overflow: hidden;
-}
+	}
+	.tagBox{
+		background: #fff;
+	    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+	    margin-bottom: 5px;
+	    padding-left:5px;
+	}
+	.addBtnBox {
+		transform: translate(0, -15%);
+	}
+	.listBox {
+		overflow: hidden;
+		position:relative;
+	}
+	span.high {
+	  background: #FE4515;
+	  width: 100%;
+	  height: 25px;
+	  display: inline-block;
+	  line-height: 25px;
+	  text-align: center;
+	  color:white;
+	}
+	span.middle {
+	  background: #12C37A;
+	  width: 100%;
+	  height: 25px;
+	  display: inline-block;
+	  line-height: 25px;
+	  text-align: center;
+	  color:white;
+	}
+	span.low {
+	  background: #FEB159;
+	  width: 100%;
+	  height: 25px;
+	  display: inline-block;
+	  line-height: 25px;
+	  text-align: center;
+	  color:white;
+	}
+	.pageBox {
+		padding-bottom:20px;
+		padding-top:20px;
+		overflow: hidden;
+	}
 
 
-.cursor {
-	cursor: pointer;
-}
+	.cursor {
+		cursor: pointer;
+	}
 
-.cardpoplist{
-	text-align:left
-}
-.cardpoplist p {
-	border-bottom: #ccc solid 1px;
-	padding-top:0.5em;
-	padding-bottom:0.5em;
-}
+	.cardpoplist{
+		text-align:left
+	}
+	.cardpoplist p {
+		border-bottom: #ccc solid 1px;
+		padding-top:0.5em;
+		padding-bottom:0.5em;
+	}
 </style>
 <style>
 #kanbanboard .content-header , #kanbanboard .ivu-col>div{
@@ -1652,6 +1655,23 @@ span.low {
 #kanbanboard .ivu-row-flex .ivu-col:last-of-type{
 	padding-right: 8px !important;
 	padding-left: 4px !important;
+}
+.tagBar {
+	height:35px; 
+	
+}
+.tagBarRight {
+	float:right;
+}
+.tagBarLeft{
+	float: left;
+	padding-right:10px; 
+}
+.hack {
+	clear: both; 
+	width:100%;
+	height:1px; 
+	overflow:hidden;
 }
 </style>
 

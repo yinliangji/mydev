@@ -40,7 +40,7 @@
                 <ToolTip content="计划在哪个迭代周期内完成此用户故事" />
             </FormItem>
 
-            <FormItem label="所属需求项" prop="req_id">
+            <FormItem label="所属需求项" prop="req_id" id="myReqId">
                 <Select ref="req_idSelect" disabled filterable  v-model="formValidate.req_id" placeholder="请选择所属需求项">
                     <Option v-for="(item , index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
                 </Select>
@@ -353,4 +353,9 @@ export default {
 </script>
 <style lang="less" scoped>
 
+</style>
+<style>
+#myReqId > label::before {
+    display: none;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="content-header">
-     <span class="title" v-if="myAside == 'product' || myAside == 'demand'? true:false" >
+     <span :title="text" class="title" v-if="myAside == 'product' || myAside == 'demand'? true:false" >
         <mark>{{text}}</mark>
         <span class="number" >
          {{taskNumber}}
@@ -47,6 +47,9 @@ mark{
     height: 100%;
     text-overflow: ellipsis;
 
+    word-break: break-all;
+    word-wrap: break-word; 
+    overflow-wrap: break-word;
 }
 .number{
   position: absolute;

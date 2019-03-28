@@ -45,52 +45,10 @@
                 </Form>
 
                 <div class="tableBox" style="position:relative;">
-                    <ToolTip 
-                        placement="right"
-                        :L="ToolTipL" 
-                        :T="25" 
-                        :Z="10" 
-                        :W="300"  
-                        content="需求项状态说明：<br>1.提出（需求创建未开始处理）<br>2.价值分析（需求至少拆分成一个用户故事）<br>3.已选中（至少有一个用户故事被规划到某次迭代）<br>4.澄清（至少有一个用户故事进入开发阶段测试）<br>5.开发中（至少有一个用户故事进入开发测试阶段）<br>6.用户验收测试（所有用户故事都已进入用户验收测试）<br>7.已上线（所有用户故事都已上线）<br>8.确认完成（业务人员确认需求已完成）" 
-                    />
+                    
                     <div class="tableBtnBox">
-                        <Row>
-                            <Col span="4">
-                                <Button 
-                                    type="success" 
-                                    @click="addItem2"
-                                    :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
-                                    >
-                                    添加
-                                </Button>
-                                <Button 
-                                    type="warning" 
-                                    @click="editItemFn2"
-                                    :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_edit','icdp_prjrequirement_view'])"
-                                    v-show="currentView == 'developList'"
-                                    >
-                                    编辑
-                                </Button>
-                                <Button 
-                                    type="error" 
-                                    @click="deleteTableItem"
-                                    :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
-                                    v-show="currentView == 'developList'"
-                                    >
-                                    删除
-                                </Button>
-                                
-                            </Col>
-                            <Col span="2" >
-                                <img :src="currentView == 'developList' ? developListImgCur : developListImg" 
-                                @click="showList" class="cursor" title="用户故事列表">
-                            </Col>
-                            <Col span="2" >
-                                <img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
-                                @click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn2">
-                            </Col>
-                            
-                            <Col span="16">
+                        <div style="" class="tagBar">
+                            <div  class="tagBarRight">
                                 <Button 
                                     type="primary"
                                     @click="toBusiness"
@@ -108,8 +66,54 @@
                                     >
                                     从ITM同步同步需求项
                                 </Button>
-                            </Col>
-                        </Row>
+                            </div>
+                            <div class="tagBarLeft">
+                                <Button 
+                                    type="success" 
+                                    @click="addItem2"
+                                    :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
+                                    >
+                                    添加
+                                </Button>
+                                <Button 
+                                    type="warning" 
+                                    @click="editItemFn2"
+                                    :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_edit','icdp_prjrequirement_view'])"
+                                    :style="'visibility:'+(currentView == 'developList' ? 'visible' : 'hidden')"
+                                    >
+                                    <!-- v-show="currentView == 'developList'" -->
+                                    编辑
+                                </Button>
+                                <Button 
+                                    type="error" 
+                                    @click="deleteTableItem"
+                                    :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
+                                    :style="'visibility:'+(currentView == 'developList' ? 'visible' : 'hidden')"
+                                    >
+                                    <!-- v-show="currentView == 'developList'" -->
+                                    删除
+                                </Button>
+                            </div>
+                            <div class="tagBarLeft">
+                                <img :src="currentView == 'developList' ? developListImgCur : developListImg" 
+                                @click="showList" class="cursor" title="用户故事列表">
+                            </div>
+                            <div class="tagBarLeft">
+                                <img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
+                                @click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn2">
+                            </div>
+                            <div style="position:relative;" class="tagBarLeft">
+                                <ToolTip 
+                                    placement="right"
+                                    :L="-2" 
+                                    :T="7" 
+                                    :Z="10" 
+                                    :W="300"  
+                                    content="需求项状态说明：<br>1.提出（需求创建未开始处理）<br>2.价值分析（一个需求至少拆解成一个用户故事）<br>3.已选中（至少一个关联的用户故事已被规划到迭代）<br>4.澄清（至少一个用户故事拆解成任务）<br>5.开发中（至少一个用户故事状态分类属于实施阶段）<br>6.用户验收测试（所有用户故事状态都属于用户验收中）<br>7.已上线（所有用户故事状态分类都属于已投产）<br>8.确认完成（业务方确认需求已完成。确认完成的需求不能在拆分用户故事）<br>【业务方确认完成，是手工操作】<br>【其他状态变更，可根据用户故事状态自动更新】" 
+                                />
+                            </div>
+                            <div class="hack">&nbsp;</div>    
+                        </div>
                         
                     </div>
 
@@ -1197,6 +1201,24 @@ export default {
 }
 #kanbanboard_demand .row-wrapper {
     
+}
+
+.tagBar {
+    height:35px; 
+    
+}
+.tagBarRight {
+    float:right;
+}
+.tagBarLeft{
+    float: left;
+    padding-right:10px; 
+}
+.hack {
+    clear: both; 
+    width:100%;
+    height:1px; 
+    overflow:hidden;
 }
 </style>
 

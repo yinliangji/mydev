@@ -188,6 +188,9 @@ export default {
 		}	
 	},
 	watch:{
+        Data(D){
+            this.get_permission(D);
+        },
         formValidate: {
             handler(val, oldVal) {
                 if(val){
@@ -209,30 +212,29 @@ export default {
         console.log("分组设置--updated-------",this.formPartValidate,this.formValidate)
     },
 	mounted(){
-		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 
-
-		this.getPermissionFn(getPermission).then(()=>{
-			if(this.identity){
-				this.isModify = (this.identity == "SuperAdmin" || this.identity == "PlainAdmin" || this.identity == "PrjManager") ? false  : true;
-			}else if(this.prj_permission && Array.isArray(this.prj_permission) && this.prj_permission.length){
-				this.isModify = (this.prj_permission.findIndex(item=>item == "icdp_projList_mng") != -1) ? false : true;
-			}else{
-				this.isModify = true;
-			}
-		},()=>{
-
-		});
-
+        let ID = this.getID() ? this.getID() : this.$router.push('/agile');
+        if(this.Data){
+            this.get_permission(this.Data);
+        }
 		this.addTeam(getUserByProjId,{projectId:ID}).then(()=>{
 			this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:ID});
 		},()=>{})
 	},
 	methods:{
-		
-		getPermissionFn(URL){
-            return Common.GetPermission(defaultAXIOS,this,URL);
+		get_permission(D){
+            let Ide = D.identity;
+            let Per = D.prj_permission || D.permission;
+            if(Ide){
+                this.isModify = (Ide == "SuperAdmin" || Ide == "PlainAdmin" || Ide == "PrjManager") ? false  : true;
+            }else if(Per && Array.isArray(Per) && Per.length){
+                this.isModify = (Per.findIndex(item=>item == "icdp_projList_mng") != -1) ? false : true;
+            }else{
+                this.isModify = true;
+            }
+
         },
+		
 		getID(){
 			return Common.GETID(this,Common);
 		},

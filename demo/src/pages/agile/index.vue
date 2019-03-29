@@ -116,6 +116,7 @@
                             type="warning" 
                             :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
                             @click="editItemFn"
+                            v-show="false"
                             >
                             编辑
                         </Button>
@@ -385,24 +386,26 @@ export default {
                 {
                     title: '操作',
                     key: 'action',
-                    width: 170,
+                    width: 210,
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
-                            // h('Button', {
-                            //     props: {
-                            //         type: 'primary',
-                            //         size: 'small'
-                            //     },
-                            //     style: {
-                            //         marginRight: '5px'
-                            //     },
-                            //     on: {
-                            //         click: () => {
-                            //             this.goDemandFn(params.index)
-                            //         }
-                            //     }
-                            // }, '需求项'),
+                            h('Button', {
+                                props: {
+                                    type: 'warning',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '2px',
+                                    marginLeft: '2px',
+                                },
+                                domProps:{disabled:!this.isEdit(params.row.isEdit)},
+                                on: {
+                                    click: () => {
+                                        this.editItemFn({},params.index);
+                                    }
+                                }
+                            }, '编辑'),
                             h('Button', {
                                 props: {
                                     type: 'primary',
@@ -468,6 +471,24 @@ export default {
         }
     },
     methods: {
+        /* ====== */
+        demo(){
+            Store.dispatch('LOGIN_SAVE/incrementAsync', {
+                isLogin: true
+            })
+        },
+        /* ====== */
+        isEdit(val){
+            if(val){
+                if(val === "null" || val === "undefined" || val === "false" || val === "NaN" || val === "NaN-aN-aN" || val === "0"){
+                    return false
+                }else{
+                    return true;    
+                }
+            }else{
+                return false;
+            }
+        },
         itmCloseFn(is,tab){
             this.isShowItm = is;
             if(tab){
@@ -483,14 +504,7 @@ export default {
         authIsAdmin(KEY){
             return Common.AdminAuth(this,KEY)
         },
-        /* ====== */
-        demo(){
-            
-            Store.dispatch('LOGIN_SAVE/incrementAsync', {
-                isLogin: true
-            })
-            
-        },
+        
 
         authIs(KEY){
             return Common.auth(this,KEY);
@@ -628,19 +642,22 @@ export default {
             this.isShowAddPop = true;
             this.isAdd = true;
         },
-        editItemFn(){
-            this.$Message.config({
-                top: 250,
-                duration: 3
-            });
-            if(this.actionArr.length >1){
-                this.error("只能选择一项，进行编辑！")
-                return
-            }else if(!this.actionArr.length){
-                this.error("请选择一项，进行编辑！")
-                return
+        editItemFn(o,i){
+            let obj;
+            if(i || i == 0 || i == "0"){
+                obj = this.tableData[i];
+            }else{
+                if(this.actionArr.length >1){
+                    Common.CommonWarning(this,"只能选择一项，进行编辑！")
+                    return
+                }else if(!this.actionArr.length){
+                    Common.CommonWarning(this,"请选择一项，进行编辑！")
+                    return
+                }
+                
+                obj = this.actionArr[0];
             }
-            this.$router.push({path: '/agile/edit', query: {id:this.actionArr[0].id,prj_id:this.actionArr[0].prj_id}})
+            this.$router.push({path: '/agile/edit', query: {id:obj.id,prj_id:obj.prj_id}})
             this.actionArr = [];
 
             // this.isShowAddPop = true;

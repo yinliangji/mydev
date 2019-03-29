@@ -3,6 +3,7 @@ let Mock = require('mockjs'); //引入mock模块
 let app = express(); //实例化express
 let bodyParser = require('body-parser'); //body-parser中间件来解析请求体
 let myNumber = false;
+let itemNumber = 10;
 let allowCrossDomain = function(req, res, next) {
     //console.log(res.req)
     //res.header('Access-Control-Allow-Origin', '*');
@@ -89,7 +90,7 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
         "status": val1,
         "message": "mockDataList xxxxxxx",
         data: {
-            "list|5": [{
+            "list|10": [{
                 "id|+1": 1,
                 "prj_id|+1": 1,
                 "prj_name|5-148": /[a-zA-Z0-9]/,
@@ -103,6 +104,7 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
                 "logic_sys_id": "logic_sys_id",
                 "phycics_sys_id": "phycics_sys_id",
                 "modules": "modules",
+                "isEdit|1": [true,true,true,true,true,"true",true,false,null,undefined,0,NaN,"false","null","undefined","NaN","NaN-aN-aN","0"],
                 "prod_id|+1": 500,
                 "prod_name|5-8": /[a-zA-Z]/,
                 "__value2__page": val2,
@@ -491,17 +493,14 @@ app.all("/project/detail/1", function(req, res) {
     res.end()
 });
 
-for(let i=2;i<10;i++){
+for(let i=2;i<itemNumber;i++){
     eval('app.all("/project/detail/'+i+'", function(req, res) {let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);res.json(detail(req.body.myStatus));res.end();});')
 }
 
 
 
 let queryPrj_fromUser = (val1 = "success", val2 = 1, val3 = 3) => {
-    return Mock.mock({
-        "status": val1,
-        "message": "mockDataList xxxxxxx",
-        "data": [
+    let _data = [
             {
                 id: 1,
                 prod:1,
@@ -538,7 +537,25 @@ let queryPrj_fromUser = (val1 = "success", val2 = 1, val3 = 3) => {
                 status:0,
                 prj_name: "一体化研发平台"
             }
-        ],
+        ];
+    
+    for(let i=5;i<itemNumber;i++){
+        let obj = {
+            id:i,
+            prod:i,
+            prj_id:"PJ10000"+i,
+            prj_type:1,
+            create_person:"xiebei.zh",
+            status:0,
+            prj_name: "敏捷项目_"+i
+
+        };
+        _data.push(obj);
+    }        
+    return Mock.mock({
+        "status": val1,
+        "message": "mockDataList xxxxxxx",
+        "data": _data,
         "total|19-29": 3,
         "per_page|9-19": 3,
        
@@ -546,10 +563,6 @@ let queryPrj_fromUser = (val1 = "success", val2 = 1, val3 = 3) => {
 }
 
 app.all('/project/queryPrj_fromUser/', function(req, res) {
-    
-
-
-
 
     let resVal = queryPrj_fromUser(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
@@ -1594,7 +1607,7 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                 ]
             },
         ],
-        "role|1":["icdp_projManager","icdp_teamLeader","icdp_teamLeader"],
+        "role|1":["icdp_projManager","icdp_teamLeader","icdp_teamLeader","icdp_teamLeader"],
         status_data:[
             {value:"提出",key:"1"},
             {value:"价值分析",key:"2"},
@@ -3155,9 +3168,13 @@ app.all('/uploadfiles/delete_file/', function(req, res) {
 
 
 app.all('/prj/sync_submit/', function(req, res) {
-    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
+    res.json({status: "success",message: "import success",});
+    res.end()
+});
+
+app.all('/prj/update_submit/', function(req, res) {
+    console.log("req==>", req.body);
     res.json({status: "success",message: "import success",});
     res.end()
 });
@@ -4280,6 +4297,7 @@ app.all('/project/proByUser/', function(req, res) {
     res.json({status: "success",message: "proByUser success",data:[3,1,2,4,5,6,7,8,9]});
     res.end()
 });
+
 
 
 

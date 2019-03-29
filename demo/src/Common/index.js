@@ -1203,7 +1203,11 @@ export default class Common extends Utils {
 
     //获取权限--不通用
     static GetPermission(FUN,that,URL,params){
-      let _params = params ? params : {username:super.getCookie("username")}
+      
+
+      let _params = params ? Object.assign({username:super.getCookie("username")},params) : {username:super.getCookie("username")}
+
+      //let _params = params ? params : {username:super.getCookie("username")}
     	return FUN(URL,_params,{timeout:20000,method:'get'}).then((response) => {
 			let myData = response.data;
 			console.log("<======获取权限***response+++",response,myData,"======>");

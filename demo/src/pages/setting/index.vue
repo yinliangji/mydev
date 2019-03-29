@@ -69,7 +69,13 @@ export default {
     },
 	mounted(){
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
-		this.getPermissionFn(getPermission).then((res)=>{
+
+		let params = {
+        	prjSn:Common.GETprjid(this,Common),
+        	prj_id:Common.GETprjid(this,Common),
+        }
+
+		this.getPermissionFn(getPermission,params).then((res)=>{
 			this.myData = res;
 		},()=>{
 			this.myData = false;
@@ -83,8 +89,8 @@ export default {
             this.$router.push({path: '/setting', query: {TabsCur:name,}})
         },
         //tabs -end
-		getPermissionFn(URL){
-            return Common.GetPermission(defaultAXIOS,this,URL);
+		getPermissionFn(URL,params){
+            return Common.GetPermission(defaultAXIOS,this,URL,params);
         },
 		getID(){
 			return Common.GETID(this,Common);
@@ -92,6 +98,16 @@ export default {
 		
 		getSendData(data){
             console.log(data,"<==========getSendData");
+            let params = {
+            	prjSn:data.prjSn || data.prj_id,
+            	prj_id:data.prjSn || data.prj_id,
+            }
+            this.getPermissionFn(getPermission,params).then((res)=>{
+				this.myData = res;
+			},()=>{
+				this.myData = false;
+				this.showError(getPermission+"获得权限失败");
+			});
         },
         selectMenuFn(N){
             console.log(N,"<==========selectMenuFn");

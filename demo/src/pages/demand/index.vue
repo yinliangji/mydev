@@ -393,12 +393,14 @@ export default {
         EventBus.$on("HelpIcon",this.helpToLeft);
 
         
-        
-        this.getPermissionFn(getPermission);
+        let params = {
+            prjSn:Common.GETprjid(this,Common),
+            prj_id:Common.GETprjid(this,Common),
+        }
+        this.getPermissionFn(getPermission,params);
         let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 
-        //this.getPermissionFn(getPermission);
-
+        
         /*
         this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID);
         this.tableDAtaPageCurrent = 1;
@@ -785,8 +787,8 @@ export default {
             return Common.AdminAuth(this,KEY)
         },
 
-        getPermissionFn(URL){
-            Common.GetPermission(defaultAXIOS,this,URL);
+        getPermissionFn(URL,params){
+            return Common.GetPermission(defaultAXIOS,this,URL,params);
         },
         selectMenuFn(N){
             this.kanbanboardIsShow = false;
@@ -944,9 +946,7 @@ export default {
                 return Promise.reject(URL+"_错误");
             });
         },
-        getPermissionFn(URL){
-            Common.GetPermission(defaultAXIOS,this,URL);
-        },
+        
         
         //*********
         del () {

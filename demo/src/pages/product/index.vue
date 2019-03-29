@@ -726,7 +726,12 @@ export default {
 
 
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
-		this.getPermissionFn(getPermission);
+
+		let params = {
+            prjSn:Common.GETprjid(this,Common),
+            prj_id:Common.GETprjid(this,Common),
+        }
+		this.getPermissionFn(getPermission,params);
 
 		if(!Common.GetSession("CurView") && this.$route.query.board){
 			let CurView = "kanbanboard"
@@ -1289,8 +1294,8 @@ export default {
 			return Common.auth(this,KEY)            
         },
 
-        getPermissionFn(URL){
-        	Common.GetPermission(defaultAXIOS,this,URL);
+        getPermissionFn(URL,params){
+        	return Common.GetPermission(defaultAXIOS,this,URL,params);
         },
 
 		getID(){

@@ -365,7 +365,11 @@ export default {
             let userName = Common.getStorageAndCookie(this,Common,"username");
             let myID = Common.GETID(this,Common,"inCookie");
             let exeFn = ()=>{
-                this.getPermissionFn(getPermission).then((RESULT)=>{
+                let params = {
+                    prjSn:Common.GETprjid(this,Common),
+                    prj_id:Common.GETprjid(this,Common),
+                }
+                this.getPermissionFn(getPermission,params).then((RESULT)=>{
 
                     setTimeout(()=>{
                         EVENT.emit("SIDER1",RESULT);
@@ -434,7 +438,11 @@ export default {
                 console.log(error);
                 this.showError(error);
             })
-            this.getPermissionFn(getPermission)
+            let params = {
+                prjSn:Common.GETprjid(this,Common),
+                prj_id:Common.GETprjid(this,Common),
+            }
+            this.getPermissionFn(getPermission,params)
     	}else{
             this.$router.push({path: '/agile'})
             
@@ -489,6 +497,14 @@ export default {
         },
         getSendData(data){
             console.log(data,"<==========getSendData");
+            let params = {
+                prjSn:data.prjSn || data.prj_id,
+                prj_id:data.prjSn || data.prj_id,
+            }
+            this.getPermissionFn(getPermission,params).then((res)=>{
+            },()=>{
+                this.showError(getPermission+"获得权限失败");
+            });
         },
         //下载文件 start
         listFileDown(params){
@@ -621,9 +637,8 @@ export default {
         authIs(KEY){
             return Common.auth(this,KEY)
         },
-        getPermissionFn(URL){
-            //Common.GetPermission(defaultAXIOS,this,URL);
-            return Common.GetPermission(defaultAXIOS,this,URL);
+        getPermissionFn(URL,params){
+            return Common.GetPermission(defaultAXIOS,this,URL,params);
         },
         outputExecl(){
             let params = {

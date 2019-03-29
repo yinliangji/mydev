@@ -10,9 +10,9 @@
             </BreadcrumbItem>
             <BreadcrumbItem>
                 <span class="crumbs">{{formValidate.userstory_name}}</span>
-                <span class="crumbs">（</span>
+                <!-- <span class="crumbs">（</span>
                 <span class="crumbs">{{formValidate.sprint_name}}</span>
-                <span class="crumbs">）</span>
+                <span class="crumbs">）</span> -->
             </BreadcrumbItem>
         </Breadcrumb>
         <Card>
@@ -207,7 +207,11 @@ export default {
 
         //this.getPermissionFn(getPermission); 获取权限开始
         let auth_list = ()=>{
-            this.getPermissionFn(getPermission).then((result)=>{
+            let params = {
+                prjSn:Common.GETprjid(this,Common),
+                prj_id:Common.GETprjid(this,Common),
+            }
+            this.getPermissionFn(getPermission,params).then((result)=>{
                 setTimeout(()=>{
                     EVENT.emit("SIDER1",result);
                 },500)
@@ -330,8 +334,8 @@ export default {
         authIs(KEY){
             return Common.auth(this,KEY)
         },
-        getPermissionFn(URL){
-            return Common.GetPermission(defaultAXIOS,this,URL);
+        getPermissionFn(URL,params){
+            return Common.GetPermission(defaultAXIOS,this,URL,params);
         },
         editItemFn(){
             let _query = {

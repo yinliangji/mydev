@@ -100,7 +100,11 @@ export default {
         
         if(ID && REQ_ID){
             this.formValidate.req_id = REQ_ID;
-            this.getPermissionFn(getPermission).then((result)=>{
+            let params = {
+                prjSn:Common.GETprjid(this,Common),
+                prj_id:Common.GETprjid(this,Common),
+            }
+            this.getPermissionFn(getPermission,params).then((result)=>{
                 if(this.detail_id){
                     this.GetDetail(DetailReq,this.detail_id)
                 }else{
@@ -200,8 +204,8 @@ export default {
         authIs(KEY){
             return Common.auth(this,KEY)
         },
-        getPermissionFn(URL){
-            return Common.GetPermission(defaultAXIOS,this,URL);
+        getPermissionFn(URL,params){
+            return Common.GetPermission(defaultAXIOS,this,URL,params);
         },
         
         showError(ERR){

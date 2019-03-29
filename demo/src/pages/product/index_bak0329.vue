@@ -287,9 +287,7 @@ export default {
 		},
 		formValidate: {
             handler(val, oldVal) {
-            	//Common.SetSession("userstorySerchTemp",JSON.stringify(val))
-
-
+            	Common.SetSession("userstorySerchTemp",JSON.stringify(val))
                 // for(let I in val){
                 // 	Common.SetSession(I,val[I]);
                 // }
@@ -320,29 +318,37 @@ export default {
 	        	for(let I in this.formValidate){
 	        		this.formValidate[I] = _allSession[I]
 	        	}
-	        	this.tableDAtaPageCurrent = _allSession.tableDAtaPageCurrent - 0;
+	        	if(Common.GetSession("tableDAtaPageCurrent")){
+	        		this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") - 0;
+	        	}
+        	}else if(Common.GetSession("userstorySerchTemp")){
+        		let _allSession = JSON.parse(Common.GetSession("userstorySerch"));
+	        	for(let I in this.formValidate){
+	        		this.formValidate[I] = _allSession[I]
+	        	}
+	        	if(Common.GetSession("tableDAtaPageCurrent")){
+	        		this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") - 0;
+	        	}
         	}
         	Common.RemoveSession("isClickedDelBtn");
         }
 
-        
 
+        Common.RemoveSession("userstorySerchTemp");
         if(Common.GetSession("allSession")){
+
         	let _allSession = JSON.parse(Common.GetSession("allSession"));
         	for(let I in this.formValidate){
-        		this.formValidate[I] = _allSession[I];
-        		/*
+        		this.formValidate[I] = _allSession[I]
         		if(I != "sprint"){
         			//this.formValidate[I] = _allSession[I]
         		}
-        		*/
         	}
         	this.tableDAtaPageCurrent =_allSession.tableDAtaPageCurrent - 0;
-        	
+        	//Common.SetSession("oldAllSession",Common.GetSession("allSession"));
         }
-
-        Common.RemoveSession("userstorySerchTemp");
-        Common.RemoveSession("userstorySerch");
+        
+        
         
 
         if(this.formValidate.userstory_status || this.formValidate.req_id || this.formValidate.proi || this.formValidate.userstory_type || this.formValidate.charger){
@@ -1158,21 +1164,6 @@ export default {
             	uss:"[]",//this.ussArr(USS,this.statusLists),
             }
 
-            let myCondition = {
-        		userstory_name,
-        		userstory_id,
-        		sprint,
-        		userstory_status,
-        		req_id,
-        		proi,
-        		userstory_type,
-        		charger,
-        		group_name,
-        		learn_concern,
-        		uss:'[]',
-        	}
-            this.serachCondition(myCondition);
-
 
 
 			defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
@@ -1370,13 +1361,11 @@ export default {
             this.$refs.formValidate.resetFields();
             this.serchAll();
         },
-        //记住搜索条件 start
         serachCondition(val){
             if(Common.IsObject(val)){
                 val.tableDAtaPageCurrent = this.tableDAtaPageCurrent;
             }
             Common.RemoveSession("userstorySerch");
-            Common.RemoveSession("allSession");
             Common.SetSession("userstorySerch",JSON.stringify(val));
         },
         optionSession(){
@@ -1384,7 +1373,6 @@ export default {
 			Common.GetSession("userstorySerchTemp") && Common.SetSession("userstorySerch",Common.GetSession("userstorySerchTemp")) ;
 			Common.RemoveSession("userstorySerchTemp");
         },
-        //记住搜索条件 start
 		serchAll(evt,uss = ""){
 			if(!this.clickTime){
 				return
@@ -1474,22 +1462,6 @@ export default {
 				username:Common.getCookie("username"),
 				uss:"[]",//this.ussArr(USS,this.statusLists)
 			};
-
-			let myCondition = {
-        		userstory_name,
-        		userstory_id,
-        		sprint,
-        		userstory_status,
-        		req_id,
-        		proi,
-        		userstory_type,
-        		charger,
-        		group_name,
-        		learn_concern,
-        		uss:'[]',
-        	}
-            this.serachCondition(myCondition);
-
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======***用户故事列表+++",response,myData,"======>");

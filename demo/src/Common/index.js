@@ -1572,9 +1572,10 @@ export default class Common extends Utils {
         }
       })(_Common.GetSession("userstorySerch"),_Common.GetSession("userstorySerchTemp"))
       
-
-      allSession.tableDAtaPageCurrent = _Common.GetSession("tableDAtaPageCurrent") ? _Common.GetSession("tableDAtaPageCurrent") : 1;
-      _Common.SetSession("allSession",JSON.stringify(allSession));
+      if(!allSession.tableDAtaPageCurrent){
+        allSession.tableDAtaPageCurrent = _Common.GetSession("tableDAtaPageCurrent") ? _Common.GetSession("tableDAtaPageCurrent") : 1;
+      }
+      _Common.SetSession("allSession",JSON.stringify(allSession));  
 
       _Common.RemoveSession("tableDAtaPageCurrent");
       _Common.RemoveSession("userstorySerch");

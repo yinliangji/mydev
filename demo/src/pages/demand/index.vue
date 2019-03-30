@@ -754,7 +754,7 @@ export default {
             return Common.GETID(this,Common);
         },
         goUserStory(i){
-            Common.SetSession("REQ_ID",this.tableData[i].id)
+            Common.SetSession("REQ_ID",this.tableData[i].req_id || this.tableData[i].id)
             this.$router.push({path: '/product', query: {board: true}})
         },
         toBusiness(i,From){

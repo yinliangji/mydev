@@ -493,7 +493,7 @@ app.all("/project/detail/1", function(req, res) {
     res.end()
 });
 
-for(let i=2;i<itemNumber;i++){
+for(let i=2;i<=itemNumber;i++){
     eval('app.all("/project/detail/'+i+'", function(req, res) {let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);res.json(detail(req.body.myStatus));res.end();});')
 }
 
@@ -539,7 +539,7 @@ let queryPrj_fromUser = (val1 = "success", val2 = 1, val3 = 3) => {
             }
         ];
     
-    for(let i=5;i<itemNumber;i++){
+    for(let i=5;i<=itemNumber;i++){
         let obj = {
             id:i,
             prod:i,
@@ -2993,7 +2993,7 @@ let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": "success",
         "message": "mockDataList xxxxxxx",
-        "data|3-5": [{
+        "data|4": [{
             "id|+1": 1,
             "req_id|+1": 4,
             "req_submitter|5-8": /[a-zA-Z]/,

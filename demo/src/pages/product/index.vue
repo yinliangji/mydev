@@ -287,17 +287,11 @@ export default {
 		},
 		formValidate: {
             handler(val, oldVal) {
-            	//Common.SetSession("userstorySerchTemp",JSON.stringify(val))
-
-
-                // for(let I in val){
-                // 	Common.SetSession(I,val[I]);
-                // }
             },
             deep: true
         },
         tableDAtaPageCurrent(val, oldVal){
-        	Common.SetSession("tableDAtaPageCurrent",val);
+        	//Common.SetSession("tableDAtaPageCurrent",val);
         },
         statusListBase: {
             handler(val, oldVal) {
@@ -313,43 +307,9 @@ export default {
         if(this.addtest){
             this.tabRowAddFn()
         }
-
-        if(Common.GetSession("isClickedDelBtn")){
-        	if(Common.GetSession("userstorySerch")){
-        		let _allSession = JSON.parse(Common.GetSession("userstorySerch"));
-	        	for(let I in this.formValidate){
-	        		this.formValidate[I] = _allSession[I]
-	        	}
-	        	this.tableDAtaPageCurrent = _allSession.tableDAtaPageCurrent - 0;
-        	}
-        	Common.RemoveSession("isClickedDelBtn");
-        }
+        this.searchInit();
 
         
-
-        if(Common.GetSession("allSession")){
-        	let _allSession = JSON.parse(Common.GetSession("allSession"));
-        	for(let I in this.formValidate){
-        		this.formValidate[I] = _allSession[I];
-        		/*
-        		if(I != "sprint"){
-        			//this.formValidate[I] = _allSession[I]
-        		}
-        		*/
-        	}
-        	this.tableDAtaPageCurrent =_allSession.tableDAtaPageCurrent - 0;
-        	
-        }
-
-        Common.RemoveSession("userstorySerchTemp");
-        Common.RemoveSession("userstorySerch");
-        
-
-        if(this.formValidate.userstory_status || this.formValidate.req_id || this.formValidate.proi || this.formValidate.userstory_type || this.formValidate.charger){
-        	this.isShowMoreShow = true;	
-        }else{
-        	this.isShowMoreShow = false;
-        }
 
         console.log("用户故事列表--created-------",this.formValidate,this.statusListBase)
 
@@ -741,6 +701,54 @@ export default {
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
 	},
 	methods:{
+		searchInit(){
+			if(Common.GetSession("isClickedDelBtn")){
+	        	if(Common.GetSession("userstorySerch")){
+	        		let _allSession = JSON.parse(Common.GetSession("userstorySerch"));
+		        	for(let I in this.formValidate){
+		        		this.formValidate[I] = _allSession[I]
+		        	}
+		        	this.tableDAtaPageCurrent = _allSession.tableDAtaPageCurrent - 0;
+	        	}
+	        	Common.RemoveSession("isClickedDelBtn");
+	        }else if(Common.GetSession("allSession")){
+
+	        	let _allSession = JSON.parse(Common.GetSession("allSession"));
+
+	        	for(let I in this.formValidate){
+	        		if(_allSession.hasOwnProperty(I)){
+	        			this.formValidate[I] = _allSession[I];	
+	        		}
+	        	}
+	        	if(_allSession.hasOwnProperty("tableDAtaPageCurrent")){
+	        		this.tableDAtaPageCurrent =_allSession.tableDAtaPageCurrent - 0;	
+	        	}
+	        	
+	        }else if(Common.GetSession("REQ_ID")){
+	    		this.formValidate.req_id = Common.GetSession("REQ_ID") + "";
+	    		this.formValidate.sprint = "";
+
+	    		this.formValidate.userstory_name = "";
+	    		this.formValidate.userstory_id = "";
+	    		this.formValidate.userstory_type = "";
+	    		this.formValidate.userstory_status = "";
+	    		this.formValidate.proi = "";
+	    		this.formValidate.charger = "";
+	    		this.formValidate.learn_concern = "";
+	    		this.formValidate.group_name = "";
+	    		this.isShowMoreShow = true;
+
+	    	} 
+
+	        Common.RemoveSession("userstorySerch");
+	        
+
+	        if(this.formValidate.userstory_status || this.formValidate.req_id || this.formValidate.proi || this.formValidate.userstory_type || this.formValidate.charger){
+	        	this.isShowMoreShow = true;	
+	        }else{
+	        	this.isShowMoreShow = false;
+	        }
+		},
 		helpToLeft(){
 			this.ToolTipL = Common.HelpLeft("kanbanShowBtn");
 		},
@@ -782,7 +790,6 @@ export default {
 					if(obj){_arr.push(obj)}
 				}
 
-				console.error(arrC,temp,_myarr)
 			}
 			return _arr
 		},
@@ -897,33 +904,30 @@ export default {
 			let _myAllSession = Common.GetSession("allSession");
 		    this.getDefSpringFn(getDefSpring,ID).then((sprint)=>{
 
-		    	if(!_myAllSession || (_myAllSession && !JSON.parse(_myAllSession).hasOwnProperty("sprint"))){
-		    		if(!isShowList){
-		    			if(Common.GetSession("isClickedDelBtn")){
-		    				let _temp = Common.GetSession("userstorySerch") || Common.GetSession("userstorySerchTemp") || false;
-		    				this.formValidate.sprint = _temp ? JSON.parse(_temp).sprint : sprint+"";
-		    				Common.RemoveSession("isClickedDelBtn");
-		    			}else if(_myAllSession && JSON.parse(_myAllSession).hasOwnProperty("sprint")){
-		    				this.formValidate.sprint = JSON.parse(_myAllSession).sprint+"";
-		    			}else if(_myAllSession && !JSON.parse(_myAllSession).hasOwnProperty("sprint")){
-		    				this.formValidate.sprint = "";
+		    	if(!isShowList){
+
+			    	if(_myAllSession){
+			    		if(!JSON.parse(_myAllSession).hasOwnProperty("sprint")){
+			    			this.formValidate.sprint = sprint+"";
+			    		}
+			    		Common.RemoveSession("allSession");
+			    	}else if(Common.GetSession("REQ_ID")){
+			    		this.optionSession();
+			    	}else{
+			    		if(Common.GetSession("isClickedDelBtn")){
+			    			//
 		    			}else{
 		    				this.formValidate.sprint = sprint+"";
 		    			}
-		    		}
+			    	}
+
+			    	
+			    	if(Common.GetSession("tableDAtaPageCurrent")){
+			    		this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") - 0;	
+			    	}
+			    	
 		    	}
-
-		    	if(Common.GetSession("REQ_ID")){
-		    		this.formValidate.req_id = Common.GetSession("REQ_ID") + "";
-		    		this.formValidate.sprint = "";
-		    		setTimeout(()=>{
-		    			this.optionSession();
-		    			this.isShowMoreShow = true;
-		    		},350)
-		    	}
-
-		    	this.tableDAtaPageCurrent = Common.GetSession("tableDAtaPageCurrent") ? Common.GetSession("tableDAtaPageCurrent") - 0 : 1;
-
+		    	
 		    	//currentView: "developList",//developList//kanbanboard
 		    	
 		    	let searchParams = [
@@ -1378,11 +1382,11 @@ export default {
             Common.RemoveSession("userstorySerch");
             Common.RemoveSession("allSession");
             Common.SetSession("userstorySerch",JSON.stringify(val));
+            Common.RemoveSession("isClickedDelBtn");
         },
         optionSession(){
-        	Common.RemoveSession("allSession");
-			Common.GetSession("userstorySerchTemp") && Common.SetSession("userstorySerch",Common.GetSession("userstorySerchTemp")) ;
-			Common.RemoveSession("userstorySerchTemp");
+        	Common.RemoveSession("REQ_ID");
+        	//Common.RemoveSession("allSession");
         },
         //记住搜索条件 start
 		serchAll(evt,uss = ""){
@@ -1397,8 +1401,9 @@ export default {
 
 			let _uss = uss ? uss : this.ussArr(uss,this.statusLists);
 			let ID = this.getID();
+
 			this.optionSession();
-			Common.RemoveSession("REQ_ID");
+
             if(this.currentView == "kanbanboard"){
             	this.kanbanboardIsShow = false;
             	setTimeout(()=>{
@@ -1506,6 +1511,7 @@ export default {
             });
         },
 		changeCurrentPage(i) {
+			this.tableDAtaPageCurrent = i;
 			let ID = this.getID()
             //this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID)
             let searchParams = [
@@ -1521,7 +1527,7 @@ export default {
             	this.formValidate.group_name
             ];
             this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID,...searchParams);
-            this.tableDAtaPageCurrent = i;
+            
         },
         changePageSize(i) {
         },

@@ -31,7 +31,14 @@ export default {
                 {
                     title: '状态',
                     key: 'userstory_status',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'span',
+                            {},
+                            params.row.status_name || "",
+                        );
+                    },
                 },
                 {
                     title: '变更时间',
@@ -48,6 +55,13 @@ export default {
                     title: '用户故事',
                     key: 'userstory_id',
                     align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'span',
+                            {},
+                            params.row.userstory_name || "",
+                        );
+                    },
                 },
             ],
             tableData: [],
@@ -58,12 +72,12 @@ export default {
     methods: {
         changeCurrentPage(i) {
             this.currentPage = i;
-            this.getMissionChangeFn(getMissionChange,this.TASKID,i,this.tableDAtaPageLine)
+            this.getMissionChangeFn(getMissionChange,this.TASKID,i,this.tableDAtaPageLine,Common.GETprjid(this,Common))
         },
         changePageSize(i) {
         },
-        getMissionChangeFn(URL = "",userstory_id = "",page = "",limit = "",data = ""){
-            defaultAXIOS(URL,{userstory_id,page,limit,data},{timeout:5000,method:'get'})
+        getMissionChangeFn(URL = "",userstory_id = "",page = "",limit = "",prjSn="",data = ""){
+            defaultAXIOS(URL,{userstory_id,page,limit,data,prjSn},{timeout:5000,method:'get'})
             .then((response) => {
                 let myData = response.data;
                 console.log("<======product getMissionChange***response+++",response,myData,"======>");
@@ -82,7 +96,7 @@ export default {
     watch: {
         TASKID(){
             if(this.TASKID){
-                this.getMissionChangeFn(getMissionChange,this.TASKID,this.currentPage,this.tableDAtaPageLine);
+                this.getMissionChangeFn(getMissionChange,this.TASKID,this.currentPage,this.tableDAtaPageLine,Common.GETprjid(this,Common));
             }
         },
     },
@@ -96,7 +110,7 @@ export default {
     },
     mounted(){
         if(this.TASKID){
-            this.getMissionChangeFn(getMissionChange,this.TASKID,this.currentPage,this.tableDAtaPageLine);
+            this.getMissionChangeFn(getMissionChange,this.TASKID,this.currentPage,this.tableDAtaPageLine,Common.GETprjid(this,Common));
         }
         
     },

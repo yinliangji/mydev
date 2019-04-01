@@ -134,7 +134,10 @@ CommonRest.restUrl = {
     "getDefSpring": process.env.BASE_URL + "/userstory/getDefaultSpringIdByPrj/",
     /**** 用户故事当前迭代 get****/
 
-    "getMissionChange": process.env.BASE_URL + "/userstoryEvo/list/",
+    //"getMissionChange": process.env.BASE_URL + "/userstoryEvo/list/",
+    /**** 用户故事当前迭代 get****/
+
+    "getMissionChange": process.env.BASE_URL + "/userstoryEvo/Newlist/",
     /**** 用户故事当前迭代 get****/
 
     "userstoryAddGroup": process.env.BASE_URL + "/agile/search_busfunc/",

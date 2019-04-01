@@ -14,6 +14,12 @@
       <div class="DragCursor" :class="(()=>{return isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)+'Show'})()">拖拽</div>
       <div class="card-wrap" @click="itemClick(item)" >
 
+        <p v-if="item.source=='dependManage'" class="DMTitle" :title="item.depd_main_type_name+'：'+item.depdName">
+          <span>
+            <em>{{item.depd_main_type_name}}：{{item.depdName}}</em>
+          </span>
+        </p>
+
         <p class="item-content" :title="item.taskName">
           <span class="levelText" :style="{'background':item.bgcolor}" v-show="item.bgcolor.indexOf('ffffff') == -1">
             {{levelText(item.bgcolor)}}
@@ -188,6 +194,49 @@ export default {
 </script>
 
 <style scoped>
+.DMTitle {
+  overflow: hidden;
+  padding-top:  2px;
+}
+.DMTitle > span {
+  position:relative;
+  height: 1.5em;
+  max-width: 95%;
+  display: inline-block;
+  color: #999;
+}
+.DMTitle > span em {
+  display: inline-block;
+  max-width: 100%;
+  line-height: 1.5em;
+  color: #999;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  padding-left: 1.1em;
+}
+.DMTitle > span:after{
+  content: "】";
+  position: absolute;
+  right: -1.1em;
+  top: 0;
+  height: 1.5em;
+  line-height: 1.5em;
+  color: #999;
+}
+.DMTitle > span:before{
+  content: "【";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 1.5em;
+  line-height: 1.5em;
+  color: #999;
+}
+
 .DragCursor {
   position: absolute;
   left: 0;

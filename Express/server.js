@@ -889,6 +889,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                         
                     },
@@ -907,6 +909,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                     {
@@ -924,6 +928,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                     {
@@ -941,6 +947,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     }
                 ]
@@ -964,6 +972,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                     {
@@ -981,6 +991,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                     {
@@ -998,6 +1010,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                     {
@@ -1015,6 +1029,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     }
                 ]
@@ -1038,6 +1054,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                     {
@@ -1055,6 +1073,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                 ]
@@ -1078,6 +1098,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                     {
@@ -1095,6 +1117,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                 ]
@@ -1118,6 +1142,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                     {
@@ -1135,6 +1161,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                    
@@ -1159,6 +1187,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                     {
@@ -1176,6 +1206,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                 ]
@@ -1199,6 +1231,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                     {
@@ -1216,6 +1250,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                 ]
@@ -1240,6 +1276,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                     {
@@ -1257,6 +1295,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
                         "depdDesc":"依赖项状态->@title",
+                        "depdName|1":["依赖性测试",""],
+                        "depd_main_type_name|1":["用户故事",""],
 
                     },
                 ]
@@ -3093,8 +3133,10 @@ let missionChangeList = (val1 = 200, val2 = 1, val3 = 3) => {
             operator_id:"xiebei.zh",
             operator_name:"谢蓓",
             "task_id|+1":110,
-            userstory_status:"未开始",
-            "userstory_id|6-10":/[a-zA-Z0-9]/,
+            "userstory_status|1":[1],
+            "status_name|1":["提出"],
+            "userstory_id|+1":280,
+            "userstory_name|6-10":/[a-zA-Z0-9]/,
         }],
         table_id:"listview_bable",
 
@@ -3117,6 +3159,13 @@ let missionChangeList = (val1 = 200, val2 = 1, val3 = 3) => {
 
 
 app.all('/userstoryEvo/list/', function(req, res) {
+    let resVal = missionChangeList(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(missionChangeList(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+app.all('/userstoryEvo/Newlist/', function(req, res) {
     let resVal = missionChangeList(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
     console.log("resVal==>", resVal);

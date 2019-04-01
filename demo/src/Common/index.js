@@ -1,5 +1,6 @@
 "use strict"
 import Utils from './utils';
+import HeadGlobal from 'header/global'
 export default class Common extends Utils {
 	constructor() {
         super()
@@ -1228,13 +1229,13 @@ export default class Common extends Utils {
 				return Promise.reject(myData.status);
 			}else{
 				toLoginPage(that,myData.status);
-				that.showError("权限不足，不能有任何动作");
-				return Promise.reject("权限不足，不能有任何动作");
+				that.showError("权限出错，"+myData.status);
+				return Promise.reject("权限不足，"+myData.status);
 			}
           
   		}).catch( (error) => {
   			console.log(error);
-  			toLoginPage(that,"获取权限出错！");
+  			toLoginPage(that,"获取权限出错！"+error);
   			that.showError(error);
   			return Promise.reject(error);
   		});
@@ -1923,12 +1924,12 @@ function getLocalStorageFn(that,_Common,name){
   return localStorage.getItem(name) ? localStorage.getItem(name) : false;
 }
 
-function toLoginPage(THAT = false){
+function toLoginPage(THAT = false,msg){
 	let error =	(MSG = "错误",CallBack = ()=>{},Fn = ()=>{})=>{
 		if(THAT){
 			THAT.$Message.config({
 			top: 250,
-			duration: 3,
+			duration: 10,
 			closable:true,
 			onClose:CallBack(),
 			});
@@ -1943,6 +1944,10 @@ function toLoginPage(THAT = false){
 		}
 	}
 
+  if(THAT && msg){
+    error(msg,()=>{},()=>{})
+  }
+
 	let HostName = document.location.hostname;
 	if(HostName == "127.0.0.1"){
 		if(THAT){
@@ -1950,7 +1955,15 @@ function toLoginPage(THAT = false){
 		}else{
 		  alert('window.location.href="http://127.0.0.1:1000/"')
 		}
-	}else if(HostName == "128.196.63.30"){
+	}else{
+    error("错误！到【"+HeadGlobal.login2_url+"/icdp?apptype=app03】登录",()=>{
+      //window.location.href = HeadGlobal.login2_url+"/icdp?apptype=app03"
+    },()=>{
+      window.location.href = HeadGlobal.login2_url+"/icdp?apptype=app03"
+    })
+  }
+  /*
+  else if(HostName == "128.196.63.30"){
 		error("错误！到【http://128.192.184.4:8020/icdp?apptype=app03】登录",()=>{
 			//window.location.href="http://128.192.184.4:8020/icdp?apptype=app03";
 		},()=>{
@@ -1970,6 +1983,8 @@ function toLoginPage(THAT = false){
 			window.location.href="http://128.192.184.4:8020/icdp?apptype=app03"
 		})
 	}
+  */
+
 }
 window.toLoginPage = toLoginPage;
 

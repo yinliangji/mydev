@@ -606,12 +606,18 @@ export default {
       this.$emit("userStoryIdFn",id);
     },
     toStory(IG,column){
+      let ID = this.$router.history.current.query.prjId || this.$router.history.current.query.id || "";
+      let PrjSn = this.$router.history.current.query.prjSn || this.$router.history.current.query.prj_id || "";
       let obj =  column && column == 'us' ? 
       {
         path:"demand/detail",
         query:{
           reqList_id:IG.groupId,
           req_id:IG.reqID,
+          prj_id:PrjSn,
+          prjSn:PrjSn,
+          id:ID,
+          prjId:ID,
         }
       }
       :
@@ -619,6 +625,10 @@ export default {
         path:"product/detail",
         query:{
           detail_id:IG.groupId,
+          prj_id:PrjSn,
+          prjSn:PrjSn,
+          id:ID,
+          prjId:ID,
         }
       }
       const {href}=this.$router.resolve(obj);

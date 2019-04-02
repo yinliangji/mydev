@@ -1270,6 +1270,7 @@ export default {
 
 							_Obj.taskDesc = myData[i].list[j].taskDesc  || "";
 							_Obj.depdDesc = myData[i].list[j].depdDesc  || "";
+							_Obj.userstory_desc = myData[i].list[j].userstory_desc  || "";
 
 							_arr.push(_Obj);
 							_Obj = {}

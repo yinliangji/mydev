@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // import Home from '../pages/home'
 import Store from '@/vuex/store'
+import Common from '@/Common';
 Vue.use(Router)
 const router = new Router({
     mode: 'hash', //'history',
@@ -528,18 +529,82 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+
     Store.dispatch('IS_PAGELOADING/incrementAsync', {
-            isShow: true,
-            msg: "正在加载中……"
-        })
-        // console.log('beforeEach__to',to)
-        // console.log('beforeEach__from',from);
-    next();
+        isShow: true,
+        msg: "正在加载中……"
+    })
+
+     
+
+    if(to.path == "/agile/detail" || to.path == "/agile" || to.path == "/agile/add" || to.path == "/agile/edit" || to.path == "/" || from.path == "/" ){
+        console.log("不是点击进来 或者 /agile/detail 或者列表进来")
+        next()
+        return;
+    }
+    let isFromPrjId = from.query.hasOwnProperty('prjId');
+    let isFromId = from.query.hasOwnProperty('id');
+    let isFromPrj_id = from.query.hasOwnProperty('prj_id');
+    let isFromPrjSn = from.query.hasOwnProperty('prjSn');
+
+    let isToPrjId = to.query.hasOwnProperty('prjId');
+    let isToId = to.query.hasOwnProperty('id');
+    let isToPrj_id = to.query.hasOwnProperty('prj_id');
+    let isToPrjSn = to.query.hasOwnProperty('prjSn');
+    if(isToPrjId && isToId && isToPrj_id && isToPrjSn){
+        console.log("已经有参数to")
+        next()
+        return;
+    }
+
+    let toQuery = JSON.parse(JSON.stringify(to.query));
+
+    let fromID = from.query.prjId || from.query.id || Common.GETID(this,Common,"inCookie");
+    let fromPrjSn = from.query.prjSn || from.query.prj_id || Common.GETprjid(this,Common,"inCookie");
+
+    if(!fromID || !fromPrjSn){
+        console.log("执行 没有获取到参数",to.query)
+        next()
+        return;
+    }
+
+    let toID = toQuery.prjId || toQuery.id;
+    let toPrjSn = toQuery.prjSn || toQuery.prj_id;
+
+
+    if(fromID && !toID){
+        toQuery.prjId = fromID;
+        toQuery.id = fromID;
+    }else if(toQuery.id && !toQuery.prjId){
+        toQuery.prjId = toQuery.id;
+    }else if(!toQuery.id && toQuery.prjId){
+        toQuery.id = toQuery.prjId;
+    }
+
+    if(fromPrjSn && !toPrjSn){
+        toQuery.prjSn = fromPrjSn;
+        toQuery.prj_id = fromPrjSn;
+    }else if(toQuery.prj_id && !toQuery.prjSn){
+        toQuery.prjSn = toQuery.prj_id;
+    }else if(!toQuery.prj_id && toQuery.prjSn){
+        toQuery.prj_id = toQuery.prjSn;
+    }
+
+    console.log("next(参数)",toQuery,to.query)
+
+    next({
+        path: to.path,
+        query: toQuery
+    })
+    setTimeout(()=>{
+        next();
+        console.log("next()",toQuery,to.query)
+    },500)
+    
+
 })
 
 router.afterEach((to, from) => {
-    // console.log('aftereach__to',to)
-    // console.log('aftereach__from',from);
     Store.dispatch('IS_PAGELOADING/incrementAsync', {
         isShow: false,
         msg: "正在加载中……"

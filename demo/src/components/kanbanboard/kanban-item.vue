@@ -20,7 +20,7 @@
           </span>
         </p>
 
-        <p class="item-content" :title="item.taskName">
+        <p class="item-content" :title="'名称：'+item.taskName+'\n描述：'+item.userstory_desc">
           <span class="levelText" :style="{'background':item.bgcolor}" v-show="item.bgcolor.indexOf('ffffff') == -1">
             {{levelText(item.bgcolor)}}
           </span>

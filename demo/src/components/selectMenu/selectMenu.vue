@@ -216,7 +216,7 @@ export default {
                     if(isProdID){
                         _url = this.delUrlParam(_url,"prod_id");
                     }
-                    this.$router.push({fullPath:_url})
+                    //this.$router.push({fullPath:_url})
                 }
             }
             this.mySetCookie("prjId",data);
@@ -234,8 +234,21 @@ export default {
                     break
                 }
             }
+            let objData = this.checkGet(data || "",this.projectList)
+            let Query = JSON.parse(JSON.stringify(this.$route.query));
+            Query.prjId = objData.prjId || objData.id;
+            Query.id = objData.prjId || objData.id;
+            Query.prjSn = objData.prjSn || objData.prj_id;
+            Query.prj_id = objData.prjSn || objData.prj_id;
+            
+            
+
+            if(this.$route.path != "/agile/detail"){
+                this.$router.push({path: this.$route.path,query: Query })
+            }
             this.$emit("changeSelect",data);
-            this.$emit("sendData",this.checkGet(data || "",this.projectList));
+            this.$emit("sendData",objData);
+
         },
         _getPrjSn(pId){
             let isPrjId = this.projectList.every((item)=>{return item.prjId ? true : false});

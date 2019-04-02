@@ -85,3 +85,17 @@ function myBrowser() {
                             return "Chrome";
                         }
                     }//myBrowser() end
+
+
+
+
+
+&#13;&#10
+
+#13 回车。 
+#10 换行 
+#0 空 
+#8退格
+
+
+<span title="第一行&#10;第二行&#10;第三行">请将鼠标移到我的上面看看title换行了没</span>

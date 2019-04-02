@@ -3,7 +3,7 @@ let Mock = require('mockjs'); //引入mock模块
 let app = express(); //实例化express
 let bodyParser = require('body-parser'); //body-parser中间件来解析请求体
 let myNumber = false;
-let itemNumber = 10;
+let itemNumber = 9;
 let allowCrossDomain = function(req, res, next) {
     //console.log(res.req)
     //res.header('Access-Control-Allow-Origin', '*');
@@ -90,7 +90,7 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
         "status": val1,
         "message": "mockDataList xxxxxxx",
         data: {
-            "list|10": [{
+            "list|9": [{
                 "id|+1": 1,
                 "prj_id|+1": 1,
                 "prj_name|5-148": /[a-zA-Z0-9]/,
@@ -128,14 +128,14 @@ app.all('/project/all', function(req, res) {
     res.end()
 });
 
-let detail = (val1 = 200, val2 = 1, val3 = 3) => {
+let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
     return Mock.mock({
         "status": "success",
         "message": "detail xxxxxxx",
         data: {
             "create_person":"xiebei.zh",
-            "id": 1,
-            "prj_id":"PJ100001",
+            "id": num,
+            "prj_id":"PJ10000"+num,
 
             "prj_name|5-8": /[a-zA-Z]/,
             "manager|6-10": /[a-zA-Z0-9]/,
@@ -486,15 +486,13 @@ let detail = (val1 = 200, val2 = 1, val3 = 3) => {
 
 
 app.all("/project/detail/1", function(req, res) {
-    let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
-    res.json(detail(req.body.myStatus));
+    res.json(detail(req.body.myStatus,1));
     res.end()
 });
 
 for(let i=2;i<=itemNumber;i++){
-    eval('app.all("/project/detail/'+i+'", function(req, res) {let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);res.json(detail(req.body.myStatus));res.end();});')
+    eval('app.all("/project/detail/'+i+'", function(req, res) {res.json(detail(req.body.myStatus,'+i+'));res.end();});')
 }
 
 
@@ -891,6 +889,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                         
                     },
@@ -911,6 +910,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                     {
@@ -930,6 +930,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                     {
@@ -949,6 +950,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     }
                 ]
@@ -974,6 +976,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                     {
@@ -993,6 +996,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                     {
@@ -1012,6 +1016,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                     {
@@ -1031,6 +1036,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     }
                 ]
@@ -1056,6 +1062,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                     {
@@ -1075,6 +1082,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                 ]
@@ -1100,6 +1108,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                     {
@@ -1119,6 +1128,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                 ]
@@ -1144,6 +1154,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                     {
@@ -1163,6 +1174,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                    
@@ -1189,6 +1201,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                     {
@@ -1208,6 +1221,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                 ]
@@ -1233,6 +1247,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                     {
@@ -1252,6 +1267,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                 ]
@@ -1278,6 +1294,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                     {
@@ -1297,6 +1314,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdDesc":"依赖项状态->@title",
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
+                        "userstory_desc":"@title",
 
                     },
                 ]

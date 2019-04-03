@@ -893,27 +893,17 @@ export default {
                  
               }
             }
-
-
-
-            //----
-          
-          //
-          if(that.noPutWip.length && that.groupLists.length){
-
-            for(let i=0;i<that.groupLists.length;i++){
-              that.noPutWip.forEach((item)=>{
-
-                if(document.getElementById('C-'+that.groupLists[i].groupId+'_'+item) && item != evt.item.getAttribute("state")){
-                  document.getElementById('C-'+that.groupLists[i].groupId+'_'+item).setAttribute("title","用户故事超过WIP数量，不能在拖入")
-                   
-                }
-              })
+            //----                                             
+            if(that.noPutWip.length && that.groupLists.length){
+              for(let i=0;i<that.groupLists.length;i++){
+                that.noPutWip.forEach((item)=>{
+                  if(document.getElementById('C-'+that.groupLists[i].groupId+'_'+item) && item != evt.item.parentNode.getAttribute("state")){
+                    document.getElementById('C-'+that.groupLists[i].groupId+'_'+item).setAttribute("title","用户故事超过WIP数量，不能在拖入")
+                  }
+                })
+              }
             }
-          }
             //----
-
-
           }
         },
       });

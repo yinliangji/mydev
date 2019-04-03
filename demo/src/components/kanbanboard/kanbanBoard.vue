@@ -903,8 +903,6 @@ export default {
 
             for(let i=0;i<that.groupLists.length;i++){
               that.noPutWip.forEach((item)=>{
-                //console.error(that.groupLists[i].groupId+'_'+item,evt.item.getAttribute("groupid")+'_'+evt.item.getAttribute("state"))
-
 
                 if(document.getElementById('C-'+that.groupLists[i].groupId+'_'+item) && item != evt.item.getAttribute("state")){
                   document.getElementById('C-'+that.groupLists[i].groupId+'_'+item).setAttribute("title","用户故事超过WIP数量，不能在拖入")

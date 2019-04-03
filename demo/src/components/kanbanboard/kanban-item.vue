@@ -9,7 +9,7 @@
     :groupId="item.groupId"
     :nickname="item.nickName"
     :class="isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)"
-    :data-taskCount="item.task_count"
+    :data-taskcount="item.task_count"
     >
       <div class="DragCursor" :class="(()=>{return isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)+'Show'})()">拖拽</div>
       <div class="card-wrap" @click="itemClick(item)" >
@@ -337,6 +337,7 @@ export default {
   margin-right: 2px;
   min-height: 30px;
   overflow: hidden;
+  background: white;
 
   /*
   margin-right: 10px;

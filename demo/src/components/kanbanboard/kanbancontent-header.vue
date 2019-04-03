@@ -1,12 +1,18 @@
 <template>
   <div class="content-header">
-     <span :title="text" class="title" v-if="myAside == 'product' || myAside == 'demand'? true:false" >
+     <span :title="'状态名称：'+text+'\n所属分类：'+myClass+'\n　　WIP：'+wip+'\n已有数量：'+taskNumber" class="title" v-if="myAside == 'product'? true:false" >
         <mark>{{text}}</mark>
         <span class="number" >
          {{taskNumber}}
         </span>
      </span>
-     <span class="title" v-else>
+     <span :title="text" class="title" v-if="myAside == 'demand'? true:false" >
+        <mark>{{text}}</mark>
+        <span class="number" >
+         {{taskNumber}}
+        </span>
+     </span>
+     <span class="title" v-if="myAside == 'demand' || myAside == 'product' ? false:true">
        {{text}}
      </span>
      <span v-show="myAside == 'product' || myAside == 'demand'? false:true">数量{{taskNumber}}</span>
@@ -23,6 +29,18 @@
       },
       //
       myAside: {//判断栏目
+        type: [Boolean,String,Number],
+        default: function() {
+          return false;
+        }
+      },
+      wip:{
+        type: [Boolean,String,Number],
+        default: function() {
+          return false;
+        }
+      },
+      myClass:{
         type: [Boolean,String,Number],
         default: function() {
           return false;

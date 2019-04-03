@@ -1205,7 +1205,9 @@ export default {
                 			}
                 		}
                 		_temp.stateStr = myData[i].userstory_status;
-                		_temp.taskNumber = Number(myData[i].count);
+                		_temp.taskNumber = myData[i].count - 0;
+                		_temp.myClass = myData[i].class || "";
+                		_temp.wip = (myData[i].wip || 0) - 0;
                 		_temp.state = fn(this.userstory_statusList,_temp.stateStr);
                 		//_temp.state = "0"+(i+1);
                 		this.statusList.push(_temp);

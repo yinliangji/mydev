@@ -864,6 +864,8 @@ app.all('/sprint/getSprintsByPrj', function(req, res) {
 });
 
 
+
+
 let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
     console.log("num=====",num)
     let data = [];
@@ -871,6 +873,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
             {
                 count:4,
                 userstory_status:"提出",
+                wip:4,
+                class:"所属分类xxx_1",
                 list:[
                     {
                         userstory_name:"userstory_name_1",
@@ -958,6 +962,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
             {
                 count:4,
                 userstory_status:"设计分析",
+                wip:((N)=>{if(N<3){return 0}else if(N<6){return 3}else {return 7}})(Math.random()*10),
+                class:"所属分类xxx_5",
                 list:[
                     {
                         userstory_name:"userstory_name_5",
@@ -1044,6 +1050,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
             {
                 count:2,
                 userstory_status:"开发测试",
+                wip:((N)=>{if(N<3){return 0}else if(N<6){return 3}else {return 7}})(Math.random()*10),
+                class:"所属分类xxx_9",
                 list:[
                     {
                         userstory_name:"userstory_name_9",
@@ -1090,6 +1098,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
             {
                 count:2,
                 userstory_status:"用户验收测试",
+                wip:((N)=>{if(N<3){return 0}else if(N<6){return 3}else {return 7}})(Math.random()*10),
+                class:"所属分类xxx_11",
                 list:[
                     {
                         userstory_name:"userstory_name_11",
@@ -1136,6 +1146,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
             {
                 count:2,
                 userstory_status:"待投产",
+                wip:((N)=>{if(N<3){return 0}else if(N<6){return 3}else {return 7}})(Math.random()*10),
+                class:"所属分类xxx_13",
                 list:[
                     {
                         userstory_name:"userstory_name_13",
@@ -1183,6 +1195,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
             {
                 count:2,
                 userstory_status:"已投产",
+                wip:((N)=>{if(N<3){return 0}else if(N<6){return 3}else {return 7}})(Math.random()*10),
+                class:"所属分类xxx_15",
                 list:[
                     {
                         userstory_name:"userstory_name_15",
@@ -1229,6 +1243,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
             {
                 count:2,
                 userstory_status:"停滞",
+                wip:((N)=>{if(N<3){return 0}else if(N<6){return 3}else {return 7}})(Math.random()*10),
+                class:"所属分类xxx_17",
                 list:[
                     {
                         userstory_name:"userstory_name_17",
@@ -1275,6 +1291,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
             {
                 count:2,
                 userstory_status:"废弃",
+                wip:0,
+                class:"所属分类xxx_19",
                 list:[
                 
                     {

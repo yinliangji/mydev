@@ -41,13 +41,13 @@
       <div class="row-wrapper" id="kanbanHeader">
         <Row :gutter="0" class="kanbanHeaderBox" id="kanbanHeaderBox"  align="middle">
 
-          <Col style="width:121px;"  class="topColumnFirst" v-if="groupList.length > 0">
+          <Col :style="'width:'+((firstColumn - 0) + 1)+'px;'"  class="topColumnFirst" v-if="groupList.length > 0">
             <div class="centerHeaderTitle">
               {{groupList[0].text}}
             </div>
           </Col>
           <Col class="topColumn" :id="'TC-'+item.state"  v-for="(item, index) in myStatusList" :key="index">
-            <kanbanContentHeader :myAside="aside" :text="item.stateStr" :taskNumber="item.taskNumber" />
+            <kanbanContentHeader :myAside="aside" :wip="((n)=>{return n==0 || n=='0' ? '∞':n})(item.wip)" :myClass="item.myClass" :text="item.stateStr" :taskNumber="item.taskNumber" />
           </Col>
         </Row>
       </div>
@@ -203,6 +203,9 @@ export default {
       imgStatus:require("@/assets/images/user_02.png"),
       Warning:"",
       noPut:[],
+
+      noPutWip:[],
+
       //筛选开始
       funnelLoading:false,
       indeterminate: false,
@@ -241,6 +244,9 @@ export default {
       if(!this.checkAllGroup.length){
         this.checkAllGroup = this.funnelAllSelect();  
       }
+
+      
+      this.noPutWipFn(data);
     },
     MenuStatusList(data){
       this.userstoryStatusList = this.statusListFn(data);
@@ -268,6 +274,48 @@ export default {
     EventBus.$on("KBScroll",this.kanbanScrollFn);
   },
   methods:{
+    noPutWipFn(data){//
+      if("product" == "product"){
+        //
+        this.noPutWip = [];
+        data.forEach((item)=>{
+          if(((item.taskNumber-0) >= (item.wip)) && (item.wip != 0 || item.wip != "0")){
+            this.noPutWip.push(item.state);
+          }
+        })
+        
+        setTimeout(()=>{
+          //
+          if(this.myStatusList.length && this.groupLists.length){
+            for(let i=0;i<this.groupLists.length;i++){
+              this.myStatusList.forEach((item)=>{
+                if(document.getElementById('kb'+this.groupLists[i].groupId+'_'+item.state)){
+                  document.getElementById('kb'+this.groupLists[i].groupId+'_'+item.state).removeAttribute("title");
+                }
+              })
+            }
+          }
+          //
+          if(this.noPutWip.length && this.groupLists.length){
+
+            for(let i=0;i<this.groupLists.length;i++){
+              this.noPutWip.forEach((item)=>{
+                if(document.getElementById('kb'+this.groupLists[i].groupId+'_'+item)){
+                  document.getElementById('kb'+this.groupLists[i].groupId+'_'+item).setAttribute("title","用户故事超过WIP数量，不能在拖入")
+
+                }
+              })
+            }
+          }
+          //
+        },350)
+        //
+        //return p.indexOf(s) == -1?'noPutBg':''
+      }else{
+        return "";
+      }
+      
+    },
     //筛选开始
     goSetting(evt){
       this.$router.push({path: '/setting', query: {TabsCur:"name2",}})
@@ -721,11 +769,19 @@ export default {
               })
             }
 
+            let fnWip = (arr,El)=>{
+              return arr.indexOf(El.getAttribute("state")) != -1 ? El.getAttribute("title") : false; 
+            }
+
             if(that.aside && that.aside == "product"){
 
               if(fnUs(that.isUsPut,Old.el.id,Ele.getAttribute("groupid"))){
                 that.Warning = "有工作项，不能废弃"
                 return false
+              }else if(fnWip(that.noPutWip,Old.el)){
+                that.Warning = fnWip(that.noPutWip,Old.el);
+                return false
+
               }else{
                 that.Warning = "";
                 return true                
@@ -776,6 +832,19 @@ export default {
           
         },
         onEnd:function(evt){
+          
+          if(that.myStatusList.length && that.groupLists.length && that.aside == "product"){
+            for(let i=0;i<that.groupLists.length;i++){
+              that.myStatusList.forEach((item)=>{
+                
+                if(document.getElementById('C-'+that.groupLists[i].groupId+'_'+item.state)){
+                  document.getElementById('C-'+that.groupLists[i].groupId+'_'+item.state).removeAttribute("title");
+                }
+              })
+            }
+
+          }
+          
           if(that.noPut.length && that.aside && that.aside == "product"){
             let DOM = document.getElementById(that.noPut[0]);
             if(DOM){
@@ -824,6 +893,26 @@ export default {
                  
               }
             }
+
+
+
+            //----
+          
+          //
+          if(that.noPutWip.length && that.groupLists.length){
+
+            for(let i=0;i<that.groupLists.length;i++){
+              that.noPutWip.forEach((item)=>{
+                if(document.getElementById('C-'+that.groupLists[i].groupId+'_'+item)){
+                  document.getElementById('C-'+that.groupLists[i].groupId+'_'+item).setAttribute("title","用户故事超过WIP数量，不能在拖入")
+                   
+                }
+              })
+            }
+          }
+            //----
+
+
           }
         },
       });
@@ -1059,6 +1148,18 @@ export default {
     
 
 }
+.Column[title][id^="C-"]{
+  /*
+  outline: red solid 1px;
+  pointer-events: none;
+  */
+
+  
+  
+
+}
+
+
 [id^="C-"]{
   transition: all 0.5s ease-out 0s;
 }
@@ -1078,6 +1179,31 @@ export default {
   /*display: none;*/
 }
 
+.rowBox[title][id^="kb"]{
+  background:#e4e4e4;
+  overflow: hidden;
+  
+  /*pointer-events: none;*/
+}
+.rowBox[title][id^="kb"]:before{
+   position: absolute;
+  content: "";
+  left: -110%;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  z-index: 50; 
+  transition: all 0.5s ease-out 0s;
+  opacity: 0;
+}
+.Column[title][id^="C-"] .rowBox[title][id^="kb"]:before{
+  left: 0;
+  opacity: 1;
+}
+.Column[title][id^="C-"] .rowBox[title][id^="kb"]{
+  pointer-events: none;
+}
 
 .rowBox{
   padding-top: 0px;

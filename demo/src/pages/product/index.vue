@@ -172,9 +172,9 @@
 								<img :src="currentView == 'developList' ? developListImgCur : developListImg" 
 								@click="showList" class="cursor" title="用户故事列表">
 							</div>
-							<div class="tagBarLeft">
+							<div class="tagBarLeft"> 
 								<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
-								@click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn">
+								@click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn" :style="!searchCan ?'pointer-events: none;opacity:0.5;':''">
 							</div>
 							<div style="position:relative;" class="tagBarLeft">
 								<ToolTip 

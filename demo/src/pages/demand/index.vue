@@ -1,7 +1,7 @@
 <template>
     <div class="pageContent">
         <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'10'" />
-        <selectMenu @changeSelect="selectMenuFn"></selectMenu>
+        <selectMenu @changeSelect="selectMenuFn" :Disabled="SearchCan"></selectMenu>
         <Card id="BoxPT">
             <div class="demandBox">
                 <h3 class="Title"><span>需求项管理</span></h3>
@@ -33,11 +33,11 @@
                                 </Row>
                             </Col>
                             <Col span="4" style="text-align: left" class="serchBtnBox">
-                                <Button type="primary" icon="ios-search" class="_serchBtn" @click="serchAll">
-                                    查询
+                                <Button type="primary" icon="ios-search" class="_serchBtn" @click="serchAll" :disabled="!searchCan">
+                                    {{searchCan?'查询':'稍等'}}
                                 </Button>
-                                <Button class="_cancelSerchBtn" @click="cancelSerchAll">
-                                    重置
+                                <Button class="_cancelSerchBtn" @click="cancelSerchAll" :disabled="!searchCan">
+                                    {{searchCan?'重置':'稍等'}}
                                 </Button>
                             </Col>
                         </Row>
@@ -100,7 +100,7 @@
                             </div>
                             <div class="tagBarLeft">
                                 <img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
-                                @click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn2">
+                                @click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn2" :style="!searchCan ?'pointer-events: none;opacity:0.5;':''">
                             </div>
                             <div style="position:relative;" class="tagBarLeft">
                                 <ToolTip 
@@ -356,6 +356,7 @@ export default {
             isShowITMPop:false,
 
             //看板start
+            searchCan:false,
             menuStatusList:[],
             currentView: "developList",//developList//kanbanboard
             developListImg:require("../../assets/images/product-list.png"),
@@ -528,6 +529,7 @@ export default {
             },350)
         },
         storyGetKanBanFn(URL = "",id="",req_id = "",req_name = "",req_submitter = "",req_stat = ""){
+            this.searchCan = false;
             this.kanbanboardIsShow = true;
             this.cardList = [];
             this.statusList = [];
@@ -644,7 +646,9 @@ export default {
                 }else{
                     this.showError(URL+"_没有数据");
                 }
+                this.searchCan = true;
             }).catch( (error) => {
+                this.searchCan = true;
                 console.log(error);
                 this.showError(error);
             });
@@ -735,16 +739,20 @@ export default {
         },
         //看板结束
         tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",req_name = "",req_id = "",req_submitter = "",req_stat = ""){
+            this.searchCan = false;
+
             this.getPrjidFn(projectDetail,id).then((prj_id)=>{
-                this.reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter,req_stat)
-                .then(()=>{
-                })
-                .catch((error)=>{
+
+                this.reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter,req_stat).then(()=>{
+                    
+                }).catch((error)=>{
+                    
                     console.log(error);
                     this.showError(error);
                 })
 
             }).catch((error)=>{
+                this.searchCan = true;
                 console.log(error);
                 this.showError(error);
             })
@@ -791,6 +799,7 @@ export default {
             return Common.GetPermission(defaultAXIOS,this,URL,params);
         },
         selectMenuFn(N){
+            this.searchCan = false;
             this.kanbanboardIsShow = false;
             let ID = N;
             Common.setStorageAndCookie(Common,"id",ID);
@@ -839,14 +848,7 @@ export default {
         },
         serchAll(){
 
-            if(!this.clickTime){
-                return
-            }else{
-                this.clickTime = false;
-                setTimeout(()=>{
-                    this.clickTime = true;
-                },1500)
-            }
+            this.searchCan = false;
             
             let ID = Common.GETID(this,Common)
             //this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",ID,this.formValidate.req_name,this.formValidate.req_id,this.formValidate.req_submitter);
@@ -912,6 +914,7 @@ export default {
         },
 
         reqAllFn(URL,page,limit,data,id,prj_id,req_name,req_id,req_submitter,req_stat){
+            this.searchCan = false;
             let defaultAXIOSParams = {
                 page,
                 limit,
@@ -937,11 +940,15 @@ export default {
                         this.tableData[i].end_time = this.tableData[i].end_time || "";
                     }
 
+                    this.searchCan = true;
+                    return Promise.resolve(myData);
                 }else{
+                    this.searchCan = true;
                     return Promise.reject(URL+"_错误");
                 }
             })
             .catch( (error) => {
+                this.searchCan = true;
                 console.log(error);
                 return Promise.reject(URL+"_错误");
             });
@@ -1144,6 +1151,9 @@ export default {
                 this.menuStatusList.push(obj);
             })
             return this.statusListBase;
+        },
+        SearchCan(){
+            return !this.searchCan
         },
     },
     watch: {

@@ -466,7 +466,16 @@ export default {
 
             //this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
             //this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
-            this.storyGetConditionFn(storyGetCondition,"proi",ID)
+            this.storyGetConditionFn(storyGetCondition,"proi",ID).then(()=>{
+                
+                let any = this.req_idList.findIndex(item => this.formValidate.req_id == item.value+"");
+                if(any == -1){
+                    this.formValidate.req_id = "";
+                }
+
+            },()=>{
+
+            })
 
             this.publishUserFn(publishUser);
 

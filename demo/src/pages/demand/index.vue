@@ -512,6 +512,7 @@ export default {
             }
         },
         showList() {
+            this.searchCan = false;
             let CurView = "developList";
             this.currentView = CurView;
             Common.SetSession("CurView_demand",CurView);
@@ -520,6 +521,7 @@ export default {
             },350)
         },
         showTask(){
+            this.searchCan = false;
             let CurView = "kanbanboard"
             this.currentView = CurView;
             Common.SetSession("CurView_demand",CurView);

@@ -12,6 +12,20 @@
 	</quill-editor>
 </template>
 <script>
+
+/*
+import Quill from 'quill';
+import quillEditor from 'vue-quill-editor'
+import ImagePaste from 'quill-yang-image-paste';
+Quill.register('modules/imagePaste', ImagePaste);
+//VueQuillEditor.register('modules/imagePaste', ImagePaste);
+//一定要引入这三个css，不然文本编辑器会出现不规则黑白几何图形
+//这三个css可以在main.js中引入，也可以在具体使用的.vue文件中引入
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+*/
+
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
@@ -21,7 +35,11 @@ export default {
 	data(){
 		return{
 			value:'',
-            editorOption:{},
+            editorOption:{
+            	modules: {
+                    imagePaste: true
+                },
+            },
 		}
 	},
 	props: {
@@ -92,6 +110,9 @@ export default {
 	mounted(){
 		//this.getEdit()
 	},
+	components: {
+        //quillEditor
+    },
 	
 
 }

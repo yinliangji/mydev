@@ -2,7 +2,10 @@
     <div class="curPosition" id="curPosition" ref="curPosition">
         <Icon type="navicon-round" style="color:#01babc;font-size:16px;"></Icon>
         <span>选择项目</span>
-        <Select v-model="curProject" clearable filterable style="width:300px" @on-change="changeCurProject">
+        <Select v-show="Disabled" placeholder="数据加载中........" style="width:300px">
+            <Option  :value="1" :key="1">&nbsp;</Option>
+        </Select>
+        <Select v-show="!Disabled" :disabled="Disabled" v-model="curProject" clearable filterable style="width:300px" @on-change="changeCurProject">
             <Option v-for="(item,index) in projectList" :value="item.id" :key="index">{{ item.prj_name }}</Option>
         </Select>
         <a v-if="isTestBtn" @click="testBtn">from=nav</a>
@@ -20,6 +23,12 @@ export default {
     name: 'curPosition',
     props: {
         Init: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
+        Disabled: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
                 return false;

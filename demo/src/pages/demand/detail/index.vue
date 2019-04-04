@@ -78,6 +78,10 @@ export default {
                 prj_type:"",
                 id:"",
                 prj_type_name:"",
+
+                intro:"",
+                req_source:"",
+                req_source_name:"",
             },
 
             prj_permission:[],

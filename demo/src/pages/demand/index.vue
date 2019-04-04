@@ -967,10 +967,11 @@ export default {
                     this.modaDelete = false;
                     this.$Message.config({
                         top: 250,
-                        duration: 3
+                        duration: 6,
+                        closable:true,
                     });
 
-                    this.$Message.success(myData.message);
+                    this.$Message.warning(myData.message);
                     //this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
                     this.tableDAtaPageCurrent = 1;
                     this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));

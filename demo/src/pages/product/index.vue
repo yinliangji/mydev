@@ -1,7 +1,7 @@
 <template>
 	<div class="pageContent">
 		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'10'" />
-		<selectMenu @changeSelect="selectMenuFn"></selectMenu>
+		<selectMenu @changeSelect="selectMenuFn" :Disabled="SearchCan"></selectMenu>
 		<Card id="BoxPT">
 			<div class="productBox">
 				<h3 class="Title"><span>用户故事</span></h3>
@@ -101,8 +101,13 @@
 						        </Row>
 							</Col>
 							<Col span="4" style="text-align: left" class="serchBtnBox">
-								<Button type="primary" icon="ios-search" class="serchBtn" @click="serchAll">查询</Button>
-								<Button class="cancelSerchBtn" @click="cancelSerchAll">重置</Button>
+								<Button type="primary" icon="ios-search" :disabled="!searchCan" class="serchBtn" @click="serchAll">
+									{{searchCan?'查询':'稍等'}}
+    				        		
+								</Button>
+								<Button class="cancelSerchBtn" :disabled="!searchCan" @click="cancelSerchAll">
+									{{searchCan?'重置':'稍等'}}
+								</Button>
 							</Col>
 						</Row>
 						<div class="formValidateMoreBtnBox" :class="isShowMoreShow ?'arrUp':'arrDown'" @click="isShowMoreShow = !isShowMoreShow">
@@ -336,6 +341,7 @@ export default {
 			currentView: "developList",//developList//kanbanboard
 
 			//看板开始
+			searchCan:false,
 			menuStatusList:[],
 			groupList:[
 		        { text: "所属需求项" },
@@ -659,6 +665,9 @@ export default {
 		},
 		
 		//看板结束
+		SearchCan(){
+			return !this.searchCan
+		},
         addtest() {
             return this.$store.state["ADD_DATA_TEST"].data
         },
@@ -1137,6 +1146,7 @@ export default {
 			this.groupList = [{ text: "所属需求项" }];
 		},
 		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = "",USS = ""){
+			this.searchCan = false;
 
 			this.kanbanboardIsShow = true;
 			this.cardList = [];
@@ -1180,6 +1190,7 @@ export default {
 
 
 			defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
+				
                 let myData = response.data;
                 if(myData.status == "success" ){
                 	this.borderRole = myData.role;
@@ -1286,7 +1297,10 @@ export default {
                 	this.showError(URL+"_没有数据");
                 }
 
+                this.searchCan = true;
+
             }).catch( (error) => {
+            	this.searchCan = true;
                 console.log(error);
                 this.showError(error);
             });
@@ -1320,8 +1334,10 @@ export default {
 
 
 		selectMenuFn(N){
+			this.searchCan = false;
 			this.kanbanboardIsShow = false;
 			let ID = N;
+			
 			//Common.setStorageAndCookie(Common,"id",N)
 			defaultAXIOS(projectDetail+ID,{},{timeout:2000,method:'get'}).then((response) => {
 			    let myData = response.data;
@@ -1357,6 +1373,7 @@ export default {
 
 
 			}).catch( (error) => {
+				this.searchCan = true;
 			    console.log(error);
 			    this.showError(error);
 			});
@@ -1463,6 +1480,7 @@ export default {
 		},
 		
 		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = "",USS = ""){
+			this.searchCan = false;
 			let defaultAXIOSParams = {
 				page,
 				limit,
@@ -1507,8 +1525,9 @@ export default {
                 this.tableDAtaTatol = myData.page_rows;
 
 
-
+                this.searchCan = true;
             }).catch( (error) => {
+            	this.searchCan = true;
                 console.log(error);
                 this.showError(error);
             });

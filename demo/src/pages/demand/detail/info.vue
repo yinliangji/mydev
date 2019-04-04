@@ -22,10 +22,18 @@
         <tr>
           <th >提出部门</th>
           <td>{{ formValidate.req_submitter | FALSEINFO}}</td>
-          <th width="11%">需求项状态</th>
-          <td width="20%">{{ formValidate.status_name | FALSEINFO}}</td>
-          <th width="11%">创建人</th>
+          <th >需求项状态</th>
+          <td >{{ formValidate.status_name | FALSEINFO}}</td>
+          <th >创建人</th>
           <td>{{ formValidate.create_user | FALSEINFO}}</td>
+        </tr>
+        <tr>
+          <th >需求提出人</th>
+          <td>{{ formValidate.intro | FALSEINFO}}</td>
+          <th >需求来源</th>
+          <td >{{ formValidate.req_source_name | FALSEINFO}}</td>
+          <th >需求项备注</th>
+          <td v-html="formValidate.remark?'<pre>'+formValidate.remark+'</pre>':''">&nbsp;</td>
         </tr>
         <tr>
           <th>依赖项</th>
@@ -40,10 +48,7 @@
           <th>需求项描述</th>
           <td colspan="5" v-html="formValidate.comment?'<pre>'+formValidate.comment+'</pre>':''"></td>
         </tr>
-        </tr>
-          <th>需求项备注</th>
-          <td colspan="5" v-html="formValidate.remark?'<pre>'+formValidate.remark+'</pre>':''"></td>
-        </tr>
+        
         
       </tbody>
     </table>
@@ -106,7 +111,10 @@ export default {
                 product_name:"",
                 depd_list:[],    
                 AddGroupList:[],//搜索查询
-                bfunc:[],//弹出业务窗口           
+                bfunc:[],//弹出业务窗口
+                intro:"",  
+                req_source:"",
+                req_source_name:"",         
             },
             //业务弹出--start
             depdpopIsShow:false,

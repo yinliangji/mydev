@@ -56,6 +56,21 @@
     		                <Input v-model="formItem.req_submitter" placeholder="请输入提出部门"></Input>
     		            </FormItem>
 
+                        <Row v-show="formItem.prj_type  != 2 ? false : true">
+                            <Col span="12">
+                                <FormItem label="需求提出人">
+                                    <Input v-model="formItem.intro" placeholder="请输入提出人"></Input>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                 <FormItem label="需求来源" >
+                                    <Select  clearable v-model="formItem.req_source" placeholder="请选择需求来源">
+                                        <Option v-for="(item,index) in req_sourceList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                    </Select>
+                                </FormItem>
+                            </Col>
+                        </Row>
+
     		            <FormItem label="添加依赖项" >
                             <span style="position: relative;">
                                 <Tag 
@@ -77,6 +92,10 @@
                                 <ToolTip  placement="top-start" :T="-4" content="建议针对项目组外部依赖项的跟踪" />
                             </span>
                         </FormItem>
+
+                        
+
+                        
 
     		            <FormItem label="需求项描述" prop="comment" v-show="formItem.prj_type  != 2 ? false : true">
     		                <Input v-model="formItem.comment" type="textarea" :autosize="{minRows: 3,maxRows: 10}" placeholder="请填写需求项描述"></Input>
@@ -154,6 +173,8 @@ export default {
                 start_time:"",
                 end_time:"",
                 remark:"",
+                intro:"",
+                req_source:"",
             },
 
             ruleValidate: {
@@ -180,11 +201,9 @@ export default {
                     //{ required: false, type: 'date', message: 'Please select the date', trigger: 'change' }
                 ],
             },
+            req_sourceList:[
+            ],
             prj_idList:[
-                // {
-                //     value: '11',
-                //     label: '项目1'
-                // },
             ],
             //依赖开始
             dependList:[],
@@ -207,17 +226,26 @@ export default {
         console.log("需求项添加或编辑--updated--",this.formItem)
     },
 	mounted(){
-        this.getTimerPrj(getPrjTime,{prj_id:Common.GETID(this,Common)})
-		if(this.$router.history.current.query.DATA){
-			let _DATA = JSON.parse(this.$router.history.current.query.DATA);
-            _DATA = Array.isArray(_DATA) ? _DATA : [_DATA];
-            this.ADDorEDIT = false;
-            this.changeDemandSerch();
-			this.getReqDepdFn(getReqDepd,{prjId:Common.GETID(this,Common),reqId:_DATA[0].id})
-			this.editFn(_DATA);
-		}
+        this.getTimerPrj(getPrjTime,{prj_id:Common.GETID(this,Common)}).then((D)=>{
+            this.isDATA(D);
+        },()=>{
+            this.isDATA();
+        })
+		
 	},
 	methods: {
+        isDATA(D){
+            if(this.$router.history.current.query.DATA){
+                let _DATA = JSON.parse(this.$router.history.current.query.DATA);
+                _DATA = Array.isArray(_DATA) ? _DATA : [_DATA];
+                this.ADDorEDIT = false;
+                this.changeDemandSerch();
+                this.getReqDepdFn(getReqDepd,{prjId:Common.GETID(this,Common),reqId:_DATA[0].id});
+                
+                this.editFn(_DATA);
+            }
+
+        },
         changeDemandSerch(){
             if(this.ADDorEDIT){
                 Common.RemoveSession("demandSerch");
@@ -228,17 +256,25 @@ export default {
             }
         },
         getTimerPrj(URL,params = {}){
-            defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
+            return defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======需求项 获取项目时间***response+++",response,myData,"======>");
                 if(myData.status == "success"){
                     this.itemEndTime = myData.data.end_time;
+                    this.req_sourceList = myData.req_sourceList;
+
+                    return Promise.resolve(myData.data)
+                    //this.formItem.intro = myData.data.intro;
+                    //this.formItem.req_source = myData.data.req_source;
+
                 }else{
                     this.showError(myData.status);
+                    return Promise.reject(myData.status);  
                 }
             }).catch( (error) => {
                 console.log(error);
                 this.showError(error);
+                return Promise.reject(myData.status);
             });
         },
 		//依赖开始
@@ -285,6 +321,9 @@ export default {
                 this.formItem.comment = data[0].comment+"";
                 this.formItem.remark = data[0].remark+"";
 
+                this.formItem.intro = (data[0].intro || "")+"";
+                this.formItem.req_source = (data[0].req_source || "")+"";   
+
             }
         },
         addItem(){
@@ -304,6 +343,8 @@ export default {
             this.editTableData = false;
             this.formItem.myId = "";
             this.formItem.comment = "";
+            this.formItem.intro = "";
+            this.formItem.req_source = "";
             this.dependList = [];
             this.depd_sn = "";
             
@@ -329,6 +370,9 @@ export default {
                 depd_list:this.dependList,
                 depd_sn:this.formItem.req_id,
                 username:Common.getStorageAndCookie(this,Common,"username"),
+
+                intro:this.formItem.intro,
+                req_source:this.formItem.req_source,
             }
             
             let URL = this.ADDorEDIT ? reqAdd : reqEdit;

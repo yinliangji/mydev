@@ -535,71 +535,10 @@ router.beforeEach((to, from, next) => {
         msg: "正在加载中……"
     })
 
-    console.log("to=",to ,"from=", from );
-
-    if(from.path == "/" || from.path == ""){
-        
-        if(to.path != "/agile/detail" && to.path != "/agile" && to.path != "/" && to.path != "/agile/add" && to.path != "/agile/edit"){
-            console.log("新开窗口 和 /agile 不相关");
-            
-            let newToQuery = JSON.parse(JSON.stringify(to.query));
-
-            let isNewToPrjId = newToQuery.prjId;
-            let isNewToID = newToQuery.id;
-
-            let isNewToPrjSn = newToQuery.prjSn;
-            let isNewToPrj_id = newToQuery.prj_id;
-
-            let newToID = isNewToPrjId || isNewToID;
-            let newToPrjSn = isNewToPrjSn || isNewToPrj_id;
-
-            if(isNewToPrjId && isNewToID && isNewToPrjSn && isNewToPrj_id){
-                console.log("isNewToPrjId  isNewToID  isNewToPrjSn  isNewToPrj_id",isNewToPrjId , isNewToID , isNewToPrjSn , isNewToPrj_id);
-                next();
-                return;
-            }else{
-                let inCookieID = Common.GETID(this,Common,"inCookie") || "";
-                let inCookiePrjSn = Common.GETprjid(this,Common,"inCookie") || "";
-                if(!inCookieID){
-                    console.log("cookie没有id",isNewToPrjId , isNewToID , isNewToPrjSn , isNewToPrj_id);
-                    next();
-                    return;
-                }
-
-                if(!newToID){
-                    newToQuery.prjId = inCookieID;
-                    newToQuery.id = inCookieID;
-                }else{
-                    newToQuery.prjId = isNewToPrjId ? isNewToPrjId : isNewToID;
-                    newToQuery.id = isNewToPrjId ? isNewToPrjId : isNewToID;
-                }
-
-                if(!newToPrjSn){
-                    newToQuery.prjSn = inCookiePrjSn;
-                    newToQuery.prj_id = inCookiePrjSn;
-                }else{
-                    newToQuery.prjSn = isNewToPrjSn ? isNewToPrjSn : isNewToPrj_id;
-                    newToQuery.prj_id = isNewToPrjSn ? isNewToPrjSn : isNewToPrj_id;
-                }
-                console.log("设置 id prj—id 执行",to.path , newToQuery);
-                next({
-                    path: to.path,
-                    query: newToQuery
-                })
-                setTimeout(()=>{
-                    next();
-                    console.log("next()",newToQuery,to.query)
-                },500)
-                
-
-            }
-
-        }
-
-     }
+     
 
     if(to.path == "/agile/detail" || to.path == "/agile" || to.path == "/agile/add" || to.path == "/agile/edit" || to.path == "/" || from.path == "/" ){
-        console.log("不是点击进来 或者 /agile/detail 或者列表进来");
+        console.log("不是点击进来 或者 /agile/detail 或者列表进来")
         next()
         return;
     }

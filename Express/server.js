@@ -3082,6 +3082,9 @@ let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
             "end_time":"@date(yyyy-MM-dd)",
             remark:"@title",
 
+            "intro":"@name",
+            "req_source|1":['server','oa','mail','tel','metting'],
+
 
             "__value2__page": val2,
             "__value3__pageline": val3,
@@ -3908,6 +3911,9 @@ let DetailReq = (val1 = 200, val2 = 1, val3 = 3) => {
             id:10039,
             prj_type_name:"自研",
             remark:"@title",
+            intro:"@name",
+            req_source:"oa",
+            req_source_name:"OA",
             "depd_list|2-10":[
                 {
                     create_time:"@date(yyyy-MM-dd)",
@@ -4287,7 +4293,38 @@ app.all('/maven/queryPublicRep/', function(req, res) {
 
 
 app.all('/req/prj_time/', function(req, res) {
-    res.json({status: "success",message: "add_users success",data:{end_time:"2019-05-01"}});
+    let obj = {
+        status: "success",
+        message: "add_users success",
+        data:{
+            end_time:"2019-05-01",
+            intro:"@name",
+            req_source:"oa",
+        },
+        req_sourceList:[
+            {
+                value: 'server',
+                label: '服务请求',
+            },
+            {
+                value: 'oa',
+                label: 'OA',
+            },
+            {
+                value: 'mail',
+                label: '邮件',
+            },
+            {
+                value: 'tel',
+                label: '电话',
+            },
+            {
+                value: 'metting',
+                label: '会议',
+            },
+        ],
+    }
+    res.json(obj);
     res.end()
 });
 

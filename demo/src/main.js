@@ -37,15 +37,23 @@ Vue.prototype.$echarts = echarts;
 require('!style-loader!css-loader!less-loader!mytheme/myTheme.less');
 
 //富文本编辑框开始
+import * as Quill from 'quill';
+import QuillEditor from 'vue-quill-editor'
+//import VueQuillEditor from 'vue-quill-editor'
+//import {ImagePaste} from './components/quill/quill-image-paste-master';
+import {ImagePaste} from 'quill-image-paste-master';
 
-import VueQuillEditor from 'vue-quill-editor'
 
+Quill.register('modules/imagePaste', ImagePaste);
+//VueQuillEditor.register('modules/imagePaste', ImagePaste);
 //一定要引入这三个css，不然文本编辑器会出现不规则黑白几何图形
 //这三个css可以在main.js中引入，也可以在具体使用的.vue文件中引入
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-Vue.use(VueQuillEditor)
+
+Vue.use(QuillEditor)
+//Vue.use(VueQuillEditor)
 //富文本编辑框结束
 
 /* 通用开始 */

@@ -2,9 +2,14 @@
     <div class="curPosition" id="curPosition" ref="curPosition">
         <Icon type="navicon-round" style="color:#01babc;font-size:16px;"></Icon>
         <span>选择项目</span>
-        <Select :disabled="Disabled" v-model="curProject" clearable filterable style="width:300px" @on-change="changeCurProject">
-            <Option v-for="(item,index) in projectList" :value="item.id" :key="index">{{ item.prj_name }}</Option>
-        </Select>
+        <span style="position:relative;">
+            <Spin fix style="width:20px;right:3px;left:auto;background:white;" :class="Disabled?'SelectDoLoad':''" class="SelectNoneLoad">
+                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+            </Spin>    
+            <Select :class="Disabled?'SelectDo':''" class="SelectItem"  v-model="curProject" clearable filterable @on-change="changeCurProject">
+                <Option v-for="(item,index) in projectList" :value="item.id" :key="index">{{ item.prj_name }}</Option>
+            </Select>
+        </span>
         <a v-if="isTestBtn" @click="testBtn">from=nav</a>
         <a v-if="isTestBtn" @click="testBtn2">maven</a>
     </div>
@@ -293,3 +298,40 @@ export default {
     }
 };
 </script>
+<style>
+.SelectNoneLoad{
+    display: none;
+    
+}
+.SelectDoLoad{
+    display: block;
+}
+.SelectDo {
+    pointer-events: none;
+}
+.SelectDo .ivu-select-input {
+    opacity: 0.0;
+    
+}
+.SelectItem{
+    width:300px;
+    
+}
+.SelectItem .ivu-select-input {
+    transition: all 1s;
+}
+
+.demo-spin-icon-load{
+        animation: ani-demo-spin 1s linear infinite;
+    }
+    @keyframes ani-demo-spin {
+        from { transform: rotate(0deg);}
+        50%  { transform: rotate(180deg);}
+        to   { transform: rotate(360deg);}
+    }
+    .demo-spin-col{
+        height: 100px;
+        position: relative;
+        border: 1px solid #eee;
+    }
+</style>

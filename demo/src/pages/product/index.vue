@@ -102,11 +102,17 @@
 							</Col>
 							<Col span="4" style="text-align: left" class="serchBtnBox">
 								<Button type="primary" icon="ios-search" :disabled="!searchCan" class="serchBtn" @click="serchAll">
-									{{searchCan?'查询':'稍等'}}
+									<Spin fix v-if="!searchCan" style="background:none;">
+						                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+						            </Spin>
+									查询
     				        		
 								</Button>
 								<Button class="cancelSerchBtn" :disabled="!searchCan" @click="cancelSerchAll">
-									{{searchCan?'重置':'稍等'}}
+									<Spin fix v-if="!searchCan" style="background:none;">
+						                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+						            </Spin>
+									重置
 								</Button>
 							</Col>
 						</Row>
@@ -169,12 +175,20 @@
 								</Button>
 							</div>
 							<div class="tagBarLeft">
-								<img :src="currentView == 'developList' ? developListImgCur : developListImg" 
-								@click="showList" class="cursor" title="用户故事列表">
+								<span style="position:relative;">
+									<Spin fix v-if="!searchCan" style="background:none;">
+						                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+						            </Spin>
+									<img :src="currentView == 'developList' ? developListImgCur : developListImg" @click="showList" class="cursor" title="用户故事列表" :style="!searchCan ?'pointer-events: none;opacity:0.5;':''" >
+								</span>
 							</div>
-							<div class="tagBarLeft"> 
-								<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
-								@click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn" :style="!searchCan ?'pointer-events: none;opacity:0.5;':''">
+							<div class="tagBarLeft">
+								<span style="position:relative;">
+									<Spin fix v-if="!searchCan" style="background:none;">
+						                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+						            </Spin> 
+									<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" @click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn" :style="!searchCan ?'pointer-events: none;opacity:0.5;':''" >
+								</span>
 							</div>
 							<div style="position:relative;" class="tagBarLeft">
 								<ToolTip 
@@ -1191,7 +1205,7 @@ export default {
 
 
 
-			defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
+			defaultAXIOS(URL,defaultAXIOSParams,{timeout:10000,method:'get'}).then((response) => {
 				
                 let myData = response.data;
                 if(myData.status == "success" ){
@@ -1352,11 +1366,7 @@ export default {
 
 			    let DATA = myData.data ? myData.data : myData
 			    let prodId = DATA.prod_id?DATA.prod_id : DATA.prod 
-			    if(DATA.prj_id){
-			    	//Common.setStorageAndCookie(Common,'prj_id',DATA.prj_id);
-			    }else{
-			    	//Common.setStorageAndCookie(Common,'prj_id',"");
-			    }
+			    
 			    if(prodId){
 		            Common.setStorageAndCookie(Common,'prod_id',prodId);
 			    }else{

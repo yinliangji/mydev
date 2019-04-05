@@ -33,11 +33,17 @@
                                 </Row>
                             </Col>
                             <Col span="4" style="text-align: left" class="serchBtnBox">
-                                <Button type="primary" icon="ios-search" class="_serchBtn" @click="serchAll" :disabled="!searchCan">
-                                    {{searchCan?'查询':'稍等'}}
+                                <Button type="primary" icon="ios-search" class="_serchBtn" @click="serchAll" :disabled="!searchCan" style="position:relative;">
+                                    <Spin fix v-if="!searchCan" style="background:none;">
+                                        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                                    </Spin>
+                                    查询
                                 </Button>
                                 <Button class="_cancelSerchBtn" @click="cancelSerchAll" :disabled="!searchCan">
-                                    {{searchCan?'重置':'稍等'}}
+                                    <Spin fix v-if="!searchCan" style="background:none;">
+                                        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                                    </Spin>
+                                    重置
                                 </Button>
                             </Col>
                         </Row>
@@ -95,12 +101,20 @@
                                 </Button>
                             </div>
                             <div class="tagBarLeft">
-                                <img :src="currentView == 'developList' ? developListImgCur : developListImg" 
-                                @click="showList" class="cursor" title="用户故事列表">
+                                <span style="position:relative;">
+                                    <Spin fix v-if="!searchCan" style="background:none;">
+                                        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                                    </Spin>
+                                    <img :src="currentView == 'developList' ? developListImgCur : developListImg" @click="showList" class="cursor" title="项目需求项列表" :style="!searchCan ?'pointer-events: none;opacity:0.5;':''">
+                                </span>
                             </div>
                             <div class="tagBarLeft">
-                                <img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" 
-                                @click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn2" :style="!searchCan ?'pointer-events: none;opacity:0.5;':''">
+                                <span style="position:relative;">
+                                    <Spin fix v-if="!searchCan" style="background:none;">
+                                        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                                    </Spin>
+                                    <img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" @click="showTask" class="cursor" title="项目需求项看板" id="kanbanShowBtn2" :style="!searchCan ?'pointer-events: none;opacity:0.5;':''">
+                                </span>
                             </div>
                             <div style="position:relative;" class="tagBarLeft">
                                 <ToolTip 
@@ -546,7 +560,7 @@ export default {
                 req_stat
             }
             this.serachCondition({req_name,req_id,req_submitter,req_stat});
-            defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
+            defaultAXIOS(URL,defaultAXIOSParams,{timeout:10000,method:'get'}).then((response) => {
                 let myData = response.data;
                 let statusData = myData.status_data ? myData.status_data : false;
                 console.log("<======用户故事 看板 ***response+++",response,myData,"======>");

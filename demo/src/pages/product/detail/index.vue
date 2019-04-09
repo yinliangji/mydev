@@ -104,6 +104,7 @@
             </Tabs>
             
         </Card>
+        <GoAgileMode :Data="GO" :Text="GOText" />
     </div>
 </template>
 <script>
@@ -111,7 +112,7 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 import Store from '@/vuex/store'
-const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstoryGetBus,userstoryAddBus} = Common.restUrl;
+const {storyGetDetail,storyGetCondition,getPermission,getMissionChange,userstoryGetBus,userstoryAddBus,projectListDataNew} = Common.restUrl;
 import FileDownLoad from './filedown'
 import InfoTable from './info'
 import UsChange from './change'
@@ -123,6 +124,8 @@ import storyTestCase from '@/components/storyTestCase'
 //juzi start
 import AppDesign from '@/pages/appdesign'
 //juzi end
+
+import GoAgileMode from "@/components/goAgileMode";
 export default {
     data () {
         return {
@@ -198,6 +201,9 @@ export default {
             //juzi start
             userStoryId:"",
             //juzi end
+            //检测id是否在projectListDataNew列表里
+            GO:false,
+            GOText:"",
             
             
         }
@@ -280,6 +286,7 @@ export default {
         if(_TabsCur){
             this.TabsCur = _TabsCur;
         }
+        Common.GetProjectList(defaultAXIOS,this,Common,projectListDataNew);
     },
     beforeUpdate(){
         console.log("用户故事detail--beforeUpdate-------",this.formValidate)
@@ -401,7 +408,7 @@ export default {
             // },(E)=>{
             //  return Promise.reject("reject");
             // });
-        },        
+        },
     },
     components: {
         
@@ -412,6 +419,7 @@ export default {
         UsChange,
         Analyse,
         AnalyseInfo,
+        GoAgileMode,
     },
     watch:{
     },

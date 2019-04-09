@@ -45,6 +45,7 @@
             </Tabs>
             
         </Card>
+        <GoAgileMode :Data="GO" :Text="GOText" />
     </div>
 </template>
 <script>
@@ -52,10 +53,11 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 import Store from '@/vuex/store'
-const {getPermission,DetailReq} = Common.restUrl;
+const {getPermission,DetailReq,projectListDataNew} = Common.restUrl;
 import FileDownLoad from './filedown'
 import InfoTable from './info'
 
+import GoAgileMode from "@/components/goAgileMode";
 export default {
     data () {
         return {
@@ -93,6 +95,9 @@ export default {
             
             ruleValidate: {
             },
+            //检测id是否在projectListDataNew列表里
+            GO:false,
+            GOText:"",
             
         }
     },
@@ -128,6 +133,7 @@ export default {
     },
     created(){
         console.log("项目需求项detail--created-------",this.formValidate);
+        Common.GetProjectList(defaultAXIOS,this,Common,projectListDataNew);
         this.changeDemandSerch();
     },
     beforeUpdate(){
@@ -220,6 +226,7 @@ export default {
     components: {
         FileDownLoad,
         InfoTable,
+        GoAgileMode,
     },
     watch:{
     },

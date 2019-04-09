@@ -1837,6 +1837,50 @@ export default class Common extends Utils {
       let sbDOMLeft = sbDOM ? sbDOM.offsetWidth : 180;
       return kbDOM ? kbDOM.getBoundingClientRect().left - (sbDOMLeft-120) : 330
     }
+    //检查网址id是否在 projectListDataNew 里
+    static GetProjectList(FN,that,_Common,URL){
+      let fn = (val)=>{
+          if(val){
+              return true
+          }else{
+              if(val == 0){
+                  return true;
+              }else{
+                  return false;
+              }
+          }
+      } 
+      let ID = that.$router.history.current.query.prjId || that.$router.history.current.query.id;
+      let PrjSn = that.$router.history.current.query.prjSn || that.$router.history.current.query.prj_id;
+      let params = {
+          username:_Common.getStorageAndCookie(that,_Common,"username"),
+      }
+      return FN(URL,params,{timeout:20000,method:'get'}).then(res => {
+         
+          if(res.status != 200){
+              //this.$router.push({path:"/agile"});
+              that.GO = true;
+              that.GOText = "projectListDataNew获取失败";
+              return false;
+          }
+          if(res.data.data && Array.isArray(res.data.data) && res.data.data.length){
+              let isID = res.data.data.find((item)=>{
+                  return (item.id || item.prjId) == ID;
+              });
+              let isPrjSn = res.data.data.find((item)=>{
+                  return (item.prj_id || item.prjSn) == PrjSn;
+              })
+              that.GO = !(fn(isID) && fn(isPrjSn));
+              that.GOText = that.GO ? "没有找到相关项目，跳转到项目列表页" : ""; 
+              return fn(isID) && fn(isPrjSn);
+              
+          }else{
+              that.GO = true;
+              that.GOText = "projectListDataNew获取失败";
+              return false
+          }
+      });
+    }
 
 }
 function filterParentheses(str){

@@ -1715,6 +1715,20 @@ export default {
 		padding-top:0.5em;
 		padding-bottom:0.5em;
 	}
+
+.demo-spin-icon-load{
+    animation: ani-demo-spin 1s linear infinite;
+}
+@keyframes ani-demo-spin {
+    from { transform: rotate(0deg);}
+    50%  { transform: rotate(180deg);}
+    to   { transform: rotate(360deg);}
+}
+.demo-spin-col{
+    height: 100px;
+    position: relative;
+    border: 1px solid #eee;
+}
 </style>
 <style>
 #kanbanboard .content-header , #kanbanboard .ivu-col>div{

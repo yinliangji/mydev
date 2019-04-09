@@ -10,6 +10,7 @@
                 <Option v-for="(item,index) in projectList" :value="item.id" :key="item.id">{{ item.prj_name }}</Option>
             </Select>
         </span>
+        <GoAgileMode :Data="GO" :Text="GOText" />
         <a v-if="isTestBtn" @click="testBtn">from=nav</a>
         <a v-if="isTestBtn" @click="testBtn2">maven</a>
     </div>
@@ -21,6 +22,7 @@ const {defaultAXIOS} = API;
 import {getUrlParam,_findIndex,_findItem} from "@/base/base"
 import Common from "@/Common";
 const { projectListDataNew } = Common.restUrl;
+import GoAgileMode from "@/components/goAgileMode";
 export default {
     name: 'curPosition',
     inject:["reload"],
@@ -51,9 +53,18 @@ export default {
         },
         
     },
-    
+    components: {
+        GoAgileMode,
+    },
+    computed:{
+        isGo(){
+            return this.GO;
+        },
+    },
     data() {
         return {
+            GO:false,
+            GOText:"",
             projectList: [],
             curProject: "",
             isTestBtn:window.location.href.indexOf('//127.0.0.1:') != -1 ? true : false,
@@ -178,8 +189,11 @@ export default {
                 username:username,
             }
             defaultAXIOS(projectListDataNew,params,{timeout:20000,method:'get'}).then(res => {
-                if(res.status != 200){
-                    this.$router.push({path:"/agile"});
+                if(res.status < 200 && res.status > 399){
+                    Common.CommonError(this,"获取到projectListDataNew项目列表失败");
+                    this.$emit("sendData",false);
+                    console.log("else");
+                    //this.$router.push({path:"/agile"});
                     return;
                 }
                 let _cur;
@@ -225,9 +239,14 @@ export default {
                         },2000)
                         console.log("没有获取到prjId或id 等待2秒");
                     }else if(prjIdUrl == false && prjIdCookie == false){
-                        Common.CommonError(this,"选择项目列表【projectList】里没有匹配的prjId或id");
-                        this.$emit("sendData",false);
+                        
+                        
                         console.log("选择项目列表【projectList】里没有匹配的prjId或id");
+                        this.GOText = "选择项目列表【projectList】里没有匹配的prjId或id";
+                        this.GO = true;
+                        
+                        //Common.CommonError(this,"选择项目列表【projectList】里没有匹配的prjId或id");
+                        this.$emit("sendData",false);
                         return
                     }else if(prjIdUrl != false){
                         this.curProject = parseInt(prjIdUrl);
@@ -353,10 +372,10 @@ export default {
     },
     mounted() {
         //this.cookieState();
-    }
+    },
 };
 </script>
-<style>
+<style >
 .SelectNoneLoad{
     display: none;
     

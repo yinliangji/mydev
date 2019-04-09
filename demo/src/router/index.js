@@ -558,7 +558,7 @@ router.beforeEach((to, from, next) => {
                 next();
                 return;
             }else{
-                let inCookieID = Common.GETID(this,Common,"inCookie") || "";
+                let inCookieID =  Common.GETID(this,Common,"inCookie") || "";
                 let inCookiePrjSn = Common.GETprjid(this,Common,"inCookie") || "";
                 if(!inCookieID){
                     console.log("cookie没有id",isNewToPrjId , isNewToID , isNewToPrjSn , isNewToPrj_id);
@@ -620,7 +620,7 @@ router.beforeEach((to, from, next) => {
 
     let toQuery = JSON.parse(JSON.stringify(to.query));
 
-    let fromID = from.query.prjId || from.query.id || Common.GETID(this,Common,"inCookie");
+    let fromID = from.query.prjId || from.query.id ||  Common.GETID(this,Common,"inCookie");
     let fromPrjSn = from.query.prjSn || from.query.prj_id || Common.GETprjid(this,Common,"inCookie");
 
     if(!fromID || !fromPrjSn){

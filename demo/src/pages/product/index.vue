@@ -1360,9 +1360,10 @@ export default {
 			    console.log("<======detail***response+++",response,myData,"+++detail***response======>");
 
 			    //this.$refs.req_id.setQuery();
+			    
 			    this.$refs.ReqId.clearSingleSelect();
-			    this.$refs.Charger.clearSingleSelect()
-			    this.$refs.Sprint.clearSingleSelect()
+			    this.$refs.Charger.clearSingleSelect();
+			    this.$refs.Sprint.clearSingleSelect();
 
 			    let DATA = myData.data ? myData.data : myData
 			    let prodId = DATA.prod_id?DATA.prod_id : DATA.prod 

@@ -2,12 +2,12 @@
     <div class="curPosition" id="curPosition" ref="curPosition">
         <Icon type="navicon-round" style="color:#01babc;font-size:16px;"></Icon>
         <span>选择项目</span>
-        <span style="position:relative;">
-            <Spin fix style="width:20px;right:3px;left:auto;background:white;" :class="Disabled?'SelectDoLoad':''" class="SelectNoneLoad">
+        <span style="position:relative;display:inline-block;" id="SelectItem">
+            <Spin fix style="width:20px;height:20px;top:6px;right:3px;left:auto;background:white;" :class="Disabled?'SelectDoLoad':''" class="SelectNoneLoad">
                 <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
             </Spin>    
-            <Select :class="Disabled?'SelectDo':''" class="SelectItem"  v-model="curProject" clearable filterable @on-change="changeCurProject">
-                <Option v-for="(item,index) in projectList" :value="item.id" :key="index">{{ item.prj_name }}</Option>
+            <Select ref="SelectItem" :class="Disabled?'SelectDo':''" style="width:300px;" class="SelectItem"  v-model="curProject" clearable filterable @on-change="changeCurProject">
+                <Option v-for="(item,index) in projectList" :value="item.id" :key="item.id">{{ item.prj_name }}</Option>
             </Select>
         </span>
         <a v-if="isTestBtn" @click="testBtn">from=nav</a>
@@ -23,6 +23,7 @@ import Common from "@/Common";
 const { projectListDataNew } = Common.restUrl;
 export default {
     name: 'curPosition',
+    inject:["reload"],
     props: {
         Init: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
@@ -59,6 +60,52 @@ export default {
         };
     },
     methods: {
+        cookieState(){
+            let oldID;
+            let cookieTimer = setInterval(()=>{
+                let curID = Common.GETID(this,Common,"inCookie");
+                if(curID != (window.prjId ||  window.id)){
+
+                    console.error("ID cookie改变_"+Date.now());
+
+                    //
+                    let objData = this.checkGet(curID || "",this.projectList)
+                    let Query = JSON.parse(JSON.stringify(this.$route.query));
+                    Query.prjId = objData.prjId || objData.id;
+                    Query.id = objData.prjId || objData.id;
+                    Query.prjSn = objData.prjSn || objData.prj_id;
+                    Query.prj_id = objData.prjSn || objData.prj_id;
+
+                    window.prjId = objData.prjId || objData.id;
+                    window.id = objData.prjId || objData.id;
+                    window.prjSn = objData.prjSn || objData.prj_id;
+                    window.prj_id = objData.prjSn || objData.prj_id;
+
+                    
+                    
+                    
+                    //this.$refs.SelectItem.clearSingleSelect();
+                    //this.$refs.SelectItem.setQuery(this.getCookie("prj_name"))
+
+
+                    this.curProject = objData.prjId || objData.id;
+                    
+
+                    if(this.$route.path != "/agile/detail"){
+                        this.$router.push({path: this.$route.path,query: Query })
+                    }
+                    
+
+                    this.$emit("changeSelect",curID);
+                    this.$emit("sendData",objData);
+
+                    //this.reload();
+                    window.location.reload();
+                    //
+
+                }
+            },1500)
+        },
         testBtn(){
             this.$router.push({path: '/agile/detail', query: {from:"nav"}});
         },
@@ -91,13 +138,23 @@ export default {
             if(val && name && (name == "prjId" || name == "id")){
                 this.setCookie("prjId",val);
                 this.setCookie("id",val);
+                window.prjId = val;
+                window.id = val;
+                //Common.SetSession("prjId",val);
+                //Common.SetSession("id",val);
                 return true;
             }else if(val && name && (name == "prjSn" || name == "prj_id")){
                 this.setCookie("prjSn",val);
                 this.setCookie("prj_id",val);
+                window.prjSn = val;
+                window.prj_id = val;
+                //Common.SetSession("prjSn",val);
+                //Common.SetSession("prj_id",val);
                 return true;
             }else if(val,name){
                 this.setCookie(name,val);
+                window[name] = val;
+                //Common.SetSession(name,val);
                 return true;
             }else{
                 return false;
@@ -295,6 +352,7 @@ export default {
         }
     },
     mounted() {
+        //this.cookieState();
     }
 };
 </script>
@@ -314,24 +372,24 @@ export default {
     
 }
 .SelectItem{
-    width:300px;
+    
     
 }
 .SelectItem .ivu-select-input {
     transition: all 1s;
 }
 
-.demo-spin-icon-load{
-        animation: ani-demo-spin 1s linear infinite;
-    }
-    @keyframes ani-demo-spin {
-        from { transform: rotate(0deg);}
-        50%  { transform: rotate(180deg);}
-        to   { transform: rotate(360deg);}
-    }
-    .demo-spin-col{
-        height: 100px;
-        position: relative;
-        border: 1px solid #eee;
-    }
+#SelectItem .demo-spin-icon-load{
+    animation: ani-demo-spin 1s linear infinite;
+}
+@keyframes ani-demo-spin {
+    from { transform: rotate(0deg);}
+    50%  { transform: rotate(180deg);}
+    to   { transform: rotate(360deg);}
+}
+#SelectItem  .demo-spin-col{
+    height: 100px;
+    position: relative;
+    border: 1px solid #eee;
+}
 </style>

@@ -379,35 +379,35 @@ export default {
             ],
             ruleValidate: {
                 userstory_name: [
-                    { required: true, message: 'The name cannot be empty', trigger: 'blur' }
+                    { required: true, message: '内容不能为空', trigger: 'blur' }
                 ],
                 department: [
-                    { required: false, message: 'The name cannot be empty', trigger: 'blur' }
+                    { required: false, message: '内容不能为空', trigger: 'blur' }
                 ],
 
                 userstory_type: [
-                    { required: true, message: 'Please select the city', trigger: 'change' }
+                    { required: true, message: '内容不能为空', trigger: 'change' }
                 ],
                 req_id: [
-                    { required: true, message: 'Please select the city', trigger: 'change' }
+                    { required: true, message: '请选择', trigger: 'change' }
                 ],
                 introducer: [
-                    { required: false, message: 'Please select the city', trigger: 'change' }
+                    { required: false, message: '内容不能为空', trigger: 'change' }
                 ],
 
                 person: [
-                    { required: true, message: 'Please select the city', trigger: 'change' }
+                    { required: true, message: '内容不能为空', trigger: 'change' }
                 ],
                 userstory_status: [
-                    { required: true, message: 'Please select gender', trigger: 'change' }
+                    { required: true, message: '请选择', trigger: 'change' }
                 ],
                 
                 sprint: [
-                    { required: false, message: 'Please select the city', trigger: 'change' }
+                    { required: false, message: '请选择', trigger: 'change' }
                 ],
 
                 proi: [
-                    { required: false, message: 'Please select gender', trigger: 'change' }
+                    { required: false, message: '请选择', trigger: 'change' }
                 ],
                 manhour: [
                     { required: false,type: 'number',validator: validateNumber2, message: 'Incorrect number format', trigger: 'blur' }

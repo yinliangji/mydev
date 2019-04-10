@@ -29,7 +29,7 @@
                     <p >{{formValidate.depd_desc}}</p>
                 </FormItem>
 
-                <FormItem label="依赖项创建人" >
+                <FormItem label="依赖项创建人" v-show="false">
                     <p >{{formValidate.created_user_username}}</p>
                 </FormItem>
                 

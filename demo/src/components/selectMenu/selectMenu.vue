@@ -77,7 +77,7 @@ export default {
                 let curID = Common.GETID(this,Common,"inCookie");
                 if(curID != (window.prjId ||  window.id)){
 
-                    console.error("ID cookie改变_"+Date.now());
+                    console.log("ID cookie改变_"+Date.now());
 
                     //
                     let objData = this.checkGet(curID || "",this.projectList)
@@ -182,7 +182,9 @@ export default {
             var self = this;
             let username = this.getCookie("username");
             if(!username){
-                Common.CommonError(this,"没有获取到username 无法获取项目列表")
+                Common.CommonError(this,"没有获取到username 无法获取项目列表");
+                this.$emit("sendData",false);
+                console.log("没有获取到username 无法获取项目列表");
                 return;
             }
             let params = {
@@ -192,7 +194,7 @@ export default {
                 if(res.status < 200 && res.status > 399){
                     Common.CommonError(this,"获取到projectListDataNew项目列表失败");
                     this.$emit("sendData",false);
-                    console.log("else");
+                    console.log("获取到projectListDataNew项目列表失败");
                     //this.$router.push({path:"/agile"});
                     return;
                 }
@@ -210,16 +212,34 @@ export default {
                     }) 
                 }else if(res.data.data && Array.isArray(res.data.data) && res.data.data.length == 0){
                     Common.CommonError(this,"没有项目");
+                    this.$emit("sendData",false);
+                    console.log("没有项目");
                     return
                 }else{
                     Common.CommonError(this,"获取项目失败");
+                    this.$emit("sendData",false);
+                    console.log("获取项目失败");
                     return
                 }
                 
                 this.$nextTick(()=>{
                     let prjIdUrl = this._getUrlParam();//从url获取id或prjId并在projectList 里发现相同的id或prjId
                     let prjIdCookie = this._getCookie();//从cookie获取id或prjId并在projectList 里发现相同的id或prjId
+                    
+                    if(!prjIdUrl){
+                        console.log("选择项目列表【projectList】里没有匹配的prjId或id");
+                        this.GOText = "选择项目列表【projectList】里没有匹配的prjId或id";
+                        this.GO = true;
+                        //Common.CommonError(this,"选择项目列表【projectList】里没有匹配的prjId或id");
+                        this.$emit("sendData",false);
+                    }
+
                     let myGetOutID =  this.isReturnValue(getUrlParam("prjId")) || this.isReturnValue(getUrlParam("id")) || this.isReturnValue(this.getCookie("prjId")) || this.isReturnValue(this.getCookie("id"));
+
+
+                    console.error("prjIdUrl=",prjIdUrl,"prjIdCookie=",prjIdCookie,"myGetOutID=",myGetOutID)
+
+
                     console.log("prjIdUrl=",prjIdUrl," prjIdCookie=",prjIdCookie," myGetOutID=",myGetOutID);
                     if(!this.isTrue(myGetOutID)){
                         let ID = this.isReturnValue(this.projectList[0].prjId) || this.isReturnValue(this.projectList[0].id);
@@ -242,10 +262,10 @@ export default {
                         
                         
                         console.log("选择项目列表【projectList】里没有匹配的prjId或id");
-                        this.GOText = "选择项目列表【projectList】里没有匹配的prjId或id";
-                        this.GO = true;
+                        //this.GOText = "选择项目列表【projectList】里没有匹配的prjId或id";
+                        //this.GO = true;
                         
-                        //Common.CommonError(this,"选择项目列表【projectList】里没有匹配的prjId或id");
+                        Common.CommonError(this,"选择项目列表【projectList】里没有匹配的prjId或id");
                         this.$emit("sendData",false);
                         return
                     }else if(prjIdUrl != false){
@@ -260,7 +280,7 @@ export default {
                     }else{
                         Common.CommonError(this,"没有获取到prjId或id 回到agile")
                         this.$emit("sendData",false);
-                        console.log("else");
+                        console.log("else 没有获取到prjId或id 回到agile");
                         return
                     }
                 })

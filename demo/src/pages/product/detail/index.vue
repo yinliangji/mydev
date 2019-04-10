@@ -243,7 +243,7 @@ export default {
         let ID = Common.GETID(this,Common)
         if(detailID && ID){
 
-            if(!Common.GETID(this,Common,"inCookie")){
+            if(!Common.GETID(this,Common)){//if(!Common.GETID(this,Common,"inCookie")){
                 Common.setStorageAndCookie(Common,"id",ID)
             }
 

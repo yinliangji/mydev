@@ -1184,7 +1184,7 @@ export default {
             	sprint,
             	group_name,
             	username:Common.getCookie("username"),
-            	prjSn:Common.getCookie("prjSn"),
+            	prjSn:Common.GETprjid(this,Common),//Common.getCookie("prjSn"),
             	uss:"[]",//this.ussArr(USS,this.statusLists),
             }
 

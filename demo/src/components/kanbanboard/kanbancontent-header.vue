@@ -1,6 +1,6 @@
 <template>
   <div class="content-header">
-     <span :title="'状态名称：'+text+'\n所属分类：'+myClass+'\n　　WIP：'+wip+'\n已有数量：'+taskNumber" class="title" v-if="myAside == 'product'? true:false" >
+     <span :title="'状态名称：'+text+'\n状态分类：'+myClass+'\n　　WIP：'+wip+'\n已有数量：'+taskNumber" class="title" v-if="myAside == 'product'? true:false" >
         <mark>{{text}}</mark>
         <span class="number" >
          {{taskNumber}}

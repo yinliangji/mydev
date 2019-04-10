@@ -535,11 +535,15 @@ router.beforeEach((to, from, next) => {
         msg: "正在加载中……"
     })
 
-    console.log("to=",to ,"from=", from );
+    console.log("beforeEach to=",to , to.path);
+    console.log("beforeEach from=", from , from.path );
+
+    
+
 
     if(from.path == "/" || from.path == ""){
         
-        if(to.path != "/agile/detail" && to.path != "/agile" && to.path != "/" && to.path != "/agile/add" && to.path != "/agile/edit"){
+        if( to.path != "/agile" && to.path != "/" && to.path != "/agile/add" && to.path != "/agile/edit" && to.path != "/userAdvice" && to.path != "/platOverview"){
             console.log("新开窗口 和 /agile 不相关");
             
             let newToQuery = JSON.parse(JSON.stringify(to.query));
@@ -598,8 +602,10 @@ router.beforeEach((to, from, next) => {
 
      }
 
-    if(to.path == "/agile/detail" || to.path == "/agile" || to.path == "/agile/add" || to.path == "/agile/edit" || to.path == "/" || from.path == "/" ){
-        console.log("不是点击进来 或者 /agile/detail 或者列表进来");
+
+
+    if(to.path == "/agile" || to.path == "/userAdvice" || to.path == "/platOverview" || to.path == "/agile/add" || to.path == "/agile/edit" || to.path == "/" || from.path == "/" ){
+        console.log("不是点击进来  或者列表进来");
         next()
         return;
     }
@@ -613,7 +619,7 @@ router.beforeEach((to, from, next) => {
     let isToPrj_id = to.query.hasOwnProperty('prj_id');
     let isToPrjSn = to.query.hasOwnProperty('prjSn');
     if(isToPrjId && isToId && isToPrj_id && isToPrjSn){
-        console.log("已经有参数to")
+        console.log("已经有参数to","to.query=",to.query)
         next()
         return;
     }
@@ -651,15 +657,15 @@ router.beforeEach((to, from, next) => {
         toQuery.prj_id = toQuery.prjSn;
     }
 
-    console.log("next(参数)",toQuery,to.query)
+    console.log("next(参数)","toQuery=",toQuery,"to.query=",to.query)
 
     next({
         path: to.path,
         query: toQuery
     })
     setTimeout(()=>{
+        console.log("next()","toQuery=",toQuery,"to.query=",to.query)
         next();
-        console.log("next()",toQuery,to.query)
     },500)
     
 
@@ -668,8 +674,40 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to, from) => {
     Store.dispatch('IS_PAGELOADING/incrementAsync', {
         isShow: false,
-        msg: "正在加载中……"
+        msg: "加载完成"
     })
+
+
+    if(to.path == from.path){
+        let myID = to.query.hasOwnProperty('prjId') || to.query.hasOwnProperty('id');
+        let myPrjSn = to.query.hasOwnProperty('prj_id') || to.query.hasOwnProperty('prjSn');
+
+        let WinID = window.prjId || window.id;
+        let WinPrjSn = window.prjSn || window.prj_id;
+        if(myID && myPrjSn){
+
+        }else{
+            let myToQuery = JSON.parse(JSON.stringify(to.query));
+            
+            if(!myID){
+                myToQuery.id = WinID;
+                myToQuery.prjId = WinID;
+            }
+            if(!myPrjSn){
+                myToQuery.prjSn = WinPrjSn;
+                myToQuery.prj_id = WinPrjSn;
+            }
+            console.log((myID && myPrjSn),WinID,WinPrjSn,myToQuery,window.location.href);
+            let MyURL = window.location.href;
+            window.location.href = MyURL;
+            //window.location.href
+        }
+
+    }
+
+    //console.error("afterEach to=",to , to.path);
+    //console.error("afterEach from=", from , from.path );
+
 })
 
 

@@ -1,8 +1,8 @@
 <template>
-	<aside>
+	<aside id="asideMenu_2">
 		<!-- this.$router.push({path: '/product', query: {board: true}}) -->
 		<MenuItem name="1-8" title="项目详情">
-			<router-link to="/agile/detail" />
+			<router-link  to="/agile/detail" />
 			<Icon type="ios-photos-outline"></Icon>
 			<span>项目详情</span>
 		</MenuItem>
@@ -58,7 +58,8 @@
 			<span>里程碑</span>
 		</MenuItem>
 		<MenuItem name="1-17" title="项目设置">
-			<router-link  to="/setting" />
+			<router-link to="/setting" />
+			<!-- <router-link :to="toURL()" /> -->
 			<Icon type="settings"></Icon>
 			<span>项目设置</span>
 		</MenuItem>
@@ -73,8 +74,32 @@ export default {
 		return{
 
 		}
-	}
+	},
+	methods:{
+		toURL(){
+			let obj = {}
+			let ID = window.prjId || window.id;
+			let PrjSn = window.prjSn || window.prj_id;
+			console.error(ID,PrjSn)
+            if(ID){
+            	obj.id = ID;
+            	obj.prjId = ID;
+            }
+            if(PrjSn){
+            	obj.prjSn = PrjSn;
+            	obj.prj_id = PrjSn;
+            }
+            obj.test = 1111111;         
+			return {path: '/setting', query: obj}
+		}
+		
+	},
 }
 </script>
 <style lang="less" scoped>
+</style>
+<style>
+#asideMenu_2 .ivu-menu-item-active a {
+	/*pointer-events: none;*/
+}
 </style>

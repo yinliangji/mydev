@@ -70,7 +70,7 @@
                                     size="small"
                                     style="float: right"
                                     >
-                                    从ITM同步同步需求项
+                                    从ITM同步需求项
                                 </Button>
                             </div>
                             <div class="tagBarLeft">

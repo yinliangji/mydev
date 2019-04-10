@@ -363,7 +363,7 @@ export default {
         if(this.$router.history.current.query.from && this.$router.history.current.query.from == "nav"){
             Common.DelectLocalStorage(Common);
             let userName = Common.getStorageAndCookie(this,Common,"username");
-            let myID = Common.GETID(this,Common,"inCookie");
+            let myID = Common.GETID(this,Common); //Common.GETID(this,Common,"inCookie");
             let exeFn = ()=>{
                 let params = {
                     prjSn:Common.GETprjid(this,Common),
@@ -721,7 +721,7 @@ export default {
                     Common.setStorageAndCookie(Common,"prj_id",myData.data.prj_id);
                     Common.setStorageAndCookie(Common,"prjSn",myData.data.prj_id);
                     
-                    this.$router.push({path: '/agile/detail', query: {id: ID,prj_id:myData.data.prj_id}});
+                    this.$router.push({path: '/agile/detail', query: {id: ID,prjId:ID,prj_id:myData.data.prj_id,prjSn:myData.data.prj_id}});
 
                     this.actionUrl = fileUpload+"?taskId="+this.formValidate.prj_id+"&type=1&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
 

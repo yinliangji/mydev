@@ -2,7 +2,7 @@
     <Modal v-model="isShow" width="360" :closable="isCancel()" :mask-closable="false" @on-cancel="cancel" id="goAgilePop">
         <p slot="header" style="color:#f60;text-align:center">
             <Icon type="information-circled"></Icon>
-            <span @click="cancelTime">错误！</span>
+            <span @click="cancelTime">提示！</span>
         </p>
         <div style="text-align:center">
             <p>{{Text}}</p>

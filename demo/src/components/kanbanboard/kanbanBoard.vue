@@ -301,7 +301,7 @@ export default {
             for(let i=0;i<this.groupLists.length;i++){
               this.noPutWip.forEach((item)=>{
                 if(document.getElementById('kb'+this.groupLists[i].groupId+'_'+item)){
-                  document.getElementById('kb'+this.groupLists[i].groupId+'_'+item).setAttribute("title","用户故事超过WIP数量，不能在拖入")
+                  document.getElementById('kb'+this.groupLists[i].groupId+'_'+item).setAttribute("title","用户故事超过WIP数量，不能再拖入")
 
                 }
               })
@@ -388,23 +388,23 @@ export default {
         if(gId.length){
           for(let j=0;j<gId.length;j++){
             all.forEach((item)=>{
-              document.getElementById("C-"+gId[j]+"_"+item).removeAttribute('title');
-              document.getElementById("TC-"+item).removeAttribute('title');
+              document.getElementById("C-"+gId[j]+"_"+item).removeAttribute('data-title');
+              document.getElementById("TC-"+item).removeAttribute('data-title');
             })
           }
           for(let j=0;j<gId.length;j++){
             dif.forEach((item)=>{
               //allId.push("C-"+gId[j]+"_"+item);
-              document.getElementById("C-"+gId[j]+"_"+item).setAttribute("title","hidden");
-              document.getElementById("TC-"+item).setAttribute("title","hidden");
+              document.getElementById("C-"+gId[j]+"_"+item).setAttribute("data-title","hidden");
+              document.getElementById("TC-"+item).setAttribute("data-title","hidden");
             })
           }
         }else{
           all.forEach((item)=>{
-            document.getElementById("TC-"+item).removeAttribute('title');
+            document.getElementById("TC-"+item).removeAttribute('data-title');
           })
           dif.forEach((item)=>{
-            document.getElementById("TC-"+item).setAttribute("title","hidden");
+            document.getElementById("TC-"+item).setAttribute("data-title","hidden");
           })
         }
         
@@ -1157,7 +1157,7 @@ export default {
 [id^="TC-"]{
   transition: all 0.5s ease-out 0s;
 }
-[title=hidden]{
+[data-title=hidden]{
   width: 0 !important;
   overflow: hidden !important;
   flex: 0 0 auto !important;
@@ -1179,19 +1179,49 @@ export default {
 .rowBox[title][id^="kb"]:before{
    position: absolute;
   content: "";
-  left: -110%;
+  left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.3);
   z-index: 50; 
-  transition: all 0.5s ease-out 0s;
+  transition: all 0.7s ease-out 0s;
   opacity: 0;
+  pointer-events: none;
 }
-.Column[title][id^="C-"] .rowBox[title][id^="kb"]:before{
+.rowBox[title][id^="kb"]:after{
+  position: absolute;
+  content: "用户故事超过WIP数量，不能再拖入";
   left: 0;
+  top: 50%;
+  width: 100%;
+  height:auto;
+  background: rgba(255,0,0,1);
+  transition: all 0.7s ease-out 0s;
+  z-index: 60; 
+  opacity: 0;
+  color: white;
+  box-sizing: border-box;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  line-height: 1.5em;
+  transform:translate(0,-50%);
+  border-top: white solid 1px;
+  border-bottom: white solid 1px;
+  pointer-events: none;
+}
+
+.Column[title][id^="C-"] .rowBox[title][id^="kb"]:before{
+  
   opacity: 1;
 }
+.Column[title][id^="C-"] .rowBox[title][id^="kb"]:after{
+  
+  opacity: 1;
+}
+
 .Column[title][id^="C-"] .rowBox[title][id^="kb"]{
   pointer-events: none;
 }

@@ -1,7 +1,7 @@
 <template>
 	<div class="pageContent">
 		<goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'10'" />
-		<selectMenu @changeSelect="selectMenuFn" :Disabled="SearchCan"></selectMenu>
+		<selectMenu @changeSelect="selectMenuFn" @sendData="getSendData" :Disabled="SearchCan"></selectMenu>
 		<Card id="BoxPT">
 			<div class="productBox">
 				<h3 class="Title"><span>用户故事</span></h3>
@@ -704,11 +704,7 @@ export default {
 
 		let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 
-		let params = {
-            prjSn:Common.GETprjid(this,Common),
-            prj_id:Common.GETprjid(this,Common),
-        }
-		this.getPermissionFn(getPermission,params);
+		
 
 		if(!Common.GetSession("CurView") && this.$route.query.board){
 			let CurView = "kanbanboard"
@@ -724,6 +720,16 @@ export default {
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
 	},
 	methods:{
+		getSendData(data){
+            console.log(data,"<==========getSendData");
+            let params = {
+                prjSn:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
+                prj_id:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
+                prjId:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
+                id:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
+            }
+			this.getPermissionFn(getPermission,params);
+        },
 		searchInit(){
 			if(Common.GetSession("isClickedDelBtn")){
 	        	if(Common.GetSession("userstorySerch")){

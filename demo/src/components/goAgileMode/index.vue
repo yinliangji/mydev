@@ -58,6 +58,7 @@ export default {
         },
         Timer(val){
             if(val){
+                this.hidden(true);
                 this.T = setInterval(()=>{
                     if(this.time <= 1){
                         clearInterval(this.T);
@@ -65,11 +66,34 @@ export default {
                     }
                     this.time--;
                     console.log(this.time) 
-                },1000)
+                },1000);
+                
+            }
+        },
+        hidden(val){
+            if(val){
+                setTimeout(()=>{
+                    let doms = document.getElementsByClassName("pageContent");
+                    if(doms && doms.length){
+                        for(let i=0;i<doms.length;i++){
+                           doms[i].style.opacity = 0; 
+                        }
+                    }
+                },1)
+            }else{
+                setTimeout(()=>{
+                    let doms = document.getElementsByClassName("pageContent");
+                    if(doms && doms.length){
+                        for(let i=0;i<doms.length;i++){
+                            doms[i].removeAttribute("style");
+                        }
+                    }
+                },1)
             }
         },
         cancelTime(){
             clearInterval(this.T);
+            this.hidden();
         },
         go(){
             this.$router.push({path: '/agile'})
@@ -77,12 +101,16 @@ export default {
         cancel(){
             console.log("cancel");
             clearInterval(this.T);
+            this.hidden();
         },
 
     },
     mounted(){
         this.Timer(this.Data)
 	},
+    beforeDestroy(){
+        clearInterval(this.T);
+    },
 }
 	
 

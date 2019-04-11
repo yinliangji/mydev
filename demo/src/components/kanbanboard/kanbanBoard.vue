@@ -849,6 +849,7 @@ export default {
             let DOM = document.getElementById(that.noPut[0]);
             if(DOM){
               DOM.removeAttribute('style');  
+              DOM.parentNode.removeAttribute("data-noput");
             }
           }
           if(vm.Group){
@@ -888,7 +889,8 @@ export default {
                 let Dom = document.getElementById(that.noPut[0]);
                 if(Dom){
                   let cssText = "background:#e4e4e4;webkit-transform: rotateY(-180deg);-moz-transform: rotateY(-180deg);-o-transform: rotateY(-180deg);-ms-transform: rotateY(-180deg);transform: rotateY(-180deg);"
-                  Dom.setAttribute("style",cssText)
+                  Dom.setAttribute("style",cssText);
+                  Dom.parentNode.setAttribute("data-noput",true);
                 }
                  
               }
@@ -926,6 +928,9 @@ export default {
     kanbanHeader,
     kanbanContentHeader,
     kanbanItem,
+  },
+  beforeDestroy(){
+
   },
   
 };
@@ -1224,6 +1229,39 @@ export default {
 
 .Column[title][id^="C-"] .rowBox[title][id^="kb"]{
   pointer-events: none;
+}
+
+.Column[id$="00"]{
+  
+}
+.Column[id$="00"]:before{
+
+  position: absolute;
+  left: 0;
+  top: 50%;
+  left: 4px;
+  right: 4px;
+  height:auto;
+  background: rgba(0,0,0,0.5);
+  transition: all 0.7s ease-out 0s;
+  z-index: 60; 
+  content: "用户故事已分配工作项，不能被废弃";
+  opacity: 0;
+  color: white;
+  box-sizing: border-box;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  line-height: 1.5em;
+  transform:translate(0,-50%);
+  border-top: white solid 1px;
+  border-bottom: white solid 1px;
+  pointer-events: none;
+
+}
+.Column[data-noput]:before{
+  opacity: 1;
 }
 
 .rowBox{

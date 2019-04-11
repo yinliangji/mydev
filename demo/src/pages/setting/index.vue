@@ -74,13 +74,14 @@ export default {
         	prjSn:Common.GETprjid(this,Common),
         	prj_id:Common.GETprjid(this,Common),
         }
-
+        /*
 		this.getPermissionFn(getPermission,params).then((res)=>{
 			this.myData = res;
 		},()=>{
 			this.myData = false;
 			this.showError(getPermission+"获得权限失败");
 		});
+		*/
 	},
 	methods:{
 		//tabs - start
@@ -99,8 +100,10 @@ export default {
 		getSendData(data){
             console.log(data,"<==========getSendData");
             let params = {
-            	prjSn:data.prjSn || data.prj_id,
-            	prj_id:data.prjSn || data.prj_id,
+                prjSn:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
+                prj_id:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
+                prjId:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
+                id:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
             }
             this.getPermissionFn(getPermission,params).then((res)=>{
 				this.myData = res;

@@ -214,18 +214,21 @@
         </Modal>
 
         <Modal v-model="modaDelete" width="300">
-                <p slot="header" style="color:#f60;text-align:center">
-                    <Icon type="ios-information-circle"></Icon>
-                    <span>删除确认</span>
-                </p>
-                <div style="text-align:center">
-                <p>删除无法恢复，是否继续？</p>
-                </div>
-                    <div slot="footer">
-                    <Button color="#1c2438"  :loading="modal_loading"  @click="del">删除</Button>
-                    <Button type="primary" @click="cancel">取消</Button>
-                </div>
-            </Modal> 
+            <p slot="header" style="color:#f60;text-align:center">
+                <Icon type="ios-information-circle"></Icon>
+                <span>删除确认</span>
+            </p>
+            <div style="text-align:center">
+            <p>删除无法恢复，是否继续？</p>
+            </div>
+                <div slot="footer">
+                <Button color="#1c2438"  :loading="modal_loading"  @click="del">删除</Button>
+                <Button type="primary" @click="cancel">取消</Button>
+            </div>
+        </Modal>
+
+        <GoAgileMode :Data="GO" :Text="GOText" /> 
+
 	</div>
 </template>
 <script>
@@ -234,6 +237,10 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 const {projectDetail,listModule,getPermission,fileDownList,downFile,fileUpload,fileDelete,projectOutputWord,projectOutputExecl,proByUser} = Common.restUrl;
+
+
+import GoAgileMode from "@/components/goAgileMode";
+
 export default {
 	data () {
         return {
@@ -274,6 +281,7 @@ export default {
 
             prj_permission:[],
             identity:"",
+            myPermission:"",
 
             tableDAtaTatol:0,
             tableDAtaPageLine:5,
@@ -352,9 +360,16 @@ export default {
             modal_loading: false,
             delIndex:false,
             delPath_file:"",
+
+            //跳转组件
+            GO:false,
+            GOText:"",
         }
     },
     inject:["reload"],
+    components: {
+        GoAgileMode,
+    },
     beforecreated(){
         console.log("项目详情页--beforecreated-------");
     },
@@ -387,12 +402,16 @@ export default {
 
                         })
                     },()=>{
-                        this.$router.push({path: '/agile'});
+                        this.GOText = "获取主键ID数组失败！";
+                        this.GO = true;
+                        //this.$router.push({path: '/agile'});
                     })
                    
                 },()=>{
                     this.showError("权限不足，不能有任何动作,跳转的列表页！");
-                    this.$router.push({path: '/agile'});
+                    this.GOText = "权限不足或者获取权限失败！";
+                    this.GO = true;
+                    //this.$router.push({path: '/agile'});
                 })
             }
             EVENT.on("USER",(result)=>{
@@ -438,13 +457,17 @@ export default {
                 console.log(error);
                 this.showError(error);
             })
+            /*
             let params = {
                 prjSn:Common.GETprjid(this,Common),
                 prj_id:Common.GETprjid(this,Common),
             }
             this.getPermissionFn(getPermission,params)
+            */
     	}else{
-            this.$router.push({path: '/agile'})
+            this.GOText = "获取主键ID失败！";
+            this.GO = true;
+            //this.$router.push({path: '/agile'})
             
             /*
             if(Common.GETID(this,Common)){
@@ -498,8 +521,10 @@ export default {
         getSendData(data){
             console.log(data,"<==========getSendData");
             let params = {
-                prjSn:data.prjSn || data.prj_id,
-                prj_id:data.prjSn || data.prj_id,
+                prjSn:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
+                prj_id:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
+                prjId:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
+                id:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
             }
             this.getPermissionFn(getPermission,params).then((res)=>{
             },()=>{

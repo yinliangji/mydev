@@ -46,7 +46,7 @@ export default {
         curProject(curVal,oldVal){
         },
         Init(curVal,oldVal){
-            console.error("Init",this.Init)
+            console.log("Init",this.Init)
             if(!curVal){
                 this.showProjectList();        
             }
@@ -228,17 +228,14 @@ export default {
                     
                     if(!prjIdUrl){
                         console.log("选择项目列表【projectList】里没有匹配的prjId或id");
-                        this.GOText = "选择项目列表【projectList】里没有匹配的prjId或id";
+                        this.GOText = "您访问的页面不存在，或者您没有权限访问该页面！";
                         this.GO = true;
                         //Common.CommonError(this,"选择项目列表【projectList】里没有匹配的prjId或id");
                         this.$emit("sendData",false);
+                        return
                     }
 
                     let myGetOutID =  this.isReturnValue(getUrlParam("prjId")) || this.isReturnValue(getUrlParam("id")) || this.isReturnValue(this.getCookie("prjId")) || this.isReturnValue(this.getCookie("id"));
-
-
-                    console.error("prjIdUrl=",prjIdUrl,"prjIdCookie=",prjIdCookie,"myGetOutID=",myGetOutID)
-
 
                     console.log("prjIdUrl=",prjIdUrl," prjIdCookie=",prjIdCookie," myGetOutID=",myGetOutID);
                     if(!this.isTrue(myGetOutID)){

@@ -1852,6 +1852,7 @@ export default class Common extends Utils {
       } 
       let ID = that.$router.history.current.query.prjId || that.$router.history.current.query.id;
       let PrjSn = that.$router.history.current.query.prjSn || that.$router.history.current.query.prj_id;
+      console.error(ID,PrjSn,"=====----")
       let params = {
           username:_Common.getStorageAndCookie(that,_Common,"username"),
       }
@@ -1864,12 +1865,14 @@ export default class Common extends Utils {
               return false;
           }
           if(res.data.data && Array.isArray(res.data.data) && res.data.data.length){
+            console.error(res.data.data,"=====----")
               let isID = res.data.data.find((item)=>{
                   return (item.id || item.prjId) == ID;
               });
               let isPrjSn = res.data.data.find((item)=>{
                   return (item.prj_id || item.prjSn) == PrjSn;
               })
+              console.error(isID,isPrjSn,"=====----")
               that.GO = !(fn(isID) && fn(isPrjSn));
               that.GOText = that.GO ? "没有找到相关项目，跳转到项目列表页" : ""; 
               return fn(isID) && fn(isPrjSn);

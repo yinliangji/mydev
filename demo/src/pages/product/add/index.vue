@@ -250,6 +250,7 @@
             </div>
         </Card>
         <Depend :prjName="formValidate.prj_name" :DependOnOff="dependonoff" @sendDepend="receiveDepend" @sendCloseDepend="receiveCloseDepend" />
+        <GoAgileMode :Data="GO" :Text="GOText" />
         
     </div>
 </template>
@@ -258,12 +259,14 @@ import Store from '@/vuex/store'
 import Trans from './trans'
 import Depend from './depend'
 
-
-
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAdd,storyAddGet,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,developEditAxiosData,updateView} = Common.restUrl;
+
+import GoAgileMode from "@/components/goAgileMode";
+
+
+const {storyAdd,storyAddGet,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,developEditAxiosData,updateView,projectListDataNew} = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -315,6 +318,7 @@ export default {
     created(){
         console.log("productAdd--created-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
         this.addCheckSerch();//搜索查询
+        Common.GetProjectList(defaultAXIOS,this,Common,projectListDataNew);
     },
     beforeUpdate(){
         console.log("productAdd--beforeUpdate-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
@@ -370,33 +374,13 @@ export default {
             },
 
             req_idList:[
-                // {
-                //     value: 'New York',
-                //     label: '业务模块1'
-                // },
-               
+                
             ],
             sprintList:[
-                // {
-                //     value: 'New York',
-                //     label: '业务模块1'
-                // },
+               
             ],
 
             businessList: [
-                {
-                    value: 'New York',
-                    label: '业务模块1'
-                },
-                {
-                    value: 'London',
-                    label: '业务模块2'
-                },
-                {
-                    value: 'Sydney',
-                    label: '业务模块3'
-                },
-               
             ],
             ruleValidate: {
                 userstory_name: [
@@ -462,6 +446,9 @@ export default {
             depd_sn:"",
             dependonoff:false,
             //依赖结束
+            //检测id是否在projectListDataNew列表里
+            GO:false,
+            GOText:"",
             
             
 
@@ -861,6 +848,7 @@ export default {
     components: {
        Trans,
        Depend,
+       GoAgileMode,
     },
     watch:{
         //查询搜索开始

@@ -750,16 +750,6 @@ export default {
             
             Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id);
             
-            /*
-            Common.setCookie("id",this.tableData[I].id);
-            localStorage.setItem('id', this.tableData[I].id);
-
-            Common.setCookie("prj_id",this.tableData[I].prj_id);
-            localStorage.setItem('prj_id', this.tableData[I].prj_id);
-
-            Common.setCookie("prod_id",this.tableData[I].prod_id);
-            localStorage.setItem('prod_id',this.tableData[I].prod_id);
-            */
 
             this.$router.push({path: '/agile/detail', query: {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id}})
         },
@@ -771,17 +761,6 @@ export default {
             Common.setStorageAndCookie(Common,"id",this.tableData[I].id)
             Common.setStorageAndCookie(Common,"prj_id",this.tableData[I].prj_id)
             Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id)
-            /*
-            Common.setCookie("id",this.tableData[I].id);
-            localStorage.setItem('id', this.tableData[I].id);
-
-            Common.setCookie("prj_id",this.tableData[I].prj_id);
-            localStorage.setItem('prj_id', this.tableData[I].prj_id);
-
-            Common.setCookie("prod_id",this.tableData[I].prod_id);
-            localStorage.setItem('prod_id',this.tableData[I].prod_id);
-            */
-
             
             this.$router.push({path: '/development', query: {board: true,id: this.tableData[I].id}})
         },

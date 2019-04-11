@@ -273,6 +273,8 @@
             </div>
         </Modal>
 
+        <GoAgileMode :Data="GO" :Text="GOText" />
+
 
     </div>
 </template>
@@ -282,9 +284,10 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail,listModule,logicSystem,phySystem} = Common.restUrl;
+const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail,listModule,logicSystem,phySystem,projectListDataNew} = Common.restUrl;
 import Store from '@/vuex/store'
 import AddPartPop from '@/pages/agile/add/addpartpop';
+import GoAgileMode from "@/components/goAgileMode";
 const validateDate = (rule, value, callback) => {
     if (!value || !value[0] || !value[1]) {
         console.log("value 错误",)  
@@ -334,7 +337,8 @@ export default {
         console.log("agileEdit--beforecreated-------",this.formValidate)
     },
     created(){
-        console.log("agileEdit--created-------",this.formValidate)
+        console.log("agileEdit--created-------",this.formValidate);
+        Common.GetProjectList(defaultAXIOS,this,Common,projectListDataNew);
     },
     beforeUpdate(){
         console.log("agileEdit--beforeUpdate-------",this.formValidate)
@@ -492,6 +496,9 @@ export default {
                 ],
             },
             inputLoad:false,
+            //检测id是否在projectListDataNew列表里
+            GO:false,
+            GOText:"",
         }
     },
     mounted(){
@@ -1029,6 +1036,7 @@ export default {
     },
     components: {
         AddPartPop,
+        GoAgileMode,
     },
 
 }

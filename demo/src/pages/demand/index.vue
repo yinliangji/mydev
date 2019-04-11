@@ -1,7 +1,7 @@
 <template>
     <div class="pageContent">
         <goAgile :go="'/agile'" :text="'返回敏捷项目列表'" :TOP="'10'" />
-        <selectMenu @changeSelect="selectMenuFn" :Disabled="SearchCan"></selectMenu>
+        <selectMenu @changeSelect="selectMenuFn" @sendData="getSendData" :Disabled="SearchCan"></selectMenu>
         <Card id="BoxPT">
             <div class="demandBox">
                 <h3 class="Title"><span>需求项管理</span></h3>
@@ -408,11 +408,7 @@ export default {
         EventBus.$on("HelpIcon",this.helpToLeft);
 
         
-        let params = {
-            prjSn:Common.GETprjid(this,Common),
-            prj_id:Common.GETprjid(this,Common),
-        }
-        this.getPermissionFn(getPermission,params);
+        
         let ID = this.getID() ? this.getID() : this.$router.push('/agile');
 
         
@@ -441,6 +437,16 @@ export default {
         console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
+        getSendData(data){
+            console.log(data,"<==========getSendData");
+            let params = {
+                prjSn:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
+                prj_id:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
+                prjId:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
+                id:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
+            }
+            this.getPermissionFn(getPermission,params);
+        },
         helpToLeft(){
             this.ToolTipL = Common.HelpLeft("kanbanShowBtn2");
         },

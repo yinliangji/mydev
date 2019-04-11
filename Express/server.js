@@ -86,13 +86,42 @@ app.all('/json.action', function(req, res) {
 
 
 let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
+
+let _manager = ["lizhuo.zh(李卓-中国建设银行北京开发中心)|miaoxinyu.zh(苗新宇-中国建设银行北京开发中心)","miaoxinyu.zh(苗新宇-中国建设银行北京开发中心)","lizhuo.zh(李卓-中国建设银行北京开发中心)|miaoxinyu.zh(苗新宇-中国建设银行北京开发中心)|xiebei.zh(谢蓓-中国建设银行北京开发中心)","lizhuo.zh(李卓-中国建设银行北京开发中心)|miaoxinyu.zh(苗新宇-中国建设银行北京开发中心)","lizhuo.zh(李卓-中国建设银行北京开发中心)","xiebei.zh(谢蓓-中国建设银行北京开发中心)"]
+
+//((N)=>{let num;if(N<=0.2){num = 0;}else if(N>0.2 && N<0.4){num = 1;}else if(N>=0.4 && N<0.6){num = 2;}else if(N>=0.6 && N<0.8){num = 3;}else{num = 4;}return _manager[num];})(Math.random())    
+
+
+    let list = [];
+    let obj = {};
+    for(let i =1;i<10;i++){
+        obj.id = i;
+        obj.prj_id = "PJ10000"+i;
+        obj.prj_name = "prj_name"+i;
+        obj.manager = ((N)=>{let num;if(N<=0.2){num = 0;}else if(N>0.2 && N<0.4){num = 1;}else if(N>=0.4 && N<0.6){num = 2;}else if(N>=0.6 && N<0.8){num = 3;}else{num = 4;}return _manager[num];})(Math.random());
+        obj.prj_desc = "项目描述"+i;
+        obj.prj_goal = "项目目标"+i;
+        obj.settle_time = "2019-0"+i+"-01";
+        obj.start_time = "2019-0"+i+"-12";
+        obj.end_time = "2019-0"+i+"-23";
+        obj.prj_type = ((N)=>{return N >0.5?0:1 })(Math.random());
+        obj.logic_sys_id = "logic_sys_id"+i;
+        obj.phycics_sys_id = "phycics_sys_id"+i;
+        obj.modules = "modules";
+        obj.isEdit = ((N)=>{return N >0.5?true:false })(Math.random());
+        obj.prod_id = "prod_id"+i;
+        obj.prod_name =  "prod_name"+i;
+        list.push(obj);
+        obj = {};
+
+    }
     return Mock.mock({
         "status": val1,
         "message": "mockDataList xxxxxxx",
         data: {
-            "list|9": [{
+            "_list|9": [{
                 "id|+1": 1,
-                "prj_id|+1": 1,
+                "prj_id|+1":1,
                 "prj_name|5-148": /[a-zA-Z0-9]/,
                 "manager": /([a-zA-Z]{5,8})\|([a-zA-Z]{5,8})/,
                 "prj_desc": "项目描述",
@@ -111,6 +140,7 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
                 "__value3__pageline": val3,
 
             }],
+            list:list,
             "total|19-29": 3,
             "per_page|9-19": 3,
         },

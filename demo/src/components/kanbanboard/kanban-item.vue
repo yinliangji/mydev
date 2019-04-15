@@ -12,15 +12,66 @@
     :data-taskcount="item.task_count"
     >
       <div class="DragCursor" :class="(()=>{return isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)+'Show'})()">拖拽</div>
-      <div class="card-wrap" @click="itemClick(item)" >
+      
+      <div class="card-wrap noCursor" v-if="myAside == 'product'" >
 
-        <p v-if="item.source=='dependManage'" class="DMTitle" :title="item.depd_main_type_name+'：'+item.depdName">
-          <span>
-            <em>{{item.depd_main_type_name}}：{{item.depdName}}</em>
+        <p class="item-content" :title="'名称：'+item.taskName+'\n描述：'+item.userstory_desc"  style="cursor:pointer" @click="itemClick(item)">
+          <span class="levelText" :style="{'background':item.bgcolor}" v-show="item.bgcolor.indexOf('ffffff') == -1">
+            {{levelText(item.bgcolor)}}
+          </span>
+          {{item.taskName}}
+        </p>
+        <!-- 用户故事标识状态 显示包括工作项个数、附件、测试案例个数、依赖项状态 -->
+        <p  class="kananstatus floatClear">
+          <span class="iconBg" style="background:#e0592b;" title="工作项个数" v-if="item.task_count == 0 || item.task_count == '0'" >
+            {{item.task_count}}
+          </span>
+          <span class="iconBg" style="background:#e0592b;cursor:pointer" :title="item.taskDesc ? item.taskDesc : '工作项个数'"  @click="itemClick(item,'工作项')" v-else>
+            {{item.task_count}}
+          </span>
+          
+          <span class="iconBg" :class="'isFile'" v-if="item.isFile=='yes'" title="有附件" style="cursor:pointer" @click="itemClick(item,'附件')">
+            <Icon type="paperclip"></Icon>
+          </span>
+          <span class="iconBg" style="background:#00a6b6;cursor:pointer" title="测试案例个数"  @click="itemClick(item,'测试案例')">
+            {{item.testCase}}
+          </span>
+          <span class="iconBg" style="font-size:20px;cursor:pointer;" v-if="item.isDepd=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'" @click="itemClick(item,'依赖项')">
+            <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
+            <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
+          </span>
+        </p>
+        <p class="item-name">
+          <span class="user_name" v-html="chackSymbol(item.nickName)">
+          </span>
+        </p>
+      </div>
+      <div class="card-wrap" v-if="myAside == 'demand'" @click="itemClick(item)" >
+        <p class="item-content" :title="item.taskName">
+          {{item.taskName}}
+        </p>
+        <!-- 需求项标识状态 -->
+        <p  class="kananstatus floatClear">
+          <span class="iconBg" style="background:#e0592b" :title="item.usDesc ? item.usDesc : '用户故事个数'" >
+            {{item.us_counts}}
+          </span>
+          <span class="iconBg" :class="'isFile'"  v-if="item.isFile=='yes'" title="有附件">
+            <Icon type="paperclip"></Icon>
+          </span>
+          <span class="iconBg" style="font-size:20px" v-if="item.isDepd=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'">
+            <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
+            <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
           </span>
         </p>
 
-        <p class="item-content" :title="'名称：'+item.taskName+'\n描述：'+item.userstory_desc">
+        <p class="item-name">
+          <span class="user_name" v-html="chackSymbol(item.nickName)">
+          </span>
+        </p>
+      </div>
+
+      <div class="card-wrap" v-if="item.source=='task'" @click="itemClick(item)" >
+        <p class="item-content" :title="item.taskName">
           <span class="levelText" :style="{'background':item.bgcolor}" v-show="item.bgcolor.indexOf('ffffff') == -1">
             {{levelText(item.bgcolor)}}
           </span>
@@ -37,45 +88,41 @@
             <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
           </span>
         </p>
-        <!-- 用户故事标识状态 显示包括工作项个数、附件、测试案例个数、依赖项状态 -->
-        <p v-if="item.source=='userstory'" class="kananstatus floatClear">
-          <span class="iconBg" style="background:#e0592b" :title="item.taskDesc ? item.taskDesc : '工作项个数'" >
-            {{item.task_count}}
-          </span>
-          <span class="iconBg" :class="'isFile'" v-if="item.isFile=='yes'" title="有附件">
-            <Icon type="paperclip"></Icon>
-          </span>
-          <span class="iconBg" style="background:#00a6b6" title="测试案例个数" >
-            {{item.testCase}}
-          </span>
-          <span class="iconBg" style="font-size:20px" v-if="item.isDepd=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'">
-            <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
-            <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
-          </span>
-        </p>
-        <!-- 需求项标识状态 -->
-        <p v-if="item.source=='demand'" class="kananstatus floatClear">
-          <span class="iconBg" style="background:#e0592b" :title="item.usDesc ? item.usDesc : '用户故事个数'" >
-            {{item.us_counts}}
-          </span>
-          <span class="iconBg" :class="'isFile'"  v-if="item.isFile=='yes'" title="有附件">
-            <Icon type="paperclip"></Icon>
-          </span>
-          <span class="iconBg" style="font-size:20px" v-if="item.isDepd=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'">
-            <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
-            <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
-          </span>
-        </p>
         <p class="item-name">
-          <span class="user_name" v-if="nicknameFormat(myAside == 'product' || myAside == 'demand')" v-html="chackSymbol(item.nickName)">
-          </span>
-          <span class="user_name" v-else>
+          <span class="user_name">
               {{item.nickName}}
           </span>
-          <!-- <img :src="item.headPortrait" width="21" height="21" /> -->
-          <!-- <img v-show="myAside == 'product' || myAside == 'demand'? false:true" :src="headPortrait" width="21" height="21" /> -->
         </p>
       </div>
+
+      <div class="card-wrap" v-if="item.source=='dependManage'" @click="itemClick(item)" >
+        <p  class="DMTitle" :title="item.depd_main_type_name+'：'+item.depdName">
+          <span>
+            <em>{{item.depd_main_type_name}}：{{item.depdName}}</em>
+          </span>
+        </p>
+        <p class="item-content" :title="item.taskName">
+          {{item.taskName}}
+        </p>
+        <p class="item-name">
+          <span class="user_name" >
+              {{item.nickName}}
+          </span>
+        </p>
+      </div>
+
+      <div class="card-wrap" v-if="(myAside != 'product' && myAside != 'demand' && myAside!='development' && myAside!='dependManage')" @click="itemClick(item)" >
+        <p class="item-content" :title="item.taskName">
+          {{item.taskName}}
+        </p>
+        <p class="item-name">
+          <span class="user_name">
+              {{item.nickName}}
+          </span>
+        </p>
+      </div>
+
+      
   </div>
 </template>
 
@@ -178,8 +225,8 @@ export default {
         return "低"
       }
     },
-    itemClick(info){
-      EventBus.$emit('clickItem', info);
+    itemClick(info,type){
+      EventBus.$emit('clickItem', info,type);
     },
 
   },
@@ -345,6 +392,12 @@ export default {
   */
  font-size: 12px;
 }
+.card-wrap.noCursor {
+  cursor: default;
+}
+
+
+
 .kanban-item {
   width: 100px;
   height: auto;

@@ -41,13 +41,13 @@
       <div class="row-wrapper" id="kanbanHeader">
         <Row :gutter="0" class="kanbanHeaderBox" id="kanbanHeaderBox"  align="middle">
 
-          <Col style="width:121px;"  class="topColumnFirst" v-if="groupList.length > 0">
+          <Col :style="'width:'+((firstColumn - 0) + 1)+'px;'"  class="topColumnFirst" v-if="groupList.length > 0">
             <div class="centerHeaderTitle">
               {{groupList[0].text}}
             </div>
           </Col>
-          <Col class="topColumn"  v-for="(item, index) in statusList" :key="index">
-            <kanbanContentHeader :myAside="aside" :text="item.stateStr" :taskNumber="item.taskNumber" />
+          <Col class="topColumn" :id="'TC-'+item.state"  v-for="(item, index) in myStatusList" :key="index">
+            <kanbanContentHeader :myAside="aside" :wip="((n)=>{return n==0 || n=='0' ? '∞':n})(item.wip)" :myClass="item.myClass" :text="item.stateStr" :taskNumber="item.taskNumber" />
           </Col>
         </Row>
       </div>
@@ -68,7 +68,7 @@
               <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" title="快速添加工作项">快捷添加</Button>
             </div>
           </Col>
-          <Col class="Column" v-for="(items, index) in statusList"  :key="index"  >
+          <Col class="Column" v-for="(items, index) in myStatusList" :key="index" :id="'C-'+itemGroup.groupId+'_'+items.state" :data-G="itemGroup.groupId" :data-S="items.state" >
             <div :id="'kb'+itemGroup.groupId+'_'+items.state" :state="items.state" :groupid="itemGroup.groupId" class="rowBox" :class="addSpace?'addSpaceBox':''">
               <kanbanItem
                 :myIsOperation = "isOperation"
@@ -88,7 +88,7 @@
       <!--无分组-->
       <div class="row-wrapper"   v-if="groupList.length == 0">
         <Row :gutter="0" class="kanbanBox" align="top">
-          <Col class="Column" v-for="(items, index) in statusList"  :key="index"  >
+          <Col class="Column" v-for="(items, index) in myStatusList"  :key="index" :id="'C-'+items.groupId+'_'+items.state" :data-G="items.groupId" :data-S="items.state" >
             <div :id="'stateId_'+items.state" :state="items.state"  class="rowBox rowBox2"  :class="isPutFn(aside,isPut,items.state)">
               <kanbanItem
                   :myIsOperation = "isOperation"
@@ -203,6 +203,9 @@ export default {
       imgStatus:require("@/assets/images/user_02.png"),
       Warning:"",
       noPut:[],
+
+      noPutWip:[],
+
       //筛选开始
       funnelLoading:false,
       indeterminate: false,
@@ -228,14 +231,22 @@ export default {
   watch:{
     cardList(data){
       setTimeout(()=>{
-        this.autoHeight();  
+        this.autoHeight();
+        this.kanbanScrollFn("collapsedSider");
       },10)
       
     },
     groupList(data){
     },
     statusList(data){
-      this.checkAllGroup = this.funnelAllSelect();
+      this.myStatusList = [];
+      this.myStatusList = data;
+      if(!this.checkAllGroup.length){
+        this.checkAllGroup = this.funnelAllSelect();  
+      }
+
+      
+      this.noPutWipFn(data);
     },
     MenuStatusList(data){
       this.userstoryStatusList = this.statusListFn(data);
@@ -257,10 +268,54 @@ export default {
     //EventBus.$on("storyBindSort",this.bindStorySortId);
     setTimeout(()=>{
       this.autoHeight();
-      this.kanbanScrollFn();//以后加上
+      this.kanbanScrollFn("collapsedSider");
     },1000);
+    
+    EventBus.$on("KBScroll",this.kanbanScrollFn);
   },
   methods:{
+    noPutWipFn(data){//
+      if("product" == "product"){
+        //
+        this.noPutWip = [];
+        data.forEach((item)=>{
+          if(((item.taskNumber-0) >= (item.wip)) && (item.wip != 0 || item.wip != "0")){
+            this.noPutWip.push(item.state);
+          }
+        })
+        
+        setTimeout(()=>{
+          //
+          if(this.myStatusList.length && this.groupLists.length){
+            for(let i=0;i<this.groupLists.length;i++){
+              this.myStatusList.forEach((item)=>{
+                if(document.getElementById('kb'+this.groupLists[i].groupId+'_'+item.state)){
+                  document.getElementById('kb'+this.groupLists[i].groupId+'_'+item.state).removeAttribute("title");
+                }
+              })
+            }
+          }
+          //
+          if(this.noPutWip.length && this.groupLists.length){
+
+            for(let i=0;i<this.groupLists.length;i++){
+              this.noPutWip.forEach((item)=>{
+                if(document.getElementById('kb'+this.groupLists[i].groupId+'_'+item)){
+                  document.getElementById('kb'+this.groupLists[i].groupId+'_'+item).setAttribute("title","用户故事超过WIP数量，不能再拖入")
+
+                }
+              })
+            }
+          }
+          //
+        },350)
+        //
+        //return p.indexOf(s) == -1?'noPutBg':''
+      }else{
+        return "";
+      }
+      
+    },
     //筛选开始
     goSetting(evt){
       this.$router.push({path: '/setting', query: {TabsCur:"name2",}})
@@ -312,7 +367,55 @@ export default {
             }
           })
         }
-        this.$emit("sendCheckbox",newArr,this.checkAllGroup,this.checkAll)
+        this.$emit("sendCheckbox",newArr,this.checkAllGroup,this.checkAll);
+        this.funnelLoading = false;
+
+        let all = [];
+        this.myStatusList.forEach((item)=>{
+          all.push(item.state);
+        })
+        let gId = [];
+        this.groupLists.forEach((item)=>{
+          gId.push(item.groupId);
+        })
+        let C = new Set(this.checkAllGroup);
+        let A = new Set(all);
+        let dif = new Set([...A].filter(x => !C.has(x)));
+        dif = Array.from(dif);
+        
+        let allId = [];
+
+        if(gId.length){
+          for(let j=0;j<gId.length;j++){
+            all.forEach((item)=>{
+              document.getElementById("C-"+gId[j]+"_"+item).removeAttribute('data-title');
+              document.getElementById("TC-"+item).removeAttribute('data-title');
+            })
+          }
+          for(let j=0;j<gId.length;j++){
+            dif.forEach((item)=>{
+              //allId.push("C-"+gId[j]+"_"+item);
+              document.getElementById("C-"+gId[j]+"_"+item).setAttribute("data-title","hidden");
+              document.getElementById("TC-"+item).setAttribute("data-title","hidden");
+            })
+          }
+        }else{
+          all.forEach((item)=>{
+            document.getElementById("TC-"+item).removeAttribute('data-title');
+          })
+          dif.forEach((item)=>{
+            document.getElementById("TC-"+item).setAttribute("data-title","hidden");
+          })
+        }
+        
+        setTimeout(()=>{
+          this.kanbanScrollFn("collapsedSider");
+        },500)
+
+        
+
+
+
     },
     funnelCheckAll () {
       this.checkAll = !this.checkAll;
@@ -375,7 +478,14 @@ export default {
         this.setHeight();
       },2)      
     },
-    kanbanScrollFn(){
+    kanbanScrollFn(val){
+      if(val == "collapsedSider"){
+        document.getElementById("main").scrollTop = document.getElementById("main").scrollTop + 1;
+        setTimeout(()=>{
+          //document.getElementById("main").scrollTop = document.getElementById("main").scrollTop - 1;
+        },500)  
+      }
+      
 
       let columnW = (kbdom,rwdom,topcol,col)=>{
         let everyWArr = [];
@@ -436,10 +546,12 @@ export default {
 
       columnW("kanbanHeaderBox","row-wrapper","topColumn","Column");
 
-      ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
+      //ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
+      ivuRowFlexDomW = kanbanHeaderDom && kanbanHeaderDom.offsetWidth ? kanbanHeaderDom.offsetWidth : 1131;
+
       kanbanHeaderDomH = kanbanHeaderDom.offsetHeight ? kanbanHeaderDom.offsetHeight : 41;
 
-      mainDom.onscroll= function(){
+      let myscroll = ()=>{
         if(that.$route.path == "/demand" || that.$route.path ==  "/product" || that.$route.path ==  "/development" || that.$route.path ==  "/dependManage"){}else{return};
         kanbanHeaderDom = kanbanHeaderDom ? kanbanHeaderDom : document.getElementById("kanbanHeader");
 
@@ -452,7 +564,8 @@ export default {
 
         columnW("kanbanHeaderBox","rowWrapper","topColumn","Column");
 
-        ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
+        //ivuRowFlexDomW = ivuRowFlexDom.offsetWidth ? ivuRowFlexDom.offsetWidth : 1131;
+        ivuRowFlexDomW = kanbanHeaderDom && kanbanHeaderDom.offsetWidth ? kanbanHeaderDom.offsetWidth : 1131;
         kanbanHeaderDomH = kanbanHeaderDom.offsetHeight ? kanbanHeaderDom.offsetHeight : 41;
 
         boardDom.style.position = "relative";
@@ -485,6 +598,9 @@ export default {
           }
         }
       }
+      myscroll();
+
+      mainDom.onscroll= myscroll
     },
     setHeight(){
       this.addSpace = this.aside == "product" && this.role != "icdp_projManager" ? 50 : 0;
@@ -538,12 +654,18 @@ export default {
       this.$emit("userStoryIdFn",id);
     },
     toStory(IG,column){
+      let ID = this.$router.history.current.query.prjId || this.$router.history.current.query.id || "";
+      let PrjSn = this.$router.history.current.query.prjSn || this.$router.history.current.query.prj_id || "";
       let obj =  column && column == 'us' ? 
       {
         path:"demand/detail",
         query:{
           reqList_id:IG.groupId,
           req_id:IG.reqID,
+          prj_id:PrjSn,
+          prjSn:PrjSn,
+          id:ID,
+          prjId:ID,
         }
       }
       :
@@ -551,6 +673,10 @@ export default {
         path:"product/detail",
         query:{
           detail_id:IG.groupId,
+          prj_id:PrjSn,
+          prjSn:PrjSn,
+          id:ID,
+          prjId:ID,
         }
       }
       const {href}=this.$router.resolve(obj);
@@ -643,11 +769,19 @@ export default {
               })
             }
 
+            let fnWip = (arr,El)=>{
+              return arr.indexOf(El.getAttribute("state")) != -1 ? El.getAttribute("title") : false; 
+            }
+
             if(that.aside && that.aside == "product"){
 
               if(fnUs(that.isUsPut,Old.el.id,Ele.getAttribute("groupid"))){
                 that.Warning = "有工作项，不能废弃"
                 return false
+              }else if(fnWip(that.noPutWip,Old.el)){
+                that.Warning = fnWip(that.noPutWip,Old.el);
+                return false
+
               }else{
                 that.Warning = "";
                 return true                
@@ -698,10 +832,24 @@ export default {
           
         },
         onEnd:function(evt){
+          
+          if(that.myStatusList.length && that.groupLists.length && that.aside == "product"){
+            for(let i=0;i<that.groupLists.length;i++){
+              that.myStatusList.forEach((item)=>{
+                
+                if(document.getElementById('C-'+that.groupLists[i].groupId+'_'+item.state)){
+                  document.getElementById('C-'+that.groupLists[i].groupId+'_'+item.state).removeAttribute("title");
+                }
+              })
+            }
+
+          }
+          
           if(that.noPut.length && that.aside && that.aside == "product"){
             let DOM = document.getElementById(that.noPut[0]);
             if(DOM){
               DOM.removeAttribute('style');  
+              DOM.parentNode.removeAttribute("data-noput");
             }
           }
           if(vm.Group){
@@ -724,9 +872,16 @@ export default {
             let gId = evt.item.getAttribute("groupid");
             if(N == 0 || N == "0"){
             }else{
+              /*
               let obj = that.statusList.find((item)=>{
                 return item.stateStr == "废弃";
               })
+              */
+              let filterObj = that.statusList.filter((item)=>{
+                return item.stateStr == "废弃";
+              })
+              let obj = filterObj && filterObj.length ? filterObj[filterObj.length - 1] : false;
+
               if(obj){
                 that.isUsPut.push(obj.state);
                 that.noPut = [];
@@ -734,11 +889,24 @@ export default {
                 let Dom = document.getElementById(that.noPut[0]);
                 if(Dom){
                   let cssText = "background:#e4e4e4;webkit-transform: rotateY(-180deg);-moz-transform: rotateY(-180deg);-o-transform: rotateY(-180deg);-ms-transform: rotateY(-180deg);transform: rotateY(-180deg);"
-                  Dom.setAttribute("style",cssText)
+                  Dom.setAttribute("style",cssText);
+                  Dom.parentNode.setAttribute("data-noput",true);
                 }
                  
               }
             }
+            //----                                             
+            if(that.noPutWip.length && that.groupLists.length){
+              for(let i=0;i<that.groupLists.length;i++){
+                that.noPutWip.forEach((item)=>{
+                  if(document.getElementById('C-'+that.groupLists[i].groupId+'_'+item) && item != evt.item.parentNode.getAttribute("state") && (evt.item.getAttribute("groupid") == that.groupLists[i].groupId)){
+
+                    document.getElementById('C-'+that.groupLists[i].groupId+'_'+item).setAttribute("title","用户故事超过WIP数量，不能在拖入")
+                  }
+                })
+              }
+            }
+            //----
           }
         },
       });
@@ -761,6 +929,9 @@ export default {
     kanbanHeader,
     kanbanContentHeader,
     kanbanItem,
+  },
+  beforeDestroy(){
+
   },
   
 };
@@ -957,8 +1128,8 @@ export default {
   flex: 1 1 1px;/* flex-grow:1; flex-shrink:1; flex-basis:auto; */
   padding-right:2px;
   padding-left:2px;
-  /*transition: all 0.1s;*/
-
+  
+  
   /* flex-basis:auto; */
 
   -webkit-perspective: 500;
@@ -970,12 +1141,132 @@ export default {
     -moz-transform-style: preserve-3d;
     -ms-transform-style: preserve-3d;
 
+
+    
+
+}
+.Column[title][id^="C-"]{
+  /*
+  outline: red solid 1px;
+  pointer-events: none;
+  */
+
+  
+  
+
 }
 
 
+[id^="C-"]{
+  transition: all 0.5s ease-out 0s;
+}
+[id^="TC-"]{
+  transition: all 0.5s ease-out 0s;
+}
+[data-title=hidden]{
+  width: 0 !important;
+  overflow: hidden !important;
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+
+  /*transition: all 0.5s ease-out 0s;*/
+
+  /*display: none;*/
+}
+
+.rowBox[title][id^="kb"]{
+  background:#e4e4e4;
+  overflow: hidden;
+  
+  /*pointer-events: none;*/
+}
+.rowBox[title][id^="kb"]:before{
+   position: absolute;
+  content: "";
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  z-index: 50; 
+  transition: all 0.7s ease-out 0s;
+  opacity: 0;
+  pointer-events: none;
+}
+.rowBox[title][id^="kb"]:after{
+  position: absolute;
+  content: "用户故事超过WIP数量，不能再拖入";
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height:auto;
+  background: rgba(255,0,0,1);
+  transition: all 0.7s ease-out 0s;
+  z-index: 60; 
+  opacity: 0;
+  color: white;
+  box-sizing: border-box;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  line-height: 1.5em;
+  transform:translate(0,-50%);
+  border-top: white solid 1px;
+  border-bottom: white solid 1px;
+  pointer-events: none;
+}
+
+.Column[title][id^="C-"] .rowBox[title][id^="kb"]:before{
+  
+  opacity: 1;
+}
+.Column[title][id^="C-"] .rowBox[title][id^="kb"]:after{
+  
+  opacity: 1;
+}
+
+.Column[title][id^="C-"] .rowBox[title][id^="kb"]{
+  pointer-events: none;
+}
+
+.Column[id$="00"]{
+  
+}
+.Column[id$="00"]:before{
+
+  position: absolute;
+  left: 0;
+  top: 50%;
+  left: 4px;
+  right: 4px;
+  height:auto;
+  background: rgba(0,0,0,0.5);
+  transition: all 0.7s ease-out 0s;
+  z-index: 60; 
+  content: "用户故事已分配工作项，不能被废弃";
+  opacity: 0;
+  color: white;
+  box-sizing: border-box;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  line-height: 1.5em;
+  transform:translate(0,-50%);
+  border-top: white solid 1px;
+  border-bottom: white solid 1px;
+  pointer-events: none;
+
+}
+.Column[data-noput]:before{
+  opacity: 1;
+}
 
 .rowBox{
-  padding-top: 2px;
+  padding-top: 0px;
   border:1px dashed #ddd;
   min-height:64px;
   border-radius:4px;

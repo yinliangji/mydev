@@ -77,7 +77,7 @@
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
                         <div class="tableBox">
                             <!-- wy start -->
-                            <storyTestCase :storyInfo="storyTestCaseData" v-if="TabsCur == 'name4'" />
+                            <storyTestCase :storyInfo="storyTestCaseData" v-if="TabsCur == 'name4' && formValidate.id" />
                             <!-- wy end -->
                         </div>
                     </div>
@@ -129,7 +129,6 @@ import GoAgileMode from "@/components/goAgileMode";
 export default {
     data () {
         return {
-            
             count: ["技术模块1", "技术模块2", "技术模块3"],
             count2: ["业务模块1", "业务模块2", "业务模块3"],
             formValidate: {
@@ -282,6 +281,13 @@ export default {
     },
     created(){
         console.log("用户故事detail--created-------",this.formValidate)
+        /*
+        let detailID = Common.GETdetail_id(this,Common,"inUrl");
+        if(detailID){
+            this.storyTestCaseData.detail_id = detailID;
+        }
+        */
+
         let _TabsCur = this.$router.history.current.query.TabsCur
         if(_TabsCur){
             this.TabsCur = _TabsCur;
@@ -328,6 +334,11 @@ export default {
         //tabs - start
         tabsHandle(name){
             this.TabsCur = name;
+            let Query = {
+                TabsCur:name,
+                detail_id:Common.GETdetail_id(this,Common),
+            }
+            this.$router.push({path: '/product/detail', query:Query})
         },
         //tabs -end
         //业务功能列表-start -- 废弃

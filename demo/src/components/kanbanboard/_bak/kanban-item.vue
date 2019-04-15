@@ -9,12 +9,18 @@
     :groupId="item.groupId"
     :nickname="item.nickName"
     :class="isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)"
-    :data-taskCount="item.task_count"
+    :data-taskcount="item.task_count"
     >
       <div class="DragCursor" :class="(()=>{return isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)+'Show'})()">拖拽</div>
       <div class="card-wrap" @click="itemClick(item)" >
 
-        <p class="item-content" :title="item.taskName">
+        <p v-if="item.source=='dependManage'" class="DMTitle" :title="item.depd_main_type_name+'：'+item.depdName">
+          <span>
+            <em>{{item.depd_main_type_name}}：{{item.depdName}}</em>
+          </span>
+        </p>
+
+        <p class="item-content" :title="'名称：'+item.taskName+'\n描述：'+item.userstory_desc">
           <span class="levelText" :style="{'background':item.bgcolor}" v-show="item.bgcolor.indexOf('ffffff') == -1">
             {{levelText(item.bgcolor)}}
           </span>
@@ -188,6 +194,49 @@ export default {
 </script>
 
 <style scoped>
+.DMTitle {
+  overflow: hidden;
+  padding-top:  2px;
+}
+.DMTitle > span {
+  position:relative;
+  height: 1.5em;
+  max-width: 95%;
+  display: inline-block;
+  color: #999;
+}
+.DMTitle > span em {
+  display: inline-block;
+  max-width: 100%;
+  line-height: 1.5em;
+  color: #999;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  padding-left: 1.1em;
+}
+.DMTitle > span:after{
+  content: "】";
+  position: absolute;
+  right: -1.1em;
+  top: 0;
+  height: 1.5em;
+  line-height: 1.5em;
+  color: #999;
+}
+.DMTitle > span:before{
+  content: "【";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 1.5em;
+  line-height: 1.5em;
+  color: #999;
+}
+
 .DragCursor {
   position: absolute;
   left: 0;
@@ -249,10 +298,10 @@ export default {
   width: 95%;
   height: 90%;
   transform:translate(-50%,-50%); */
-  left: 1px;
-  top: 1px;
+  left: 3px;
+  top: 3px;
   right: 1px;
-  bottom: 1px;
+  bottom: 0px;
 
 
   background: black;
@@ -271,20 +320,24 @@ export default {
 }
 .card-wrapper {
   box-sizing: border-box;
-  overflow: hidden;
-  margin-bottom: 2px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  min-height: 30px;
-  margin-left: 2px;
-  margin-right: 2px;
+  
+  margin-bottom: 0px;
   position: relative;
+  padding-bottom: px;
+  padding-top:2px; 
 }
 .card-wrap{
   cursor: pointer;
 
   box-sizing: border-box;
   position: relative;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-left: 2px;
+  margin-right: 2px;
+  min-height: 30px;
+  overflow: hidden;
+  background: white;
 
   /*
   margin-right: 10px;

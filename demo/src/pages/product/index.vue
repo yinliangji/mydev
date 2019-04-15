@@ -1116,16 +1116,39 @@ export default {
             }
             
         },
-        clicked(info) {
+        clicked(info,type) {
         	if(window.location.hash.indexOf("/product") == -1){
 				return
 			}
             // 点击卡片方法
-            console.log("用户故事-点击卡片方法 ::: ", info);
+            console.log("用户故事-点击卡片方法 ::: ", info,type);
             if(!EventBus.productClicked){
-            	console.log("用户故事-点击卡片方法 ::: this.$router.push", info);
+            	console.log("用户故事-点击卡片方法 ::: this.$router.push", info,type);
 
-            	this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
+            	let Path = '/product/detail';
+            	let Query = {}
+            	if(type == "附件"){
+            		Query.TabsCur = "name6";
+            		Query.detail_id = info.detail_id;
+            	}else if(type == "工作项"){
+            		Path = "/development";
+            		Query.board = "true";
+            		Query.us_name = info.detail_id;
+            	}else if(type == "测试案例"){
+            		Query.TabsCur = "name4";
+            		Query.detail_id = info.detail_id;
+            		/*
+            		window.location.href = window.location.hostname == "128.196.0.127" ? '//128.196.0.127:8000/' : '//128.196.96.210:8000/';
+            		return
+            		*/
+            	}else if(type == "依赖项"){
+            		Path = "/dependManage";
+            		Query.depd_main_type = 2;
+            	}else{
+            		Query.detail_id = info.detail_id;
+            	}
+
+            	this.$router.push({path:Path , query:Query })
             	EventBus.productClicked = true;
             	setTimeout(()=>{
             		EventBus.productClicked = false;

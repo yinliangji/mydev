@@ -13,7 +13,7 @@
     >
       <div class="DragCursor" :class="(()=>{return isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)+'Show'})()">拖拽</div>
       
-      <div class="card-wrap noCursor" v-if="myAside == 'product'" >
+      <div class="card-wrap noCursor" v-if="myAside == 'product'" id="productCardWrap">
 
         <p class="item-content" :title="'名称：'+item.taskName+'\n描述：'+item.userstory_desc"  style="cursor:pointer" @click="itemClick(item)">
           <span class="levelText" :style="{'background':item.bgcolor}" v-show="item.bgcolor.indexOf('ffffff') == -1">
@@ -40,25 +40,38 @@
             <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
             <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
           </span>
+
+          <span class="iconBg" style="font-size:18px;cursor:pointer;"  :title="'所属迭代：'+item.sprintName" @click="itemClick(item,'所属迭代')" v-if="item.sprintName && (item.sprint != 0 || item.sprint != '0')">
+            <Icon type="ios-albums" color="#ff9900"></Icon>
+          </span>
+          <span class="iconBg" style="font-size:18px;"  title="所属迭代"  v-else>
+            <Icon type="ios-albums" color="#bbbec4"></Icon>
+          </span>
         </p>
+
         <p class="item-name">
           <span class="user_name" v-html="chackSymbol(item.nickName)">
           </span>
         </p>
       </div>
-      <div class="card-wrap" v-if="myAside == 'demand'" @click="itemClick(item)" >
-        <p class="item-content" :title="item.taskName">
+
+      <div class="card-wrap noCursor" v-if="myAside == 'demand'"  >
+        <p class="item-content" style="cursor:pointer;" :title="item.taskName" @click="itemClick(item)">
           {{item.taskName}}
         </p>
         <!-- 需求项标识状态 -->
         <p  class="kananstatus floatClear">
-          <span class="iconBg" style="background:#e0592b" :title="item.usDesc ? item.usDesc : '用户故事个数'" >
+          <span class="iconBg" style="background:#e0592b;cursor:pointer;" :title="item.usDesc ? item.usDesc : '用户故事个数'" v-if="item.us_counts != 0 || item.us_counts != '0'" @click="itemClick(item,'用户故事')">
             {{item.us_counts}}
           </span>
-          <span class="iconBg" :class="'isFile'"  v-if="item.isFile=='yes'" title="有附件">
+          <span class="iconBg" style="background:#e0592b" title="用户故事个数" v-else>
+            {{item.us_counts}}
+          </span>
+
+          <span class="iconBg" :class="'isFile'"  v-if="item.isFile=='yes'" title="有附件" @click="itemClick(item,'附件')" style="cursor:pointer;">
             <Icon type="paperclip"></Icon>
           </span>
-          <span class="iconBg" style="font-size:20px" v-if="item.isDepd=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'">
+          <span class="iconBg" style="font-size:20px;cursor:pointer;" v-if="item.isDepd=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'" @click="itemClick(item,'依赖项')">
             <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
             <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
           </span>
@@ -329,11 +342,20 @@ export default {
   line-height: 18px;
   vertical-align: top;
 }
+#productCardWrap .iconBg{
+  margin-right:2px;
+}
+#productCardWrap .iconBg:last-of-type{
+  margin-right: 0;
+}
 .isFile{
   color:#7d2f74;
   font-size:22px;
-  transform:rotate(35deg);
+  
   font-weight:bold
+}
+.isFile i{
+  transform:rotate(35deg);
 }
 .isOpacity{
   position: relative;

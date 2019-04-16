@@ -39,7 +39,7 @@
 		</MenuItem>
 		<MenuItem name="1-12" title="依赖管理">
 			<router-link  to="/dependManage" />
-			<Icon type="social-codepen-outline"></Icon>
+			<Icon type="ios-color-filter-outline"></Icon>
 			<span>依赖管理</span>
 		</MenuItem>
 		<MenuItem name="1-15" title="测试案例与缺陷管理">

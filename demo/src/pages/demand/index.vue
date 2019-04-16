@@ -654,6 +654,9 @@ export default {
                             _Obj.usDesc = myData[i].list[j].usDesc || "";
                             _Obj.depdDesc = myData[i].list[j].depdDesc || "";
 
+                            _Obj.req_id = myData[i].list[j].req_id || "";
+                            _Obj.req_name = myData[i].list[j].req_name || "";
+
                             _arr.push(_Obj);
                             _Obj = {}
                         }
@@ -730,17 +733,38 @@ export default {
 
 
         },
-        clicked(info) {
+        clicked(info,type) {
             if(window.location.hash.indexOf("/demand") == -1){
                 return
             }
             // 点击卡片方法
-            console.log("需求项-点击卡片方法 ::: ", info);
+            console.log("需求项-点击卡片方法 ::: ", info,type);
             //this.$router.push({path: '/product/detail', query: {detail_id: info.detail_id }})
             
             if(!EventBus.demandClicked){
-                console.log("需求项-点击卡片方法 ::: this.$router.push", info);
-                this.$router.push({path: '/demand/detail', query: {reqList_id: info.detail_id,req_id:info.taskId }})
+                console.log("需求项-点击卡片方法 ::: this.$router.push", info,type);
+                let Path = "/demand/detail";
+                let Query = {};
+
+                if(type == "用户故事"){
+                    Common.SetSession("REQ_ID",info.detail_id)
+                    Path = "/product";
+                    Query.board = "true";
+                }else if(type == "附件"){
+                    Query.reqList_id = info.detail_id;
+                    Query.req_id = info.taskId;
+                    Query.TabsCur = "name2";
+                }else if(type == "依赖项"){
+                    Path = "/dependManage";
+                    Query.depd_main_type = 1;
+                }
+                else{
+                    Query.reqList_id = info.detail_id;
+                    Query.req_id = info.taskId;
+                }
+
+                this.$router.push({path: Path, query: Query})
+
                 EventBus.demandClicked = true;
                 setTimeout(()=>{
                     EventBus.demandClicked = false;

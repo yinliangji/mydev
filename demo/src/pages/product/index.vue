@@ -319,7 +319,7 @@ export default {
         },
 	},
 	beforecreated(){
-        console.log("product--beforecreated-------",this.formValidate)
+        console.log("product--beforecreated-------",this.formValidate);
     },
     created(){
         this.isKanbanboard();
@@ -731,6 +731,7 @@ export default {
 			this.getPermissionFn(getPermission,params);
         },
 		searchInit(){
+
 			if(Common.GetSession("isClickedDelBtn")){
 	        	if(Common.GetSession("userstorySerch")){
 	        		let _allSession = JSON.parse(Common.GetSession("userstorySerch"));
@@ -1144,6 +1145,11 @@ export default {
             	}else if(type == "依赖项"){
             		Path = "/dependManage";
             		Query.depd_main_type = 2;
+            	}else if(type == "所属迭代"){
+            		Path = "/iteration";
+            		if(info.sprintName){
+            			Query.sprintName = info.sprintName
+            		}
             	}else{
             		Query.detail_id = info.detail_id;
             	}
@@ -1251,6 +1257,18 @@ export default {
         			}
         			return obj && obj.value ? ((obj.value-0) <10 ? "0"+obj.value : obj.value+"") : 0;
         		}
+        		let sprintFn = (val,arr)=>{
+        			let obj = ""
+        			if(arr && Array.isArray(arr) && arr.length){
+        				obj = arr.find(item=>item.value == val);
+        			}
+        			if(obj && obj.label){
+        				return obj.label;
+        			}else{
+        				return obj;
+        			}
+
+        		}
                 if(myData && myData.length){
                 	let _temp = {};
                 	let reqArr = [];
@@ -1330,6 +1348,8 @@ export default {
 							_Obj.depdDesc = myData[i].list[j].depdDesc  || "";
 							_Obj.userstory_desc = myData[i].list[j].userstory_desc  || "";
 
+							_Obj.sprint = this.formValidate.sprint || "";
+							_Obj.sprintName = sprintFn((this.formValidate.sprint || ""),this.sprintList);
 							_arr.push(_Obj);
 							_Obj = {}
 						}

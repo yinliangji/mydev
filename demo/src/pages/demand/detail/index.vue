@@ -133,6 +133,10 @@ export default {
     },
     created(){
         console.log("项目需求项detail--created-------",this.formValidate);
+        let _TabsCur = this.$router.history.current.query.TabsCur
+        if(_TabsCur){
+            this.TabsCur = _TabsCur;
+        }
         Common.GetProjectList(defaultAXIOS,this,Common,projectListDataNew);
         this.changeDemandSerch();
     },
@@ -209,6 +213,11 @@ export default {
         //tabs - start
         tabsHandle(name){
             this.TabsCur = name;
+            let Query = {
+                TabsCur:name,
+                detail_id:Common.GETdetail_id(this,Common),
+            }
+            this.$router.push({path: '/demand/detail', query:Query})
         },
         //tabs -end
         authIs(KEY){

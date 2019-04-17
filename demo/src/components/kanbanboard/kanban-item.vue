@@ -55,8 +55,10 @@
         </p>
       </div>
 
+
+
       <div class="card-wrap noCursor" v-if="myAside == 'demand'"  >
-        <p class="item-content" style="cursor:pointer;" :title="item.taskName" @click="itemClick(item)">
+        <p class="item-content" style="cursor:pointer;" :title="'名称　　：'+item.taskName+'\n描述　　：'+item.desc+'\n开始时间：'+item.start_time+'\n结束时间：'+item.end_time+'\n提出人　：'+item.intro+'\n提出部门：'+item.submit_department" @click="itemClick(item)">
           {{item.taskName}}
         </p>
         <!-- 需求项标识状态 -->
@@ -84,7 +86,8 @@
       </div>
 
       <div class="card-wrap" v-if="item.source=='task'" @click="itemClick(item)" >
-        <p class="item-content" :title="item.taskName">
+        <!-- :title="item.taskName" -->
+        <p class="item-content" :title="developmentTitle(item.taskName,item.desc,item.actual_hours,item.plan_hours)">
           <span class="levelText" :style="{'background':item.bgcolor}" v-show="item.bgcolor.indexOf('ffffff') == -1">
             {{levelText(item.bgcolor)}}
           </span>
@@ -184,6 +187,20 @@ export default {
     
   },
   methods: {
+    developmentTitle(TN="",D="",AH="",PH=""){
+      let fn = (val)=>{
+        let str = val;
+        if(val.indexOf("<pre>") != -1){
+          str = val.replace("<pre>", "");
+        }
+        if(val.indexOf("</pre>") != -1){
+          str = str.replace("</pre>", "");
+        }
+        return str || "";
+
+      }
+      return "名　　称："+(TN || "")+"\n描　　述："+fn(D)+"\n预计工时："+(AH || 0)+"天\n实际工时："+(PH || 0)+"天";
+    },
     chackSymbol(str){
       if(Common.ChackSymbol(str,"()")){
           let strArr = str.split("(")

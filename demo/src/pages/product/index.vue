@@ -1348,8 +1348,8 @@ export default {
 							_Obj.depdDesc = myData[i].list[j].depdDesc  || "";
 							_Obj.userstory_desc = myData[i].list[j].userstory_desc  || "";
 
-							_Obj.sprint = this.formValidate.sprint || "";
-							_Obj.sprintName = sprintFn((this.formValidate.sprint || ""),this.sprintList);
+							_Obj.sprint = (myData[i].list[j].sprint || this.formValidate.sprint || "")+"";
+							_Obj.sprintName = (myData[i].list[j].sprintName ||  sprintFn((this.formValidate.sprint || ""),this.sprintList) || "")+"";
 							_arr.push(_Obj);
 							_Obj = {}
 						}

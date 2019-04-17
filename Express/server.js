@@ -942,6 +942,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":4,
+                        "sprintName":"sprint_齐慧超(qihuichao)",
 
                         
                     },
@@ -963,6 +965,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":5,
+                        "sprintName":"sprint_黄永华(huangyonghua)",
 
                     },
                     {
@@ -983,6 +987,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":6,
+                        "sprintName":"sprint_赖磊(lailei)",
 
                     },
                     {
@@ -1003,6 +1009,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":7,
+                        "sprintName":"sprint_殷良骥(yinliangji)",
 
                     }
                 ]
@@ -1031,6 +1039,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":4,
+                        "sprintName":"sprint_齐慧超(qihuichao)",
+
 
                     },
                     {
@@ -1051,6 +1062,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":5,
+                        "sprintName":"sprint_黄永华(huangyonghua)",
 
                     },
                     {
@@ -1071,6 +1084,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":6,
+                        "sprintName":"sprint_赖磊(lailei)",
 
                     },
                     {
@@ -1091,6 +1106,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":7,
+                        "sprintName":"sprint_殷良骥(yinliangji)",
 
                     }
                 ]
@@ -1119,6 +1136,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":0,
+                        "sprintName":"为规划迭代",
 
                     },
                     {
@@ -1139,6 +1158,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":4,
+                        "sprintName":"sprint_齐慧超(qihuichao)",
 
                     },
                 ]
@@ -1167,6 +1188,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":6,
+                        "sprintName":"sprint_赖磊(lailei)",
 
                     },
                     {
@@ -1187,6 +1210,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":7,
+                        "sprintName":"sprint_殷良骥(yinliangji)",
 
                     },
                 ]
@@ -1215,6 +1240,9 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":5,
+                        "sprintName":"sprint_黄永华(huangyonghua)",
+
 
                     },
                     {
@@ -1235,6 +1263,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":6,
+                        "sprintName":"sprint_赖磊(lailei)",
 
                     },
                    
@@ -1264,6 +1294,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":4,
+                        "sprintName":"sprint_齐慧超(qihuichao)",
 
                     },
                     {
@@ -1284,6 +1316,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":6,
+                        "sprintName":"sprint_赖磊(lailei)",
 
                     },
                 ]
@@ -1312,6 +1346,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":4,
+                        "sprintName":"sprint_齐慧超(qihuichao)",
 
                     },
                     {
@@ -1332,6 +1368,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":5,
+                        "sprintName":"sprint_黄永华(huangyonghua)",
 
                     },
                 ]
@@ -1361,6 +1399,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":5,
+                        "sprintName":"sprint_黄永华(huangyonghua)",
 
                     },
                     {
@@ -1381,6 +1421,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "depdName|1":["依赖性测试",""],
                         "depd_main_type_name|1":["用户故事",""],
                         "userstory_desc":"@title",
+                        "sprint":5,
+                        "sprintName":"sprint_黄永华(huangyonghua)",
 
                     },
                 ]
@@ -1440,6 +1482,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_2",
@@ -1453,6 +1501,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     
                     {
@@ -1467,6 +1521,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     }
                 ]
             },
@@ -1486,6 +1546,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_5",
@@ -1499,6 +1565,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_6",
@@ -1512,6 +1584,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_7",
@@ -1525,6 +1603,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_8",
@@ -1538,6 +1622,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     }
                 ]
             },
@@ -1557,6 +1647,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_10",
@@ -1570,6 +1666,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                    
                 ]
@@ -1590,6 +1692,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_12",
@@ -1603,6 +1711,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                    
                 ]
@@ -1623,6 +1737,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_14",
@@ -1636,6 +1756,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                    
                 ]
@@ -1656,6 +1782,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_16",
@@ -1669,6 +1801,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                    
                 ]
@@ -1689,6 +1827,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_18",
@@ -1702,6 +1846,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                    
                 ]
@@ -1722,6 +1872,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_20",
@@ -1735,6 +1891,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                     {
                         req_name:"req_name_21",
@@ -1748,6 +1910,12 @@ let kanbanReqList = (val1 = 200, val2 = 1, val3 = 3) => {
                         "usDesc":"用户故事个数->@title",
                         "depdDesc":"依赖项状态->@title",
                         "isFile|1":["no","yes"],
+
+                        "desc":"@title",
+                        "start_time":"@date(yyyy-MM-dd)",
+                        "end_time":"@date(yyyy-MM-dd)",
+                        "intro":"@cname",
+                        "submit_department":"@name",
                     },
                    
                 ]
@@ -4209,6 +4377,10 @@ let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
                     taskStatus: 1,
                     bgcolor:"#FE4514",
                     headPortrait:"xxx/xx.jpg",
+
+                    "desc":"<pre>*desc*</pre>",
+                    "actual_hours|1":["1.2",1.2],
+                    "plan_hours|1":["4.5",4.5],
                 },
                 {
                     isDepend:"no",
@@ -4226,6 +4398,10 @@ let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
                     taskStatus: 2,
                     bgcolor:"#FEB159",
                     headPortrait:"xxx/xx.jpg",
+
+                    "desc":"<pre>*desc*</pre>",
+                    "actual_hours|1":["1.2",1.2],
+                    "plan_hours|1":["4.5",4.5],
                 },
                 {
                     isDepend:"no",
@@ -4243,6 +4419,10 @@ let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
                     taskStatus: 4,
                     bgcolor:"#FE4514",
                     headPortrait:"xxx/xx.jpg",
+
+                    "desc":"<pre>*desc*</pre>",
+                    "actual_hours|1":["1.2",1.2],
+                    "plan_hours|1":["4.5",4.5],
                 },
                 {
                     isDepend:"no",
@@ -4260,6 +4440,10 @@ let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
                     taskStatus: 3,
                     bgcolor:"#FEB159",
                     headPortrait:"xxx/xx.jpg",
+
+                    "desc":"<pre>*desc*</pre>",
+                    "actual_hours|1":["1.2",1.2],
+                    "plan_hours|1":["4.5",4.5],
                 },
                 {
                     isDepend:"no",
@@ -4277,6 +4461,10 @@ let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
                     taskStatus: 2,
                     bgcolor:"#FEB159",
                     headPortrait:"xxx/xx.jpg",
+
+                    "desc":"<pre>*desc*</pre>",
+                    "actual_hours|1":["1.2",1.2],
+                    "plan_hours|1":["4.5",4.5],
                 },
             ],
 

@@ -101,6 +101,14 @@
                         </div>
                     </div>
                 </TabPane>
+                <TabPane label="评论" name="name7">
+                    <div class="baseInfoBox" >
+                        <!-- <h3 class="Title"><span>评论</span></h3> -->
+                        <div class="tableBox">
+                            <Comment :index="1" v-if="TabsCur == 'name7'" />
+                        </div>
+                    </div>
+                </TabPane>
             </Tabs>
             
         </Card>
@@ -126,6 +134,9 @@ import AppDesign from '@/pages/appdesign'
 //juzi end
 
 import GoAgileMode from "@/components/goAgileMode";
+import Comment from "@/components/comment/Comment";
+
+
 export default {
     data () {
         return {
@@ -422,7 +433,7 @@ export default {
         },
     },
     components: {
-        
+        Comment,
         storyTestCase,
         AppDesign,
         FileDownLoad,

@@ -657,6 +657,15 @@ export default {
                             _Obj.req_id = myData[i].list[j].req_id || "";
                             _Obj.req_name = myData[i].list[j].req_name || "";
 
+
+                            _Obj.desc = myData[i].list[j].desc || "";
+                            _Obj.start_time = myData[i].list[j].start_time || "";
+                            _Obj.end_time = myData[i].list[j].end_time || "";
+                            _Obj.intro = myData[i].list[j].intro || "";
+                            _Obj.submit_department = myData[i].list[j].submit_department || "";
+                            
+                            
+
                             _arr.push(_Obj);
                             _Obj = {}
                         }

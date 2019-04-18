@@ -47,7 +47,7 @@
                                             </Select>
                                         </FormItem>
                                     </Col>
-                                    <Col span="2" style="text-align: center"><!-- 项目经理 --></Col>
+                                    <Col span="2" style="text-align: center">项目经理</Col>
                                     <Col span="6">
                                         <!-- <FormItem >
                                             <Select clearable v-model="formValidate.icdp_projManager" placeholder="请选择项目经理">

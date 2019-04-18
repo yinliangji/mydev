@@ -322,15 +322,26 @@ export default class Common extends Utils {
 
     //给输入框本身加已选择的数组temp --不通用
     static inputArr(_this,val){
-      //
+      if(!val){
+        return;
+      }
       let ArrFn = (obj,arr)=>{
+        
         let _OBJ = {}
-        for(let k=0;k<arr.length;k++){
-            if(arr[k] == obj.value){
+        if(Array.isArray(arr)){
+          for(let k=0;k<arr.length;k++){
+              if(arr[k] == obj.value){
+                 _OBJ.label = obj.label;
+                 _OBJ.value = obj.value;
+              }
+          }
+        }else{
+          if(arr == obj.value){
                _OBJ.label = obj.label;
                _OBJ.value = obj.value;
             }
         }
+        
         if(_OBJ.label && _OBJ.value){
             return _OBJ;    
         }else{

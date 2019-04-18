@@ -38,6 +38,15 @@
                                             <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择结束日期" v-model="formValidate.end_time"></DatePicker>
                                         </FormItem>
                                     </Col>
+                                    <Col span="2" style="text-align: center">项目类型</Col>
+                                    <Col span="6">
+                                        <FormItem >
+                                            <Select clearable v-model="formValidate.prj_type" placeholder="请选择项目类型">
+                                                
+                                                <Option v-for="(item,index) in prj_typeList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                            </Select>
+                                        </FormItem>
+                                    </Col>
                                     <Col span="2" style="text-align: center"><!-- 项目经理 --></Col>
                                     <Col span="6">
                                         <!-- <FormItem >
@@ -48,15 +57,15 @@
                                         </FormItem> -->
                                     </Col>
                                     
-                                    <Col span="2" style="text-align: center"><!-- 开发人员 --></Col>
+                                    <!-- <Col span="2" style="text-align: center">开发人员</Col>
                                     <Col span="6">
-                                        <!-- <FormItem >
+                                        <FormItem >
                                             <Select clearable v-model="formValidate.icdp_devTeam" placeholder="请选择开发人员">
                                                
                                                 <Option v-for="(item,index) in icdp_devTeamList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
-                                        </FormItem> -->
-                                    </Col>
+                                        </FormItem>
+                                    </Col> -->
                                 </Row>
                                 <!-- <Row class="SerchBox" v-if="isShowMoreShow">
                                     <Col span="3" style="text-align: center">教练</Col>
@@ -456,12 +465,22 @@ export default {
                 icdp_agileCoach:"",//ICDP敏捷教练
                 icdp_devTeam:"",//ICDP开发组
                 icdp_testTeam:"",//ICDP测试组
+                prj_type:"",//项目类型
             },
             icdp_projManagerList:[],
             icdp_agileCoachList:[],
             icdp_devTeamList:[],
             icdp_testTeamList:[],
-
+            prj_typeList:[
+                {
+                    value:1,
+                    label:"立项",
+                },
+                {
+                    value:2,
+                    label:"自研",
+                }
+            ],
             prj_permission:[],
             identity:"",
 
@@ -533,7 +552,8 @@ export default {
                 this.formValidate.icdp_projManager,
                 this.formValidate.icdp_agileCoach,
                 this.formValidate.icdp_devTeam,
-                this.formValidate.icdp_testTeam
+                this.formValidate.icdp_testTeam,
+                this.formValidate.prj_type,
             ]
             this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine,...searchParams);
             this.tableDAtaPageCurrent = 1;
@@ -583,7 +603,7 @@ export default {
             Common.ErrorShow(ERR,this);
         },
 
-        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = ""){
+        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = "",prj_type = ""){
             let starttimeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
             let endtimeFromet = end_time ? end_time.Format("yyyy-MM-dd") : "";
             let defaultAXIOSParams = {
@@ -596,7 +616,8 @@ export default {
                 icdp_agileCoach,
                 icdp_devTeam,
                 icdp_testTeam,
-                username:Common.getStorageAndCookie(this,Common,"username")
+                username:Common.getStorageAndCookie(this,Common,"username"),
+                prj_type,
             }
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;

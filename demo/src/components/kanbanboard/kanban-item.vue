@@ -33,7 +33,10 @@
           <span class="iconBg" :class="'isFile'" v-if="item.isFile=='yes'" title="有附件" style="cursor:pointer" @click="itemClick(item,'附件')">
             <Icon type="paperclip"></Icon>
           </span>
-          <span class="iconBg" style="background:#00a6b6;cursor:pointer" title="测试案例个数"  @click="itemClick(item,'测试案例')">
+          <span class="iconBg" style="background:#00a6b6;cursor:pointer" title="测试案例个数"  @click="itemClick(item,'测试案例')" v-if="item.testCase != 0 || item.testCase != '0'">
+            {{item.testCase}}
+          </span>
+          <span class="iconBg" style="background:#00a6b6;" title="测试案例个数" v-else>
             {{item.testCase}}
           </span>
           <span class="iconBg" style="font-size:20px;cursor:pointer;" v-if="item.isDepd=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'" @click="itemClick(item,'依赖项')">
@@ -44,7 +47,7 @@
           <span class="iconBg" style="font-size:18px;cursor:pointer;"  :title="'所属迭代：'+item.sprintName" @click="itemClick(item,'所属迭代')" v-if="item.sprintName && (item.sprint != 0 || item.sprint != '0')">
             <Icon type="ios-albums" color="#ff9900"></Icon>
           </span>
-          <span class="iconBg" style="font-size:18px;"  title="所属迭代"  v-else>
+          <span class="iconBg" style="font-size:18px;"  title="所属迭代：未规划"  v-else>
             <Icon type="ios-albums" color="#bbbec4"></Icon>
           </span>
         </p>
@@ -199,7 +202,7 @@ export default {
         return str || "";
 
       }
-      return "名　　称："+(TN || "")+"\n描　　述："+fn(D)+"\n预计工时："+(AH || 0)+"天\n实际工时："+(PH || 0)+"天";
+      return "名　　称："+(TN || "")+"\n描　　述："+fn(D)+"\n实际工时："+(AH || 0)+"天\n预计工时："+(PH || 0)+"天";
     },
     chackSymbol(str){
       if(Common.ChackSymbol(str,"()")){

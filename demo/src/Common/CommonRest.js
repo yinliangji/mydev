@@ -90,13 +90,13 @@ CommonRest.restUrl = {
     /**** 敏捷项目添加ITM get ****/
 
     "projectOutputExecl": process.env.BASE_URL + "/designer/application_erro/",
-    /**** 敏捷项目导出word get ****/
+    /**** 敏捷项目导出Execl get ****/
 
     "projectOutputWord": process.env.BASE_URL + "/designer/project_id/",
     /**** 敏捷项目导出word get ****/
 
-    "projectAddCustomizedGroup": process.env.BASE_URL + "/agile/getUsersxxxxxxxxxxxx/",
-    /**** 敏捷项目添加 get****/
+    "projectCondition": process.env.BASE_URL + "/project/condition/",
+    /**** 敏捷项目获取部门、项目类型 get****/
 
 
     /*****************************************/

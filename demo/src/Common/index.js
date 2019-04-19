@@ -506,6 +506,39 @@ export default class Common extends Utils {
       })
     }
 
+    //给输入框加函数节流2--不通用
+    static changeArrSingle(_this, curVal, _Common, _projectAddGroup,FUN,ID) {
+      _this.$nextTick(() => {
+        for (var i = 0; i < curVal.length; i++) {
+          let _DOM = document.getElementById(ID).getElementsByClassName("ivu-select-input")[0];
+          _DOM.addEventListener("keyup", function(event) {
+            let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel", ""));
+            let exec = _Common.throttle(
+              (value, THIS) => {
+                let _URL;
+                let _param = {};
+
+                if(curVal[_num].groupName){
+                  _URL = curVal[_num].groupName;
+                  _param = {name: value,}
+                }else {
+                  _URL = _projectAddGroup;
+                  _param = {userName: value,}
+                }
+                _this.inputLoad = true;
+                FUN ? FUN(_URL,_param, _num,THIS) : _this.projectGroupFn2(_URL,_param, _num,THIS);
+              },
+              this,
+              1500,
+              this.value,
+              2000
+            );
+            exec();
+          })
+        }
+      })
+    }
+
 
     //添加角色2--不通用
     static  addPartPopBox2(name,that){

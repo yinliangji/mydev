@@ -4758,6 +4758,44 @@ app.all('/maven/queryJarDetailByGav/', function(req, res) {
 
 
 
+let projectCondition = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message projectCondition",
+        "type_list":[
+            {
+                type_num:1,
+                type_name:"立项",
+            },
+            {
+                type_num:2,
+                type_name:"自研",
+            }
+        ],
+        "org_list|5":["@title"],
+
+        "data": [{
+            "__value2__page": val2,
+            "__value3__pageline": val3,
+        }],
+        "count|20-30":0,
+        "total|20-30":0,
+        "pagetotal|20-30":0,
+    })
+}
+
+
+app.all('/project/condition/', function(req, res) {
+    let resVal = projectCondition(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(projectCondition(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+
+
 
 
 /*************qhc */

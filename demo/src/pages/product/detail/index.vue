@@ -97,18 +97,18 @@
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
                         <div class="tableBox">
                             <!-- 用户故事附件制作中....... -->
-                            <FileDownLoad :USID="formValidate.userstory_id" v-if="TabsCur == 'name6'" />
+                            <FileDownLoad :USID="formValidate.userstory_id" v-if="formValidate.userstory_id && TabsCur == 'name6'" />
                         </div>
                     </div>
                 </TabPane>
-                <TabPane label="评论" name="name7">
+                <!-- <TabPane label="评论" name="name7">
                     <div class="baseInfoBox" >
-                        <!-- <h3 class="Title"><span>评论</span></h3> -->
+                        <h3 class="Title"><span>评论</span></h3>
                         <div class="tableBox">
                             <Comment :index="1" v-if="TabsCur == 'name7'" />
                         </div>
                     </div>
-                </TabPane>
+                </TabPane> -->
             </Tabs>
             
         </Card>

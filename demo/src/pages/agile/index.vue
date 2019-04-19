@@ -21,23 +21,9 @@
                                             <Input clearable v-model="formValidate.prj_id" placeholder="输入项目编号"></Input>
                                         </FormItem>
                                     </Col>
-                                    <Col span="2" style="text-align: center">开始时间</Col>
-                                    <Col span="6">
-                                        <FormItem >
-                                            <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期" v-model="formValidate.start_time"></DatePicker>
-                                        </FormItem>
-                                    </Col>
-                                </Row>
+                                    
 
-                              
 
-                                <Row class="SerchBox" v-if="isShowMoreShow">
-                                    <Col span="2" style="text-align: center">结束时间</Col>
-                                    <Col span="6">
-                                        <FormItem >
-                                            <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择结束日期" v-model="formValidate.end_time"></DatePicker>
-                                        </FormItem>
-                                    </Col>
                                     <Col span="2" style="text-align: center">项目类型</Col>
                                     <Col span="6">
                                         <FormItem >
@@ -47,8 +33,25 @@
                                             </Select>
                                         </FormItem>
                                     </Col>
+
+                                </Row>
+
+                              
+
+                                <Row class="SerchBox" v-show="isShowMoreShow">
                                     <Col span="2" style="text-align: center">项目经理</Col>
                                     <Col span="6">
+                                        <FormItem
+                                            id="prjManager"
+                                            :ref="ITMitem.AddGroupList[0]+'0'" 
+                                            :class="ITMitem.AddGroupList[0]+'0'"
+                                            >
+                                            <Select v-model="ITMitem.AddGroupList[0].group" :id="'sel'+'0'" clearable filterable :loading="inputLoad"   :placeholder="'请输入内容并选择【'+ITMitem.AddGroupList[0].myLabel+'】'">
+                                                <Option v-for="(item,index2) in ITMitem.AddGroupList[0].groupList" :value="item.value" :key="index2">
+                                                    {{ item.label }}
+                                                </Option>
+                                            </Select>
+                                        </FormItem>
                                         <!-- <FormItem >
                                             <Select clearable v-model="formValidate.icdp_projManager" placeholder="请选择项目经理">
                                                 
@@ -56,8 +59,36 @@
                                             </Select>
                                         </FormItem> -->
                                     </Col>
+                                    <Col span="2" style="text-align: center">开始时间</Col>
+                                    <Col span="6">
+                                        <FormItem >
+                                            <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期" v-model="formValidate.start_time" />
+                                        </FormItem>
+                                    </Col>
+                                    <Col span="2" style="text-align: center">结束时间</Col>
+                                    <Col span="6">
+                                        <FormItem >
+                                            <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择结束日期" v-model="formValidate.end_time" />
+                                        </FormItem>
+                                    </Col>
                                     
-                                    <!-- <Col span="2" style="text-align: center">开发人员</Col>
+                                    
+                                    
+                                    
+                                </Row>
+                                <!--
+                                <Row class="SerchBox" v-show="isShowMoreShow">
+                                    <Col span="2" style="text-align: center">实施部门</Col>
+                                    <Col span="6">
+                                        <FormItem >
+                                            <Select clearable filterable v-model="formValidate.department" placeholder="请选择部门">
+                                               
+                                                <Option v-for="(item,index) in departmentList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                            </Select>
+                                        </FormItem>
+                                    </Col>
+                                     
+                                    <Col span="2" style="text-align: center">开发人员</Col>
                                     <Col span="6">
                                         <FormItem >
                                             <Select clearable v-model="formValidate.icdp_devTeam" placeholder="请选择开发人员">
@@ -65,9 +96,8 @@
                                                 <Option v-for="(item,index) in icdp_devTeamList" :value="item.value" :key="index">{{ item.label }}</Option>
                                             </Select>
                                         </FormItem>
-                                    </Col> -->
-                                </Row>
-                                <!-- <Row class="SerchBox" v-if="isShowMoreShow">
+                                    </Col>
+                                    
                                     <Col span="3" style="text-align: center">教练</Col>
                                     <Col span="5">
                                        
@@ -79,7 +109,7 @@
                                         </FormItem>
                                     </Col>
 
-                                    <Col span="3" style="text-align: center">测试人员</Col>
+                                    <Col span="3" style="text-align: center"> 测试人员 </Col>
                                     <Col span="5">
                                         <FormItem >
                                             <Select clearable v-model="formValidate.icdp_testTeam" placeholder="请选择测试人员">
@@ -93,7 +123,8 @@
                                     <Col span="5">
                                         &nbsp;
                                     </Col>
-                                </Row>  -->
+                                </Row> 
+                                -->
 
                             </Col>
                             <Col span="4" style="text-align: left" class="serchBtnBox">
@@ -205,7 +236,7 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission,projectAddGroup} = Common.restUrl;
+const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission,projectAddGroup,projectCondition} = Common.restUrl;
 
 export default {
     name: 'aglie',
@@ -236,6 +267,7 @@ export default {
             Store.dispatch('EVENT_EMIT/incrementAsync', {isEmit: true,})
         }
         this.tableDAtaPageCurrent = 1;
+        this.getProjectCondition(projectCondition,{});
 
         
         
@@ -256,16 +288,13 @@ export default {
         "ITMitem.AddGroupList"(curVal,oldVal){
             let _this = this;
             if(curVal){
-                Common.changeArr2(this,curVal,Common,projectAddGroup,this.projectGroupFn2)//修改添加角色
+                Common.changeArrSingle(this,curVal,Common,projectAddGroup,this.projectGroupFn,"prjManager")//下拉样子
             }
         },
         ITMitem: {
             handler(val, oldVal) {
                 if(val){
-                    if(val.AddGroupList[0].grouptemp.length == 1){
-                        //console.log(val.AddGroupList[0].grouptemp[0])
-                    }
-                    Common.inputArr2(this,val)//修改添加角色
+                    Common.inputArr(this,val)//下拉样子
                 }
             },
             deep: true
@@ -289,6 +318,7 @@ export default {
         console.log("agile--created-------",this.tableData,this.ITMitem);
         Common.delStorageAndCookie(Common,"detail_id");
         Common.DelectLocalStorage(Common);
+        this.addCheckSerch();
     },
     beforeUpdate(){
         console.log("agile--beforeUpdate-------",this.tableData,this.ITMitem)
@@ -466,27 +496,25 @@ export default {
                 icdp_devTeam:"",//ICDP开发组
                 icdp_testTeam:"",//ICDP测试组
                 prj_type:"",//项目类型
+                department:""//部门
             },
             icdp_projManagerList:[],
             icdp_agileCoachList:[],
             icdp_devTeamList:[],
             icdp_testTeamList:[],
             prj_typeList:[
-                {
-                    value:1,
-                    label:"立项",
-                },
-                {
-                    value:2,
-                    label:"自研",
-                }
+                
             ],
+            departmentList:[],
             prj_permission:[],
             identity:"",
 
             isShowItm:false,
-            
 
+            ITMitem: {
+                AddGroupList:[],
+            },
+            inputLoad:false,
         }
     },
     methods: {
@@ -497,6 +525,78 @@ export default {
             })
         },
         /* ====== */
+
+        getProjectCondition(URL,params = {}){
+            defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【getProjectCondition】***response+++",response,myData,"====>");
+                if(myData.status == "success"){
+                    if(Array.isArray(myData.type_list) && myData.type_list.length){
+                        let obj = {};
+                        this.prj_typeList = [];
+                        myData.type_list.forEach((item)=>{
+                            obj.value = item.type_num;
+                            obj.label = item.type_name;
+                            this.prj_typeList.push(obj);
+                            obj = {}
+                        })
+                    }
+                    if(Array.isArray(myData.org_list) && myData.org_list.length){
+                        let obj = {};
+                        this.departmentList = [];
+                        myData.org_list.forEach((item,index)=>{
+                            obj.value = item;
+                            obj.label = item;
+                            this.departmentList.push(obj);
+                            obj = {}
+                        })
+                    }
+                }else{
+                    console.log(URL+"_"+myData.status);
+                    this.showError(URL+"_"+myData.status);
+                }
+                
+               
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });   
+        },
+
+
+        addCheckSerch(URL,params = {},Arr=[]){
+            let _tempObj = {
+                myRef: "selfRef",
+                group: "",
+                groupList: [],
+                myLabel: "项目经理",
+                myValue: "xmjl",
+                delBtn: false,
+                groupName: "",
+                required: true,
+                modaAdd:false,//修改添加角色
+                grouptemp:[],//修改添加角色
+                groupListtemp: [],//修改添加角色
+                myReftemp: "selfRefRole",//修改添加角色
+            }
+            this.ITMitem.AddGroupList.push(_tempObj);  
+        },
+        projectGroupFn(URL,params = {},ARR,thatEle){
+            defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【checkSearch Allgroup】***response+++",response,myData,"====>");
+                this.inputLoad = false;
+                this.ITMitem.AddGroupList[0].groupList = [];
+                this.ITMitem.AddGroupList[0].groupList = myData.data.list;
+               
+            }).catch( (error) => {
+                console.log(error);
+                this.inputLoad = false;
+                this.showError(error);
+            });   
+        },
+
+
         isEdit(val){
             if(val){
                 if(val === "null" || val === "undefined" || val === "false" || val === "NaN" || val === "NaN-aN-aN" || val === "0"){
@@ -539,12 +639,15 @@ export default {
             for(let i in this.formValidate){
                 this.formValidate[i] = "";
             }
+            this.ITMitem.AddGroupList[0].group = "";
+            this.ITMitem.AddGroupList[0].groupList = [];
+            
+
             this.$refs.formValidate.resetFields();
             this.serchAll();
         },
-
-        serchAll(){
-            let searchParams = [
+        searchKdy(){
+            return [
                 this.formValidate.prj_name,
                 this.formValidate.prj_id,
                 this.formValidate.start_time,
@@ -554,7 +657,13 @@ export default {
                 this.formValidate.icdp_devTeam,
                 this.formValidate.icdp_testTeam,
                 this.formValidate.prj_type,
+                (this.ITMitem.AddGroupList[0].group || ""),
+                this.formValidate.department,
             ]
+        },
+
+        serchAll(){
+            let searchParams = this.searchKdy();
             this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine,...searchParams);
             this.tableDAtaPageCurrent = 1;
         },
@@ -583,16 +692,7 @@ export default {
             });
         },
         changeCurrentPage(i) {
-            let searchParams = [
-                this.formValidate.prj_name,
-                this.formValidate.prj_id,
-                this.formValidate.start_time,
-                this.formValidate.end_time,
-                this.formValidate.icdp_projManager,
-                this.formValidate.icdp_agileCoach,
-                this.formValidate.icdp_devTeam,
-                this.formValidate.icdp_testTeam
-            ]
+            let searchParams = this.searchKdy();
             this.tableDataAjaxFn(projectAll,i,this.tableDAtaPageLine,...searchParams);
             this.tableDAtaPageCurrent = i;
         },
@@ -603,7 +703,7 @@ export default {
             Common.ErrorShow(ERR,this);
         },
 
-        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = "",prj_type = ""){
+        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = "",prj_type = "",prjManager = "",department = ""){
             let starttimeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
             let endtimeFromet = end_time ? end_time.Format("yyyy-MM-dd") : "";
             let defaultAXIOSParams = {
@@ -618,6 +718,8 @@ export default {
                 icdp_testTeam,
                 username:Common.getStorageAndCookie(this,Common,"username"),
                 prj_type,
+                prjManager,
+                department,
             }
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;

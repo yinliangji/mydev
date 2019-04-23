@@ -38,11 +38,12 @@
                     shape="circle"
                     long
                     size="small"
+                    v-show="(TabsCur != 'name3') ? true : false"
                     >
                     编辑
                 </Button>
             </div>
-        	<Tabs value="name1" type="card" >
+        	<Tabs :value="TabsCur" type="card" :capture-focus="false" @on-click="tabsHandle" >
 
 		        <TabPane label="项目基本信息" name="name1">
 		        	<div class="baseInfoBox">
@@ -364,6 +365,9 @@ export default {
             //跳转组件
             GO:false,
             GOText:"",
+            //-- tabs start
+            TabsCur:"name1",
+            //-- tabs end
         }
     },
     inject:["reload"],
@@ -395,7 +399,17 @@ export default {
                             result = response[0];
                         }
                         this.tableDataAjaxFn(projectDetail,result).then((res)=>{
-                            this.$router.push({path: '/agile/detail', query: {id:result,prj_id:res}});
+                            let queryObj = {id:result,prj_id:res};
+                            let _menuType = this.$router.history.current.query.menuType;
+                            let _curOpenName = this.$router.history.current.query.curOpenName;
+                            if(_menuType){
+                                queryObj.menuType = _menuType;
+                            }
+                            if(_curOpenName){
+                                queryObj.curOpenName = _curOpenName;
+                            }
+
+                            this.$router.push({path: '/agile/detail', query: queryObj});
                             this.reload();
                             //this.isSelectMenuInit = false;
                         },()=>{
@@ -487,6 +501,16 @@ export default {
     },
     
     methods: {
+    	//tabs - start
+        tabsHandle(name){
+            this.TabsCur = name;
+            console.error(this.$route.query)
+            let Query = JSON.stringify(this.$route.query);
+            Query = JSON.parse(Query);
+            Query.TabsCur = name;
+            this.$router.push({path: '/agile/detail', query:Query})
+        },
+        //tabs -end
         getMainListFn(URL = "",page = 1,pageline = 10){
             let username = Common.getCookie("username");
             if(!username){return Promise.reject("没有username")}
@@ -745,8 +769,19 @@ export default {
                     
                     Common.setStorageAndCookie(Common,"prj_id",myData.data.prj_id);
                     Common.setStorageAndCookie(Common,"prjSn",myData.data.prj_id);
+
+                    let queryObj = {id: ID,prjId:ID,prj_id:myData.data.prj_id,prjSn:myData.data.prj_id};
+
+                    let _menuType = this.$router.history.current.query.menuType;
+                    let _curOpenName = this.$router.history.current.query.curOpenName;
+                    if(_menuType){
+                        queryObj.menuType = _menuType;
+                    }
+                    if(_curOpenName){
+                        queryObj.curOpenName = _curOpenName;
+                    }
                     
-                    this.$router.push({path: '/agile/detail', query: {id: ID,prjId:ID,prj_id:myData.data.prj_id,prjSn:myData.data.prj_id}});
+                    this.$router.push({path: '/agile/detail', query:queryObj });
 
                     this.actionUrl = fileUpload+"?taskId="+this.formValidate.prj_id+"&type=1&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
 

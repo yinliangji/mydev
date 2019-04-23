@@ -874,7 +874,7 @@ export default {
             Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id);
             
 
-            this.$router.push({path: '/agile/detail', query: {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id}})
+            this.$router.push({path: '/agile/detail', query: {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id,menuType:"new"}})
         },
         goDemandFn (index) {
 
@@ -885,7 +885,7 @@ export default {
             Common.setStorageAndCookie(Common,"prj_id",this.tableData[I].prj_id)
             Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id)
             
-            this.$router.push({path: '/development', query: {board: true,id: this.tableData[I].id}})
+            this.$router.push({path: '/development', query: {board: true,id: this.tableData[I].id,menuType:"new"}})
         },
         goOverViewFn (I){
             this.$router.push('/overView')
@@ -909,7 +909,7 @@ export default {
 
 
 
-            this.$router.push({path: '/product', query: {board: true,id: this.tableData[I].id,prj_id: this.tableData[I].prj_id,prod_id: this.tableData[I].prod_id}})
+            this.$router.push({path: '/product', query: {board: true,id: this.tableData[I].id,prj_id: this.tableData[I].prj_id,prod_id: this.tableData[I].prod_id,menuType:"new"}})
         },
         show (index) {
             this.$Modal.info({

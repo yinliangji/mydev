@@ -313,6 +313,11 @@ CommonRest.restUrl = {
     /**** Maven制品搜索获取仓库repid get****/
     "queryJarDetailByGav": process.env.BASE_URL + "/maven/queryJarDetailByGav/",
     /**** Maven制品搜索获取详情 post****/
+
+    /*****************************************/
+
+    "getLMenu":rep_mp_e(process.env.BASE_URL + "/menu/getLeftMenu/"),
+    /**** 获取左侧菜单列表 post****/
 }
 
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);
@@ -336,4 +341,13 @@ function addZUUL(val){
        return val 
     }
 }
+
+function rep_mp_e(val){
+    if(val.indexOf("128.196.0.127") != -1){
+        return "//128.196.0.127:8000"+"/mp_e/menu/getLeftMenu/"
+    }else{
+        return "//128.196.96.210:8000"+"/mp_e/menu/getLeftMenu/"
+    }
+}
+
 

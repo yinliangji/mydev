@@ -7,8 +7,8 @@
           <td width="20%">{{ formValidate.userstory_name | FALSEINFO}}</td>
           <th width="11%">所属项目</th>
           <td  width="20%"><router-link to="/agile/detail">{{ formValidate.prj_name | FALSEINFO}}</router-link></td>
-          <th width="11%">所属产品</th>
-          <td >{{ formValidate.product_name | FALSEINFO}}</td>
+          <th width="11%"><!-- 所属产品 -->创建时间</th>
+          <td ><!-- {{ formValidate.product_name | FALSEINFO}} -->{{ formValidate.created_time | FALSEINFO}}</td>
         </tr>
         <tr>
           <th >责任人</th>
@@ -33,8 +33,8 @@
           <td>{{ formValidate.userstory_id | FALSEINFO}}</td>
           <th>关联工作项<br />(已完成/全部)</th>
           <td>{{ formValidate.complete_mission | FALSEINFO}} / {{ formValidate.mission | FALSEINFO}}</td>
-          <th width="11%">创建时间</th>
-          <td>{{ formValidate.created_time | FALSEINFO}}</td>
+          <th width="11%"><!-- 创建时间 --></th>
+          <td><!-- {{ formValidate.created_time | FALSEINFO}} --></td>
         </tr>
         <tr>
           <th>依赖项</th>

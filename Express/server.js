@@ -551,7 +551,7 @@ let queryPrj_fromUser = (val1 = "success", val2 = 1, val3 = 3) => {
                 id: 1,
                 prod:1,
                 prj_id:"PJ100001",
-                prj_type:1,
+                prj_type:((d)=>{return d>0.5 ? 1:2 })(Math.random()),
                 create_person:"xiebei.zh",
                 status:0,
                 prj_name: "敏捷项目管理系统"
@@ -560,7 +560,7 @@ let queryPrj_fromUser = (val1 = "success", val2 = 1, val3 = 3) => {
                 id: 2,
                 prod:2,
                 prj_id:"PJ100002",
-                prj_type:1,
+                prj_type:((d)=>{return d>0.5 ? 1:2 })(Math.random()),
                 create_person:"xiebei.zh",
                 status:0,
                 prj_name: "党群系统"
@@ -569,7 +569,7 @@ let queryPrj_fromUser = (val1 = "success", val2 = 1, val3 = 3) => {
                 id: 3,
                 prod:3,
                 prj_id:"PJ100003",
-                prj_type:1,
+                prj_type:((d)=>{return d>0.5 ? 1:2 })(Math.random()),
                 create_person:"xiebei.zh",
                 status:0,
                 prj_name: "高校行政平台"
@@ -578,7 +578,7 @@ let queryPrj_fromUser = (val1 = "success", val2 = 1, val3 = 3) => {
                 id: 4,
                 prod:4,
                 prj_id:"PJ100004",
-                prj_type:1,
+                prj_type:((d)=>{return d>0.5 ? 1:2 })(Math.random()),
                 create_person:"xiebei.zh",
                 status:0,
                 prj_name: "一体化研发平台"
@@ -590,7 +590,7 @@ let queryPrj_fromUser = (val1 = "success", val2 = 1, val3 = 3) => {
             id:i,
             prod:i,
             prj_id:"PJ10000"+i,
-            prj_type:1,
+            prj_type:((d)=>{return d>0.5 ? 1:2 })(Math.random()),
             create_person:"xiebei.zh",
             status:0,
             prj_name: "敏捷项目_"+i
@@ -3321,6 +3321,7 @@ let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
             remark:"@title",
 
             "intro":"@name",
+            "hope_time":"@date(yyyy-MM-dd)",
             "req_source|1":['server','oa','mail','tel','metting'],
 
 

@@ -40,18 +40,23 @@
     		            <FormItem label="需求项名称" prop="req_name">
     		                <Input v-model="formItem.req_name" placeholder="请输入需求项名称"></Input>
     		            </FormItem>
-                        <Row>
+                        <Row v-show="false">
                             <Col span="12">
-                                <FormItem label="开始时间" prop="start_time">
+                                <FormItem label="开始时间" >
+                                    <!-- prop="start_time" -->
                                     <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"  :value="formItem.start_time" v-model="formItem.start_time" ></DatePicker>
                                 </FormItem>
                             </Col>
                             <Col span="12">
-                                 <FormItem label="结束时间" prop="end_time">
+                                 <FormItem label="结束时间" >
+                                    <!-- prop="end_time" -->
                                     <DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择结束日期" v-model="formItem.end_time" ></DatePicker>
                                 </FormItem>
                             </Col>
                         </Row>
+                        <FormItem label="期望上线时间" >
+                            <DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择期望上线时间" v-model="formItem.hope_time" />
+                        </FormItem>
     		            <FormItem label="提出部门" prop="req_submitter">
     		                <Input v-model="formItem.req_submitter" placeholder="请输入提出部门"></Input>
     		            </FormItem>
@@ -64,9 +69,10 @@
                             </Col>
                             <Col span="12">
                                  <FormItem label="需求来源" >
-                                    <Select  clearable v-model="formItem.req_source" placeholder="请选择需求来源">
+                                    <Input v-model="formItem.req_source" placeholder="请输入需求来源"></Input>
+                                    <!-- <Select  clearable v-model="formItem.req_source" placeholder="请选择需求来源">
                                         <Option v-for="(item,index) in req_sourceList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                    </Select>
+                                    </Select> -->
                                 </FormItem>
                             </Col>
                         </Row>
@@ -175,6 +181,7 @@ export default {
                 remark:"",
                 intro:"",
                 req_source:"",
+                hope_time:"",
             },
 
             ruleValidate: {
@@ -322,7 +329,10 @@ export default {
                 this.formItem.remark = data[0].remark+"";
 
                 this.formItem.intro = (data[0].intro || "")+"";
-                this.formItem.req_source = (data[0].req_source || "")+"";   
+                this.formItem.req_source = (data[0].req_source || "")+"";
+
+
+                this.formItem.hope_time = data[0].hope_time;
 
             }
         },
@@ -344,6 +354,7 @@ export default {
             this.formItem.myId = "";
             this.formItem.comment = "";
             this.formItem.intro = "";
+            this.formItem.hope_time = "";
             this.formItem.req_source = "";
             this.dependList = [];
             this.depd_sn = "";
@@ -372,6 +383,7 @@ export default {
                 username:Common.getStorageAndCookie(this,Common,"username"),
 
                 intro:this.formItem.intro,
+                hope_time:this.formItem.hope_time,
                 req_source:this.formItem.req_source,
             }
             

@@ -562,7 +562,7 @@ export default {
                                         this.deleteTableLine(params.index)
                                     }
                                 }
-                            }, '删除'),
+                            }, '废弃'),
                             h('Button', {
                                 props: {
                                     type: 'warning',

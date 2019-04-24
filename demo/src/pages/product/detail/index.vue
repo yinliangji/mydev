@@ -49,29 +49,28 @@
                         </div>
                     </div>
                 </TabPane>
+                <!--
                 <TabPane label="需求项分析" name="name2">
                     <div class="baseInfoBox">
-                        <!-- <h3 class="Title"><span>需求项信息</span></h3> -->
+                        <h3 class="Title"><span>需求项信息</span></h3>
                         <div class="tableBox">
-                            <!-- -->
                             <AnalyseInfo :Data="formValidate" />
-                            <!-- -->
                         </div>
                         <br />
                         <h3 class="Title"><span>关联业务功能</span></h3>
                         <Analyse :TASKID="TASKID" :Data="formValidate" v-if="TabsCur == 'name2'" />
                     </div>
                 </TabPane>
+            
                 <TabPane label="应用设计" name="name3">
                     <div class="baseInfoBox">
-                        <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
+                        <h3 class="Title"><span>计划故事相关</span></h3>
                         <div class="tableBox">
-                            <!-- juzi start -->
                             <AppDesign :userStoryId="userStoryId" v-if="TabsCur == 'name3'" />
-                            <!-- juzi end -->
                         </div>
                     </div>
                 </TabPane>
+                -->
                 <TabPane label="测试管理" name="name4">
                     <div class="baseInfoBox">
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->

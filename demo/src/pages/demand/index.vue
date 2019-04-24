@@ -69,6 +69,7 @@
                                     @click="outinITM"
                                     size="small"
                                     style="float: right"
+                                    ref="itmSync"
                                     >
                                     从ITM同步需求项
                                 </Button>
@@ -94,8 +95,10 @@
                                     type="error" 
                                     @click="deleteTableItem"
                                     :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
-                                    :style="'visibility:'+(currentView == 'developList' ? 'visible' : 'hidden')"
+                                    :style="isDel(currentView == 'developList' ? 'visible' : 'hidden')"
+                                    ref="delBtn"
                                     >
+                                    <!-- :style="'visibility:'+(currentView == 'developList' ? 'visible' : 'hidden')" -->
                                     <!-- v-show="currentView == 'developList'" -->
                                     删除
                                 </Button>
@@ -387,8 +390,11 @@ export default {
             cardListBase:[],
             statusListBase:[],
             kanbanboardIsShow:true,
+
+
             //看板end
             clickTime:true,
+            prj_type:"",
 
 
 
@@ -437,8 +443,18 @@ export default {
         console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
+        isDel(val,type){
+            if(this.prj_type != 2){
+                return 'visibility:hidden;';
+            }
+            let IS = this.currentView == 'developList' ? 'visible' : 'hidden'
+            return 'visibility:'+ IS +';';
+        },
         getSendData(data){
             console.log(data,"<==========getSendData");
+
+            this.prj_type = data.prj_type || data.prj_type == 0 ? data.prj_type : "";
+
             let params = {
                 prjSn:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
                 prj_id:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
@@ -446,6 +462,15 @@ export default {
                 id:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
             }
             this.getPermissionFn(getPermission,params);
+
+            if(data.prj_type == 2){
+                this.$refs.itmSync.$el.setAttribute("style", "float: right; visibility: hidden;");
+                this.isDel('visible',"自研");
+            }else{
+                this.$refs.itmSync.$el.setAttribute("style", "float: right;");
+                this.isDel('hidden',"立项")
+            }
+
         },
         helpToLeft(){
             this.ToolTipL = Common.HelpLeft("kanbanShowBtn2");

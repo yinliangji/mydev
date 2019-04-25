@@ -67,7 +67,7 @@
                         </FormItem>
 
 
-                        <FormItem label="填写模块" >
+                        <FormItem label="填写模块" v-show="false">
                             <span style="position: relative;">
                                 <Tag v-for="item in formValidate.createModule" :key="item" :name="item" closable @on-close="handleClose">
                                     {{ item}}
@@ -88,8 +88,8 @@
                     </div>
 
                     
-                    <h3 class="Title"><span>关联子系统</span></h3>
-                    <div class="fromBox fromBox2">
+                    <h3 class="Title" v-show="false"><span>关联子系统</span></h3>
+                    <div class="fromBox fromBox2" v-show="false">
                         <div class="newAddGroup">
                             <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index<2">
                                 <Col span="20">
@@ -158,10 +158,10 @@
                         </div>
                     </div>
 
-					<h3 class="Title"><span>编辑成员信息</span></h3>
+					<h3 class="Title" v-show="false"><span>编辑成员信息</span></h3>
 
 					
-                    <div class="fromBox fromBox2">
+                    <div class="fromBox fromBox2" v-show="false">
                         
 
 

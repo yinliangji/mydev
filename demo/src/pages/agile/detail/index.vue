@@ -39,6 +39,7 @@
                     long
                     size="small"
                     v-show="(TabsCur != 'name3') ? true : false"
+                    :style="isShowEdit?'visibility: visible;':'visibility: hidden;'"
                     >
                     编辑
                 </Button>
@@ -49,50 +50,7 @@
 		        	<div class="baseInfoBox">
 		            	<!-- <h3 class="Title"><span>项目基本信息</span></h3> -->
 		            	<div class="tableBox">
-		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
-							  <tbody>
-								<tr>
-								  <th width="11%">项目编号</th>
-								  <td width="22%">{{ formValidate.prj_id | FALSEINFO}}</td>
-								  <th width="11%">项目名称</th>
-								  <td width="22%">{{formValidate.prj_name | FALSEINFO}}</td>
-								  <th width="11%">所属产品</th>
-								  <td>{{formValidate.prod_name | FALSEINFO}}</td>
-								</tr>
-								<tr>
-								  <th>项目创建时间</th>
-								  <td>{{formValidate.settle_time | FALSEINFO}}</td>
-								  <th>开始时间</th>
-								  <td>{{formValidate.start_time | FALSEINFO}}</td>
-								  <th>结束时间</th>
-								  <td>{{formValidate.end_time | FALSEINFO}}</td>
-								</tr>
-
-                                <tr>
-                                  <th>创建人</th>
-                                  <td>{{formValidate.create_person | FALSEINFO}}</td>
-                                  <th>逻辑子系统</th>
-                                  <td>{{formValidate.logic_sys_name | FALSEINFO}}</td>
-                                  <th>物理子系统</th>
-                                  <td>{{formValidate.physics_sys_name | FALSEINFO}}</td>
-                                </tr>
-
-								
-								<tr>
-                                  <th>所属模块</th>
-                                  <td colspan="5">{{formValidate.modules | FALSEINFO}}</td>
-                                </tr>
-
-								<tr>
-								  <th>项目描述</th>
-								  <td colspan="5" v-html="formValidate.prj_desc?'<pre>'+formValidate.prj_desc+'</pre>':''"></td>
-								</tr>
-								<tr>
-								  <th>项目目标</th>
-								  <td colspan="5" v-html="formValidate.prj_goal?'<pre>'+formValidate.prj_goal+'</pre>':''"></td>
-								</tr>
-							  </tbody>
-							</table>
+		            		<InfoTable :Data="formValidate" />
 		            	</div>
 		            </div>
 		        </TabPane>
@@ -100,37 +58,7 @@
 		        	<div class="baseInfoBox">
 		            	<!-- <h3 class="Title"><span>成员信息</span></h3> -->
 		            	<div class="tableBox">
-		            		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
-								<tbody v-html="HTML">
-									<!-- <tr v-for="(item,index) in formValidate.person" :key="index">
-										<th width="11%">{{item.title}}</th>
-										<td>
-											<span v-for="(item2,index2) in item.member" :key="index2">
-												{{item2.nick_name}}
-											</span>
-										</td>
-									</tr> --> 
-									
-									<!-- <tr>
-										<th width="11%">项目经理</th>
-										<td>{{formValidate.managerGroup | FALSEINFO}}</td>
-										<th width="11%">开发人员</th>
-										<td>{{formValidate.developerGroup | FALSEINFO}}</td>
-										<th width="11%">测试人员</th>
-										<td>{{formValidate.testerGroup | FALSEINFO}}</td>
-
-									</tr>
-									<tr>
-										<th>总体组</th>
-										<td>{{formValidate.allgroup | FALSEINFO}}</td>
-										<th>&nbsp;</th>
-										<td>&nbsp;</td>
-										<th>&nbsp;</th>
-										<td>&nbsp;</td>
-									</tr> -->
-								</tbody>
-
-							</table>
+		            		<Member :Data="HTML" />
 		            	</div>
 		            </div>
 		        </TabPane>
@@ -238,7 +166,8 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 const {projectDetail,listModule,getPermission,fileDownList,downFile,fileUpload,fileDelete,projectOutputWord,projectOutputExecl,proByUser} = Common.restUrl;
-
+import InfoTable from './info'
+import Member from './member'
 
 import GoAgileMode from "@/components/goAgileMode";
 
@@ -368,17 +297,24 @@ export default {
             //-- tabs start
             TabsCur:"name1",
             //-- tabs end
+            isShowEdit:false,
         }
     },
     inject:["reload"],
     components: {
         GoAgileMode,
+        InfoTable,
+        Member,
     },
     beforecreated(){
         console.log("项目详情页--beforecreated-------");
     },
     created(){
         console.log("项目详情页--created-------");
+        let _TabsCur = this.$router.history.current.query.TabsCur
+        if(_TabsCur){
+            this.TabsCur = _TabsCur;
+        }
         if(this.$router.history.current.query.from && this.$router.history.current.query.from == "nav"){
             Common.DelectLocalStorage(Common);
             let userName = Common.getStorageAndCookie(this,Common,"username");
@@ -415,8 +351,8 @@ export default {
                         },()=>{
 
                         })
-                    },()=>{
-                        this.GOText = "获取主键ID数组失败！";
+                    },(error)=>{
+                        this.GOText = "获取项目失败！";
                         this.GO = true;
                         //this.$router.push({path: '/agile'});
                     })
@@ -479,7 +415,7 @@ export default {
             this.getPermissionFn(getPermission,params)
             */
     	}else{
-            this.GOText = "获取主键ID失败！";
+            this.GOText = "获取项目失败！";
             this.GO = true;
             //this.$router.push({path: '/agile'})
             
@@ -764,7 +700,14 @@ export default {
                         
                     }
                 }
+                if(myData.data && myData.data.prj_type){
+                    if(myData.data.prj_type == "2"){
+                        this.isShowEdit = true;
+                    }else{
+                        this.isShowEdit = false;
+                    }
 
+                }
                 if(myData.data && myData.data.id){
                     
                     Common.setStorageAndCookie(Common,"prj_id",myData.data.prj_id);

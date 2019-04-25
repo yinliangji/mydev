@@ -120,7 +120,7 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
         obj.settle_time = "2019-0"+i+"-01";
         obj.start_time = "2019-0"+i+"-12";
         obj.end_time = "2019-0"+i+"-23";
-        obj.prj_type = ((N)=>{return N >0.5?0:1 })(Math.random());
+        obj.prj_type = ((N)=>{return N >0.5?1:2 })(Math.random());
         obj.logic_sys_id = fn(Math.random(),_logic_sys_id);
         obj.phycics_sys_id = fn(Math.random(),_phycics_sys_id);
         obj.modules = fn(Math.random(),_modules);
@@ -189,7 +189,7 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             "manager|6-10": /[a-zA-Z0-9]/,
             "prj_desc": "@title",
             "prj_goal": "项目目标",
-            "prj_type": "2",
+            "prj_type|1": ["1","2","2"],
             "settle_time": "@date(yyyy-MM-dd)",
             "start_time": "@date(yyyy-MM-dd)",
             "end_time": "@date(yyyy-MM-dd)",

@@ -343,7 +343,7 @@ function addZUUL(val){
 }
 
 function rep_mp_e(val){
-    if(val.indexOf("128.196.0.127") != -1){
+    if(window.location.href.indexOf("128.196.0.127") != -1){
         return "//128.196.0.127:8000"+"/mp_e/menu/getLeftMenu/"
     }else{
         return "//128.196.96.210:8000"+"/mp_e/menu/getLeftMenu/"

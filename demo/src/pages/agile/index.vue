@@ -150,7 +150,7 @@
                             :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
                             @click="addItemFn" 
                             >
-                            添加
+                            添加自研项目
                         </Button>
                         <Button 
                             type="warning" 
@@ -245,10 +245,15 @@ export default {
 
         let auth_list = ()=>{
             this.getPermissionFn(getPermission).then((result)=>{
-                this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+                this.getProjectCondition(projectCondition,{}).then((res)=>{
+                    this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+                },(err)=>{
+                    this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+                });
                 setTimeout(()=>{
                     EVENT.emit("SIDER1",result);
                 },500)
+
             },()=>{
                 this.showError("权限不足，不能有任何动作");
             })
@@ -267,7 +272,8 @@ export default {
             Store.dispatch('EVENT_EMIT/incrementAsync', {isEmit: true,})
         }
         this.tableDAtaPageCurrent = 1;
-        this.getProjectCondition(projectCondition,{});
+
+        
 
         
         
@@ -373,22 +379,25 @@ export default {
 
 
                 },
-                /*
+                
                 {
-                    title: '项目描述',
-                    key: 'prj_desc',
+                    title: '项目类型',
+                    width: 90,
+                    key: 'prj_type',
+                    align: 'center',
                     render: (h, params) => {
                         return h(
                             'p',
                             {
-                                domProps:{title:"prj_desc"},
+                                //domProps:{title:"prj_desc"},
                             },
-                            params.row.prj_name
+                            this.translate(this.prj_typeList,params.row.prj_type)
+                            
                         );
                     }
                     //
                 },
-                */
+                
                 {
                     title: '项目经理',
                     key: 'manager',
@@ -425,7 +434,7 @@ export default {
                 {
                     title: '操作',
                     key: 'action',
-                    width: 210,
+                    width: 230,
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
@@ -437,6 +446,7 @@ export default {
                                 style: {
                                     marginRight: '2px',
                                     marginLeft: '2px',
+                                    visibility:this.transform(this.prj_typeList,params.row.prj_type),
                                 },
                                 domProps:{disabled:!this.isEdit(params.row.isEdit)},
                                 on: {
@@ -456,10 +466,11 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.goProductFn(params.index)
+                                        //this.goProductFn(params.index)
+                                        this.goAgileDetailFn(params.index,params,"成员")
                                     }
                                 }
-                            }, '用户故事'),
+                            }, '成员'),
                             h('Button', {
                                 props: {
                                     type: 'info',
@@ -471,10 +482,28 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.goDevelopmentFn(params.index)
+                                        //this.goDevelopmentFn(params.index)
+                                        this.goAgileDetailFn(params.index,params,"附件")
                                     }
                                 }
-                            }, '工作项'),
+                            }, '附件'),
+                            h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '2px',
+                                    marginLeft: '2px',
+                                    visibility:this.transform(this.prj_typeList,params.row.prj_type),
+                                },
+                                domProps:{},
+                                on: {
+                                    click: () => {
+                                        alert(111)
+                                    }
+                                }
+                            }, '转立项'),
                             
                         ]);
                     }
@@ -525,9 +554,56 @@ export default {
             })
         },
         /* ====== */
+        transform(arr,val){
+            //visible //hidden
+            let name;
+            if(arr && Array.isArray(arr) && arr.length){
+                let nameObj = arr.find(item => item.value == (val+""));
+                if(!nameObj){
+                    if(val == 1){
+                        name = "hidden";
+                    }else if(val == 2){
+                        name = "visible";
+                    }else {
+                        name = "inherit";
+                    }
+                }else{
+                    if(nameObj.value == 1){
+                        name = "hidden";
+                    }else if(nameObj.value == 2){
+                        name = "visible";
+                    }else{
+                        name = "inherit";
+                    }
+                }
+            }else{
+                name = val;    
+            }
+            return name
+        },
+        translate(arr,val){
+            let name;
+            if(arr && Array.isArray(arr) && arr.length){
+                let nameObj = arr.find(item => item.value == (val+""));
+                if(!nameObj){
+                    if(val == 1){
+                        name = "立项";
+                    }else if(val == 2){
+                        name = "自研";
+                    }else {
+                        name = "未知";
+                    }
+                }else{
+                    name = nameObj.label;
+                }
+            }else{
+                name = val;    
+            }
+            return name   
+        },
 
         getProjectCondition(URL,params = {}){
-            defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
+            return defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======【getProjectCondition】***response+++",response,myData,"====>");
                 if(myData.status == "success"){
@@ -551,14 +627,17 @@ export default {
                             obj = {}
                         })
                     }
+                    return Promise.resolve(myData)
                 }else{
                     console.log(URL+"_"+myData.status);
+                    return Promise.resolve(URL+"_"+myData.status)
                     this.showError(URL+"_"+myData.status);
                 }
                 
-               
+                
             }).catch( (error) => {
                 console.log(error);
+                return Promise.resolve(error)
                 this.showError(error);
             });   
         },
@@ -863,7 +942,7 @@ export default {
         handleSelectAll (status) {
             this.$refs.selection.selectAll(status);
         },
-        goAgileDetailFn (I,P) {
+        goAgileDetailFn (I,P,R) {
 
             Common.setStorageAndCookie(Common,"id",this.tableData[I].id);
             Common.setStorageAndCookie(Common,"prjId",this.tableData[I].id);
@@ -872,10 +951,21 @@ export default {
             Common.setStorageAndCookie(Common,"prjSn",this.tableData[I].prj_id);
             
             Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id);
+
+            let Query = {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id,menuType:"new"}
+
+            if(R == "成员"){
+                Query.TabsCur = "name2"
+            }
+            if(R == "附件"){
+                Query.TabsCur = "name3"
+            }
             
 
-            this.$router.push({path: '/agile/detail', query: {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id,menuType:"new"}})
+            this.$router.push({path: '/agile/detail', query:Query })
         },
+
+
         goDemandFn (index) {
 
             this.$router.push('/demand')

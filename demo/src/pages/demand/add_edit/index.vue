@@ -13,8 +13,9 @@
     		            
 
     		            <FormItem label="需求项类型" prop="prj_type">
-    		                <RadioGroup v-model="formItem.prj_type">
-    		                    <Radio label="1">
+                            自研
+    		                <RadioGroup v-model="formItem.prj_type" v-show="false">
+    		                    <Radio label="1" v-show="false">
     		                        立项&nbsp;
     		                        <ToolTip placement="top-start" :T="1" content="在ITM中立项的项目对应的需求项" />
     		                    </Radio>
@@ -77,7 +78,7 @@
                             </Col>
                         </Row>
 
-    		            <FormItem label="添加依赖项" >
+    		            <FormItem label="添加依赖项" v-show="false">
                             <span style="position: relative;">
                                 <Tag 
                                     v-for="(item,index) in dependList"

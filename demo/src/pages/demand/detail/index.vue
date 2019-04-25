@@ -42,6 +42,14 @@
                         </div>
                     </div>
                 </TabPane>
+                <TabPane label="依赖项" name="name3">
+                    <div class="baseInfoBox" >
+                        <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
+                        <div class="tableBox">
+                            <Depend :Data="false" v-if="TabsCur == 'name3'" />
+                        </div>
+                    </div>
+                </TabPane>
             </Tabs>
             
         </Card>
@@ -56,6 +64,8 @@ import Store from '@/vuex/store'
 const {getPermission,DetailReq,projectListDataNew} = Common.restUrl;
 import FileDownLoad from './filedown'
 import InfoTable from './info'
+import Depend from './depend'
+
 
 import GoAgileMode from "@/components/goAgileMode";
 export default {
@@ -236,6 +246,7 @@ export default {
         FileDownLoad,
         InfoTable,
         GoAgileMode,
+        Depend,
     },
     watch:{
     },

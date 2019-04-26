@@ -18,6 +18,13 @@
 		        		<!-- 用户故事设置结束 -->
 		        	</div>
 		        </TabPane>
+		        <TabPane label="通知设置" name="name3">
+		        	<div class="baseInfoBox">
+		        		<!-- 用户故事设置开始 -->
+				       <NoticeSet :Data="myData" v-if="TabsCur == 'name3'" ref="NoticeSet" />
+		        		<!-- 用户故事设置结束 -->
+		        	</div>
+		        </TabPane>
 			</Tabs>
 		</Card>
 	</div>
@@ -29,10 +36,14 @@ import Common from '@/Common';
 const {getPermission} = Common.restUrl;
 import UserstorySet from './userstorySet'
 import Group from './group'
+import NoticeSet from './noticeSet'
+
+
 export default {
 	components:{
 		UserstorySet,
 		Group,
+		NoticeSet,
 	},
 	data () {
 		return {
@@ -111,6 +122,9 @@ export default {
 				this.myData = false;
 				this.showError(getPermission+"获得权限失败");
 			});
+			if(this.$refs.NoticeSet){
+				this.$refs.NoticeSet.getStatusData(data.prjSn || data.prj_id);
+			}
         },
         selectMenuFn(N){
             console.log(N,"<==========selectMenuFn");

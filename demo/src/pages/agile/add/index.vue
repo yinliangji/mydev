@@ -1003,19 +1003,19 @@ export default {
                 end_time:_end_time,
                 prj_desc: this.formValidate.prj_desc,
                 prj_goal: this.formValidate.prj_goal,
-                modules:_modules,
-                createModule:_createModule,
+                username:_username,
+                
+                /*
                 prod_id:this.formValidate.prod_id,
                 pid:this.formValidate.prod_id,
+                modules:_modules,
+                createModule:_createModule,
                 AddGroupList:JSON.stringify(this.formValidate.AddGroupList),
                 proj_role:_proj_role,
                 pid:this.formValidate.pid,
                 logicSystem:_logicSystem,//子系统
             	phySystem:_phySystem,//子系统
-                username:_username,
-
-
-
+                */
                
                 // allgroup: this.formValidate.allgroup.join(_join),
                 // managerGroup: this.formValidate.managerGroup.join(_join),

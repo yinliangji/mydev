@@ -46,7 +46,7 @@
                     <div class="baseInfoBox" >
                         <!-- <h3 class="Title"><span>计划故事相关</span></h3> -->
                         <div class="tableBox">
-                            <Depend :Data="false" v-if="TabsCur == 'name3'" />
+                            <Depend :Data="formValidate" v-if="TabsCur == 'name3' && formValidate.req_id" />
                         </div>
                     </div>
                 </TabPane>

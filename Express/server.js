@@ -4775,6 +4775,19 @@ let projectCondition = (val1 = 200, val2 = 1, val3 = 3) => {
         ],
         "org_list|5":["@title"],
 
+        "dept_nm_list|5":[
+            {
+                "num|+1":1,
+                "name|+1":1,
+            },
+        ],
+        "stff_nm_list|6":[
+            {
+                "num|+1":1,
+                "name|+1":1,
+            },
+        ],
+
         "data": [{
             "__value2__page": val2,
             "__value3__pageline": val3,

@@ -102,16 +102,16 @@
 							</Col>
 							<Col span="4" style="text-align: left" class="serchBtnBox">
 								<Button type="primary" icon="ios-search" :disabled="!searchCan" class="serchBtn" @click="serchAll">
-									<Spin fix v-if="!searchCan" style="background:none;">
+									<!-- <Spin fix v-if="!searchCan" style="background:none;">
 						                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-						            </Spin>
+						            </Spin> -->
 									查询
     				        		
 								</Button>
 								<Button class="cancelSerchBtn" :disabled="!searchCan" @click="cancelSerchAll">
-									<Spin fix v-if="!searchCan" style="background:none;">
+									<!-- <Spin fix v-if="!searchCan" style="background:none;">
 						                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-						            </Spin>
+						            </Spin> -->
 									重置
 								</Button>
 							</Col>
@@ -176,17 +176,17 @@
 							</div>
 							<div class="tagBarLeft">
 								<span style="position:relative;">
-									<Spin fix v-if="!searchCan" style="background:none;">
+									<!-- <Spin fix v-if="!searchCan" style="background:none;">
 						                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-						            </Spin>
+						            </Spin> -->
 									<img :src="currentView == 'developList' ? developListImgCur : developListImg" @click="showList" class="cursor" title="用户故事列表" :style="!searchCan ?'pointer-events: none;opacity:0.5;':''" >
 								</span>
 							</div>
 							<div class="tagBarLeft">
 								<span style="position:relative;">
-									<Spin fix v-if="!searchCan" style="background:none;">
+									<!-- <Spin fix v-if="!searchCan" style="background:none;">
 						                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-						            </Spin> 
+						            </Spin>  -->
 									<img :src="currentView == 'kanbanboard' ? kanbanboardImgCur : kanbanboardImg" @click="showTask" class="cursor" title="用户故事看板" id="kanbanShowBtn" :style="!searchCan ?'pointer-events: none;opacity:0.5;':''" >
 								</span>
 							</div>
@@ -279,6 +279,7 @@
             :isShow = "delpopIsShow"
             :isLoading = "delpopIsLoading"
         />
+
 	</div>
 </template>
 <script>
@@ -291,8 +292,15 @@ const {defaultAXIOS} = API;
 import Common from '@/Common';
 import Delpop from '@/components/delectAlert'
 const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList,userstoryOutExcel,userstoryOutWord} = Common.restUrl;
+
+import Store from '@/vuex/store'
+
 export default {
 	watch: {
+		searchCan(data){
+			console.error("searchCan",data)
+			this.mainDataLoad(!data)
+		},
 		'$route' (to, from) {
 			if(Common.GetSession("CurView")){
 				this.currentView = Common.GetSession("CurView");
@@ -323,8 +331,8 @@ export default {
     },
     created(){
         this.isKanbanboard();
-        if(this.addtest){
-            this.tabRowAddFn()
+        if(!this.searchCan){
+            this.mainDataLoad()
         }
         this.searchInit();
 
@@ -338,9 +346,8 @@ export default {
     },
     updated(){
         console.log("用户故事列表--updated-------",this.formValidate,this.statusListBase)
-        if(this.addtest){
-            this.tabRowAddFn()
-        }
+        
+        
     },
 	data() {
 		let that = this;
@@ -654,6 +661,7 @@ export default {
             //删除弹出--end
             
             clickTime:true,
+            itemName:"",
             
 		}
 	},
@@ -721,7 +729,8 @@ export default {
 	},
 	methods:{
 		getSendData(data){
-            console.log(data,"<==========getSendData");
+            console.log(data,"<==========getSendData",data.prj_name);
+            this.itemName = data.prj_name;
             let params = {
                 prjSn:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
                 prj_id:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
@@ -1619,12 +1628,18 @@ export default {
             Common.ErrorShow(ERR,this);
         },
 
-		tabRowAddFn(){
-            this.tableData.push(this.addtest);
-            Store.dispatch('ADD_DATA_TEST/incrementAsync', {
-                msg: false
-            })
-            console.log('this.$store.state["ADD_DATA_TEST"].data',this.$store.getters["ADD_DATA_TEST/getFn"])
+		mainDataLoad(IsShow = true,Msg = "正在加载中……"){
+			console.error("mainDataLoad")
+
+			Store.dispatch('IS_PAGELOADING/incrementAsync', {
+		        isShow: IsShow,
+		        msg: Msg,
+		    })
+         
+            // Store.dispatch('ADD_DATA_TEST/incrementAsync', {
+            //     msg: true
+            // })
+            //console.log('this.$store.state["ADD_DATA_TEST"].data',this.$store.getters["ADD_DATA_TEST/getFn"])
         },
         //---------
 		tableDataAddFn(Data){

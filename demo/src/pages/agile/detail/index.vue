@@ -58,7 +58,7 @@
 		        	<div class="baseInfoBox">
 		            	<!-- <h3 class="Title"><span>成员信息</span></h3> -->
 		            	<div class="tableBox">
-		            		<Member :Data="HTML" />
+		            		<Member :Data="formValidate" :Html="HTML" />
 		            	</div>
 		            </div>
 		        </TabPane>

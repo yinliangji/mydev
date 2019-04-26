@@ -59,6 +59,32 @@
                                             </Select>
                                         </FormItem> -->
                                     </Col>
+                                    <Col span="2" style="text-align: center">实施部门</Col>
+                                    <Col span="6">
+                                        <FormItem >
+                                            <Select clearable filterable v-model="formValidate.stff_nm_id" placeholder="请选择部门">
+                                                <Option v-for="(item,index) in stff_nm_idList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                            </Select>
+                                        </FormItem>
+                                    </Col>
+                                     
+                                    <Col span="2" style="text-align: center">提出部门</Col>
+                                    <Col span="6">
+                                        <FormItem >
+                                            <Select clearable filterable v-model="formValidate.dept_nm_id" placeholder="请选择部门">
+                                                <Option v-for="(item,index) in dept_nm_idList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                            </Select>
+                                        </FormItem>
+                                    </Col>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                </Row>
+                                <!--
+                                <Row class="SerchBox" v-show="isShowMoreShow">
+                                    
                                     <Col span="2" style="text-align: center">开始时间</Col>
                                     <Col span="6">
                                         <FormItem >
@@ -69,32 +95,6 @@
                                     <Col span="6">
                                         <FormItem >
                                             <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择结束日期" v-model="formValidate.end_time" />
-                                        </FormItem>
-                                    </Col>
-                                    
-                                    
-                                    
-                                    
-                                </Row>
-                                <!--
-                                <Row class="SerchBox" v-show="isShowMoreShow">
-                                    <Col span="2" style="text-align: center">实施部门</Col>
-                                    <Col span="6">
-                                        <FormItem >
-                                            <Select clearable filterable v-model="formValidate.department" placeholder="请选择部门">
-                                               
-                                                <Option v-for="(item,index) in departmentList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                            </Select>
-                                        </FormItem>
-                                    </Col>
-                                     
-                                    <Col span="2" style="text-align: center">开发人员</Col>
-                                    <Col span="6">
-                                        <FormItem >
-                                            <Select clearable v-model="formValidate.icdp_devTeam" placeholder="请选择开发人员">
-                                               
-                                                <Option v-for="(item,index) in icdp_devTeamList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                            </Select>
                                         </FormItem>
                                     </Col>
                                     
@@ -223,6 +223,10 @@
          
         
         <ItmPop :isShow="isShowItm" @itmClose="itmCloseFn" />
+
+
+        <ToItmPop :isShow="isShowToItem" @itmClose="toItemCloseFn" />
+
         <!-- <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" /> -->
 
     </div>
@@ -232,6 +236,7 @@ import AddItemPop from "./additempop";
 import ItmPop from "./itmpop";
 import Store from '@/vuex/store'
 
+import ToItmPop from "./toitmpop";
 
 import API from '@/api'
 const {defaultAXIOS} = API;
@@ -311,6 +316,7 @@ export default {
     components: {
         AddItemPop,
         ItmPop,
+        ToItmPop,
     },
     computed: {
         loginSave() {
@@ -500,7 +506,7 @@ export default {
                                 domProps:{},
                                 on: {
                                     click: () => {
-                                        alert(111)
+                                        this.toITM(params.row)
                                     }
                                 }
                             }, '转立项'),
@@ -525,20 +531,25 @@ export default {
                 icdp_devTeam:"",//ICDP开发组
                 icdp_testTeam:"",//ICDP测试组
                 prj_type:"",//项目类型
-                department:""//部门
+                department:"",//部门
+                dept_nm_id:"",//提出部门
+                stff_nm_id:"",//实施部门
             },
             icdp_projManagerList:[],
             icdp_agileCoachList:[],
             icdp_devTeamList:[],
             icdp_testTeamList:[],
-            prj_typeList:[
-                
-            ],
+            prj_typeList:[],
             departmentList:[],
+            dept_nm_idList:[],
+            stff_nm_idList:[],
+
+
             prj_permission:[],
             identity:"",
 
             isShowItm:false,
+            isShowToItem:false,
 
             ITMitem: {
                 AddGroupList:[],
@@ -627,6 +638,35 @@ export default {
                             obj = {}
                         })
                     }
+
+
+
+
+                    if(Array.isArray(myData.dept_nm_list) && myData.dept_nm_list.length){
+                        let obj = {};
+                        this.dept_nm_idList = [];
+                        myData.dept_nm_list.forEach((item)=>{
+                            obj.value = item.num+"";
+                            obj.label = item.name+"";
+                            this.dept_nm_idList.push(obj);
+                            obj = {}
+                        })
+                    }
+
+
+                    if(Array.isArray(myData.stff_nm_list) && myData.stff_nm_list.length){
+                        let obj = {};
+                        this.stff_nm_idList = [];
+                        myData.stff_nm_list.forEach((item)=>{
+                            obj.value = item.num+"";
+                            obj.label = item.name+"";
+                            this.stff_nm_idList.push(obj);
+                            obj = {}
+                        })
+                    }
+
+
+                    
                     return Promise.resolve(myData)
                 }else{
                     console.log(URL+"_"+myData.status);
@@ -696,9 +736,29 @@ export default {
                 
             }
         },
+        toItemCloseFn(is,tab){
+            this.isShowToItem = is;
+            if(tab){
+                this.cancelSerchAll();
+                this.tableDAtaPageCurrent = 1;
+                this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+                
+            }
+            
+        },
         outinITM(){
             this.isShowItm = true;
         },
+
+
+        toITM(data){
+            console.error(data)
+            this.isShowToItem = true;
+        },
+
+
+
+
         authIsAdmin(KEY){
             return Common.AdminAuth(this,KEY)
         },
@@ -738,6 +798,8 @@ export default {
                 this.formValidate.prj_type,
                 (this.ITMitem.AddGroupList[0].group || ""),
                 this.formValidate.department,
+                this.formValidate.dept_nm_id,
+                this.formValidate.stff_nm_id,
             ]
         },
 
@@ -782,7 +844,7 @@ export default {
             Common.ErrorShow(ERR,this);
         },
 
-        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = "",prj_type = "",prjManager = "",department = ""){
+        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = "",prj_type = "",prjManager = "",department = "",dept_nm_id = "",stff_nm_id = ""){
             let starttimeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
             let endtimeFromet = end_time ? end_time.Format("yyyy-MM-dd") : "";
             let defaultAXIOSParams = {
@@ -799,6 +861,8 @@ export default {
                 prj_type,
                 prjManager,
                 department,
+                dept_nm_id,
+                stff_nm_id,
             }
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;

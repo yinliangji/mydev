@@ -909,10 +909,8 @@ export default {
             let _logicSystem = JSON.stringify(_System[0].member.map((item)=>{return item.value}));
             let _phySystem = JSON.stringify(_System[1].member.map((item)=>{return item.value}));
             let _proj_role = JSON.stringify(_proj_role_);
-
-
-
-            let _pid = this.formValidate.pid ? this.formValidate.pid : ""
+            let _pid = this.formValidate.pid ? this.formValidate.pid : "";
+            let _username = Common.getStorageAndCookie(this,Common,"username");
 
             let tempData = {
                 id:Common.GETID(this,Common,"inUrl"),
@@ -923,18 +921,21 @@ export default {
                 end_time:_end_time,
                 prj_desc: this.formValidate.prj_desc,
                 prj_goal: this.formValidate.prj_goal,
+                prj_id: this.formValidate.prj_id,
+                prjSn: this.formValidate.prj_id,
+                username:_username,
+
+                /*
                 modules:_modules,
                 createModule:_createModule,
                 prod_id:this.formValidate.prod_id,
                 pid:this.formValidate.prod_id,
                 AddGroupList:JSON.stringify(this.formValidate.AddGroupList),
-                prj_id: this.formValidate.prj_id,
-                prjSn: this.formValidate.prj_id,
                 proj_role:_proj_role,
                 pid:_pid,
-
                 logicSystem:_logicSystem,//子系统
                 phySystem:_phySystem,//子系统
+                */
 
                 
             }

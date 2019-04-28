@@ -529,6 +529,28 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
                 label: 'London人2'
             },
         ],
+        pm:[
+            {
+                value: 'Canberra',
+                label: 'Canberra人6'
+            },
+            {
+                value: 'London',
+                label: 'London人2'
+            },
+        ],
+        tm:[
+            {
+                value: 'London',
+                label: 'London人2'
+            },
+        ],
+        bm:[
+            {
+                value: 'London',
+                label: 'London人2'
+            },
+        ],
     })
 }
 

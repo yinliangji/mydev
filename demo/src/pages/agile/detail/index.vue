@@ -440,7 +440,6 @@ export default {
     	//tabs - start
         tabsHandle(name){
             this.TabsCur = name;
-            console.error(this.$route.query)
             let Query = JSON.stringify(this.$route.query);
             Query = JSON.parse(Query);
             Query.TabsCur = name;

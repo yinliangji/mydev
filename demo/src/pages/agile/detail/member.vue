@@ -1,142 +1,145 @@
 <template>
-	<div class="pageContent">
-        <Card>
-            <div class="aglieAddBox">
-                
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" >
-
-                    
-                    <h3 class="Title" ><span>关联子系统</span></h3>
-                    <div class="fromBox fromBox2" >
-                        <div class="newAddGroup">
-                            <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index<2">
-                                <Col span="20">
-                                    <FormItem 
-                                        :label="myItem.myLabel" 
-                                        :prop="'AddGroupList.'+index+'.group'"
-                                        :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
-                                         
-                                        :ref="myItem.myRef+index" 
-                                        :class="myItem.myRef+index"
+	<div >
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" >
+            
+            <h3 class="Title" ><span>核心成员</span></h3>
+            <div class="fromBox fromBox2" >
+                <div class="newAddGroup">
+                    <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index<3">
+                        <Col span="20">
+                            <FormItem 
+                                :label="myItem.myLabel" 
+                                :prop="'AddGroupList.'+index+'.group'"
+                                :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                                 
+                                :ref="myItem.myRef+index" 
+                                :class="myItem.myRef+index"
+                                >
+                                <div :id="'roleBox_'+index">
+                                    <Tag 
+                                        v-for="(item,index2) in myItem.groupList" 
+                                        :value="item.value" 
+                                        :key="index2" 
+                                        :name="((O)=>{O.I = index;O.I2 = index2;return JSON.stringify(item);})(item)" 
+                                        closable 
+                                        @on-close="roleClose"
+                                        :class="myItem.groupList.length == 1 ? 'donot':''"
                                         >
-                                        <div :id="'roleBox_'+index">
-                                            <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" closable @on-close="roleClose">
-                                                {{ item.label}}
-                                            </Tag>
-                                            <Button 
-                                                icon="ios-plus-empty" 
-                                                type="dashed" 
-                                                size="small" 
-                                                @click="addRole(index)"
-                                                >
-                                                添加系统
-                                            </Button>
-                                            <Modal 
-                                                :ref="myItem.myReftemp+index" 
-                                                :class="myItem.myReftemp+index" 
-                                                v-model="formValidate.AddGroupList[index].modaAdd" 
-                                                :title="'添加'+formValidate.AddGroupList[index].myLabel+''" 
-                                                @on-ok="submitRole(index)"  
-                                                ok-text="添加"
-                                                @on-cancel="cancelRole(index)"
-                                                >
-                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入用户ID或者中文名进行搜索添加'">
-                                                    <!-- 【'+myItem.myLabel+'】 -->
-                                                    <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
-                                                        {{ item.label }}
-                                                    </Option>
-                                                </Select>
-                                            </Modal>
-                                        </div>
-                                    </FormItem>
-
-                                  
-
-                                </Col>
-                                <Col span="1">&nbsp;</Col>
-                                <Col span="3">
-                                    <Button v-if="myItem.delBtn"  type="error" long  @click="groupDel(index)">删除角色</Button>
-                                </Col>
-                            </Row>
-                        </div>
-                    </div>
-
-					         <h3 class="Title" ><span>编辑成员信息</span></h3>
-
-					
-                    <div class="fromBox fromBox2" >
-                        
-
-
-                        <div class="addpartBox">
-                            <Button type="success" @click="addpart">添加角色</Button>
-                        </div>
-                        <div class="newAddGroup">
-                            <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index>1">
-                                <Col span="20">
-                                    <FormItem 
-                                        :label="myItem.myLabel" 
-                                        :prop="'AddGroupList.'+index+'.group'"
-                                        :rules="{required: myItem.required, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
-                                         
-                                        :ref="myItem.myRef+index" 
-                                        :class="myItem.myRef+index"
+                                        {{ item.label}}
+                                    </Tag>
+                                    <Button 
+                                        icon="ios-plus-empty" 
+                                        type="dashed" 
+                                        size="small" 
+                                        @click="addRole(index)"
                                         >
-                                        <div :id="'roleBox_'+index">
-                                            <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" closable @on-close="roleClose">
-                                                {{ item.label}}
-                                            </Tag>
-                                            <Button 
-                                                icon="ios-plus-empty" 
-                                                type="dashed" 
-                                                size="small" 
-                                                @click="addRole(index)"
-                                                >
-                                                添加人员
-                                            </Button>
-                                            <Modal 
-                                                :ref="myItem.myReftemp+index" 
-                                                :class="myItem.myReftemp+index" 
-                                                v-model="formValidate.AddGroupList[index].modaAdd" 
-                                                :title="'添加'+formValidate.AddGroupList[index].myLabel+'人员'" 
-                                                @on-ok="submitRole(index)"  
-                                                ok-text="添加"
-                                                @on-cancel="cancelRole(index)"
-                                                >
-                                                <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入用户ID或者中文名进行搜索添加'">
-                                                    <!-- 【'+myItem.myLabel+'】 -->
-                                                    <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
-                                                        {{ item.label }}
-                                                    </Option>
-                                                </Select>
-                                            </Modal>
-                                        </div>
-                                    </FormItem>
-                                   
-                                </Col>
-                                <Col span="1">&nbsp;</Col>
-                                <Col span="3">
-                                    <Button v-if="myItem.delBtn" type="error" long @click="groupDel(index)">删除</Button>
-                                </Col>
-                            </Row>
-                        </div>
-                        
-                                    
+                                        添加系统
+                                    </Button>
+                                    <Modal 
+                                        :ref="myItem.myReftemp+index" 
+                                        :class="myItem.myReftemp+index" 
+                                        v-model="formValidate.AddGroupList[index].modaAdd" 
+                                        :title="'添加'+formValidate.AddGroupList[index].myLabel+''" 
+                                        @on-ok="submitRole(index)"  
+                                        ok-text="添加"
+                                        @on-cancel="cancelRole(index)"
+                                        >
+                                        <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入用户ID或者中文名进行搜索添加'">
+                                            <!-- 【'+myItem.myLabel+'】 -->
+                                            <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
+                                                {{ item.label }}
+                                            </Option>
+                                        </Select>
+                                    </Modal>
+                                </div>
+                            </FormItem>
 
-                    </div>
-                    <FormItem>
-                    	<!-- <Button type="primary" @click="submitAdd">提交</Button> -->
-    					     <Button type="primary" :loading="modal_add_loading" @click="submitAdd">
-    				        <span v-if="!modal_add_loading">提交</span>
-    				        <span v-else>Loading...</span>
-    				      </Button>
-                        <Button type="ghost" style="margin-left: 8px" @click="cancel">返回</Button>
-                    </FormItem>
-                    
-                </Form>
+                          
+
+                        </Col>
+                        <Col span="1">&nbsp;</Col>
+                        <Col span="3">
+                            <Button v-if="myItem.delBtn"  type="error" long  @click="groupDel(index)">删除角色</Button>
+                        </Col>
+                    </Row>
+                </div>
             </div>
-        </Card>
-        
+
+			<h3 class="Title" ><span>其他成员</span></h3>
+
+			
+            <div class="fromBox fromBox2" >
+                <div class="addpartBox">
+                    <Button type="success" @click="addpart">添加角色</Button>
+                </div>
+                <div class="newAddGroup">
+                    <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index>2">
+                        <Col span="20">
+                            <FormItem 
+                                :label="myItem.myLabel" 
+                                :prop="'AddGroupList.'+index+'.group'"
+                                :ref="myItem.myRef+index" 
+                                :class="myItem.myRef+index"
+                                >
+                                <div :id="'roleBox_'+index">
+                                    <Tag 
+                                        v-for="(item,index2) in myItem.groupList" 
+                                        :value="item.value" 
+                                        :key="index2" 
+                                        :name="((O)=>{O.I = index;O.I2 = index2;return JSON.stringify(item);})(item)" 
+                                        closable 
+                                        @on-close="roleClose"
+                                        >
+                                        {{ item.label}}
+                                    </Tag>
+                                    <Button 
+                                        icon="ios-plus-empty" 
+                                        type="dashed" 
+                                        size="small" 
+                                        @click="addRole(index)"
+                                        >
+                                        添加人员
+                                    </Button>
+                                    <Modal 
+                                        :ref="myItem.myReftemp+index" 
+                                        :class="myItem.myReftemp+index" 
+                                        v-model="formValidate.AddGroupList[index].modaAdd" 
+                                        :title="'添加'+formValidate.AddGroupList[index].myLabel+'人员'" 
+                                        @on-ok="submitRole(index)"  
+                                        ok-text="添加"
+                                        @on-cancel="cancelRole(index)"
+                                        >
+                                        <Select v-model="myItem.grouptemp" :id="'sel'+index" filterable :loading="inputLoad"  multiple :placeholder="'请输入用户ID或者中文名进行搜索添加'">
+                                            <!-- 【'+myItem.myLabel+'】 -->
+                                            <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
+                                                {{ item.label }}
+                                            </Option>
+                                        </Select>
+                                    </Modal>
+                                </div>
+                            </FormItem>
+                           
+                        </Col>
+                        <Col span="1">&nbsp;</Col>
+                        <Col span="3">
+                            <Button v-if="myItem.delBtn" type="error" long @click="groupDel(index)">删除</Button>
+                        </Col>
+                    </Row>
+                </div>
+                
+                            
+
+            </div>
+            <FormItem>
+            	<!-- <Button type="primary" @click="submitAdd">提交</Button> -->
+				     <Button type="primary" :loading="modal_add_loading" @click="submitAdd">
+			        <span v-if="!modal_add_loading">提交</span>
+			        <span v-else>Loading...</span>
+			      </Button>
+                <Button type="ghost" style="margin-left: 8px" @click="cancel">返回</Button>
+            </FormItem>
+            
+        </Form>
        
         <AddPartPop :isShow="partAdd" :data="formPartValidate.addGroupList" :items="formValidate.AddGroupList" @closeAddPartPop="partCancel3" @sendAddPartPop="submitPart3" />
 
@@ -420,13 +423,19 @@ export default {
             Common.CancelRole(this,i)
         },
         roleClose (event, name) {
-            Common.RoleClose(this,event, name)
+            let N = !isNaN(name) ? (name - 0) : (JSON.parse(name).I2 - 0);
+            Common.RoleClose(this,event, N).complete(()=>{
+                alert(this.formValidate.AddGroupList[JSON.parse(name).I-0].group)
+            })
+            
         },
         addRole(i){
             Common.AddRole(this,i)
         },
         submitRole(i){
-            Common.SubmitRole(this,i,Common);
+            Common.SubmitRole(this,i,Common).complete(()=>{
+                alert(JSON.stringify(this.formValidate.AddGroupList[i]))
+            });
         },
         
         projectGroupFn2(URL,params = {},ARR,thatEle){
@@ -473,25 +482,28 @@ export default {
             this.formPartValidate.partName = "";
             this.$refs.addPartPopBox.resetFields();
         },
-        submitPart(name){
-            //Common.addPartPopBox(name,this)//下拉样子
-            Common.addPartPopBox2(name,this); //修改添加角色
-        },
+        
         partCancel3(isClose){
             this.partAdd = isClose;
             this.formPartValidate.partName = "";
         },
         submitPart3(name,partName){
             this.formPartValidate.partName = partName;
-            Common.addPartPopBox3(name,this,partName); //修改添加角色
+            Common.addPartPopBox3(name,this,partName).complete(()=>{
+                alert(partName)
+            }); //修改添加角色
         },
         delCancel(){
           this.modaDelete = false;
         },
         delEnter(){
+            let deleteObj = JSON.parse(JSON.stringify(this.formValidate.AddGroupList[this.thisIndex]));
             this.formValidate.AddGroupList.splice(this.thisIndex, 1);
             this.thisIndex = null;
             this.modaDelete = false;
+
+            alert(JSON.stringify(deleteObj))
+
         },
 
         projectGroupFn(URL,params = {},ARR,thatEle){
@@ -548,27 +560,40 @@ export default {
                 let myData = response.data;
                 console.log("<======【agile edit get】***response+++",response,myData,"====>");
                 let _temp = false;
-                let _log = {
+                let pm = {
                     myRef:"selfRef",
                     group:[],
                     groupList:[],
-                    myLabel:"逻辑子系统",
+                    myLabel:"项目经理1",
                     delBtn:false,
                     groupName:logicSystem,
-                    required:false,
+                    required:true,
                     modaAdd:false,//修改添加角色
                     grouptemp:[],//修改添加角色
                     groupListtemp: [],//修改添加角色
                     myReftemp: "selfRefRole",//修改添加角色
                 }
-                let phy = {
+                let tm = {
                     myRef:"selfRef",
                     group:[],
                     groupList:[],
-                    myLabel:"物理子系统",
+                    myLabel:"技术经理1",
                     delBtn:false,
                     groupName:phySystem,
-                    required:false,
+                    required:true,
+                    modaAdd:false,//修改添加角色
+                    grouptemp:[],//修改添加角色
+                    groupListtemp: [],//修改添加角色
+                    myReftemp: "selfRefRole",//修改添加角色
+                }
+                let bm = {
+                    myRef:"selfRef",
+                    group:[],
+                    groupList:[],
+                    myLabel:"业务经理1",
+                    delBtn:false,
+                    groupName:phySystem,
+                    required:true,
                     modaAdd:false,//修改添加角色
                     grouptemp:[],//修改添加角色
                     groupListtemp: [],//修改添加角色
@@ -599,8 +624,9 @@ export default {
                         this.formValidate.AddGroupList.unshift(_obj)
                     }
                 }
-                addsystem(phy,myData.phySystem)
-                addsystem(_log,myData.logicSystem)
+                addsystem(pm,myData.pm)
+                addsystem(tm,myData.tm)
+                addsystem(bm,myData.bm)
                 
                 let checkSystem = (arr,lab)=>{
                     let check = arr.findIndex(
@@ -613,10 +639,12 @@ export default {
                     }
                     
                 }
+                /*
                 setTimeout(()=>{
                     !checkSystem(this.formValidate.AddGroupList,"逻辑子系统") && this.formValidate.AddGroupList.unshift(_log);
                     !checkSystem(this.formValidate.AddGroupList,"物理子系统") && this.formValidate.AddGroupList.unshift(phy);
                 },1)
+                */
 
                 this.formValidate.prj_type = this.formValidate.prj_type+"";
 
@@ -671,7 +699,7 @@ export default {
                             myValue:"",
                             delBtn:true,
                             groupName:"",
-                            required:true,
+                            required:false,
                             modaAdd:false,//修改添加角色
                             grouptemp:[],//修改添加角色
                             groupListtemp: [],//修改添加角色
@@ -936,5 +964,11 @@ export default {
 .addpartBox{
     padding-bottom: 20px;
     text-align: left;
+}
+</style>
+
+<style >
+.ivu-tag.donot .ivu-icon-ios-close-empty{
+    visibility: hidden;
 }
 </style>

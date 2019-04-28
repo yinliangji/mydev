@@ -604,6 +604,16 @@ export default class Common extends Utils {
       that.formPartValidate.partName = "";
       _tempObj = null;
       that.partAdd = false;
+
+      return {
+        complete(fn){
+          if(typeof fn === "function"){
+            fn()
+          }else{
+            alert("不是函数")
+          }
+        }
+      }
     }
 
     //搜索--修改标签
@@ -1482,17 +1492,44 @@ export default class Common extends Utils {
       let List = that.formValidate.AddGroupList;
       List[i].grouptemp = [];
       List[i].groupListtemp = [];
+      return {
+        complete(fn){
+          if(typeof fn === "function"){
+            fn()
+          }else{
+            alert("不是函数")
+          }
+        }
+      }
     }
     //角色取消--不通用
     static RoleClose(that,event, name){
       let I = Number(event.path[2].getAttribute("id").split("_")[1])
       that.formValidate.AddGroupList[I].group.splice(name, 1);
       that.formValidate.AddGroupList[I].groupList.splice(name, 1);
+      return {
+        complete(fn){
+          if(typeof fn === "function"){
+            fn()
+          }else{
+            alert("不是函数")
+          }
+        }
+      }
     }
     //弹出添加角色--不通用
     static AddRole(that,i,glBtn = false){
       that.formValidate.AddGroupList[i].groupLeaderAddBtnClick = glBtn;
       that.formValidate.AddGroupList[i].modaAdd = true;
+      return {
+        complete(fn){
+          if(typeof fn === "function"){
+            fn()
+          }else{
+            alert("不是函数")
+          }
+        }
+      }
       
     }
 
@@ -1535,6 +1572,15 @@ export default class Common extends Utils {
 
       List[i].grouptemp = [];
       List[i].groupListtemp = [];
+      return {
+        complete(fn){
+          if(typeof fn === "function"){
+            fn()
+          }else{
+            alert("不是函数")
+          }
+        }
+      }
     }
     //角色添加下拉菜单人员--不通用
     static ProjectGroup2(FUN,that,URL,params = {},ARR,thatEle,OBJECT,selElemFUN){

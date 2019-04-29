@@ -58,7 +58,7 @@
 		        	<div class="baseInfoBox">
 		            	<!-- <h3 class="Title"><span>成员信息</span></h3> -->
 		            	<div class="tableBox">
-		            		<Member :Data="formValidate" :Html="HTML" />
+		            		<Member :Data="formValidate" :Html="HTML" v-if="TabsCur == 'name2' && formValidate.prj_id" />
 		            	</div>
 		            </div>
 		        </TabPane>
@@ -338,11 +338,15 @@ export default {
                             let queryObj = {id:result,prj_id:res};
                             let _menuType = this.$router.history.current.query.menuType;
                             let _curOpenName = this.$router.history.current.query.curOpenName;
+                            let _TabsCur = this.$router.history.current.query.TabsCur;
                             if(_menuType){
                                 queryObj.menuType = _menuType;
                             }
                             if(_curOpenName){
                                 queryObj.curOpenName = _curOpenName;
+                            }
+                            if(_TabsCur){
+                                queryObj.TabsCur = _TabsCur;
                             }
 
                             this.$router.push({path: '/agile/detail', query: queryObj});
@@ -716,11 +720,15 @@ export default {
 
                     let _menuType = this.$router.history.current.query.menuType;
                     let _curOpenName = this.$router.history.current.query.curOpenName;
+                    let _TabsCur = this.$router.history.current.query.TabsCur;
                     if(_menuType){
                         queryObj.menuType = _menuType;
                     }
                     if(_curOpenName){
                         queryObj.curOpenName = _curOpenName;
+                    }
+                    if(_TabsCur){
+                        queryObj.TabsCur = _TabsCur;
                     }
                     
                     this.$router.push({path: '/agile/detail', query:queryObj });

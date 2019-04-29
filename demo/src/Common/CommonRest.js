@@ -98,6 +98,15 @@ CommonRest.restUrl = {
     "projectCondition": process.env.BASE_URL + "/project/condition/",
     /**** 敏捷项目获取部门、项目类型 get****/
 
+    "getProjectMember": process.env.BASE_URL + "/project/list_role_user/",
+    /**** 敏捷项目角色获取 get****/
+
+    "addProjectRole": process.env.BASE_URL + "/project/add_role/",
+    /**** 敏捷项目角色添加 post****/
+
+    "delProjectRole": process.env.BASE_URL + "/project/del_role/",
+    /**** 敏捷项目角色删除 post****/
+
 
     /*****************************************/
 

@@ -554,6 +554,22 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
     })
 }
 
+app.all('/project/edit', function(req, res) {
+    let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(detail(req.body.myStatus));
+    res.end()
+});
+
+app.all('/project/list_role_user/', function(req, res) {
+    let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(detail(req.body.myStatus));
+    res.end()
+});
+
 
 app.all("/project/detail/1", function(req, res) {
     console.log("req==>", req.body);
@@ -3099,13 +3115,7 @@ app.all('/req/setRequirementFinish/', function(req, res) {
     res.end()
 });
 
-app.all('/project/edit', function(req, res) {
-    let resVal = detail(req.body.myStatus, req.body.page, req.body.pageline);
-    console.log("req==>", req.body);
-    console.log("resVal==>", resVal);
-    res.json(detail(req.body.myStatus));
-    res.end()
-});
+
 
 app.post('/project/delete', function(req, res) {
     let resVal = mockDataList(req.body.myStatus, req.body.page, req.body.pageline);
@@ -4698,6 +4708,16 @@ app.all('/maven/getDownTopGroupByIp/', function(req, res) {
 
 app.all('/project/proByUser/', function(req, res) {
     res.json({status: "success",message: "proByUser success",data:[3,1,2,4,5,6,7,8,9]});
+    res.end()
+});
+
+app.all('/project/add_role/', function(req, res) {
+    res.json({status: "success",message: "project/add_role success"});
+    res.end()
+});
+
+app.all('/project/del_role/', function(req, res) {
+    res.json({status: "success",message: "project/add_role success"});
     res.end()
 });
 

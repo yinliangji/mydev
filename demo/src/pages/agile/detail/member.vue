@@ -130,14 +130,7 @@
                             
 
             </div>
-            <FormItem>
-            	<!-- <Button type="primary" @click="submitAdd">提交</Button> -->
-				     <Button type="primary" :loading="modal_add_loading" @click="submitAdd">
-			        <span v-if="!modal_add_loading">提交</span>
-			        <span v-else>Loading...</span>
-			      </Button>
-                <Button type="ghost" style="margin-left: 8px" @click="cancel">返回</Button>
-            </FormItem>
+            
             
         </Form>
        
@@ -149,7 +142,7 @@
                 <span>删除确认</span>
             </p>
             <div style="text-align:center">
-                <p>删除无法恢复，是否继续？</p>
+                <p>删除，是否继续？</p>
             </div>
             <div slot="footer">
                 <Button color="#1c2438" @click="delEnter">删除</Button>
@@ -157,21 +150,20 @@
             </div>
         </Modal>
 
-        <GoAgileMode :Data="GO" :Text="GOText" />
+        
 
 
     </div>
 </template>
 <script>
-
+//getProjectMember
 
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail,listModule,logicSystem,phySystem,projectListDataNew} = Common.restUrl;
+const {getProjectMember,projectAddGroup,addTeam,addProjectRole,delProjectRole} = Common.restUrl;
 import Store from '@/vuex/store'
 import AddPartPop from '@/pages/agile/add/addpartpop';
-import GoAgileMode from "@/components/goAgileMode";
 const validateDate = (rule, value, callback) => {
     if (!value || !value[0] || !value[1]) {
         console.log("value 错误",)  
@@ -186,12 +178,6 @@ const validateDate = (rule, value, callback) => {
     }
 };
 
-
-
-
-
-
-
 export default {
     props: {
         
@@ -203,14 +189,12 @@ export default {
          "formValidate.AddGroupList"(curVal,oldVal){
             let _this = this;
             if(curVal){
-                //Common.changeArr(this,curVal,Common,projectAddGroup)//下拉样子
                 Common.changeArr2(this,curVal,Common,projectAddGroup,this.projectGroupFn2)//修改添加角色
             }
         },
         formValidate: {
             handler(val, oldVal) {
                 if(val){
-                    //Common.inputArr(this,val)//下拉样子
                     Common.inputArr2(this,val)//修改添加角色
                 }
             },
@@ -218,17 +202,16 @@ export default {
         }
     },
     beforecreated(){
-        console.log("agileEdit--beforecreated-------",this.formValidate)
+        console.log("详情成员--beforecreated-------",this.formValidate)
     },
     created(){
-        console.log("agileEdit--created-------",this.formValidate);
-        Common.GetProjectList(defaultAXIOS,this,Common,projectListDataNew);
+        console.log("详情成员--created-------",this.formValidate);
     },
     beforeUpdate(){
-        console.log("agileEdit--beforeUpdate-------",this.formValidate)
+        console.log("详情成员--beforeUpdate-------",this.formValidate)
     },
     updated(){
-        console.log("agileEdit--updated-------",this.formValidate)
+        console.log("详情成员--updated-------",this.formValidate)
     },
 	computed: {
     },
@@ -274,11 +257,8 @@ export default {
             },
             prod_idList: [],
             AddGroupList:[],
-            allgroupList: [],
-            managerGroupList: [],
-            developerGroupList: [],
-            testerGroupList: [],
-            moduleList: [],
+ 
+     
             ruleValidate: {
                 prod_id: [
                     { required: false,type: 'string',  message: 'Please select gender', trigger: 'change' }
@@ -298,19 +278,16 @@ export default {
                 ],
                 end_time: [
                     { required: true, type: 'date', validator: validateDateEnd, trigger: 'change' }
-                    //{ required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
+                    
                 ],
                 prj_desc: [
                     { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
-                    //{ type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+                   
                 ],
                 prj_goal: [
-                    { required: false, message: 'Please enter a personal introduction', trigger: 'blur' },
-                    //{ type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+                    { required: false, message: 'Please enter a personal introduction', trigger: 'blur' }
                 ],
-                // modules: [
-                //     { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
-                // ],
+                
                 createModule: [
                     { required: false, type: 'array', message: '请填写内容，不能为空！', trigger: 'change' }
                 ],
@@ -326,11 +303,6 @@ export default {
                 testerGroup: [
                     { required: false, type: 'array', message: '请选择', trigger: 'change' }
                 ],
-
-
-
-               
-
 
                 prj_id: [
                     { required: false, message: '请填写内容，不能为空！', trigger: 'blur' }
@@ -380,9 +352,7 @@ export default {
                 ],
             },
             inputLoad:false,
-            //检测id是否在projectListDataNew列表里
-            GO:false,
-            GOText:"",
+            
         }
     },
     mounted(){
@@ -391,29 +361,11 @@ export default {
         let PRJ_ID = Common.GETprjid(this,Common,"inUrl") ? Common.GETprjid(this,Common,"inUrl") : "";
         if(ID && PRJ_ID){
             this.addTeamFn(addTeam);
-            this.projectGetProdFn(projectGetProd,{id:ID,prj_id:PRJ_ID});
-            this.projectEditFn(projectEdit,{id:ID,prj_id:PRJ_ID});
+            this.getMemberInfo(getProjectMember,{id:ID,prjId:ID,prjSn:PRJ_ID,prj_id:PRJ_ID});
         }else{
             Common.CommonError(this,"没有获取到prjId或id 和 prjSn或prj_id")
-            this.resetData();
         }
-
-        this.listModuleFn(listModule,((Id)=>{return Id?{id:Id}:{id:""}})(Common.GETID(this,Common,"inUrl")))
-        .then((res)=>{
-            let fn = (obj)=>{
-                return obj.label+"【"+obj.value+"】";            
-            }
-            if(res && Array.isArray(res) && res.length){
-                if(!this.formValidate.createModule){
-                    this.formValidate.createModule = [];
-                }
-                if(Array.isArray(this.formValidate.createModule)){
-                    res.forEach((item)=>{
-                      this.formValidate.createModule.push(fn(item))  
-                    });
-                }
-            }
-        }, (error)=>{})
+        
     },
     
     methods: {
@@ -433,8 +385,10 @@ export default {
             Common.AddRole(this,i)
         },
         submitRole(i){
+            let addMember = this.formValidate.AddGroupList[i].grouptemp;
             Common.SubmitRole(this,i,Common).complete(()=>{
-                alert(JSON.stringify(this.formValidate.AddGroupList[i]))
+                console.error(this.formValidate.AddGroupList[i])
+                this.submitData();
             });
         },
         
@@ -460,9 +414,7 @@ export default {
 
         },
         /* 修改添加角色 */
-        listModuleFn(URL,params = {}){
-            return Common.Modulelist(defaultAXIOS,this,URL,params)
-        },
+        
 
         addTeamFn(URL,params = {}){
             Common.AddTeam(defaultAXIOS,this,URL,params);
@@ -488,10 +440,23 @@ export default {
             this.formPartValidate.partName = "";
         },
         submitPart3(name,partName){
+            let fn = (val)=>{
+                let obj = this.formPartValidate.addGroupList.find(item=>item.value == val);
+                return obj ? obj.label : "";
+            }
             this.formPartValidate.partName = partName;
             Common.addPartPopBox3(name,this,partName).complete(()=>{
-                alert(partName)
-            }); //修改添加角色
+                let params = {
+                    id:Common.GETID(this,Common),
+                    prjId:Common.GETID(this,Common),
+                    prj_id:Common.GETprjid(this,Common),
+                    prjSn: Common.GETprjid(this,Common),
+                    username:Common.getStorageAndCookie(this,Common,"username"),
+                    role_name:partName,
+                    nick_name:fn(partName),
+                }
+                this.submitData(addProjectRole,params);
+            }); //添加角色
         },
         delCancel(){
           this.modaDelete = false;
@@ -538,23 +503,8 @@ export default {
                 this.showError(error);
             });   
         },
-        projectGetProdFn(URL,Obj = {}){
-            defaultAXIOS(URL,Obj,{timeout:5000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======【agile product get】***response+++",response,myData,"====>");
-                let _tempObj = {};
-                for(var i=0;i<myData.data.length;i++){
-                    _tempObj.value = myData.data[i].pid+"";
-                    _tempObj.label = myData.data[i].product_name+"";
-                    this.prod_idList.push(_tempObj);
-                    _tempObj = {}
-                }
-            }).catch( (error) => {
-                console.log(error);
-                this.showError(error);
-            });            
-        },
-        projectEditFn(URL = "",IDPRJID = {}){
+        
+        getMemberInfo(URL = "",IDPRJID = {}){
 
             defaultAXIOS(URL,IDPRJID,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
@@ -564,9 +514,10 @@ export default {
                     myRef:"selfRef",
                     group:[],
                     groupList:[],
-                    myLabel:"项目经理1",
+                    myLabel:"项目经理new",
+                    myValue:"pm",
                     delBtn:false,
-                    groupName:logicSystem,
+                    groupName:"",
                     required:true,
                     modaAdd:false,//修改添加角色
                     grouptemp:[],//修改添加角色
@@ -577,9 +528,10 @@ export default {
                     myRef:"selfRef",
                     group:[],
                     groupList:[],
-                    myLabel:"技术经理1",
+                    myLabel:"技术经理new",
+                    myValue:"tm",
                     delBtn:false,
-                    groupName:phySystem,
+                    groupName:"",
                     required:true,
                     modaAdd:false,//修改添加角色
                     grouptemp:[],//修改添加角色
@@ -590,9 +542,10 @@ export default {
                     myRef:"selfRef",
                     group:[],
                     groupList:[],
-                    myLabel:"业务经理1",
+                    myLabel:"业务经理new",
+                    myValue:"bm",
                     delBtn:false,
-                    groupName:phySystem,
+                    groupName:"",
                     required:true,
                     modaAdd:false,//修改添加角色
                     grouptemp:[],//修改添加角色
@@ -639,10 +592,12 @@ export default {
                     }
                     
                 }
+                
                 /*
                 setTimeout(()=>{
-                    !checkSystem(this.formValidate.AddGroupList,"逻辑子系统") && this.formValidate.AddGroupList.unshift(_log);
-                    !checkSystem(this.formValidate.AddGroupList,"物理子系统") && this.formValidate.AddGroupList.unshift(phy);
+                    !checkSystem(this.formValidate.AddGroupList,"项目经理") && this.formValidate.AddGroupList.unshift(pm);
+                    !checkSystem(this.formValidate.AddGroupList,"技术经理") && this.formValidate.AddGroupList.unshift(tm);
+                    !checkSystem(this.formValidate.AddGroupList,"业务经理") && this.formValidate.AddGroupList.unshift(bm);
                 },1)
                 */
 
@@ -726,191 +681,29 @@ export default {
         showError(ERR){
             Common.ErrorShow(ERR,this);
         },
-        resetData(){
-            //new Date().Format("yyyy-MM-dd HH:mm:ss");
-            let minute = 60*1000;
-            let hour = minute *60;
-            let day = 24*hour;
-            let setDay = new Date().getTime()+day*2;
-            var nowDay = new Date().Format("yyyy-MM-dd");
-            var defDay = new Date(setDay).Format("yyyy-MM-dd");
-            // this.formValidate.date[0] = nowDay;
-            // this.formValidate.date[1] = defDay;
-
-            this.formValidate.start_time  = nowDay;
-        },
+        
        
         
-        formItemReset(){
-            this.resetData(); //this.formValidate.date = [];
-            this.formValidate.pid = "";
-            this.formValidate.prj_type = "1";
-            this.formValidate.prj_name = "";
-            this.formValidate.start_time = "";
-            this.formValidate.end_time = "";
-            this.formValidate.prj_desc = "";
-            this.formValidate.prj_goal = "";
-            this.formValidate.createModule = [];
-            this.formValidate.modules = [];
+        /* 存储 */
+        submitData(URL,params = {}){
+            console.error(URL,params)
 
-            this.formValidate.prod_id = "";
-            //this.formValidate.AddGroupList = this.defaultGroup;
-            
-            //this.formValidate.prj_id = this.$router.history.current.query.id ? this.$router.history.current.query.id : "";
-            this.formValidate.prj_id = "";
-            
-
-
-            this.formValidate.allgroup = [];
-            this.formValidate.managerGroup = [];
-            this.formValidate.developerGroup = [];
-            this.formValidate.testerGroup = [];
-            
-            this.editTableData = false;
-            this.formValidate.date = [];
-            this.formValidate.startTime = "";
-            this.formValidate.endTime = "";
-            this.formValidate.manager = "";
-            this.formValidate.developer = "";
-            this.formValidate.tester = "";
-            this.formValidate.maintainer = "";
-            this.formValidate.technology = [];
-            this.formValidate.business = [];
-            this.formValidate.group = "";
-            
-        },
-        submitAddData(){
-            let _join = "|";
-            
-            let _modules = Array.isArray(this.formValidate.modules) ? this.formValidate.modules.join(_join) : this.formValidate.modules;
-            let _createModule_ = ((createModule)=>{
-                let fn = (name)=>{
-                    if(name.toString().indexOf("【") != -1 && name.toString().indexOf("】") != -1){
-                        return true;
-                    }else{
-                        return false;
-                    }
-                }
-                if(Array.isArray(createModule) && createModule.length){
-                    for (let i = createModule.length - 1; i >= 0; i--) {
-                        if (fn(createModule[i])) {
-                            createModule.splice(i, 1);
-                        }
-                    }
-                    return createModule.join(_join);
-                }else{
-                    return createModule
-                }
-            })(this.formValidate.createModule)
-            let _createModule =  Array.isArray(_createModule_) && _createModule_.length == 0 ? "" : _createModule_;
-            // let _start_time = new Date(this.formValidate.start_time).Format("yyyy-MM-dd");
-            // let _end_time = this.formValidate.end_time ? new Date(this.formValidate.end_time).Format("yyyy-MM-dd") : this.formValidate.end_time;
-            let _start_time = Common.DateFormat(Common,this.formValidate.start_time);
-            let _end_time = Common.DateFormat(Common,this.formValidate.end_time);
-             
-
-            //let _proj_role = JSON.stringify(Common.CheeckRoleVal(this,Common.objInArr(this.formValidate.AddGroupList)));
-
-            let _proj_role_ = Common.CheeckRoleVal(this,Common.objInArr(this.formValidate.AddGroupList));
-            let _System = _proj_role_.splice(0, 2);
-            //console.log(_System[0].member,_System[1].member)
-            
-            let _logicSystem = JSON.stringify(_System[0].member.map((item)=>{return item.value}));
-            let _phySystem = JSON.stringify(_System[1].member.map((item)=>{return item.value}));
-            let _proj_role = JSON.stringify(_proj_role_);
-            let _pid = this.formValidate.pid ? this.formValidate.pid : "";
-            let _username = Common.getStorageAndCookie(this,Common,"username");
+            return
 
             let tempData = {
-                id:Common.GETID(this,Common,"inUrl"),
-                prjId:Common.GETID(this,Common,"inUrl"),
-                prj_type:this.formValidate.prj_type,
-                prj_name: this.formValidate.prj_name,
-                start_time:_start_time,
-                end_time:_end_time,
-                prj_desc: this.formValidate.prj_desc,
-                prj_goal: this.formValidate.prj_goal,
-                prj_id: this.formValidate.prj_id,
-                prjSn: this.formValidate.prj_id,
-                username:_username,
-
-                /*
-                modules:_modules,
-                createModule:_createModule,
-                prod_id:this.formValidate.prod_id,
-                pid:this.formValidate.prod_id,
-                AddGroupList:JSON.stringify(this.formValidate.AddGroupList),
-                proj_role:_proj_role,
-                pid:_pid,
-                logicSystem:_logicSystem,//子系统
-                phySystem:_phySystem,//子系统
-                */
-
-                
+                id:Common.GETID(this,Common),
+                prjId:Common.GETID(this,Common),
+                prj_id:Common.GETprjid(this,Common),
+                prjSn: Common.GETprjid(this,Common),
+                username:Common.getStorageAndCookie(this,Common,"username"),
             }
 
-            //projectEdit
-            defaultAXIOS(projectEdit,tempData,{timeout:5000,method:'post'}).then((response) => {
-                //alert(JSON.stringify(response))
-                let myData = response.data;
-                console.log("<======[agile edit post]***response+++",response,myData,"=====>");
-                if(myData.status == "success"){
-                    this.modal_add_loading = false;
-                    this.formItemReset();
-                    this.$refs.formValidate.resetFields();
-
-                    if(this.$router.history.current.query.from == "detail"){
-                        let urlObj = {
-                            id: this.$router.history.current.query.id,
-                            prjId: this.$router.history.current.query.id,
-                            prj_id:this.$router.history.current.query.prj_id,
-                            prjSn:this.$router.history.current.query.prj_id,
-                        }
-                        this.$router.push({path: '/agile/detail', query: urlObj})
-                    }else{
-                        this.$router.push('/agile');
-                    }
-
-                }else{
-                    this.modal_add_loading = false;
-                    this.showError(myData.status);
-                }
-                
-            }).catch( (error) => {
-                console.log(error);
-                this.modal_add_loading = false;
-                this.showError(error);
-            });
+            this.getMemberInfo(getProjectMember,tempData);
 
            
         },
-        submitAdd () {
-            this.$refs.formValidate.validate((valid)=>{//验证
-                if(valid){
-                    this.submitAddData();
-                    this.modal_add_loading = true;
-                }else{
-                    Common.CommonWarning(this,"有必选的还未填写！")
-                }
-            })
-        },
-        cancel () {
-            this.formItemReset();
-            this.$refs.formValidate.resetFields();
-
-            if(this.$router.history.current.query.from == "detail"){
-                let urlObj = {
-                    id: this.$router.history.current.query.id,
-                    prjId: this.$router.history.current.query.id,
-                    prj_id:this.$router.history.current.query.prj_id,
-                    prjSn:this.$router.history.current.query.prj_id,
-                }
-                this.$router.push({path: '/agile/detail', query: urlObj})
-            }else{
-                this.$router.push('/agile');
-            }
-            
-        },
+        
+       
         handleClose (event, name) {
             let getStr = (string,str_after,str_before)=>{
                 return string.substring(string.indexOf(str_after)+1,string.lastIndexOf(str_before))
@@ -946,7 +739,6 @@ export default {
     },
     components: {
         AddPartPop,
-        GoAgileMode,
     },
 
 }

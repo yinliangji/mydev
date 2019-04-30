@@ -186,6 +186,7 @@ export default {
         	count: ["技术模块1", "技术模块2", "技术模块3"],
         	count2: ["业务模块1", "业务模块2", "业务模块3"],
         	formValidate: {
+                prj_type:"",
         		prj_id:"",
                 prj_name:"",
                 settle_time:"",
@@ -646,7 +647,10 @@ export default {
             this.$router.push({path: '/agile/edit', query: {id: Common.GETID(this,Common),prj_id:Common.GETprjid(this,Common),from:"detail"}})
         },
         selectMenuFn(N){
-            Common.setStorageAndCookie(Common,"id",N)
+            Common.setStorageAndCookie(Common,"id",N);
+            for(let I in this.formValidate){
+                this.formValidate[I] = "";
+            }
             this.tableDataAjaxFn(projectDetail,N).then((prj_id)=>{
                 this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,N,prj_id)
                 this.tableDAtaPageCurrent = 1;

@@ -2,8 +2,8 @@
 	<div >
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" >
             
-            <h3 class="Title" ><span>核心成员</span></h3>
-            <div class="fromBox fromBox2" >
+            <h3 class="Title" v-show="formValidate.prj_type == 1" ><span>核心成员</span></h3>
+            <div class="fromBox fromBox2" v-show="formValidate.prj_type == 1">
                 <div class="newAddGroup">
                     <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index<3">
                         <Col span="20">
@@ -23,7 +23,7 @@
                                         :name="((O)=>{O.I = index;O.I2 = index2;return JSON.stringify(item);})(item)" 
                                         closable 
                                         @on-close="roleClose"
-                                        :class="myItem.groupList.length == 1 ? 'donot':''"
+                                        class="donot"
                                         >
                                         {{ item.label}}
                                     </Tag>
@@ -32,6 +32,7 @@
                                         type="dashed" 
                                         size="small" 
                                         @click="addRole(index)"
+                                        style="display:none;"
                                         >
                                         添加系统
                                     </Button>
@@ -68,7 +69,7 @@
 			<h3 class="Title" ><span>其他成员</span></h3>
 
 			
-            <div class="fromBox fromBox2" >
+            <div class="fromBox fromBox2" :id="isOption()">
                 <div class="addpartBox">
                     <Button type="success" @click="addpart">添加角色</Button>
                 </div>
@@ -156,12 +157,11 @@
     </div>
 </template>
 <script>
-//getProjectMember
 
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {getProjectMember,projectAddGroup,addTeam,addProjectRole,delProjectRole} = Common.restUrl;
+const {getProjectMember,projectAddGroup,addTeam,addProjectRole,delProjectRole,delProjectUser,addProjectUser} = Common.restUrl;
 import Store from '@/vuex/store'
 import AddPartPop from '@/pages/agile/add/addpartpop';
 const validateDate = (rule, value, callback) => {
@@ -180,9 +180,20 @@ const validateDate = (rule, value, callback) => {
 
 export default {
     props: {
+        Data: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
         
     },
     watch:{
+        Data(data){
+            for(let I in data){
+                this.formValidate[I] = data[I];    
+            }
+        },
         "formValidate.start_time":function(curVal,oldVal){
 
         },
@@ -360,6 +371,12 @@ export default {
         let ID = Common.GETID(this,Common,"inUrl") ? Common.GETID(this,Common,"inUrl") : "";
         let PRJ_ID = Common.GETprjid(this,Common,"inUrl") ? Common.GETprjid(this,Common,"inUrl") : "";
         if(ID && PRJ_ID){
+            if(this.Data){
+                for(let I in this.Data){
+                    this.formValidate[I] = this.Data[I];    
+                }    
+            }
+
             this.addTeamFn(addTeam);
             this.getMemberInfo(getProjectMember,{id:ID,prjId:ID,prjSn:PRJ_ID,prj_id:PRJ_ID});
         }else{
@@ -371,13 +388,36 @@ export default {
     methods: {
 
         /* 修改添加角色 */
+        isOption(){
+            return this.formValidate.prj_type == 1 ? "option_no" : "";
+        },
         cancelRole(i){
             Common.CancelRole(this,i)
         },
+        getGroupListValue(val){
+            let obj = this.formPartValidate.addGroupList.find(item=>item.label.indexOf(val) != -1);
+            return obj ? obj.value : "";
+        },
+        getGroupListLabel(val){
+            let obj = this.formPartValidate.addGroupList.find(item=>item.value == val);
+            return obj ? obj.label : "";
+        },
         roleClose (event, name) {
+            
             let N = !isNaN(name) ? (name - 0) : (JSON.parse(name).I2 - 0);
+            let U = this.formValidate.AddGroupList[JSON.parse(name).I-0].group[N];
+            let ML = this.formValidate.AddGroupList[JSON.parse(name).I-0].myLabel; 
             Common.RoleClose(this,event, N).complete(()=>{
-                alert(this.formValidate.AddGroupList[JSON.parse(name).I-0].group)
+                let params = {
+                    id:Common.GETID(this,Common),
+                    prjId:Common.GETID(this,Common),
+                    prj_id:Common.GETprjid(this,Common),
+                    prjSn: Common.GETprjid(this,Common),
+                    username:Common.getStorageAndCookie(this,Common,"username"),
+                    user_name:U,
+                    role_name:this.getGroupListValue(ML),
+                }
+                this.submitData(delProjectUser,params);
             })
             
         },
@@ -386,9 +426,37 @@ export default {
         },
         submitRole(i){
             let addMember = this.formValidate.AddGroupList[i].grouptemp;
+            let ML = this.formValidate.AddGroupList[i].myLabel;
+            let USER = {};
+            let fn = (arr1,arr2)=>{
+                let Arr = [];
+                let Obj = {};
+                if(arr1 && arr2 && Array.isArray(arr1) && Array.isArray(arr1) && arr1.length && arr2.length){
+                    for(let i=0;i<arr1.length;i++){
+                        let O = arr2.find(item=>item.value == arr1[i]);
+                        if(O){
+                            Obj.user_name = O.value;
+                            Obj.user_nick_name = O.label;
+                            Arr.push(Obj);
+                            Obj = {};
+                        }
+                    }
+                    return JSON.stringify(Arr)
+                }else{
+                    return "";
+                }
+            } 
             Common.SubmitRole(this,i,Common).complete(()=>{
-                console.error(this.formValidate.AddGroupList[i])
-                this.submitData();
+                let params = {
+                    id:Common.GETID(this,Common),
+                    prjId:Common.GETID(this,Common),
+                    prj_id:Common.GETprjid(this,Common),
+                    prjSn: Common.GETprjid(this,Common),
+                    username:Common.getStorageAndCookie(this,Common,"username"),
+                    role_name:this.getGroupListValue(ML),
+                    users:fn(addMember,this.formValidate.AddGroupList[i].groupList),
+                }
+                this.submitData(addProjectUser,params);
             });
         },
         
@@ -440,10 +508,6 @@ export default {
             this.formPartValidate.partName = "";
         },
         submitPart3(name,partName){
-            let fn = (val)=>{
-                let obj = this.formPartValidate.addGroupList.find(item=>item.value == val);
-                return obj ? obj.label : "";
-            }
             this.formPartValidate.partName = partName;
             Common.addPartPopBox3(name,this,partName).complete(()=>{
                 let params = {
@@ -453,7 +517,7 @@ export default {
                     prjSn: Common.GETprjid(this,Common),
                     username:Common.getStorageAndCookie(this,Common,"username"),
                     role_name:partName,
-                    nick_name:fn(partName),
+                    nick_name:this.getGroupListLabel(partName),
                 }
                 this.submitData(addProjectRole,params);
             }); //添加角色
@@ -462,13 +526,24 @@ export default {
           this.modaDelete = false;
         },
         delEnter(){
+            let fn = (val)=>{
+                let obj = this.formPartValidate.addGroupList.find(item=>item.label.indexOf(val) != -1);
+                return obj ? obj.value : "";
+            }
             let deleteObj = JSON.parse(JSON.stringify(this.formValidate.AddGroupList[this.thisIndex]));
             this.formValidate.AddGroupList.splice(this.thisIndex, 1);
             this.thisIndex = null;
             this.modaDelete = false;
-
-            alert(JSON.stringify(deleteObj))
-
+            let params = {
+                id:Common.GETID(this,Common),
+                prjId:Common.GETID(this,Common),
+                prj_id:Common.GETprjid(this,Common),
+                prjSn: Common.GETprjid(this,Common),
+                username:Common.getStorageAndCookie(this,Common,"username"),
+                role_name:this.getGroupListValue(deleteObj.myLabel),
+                nick_name:deleteObj.myLabel,
+            }
+            this.submitData(delProjectRole,params);
         },
 
         projectGroupFn(URL,params = {},ARR,thatEle){
@@ -507,6 +582,7 @@ export default {
         getMemberInfo(URL = "",IDPRJID = {}){
 
             defaultAXIOS(URL,IDPRJID,{timeout:5000,method:'get'}).then((response) => {
+                this.formValidate.AddGroupList = [];
                 let myData = response.data;
                 console.log("<======【agile edit get】***response+++",response,myData,"====>");
                 let _temp = false;
@@ -514,7 +590,7 @@ export default {
                     myRef:"selfRef",
                     group:[],
                     groupList:[],
-                    myLabel:"项目经理new",
+                    myLabel:"项目经理",
                     myValue:"pm",
                     delBtn:false,
                     groupName:"",
@@ -528,7 +604,7 @@ export default {
                     myRef:"selfRef",
                     group:[],
                     groupList:[],
-                    myLabel:"技术经理new",
+                    myLabel:"技术经理",
                     myValue:"tm",
                     delBtn:false,
                     groupName:"",
@@ -542,7 +618,7 @@ export default {
                     myRef:"selfRef",
                     group:[],
                     groupList:[],
-                    myLabel:"业务经理new",
+                    myLabel:"业务经理",
                     myValue:"bm",
                     delBtn:false,
                     groupName:"",
@@ -552,6 +628,7 @@ export default {
                     groupListtemp: [],//修改添加角色
                     myReftemp: "selfRefRole",//修改添加角色
                 }
+                /*
                 for(var I in this.formValidate){
                     _temp = myData.data[I]+"";
                     if(I == "AddGroupList"){
@@ -565,8 +642,20 @@ export default {
                         
                     }
                 }
-                let addsystem = (_obj,_myData)=>{
-                    if(_myData && Array.isArray(_myData)){
+                */
+                let addsystem = (obj,arr)=>{
+                    if(obj && arr && Array.isArray(arr)){
+                        let listObj = {};
+                        obj.group = arr;
+                        arr.forEach((item,index)=>{
+                            listObj.value = item+index;
+                            listObj.label = item;
+                            obj.groupList.push(listObj);
+                            listObj = {};
+                        })
+                        
+                        this.formValidate.AddGroupList.unshift(obj)
+                        /*
                         _obj.groupList = _myData;
                         if(_myData.length){
                             _obj.group = _myData.map((item)=>{
@@ -575,12 +664,23 @@ export default {
                         }
                         
                         this.formValidate.AddGroupList.unshift(_obj)
+                        */
+                    }else{
+                        let listObj = {};
+                        [].forEach((item)=>{
+                            listObj.value = item;
+                            listObj.label = item;
+                            obj.groupList.push(listObj);
+                        })
+                        obj.group = arr;
+                        this.formValidate.AddGroupList.unshift(obj)
                     }
                 }
-                addsystem(pm,myData.pm)
-                addsystem(tm,myData.tm)
-                addsystem(bm,myData.bm)
                 
+                addsystem(bm,myData.corerole.bm);
+                addsystem(pm,myData.corerole.pm);
+                addsystem(tm,myData.corerole.tm);
+
                 let checkSystem = (arr,lab)=>{
                     let check = arr.findIndex(
                         (item)=>item.myLabel === lab
@@ -641,10 +741,10 @@ export default {
                     }
                 }
 
-                if(myData.role_user_info && myData.role_user_info.length){
+                if(myData.otherole && myData.otherole.length){
                     
                     let _tempObj = false;
-                    for(var J=0;J< myData.role_user_info.length;J++){
+                    for(var J=0;J< myData.otherole.length;J++){
 
                         _tempObj = {
                             myRef:"selfRef",
@@ -661,10 +761,10 @@ export default {
                             myReftemp: "selfRefRole",//修改添加角色
                         }
 
-                        _tempObj.myLabel = myData.role_user_info[J].title;
-                        _tempObj.myValue = objVal(this.formPartValidate.addGroupList,myData.role_user_info[J].title)
-                        _tempObj.groupList = groupList(myData.role_user_info[J].member);
-                        _tempObj.group = group(myData.role_user_info[J].member); 
+                        _tempObj.myLabel = myData.otherole[J].title;
+                        _tempObj.myValue = objVal(this.formPartValidate.addGroupList,myData.otherole[J].title)
+                        _tempObj.groupList = groupList(myData.otherole[J].member);
+                        _tempObj.group = group(myData.otherole[J].member); 
                         //_tempObj.groupList = [{"value":"lizhuo.zh","label":"李卓"}]; 
                         
                         this.formValidate.AddGroupList.push(_tempObj);
@@ -686,21 +786,22 @@ export default {
         
         /* 存储 */
         submitData(URL,params = {}){
-            console.error(URL,params)
 
-            return
-
-            let tempData = {
-                id:Common.GETID(this,Common),
-                prjId:Common.GETID(this,Common),
-                prj_id:Common.GETprjid(this,Common),
-                prjSn: Common.GETprjid(this,Common),
-                username:Common.getStorageAndCookie(this,Common,"username"),
-            }
-
-            this.getMemberInfo(getProjectMember,tempData);
-
-           
+            defaultAXIOS(URL,params,{timeout:5000,method:'post'}).then((response) => {
+                let myData = response.data;
+                console.log("<======【角色操作】***response+++",response,myData,"====>");
+                if(myData.status == "success"){
+                    if(document.location.host != "127.0.0.1:9000"){
+                        this.getMemberInfo(getProjectMember,params);    
+                    }
+                }else{
+                    console.log(URL+"_"+myData.status);
+                    this.showError(URL+"_"+myData.status);
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+            });   
         },
         
        
@@ -762,5 +863,20 @@ export default {
 <style >
 .ivu-tag.donot .ivu-icon-ios-close-empty{
     visibility: hidden;
+    width: 0;
+    height: 0;
+    display: none;
+}
+#option_no .addpartBox {
+    display: none;
+}
+#option_no .ivu-btn-error{
+    display: none;
+}
+#option_no .ivu-btn-dashed{
+    display: none;
+}
+#option_no .ivu-icon-ios-close-empty{
+    display: none;
 }
 </style>

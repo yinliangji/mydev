@@ -107,6 +107,13 @@ CommonRest.restUrl = {
     "delProjectRole": process.env.BASE_URL + "/project/del_role/",
     /**** 敏捷项目角色删除 post****/
 
+    "delProjectUser": process.env.BASE_URL + "/project/del_user/",
+    /**** 敏捷项目角色人员删除 post****/
+
+    "addProjectUser": process.env.BASE_URL + "/project/add_user/",
+    /**** 敏捷项目角色人员删除 post****/
+
+
 
     /*****************************************/
 

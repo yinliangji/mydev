@@ -189,7 +189,7 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             "manager|6-10": /[a-zA-Z0-9]/,
             "prj_desc": "@title",
             "prj_goal": "项目目标",
-            "prj_type|1": ["1","2","2"],
+            "prj_type|1": ["1","2"],
             "settle_time": "@date(yyyy-MM-dd)",
             "start_time": "@date(yyyy-MM-dd)",
             "end_time": "@date(yyyy-MM-dd)",
@@ -451,7 +451,7 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
         ],
         role_user_info:[
             {
-                "title":"产品经理",
+                "title":"敏捷教练",
                 "member":[
                     {
                         "nick_name":"李卓",
@@ -465,7 +465,7 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
 
             },
             {
-                "title":"项目经理",
+                "title":"测试组",
                 "member":[
                     {
                         "nick_name":"谢蓓",
@@ -549,6 +549,75 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             {
                 value: 'London',
                 label: 'London人2'
+            },
+        ],
+        corerole:{
+            "bm|0-10":["@cname"],
+            "tm|1-5":["@cname"],
+            "pm|0-3":["@cname"],
+        },
+        otherole:[
+            {
+                "title":"敏捷教练",
+                "member":[
+                    {
+                        "nick_name":"李卓",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_prodManager",
+                        "user_name":"lizhuo.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+            {
+                "title":"测试组",
+                "member":[
+                    {
+                        "nick_name":"谢蓓",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_projManager",
+                        "user_name":"xiebei.zh",
+                        "id":4,
+                    },
+                   
+                ],
+
+            },
+            {
+                "title":"开发组",
+                "member":[
+                    {
+                        "nick_name":"奇慧超",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"qihuichao",
+                        "id":4,
+                    },
+                    {
+                        "nick_name":"黄永华",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"huangyonghua",
+                        "id":5,
+                    },
+                    {
+                        "nick_name":"赖磊",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"lailie",
+                        "id":6,
+                    },
+                    {
+                        "nick_name":"殷良骥",
+                        "prj_id":"prj00010",
+                        "role_name":"icdp_devTeam",
+                        "user_name":"yinliangji",
+                        "id":7,
+                    },
+                ],
+
             },
         ],
     })
@@ -4718,6 +4787,16 @@ app.all('/project/add_role/', function(req, res) {
 
 app.all('/project/del_role/', function(req, res) {
     res.json({status: "success",message: "project/add_role success"});
+    res.end()
+});
+
+app.all('/project/del_user/', function(req, res) {
+    res.json({status: "success",message: "project/del_user success"});
+    res.end()
+});
+
+app.all('/project/add_user/', function(req, res) {
+    res.json({status: "success",message: "project/add_user success"});
     res.end()
 });
 

@@ -88,9 +88,9 @@
         </p>
       </div>
 
-      <div class="card-wrap" v-if="item.source=='task'" @click="itemClick(item)" >
+      <div class="card-wrap noCursor" v-if="item.source=='task'"  >
         <!-- :title="item.taskName" -->
-        <p class="item-content" :title="developmentTitle(item.taskName,item.desc,item.actual_hours,item.plan_hours)">
+        <p class="item-content" :title="developmentTitle(item.taskName,item.desc,item.actual_hours,item.plan_hours)" @click="itemClick(item,'工作项')" style="cursor:pointer;">
           <span class="levelText" :style="{'background':item.bgcolor}" v-show="item.bgcolor.indexOf('ffffff') == -1">
             {{levelText(item.bgcolor)}}
           </span>
@@ -99,10 +99,10 @@
         <!-- 顺序1工作项颜色#e0592b 2附件颜色#7d2f74 3测试案例颜色#00a6b6 4依赖项状态完成颜色#199c40，未完成颜色#db0102   -->
         <!-- 工作项状态识别 显示包括附件、依赖项状态 -->
         <p v-if="item.source=='task'" class="kananstatus">
-          <span class="iconBg" :class="'isFile'" v-if="item.isFile=='yes'" title="有附件">
+          <span class="iconBg" :class="'isFile'" v-if="item.isFile=='yes'" title="有附件" @click="itemClick(item,'附件')" style="cursor:pointer;">
             <Icon type="paperclip"></Icon>
           </span>
-          <span class="iconBg" style="font-size:20px" v-if="item.isDepend=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'">
+          <span class="iconBg" style="font-size:20px;cursor:pointer;" v-if="item.isDepend=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'" @click="itemClick(item,'依赖项')">
             <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
             <Icon type="ios-color-filter" color="#db0102" v-if="item.isFinish=='unfinish'"></Icon>
           </span>

@@ -113,6 +113,9 @@ CommonRest.restUrl = {
     "addProjectUser": process.env.BASE_URL + "/project/add_user/",
     /**** 敏捷项目角色人员删除 post****/
 
+    "Switch": process.env.BASE_URL + "/project/switch/",
+    /**** 敏捷项目转立项 post****/
+
 
 
     /*****************************************/

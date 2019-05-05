@@ -160,13 +160,13 @@
                             >
                             编辑
                         </Button>
-                        <Button 
+                        <!-- <Button 
                             type="error" 
                             :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
                             @click="deleteTableItem"
                             >
                             删除
-                        </Button>
+                        </Button> -->
                         <Button 
                             type="info" 
                             :disabled="authIsAdmin(['SuperAdmin','PlainAdmin'])"
@@ -223,9 +223,7 @@
          
         
         <ItmPop :isShow="isShowItm" @itmClose="itmCloseFn" />
-
-
-        <ToItmPop :isShow="isShowToItem" @itmClose="toItemCloseFn" />
+        <ToItmPop :isShow="isShowToItem" :Data="actionArr" @toItmClose="toItemCloseFn" />
 
         <!-- <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" /> -->
 
@@ -348,11 +346,13 @@ export default {
             modaDelete: false,
             modal_loading: false,
             columns: [
+                /*
                 {
                     type: 'selection',
                     width: 60,
                     align: 'center'
                 },
+                */
                 {
                     title: '项目编号',
                     key: 'prj_id',
@@ -436,6 +436,12 @@ export default {
                     width: 100,
                     align: 'center',
                 },
+                {
+                    title: '项目状态',
+                    key: 'itm_status',
+                    width: 85,
+                    align: 'center',
+                },
 
                 {
                     title: '操作',
@@ -452,7 +458,7 @@ export default {
                                 style: {
                                     marginRight: '2px',
                                     marginLeft: '2px',
-                                    visibility:this.transform(this.prj_typeList,params.row.prj_type),
+                                    //visibility:this.transform(this.prj_typeList,params.row.prj_type),
                                 },
                                 domProps:{disabled:!this.isEdit(params.row.isEdit)},
                                 on: {
@@ -479,23 +485,25 @@ export default {
                             }, '成员'),
                             h('Button', {
                                 props: {
-                                    type: 'info',
+                                    type: 'error',
                                     size: 'small'
                                 },
                                 style: {
                                     marginRight: '2px',
                                     marginLeft: '2px',
+                                    visibility:this.transform(this.prj_typeList,params.row.prj_type),
                                 },
                                 on: {
                                     click: () => {
                                         //this.goDevelopmentFn(params.index)
-                                        this.goAgileDetailFn(params.index,params,"附件")
+                                        //this.goAgileDetailFn(params.index,params,"附件")
+                                        this.deleteTableItem(params.index,params,"删除");
                                     }
                                 }
-                            }, '附件'),
+                            }, '删除'),
                             h('Button', {
                                 props: {
-                                    type: 'error',
+                                    type: 'success',
                                     size: 'small'
                                 },
                                 style: {
@@ -736,23 +744,26 @@ export default {
                 
             }
         },
-        toItemCloseFn(is,tab){
-            this.isShowToItem = is;
-            if(tab){
-                this.cancelSerchAll();
-                this.tableDAtaPageCurrent = 1;
-                this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
-                
-            }
-            
-        },
         outinITM(){
             this.isShowItm = true;
         },
-
-
+        toItemCloseFn(is,msg){
+            this.isShowToItem = is;
+            console.error(is,msg)
+            if(msg){
+                if(msg == "success"){
+                    this.actionArr = [];
+                    let searchParams = this.searchKdy();
+                    this.tableDataAjaxFn(projectAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,...searchParams);
+                    Common.CommonMessage(this,"转换成功");
+                }else{
+                    Common.CommonWarning(this,"转换成功");
+                }
+            }
+        },
         toITM(data){
-            console.error(data)
+            this.actionArr = [];
+            this.actionArr.push(data);
             this.isShowToItem = true;
         },
 
@@ -980,7 +991,8 @@ export default {
             });
             this.$Message.error(MSG);
         },
-        deleteTableItem(){
+        deleteTableItem(i){
+            this.actionArr.push(this.tableData[i]);
             if(this.actionArr.length){
                 this.modaDelete = true;
             }else {

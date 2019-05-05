@@ -1,21 +1,21 @@
 <template>
+    <div>
         <Modal 
-            
-            ref="mySwitch" 
-            
-            v-model="isMyShow" 
+            v-for="(myItem,index) in ITMitem.AddGroupList" :key="index"
+            :ref="myItem.myReftemp+index" 
+            :class="myItem.myReftemp+index" 
+            v-model="myItem.modaAdd" 
+            :title="myItem.myLabel+''" 
             :loading="modal_add_loading"
-            title="转立项"
 
-            @on-ok="submitRole()"  
+            @on-ok="submitRole(index,myItem.myRef+index,'formITMitem'+index)"  
             :ok-text="okBtnTxt"
-            @on-cancel="cancelRole()"
+            @on-cancel="cancelRole(index,myItem.myRef+index,'formITMitem'+index)"
             @on-visible-change="changeRole"
 
             >
-            
-           
-
+            <!-- :prop="myItem.grouptemp" -->
+            <!-- :prop="'ITMitem.AddGroupList.'+index+'.grouptemp'" -->
             <table class="ITMtable">
                 <tr>
                     <th>项目名称</th><td><p>{{ ITMtable.prj_name | FALSEINFO}}</p></td>
@@ -27,9 +27,35 @@
                     <th>项目描述</th><td><p>{{ ITMtable.msg | FALSEINFO}}</p></td>
                 </tr> -->
             </table>
-            
+            <Form :label-width="100"  :ref="'formITMitem'+index" :model="ITMitem">
+                <FormItem 
+                    :label="myItem.myLabel"
+                    :prop="'AddGroupList.'+index+'.grouptemp'"
+                    :rules="{required: true, type: 'array', message: '请选择或者填写'+myItem.myLabel+'，不能为空！', trigger: 'change'}" 
+                     
+                    :ref="myItem.myRef+index" 
+                    :class="myItem.myRef+index"
+                    >
+                    <Select 
+                        @on-query-change="queryChange"
+                        @on-change="selChange"
+                        @on-open-change="openChange"
+                        v-model="myItem.grouptemp" 
+                        :id="'sel'+index" 
+                        filterable 
+                        multiple
+                        :loading="inputLoad" 
+                        :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'"
+                        >
+                        <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
+                            {{ item.label }}
+                        </Option>
+                    </Select>
+                </FormItem>
+            </Form>
             <p :class="isShowTxt?'opacityTrue':'opacityFalse'">{{ ITMtable.msg | FALSEINFO}}</p>
         </Modal>
+    </div>
 </template>
 <script>
 import API from '@/api'
@@ -39,12 +65,6 @@ const {projectAddGroup,importITMyes,importITMno,getITMtable,syncSearch,Switch} =
 export default {
     name: 'itm',
     props: {
-        Data: {
-            type: [String,Number,Boolean,Function,Object,Array,Symbol],
-            default: function() {
-                return false;
-            }
-        },
         isShow: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
@@ -53,17 +73,28 @@ export default {
         },
     },
     watch:{
-        Data(data){
-            this.showTableTxt(data)
-        },
-        isShow(data) {
-            this.isMyShow = data;
-            if(data){
+        isShow() {
+            if(this.isShow){
                 this.initAlertTxt();
                 this.outinITM();
             }
         },
-        
+        "ITMitem.AddGroupList"(curVal,oldVal){
+            let _this = this;
+            if(curVal){
+                Common.changeArr2(this,curVal,Common,syncSearch,this.projectGroupFn2)//修改添加角色
+            }
+        },
+        ITMitem: {
+            handler(val, oldVal) {
+                if(val){
+                    if(val.AddGroupList[0].grouptemp.length == 1){
+                    }
+                    Common.inputArr2(this,val)//修改添加角色
+                }
+            },
+            deep: true
+        },
     },
 
     beforeUpdate(){
@@ -74,7 +105,6 @@ export default {
     },
     data () {
         return {
-            isMyShow:false,
             ITMitem:{
                 AddGroupList:[],
             },
@@ -84,7 +114,6 @@ export default {
                 desc:"",
                 msg:"",
                 isExist:"",
-                id:"",
             },
             inputLoad:false,
             modal_add_loading:true,
@@ -93,20 +122,9 @@ export default {
         }
     },
     mounted(){
-        this.isMyShow = this.isShow;
-        this.showTableTxt(this.Data)
+        
     },
     methods: {
-        showTableTxt(data){
-            if(data && Array.isArray(data) && data.length){
-                this.ITMtableTxt("");
-                this.ITMtable.prj_name = data[0].prj_name;
-                this.ITMtable.prj_id = data[0].prj_id;
-                this.ITMtable.id = data[0].id;
-            }else{
-                this.ITMtableTxt("");
-            }
-        },
         initAlertTxt(){
             this.isShowTxt = false;
             this.okBtnTxt = "转立项";
@@ -114,7 +132,7 @@ export default {
         },
         cleanITM(){
             this.ITMitem.AddGroupList = [];
-            //this.ITMtableTxt("");
+            this.ITMtableTxt("");
         },
         openChange(isShow){
             console.log(isShow)
@@ -124,7 +142,26 @@ export default {
                 this.ITMtable[I] = TXT;
             }
         },
-        
+        selChange(val){
+            let _val = val[val.length-1];
+            this.ITMitem.AddGroupList[0].grouptemp = [];
+            this.ITMitem.AddGroupList[0].grouptemp.push(_val);
+
+            let _obj = this.ITMitem.AddGroupList[0].groupListtemp.find(item => item.value == _val);
+
+            this.ITMtableTxt("加载中......");
+            this.initAlertTxt();
+            Common.throttle(
+                (value, THIS) => {
+                    THIS.getITMtableFn(getITMtable,{prj_id:value,prj_name:_obj?_obj.prj_name : ""})
+                },
+                this,
+                1500,
+                _val,
+                2000
+            )();
+            //
+        },
         getITMtableFn(URL,params = {}){
             if(params.prj_id){
                 defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
@@ -161,52 +198,70 @@ export default {
         queryChange(val){
         },
         changeRole(is){
-            this.$emit("toItmClose",is);
+            this.$emit("itmClose",is);
         },
         cancelRole(i,name,fromName){
-            this.$emit("toItmClose",false);
+            this.$refs[fromName][i].resetFields();
         },
         submitRole(i,name,fromName){
-            this.modal_add_loading = true;
-            this.$nextTick(() => {
-              this.modal_add_loading = true;
-            });
-            this.submitAddData(this);
+            let _isExist = this.ITMtable.isExist;
+
+            this.modal_add_loading = false;
+            setTimeout(()=>{
+                this.$nextTick(() => {
+                  this.modal_add_loading = true;
+                });
+            },300)
+
+            this.$refs[fromName][i].validate((valid)=>{//验证
+                if(valid){
+                    if(!this.isShowTxt && _isExist =="yes"){
+                        this.isShowTxt = true;
+                        this.okBtnTxt = "确认转立项";
+                    }else{
+                        this.modal_add_loading = true;
+                        this.$nextTick(() => {
+                          this.modal_add_loading = true;
+                        });
+                        this.submitAddData(i,fromName,this.ITMitem.AddGroupList[i],this,this.ITMitem.AddGroupList[i].grouptemp,_isExist);
+                    }
+                }
+            })
         },
-        submitAddData(that){
+        submitAddData(i,fromName,obj,that,group,isExist){
             this.initAlertTxt();
             let tempData = {
-                id:this.ITMtable.id,
-                prjId:this.ITMtable.id,
-                prjSn:this.ITMtable.prj_id,
-                prj_id:this.ITMtable.prj_id,
+                prj_id:group[0],
+                prj_name:(obj.groupListtemp.find(item=>item.value == group[0]) || {}).prj_name || "",
                 username:Common.getStorageAndCookie(this,Common,"username"),
             }
-            let URL = Switch;
+            let URL = isExist == "yes" ? importITMyes : importITMno;
             defaultAXIOS(URL,tempData,{timeout:5000,method:'post'}).then((response) => {
                 let myData = response.data;
                 console.log("<======agile ITMAdd***response+++",response,myData,"======>");
                 if(myData.status == "success"){
-                    this.modal_add_loading = false;
-                    this.$emit("toItmClose",false,myData.status);
+                    that.$refs[fromName][i].resetFields();
+                    that.modal_add_loading = false;
+                    obj.modaAdd = false;
+                    that.$emit("itmClose",false,"tableData");
                     
                 }else{
-                    this.modal_add_loading = false;
-                    this.showError(URL+"错误");
-                    this.$emit("toItmClose",false,myData.message);
+                    obj.modaAdd = true;
+                    that.modal_add_loading = false;
+                    that.showError(URL+"错误");
+                    this.$emit("itmClose",false);
                 }
                 
             }).catch( (error) => {
                 console.log(error);
-                this.modal_add_loading = false;
-                this.showError(error);
-                this.$emit("toItmClose",false,JSON.stringify(error));
+                that.modal_add_loading = false;
+                that.showError(error);
+                that.$emit("itmClose",false);
             });
 
         },
         outinITM(){
             this.cleanITM();
-
             if(!this.ITMitem.AddGroupList.length){
                 this.ITMitem.AddGroupList.push({
                     myRef:"selfRef",

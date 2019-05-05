@@ -129,6 +129,7 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
         obj.prod_name =  "prod_name"+i;
         obj.status = 0;
         obj.status_name = "ACTIVE";
+        obj.itm_status = ((N)=>{return N >0.5?"已结束":"" })(Math.random());
         list.push(obj);
         obj = {};
 
@@ -4465,9 +4466,9 @@ let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
             ],
             cardList:[
                 {
-                    isDepend:"no",
-                    isFile:"no",
-                    isFinish:"",
+                    "isDepend|1":["no","yes"],
+                    "isFile|1":["no","yes"],
+                    "isFinish|1":["finish","unfinish"],
                     isTaskPerson:true,
 
                     groupId:12799,
@@ -4485,9 +4486,9 @@ let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
                     "plan_hours|1":["4.5",4.5],
                 },
                 {
-                    isDepend:"no",
-                    isFile:"no",
-                    isFinish:"",
+                    "isDepend|1":["no","yes"],
+                    "isFile|1":["no","yes"],
+                    "isFinish|1":["finish","unfinish"],
                     isTaskPerson:true,
                     
                     groupId:12800,
@@ -4506,9 +4507,9 @@ let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
                     "plan_hours|1":["4.5",4.5],
                 },
                 {
-                    isDepend:"no",
-                    isFile:"no",
-                    isFinish:"",
+                    "isDepend|1":["no","yes"],
+                    "isFile|1":["no","yes"],
+                    "isFinish|1":["finish","unfinish"],
                     isTaskPerson:true,
                     
                     groupId:12799,
@@ -4527,9 +4528,9 @@ let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
                     "plan_hours|1":["4.5",4.5],
                 },
                 {
-                    isDepend:"no",
-                    isFile:"no",
-                    isFinish:"",
+                    "isDepend|1":["no","yes"],
+                    "isFile|1":["no","yes"],
+                    "isFinish|1":["finish","unfinish"],
                     isTaskPerson:true,
                     
                     groupId:12605,
@@ -4548,9 +4549,9 @@ let get_kanban_data = (val1 = 200, val2 = 1, val3 = 3) => {
                     "plan_hours|1":["4.5",4.5],
                 },
                 {
-                    isDepend:"no",
-                    isFile:"no",
-                    isFinish:"",
+                    "isDepend|1":["no","yes"],
+                    "isFile|1":["no","yes"],
+                    "isFinish|1":["finish","unfinish"],
                     isTaskPerson:true,
                     
                     groupId:12605,
@@ -4797,6 +4798,11 @@ app.all('/project/del_user/', function(req, res) {
 
 app.all('/project/add_user/', function(req, res) {
     res.json({status: "success",message: "project/add_user success"});
+    res.end()
+});
+
+app.all('/project/switch/', function(req, res) {
+    res.json({status: "success",message: "project/switch success"});
     res.end()
 });
 

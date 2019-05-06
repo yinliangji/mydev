@@ -62,18 +62,20 @@
                                     <Col span="2" style="text-align: center">实施部门</Col>
                                     <Col span="6">
                                         <FormItem >
-                                            <Select clearable filterable v-model="formValidate.stff_nm_id" placeholder="请选择部门">
+                                            <Input clearable v-model="formValidate.stff_nm_id" placeholder="输入实施部门"></Input>
+                                            <!-- <Select clearable filterable v-model="formValidate.stff_nm_id" placeholder="请选择部门">
                                                 <Option v-for="(item,index) in stff_nm_idList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                            </Select>
+                                            </Select> -->
                                         </FormItem>
                                     </Col>
                                      
                                     <Col span="2" style="text-align: center">提出部门</Col>
                                     <Col span="6">
                                         <FormItem >
-                                            <Select clearable filterable v-model="formValidate.dept_nm_id" placeholder="请选择部门">
+                                            <Input clearable v-model="formValidate.dept_nm_id" placeholder="输入提出部门"></Input>
+                                            <!-- <Select clearable filterable v-model="formValidate.dept_nm_id" placeholder="请选择部门">
                                                 <Option v-for="(item,index) in dept_nm_idList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                            </Select>
+                                            </Select> -->
                                         </FormItem>
                                     </Col>
                                     
@@ -240,7 +242,6 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission,projectAddGroup,projectCondition} = Common.restUrl;
-
 export default {
     name: 'aglie',
     mounted(){
@@ -622,72 +623,7 @@ export default {
         },
 
         getProjectCondition(URL,params = {}){
-            return defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======【getProjectCondition】***response+++",response,myData,"====>");
-                if(myData.status == "success"){
-                    if(Array.isArray(myData.type_list) && myData.type_list.length){
-                        let obj = {};
-                        this.prj_typeList = [];
-                        myData.type_list.forEach((item)=>{
-                            obj.value = item.type_num;
-                            obj.label = item.type_name;
-                            this.prj_typeList.push(obj);
-                            obj = {}
-                        })
-                    }
-                    if(Array.isArray(myData.org_list) && myData.org_list.length){
-                        let obj = {};
-                        this.departmentList = [];
-                        myData.org_list.forEach((item,index)=>{
-                            obj.value = item;
-                            obj.label = item;
-                            this.departmentList.push(obj);
-                            obj = {}
-                        })
-                    }
-
-
-
-
-                    if(Array.isArray(myData.dept_nm_list) && myData.dept_nm_list.length){
-                        let obj = {};
-                        this.dept_nm_idList = [];
-                        myData.dept_nm_list.forEach((item)=>{
-                            obj.value = item.num+"";
-                            obj.label = item.name+"";
-                            this.dept_nm_idList.push(obj);
-                            obj = {}
-                        })
-                    }
-
-
-                    if(Array.isArray(myData.stff_nm_list) && myData.stff_nm_list.length){
-                        let obj = {};
-                        this.stff_nm_idList = [];
-                        myData.stff_nm_list.forEach((item)=>{
-                            obj.value = item.num+"";
-                            obj.label = item.name+"";
-                            this.stff_nm_idList.push(obj);
-                            obj = {}
-                        })
-                    }
-
-
-                    
-                    return Promise.resolve(myData)
-                }else{
-                    console.log(URL+"_"+myData.status);
-                    return Promise.resolve(URL+"_"+myData.status)
-                    this.showError(URL+"_"+myData.status);
-                }
-                
-                
-            }).catch( (error) => {
-                console.log(error);
-                return Promise.resolve(error)
-                this.showError(error);
-            });   
+            return Common.GetProjectCondition(Common,this,defaultAXIOS,URL,params);
         },
 
 

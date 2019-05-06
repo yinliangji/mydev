@@ -912,6 +912,96 @@ export default class Common extends Utils {
         return Promise.reject(error);
       });
     }
+
+    //获取项目首页下拉
+    static GetProjectCondition(_Common,that,FUN,URL,params = {}){
+
+      return FUN(URL,params,{timeout:60000,method:'get'}).then((response) => {
+          let myData = response.data;
+          console.log("<======【getProjectCondition】***response+++",response,myData,"====>");
+          if(myData.status == "success"){
+              if(Array.isArray(myData.type_list) && myData.type_list.length && that.prj_typeList){
+                  let obj = {};
+                  that.prj_typeList = [];
+                  myData.type_list.forEach((item)=>{
+                      obj.value = item.type_num;
+                      obj.label = item.type_name;
+                      that.prj_typeList.push(obj);
+                      obj = {}
+                  })
+              }
+              if(Array.isArray(myData.org_list) && myData.org_list.length && that.departmentList){
+                  let obj = {};
+                  that.departmentList = [];
+                  myData.org_list.forEach((item,index)=>{
+                      obj.value = item;
+                      obj.label = item;
+                      that.departmentList.push(obj);
+                      obj = {}
+                  })
+              }
+
+              if(Array.isArray(myData.dept_nm_list) && myData.dept_nm_list.length && that.dept_nm_idList){
+                  let obj = {};
+                  that.dept_nm_idList = [];
+                  myData.dept_nm_list.forEach((item)=>{
+                      obj.value = item.num+"";
+                      obj.label = item.name+"";
+                      that.dept_nm_idList.push(obj);
+                      obj = {}
+                  })
+              }
+
+              if(Array.isArray(myData.stff_nm_list) && myData.stff_nm_list.length && that.stff_nm_idList){
+                  let obj = {};
+                  that.stff_nm_idList = [];
+                  myData.stff_nm_list.forEach((item)=>{
+                      obj.value = item.num+"";
+                      obj.label = item.name+"";
+                      that.stff_nm_idList.push(obj);
+                      obj = {}
+                  })
+              }
+
+              if(Array.isArray(myData.subject_list) && myData.subject_list.length && that.subjectList){
+                  let obj = {};
+                  that.subjectList = [];
+                  myData.subject_list.forEach((item)=>{
+                      obj.value = item.num+"";
+                      obj.label = item.name+"";
+                      that.subjectList.push(obj);
+                      obj = {}
+                  })
+              }
+
+              if(Array.isArray(myData.itm_status_list) && myData.itm_status_list.length && that.itm_statusList){
+                  let obj = {};
+                  that.itm_statusList = [];
+                  myData.itm_status_list.forEach((item)=>{
+                      obj.value = item.num+"";
+                      obj.label = item.name+"";
+                      that.itm_statusList.push(obj);
+                      obj = {}
+                  })
+              }
+              return Promise.resolve(myData)
+          }else{
+              console.log(URL+"_"+myData.status);
+              return Promise.reject(URL+"_"+myData.status)
+              that.showError(URL+"_"+myData.status);  
+              
+          }
+          
+          
+      }).catch( (error) => {
+          console.log(error);
+          return Promise.reject(error)
+          that.showError(error);
+          
+      });   
+      
+    }
+
     //获取逻辑子系统和业务类型 下拉列表
     static SelbusinessList(that,FUN,URL,params){
       //

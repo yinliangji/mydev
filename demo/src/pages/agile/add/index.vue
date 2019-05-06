@@ -4,7 +4,7 @@
         <Card>
             <div class="aglieAddBox">
                 
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" >
+                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140" >
 					<h3 class="Title"><span>项目基本信息</span></h3>
 
 
@@ -16,15 +16,25 @@
                             <ToolTip  content="项目归属的产品，如项目“企业现金二期”所属产品是“企业现金”" />
                         </FormItem> 
 
-
+                        <FormItem label="项目名称" prop="prj_name">
+                            <Input v-model="formValidate.prj_name" placeholder="请填写项目名称"></Input>
+                        </FormItem>
                         <Row>
                             <Col span="12">
-                                <FormItem label="项目名称" prop="prj_name">
-                                    <Input v-model="formValidate.prj_name" placeholder="请填写项目名称"></Input>
-                                </FormItem>
+                                <FormItem label="项目状态" prop="itm_status" >
+                                    <Select clearable v-model="formValidate.itm_status" placeholder="请选项目状态">
+                                        <Option v-for="item in itm_statusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select> 
+                                </FormItem> 
                             </Col>
                             <Col span="12">
-                                <FormItem label="项目类型" prop="prj_type">
+                                <FormItem label="总分行一体化研发类型" prop="subject" >
+                                    <Select clearable v-model="formValidate.subject" placeholder="请选总分行一体化研发类型">
+                                        <Option v-for="item in subjectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select> 
+                                    
+                                </FormItem> 
+                                <FormItem label="项目类型" prop="prj_type" v-show="false">
                                     自研
                                     <RadioGroup v-model="formValidate.prj_type" v-show="false">
                                         <Radio title="在ITM中已立项的项目" label="1">立项</Radio>
@@ -38,16 +48,31 @@
 
     					<Row>
                             <Col span="12">
-                                <FormItem label="开始时间" prop="start_time">
-                            		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"  :value="formValidate.start_time" v-model="formValidate.start_time" ></DatePicker>
+                                <FormItem label="项目启动时间" prop="start_time">
+                            		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择启动日期"  :value="formValidate.start_time" v-model="formValidate.start_time" ></DatePicker>
                         		</FormItem>
                             </Col>
                             <Col span="12">
-                                 <FormItem label="结束时间" prop="end_time">
+                                 <FormItem label="项目结束时间" prop="end_time">
                             		<DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择结束日期" v-model="formValidate.end_time" ></DatePicker>
                         		</FormItem>
                             </Col>
                         </Row>
+
+                        <Row>
+                            <Col span="12">
+                                <FormItem label="提出部门" prop="dept_nm_id">
+                                    <Input v-model="formValidate.dept_nm_id" placeholder="请填写提出部门"></Input>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem label="实施部门" prop="stff_nm_id">
+                                    <Input v-model="formValidate.stff_nm_id" placeholder="请填写实施部门"></Input>
+                                </FormItem> 
+                            </Col>
+                        </Row>
+
+                        
 
                       
     					<FormItem label="项目描述" prop="prj_desc">
@@ -55,11 +80,12 @@
                         </FormItem>
 
 
-                        <FormItem label="项目目标" prop="prj_goal">
+                        <FormItem label="业务目标" prop="prj_goal">
                             <Input v-model="formValidate.prj_goal" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写项目目标"></Input>
                         </FormItem>
 
 
+                        <!--  填写模块start v-show="false"以后去掉 -->
                         <FormItem label="填写模块" prop="createModule" v-show="false">
                             <span style="position: relative;">
                                 <Tag v-for="item in formValidate.createModule" :key="item" :name="item" closable @on-close="handleClose">
@@ -72,7 +98,7 @@
                             </span>
                         </FormItem>
 
-
+                        <!--  模块选择start v-show="false"以后去掉 -->
                         <FormItem label="模块选择" prop="modules" v-show="false">
                             <Select v-model="formValidate.modules" multiple >
                                 <Option v-for="item in moduleList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -81,7 +107,7 @@
 
                        
                     </div>
-
+                    <!--  关联子系统start v-show="false"以后去掉 -->
                     <h3 class="Title" v-show="false"><span>关联子系统</span></h3>
                     <div class="fromBox fromBox2"  v-show="false">
                     	<div class="newAddGroup">
@@ -151,7 +177,7 @@
                             </Row>
                         </div>
                     </div>
-                    
+                    <!--  成员信息start v-show="false"以后去掉 -->
 					<h3 class="Title"  v-show="false"><span>成员信息</span></h3>
                     <div class="fromBox fromBox2"  v-show="false">
                         
@@ -334,7 +360,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,listModule,publishUser,logicSystem,phySystem,projectAddCustomizedGroup} = Common.restUrl;
+const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,listModule,publishUser,logicSystem,phySystem,projectAddCustomizedGroup,projectCondition} = Common.restUrl;
 import Store from '@/vuex/store'
 import AddPartPop from '@/pages/agile/add/addpartpop';
 
@@ -401,39 +427,7 @@ export default {
         let _this = this;
         const validateDateEnd = Common.checkEndDate(this);
         const validatePart = Common.checkPart(this);
-        /*
-        const validateDateEnd = (rule, value, callback) => {
-            if (value) {
-                let Timer = new Date(value).getTime() - new Date(this.formValidate.start_time).getTime();
-                if(Timer >= 0){
-                    callback()
-                }else{
-                    return callback(new Error('结束日期早于开始日期！'));
-                }
-            }else if(!value){
-                return callback(new Error('请选择日期！'));
-            }else{
-                callback()  
-            }
-        };
-        const validatePart = (rule, value, callback) => {
-            console.log(value)
-            if(!value){
-                return callback(new Error('内容不能为空！'));    
-            }else{
-                if(this.formValidate.AddGroupList.length){
-                    for(var i=0;i<this.formValidate.AddGroupList.length;i++){
-                        if(this.formValidate.AddGroupList[i].myValue == (value+"")){
-                            return callback(new Error('内容重复！')); 
-                        }
-                    }
-                    callback()
-                }else{
-                    callback()
-                }
-            }
-        };
-        */
+        
         return {
             options3: {
                 disabledDate (date) {
@@ -460,6 +454,11 @@ export default {
                 AddGroupList:[],
                 pid:"",
 
+                subject:"",
+                itm_status:"",
+                stff_nm_id:"",
+                dept_nm_id:"",
+
                 
 
 
@@ -485,24 +484,31 @@ export default {
                 moudle:"",
                 group:"",
             },
-            prod_idList: [
-                // {
-                //   "id":1 ,
-                //   "product_id":"x000001",
-                //   "product_name":"product",
-                 
-                // }
-                // {
-                //     value: 'New York1',
-                //     label: 'New York总体组人1'
-                // },
+            prod_idList:[
             ],
-            moduleList: [
-                // {
-                //     value: '模块1-1',
-                //     label: '模块1'
+            moduleList:[
             ],
+            itm_statusList:[
+            ],
+            subjectList:[
+            ],
+
             ruleValidate: {
+                stff_nm_id: [
+                    { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
+                dept_nm_id: [
+                    { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
+
+
+                subject: [
+                    { required: false,type: 'string',  message: 'Please select gender', trigger: 'change' }
+                ],
+                itm_status: [
+                    { required: false,type: 'string',  message: 'Please select gender', trigger: 'change' }
+                ],
+
                 prod_id: [
                     { required: false,type: 'string', message: 'Please select gender', trigger: 'change' }
                 ],
@@ -605,11 +611,6 @@ export default {
             },
             inputLoad:false,
             popIsInput:false,//添加小组信息
-
-
-
-
-
             
         }
     },
@@ -713,11 +714,16 @@ export default {
 
         this.projectGetProdFn();
 
-        this.listModuleFn(listModule,((ID)=>{return ID?{id:ID}:{id:""}})(Common.GETID(this,Common)))
+        this.listModuleFn(listModule,((ID)=>{return ID?{id:ID}:{id:""}})(Common.GETID(this,Common)));
+
+        this.getProjectCondition(projectCondition);
 
     },
     
     methods: {
+        getProjectCondition(URL,params = {}){
+            return Common.GetProjectCondition(Common,this,defaultAXIOS,URL,params);
+        },
         /* 修改添加角色 */
         cancelRole(i){
             Common.CancelRole(this,i)
@@ -942,6 +948,11 @@ export default {
             this.formValidate.AddGroupList = this.defaultSystem;
             this.formValidate.pid = "";
 
+            this.formValidate.subject = "";
+            this.formValidate.itm_status = "";
+
+           
+
            
             
 
@@ -1004,6 +1015,8 @@ export default {
                 prj_desc: this.formValidate.prj_desc,
                 prj_goal: this.formValidate.prj_goal,
                 username:_username,
+                subject:this.formValidate.subject,
+                itm_status:this.formValidate.itm_status,
                 
                 /*
                 prod_id:this.formValidate.prod_id,

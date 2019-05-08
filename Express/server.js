@@ -188,12 +188,12 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
 
             "prj_name|5-8": /[a-zA-Z]/,
             "manager|6-10": /[a-zA-Z0-9]/,
-            "prj_desc": "@title",
-            "prj_goal": "项目目标",
+            "prj_desc": "@ctitle",
+            "prj_goal": "@ctitle",
             "prj_type|1": ["1","2"],
             "settle_time": "@date(yyyy-MM-dd)",
             "start_time": "@date(yyyy-MM-dd)",
-            "end_time": "@date(yyyy-MM-dd)",
+            "end_time": "2019-12-12",
             
             
             "logic_sys_name": "逻辑子系统1|逻辑子系统2",
@@ -208,6 +208,21 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             "prod_id": "2",
             "pid": "2",
             "prod_name|5-8": /[a-zA-Z]/,
+
+            "subject|1-3": 0,
+            "dept_nm_id": "@ctitle",
+            "stff_nm_id": "@ctitle",
+            "itm_status|1-5": 0,
+
+            "itm_prj_eng_nm":"@title",
+            "itm_prj_eng_short_num":"@title",
+            "itm_type":"@ctitle",
+            "itm_assignment_date":"@date(yyyy-MM-dd)",
+            "itm_tech_target":"@ctitle",
+            "itm_prj_tsk_id|5-10":/[a-zA-Z0-9]/,
+            "itm_lob":"@ctitle",
+            "itm_wthr_snd_ntc":"@ctitle",
+
             AddGroupList: [
                 {
                     myRef: "selfRef",
@@ -2387,6 +2402,30 @@ app.all('/prj/sync_search/', function(req, res) {
     res.end()
 });
 
+app.all('/findItm/', function(req, res) {
+
+    let val2 = req.query && req.query.userName ? req.query.userName : "";
+    let resVal
+    let Json
+    if(trueorfalse == 0){
+        Json =  GroupList(req.body.myStatus,val2)   
+        //resVal = GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+    }else if(trueorfalse == 1){
+        Json =  _GroupList(req.body.myStatus,val2) 
+        //resVal = _GroupList(req.body.myStatus, req.body.page, req.body.pageline);
+
+    }else{
+        Json =  GroupList_(req.body.myStatus,val2)   
+        //resVal = GroupList_(req.body.myStatus, req.body.page, req.body.pageline);     
+    }
+    console.log("req==>", req._parsedUrl,req.statusCode,req.statusMessage);
+    console.log("Json==>", Json);
+    trueorfalse = trueorfalse>1 ? 0 : trueorfalse+1
+    console.log(trueorfalse)
+    res.json(Json);
+    res.end()
+});
+
 app.all('/system/loglist/', function(req, res) {
     let val2 = req.query && req.query.name ? req.query.name : "";
     let resVal
@@ -3410,7 +3449,7 @@ let reqList = (val1 = 200, val2 = 1, val3 = 3) => {
         "status": "success",
         "message": "mockDataList xxxxxxx",
         "data|4": [{
-            "id|+1": 1,
+            "id|+1": 4,
             "req_id|+1": 4,
             "req_submitter|5-8": /[a-zA-Z]/,
             "req_name|5-8": /[a-zA-Z0-9]/,
@@ -3643,8 +3682,9 @@ let getITMtable = (val1 = 200, val2 = 1, val3 = 3) => {
             name:"@title",
             "num|1-100":1,
             "desc|5-10":/[a-zA-Z0-9]/,
-            "msg":"@cname",
+            "msg":"@ctitle",
             "isExist|1":["yes","no"],
+            "isSwitch|1":["yes","no"],
         },
     })
 }
@@ -4915,17 +4955,41 @@ let projectCondition = (val1 = 200, val2 = 1, val3 = 3) => {
             },
         ],
 
-        "subject_list|5":[
+        "subject_list":[
             {
-                "num|+1":1,
-                "name|+1":1,
+                "num":1,
+                "name":"类型1",
+            },
+            {
+                "num":"2",
+                "name":"类型2",
+            },
+            {
+                "num":3,
+                "name":"类型3",
             },
         ],
 
-        "itm_status_list|5":[
+        "itm_status_list":[
             {
-                "num|+1":1,
-                "name|+1":1,
+                "num":"1",
+                "name":"状态1",
+            },
+            {
+                "num":2,
+                "name":"状态2",
+            },
+            {
+                "num":"3",
+                "name":"状态3",
+            },
+            {
+                "num":4,
+                "name":"状态4",
+            },
+            {
+                "num":"5",
+                "name":"状态5",
             },
         ],
 

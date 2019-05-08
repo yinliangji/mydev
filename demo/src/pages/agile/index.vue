@@ -685,7 +685,6 @@ export default {
         },
         toItemCloseFn(is,msg){
             this.isShowToItem = is;
-            console.error(is,msg)
             if(msg){
                 if(msg == "success"){
                     this.actionArr = [];

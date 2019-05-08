@@ -69,7 +69,8 @@
 			<h3 class="Title" ><span>其他成员</span></h3>
 
 			
-            <div class="fromBox fromBox2" :id="isOption()">
+            <div class="fromBox fromBox2" >
+                <!-- :id="isOption()" -->
                 <div class="addpartBox">
                     <Button type="success" @click="addpart">添加角色</Button>
                 </div>

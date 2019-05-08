@@ -1940,7 +1940,7 @@ export default class Common extends Utils {
               if(isTimer){
                   callback()
               }else{
-                  return callback(new Error('结束日期早于开始日期！'));
+                  return callback((()=>{if(window.dateEditError){window.dateEditError()} ;return new Error('结束日期早于开始日期！')})());
               }
             }
         }else if(!value){

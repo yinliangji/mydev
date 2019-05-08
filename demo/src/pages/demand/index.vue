@@ -288,7 +288,7 @@ export default {
                     width: 140,
                 },
                 {
-                    title: '用户故事情况(上线 / 未上线)',
+                    title: '用户故事情况(上线 / 全部)',
                     width: 120,
                     key: 'on_line',
                     align: 'center',
@@ -842,7 +842,7 @@ export default {
             return Common.GETID(this,Common);
         },
         goUserStory(i){
-            Common.SetSession("REQ_ID",this.tableData[i].req_id || this.tableData[i].id)
+            Common.SetSession("REQ_ID",this.tableData[i].id || this.tableData[i].req_id)
             this.$router.push({path: '/product', query: {board: true}})
         },
         toBusiness(i,From){

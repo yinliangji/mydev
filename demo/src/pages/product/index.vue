@@ -298,7 +298,6 @@ import Store from '@/vuex/store'
 export default {
 	watch: {
 		searchCan(data){
-			console.error("searchCan",data)
 			this.mainDataLoad(!data)
 		},
 		'$route' (to, from) {
@@ -764,6 +763,7 @@ export default {
 	        	}
 	        	
 	        }else if(Common.GetSession("REQ_ID")){
+
 	    		this.formValidate.req_id = Common.GetSession("REQ_ID") + "";
 	    		this.formValidate.sprint = "";
 
@@ -1083,6 +1083,8 @@ export default {
 				id:_params.ID,
 				username:Common.getCookie("username"),
 				userstory_status:((N)=>{return (N-0) < 10 ? N.substring(1) : N})(_params.taskStatus),
+				prjSn:Common.GETprjid(this,Common),
+                prj_id:Common.GETprjid(this,Common),
 			}
 			defaultAXIOS(storySetChange,myParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
@@ -1629,7 +1631,6 @@ export default {
         },
 
 		mainDataLoad(IsShow = true,Msg = "正在加载中……"){
-			console.error("mainDataLoad")
 
 			Store.dispatch('IS_PAGELOADING/incrementAsync', {
 		        isShow: IsShow,

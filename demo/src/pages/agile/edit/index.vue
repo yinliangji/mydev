@@ -4,7 +4,7 @@
         <Card>
             <div class="aglieAddBox">
                 
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" >
+                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="140" >
 					<h3 class="Title"><span>编辑项目基本信息</span></h3>
 
 
@@ -16,15 +16,38 @@
                             <ToolTip  content="项目归属的产品，如项目“企业现金二期”所属产品是“企业现金”" />
                         </FormItem> 
 
-
+                        <FormItem label="项目名称" prop="prj_name">
+                            <span v-show="isMyEdit('prj_name')">
+                                {{formValidate.prj_name}}
+                            </span>
+                            <Input v-show="isMyEdit('prj_name','else')" v-model="formValidate.prj_name" placeholder="请填写项目名称" ></Input>
+                            
+                        </FormItem>
+                        
                         <Row>
                             <Col span="12">
-                                <FormItem label="项目名称" prop="prj_name">
-                                    <Input v-model="formValidate.prj_name" placeholder="请填写项目名称"></Input>
+                                <FormItem label="项目状态" prop="itm_status" >
+                                    <span v-show="isMyEdit('itm_status')">
+                                        {{valueChangelabel(formValidate.itm_status,itm_statusList)}}
+                                    </span> 
+                                    <Select v-show="isMyEdit('itm_status','else')" clearable v-model="formValidate.itm_status" placeholder="请选项目状态" >
+                                        <Option v-for="item in itm_statusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select>
+                                    
                                 </FormItem>
+                                
                             </Col>
                             <Col span="12">
-                                <FormItem label="项目类型" prop="prj_type">
+                                <FormItem label="总分行一体化研发类型" prop="subject" >
+                                    <span v-show="isMyEdit('subject')">
+                                        {{valueChangelabel(formValidate.subject,subjectList)}}
+                                    </span> 
+                                    <Select clearable v-model="formValidate.subject" placeholder="请选总分行一体化研发类型" v-show="isMyEdit('subject','else')">
+                                        <Option v-for="item in subjectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select> 
+                                    
+                                </FormItem> 
+                                <FormItem label="项目类型" prop="prj_type" v-show="false">
                                     <RadioGroup v-model="formValidate.prj_type">
                                         <Radio :disabled="true" title="在ITM中已立项的项目" label="1">立项</Radio>
                                         <Radio :disabled="true" title="非立项项目" label="2">自研</Radio>
@@ -45,25 +68,115 @@
 
     					<Row>
                             <Col span="12">
-                                <FormItem label="开始时间" prop="start_time">
-                            		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择开始日期"  :value="formValidate.start_time" v-model="formValidate.start_time"></DatePicker>
+                                <FormItem label="项目启动时间" prop="start_time">
+                                    <span v-show="isMyEdit('start_time')">
+                                        {{formValidate.start_time}}
+                                    </span> 
+                            		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择项目启动时间"  :value="formValidate.start_time" v-model="formValidate.start_time" v-show="isMyEdit('start_time','else')"></DatePicker>
                         		</FormItem>
                             </Col>
                             <Col span="12">
-                                 <FormItem label="结束时间" prop="end_time">
-                            		<DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择结束日期" v-model="formValidate.end_time" ></DatePicker>
+                                 <FormItem label="项目结束时间" prop="end_time">
+                                    <span v-show="isMyEdit('end_time')">
+                                        {{formValidate.end_time}}
+                                    </span>
+                            		<DatePicker placement="bottom-start" type="date" :options="options3" placeholder="选择项目结束日期" v-model="formValidate.end_time" v-show="isMyEdit('end_time','else')" ></DatePicker>
                         		</FormItem>
                             </Col>
                         </Row>
 
-                      
-    					<FormItem label="项目描述" prop="prj_desc">
-                            <Input v-model="formValidate.prj_desc" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写项目描述"></Input>
+                        <Row>
+                            <Col span="12">
+                                <FormItem label="提出部门" prop="dept_nm_id">
+                                    <span v-if="isMyEdit('dept_nm_id')">
+                                        {{formValidate.dept_nm_id}}
+                                    </span>
+                                    <Input v-model="formValidate.dept_nm_id" placeholder="请填写提出部门" v-if="isMyEdit('dept_nm_id','else')"></Input>
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem label="实施部门" prop="stff_nm_id">
+                                    <span v-if="isMyEdit('stff_nm_id')">
+                                        {{formValidate.stff_nm_id}}
+                                    </span>
+                                    <Input v-model="formValidate.stff_nm_id" placeholder="请填写实施部门" v-if="isMyEdit('stff_nm_id','else')"></Input>
+                                </FormItem> 
+                            </Col>
+                        </Row>
+
+                        <Row v-if="formValidate.prj_type == '1'">
+                            <Col span="12">
+                                <FormItem label="项目英文名称">
+                                    <span >
+                                        {{formValidate.itm_prj_eng_nm}}
+                                    </span>
+                                    
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem label="项目英文简称">
+                                    <span >
+                                        {{formValidate.itm_prj_eng_short_num}}
+                                    </span>
+                                </FormItem> 
+                            </Col>
+                        </Row>
+                        <Row  v-if="formValidate.prj_type == '1'">
+                            <Col span="12">
+                                <FormItem label="立项类型">
+                                    <span >
+                                        {{formValidate.itm_type}}
+                                    </span>
+                                    
+                                </FormItem>
+                            </Col>
+                            <Col span="12">
+                                <FormItem label="下达任务书时间">
+                                    <span >
+                                        {{formValidate.itm_assignment_date}}
+                                    </span>
+                                </FormItem> 
+                            </Col>
+                        </Row>
+                        
+                        <Row  v-if="formValidate.prj_type == '1'">
+                            <Col span="12">
+                                <FormItem label="是否发送通知书">
+                                    <span >
+                                        {{formValidate.itm_wthr_snd_ntc}}
+                                    </span>
+                                </FormItem> 
+                            </Col>
+                            <Col span="12">
+                                <FormItem label="项目任务书编号">
+                                    <span >
+                                        {{formValidate.itm_prj_tsk_id}}
+                                    </span>
+                                </FormItem> 
+                            </Col>
+                        </Row>
+                        <FormItem label="技术目标" v-if="formValidate.prj_type == '1'">
+                            {{formValidate.itm_tech_target}}
+                        </FormItem>
+                        <FormItem label="业务条线" v-if="formValidate.prj_type == '1'">
+                            {{formValidate.itm_lob}}
                         </FormItem>
 
 
-                        <FormItem label="项目目标" prop="prj_goal">
-                            <Input v-model="formValidate.prj_goal" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写项目目标"></Input>
+                      
+    					<FormItem label="项目描述" prop="prj_desc">
+                            <span v-show="isMyEdit('prj_desc')">
+                                <pre>{{formValidate.prj_desc}}</pre>
+                            </span>
+                            <Input v-model="formValidate.prj_desc" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写项目描述" v-show="isMyEdit('prj_desc','else')"></Input>
+                        </FormItem>
+
+
+                        <FormItem label="业务目标" prop="prj_goal">
+                            <span v-show="isMyEdit('prj_goal')">
+                                <pre>{{formValidate.prj_goal}}</pre>
+                            </span>
+                            <Input v-model="formValidate.prj_goal" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写业务目标" v-show="isMyEdit('prj_goal','else')"></Input>
                         </FormItem>
 
 
@@ -279,12 +392,14 @@
     </div>
 </template>
 <script>
-
+window.dateEditError =()=>{
+    
+}
 
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail,listModule,logicSystem,phySystem,projectListDataNew} = Common.restUrl;
+const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail,listModule,logicSystem,phySystem,projectListDataNew,projectCondition} = Common.restUrl;
 import Store from '@/vuex/store'
 import AddPartPop from '@/pages/agile/add/addpartpop';
 import GoAgileMode from "@/components/goAgileMode";
@@ -380,6 +495,21 @@ export default {
                 modules:[],
                 AddGroupList:[],
 
+                subject:"",
+                itm_status:"",
+                stff_nm_id:"",
+                dept_nm_id:"",
+
+
+                "itm_prj_eng_nm":"",
+                "itm_prj_eng_short_num":"",
+                "itm_type":"",
+                "itm_assignment_date":"",
+                "itm_tech_target":"",
+                "itm_prj_tsk_id":"",
+                "itm_lob":"",
+                "itm_wthr_snd_ntc":"",
+
 
                 allgroup:[],
                 managerGroup:[],
@@ -395,7 +525,31 @@ export default {
             developerGroupList: [],
             testerGroupList: [],
             moduleList: [],
+
+            itm_statusList:[],
+            subjectList:[],
+
+
+
+
             ruleValidate: {
+
+                stff_nm_id: [
+                    { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
+                dept_nm_id: [
+                    { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                ],
+
+
+                subject: [
+                    { required: false,type: 'string',  message: 'Please select gender', trigger: 'change' }
+                ],
+                itm_status: [
+                    { required: false,type: 'string',  message: 'Please select gender', trigger: 'change' }
+                ],
+
+
                 prod_id: [
                     { required: false,type: 'string',  message: 'Please select gender', trigger: 'change' }
                 ],
@@ -505,6 +659,7 @@ export default {
         
         let ID = Common.GETID(this,Common,"inUrl") ? Common.GETID(this,Common,"inUrl") : "";
         let PRJ_ID = Common.GETprjid(this,Common,"inUrl") ? Common.GETprjid(this,Common,"inUrl") : "";
+        this.getProjectCondition(projectCondition);
         if(ID && PRJ_ID){
             this.addTeamFn(addTeam);
             this.projectGetProdFn(projectGetProd,{id:ID,prj_id:PRJ_ID});
@@ -514,8 +669,7 @@ export default {
             this.resetData();
         }
 
-        this.listModuleFn(listModule,((Id)=>{return Id?{id:Id}:{id:""}})(Common.GETID(this,Common,"inUrl")))
-        .then((res)=>{
+        this.listModuleFn(listModule,((Id)=>{return Id?{id:Id}:{id:""}})(Common.GETID(this,Common,"inUrl"))).then((res)=>{
             let fn = (obj)=>{
                 return obj.label+"【"+obj.value+"】";            
             }
@@ -529,11 +683,30 @@ export default {
                     });
                 }
             }
-        }, (error)=>{})
+        }, (error)=>{});
+
     },
     
     methods: {
-
+        valueChangelabel(val,arr){
+            let obj = arr.find(item=>item.value == val)
+            return obj && obj.label ? obj.label : ""; 
+        },
+        isMyEdit(val,Else,prjType){
+            let PrjType = prjType ? prjType : this.formValidate.prj_type;
+            if(val == "subject"){
+                return Else ? true : false;
+            }else{
+                if(PrjType == "1"){
+                    return !Else ? true : false;  
+                }else{
+                    return Else ? true : false;
+                }
+            }
+        },
+        getProjectCondition(URL,params = {}){
+            return Common.GetProjectCondition(Common,this,defaultAXIOS,URL,params);
+        },
         /* 修改添加角色 */
         cancelRole(i){
             Common.CancelRole(this,i)
@@ -701,7 +874,7 @@ export default {
                         this.formValidate[I] = myData.data[I].split("|").filter(item=>item)
                     }else{
                         if(myData.data[I]){
-                            this.formValidate[I] = myData.data[I];    
+                            this.formValidate[I] = myData.data[I]+"";    
                         }
                         
                     }

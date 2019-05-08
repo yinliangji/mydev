@@ -38,7 +38,7 @@
                     shape="circle"
                     long
                     size="small"
-                    v-show="(TabsCur != 'name3') ? true : false"
+                    v-show="(TabsCur == 'name1') ? true : false"
                     :style="isShowEdit?'visibility: visible;':'visibility: hidden;'"
                     >
                     编辑
@@ -202,6 +202,21 @@ export default {
                 physics_sys_id:"",
                 physics_sys_name:"",
                 create_person:"",
+
+                dept_nm_id:"",
+                stff_nm_id:"",
+                itm_status:"",
+                subject:"",
+
+
+                itm_prj_eng_nm:"",
+                itm_prj_eng_short_num:"",
+                itm_type:"",
+                itm_assignment_date:"",
+                itm_tech_target:"",
+                itm_prj_tsk_id:"",
+                itm_lob:"",
+                itm_wthr_snd_ntc:"",
                 // allgroup:"",
                 // managerGroup:"",
                 // developerGroup:"",
@@ -711,7 +726,7 @@ export default {
                     if(myData.data.prj_type == "2"){
                         this.isShowEdit = true;
                     }else{
-                        this.isShowEdit = false;
+                        this.isShowEdit = true;
                     }
 
                 }

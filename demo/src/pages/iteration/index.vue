@@ -215,18 +215,18 @@ export default {
                                         click: () => {
                                             // this.showModal(params);
                                             //点击跳转页面
+                                            Common.SetSession("SPRINT_ID",params.row.id)
                                             this.$router.push({
-                                                path: "/development",
+                                                path:"product", //"/development",
                                                 query: {
-                                                    iterationName:
-                                                        params.row.sprint_name,
-                                                    watchKanban: true
+                                                    //iterationName:params.row.sprint_name,
+                                                    //watchKanban: true
                                                 }
                                             });
                                         }
                                     }
                                 },
-                                "查看任务"
+                                "查看用户故事"
                             ),
                             h(
                                 "Button",

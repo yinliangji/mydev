@@ -99,6 +99,29 @@
 						            </Col>
 
 						        </Row>
+						        <Row class="SerchBox"  v-show="isShowMoreShow">
+						        	
+						            <Col span="2" style="text-align: center">状态类型</Col>
+						            <Col span="6">
+						                <FormItem >
+                                            <Select clearable v-model="formValidate.uscSn" placeholder="请选择状态类型">
+                                                
+                                                <Option v-for="(item,index) in userstory_categoryList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                                
+                                            </Select>
+                                        </FormItem>
+						            </Col>
+
+									<Col span="2" style="text-align: center"><!-- 责任人 --></Col>
+						            <Col span="6">
+						                <!--  -->
+						            </Col>
+						            <Col span="2" style="text-align: center"><!-- 小组名称 --></Col>
+						            <Col span="6">
+						                <!--  -->
+						            </Col>
+
+						        </Row>
 							</Col>
 							<Col span="4" style="text-align: left" class="serchBtnBox">
 								<Button type="primary" icon="ios-search" :disabled="!searchCan" class="serchBtn" @click="serchAll">
@@ -634,12 +657,14 @@ export default {
                 learn_concern:"",//是否领导关心
                 sprint:"",//所属迭代
                 group_name:"",//查询分组
+                uscSn:"",//状态类型查询
 
             },
             userstory_typeList:[],
             userstory_statusList:[],
             NewStatusList:[
             ],
+            userstory_categoryList:[],
             req_idList:[],
             proiList:[],
             chargerList:[],
@@ -762,7 +787,25 @@ export default {
 	        		this.tableDAtaPageCurrent =_allSession.tableDAtaPageCurrent - 0;	
 	        	}
 	        	
-	        }else if(Common.GetSession("REQ_ID")){
+	        }else if(Common.GetSession("SPRINT_ID")){
+
+	    		this.formValidate.req_id = "";
+	    		this.formValidate.sprint = Common.GetSession("SPRINT_ID") + "";
+
+	    		this.formValidate.userstory_name = "";
+	    		this.formValidate.userstory_id = "";
+	    		this.formValidate.userstory_type = "";
+	    		this.formValidate.userstory_status = "";
+	    		this.formValidate.proi = "";
+	    		this.formValidate.charger = "";
+	    		this.formValidate.learn_concern = "";
+	    		this.formValidate.group_name = "";
+	    		this.isShowMoreShow = true;
+
+	    		this.formValidate.uscSn = "";
+
+	    	}
+	        else if(Common.GetSession("REQ_ID")){
 
 	    		this.formValidate.req_id = Common.GetSession("REQ_ID") + "";
 	    		this.formValidate.sprint = "";
@@ -777,12 +820,14 @@ export default {
 	    		this.formValidate.group_name = "";
 	    		this.isShowMoreShow = true;
 
+	    		this.formValidate.uscSn = "";
+
 	    	} 
 
 	        Common.RemoveSession("userstorySerch");
 	        
 
-	        if(this.formValidate.userstory_status || this.formValidate.req_id || this.formValidate.proi || this.formValidate.userstory_type || this.formValidate.charger){
+	        if(this.formValidate.userstory_status || this.formValidate.req_id || this.formValidate.proi || this.formValidate.userstory_type || this.formValidate.charger || this.formValidate.uscSn){
 	        	this.isShowMoreShow = true;	
 	        }else{
 	        	this.isShowMoreShow = false;
@@ -858,6 +903,7 @@ export default {
 				learn_concern:this.formValidate.learn_concern,
 				sprint:this.formValidate.sprint,
 				group_name:this.formValidate.group_name,
+				uscSn:this.formValidate.uscSn,
 			}
 			let fileName = "用户故事Excel导出"
 			return Common.DownFile(defaultAXIOS,this,userstoryOutExcel,params,fileName);
@@ -876,6 +922,7 @@ export default {
 				learn_concern:this.formValidate.learn_concern,
 				sprint:this.formValidate.sprint,
 				group_name:this.formValidate.group_name,
+				uscSn:this.formValidate.uscSn,
 			}
 			let fileName = "用户故事Word导出.doc"
 			return Common.DownFile(defaultAXIOS,this,userstoryOutWord,params,fileName);
@@ -950,7 +997,7 @@ export default {
 			    			this.formValidate.sprint = sprint+"";
 			    		}
 			    		Common.RemoveSession("allSession");
-			    	}else if(Common.GetSession("REQ_ID")){
+			    	}else if(Common.GetSession("REQ_ID") || Common.GetSession("SPRINT_ID")){
 			    		this.optionSession();
 			    	}else{
 			    		if(Common.GetSession("isClickedDelBtn")){
@@ -979,7 +1026,9 @@ export default {
 		    		this.formValidate.charger,
 		    		this.formValidate.learn_concern,
 		    		this.formValidate.sprint,
-		    		this.formValidate.group_name
+		    		this.formValidate.group_name,
+		    		"[]",
+		    		this.formValidate.uscSn,
 		    	]
 
 		    	if(this.currentView == "kanbanboard"){
@@ -1034,7 +1083,7 @@ export default {
 	    		//
 	    	},(ERR)=>{
 	    		console.log(ERR)
-	    		this.showError(ERR+"没有 userstory_type,userstory_status,req_id,proi,charger,learn_concern,sprint 其中之一");
+	    		this.showError(ERR+"没有 userstory_type,userstory_status,req_id,proi,charger,storyGetConditionFn,sprint 其中之一");
 	    		return Promise.reject(error);
 	    	})
 
@@ -1207,7 +1256,7 @@ export default {
 			this.statusListBase = [];
 			this.groupList = [{ text: "所属需求项" }];
 		},
-		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = "",USS = ""){
+		storyGetKanBanFn(URL = "",id,userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = "",USS = "",uscSn = ""){
 			this.searchCan = false;
 
 			this.kanbanboardIsShow = true;
@@ -1232,6 +1281,7 @@ export default {
             	username:Common.getCookie("username"),
             	prjSn:Common.GETprjid(this,Common),//Common.getCookie("prjSn"),
             	uss:"[]",//this.ussArr(USS,this.statusLists),
+            	uscSn,
             }
 
             let myCondition = {
@@ -1246,6 +1296,7 @@ export default {
         		group_name,
         		learn_concern,
         		uss:'[]',
+        		uscSn,
         	}
             this.serachCondition(myCondition);
 
@@ -1321,12 +1372,35 @@ export default {
                 			return false;
                 		}
                 	}
+                	let checkreqNameAll = (n)=>{
+                		let _temp = {}
+                		if(this.req_idList && Array.isArray(this.req_idList) && this.req_idList.length){
+                			for(let i=0;i<this.req_idList.length;i++){
+                				_temp.text = this.req_idList[i].label || "";
+	                			_temp.groupId = (this.req_idList[i].value || "") + "";
+		                		_temp.reqID = this.req_idList[i].reqID || "";
+		                		this.groupList.push(_temp);	
+		                		_temp = {};
+                			}
+                			
+
+	                		
+	                		
+                		}else{
+                			return false;
+                		}
+                	}
+
                 	this.groupList = [];
                 	this.groupList.push({text:"所属需求项"});
+                	//checkreqNameAll();
+                	
                 	for(let k=0;k<reqArr2.length;k++){
                 		let _CN = checkreqName(reqArr2[k]);
                 		if(_CN){this.groupList.push(_CN)}
                 	}
+                	
+
 	            	let _arr = [];
 					let _Obj = {};
 					
@@ -1417,7 +1491,7 @@ export default {
 			//Common.setStorageAndCookie(Common,"id",N)
 			defaultAXIOS(projectDetail+ID,{},{timeout:2000,method:'get'}).then((response) => {
 			    let myData = response.data;
-			    console.log("<======detail***response+++",response,myData,"+++detail***response======>");
+			    console.log("<======detail***response+++",response,myData,"======>");
 
 			    //this.$refs.req_id.setQuery();
 			    
@@ -1457,7 +1531,8 @@ export default {
         },
 
 		storyGetConditionFn(URL,condition,prj_id){
-			return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint","group_name"],"sprintList");
+			return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["userstory_type","userstory_status","req_id","proi","charger","sprint","group_name","userstory_category"],"sprintList");
+			//,"learn_concern"
 			//return Common.GetCondition(defaultAXIOS,this,URL,condition,prj_id);
         },
         cancelSerchAll(){
@@ -1479,7 +1554,7 @@ export default {
         },
         optionSession(){
         	Common.RemoveSession("REQ_ID");
-        	//Common.RemoveSession("allSession");
+        	Common.RemoveSession("SPRINT_ID");
         },
         //记住搜索条件 start
 		serchAll(evt,uss = ""){
@@ -1527,6 +1602,7 @@ export default {
         		this.formValidate.sprint,
         		this.formValidate.group_name,
         		uss,
+        		this.formValidate.uscSn,
         	];
         	if(this.currentView == "kanbanboard"){
         		this.storyGetKanBanFn(storyGetKanBan,ID,...searchParams);
@@ -1552,7 +1628,7 @@ export default {
 			}
 		},
 		
-		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = "",USS = ""){
+		tableDataAjaxFn(URL = "",page = 1,limit = 3,data = "",id = "",userstory_name = "",userstory_id = "",userstory_type = "",userstory_status = "",req_id = "",proi = "",charger = "",learn_concern = "",sprint = "",group_name = "",USS = "",uscSn = ""){
 			this.searchCan = false;
 			let defaultAXIOSParams = {
 				page,
@@ -1560,6 +1636,7 @@ export default {
 				data,
 				id:id,
 				prj_id:id,
+				prjSn:Common.GETprjid(this,Common),
 				userstory_name,
 				userstory_id,
 				userstory_type,
@@ -1572,6 +1649,7 @@ export default {
 				group_name,
 				username:Common.getCookie("username"),
 				uss:"[]",//this.ussArr(USS,this.statusLists)
+				uscSn,
 			};
 
 			let myCondition = {
@@ -1586,6 +1664,7 @@ export default {
         		group_name,
         		learn_concern,
         		uss:'[]',
+        		uscSn,
         	}
             this.serachCondition(myCondition);
 
@@ -1619,7 +1698,8 @@ export default {
             	this.formValidate.charger,
             	this.formValidate.learn_concern,
             	this.formValidate.sprint,
-            	this.formValidate.group_name
+            	this.formValidate.group_name,
+            	this.formValidate.uscSn,
             ];
             this.tableDataAjaxFn(storyAll,i,this.tableDAtaPageLine,"",ID,...searchParams);
             

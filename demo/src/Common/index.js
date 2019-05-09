@@ -1269,8 +1269,8 @@ export default class Common extends Utils {
               let _OBJ = {};
               let _arr = [];
               for(let i=0;i<arr.length;i++){
-                _OBJ.label = (arr[i].value || arr[i].sprint_name || arr[i].nick_name || arr[i].key || "")+"";
-                _OBJ.value = (arr[i].key || arr[i].sprint || arr[i].user_name || 0)+"";
+                _OBJ.label = (arr[i].value || arr[i].uscName || arr[i].sprint_name || arr[i].nick_name || arr[i].key || "")+"";
+                _OBJ.value = (arr[i].key || arr[i].uscSn || arr[i].sprint || arr[i].user_name || 0)+"";
                 if(arr[i].reqID){_OBJ.reqID = arr[i].reqID}
                 _arr.push(_OBJ);
                 _OBJ = {};

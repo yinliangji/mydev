@@ -71,8 +71,21 @@ export default {
                 return false;
             }
         },
+        Data: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return [];
+            }
+        },
     },
     watch:{
+        Data(data) {
+            if(data){
+                this.formValidateData = data;
+            }else{
+                this.formValidateData = [];
+            }
+        },
         isShow(data) {
             if(data){
                 this.initAlertTxt("确定");
@@ -121,10 +134,15 @@ export default {
             modal_add_loading:true,
             isShowTxt:true,
             okBtnTxt:"",
+            formValidateData:[],
         }
     },
     mounted(){
-        
+        if(this.Data) {
+            this.formValidateData = this.Data;
+        }else{
+            this.formValidateData = [];
+        }
     },
     methods: {
         initAlertTxt(BtnTxt){
@@ -242,6 +260,7 @@ export default {
             let tempData = {
                 prj_id:group[0],
                 prjSn:group[0],
+                current_prjSn:this.formValidateData[0].prj_id,
                 prj_name:(obj.groupListtemp.find(item=>item.value == group[0]) || {}).prj_name || "",
                 username:Common.getStorageAndCookie(this,Common,"username"),
             }
@@ -253,7 +272,7 @@ export default {
                     that.$refs[fromName][i].resetFields();
                     that.modal_add_loading = false;
                     obj.modaAdd = false;
-                    that.$emit("toItmClose",false,"tableData");
+                    that.$emit("toItmClose",false,myData.status);
                     
                 }else{
                     obj.modaAdd = true;

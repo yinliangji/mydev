@@ -58,22 +58,17 @@
                         </Row>
 
 
-                        
-
-                     
-
-                        
-
                        
 
     					<Row>
                             <Col span="12">
+                                
                                 <FormItem label="项目启动时间" prop="start_time">
                                     <span v-show="isMyEdit('start_time')">
                                         {{formValidate.start_time}}
                                     </span> 
-                            		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择项目启动时间"  :value="formValidate.start_time" v-model="formValidate.start_time" v-show="isMyEdit('start_time','else')"></DatePicker>
-                        		</FormItem>
+                                    <DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择项目启动时间"  :value="formValidate.start_time" v-model="formValidate.start_time" v-show="isMyEdit('start_time','else')"></DatePicker>
+                                </FormItem>
                             </Col>
                             <Col span="12">
                                  <FormItem label="项目结束时间" prop="end_time">
@@ -563,11 +558,13 @@ export default {
                 prj_name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
+
+
                 start_time: [
-                    { required: true, type: 'date', message: '请选择日期！', trigger: 'change' }
+                    { required:false, type: 'date', message: '请选择日期！', trigger: 'change' }
                 ],
                 end_time: [
-                    { required: true, type: 'date', validator: validateDateEnd, trigger: 'change' }
+                    { required: false, type: 'date', validator: validateDateEnd, trigger: 'change' }
                     //{ required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
                 ],
                 prj_desc: [

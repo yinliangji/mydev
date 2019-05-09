@@ -175,7 +175,8 @@ export default {
                 depd_list:[],  
                 AddGroupList:[],//搜索查询
                 bfunc:[],//弹出业务窗口  
-                editStatus:"",         
+                editStatus:"", 
+                us_accept:"",         
             },
             userstory_typeList:[],
             userstory_statusList:[],

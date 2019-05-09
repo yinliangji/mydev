@@ -8,9 +8,9 @@
                     <h3 class="Title"><span>基本信息</span></h3>
                     <div class="fromBox">
                        
-                        <FormItem label="所属产品" >
+                        <!-- <FormItem label="所属产品" >
                             <span>{{formValidate.product_name}}</span>
-                        </FormItem>
+                        </FormItem> -->
                    
                         <FormItem label="所属项目" >
                             <span>{{formValidate.prj_name}}</span>
@@ -91,20 +91,25 @@
                         <FormItem label="故事描述">
                             <Input v-model="formValidate.userstory_desc" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写故事描述"></Input>
                         </FormItem>
+                        <FormItem label="验收标准">
+                            <Input v-model="formValidate.us_accept" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写验收标准"></Input>
+                        </FormItem>
                     </div>
 
 
                     <h3 class="Title"><span>计划效率相关</span></h3>
                     <div class="fromBox">
 
-                        <Row>
+                        <FormItem label="所属迭代" prop="sprint">
+                            <Select clearable v-model="formValidate.sprint" placeholder="请选所属迭代">
+                                <Option v-for="(item , index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
+                            </Select>
+                            <ToolTip content="计划在哪个迭代周期内完成此用户故事" />
+                        </FormItem>
+
+                        <Row v-show="false">
                             <Col span="12" class="relZIndex1">
-                                <FormItem label="所属迭代" prop="sprint">
-                                    <Select clearable v-model="formValidate.sprint" placeholder="请选所属迭代">
-                                        <Option v-for="(item , index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                    </Select>
-                                    <ToolTip content="计划在哪个迭代周期内完成此用户故事" />
-                                </FormItem>
+                                
                             </Col>
                             <Col span="12">
                                <FormItem label="工时(预计)" prop="manhour">
@@ -180,7 +185,31 @@
                             </Row>
 
                         </div>
-                        <h3 class="Title"><span>依赖相关</span></h3>
+                        
+                       <!--  <FormItem label="用户故事提出人" prop="introducer">
+                            <Select v-model="formValidate.introducer" placeholder="请选择用户故事提出人">
+                                <Option value="提出人1">提出人1</Option>
+                                <Option value="提出人2">提出人2</Option>
+                                <Option value="提出人3">提出人3</Option>
+                            </Select>
+                        </FormItem>
+
+                        <FormItem label="提出人部门" prop="department">
+                            <Input v-model="formValidate.department" placeholder="请填提出人部门"></Input>
+                        </FormItem> -->
+
+                        <!-- <Row>
+                            <Col span="12">
+                                
+                            </Col>
+                            <Col span="12">
+                                 
+                            </Col>
+                        </Row> -->
+                    </div>
+
+                    <h3 class="Title"><span>依赖相关</span></h3>
+                    <div class="fromBox">
 
                         <FormItem label="添加依赖项" >
                             <span style="position: relative;">
@@ -207,26 +236,6 @@
                         <FormItem label="" >
                             &nbsp;
                         </FormItem>
-                       <!--  <FormItem label="用户故事提出人" prop="introducer">
-                            <Select v-model="formValidate.introducer" placeholder="请选择用户故事提出人">
-                                <Option value="提出人1">提出人1</Option>
-                                <Option value="提出人2">提出人2</Option>
-                                <Option value="提出人3">提出人3</Option>
-                            </Select>
-                        </FormItem>
-
-                        <FormItem label="提出人部门" prop="department">
-                            <Input v-model="formValidate.department" placeholder="请填提出人部门"></Input>
-                        </FormItem> -->
-
-                        <!-- <Row>
-                            <Col span="12">
-                                
-                            </Col>
-                            <Col span="12">
-                                 
-                            </Col>
-                        </Row> -->
                     </div>
 
                     <FormItem>
@@ -350,6 +359,8 @@ export default {
 
                 AddGroupList: [], //搜索查询
                 bfunc: [], //弹出业务窗口
+
+                us_accept:"",
                 
             },
             req_idList:[
@@ -643,7 +654,7 @@ export default {
                     this.formValidate.manhour = Number(temp)
                 }else if(i == "AddGroupList" || i == "bfunc"){
                 }else{
-                    this.formValidate[i] = DATA[i]+"";
+                    this.formValidate[i] = (DATA[i] || "")+"";
                 }
             }
         },
@@ -671,6 +682,8 @@ export default {
             this.formValidate.req_name="";
 
             this.formValidate.bfunc = [];
+
+            this.formValidate.us_accept = "";
           
         },
         submitAddData(){
@@ -708,6 +721,7 @@ export default {
                 depd_sn:this.formValidate.userstory_id,
                 depd_main_type:2,
                 depd_list:this.dependList,
+                us_accept:this.formValidate.us_accept,
             
             }
             defaultAXIOS(storyEdit,tempData,{timeout:20000,method:'post'}).then((response) => {

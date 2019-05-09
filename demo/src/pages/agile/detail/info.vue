@@ -70,8 +70,8 @@
         </tr>
         </tbody>
     </table>
-    <h3 class="Title"><span>其他基本信息</span></h3>
-    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable">
+    <h3 class="Title" v-show="formValidate.prj_type == '1'"><span>其他基本信息</span></h3>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable" v-show="formValidate.prj_type == '1'">
         <tbody>
         <tr>
           <th width="12%">项目英文名称</th>

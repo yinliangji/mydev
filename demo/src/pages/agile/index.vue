@@ -617,7 +617,13 @@ export default {
                     name = nameObj.label;
                 }
             }else{
-                name = val;    
+                if(val == 1){
+                    name = "立项";
+                }else if(val == 2){
+                    name = "自研";
+                }else {
+                    name = "未知";
+                }    
             }
             return name   
         },
@@ -692,7 +698,7 @@ export default {
                     this.tableDataAjaxFn(projectAll,this.tableDAtaPageCurrent,this.tableDAtaPageLine,...searchParams);
                     Common.CommonMessage(this,"转换成功");
                 }else{
-                    Common.CommonWarning(this,"转换成功");
+                    Common.CommonWarning(this,"转换失败");
                 }
             }
         },

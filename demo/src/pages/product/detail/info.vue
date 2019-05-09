@@ -48,6 +48,12 @@
           <th>故事描述</th>
           <td colspan="5" v-html="formValidate.userstory_desc?'<pre>'+formValidate.userstory_desc+'</pre>':''"></td>
         </tr>
+        <tr>
+          <th>验收标准</th>
+          <td colspan="5" v-html="formValidate.us_accept?'<pre>'+formValidate.us_accept+'</pre>':''"></td>
+        </tr>
+
+        
       </tbody>
     </table>
     <Depdepd 
@@ -108,7 +114,8 @@ export default {
                 product_name:"",
                 depd_list:[],  
                 AddGroupList:[],//搜索查询
-                bfunc:[],//弹出业务窗口           
+                bfunc:[],//弹出业务窗口   
+                us_accept:"",        
             },
             //业务弹出--start
             depdpopIsShow:false,

@@ -808,6 +808,7 @@ let listUserstoryList = (val1 = 200, val2 = 1, val3 = 3) => {
             "sprint|+1": 4,
             "sprint_name|+1":4,
             "userstory_desc":"故事描述123123",
+            us_accept:"验收标准.....",
 
             "prj_id":"prj_id_xxxxxx",
             "prj_name":"敏捷项目0000",
@@ -2103,6 +2104,7 @@ let Userstorydetail = (val1 = 200, val2 = 1, val3 = 3) => {
             "sprint": 6,
             "sprint_name":6,
             "userstory_desc":"故事描述123123",
+            us_accept:"验收标准-详情....",
 
             "prj_id":"prj_id_xxxxxx",
             "prj_name":"敏捷项目0000",
@@ -2999,6 +3001,32 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
                 {"value":"group_name_黄永华(huangyonghua)","key":5,},
                 {"value":"group_name_赖磊(lailei)","key":6,},
                 {"value":"group_name_殷良骥(yinliangji)","key":7,},
+            ],
+            userstory_category:[
+                {
+                    //"value":"userstory_category_齐慧超(qihuichao)",
+                    //"key":4,
+                    "uscName":"userstory_category_齐慧超(qihuichao)",
+                    "uscSn":4,
+                },
+                {
+                    //"value":"userstory_category_黄永华(huangyonghua)",
+                    //"key":5,
+                    "uscName":"userstory_category_黄永华(huangyonghua)",
+                    "uscSn":5,
+                },
+                {
+                    //"value":"userstory_category_赖磊(lailei)",
+                    //"key":6,
+                    "uscName":"userstory_category_赖磊(lailei)",
+                    "uscSn":6,
+                },
+                {
+                    //"value":"userstory_category_殷良骥(yinliangji)",
+                    //"key":7,
+                    "uscName":"userstory_category_殷良骥(yinliangji)",
+                    "uscSn":7,
+                },
             ],
             
         }
@@ -4630,9 +4658,9 @@ let mockIterationList = (val1 = 200, val2 = 1, val3 = 3) => {
         "status": val1,
         "message": "success",
         "rows|3-9": [{
-            "id": 1,
-            "prj_id|+1": 1, //所属项目
-            "sprint_id|5-8": /[0-9a-zA-Z]/, //迭代编号
+            "id|4-7": 4,
+            "prj_id|4-7": 4, //所属项目
+            "sprint_id|4-7": 4, //迭代编号
             "sprint_name|5-8": /[0-9a-zA-Z]/, //迭代名称
             "start_time": "2018-10-10",
             "end_time": "2018-12-10",

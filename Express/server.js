@@ -129,7 +129,7 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
         obj.prod_name =  "prod_name"+i;
         obj.status = 0;
         obj.status_name = "ACTIVE";
-        obj.itm_status = ((N)=>{return N >0.5?"已结束":"" })(Math.random());
+        obj.itm_status = ((N)=>{return N >0.5?"1":"2" })(Math.random());
         list.push(obj);
         obj = {};
 
@@ -213,10 +213,12 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             "dept_nm_id": "@ctitle",
             "stff_nm_id": "@ctitle",
             "itm_status|1-5": 0,
+            "propose_depart": "@ctitle",
+            "aply_id": "@ctitle",
 
             "itm_prj_eng_nm":"@title",
             "itm_prj_eng_short_num":"@title",
-            "itm_type":"@ctitle",
+            "itm_type|1":["1","2"],
             "itm_assignment_date":"@date(yyyy-MM-dd)",
             "itm_tech_target":"@ctitle",
             "itm_prj_tsk_id|5-10":/[a-zA-Z0-9]/,

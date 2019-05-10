@@ -25,9 +25,9 @@
         <tr>
           
           <th>提出部门</th>
-          <td>{{formValidate.dept_nm_id | FALSEINFO}}</td>
+          <td>{{formValidate.propose_depart | FALSEINFO}}</td>
           <th>实施部门</th>
-          <td>{{formValidate.stff_nm_id | FALSEINFO}}</td>
+          <td>{{formValidate.aply_id | FALSEINFO}}</td>
           <th>项目状态</th>
           <td>{{formValidate.itm_status | FALSEINFO}}</td>
         </tr>
@@ -79,7 +79,8 @@
           <th width="12%">项目英文简称</th>
           <td width="21%">{{formValidate.itm_prj_eng_short_num | FALSEINFO}}</td>
           <th width="12%">立项类型</th>
-          <td>{{formValidate.itm_type  | FALSEINFO}}</td>
+          <td>{{transform(formValidate.itm_type) | FALSEINFO}}</td>
+          
         </tr>
         <tr>
           <th>下达任务书时间</th>
@@ -141,8 +142,8 @@ export default {
                 physics_sys_name:"",
                 create_person:"",
                 prj_type:"",
-                dept_nm_id:"",
-                stff_nm_id:"",
+                propose_depart:"",
+                aply_id:"",
                 itm_status:"",
                 subject:"",
 
@@ -176,6 +177,20 @@ export default {
         },
     },
     methods: {
+      transform(val){
+        if(val){
+          if(val == "1"){
+            return "项目"
+          }else if(val == "2"){
+            return "开发任务"
+          }else{
+            return false;
+          }
+        }else{
+          return false;
+        }
+
+      },
       //业务窗口 -start
       depdpopCloseFn(B){
           this.depdpopIsShow = B;

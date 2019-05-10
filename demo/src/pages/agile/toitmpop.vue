@@ -263,6 +263,7 @@ export default {
                 current_prjSn:this.formValidateData[0].prj_id,
                 prj_name:(obj.groupListtemp.find(item=>item.value == group[0]) || {}).prj_name || "",
                 username:Common.getStorageAndCookie(this,Common,"username"),
+                current_prjId:this.formValidateData[0].id,
             }
             let URL = Switch;
             defaultAXIOS(URL,tempData,{timeout:5000,method:'post'}).then((response) => {

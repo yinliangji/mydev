@@ -203,8 +203,8 @@ export default {
                 physics_sys_name:"",
                 create_person:"",
 
-                dept_nm_id:"",
-                stff_nm_id:"",
+                propose_depart:"",
+                aply_id:"",
                 itm_status:"",
                 subject:"",
 
@@ -659,7 +659,13 @@ export default {
             return Common.DownFile(defaultAXIOS,this,projectOutputWord,params,fileName);
         },
         editItemFn(){
-            this.$router.push({path: '/agile/edit', query: {id: Common.GETID(this,Common),prj_id:Common.GETprjid(this,Common),from:"detail"}})
+            let Query = {
+                id: Common.GETID(this,Common),
+                prj_id:Common.GETprjid(this,Common),
+                from:"detail",
+                DATA:JSON.stringify(this.formValidate)
+            }
+            this.$router.push({path: '/agile/edit', query:Query })
         },
         selectMenuFn(N){
             Common.setStorageAndCookie(Common,"id",N);

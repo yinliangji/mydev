@@ -61,13 +61,13 @@
 
                         <Row>
                             <Col span="12">
-                                <FormItem label="提出部门" prop="dept_nm_id">
-                                    <Input v-model="formValidate.dept_nm_id" placeholder="请填写提出部门"></Input>
+                                <FormItem label="提出部门" prop="propose_depart">
+                                    <Input v-model="formValidate.propose_depart" placeholder="请填写提出部门"></Input>
                                 </FormItem>
                             </Col>
                             <Col span="12">
-                                <FormItem label="实施部门" prop="stff_nm_id">
-                                    <Input v-model="formValidate.stff_nm_id" placeholder="请填写实施部门"></Input>
+                                <FormItem label="实施部门" prop="aply_id">
+                                    <Input v-model="formValidate.aply_id" placeholder="请填写实施部门"></Input>
                                 </FormItem> 
                             </Col>
                         </Row>
@@ -456,8 +456,8 @@ export default {
 
                 subject:"",
                 itm_status:"",
-                stff_nm_id:"",
-                dept_nm_id:"",
+                aply_id:"",
+                propose_depart:"",
 
                 
 
@@ -494,10 +494,10 @@ export default {
             ],
 
             ruleValidate: {
-                stff_nm_id: [
+                aply_id: [
                     { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
-                dept_nm_id: [
+                propose_depart: [
                     { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
 
@@ -951,6 +951,9 @@ export default {
             this.formValidate.subject = "";
             this.formValidate.itm_status = "";
 
+            this.formValidate.propose_depart = "";
+            this.formValidate.aply_id = "";
+
            
 
            
@@ -1017,6 +1020,8 @@ export default {
                 username:_username,
                 subject:this.formValidate.subject,
                 itm_status:this.formValidate.itm_status,
+                propose_depart:this.formValidate.propose_depart,
+                aply_id:this.formValidate.aply_id,
                 
                 /*
                 prod_id:this.formValidate.prod_id,

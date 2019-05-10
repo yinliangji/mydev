@@ -62,20 +62,14 @@
                                     <Col span="2" style="text-align: center">实施部门</Col>
                                     <Col span="6">
                                         <FormItem >
-                                            <Input clearable v-model="formValidate.stff_nm_id" placeholder="输入实施部门"></Input>
-                                            <!-- <Select clearable filterable v-model="formValidate.stff_nm_id" placeholder="请选择部门">
-                                                <Option v-for="(item,index) in stff_nm_idList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                            </Select> -->
+                                            <Input clearable v-model="formValidate.aply_id" placeholder="输入实施部门"></Input>
                                         </FormItem>
                                     </Col>
                                      
                                     <Col span="2" style="text-align: center">提出部门</Col>
                                     <Col span="6">
                                         <FormItem >
-                                            <Input clearable v-model="formValidate.dept_nm_id" placeholder="输入提出部门"></Input>
-                                            <!-- <Select clearable filterable v-model="formValidate.dept_nm_id" placeholder="请选择部门">
-                                                <Option v-for="(item,index) in dept_nm_idList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                            </Select> -->
+                                            <Input clearable v-model="formValidate.propose_depart" placeholder="输入提出部门"></Input>
                                         </FormItem>
                                     </Col>
                                     
@@ -541,8 +535,8 @@ export default {
                 icdp_testTeam:"",//ICDP测试组
                 prj_type:"",//项目类型
                 department:"",//部门
-                dept_nm_id:"",//提出部门
-                stff_nm_id:"",//实施部门
+                propose_depart:"",//提出部门
+                aply_id:"",//实施部门
             },
             icdp_projManagerList:[],
             icdp_agileCoachList:[],
@@ -550,8 +544,7 @@ export default {
             icdp_testTeamList:[],
             prj_typeList:[],
             departmentList:[],
-            dept_nm_idList:[],
-            stff_nm_idList:[],
+            itm_statusList:[],
 
 
             prj_permission:[],
@@ -750,8 +743,8 @@ export default {
                 this.formValidate.prj_type,
                 (this.ITMitem.AddGroupList[0].group || ""),
                 this.formValidate.department,
-                this.formValidate.dept_nm_id,
-                this.formValidate.stff_nm_id,
+                this.formValidate.propose_depart,
+                this.formValidate.aply_id,
             ]
         },
 
@@ -796,7 +789,7 @@ export default {
             Common.ErrorShow(ERR,this);
         },
 
-        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = "",prj_type = "",prjManager = "",department = "",dept_nm_id = "",stff_nm_id = ""){
+        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = "",prj_type = "",prjManager = "",department = "",propose_depart = "",aply_id = ""){
             let starttimeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
             let endtimeFromet = end_time ? end_time.Format("yyyy-MM-dd") : "";
             let defaultAXIOSParams = {
@@ -813,15 +806,23 @@ export default {
                 prj_type,
                 prjManager,
                 department,
-                dept_nm_id,
-                stff_nm_id,
+                propose_depart,
+                aply_id,
             }
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======agile***response+++",response,myData.data.list,"+++agile***response======>");
+                console.log("<======agile***列表+++",response,myData.data.list,"======>");
                 if(myData.status == "success"){
                     this.tableData = myData.data.list;
                     this.tableDAtaTatol = myData.data.total;
+
+                    console.error(this.itm_statusList)
+                    if(this.itm_statusList && this.itm_statusList.length){
+                        for(let i=0;i<this.tableData.length;i++){
+                            this.tableData[i].itm_status = this.itm_statusList.find(item =>item.value == this.tableData[i].itm_status).label || this.tableData[i].itm_status;
+                        }
+                    }
+
                 }else{
                     this.showError(URL+"_错误");
                 }
@@ -875,7 +876,9 @@ export default {
                 
                 obj = this.actionArr[0];
             }
-            this.$router.push({path: '/agile/edit', query: {id:obj.id,prj_id:obj.prj_id}})
+            let Query = {id:obj.id,prj_id:obj.prj_id}
+            Query.DATA = JSON.stringify(obj);
+            this.$router.push({path: '/agile/edit', query:Query})
             this.actionArr = [];
 
             // this.isShowAddPop = true;
@@ -970,6 +973,8 @@ export default {
             Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id);
 
             let Query = {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id,menuType:"new"}
+
+
 
             if(R == "成员"){
                 Query.TabsCur = "name2"

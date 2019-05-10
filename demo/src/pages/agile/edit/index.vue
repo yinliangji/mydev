@@ -82,19 +82,19 @@
 
                         <Row>
                             <Col span="12">
-                                <FormItem label="提出部门" prop="dept_nm_id">
-                                    <span v-if="isMyEdit('dept_nm_id')">
-                                        {{formValidate.dept_nm_id}}
+                                <FormItem label="提出部门" prop="propose_depart">
+                                    <span v-if="isMyEdit('propose_depart')">
+                                        {{formValidate.propose_depart}}
                                     </span>
-                                    <Input v-model="formValidate.dept_nm_id" placeholder="请填写提出部门" v-if="isMyEdit('dept_nm_id','else')"></Input>
+                                    <Input v-model="formValidate.propose_depart" placeholder="请填写提出部门" v-if="isMyEdit('propose_depart','else')"></Input>
                                 </FormItem>
                             </Col>
                             <Col span="12">
-                                <FormItem label="实施部门" prop="stff_nm_id">
-                                    <span v-if="isMyEdit('stff_nm_id')">
-                                        {{formValidate.stff_nm_id}}
+                                <FormItem label="实施部门" prop="aply_id">
+                                    <span v-if="isMyEdit('aply_id')">
+                                        {{formValidate.aply_id}}
                                     </span>
-                                    <Input v-model="formValidate.stff_nm_id" placeholder="请填写实施部门" v-if="isMyEdit('stff_nm_id','else')"></Input>
+                                    <Input v-model="formValidate.aply_id" placeholder="请填写实施部门" v-if="isMyEdit('aply_id','else')"></Input>
                                 </FormItem> 
                             </Col>
                         </Row>
@@ -448,6 +448,7 @@ export default {
     },
     created(){
         console.log("agileEdit--created-------",this.formValidate);
+        
         Common.GetProjectList(defaultAXIOS,this,Common,projectListDataNew);
     },
     beforeUpdate(){
@@ -492,8 +493,8 @@ export default {
 
                 subject:"",
                 itm_status:"",
-                stff_nm_id:"",
-                dept_nm_id:"",
+                aply_id:"",
+                propose_depart:"",
 
 
                 "itm_prj_eng_nm":"",
@@ -529,10 +530,10 @@ export default {
 
             ruleValidate: {
 
-                stff_nm_id: [
+                aply_id: [
                     { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
-                dept_nm_id: [
+                propose_depart: [
                     { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
 
@@ -559,12 +560,13 @@ export default {
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
 
+        
 
                 start_time: [
-                    { required:false, type: 'date', message: '请选择日期！', trigger: 'change' }
+                    { required:((D)=>{return D ? (JSON.parse(D).prj_type == '1' ? false : true) : true;})(this.$router.history.current.query.DATA), type: 'date', message: '请选择日期！', trigger: 'change' }
                 ],
                 end_time: [
-                    { required: false, type: 'date', validator: validateDateEnd, trigger: 'change' }
+                    { required:((D)=>{return D ? (JSON.parse(D).prj_type == '1' ? false : true) : true;})(this.$router.history.current.query.DATA), type: 'date', validator: validateDateEnd, trigger: 'change' }
                     //{ required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
                 ],
                 prj_desc: [
@@ -876,6 +878,13 @@ export default {
                         
                     }
                 }
+                if(window.location.host == "127.0.0.1:9000"){
+                    let _DATA = this.$router.history.current.query.DATA;
+                    _DATA = _DATA ? JSON.parse(_DATA) : _DATA;
+                    this.formValidate.prj_type = _DATA && _DATA.prj_type ? _DATA.prj_type : "";
+                }
+
+
                 let addsystem = (_obj,_myData)=>{
                     if(_myData && Array.isArray(_myData)){
                         _obj.groupList = _myData;
@@ -1019,6 +1028,10 @@ export default {
             
             //this.formValidate.prj_id = this.$router.history.current.query.id ? this.$router.history.current.query.id : "";
             this.formValidate.prj_id = "";
+            this.formValidate.propose_depart = "";
+            this.formValidate.aply_id = "";
+            this.formValidate.subject = "";
+            this.formValidate.itm_status = "";
             
 
 
@@ -1094,6 +1107,10 @@ export default {
                 prj_id: this.formValidate.prj_id,
                 prjSn: this.formValidate.prj_id,
                 username:_username,
+                propose_depart:this.formValidate.propose_depart,
+                aply_id:this.formValidate.aply_id,
+                subject:this.formValidate.subject,
+                itm_status:this.formValidate.itm_status,
 
                 /*
                 modules:_modules,

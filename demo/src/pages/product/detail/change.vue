@@ -51,6 +51,7 @@ export default {
                     key: 'operator_name',
                     align: 'center',
                 },
+                /*
                 {
                     title: '用户故事',
                     key: 'userstory_id',
@@ -63,6 +64,7 @@ export default {
                         );
                     },
                 },
+                */
             ],
             tableData: [],
             currentPage:1,

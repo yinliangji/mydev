@@ -265,6 +265,10 @@ export default class Common extends Utils {
     //权限判断--不通用
     static auth(THIS,KEY){
       let OBJ = THIS.prj_permission
+      /*if(!OBJ.length){
+        return false;
+      }
+      */
       if(THIS.identity == "SuperAdmin"){
           return false
       }else if(THIS.identity == "PlainAdmin"){
@@ -274,7 +278,9 @@ export default class Common extends Utils {
               let _temp = true;
               for(let i =0;i<KEY.length;i++){
                   if(!(KEY[i].indexOf("_view") != -1)){
-                      if(OBJ.findIndex((item)=>{return item == KEY[i]}) != -1){
+
+                      if(KEY[i] == "icdp_projList_mng"){console.error(OBJ,"111")}
+                      if(OBJ.findIndex(item=>item == KEY[i]) != -1){
                           _temp = false
                       }
                   }

@@ -29,13 +29,13 @@
           <th>实施部门</th>
           <td>{{formValidate.aply_id | FALSEINFO}}</td>
           <th>项目状态</th>
-          <td>{{formValidate.itm_status | FALSEINFO}}</td>
+          <td>{{formValidate.itm_status_name | FALSEINFO}}</td>
         </tr>
 
 
         <tr>
-          <th>研发模式</th>
-          <td>{{formValidate.subject | FALSEINFO}}</td>
+          <th>研发类型</th>
+          <td>{{formValidate.subject_name | FALSEINFO}}</td>
           
           <th>逻辑子系统</th>
           <td>{{formValidate.logic_sys_name | FALSEINFO}}</td>
@@ -55,10 +55,10 @@
         </tr>
 
         
-        <tr>
+        <!-- <tr>
           <th>所属模块</th>
           <td colspan="5">{{formValidate.modules | FALSEINFO}}</td>
-        </tr>
+        </tr> -->
 
         <tr>
           <th>项目描述</th>
@@ -85,21 +85,25 @@
         <tr>
           <th>下达任务书时间</th>
           <td>{{formValidate.itm_assignment_date | FALSEINFO}}</td>
-          <th>技术目标</th>
-          <td>{{formValidate.itm_tech_target | FALSEINFO}}</td>
+          <th>业务条线</th>
+          <td>{{formValidate.itm_lob | FALSEINFO}}</td>
           <th>项目任务书编号</th>
           <td>{{formValidate.itm_prj_tsk_id | FALSEINFO}}</td>
         </tr>
 
         <tr>
           
-          <th>业务条线</th>
-          <td>{{formValidate.itm_lob | FALSEINFO}}</td>
           <th>是否发送通知书</th>
-          <td>{{formValidate.itm_wthr_snd_ntc | FALSEINFO}}</td>
-          <th><!-- 项目状态 --></th>
-          <td><!-- {{formValidate.itm_status | FALSEINFO}} --></td>
-        </tr>
+          <td>{{formValidate.itm_wthr_snd_ntc | FALSEINFO}}</td>        
+
+  
+          <th>技术目标</th>
+          <td >
+            {{formValidate.itm_tech_target | FALSEINFO}}
+          </td>
+          <th>itm编号</th>
+          <td>{{formValidate.itm_id_sn | FALSEINFO}}</td>
+          </tr>
 
 
        
@@ -146,6 +150,8 @@ export default {
                 aply_id:"",
                 itm_status:"",
                 subject:"",
+                itm_status_name:"",
+                subject_name:"",
 
 
                 itm_prj_eng_nm:"",
@@ -156,6 +162,7 @@ export default {
                 itm_prj_tsk_id:"",
                 itm_lob:"",
                 itm_wthr_snd_ntc:"",
+                itm_id_sn:"",
                 // allgroup:"",
                 // managerGroup:"",
                 // developerGroup:"",

@@ -72,7 +72,7 @@
             <div class="fromBox fromBox2" >
                 <!-- :id="isOption()" -->
                 <div class="addpartBox">
-                    <Button type="success" @click="addpart">添加角色</Button>
+                    <Button type="success" @click="addpart" :disabled="authIs(['icdp_proj_role_edit','icdp_projList_view'])" >添加角色</Button>
                 </div>
                 <div class="newAddGroup">
                     <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index>2">
@@ -89,8 +89,8 @@
                                         :value="item.value" 
                                         :key="index2" 
                                         :name="((O)=>{O.I = index;O.I2 = index2;return JSON.stringify(item);})(item)" 
-                                        closable 
                                         @on-close="roleClose"
+                                        :closable="!authIs(['icdp_proj_role_edit','icdp_projList_view'])"
                                         >
                                         {{ item.label}}
                                     </Tag>
@@ -99,6 +99,7 @@
                                         type="dashed" 
                                         size="small" 
                                         @click="addRole(index)"
+                                        :disabled="authIs(['icdp_proj_role_edit','icdp_projList_view'])"
                                         >
                                         添加人员
                                     </Button>
@@ -124,7 +125,7 @@
                         </Col>
                         <Col span="1">&nbsp;</Col>
                         <Col span="3">
-                            <Button v-if="myItem.delBtn" type="error" long @click="groupDel(index)">删除</Button>
+                            <Button :disabled="authIs(['icdp_proj_role_edit','icdp_projList_view'])" v-if="myItem.delBtn" type="error" long @click="groupDel(index)">删除</Button>
                         </Col>
                     </Row>
                 </div>
@@ -187,6 +188,26 @@ export default {
                 return false;
             }
         },
+        PrjPermission: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
+        Identity: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
+
+
+        
+
+
+
+
+        
         
     },
     watch:{
@@ -194,6 +215,12 @@ export default {
             for(let I in data){
                 this.formValidate[I] = data[I];    
             }
+        },
+        PrjPermission(data){
+            this.prj_permission = data;
+        },
+        Identity(data){
+            this.identity = data;
         },
         "formValidate.start_time":function(curVal,oldVal){
 
@@ -218,6 +245,10 @@ export default {
     },
     created(){
         console.log("详情成员--created-------",this.formValidate);
+        if(this.PrjPermission){
+            this.prj_permission = this.PrjPermission;        
+        }
+        this.identity = this.Identity;
     },
     beforeUpdate(){
         console.log("详情成员--beforeUpdate-------",this.formValidate)
@@ -269,7 +300,8 @@ export default {
             },
             prod_idList: [],
             AddGroupList:[],
- 
+            prj_permission:[],
+            identity:"",
      
             ruleValidate: {
                 prod_id: [
@@ -372,6 +404,7 @@ export default {
         let ID = Common.GETID(this,Common,"inUrl") ? Common.GETID(this,Common,"inUrl") : "";
         let PRJ_ID = Common.GETprjid(this,Common,"inUrl") ? Common.GETprjid(this,Common,"inUrl") : "";
         if(ID && PRJ_ID){
+
             if(this.Data){
                 for(let I in this.Data){
                     this.formValidate[I] = this.Data[I];    
@@ -396,7 +429,8 @@ export default {
             Common.CancelRole(this,i)
         },
         getGroupListValue(val){
-            let obj = this.formPartValidate.addGroupList.find(item=>item.label.indexOf(val) != -1);
+            let _obj = this.formPartValidate.addGroupList.find(item=>item.label == val);
+            let obj = _obj ? _obj : this.formPartValidate.addGroupList.find(item=>item.label.indexOf(val) != -1);
             return obj ? obj.value : "";
         },
         getGroupListLabel(val){
@@ -407,7 +441,8 @@ export default {
             
             let N = !isNaN(name) ? (name - 0) : (JSON.parse(name).I2 - 0);
             let U = this.formValidate.AddGroupList[JSON.parse(name).I-0].group[N];
-            let ML = this.formValidate.AddGroupList[JSON.parse(name).I-0].myLabel; 
+            let ML = this.formValidate.AddGroupList[JSON.parse(name).I-0].myLabel;
+            let MV = this.formValidate.AddGroupList[JSON.parse(name).I-0].myValue; 
             Common.RoleClose(this,event, N).complete(()=>{
                 let params = {
                     id:Common.GETID(this,Common),
@@ -416,7 +451,7 @@ export default {
                     prjSn: Common.GETprjid(this,Common),
                     username:Common.getStorageAndCookie(this,Common,"username"),
                     user_name:U,
-                    role_name:this.getGroupListValue(ML),
+                    role_name:MV || this.getGroupListValue(ML),
                 }
                 this.submitData(delProjectUser,params);
             })
@@ -428,6 +463,7 @@ export default {
         submitRole(i){
             let addMember = this.formValidate.AddGroupList[i].grouptemp;
             let ML = this.formValidate.AddGroupList[i].myLabel;
+            let MV = this.formValidate.AddGroupList[i].myValue;
             let USER = {};
             let fn = (arr1,arr2)=>{
                 let Arr = [];
@@ -454,7 +490,7 @@ export default {
                     prj_id:Common.GETprjid(this,Common),
                     prjSn: Common.GETprjid(this,Common),
                     username:Common.getStorageAndCookie(this,Common,"username"),
-                    role_name:this.getGroupListValue(ML),
+                    role_name:MV || this.getGroupListValue(ML),
                     users:fn(addMember,this.formValidate.AddGroupList[i].groupList),
                 }
                 this.submitData(addProjectUser,params);
@@ -463,6 +499,17 @@ export default {
         
         projectGroupFn2(URL,params = {},ARR,thatEle){
             Common.ProjectGroup2(defaultAXIOS,this,URL,params,ARR,thatEle);
+        },
+        authIsAdmin(KEY){
+            return Common.AdminAuth(this,KEY)
+        },
+        
+
+        authIs(KEY){
+            return Common.auth(this,KEY);
+        },
+        authAdminIs(KEY){
+            return Common.AdminAuth(this,KEY);
         },
         addSelectEleList(ARR,thatEle,dataList){
             if(typeof(ARR)  == "number"){
@@ -541,7 +588,7 @@ export default {
                 prj_id:Common.GETprjid(this,Common),
                 prjSn: Common.GETprjid(this,Common),
                 username:Common.getStorageAndCookie(this,Common,"username"),
-                role_name:this.getGroupListValue(deleteObj.myLabel),
+                role_name:deleteObj.myValue || this.getGroupListValue(deleteObj.myLabel),
                 nick_name:deleteObj.myLabel,
             }
             this.submitData(delProjectRole,params);
@@ -667,13 +714,16 @@ export default {
                         this.formValidate.AddGroupList.unshift(_obj)
                         */
                     }else{
+                        let _arr = ((myarr)=>{return myarr ? arr.split("，") : []})(arr);
+
                         let listObj = {};
-                        [].forEach((item)=>{
+                        _arr.forEach((item)=>{
                             listObj.value = item;
                             listObj.label = item;
                             obj.groupList.push(listObj);
+                            listObj = {};
                         })
-                        obj.group = arr;
+                        obj.group = _arr;
                         this.formValidate.AddGroupList.unshift(obj)
                     }
                 }
@@ -706,13 +756,7 @@ export default {
 
                 this.formValidate.pid = this.formValidate.pid ? this.formValidate.pid+"" : "";
 
-                let objVal = (Arr,Lab) => {
-                    for(var O = 0;O< Arr.length;O++ ){
-                        if(Arr[O].label ==Lab){
-                            return Arr[O].value
-                        }
-                    }
-                }
+                
 
                 let groupList = (Arr)=>{
                     let _demoObj = {};
@@ -741,6 +785,13 @@ export default {
                         return  [];
                     }
                 }
+                let objVal = (Arr,Lab) => {
+                    for(var O = 0;O< Arr.length;O++ ){
+                        if(Arr[O].label ==Lab){
+                            return Arr[O].value
+                        }
+                    }
+                }
 
                 if(myData.otherole && myData.otherole.length){
                     
@@ -763,7 +814,8 @@ export default {
                         }
 
                         _tempObj.myLabel = myData.otherole[J].title;
-                        _tempObj.myValue = objVal(this.formPartValidate.addGroupList,myData.otherole[J].title)
+                        _tempObj.myValue = myData.otherole[J].value || this.getGroupListValue(myData.otherole[J].title);
+
                         _tempObj.groupList = groupList(myData.otherole[J].member);
                         _tempObj.group = group(myData.otherole[J].member); 
                         //_tempObj.groupList = [{"value":"lizhuo.zh","label":"李卓"}]; 

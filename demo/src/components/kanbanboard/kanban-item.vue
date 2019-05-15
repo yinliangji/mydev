@@ -10,8 +10,9 @@
     :nickname="item.nickName"
     :class="isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)"
     :data-taskcount="item.task_count"
+    :data-isDiscard="item.isDiscard ? 'yes':'no'"
     >
-      <div class="DragCursor" :class="(()=>{return isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)+'Show'})()">拖拽</div>
+      <!-- <div class="DragCursor" :class="(()=>{return isDraggable(myRole,myAside,item.nickName,item.taskStatus,item.isTaskPerson,item.myUserName)+'Show'})()">拖拽</div> -->
       
       <div class="card-wrap noCursor" v-if="myAside == 'product'" id="productCardWrap">
 

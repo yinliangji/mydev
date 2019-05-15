@@ -870,7 +870,8 @@ export default {
             that.isUsPut = [];
             let N = evt.item.getAttribute("data-taskcount") - 0;
             let gId = evt.item.getAttribute("groupid");
-            if(N == 0 || N == "0"){
+            let isDis = evt.item.getAttribute("data-isDiscard");
+            if(N == 0 || N == "0" || isDis == "yes"){
             }else{
               /*
               let obj = that.statusList.find((item)=>{

@@ -210,9 +210,11 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             "prod_name|5-8": /[a-zA-Z]/,
 
             "subject|1-3": 0,
+            "subject_name": "@ctitle",
             "dept_nm_id": "@ctitle",
             "stff_nm_id": "@ctitle",
             "itm_status|1-5": 0,
+            "itm_status_name": "@ctitle",
             "propose_depart": "@ctitle",
             "aply_id": "@ctitle",
 
@@ -224,6 +226,7 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             "itm_prj_tsk_id|5-10":/[a-zA-Z0-9]/,
             "itm_lob":"@ctitle",
             "itm_wthr_snd_ntc":"@ctitle",
+            "itm_id_sn|5-10":/[a-zA-Z0-9]/,
 
             AddGroupList: [
                 {
@@ -470,6 +473,7 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
         role_user_info:[
             {
                 "title":"敏捷教练",
+                "value":"icdp_agileCoach",
                 "member":[
                     {
                         "nick_name":"李卓",
@@ -484,6 +488,7 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             },
             {
                 "title":"测试组",
+                "value":"icdp_testTeam",
                 "member":[
                     {
                         "nick_name":"谢蓓",
@@ -498,6 +503,7 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             },
             {
                 "title":"开发组",
+                "value":"icdp_devTeam",
                 "member":[
                     {
                         "nick_name":"奇慧超",
@@ -1061,6 +1067,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "isFile|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "task_count|0-0":0,
+                        "isDiscard":true,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
@@ -1084,6 +1091,8 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "isFile|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "task_count|0-0":0,
+                        "isDiscard":true,
+
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
@@ -1158,6 +1167,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "isFile|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "task_count|0-0":0,
+                        "isDiscard":true,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
@@ -1255,6 +1265,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "isFile|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "task_count|1-99":0,
+                        "isDiscard":true,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
@@ -1518,6 +1529,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "isFile|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "task_count|0-0":0,
+                        "isDiscard":true,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
@@ -1540,6 +1552,7 @@ let kanbanList = (val1 = 200, val2 = 1, val3 = 3,num = 8) => {
                         "isFile|1":["no","yes"],
                         "isFinish|1":["finish","unfinish"],
                         "task_count|0-0":0,
+                        "isDiscard":true,
                         "testCase|1-99":0,
                         "username|1":["lizhuo.zh","xiebei.zh"],
                         "taskDesc":"工作项个数->@title",
@@ -3120,9 +3133,12 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
 
             "icdp_projList_view",//10
 
-            //========
+            
             //"icdp_projList_mng",//25
+            //========
+            
             "icdp_projList_edit",//21
+            //"icdp_proj_role_edit",
 
             //=======
             "icdp_prjrequirement_mng",
@@ -3133,6 +3149,7 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
         identity:"PlainAdmin",
         //PlainAdmin
         //SuperAdmin
+        //PrjManager
         //Admin
     })
 }
@@ -3171,9 +3188,12 @@ let getPermission2 = (val1 = 200, val2 = 1, val3 = 3) => {
 
             "icdp_projList_view",//10
 
+            
+            //"icdp_proj_role_edit",
             //========
             //"icdp_projList_mng",//25
             "icdp_projList_edit",//21
+
 
             //=======
             "icdp_prjrequirement_mng",

@@ -22,7 +22,7 @@
                         <Row>
                             <Col span="12">
                                 <FormItem label="项目状态" prop="itm_status" >
-                                    <Select clearable v-model="formValidate.itm_status" placeholder="请选项目状态">
+                                    <Select disabled v-model="formValidate.itm_status" placeholder="请选项目状态">
                                         <Option v-for="item in itm_statusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                     </Select> 
                                 </FormItem> 
@@ -716,7 +716,13 @@ export default {
 
         this.listModuleFn(listModule,((ID)=>{return ID?{id:ID}:{id:""}})(Common.GETID(this,Common)));
 
-        this.getProjectCondition(projectCondition);
+        this.getProjectCondition(projectCondition).then((res)=>{
+            if(Array.isArray(this.itm_statusList) && this.itm_statusList.length){
+                this.formValidate.itm_status = this.itm_statusList[0].value;
+            }
+        },(error)=>{
+
+        })
 
     },
     

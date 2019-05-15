@@ -13,6 +13,7 @@
                     long
                     size="small"
                     icon="ios-download-outline"
+                    v-show="false"
                     >
                     word 导出设计文档
                 </Button>
@@ -26,6 +27,7 @@
                     long
                     size="small"
                     icon="ios-download-outline"
+                    v-show="false"
                     >
                     excel 导出服务接口和错误码
                 </Button>
@@ -58,7 +60,7 @@
 		        	<div class="baseInfoBox">
 		            	<!-- <h3 class="Title"><span>成员信息</span></h3> -->
 		            	<div class="tableBox">
-		            		<Member :Data="formValidate" :Html="HTML" v-if="TabsCur == 'name2' && formValidate.prj_id" />
+		            		<Member :Data="formValidate" :Identity="identity" :PrjPermission="prj_permission"  :Html="HTML" v-if="TabsCur == 'name2' && formValidate.prj_id && prj_permission.length" />
 		            	</div>
 		            </div>
 		        </TabPane>
@@ -207,6 +209,8 @@ export default {
                 aply_id:"",
                 itm_status:"",
                 subject:"",
+                subject_name:"",
+                itm_status_name:"",
 
 
                 itm_prj_eng_nm:"",
@@ -217,6 +221,7 @@ export default {
                 itm_prj_tsk_id:"",
                 itm_lob:"",
                 itm_wthr_snd_ntc:"",
+                itm_id_sn:"",
                 // allgroup:"",
                 // managerGroup:"",
                 // developerGroup:"",

@@ -156,13 +156,14 @@
                             >
                             编辑
                         </Button>
-                        <!-- <Button 
+                        <Button 
                             type="error" 
                             :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
                             @click="deleteTableItem"
+                            v-show="false"
                             >
                             删除
-                        </Button> -->
+                        </Button>
                         <Button 
                             type="info" 
                             :disabled="authIsAdmin(['SuperAdmin','PlainAdmin'])"
@@ -170,6 +171,9 @@
                             >
                             从ITM导入项目
                         </Button>
+                        <a target="_blank" href="//128.194.224.146:8000/forum/116/2469">
+                            新建项目的方法与操作权限
+                        </a>
                     </div>
                     <Table border stripe  ref="selection" :columns="columns" :data="tableData" class="myTable" @on-select="onSelectFn" @on-select-all="onSelectAllFn" @on-selection-change="onSelectionChangeFn"></Table>
 
@@ -488,6 +492,9 @@ export default {
                                     marginLeft: '2px',
                                     visibility:this.transform(this.prj_typeList,params.row.prj_type),
                                 },
+                                domProps:{disabled:this.authIs(['icdp_projList_mng','icdp_projList_view'])},
+                                //domProps:{disabled:!this.isEdit(params.row.isEdit)},
+                                
                                 on: {
                                     click: () => {
                                         //this.goDevelopmentFn(params.index)
@@ -506,7 +513,7 @@ export default {
                                     marginLeft: '2px',
                                     visibility:this.transform(this.prj_typeList,params.row.prj_type),
                                 },
-                                domProps:{},
+                                domProps:{disabled:!this.isEdit(params.row.isEdit)},
                                 on: {
                                     click: () => {
                                         this.toITM(params.row)
@@ -816,10 +823,13 @@ export default {
                     this.tableData = myData.data.list;
                     this.tableDAtaTatol = myData.data.total;
 
-                    console.error(this.itm_statusList)
                     if(this.itm_statusList && this.itm_statusList.length){
                         for(let i=0;i<this.tableData.length;i++){
-                            this.tableData[i].itm_status = this.itm_statusList.find(item =>item.value == this.tableData[i].itm_status).label || this.tableData[i].itm_status;
+                            if(this.tableData[i].itm_status || this.tableData[i].itm_status == 0){
+                                this.tableData[i].itm_status = this.itm_statusList.find(item =>item.value == this.tableData[i].itm_status).label || this.tableData[i].itm_status;
+                            }else{
+                                this.tableData[i].itm_status = "";
+                            }
                         }
                     }
 

@@ -1427,6 +1427,9 @@ export default {
 							_Obj.isFile = myData[i].list[j].isFile;
 							_Obj.isFinish = myData[i].list[j].isFinish;
 							_Obj.task_count = myData[i].list[j].task_count;
+
+							_Obj.isDiscard = myData[i].list[j].isDiscard || "";
+
 							_Obj.testCase = myData[i].list[j].testCase;
 
 							_Obj.taskDesc = myData[i].list[j].taskDesc  || "";
@@ -1435,6 +1438,7 @@ export default {
 
 							_Obj.sprint = (myData[i].list[j].sprint || this.formValidate.sprint || "")+"";
 							_Obj.sprintName = (myData[i].list[j].sprintName ||  sprintFn((this.formValidate.sprint || ""),this.sprintList) || "")+"";
+
 							_arr.push(_Obj);
 							_Obj = {}
 						}

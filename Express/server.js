@@ -113,6 +113,7 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
     for(let i =1;i<10;i++){
         obj.id = i;
         obj.prj_id = "PJ10000"+i;
+        obj.itm_id_sn = "Itm10000"+i;
         obj.prj_name = /([a-zA-Z0-9]{5,128})/;
         obj.manager = fn(Math.random(),_manager);
         obj.prj_desc = "项目描述"+i;

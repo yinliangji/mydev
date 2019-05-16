@@ -48,12 +48,14 @@
 
     					<Row>
                             <Col span="12">
-                                <FormItem label="项目启动时间" prop="start_time">
+                                <FormItem label="项目启动时间" >
+                                    <!-- prop="start_time" -->
                             		<DatePicker placement="bottom-start" type="date" format="yyyy-MM-dd"  placeholder="选择启动日期"  :value="formValidate.start_time" v-model="formValidate.start_time" ></DatePicker>
                         		</FormItem>
                             </Col>
                             <Col span="12">
-                                 <FormItem label="项目结束时间" prop="end_time">
+                                 <FormItem label="项目结束时间" >
+                                    <!-- prop="end_time" -->
                             		<DatePicker  placement="bottom-start" type="date" :options="options3" placeholder="选择结束日期" v-model="formValidate.end_time" ></DatePicker>
                         		</FormItem>
                             </Col>
@@ -522,11 +524,11 @@ export default {
                 prj_name: [
                     { required: true, message: '请填写内容，不能为空！', trigger: 'blur' }
                 ],
-                 start_time: [
-                     { required: true, type: 'date', message: '请选择日期！', trigger: 'change' }
+                start_time: [
+                     { required: false, type: 'date', message: '请选择日期！', trigger: 'change' }
                  ],
                 end_time: [//
-                    { required: true, type: 'date', validator: validateDateEnd, trigger: 'change' }
+                    { required: false, type: 'date', validator: validateDateEnd, trigger: 'change' }
                     //{ required: false, type: 'date', message: 'Please select the date', trigger: 'change' }
                 ],
                 prj_desc: [

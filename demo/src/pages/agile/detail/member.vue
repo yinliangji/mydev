@@ -411,7 +411,7 @@ export default {
                 }    
             }
 
-            this.addTeamFn(addTeam);
+            this.addTeamFn(addTeam,{prjId:ID,id:ID});
             this.getMemberInfo(getProjectMember,{id:ID,prjId:ID,prjSn:PRJ_ID,prj_id:PRJ_ID});
         }else{
             Common.CommonError(this,"没有获取到prjId或id 和 prjSn或prj_id")
@@ -642,7 +642,7 @@ export default {
                     myValue:"pm",
                     delBtn:false,
                     groupName:"",
-                    required:true,
+                    required:false,
                     modaAdd:false,//修改添加角色
                     grouptemp:[],//修改添加角色
                     groupListtemp: [],//修改添加角色
@@ -656,7 +656,7 @@ export default {
                     myValue:"tm",
                     delBtn:false,
                     groupName:"",
-                    required:true,
+                    required:false,
                     modaAdd:false,//修改添加角色
                     grouptemp:[],//修改添加角色
                     groupListtemp: [],//修改添加角色
@@ -670,7 +670,7 @@ export default {
                     myValue:"bm",
                     delBtn:false,
                     groupName:"",
-                    required:true,
+                    required:false,
                     modaAdd:false,//修改添加角色
                     grouptemp:[],//修改添加角色
                     groupListtemp: [],//修改添加角色

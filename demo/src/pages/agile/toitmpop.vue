@@ -12,6 +12,7 @@
             :ok-text="okBtnTxt"
             @on-cancel="cancelRole(index,myItem.myRef+index,'formITMitem'+index)"
             @on-visible-change="changeRole"
+            :id="'switchPop_'+index"
 
             >
             <!-- :prop="myItem.grouptemp" -->
@@ -53,7 +54,7 @@
                     </Select>
                 </FormItem>
             </Form>
-            <p :class="isShowTxt?'opacityTrue':'opacityFalse'">{{ ITMtable.msg | FALSEINFO}}</p>
+            <p id="ShowTxt" :class="isShowTxt?'opacityTrue':'opacityFalse'">{{ ITMtable.msg | FALSEINFO}}</p>
         </Modal>
     </div>
 </template>
@@ -79,6 +80,16 @@ export default {
         },
     },
     watch:{
+        okBtnTxt(data){
+            let itmDom = document.getElementById("switchPop_0");
+            itmDom = itmDom ? itmDom.getElementsByClassName("ivu-btn-primary")[0] : false;
+            if(data == "不能" && itmDom){
+                console.error("okBtnTxt",data,itmDom)
+                itmDom.style.visibility = "hidden";
+            }else if(itmDom){
+                itmDom.removeAttribute("style")
+            }
+        },
         Data(data) {
             if(data){
                 this.formValidateData = data;
@@ -199,8 +210,10 @@ export default {
                         this.ITMtable.prj_id = params.prj_id;
                         this.ITMtable.prj_name = params.prj_name;
                         if(myData.data && (myData.data.isSwitch == "no" || !myData.data.isSwitch) ){
-                            this.okBtnTxt = "不能转立项，选择其他";
+                            this.isShowTxt = false;
+                            this.okBtnTxt = "不能";
                         }else{
+                            this.isShowTxt = true;
                             this.okBtnTxt = "转立项";
                         }
                     }else{
@@ -390,12 +403,12 @@ export default {
     width:20%;
 }
 .opacityTrue{
-    color:red;
+    color:#495060;
     opacity: 1;
 
 }
 .opacityFalse{
     color:red;
-    opacity: 0;
+    opacity: 1;
 }
 </style>

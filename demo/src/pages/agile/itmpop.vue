@@ -12,6 +12,7 @@
             :ok-text="okBtnTxt"
             @on-cancel="cancelRole(index,myItem.myRef+index,'formITMitem'+index)"
             @on-visible-change="changeRole"
+            :id="'itmPop_'+index"
 
             >
             <!-- :prop="myItem.grouptemp" -->
@@ -45,7 +46,7 @@
                         filterable 
                         multiple
                         :loading="inputLoad" 
-                        :placeholder="'请输入内容并选择【'+myItem.myLabel+'】'"
+                        :placeholder="'请输入项目名称查找ITM项目'"
                         >
                         <Option v-for="(item,index2) in myItem.groupListtemp" :value="item.value" :key="index2">
                             {{ item.label }}
@@ -73,8 +74,20 @@ export default {
         },
     },
     watch:{
-        isShow() {
-            if(this.isShow){
+        okBtnTxt(data){
+            
+            let itmDom = document.getElementById("itmPop_0");
+            itmDom = itmDom ? itmDom.getElementsByClassName("ivu-btn-primary")[0] : false;
+            if(data == "不能作" && itmDom){
+                console.error("okBtnTxt",data,itmDom)
+                itmDom.style.visibility = "hidden";
+            }else if(itmDom){
+                itmDom.removeAttribute("style")
+            }
+
+        },
+        isShow(data) {
+            if(data){
                 this.initAlertTxt();
                 this.outinITM();
             }
@@ -206,9 +219,11 @@ export default {
         submitRole(i,name,fromName){
             let _isExist = this.ITMtable.isExist;
             if(_isExist =="yes"){
-                this.okBtnTxt = "不能导入"
+                
+                this.okBtnTxt = "不能作"
                 this.isShowTxt = true;
                 this.modal_add_loading = false;
+                
                 setTimeout(()=>{
                     this.$nextTick(() => {
                       this.modal_add_loading = true;
@@ -227,8 +242,10 @@ export default {
             this.$refs[fromName][i].validate((valid)=>{//验证
                 if(valid){
                     if(!this.isShowTxt && _isExist =="yes"){
+
                         this.isShowTxt = true;
-                        this.okBtnTxt = "不能导入";//"确定重新导入"
+                        this.okBtnTxt = "不能作";//"确定重新导入"
+                        
                     }else{
                         this.modal_add_loading = true;
                         this.$nextTick(() => {

@@ -63,7 +63,8 @@
     					<Row>
                             <Col span="12">
                                 
-                                <FormItem label="项目启动时间" prop="start_time">
+                                <FormItem label="项目启动时间" >
+                                    <!-- prop="start_time" -->
                                     <span v-show="isMyEdit('start_time')">
                                         {{formValidate.start_time}}
                                     </span> 
@@ -71,7 +72,8 @@
                                 </FormItem>
                             </Col>
                             <Col span="12">
-                                 <FormItem label="项目结束时间" prop="end_time">
+                                 <FormItem label="项目结束时间" >
+                                    <!-- prop="end_time" -->
                                     <span v-show="isMyEdit('end_time')">
                                         {{formValidate.end_time}}
                                     </span>
@@ -563,10 +565,10 @@ export default {
         
 
                 start_time: [
-                    { required:((D)=>{return D ? (JSON.parse(D).prj_type == '1' ? false : true) : true;})(this.$router.history.current.query.DATA), type: 'date', message: '请选择日期！', trigger: 'change' }
+                    { required:false, type: 'date', message: '请选择日期！', trigger: 'change' }
                 ],
                 end_time: [
-                    { required:((D)=>{return D ? (JSON.parse(D).prj_type == '1' ? false : true) : true;})(this.$router.history.current.query.DATA), type: 'date', validator: validateDateEnd, trigger: 'change' }
+                    { required:false, type: 'date', validator: validateDateEnd, trigger: 'change' }
                     //{ required: false, type: 'date', message: 'Please select the date', trigger: ['blur','change'] }
                 ],
                 prj_desc: [

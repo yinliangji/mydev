@@ -278,8 +278,6 @@ export default class Common extends Utils {
               let _temp = true;
               for(let i =0;i<KEY.length;i++){
                   if(!(KEY[i].indexOf("_view") != -1)){
-
-                      if(KEY[i] == "icdp_projList_mng"){console.error(OBJ,"111")}
                       if(OBJ.findIndex(item=>item == KEY[i]) != -1){
                           _temp = false
                       }

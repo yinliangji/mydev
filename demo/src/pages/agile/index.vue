@@ -353,11 +353,12 @@ export default {
                 },
                 */
                 {
-                    title: '项目编号',
+                    title: 'ICDP编号',
                     key: 'prj_id',
-                    width: 85,
+                    width: 90,
                     align: 'center',
                 },
+                
                 {
                     title: '项目名称',
                     key: 'prj_name',
@@ -402,7 +403,12 @@ export default {
                     }
                     //
                 },
-                
+                {
+                    title: 'ITM编号',
+                    key: 'itm_id_sn',
+                    width: 85,
+                    align: 'center',
+                },
                 {
                     title: '项目经理',
                     key: 'manager',

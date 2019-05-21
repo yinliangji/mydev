@@ -1264,7 +1264,7 @@ export default class Common extends Utils {
     //获取搜索下拉菜单全部--不通用
     static GetConditionAll(FUN,that,URL, condition,prj_id,all,special){
       //
-      return FUN(URL,{condition,prj_id},{timeout:20000,method:'get'})
+      return FUN(URL,{condition,prj_id,id:prj_id},{timeout:20000,method:'get'})
       .then((response) => {
           let myData = response.data;
           console.log("<======product condition***response+++",condition,response,myData,"======>");

@@ -177,7 +177,7 @@ export default {
         },
         getITMtableFn(URL,params = {}){
             if(params.prj_id){
-                defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
+                defaultAXIOS(URL,params,{timeout:50000,method:'get'}).then((response) => {
                     let myData = response.data;
                     console.log("<======agile ITMtable***response+++",response,myData,"======>");
                     if(myData.status == "success"){
@@ -264,7 +264,7 @@ export default {
                 username:Common.getStorageAndCookie(this,Common,"username"),
             }
             let URL = isExist == "yes" ? importITMyes : importITMno;
-            defaultAXIOS(URL,tempData,{timeout:5000,method:'post'}).then((response) => {
+            defaultAXIOS(URL,tempData,{timeout:50000,method:'post'}).then((response) => {
                 let myData = response.data;
                 console.log("<======agile ITMAdd***response+++",response,myData,"======>");
                 if(myData.status == "success"){

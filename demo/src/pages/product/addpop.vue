@@ -53,7 +53,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {storyAdd} = Common.restUrl;
+const {storyAdd,modifyCondition} = Common.restUrl;
 export default {
     props: {
         isShow: {
@@ -173,7 +173,7 @@ export default {
             this.req_idList = D;
         },
         SprintList(D){
-            this.sprintList = D;
+            //this.sprintList = D;
         },
         CurrentReqId(D){
             this.currentReq_id = D;
@@ -189,9 +189,7 @@ export default {
         console.log("添加用户故事 updated-------","this.isShow----",this.isShow)
     },
     mounted(){
-
-
-        
+        this.storyGetConditionFn(modifyCondition,"",Common.GETID(this,Common)).then(()=>{},()=>{})
     },
     data() {
         return {
@@ -251,6 +249,9 @@ export default {
         }
     },
     methods:{
+        storyGetConditionFn(URL,condition,prj_id){
+            return Common.GetConditionAll(defaultAXIOS,this,URL,"xxxxx",prj_id,["sprint"]);
+        },
         formItemReset(){
             this.formValidate.userstory_name = '';
             this.formValidate.userstory_type = "1";

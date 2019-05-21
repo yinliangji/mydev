@@ -262,7 +262,7 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 import GoAgileMode from "@/components/goAgileMode";
-const {storyEdit,storyGetSprint,storyGetReq,storyGetCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,userstoryGetReturnbfunc,storyGetDetail,projectListDataNew} = Common.restUrl;
+const {storyEdit,storyGetSprint,storyGetReq,modifyCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,userstoryGetReturnbfunc,storyGetDetail,projectListDataNew} = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -463,7 +463,7 @@ export default {
 
             //this.storyGetConditionFn(storyGetCondition,"userstory_type",ID);
             //this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
-            this.storyGetConditionFn(storyGetCondition,"proi",ID).then(()=>{
+            this.storyGetConditionFn(modifyCondition,"proi",ID).then(()=>{
                 
                 let any = this.req_idList.findIndex(item => this.formValidate.req_id == item.value+"");
                 if(any == -1){

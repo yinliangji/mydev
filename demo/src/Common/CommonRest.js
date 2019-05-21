@@ -148,7 +148,10 @@ CommonRest.restUrl = {
     /**** 用户故事获取需求列表 get****/
 
     "storyGetCondition": process.env.BASE_URL + "/userstory/getUserstoryCondition/",
-    /**** 用户故事查询获取 get****/
+    /**** 用户故事查询下拉获取 get****/
+
+    "modifyCondition": process.env.BASE_URL + "/userstory/modifyCondition/",
+    /**** 用户故事添加编辑下拉获取 get****/
 
     "storySetChange": process.env.BASE_URL + "/userstory/changeUserstoryStatus/",
     /**** 用户故事看板拖动 get****/

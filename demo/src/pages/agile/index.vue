@@ -519,7 +519,10 @@ export default {
                                     marginLeft: '2px',
                                     visibility:this.transform(this.prj_typeList,params.row.prj_type),
                                 },
-                                domProps:{disabled:!this.isEdit(params.row.isEdit)},
+                                domProps:{
+                                    disabled:!this.isEdit(params.row.isEdit),
+                                    title:"将自研项目转化为ITM立项项目，属性覆盖为ITM立项内容，原自研项目的需求项保留与ITM立项需求整合。",
+                                },
                                 on: {
                                     click: () => {
                                         this.toITM(params.row)

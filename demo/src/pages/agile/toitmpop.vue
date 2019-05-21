@@ -17,6 +17,7 @@
             >
             <!-- :prop="myItem.grouptemp" -->
             <!-- :prop="'ITMitem.AddGroupList.'+index+'.grouptemp'" -->
+            <p>将自研项目转化为ITM立项项目，属性覆盖为ITM立项内容，原自研项目的需求项保留与ITM立项需求整合。</p>
             <table class="ITMtable">
                 <tr>
                     <th>项目名称</th><td><p>{{ ITMtable.prj_name | FALSEINFO}}</p></td>
@@ -197,7 +198,7 @@ export default {
         getITMtableFn(URL,params = {}){
 
             if(params.prj_id){
-                defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
+                defaultAXIOS(URL,params,{timeout:50000,method:'get'}).then((response) => {
                     let myData = response.data;
                     console.log("<======agile ITMtable***response+++",response,myData,"======>");
                     if(myData.status == "success"){
@@ -279,7 +280,7 @@ export default {
                 current_prjId:this.formValidateData[0].id,
             }
             let URL = Switch;
-            defaultAXIOS(URL,tempData,{timeout:5000,method:'post'}).then((response) => {
+            defaultAXIOS(URL,tempData,{timeout:50000,method:'post'}).then((response) => {
                 let myData = response.data;
                 console.log("<======agile ITMAdd***response+++",response,myData,"======>");
                 if(myData.status == "success"){

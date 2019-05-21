@@ -99,3 +99,20 @@ function myBrowser() {
 
 
 <span title="第一行&#10;第二行&#10;第三行">请将鼠标移到我的上面看看title换行了没</span>
+
+
+方案一
+在project directory/.git/config文件中的ssh 后面添加下面这段代码
+
+ssh -oKexAlgorithms=+diffie-hellman-group1-sha1
+1
+方案二
+在.ssh目录下面新建一个config文件并在config文件中添加以下代码
+
+Host xx.xx.x.xxx
+    KexAlgorithms +diffie-hellman-group1-sha1
+
+
+1
+2
+其中 xx.xx.x.xxx为服务器的ip地址或者域名

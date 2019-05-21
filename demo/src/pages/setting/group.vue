@@ -24,10 +24,11 @@
                                     <Button 
 										v-show="myItem.groupLeader.length==0"
                                         icon="ios-plus-empty" 
-                                        type="dashed" 
+                                        type="success" 
                                         size="small" 
                                         @click="addRoleGL(index)"
                                         :disabled="isModify"
+
                                         >
                                         添加{{formValidate.AddGroupList[index].myLabel}}小组长
                                     </Button>
@@ -35,15 +36,16 @@
                             	</div>
                                 <div :id="'roleBox_'+index">
                                 	<div class="ivu-tag" style="cursor:default;">小组员：</div>
-                                    <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" :id="myItem.myValue+'_'+item.value+'_'+index+'_'+index2" :closable="!isModify" @on-close="roleClose">
+                                    <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" :id="myItem.myValue+'_'+item.value+'_'+index+'_'+index2" :closable="!isModifyMember" @on-close="roleClose">
                                         {{ item.label}}
                                     </Tag>
                                     <Button 
                                         icon="ios-plus-empty" 
-                                        type="dashed" 
+                                        type="success" 
                                         size="small" 
                                         @click="addRole(index)"
-                                        :disabled="isModify"
+                                        :disabled="isModifyMember"
+                                        shape="circle"
                                         >
                                         添加{{formValidate.AddGroupList[index].myLabel}}人员
                                     </Button>
@@ -184,12 +186,14 @@ export default {
             prj_permission:false,
 			identity:false,
 			isModify:true,
+            isModifyMember:true,
 			
 		}	
 	},
 	watch:{
         Data(D){
             this.get_permission(D);
+            this.get_permissionMember(D);
         },
         formValidate: {
             handler(val, oldVal) {
@@ -216,6 +220,7 @@ export default {
         let ID = this.getID() ? this.getID() : this.$router.push('/agile');
         if(this.Data){
             this.get_permission(this.Data);
+            this.get_permissionMember(this.Data);
         }
 		this.addTeam(getUserByProjId,{projectId:ID}).then(()=>{
 			this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:ID});
@@ -225,15 +230,31 @@ export default {
 		get_permission(D){
             let Ide = D.identity;
             let Per = D.prj_permission || D.permission;
-            if(Ide){
-                this.isModify = (Ide == "SuperAdmin" || Ide == "PlainAdmin" || Ide == "PrjManager") ? false  : true;
+            if(Ide && (Ide == "SuperAdmin" || Ide == "PlainAdmin" || Ide == "PrjManager")){
+                this.isModify = false;
             }else if(Per && Array.isArray(Per) && Per.length){
-                this.isModify = (Per.findIndex(item=>item == "icdp_projList_mng") != -1) ? false : true;
+                this.isModify = (Per.findIndex(item=>item == "icdp_proj_group_mng") != -1) ? false : true;
             }else{
                 this.isModify = true;
             }
 
         },
+        get_permissionMember(D){
+            let Ide = D.identity;
+            let Per = D.prj_permission || D.permission;
+            if(Ide && (Ide == "SuperAdmin" || Ide == "PlainAdmin" || Ide == "PrjManager")){
+                this.isModifyMember =  false;
+            }else if(Per && Array.isArray(Per) && Per.length){
+                this.isModifyMember = (Per.findIndex(item=>item == "icdp_proj_group_mng") != -1 || Per.findIndex(item=>item == "icdp_proj_group_menber_edit") != -1) ? false : true;
+            }else{
+                this.isModifyMember = true;
+            }
+
+        },
+
+
+
+        
 		
 		getID(){
 			return Common.GETID(this,Common);

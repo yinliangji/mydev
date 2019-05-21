@@ -2930,15 +2930,7 @@ let Condition = (val1 = 200, val2 = 1, val3 = 3) => {
     ])
 }
 
-app.all('/userstory/getUserstoryCondition', function(req, res) {
-    //let resVal = Condition(req.body.myStatus, req.body.page, req.body.pageline);
-    //console.log("req==>", req.body);
-    //console.log("resVal==>", resVal);
-    
-    console.log("res====>",res.req._parsedUrl.query,res.req._parsedUrl.query.indexOf("userstory_type"))
-    
-
-    let OBJECT = 
+ let ConditionOBJECT = 
         {
             userstory_type:[
                 {value:"用户需求",key:"1"},
@@ -3046,8 +3038,18 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
             ],
             
         }
+
+app.all('/userstory/getUserstoryCondition', function(req, res) {
+    //let resVal = Condition(req.body.myStatus, req.body.page, req.body.pageline);
+    //console.log("req==>", req.body);
+    //console.log("resVal==>", resVal);
     
-    res.json(OBJECT);
+    console.log("res====>",res.req._parsedUrl.query,res.req._parsedUrl.query.indexOf("userstory_type"))
+    
+
+   
+    
+    res.json(ConditionOBJECT);
     res.end();
     return
 
@@ -3096,6 +3098,14 @@ app.all('/userstory/getUserstoryCondition', function(req, res) {
     
     res.end()
 });
+app.all('/userstory/modifyCondition', function(req, res) {
+    console.log("res====>",res.req._parsedUrl.query,res.req._parsedUrl.query.indexOf("userstory_type"))
+    res.json(ConditionOBJECT);
+    res.end();
+    return
+
+    
+});
 
 
 
@@ -3134,6 +3144,10 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
 
             "icdp_projList_view",//10
 
+
+            "icdp_proj_group_mng",//项目设置
+            "icdp_proj_group_menber_edit",//项目设置
+
             
             //"icdp_projList_mng",//25
             //========
@@ -3147,7 +3161,7 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
             "icdp_prjrequirement_edit",
             "icdp_prjrequirement_confirm",
         ],
-        identity:"PlainAdmin",
+        identity:"SuperAdmin",
         //PlainAdmin
         //SuperAdmin
         //PrjManager
@@ -3189,6 +3203,9 @@ let getPermission2 = (val1 = 200, val2 = 1, val3 = 3) => {
 
             "icdp_projList_view",//10
 
+            "icdp_proj_group_mng",//项目设置
+            "icdp_proj_group_menber_edit",//项目设置
+
             
             //"icdp_proj_role_edit",
             //========
@@ -3202,7 +3219,7 @@ let getPermission2 = (val1 = 200, val2 = 1, val3 = 3) => {
             "icdp_prjrequirement_edit",
             //"icdp_prjrequirement_confirm",
         ],
-        identity:"PlainAdmin",
+        identity:"SuperAdmin",
         //PlainAdmin
         //SuperAdmin
         //PrjManager

@@ -28,8 +28,8 @@
                                 </FormItem> 
                             </Col>
                             <Col span="12">
-                                <FormItem label="总分行一体化研发类型" prop="subject" >
-                                    <Select clearable v-model="formValidate.subject" placeholder="请选总分行一体化研发类型">
+                                <FormItem label="总分行一体化研发领域" prop="subject" >
+                                    <Select clearable v-model="formValidate.subject" placeholder="请选总分行一体化研发领域">
                                         <Option v-for="item in subjectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                     </Select> 
                                     
@@ -352,7 +352,7 @@
             </div>
         </Modal>
 
-
+        <GoAgileMode :Data="GO" :Text="GOText" />
 
     </div>
 </template>
@@ -362,9 +362,11 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,listModule,publishUser,logicSystem,phySystem,projectAddCustomizedGroup,projectCondition} = Common.restUrl;
+const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,listModule,publishUser,logicSystem,phySystem,projectAddCustomizedGroup,projectCondition,getPermission} = Common.restUrl;
 import Store from '@/vuex/store'
 import AddPartPop from '@/pages/agile/add/addpartpop';
+
+import GoAgileMode from "@/components/goAgileMode";
 
 const validateDate = (rule, value, callback) => {
     if (!value || !value[0] || !value[1]) {
@@ -613,10 +615,27 @@ export default {
             },
             inputLoad:false,
             popIsInput:false,//添加小组信息
+
+            prj_permission:[],
+            identity:"",
+
+            //检测id是否在projectListDataNew列表里
+            GO:false,
+            GOText:"",
             
         }
     },
     mounted(){
+        this.getPermissionFn(getPermission).then((result)=>{
+            let IS = this.authIs(['icdp_projList_mng','icdp_projList_view']);
+            if(IS){
+                this.GO = true;
+                this.GOText = "没有权限";    
+            }
+        },()=>{
+            this.showError("获取权限失败");
+        })
+
         this.resetData();
 
         this.defaultGroup = [
@@ -729,6 +748,18 @@ export default {
     },
     
     methods: {
+        authIsAdmin(KEY){
+            return Common.AdminAuth(this,KEY)
+        },
+        authIs(KEY){
+            return Common.auth(this,KEY);
+        },
+        authAdminIs(KEY){
+            return Common.AdminAuth(this,KEY);
+        },
+        getPermissionFn(URL){
+            return Common.GetPermission(defaultAXIOS,this,URL);
+        },
         getProjectCondition(URL,params = {}){
             return Common.GetProjectCondition(Common,this,defaultAXIOS,URL,params);
         },
@@ -1069,6 +1100,7 @@ export default {
                 }else{
                     this.modal_add_loading = false;
                     this.showError(myData.status);
+                    Common.CommonWarning(this,myData.message);
                 }
                 
             }).catch( (error) => {
@@ -1117,6 +1149,7 @@ export default {
     },
     components: {
         AddPartPop,
+        GoAgileMode,
     },
 
 }

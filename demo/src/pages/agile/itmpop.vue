@@ -78,9 +78,16 @@ export default {
             
             let itmDom = document.getElementById("itmPop_0");
             itmDom = itmDom ? itmDom.getElementsByClassName("ivu-btn-primary")[0] : false;
-            if(data == "不能作" && itmDom){
-                console.error("okBtnTxt",data,itmDom)
-                itmDom.style.visibility = "hidden";
+
+            if(data == "加载中" && itmDom){
+                itmDom.setAttribute("disabled",true);
+            }else{
+                itmDom.removeAttribute("disabled");
+            }
+
+            if(data == "继续(有风险！谨慎操作)" && itmDom){
+                //itmDom.style.visibility = "hidden";
+                itmDom.style.background = "red";
             }else if(itmDom){
                 itmDom.removeAttribute("style")
             }
@@ -135,12 +142,15 @@ export default {
         }
     },
     mounted(){
-        
+        if(this.isShow){
+            this.initAlertTxt();
+            this.outinITM();
+        }
     },
     methods: {
-        initAlertTxt(){
+        initAlertTxt(val){
             this.isShowTxt = false;
-            this.okBtnTxt = "添加";
+            this.okBtnTxt = val ? val: "添加";
             modal_add_loading:true;
         },
         cleanITM(){
@@ -163,7 +173,7 @@ export default {
             let _obj = this.ITMitem.AddGroupList[0].groupListtemp.find(item => item.value == _val);
 
             this.ITMtableTxt("加载中......");
-            this.initAlertTxt();
+            this.initAlertTxt("加载中");
             Common.throttle(
                 (value, THIS) => {
                     THIS.getITMtableFn(getITMtable,{prj_id:value,prj_name:_obj?_obj.prj_name : ""})
@@ -192,7 +202,7 @@ export default {
                         if(myData.data && myData.data.isExist == "no"){
                             this.okBtnTxt = "确认添加";
                         }else{
-                            this.okBtnTxt = "添加";
+                            this.okBtnTxt = "继续";
                         }
                     }else{
                         this.showError(URL+"错误");
@@ -218,10 +228,14 @@ export default {
         },
         submitRole(i,name,fromName){
             let _isExist = this.ITMtable.isExist;
+            /*
+
             if(_isExist =="yes"){
                 
-                this.okBtnTxt = "不能作"
+                this.okBtnTxt = "继续(有风险！谨慎操作)"
                 this.isShowTxt = true;
+                
+                
                 this.modal_add_loading = false;
                 
                 setTimeout(()=>{
@@ -230,6 +244,7 @@ export default {
                     });
                 },300)
                 return
+                
             }
 
             this.modal_add_loading = false;
@@ -238,13 +253,21 @@ export default {
                   this.modal_add_loading = true;
                 });
             },300)
+            */
 
             this.$refs[fromName][i].validate((valid)=>{//验证
                 if(valid){
                     if(!this.isShowTxt && _isExist =="yes"){
 
                         this.isShowTxt = true;
-                        this.okBtnTxt = "不能作";//"确定重新导入"
+                        this.okBtnTxt = "继续(有风险！谨慎操作)";//"确定重新导入"
+                        this.modal_add_loading = true;
+                        setTimeout(()=>{
+                            this.modal_add_loading = false;
+                            this.$nextTick(() => {
+                              this.modal_add_loading = true;
+                            });
+                        },300)
                         
                     }else{
                         this.modal_add_loading = true;
@@ -272,7 +295,7 @@ export default {
                     that.modal_add_loading = false;
                     obj.modaAdd = false;
                     that.$emit("itmClose",false,"tableData");
-                    
+
                 }else{
                     obj.modaAdd = true;
                     that.modal_add_loading = false;
@@ -305,6 +328,12 @@ export default {
                     myReftemp: "selfRefRole",//修改添加角色
                 })
             }
+        },
+        hiddenPop(){
+            if(this.ITMitem.AddGroupList.length){
+                this.ITMitem.AddGroupList[0].modaAdd = false;
+            }
+            this.modal_add_loading = true;
         },
         projectGroupFn2(URL,params = {},ARR,thatEle){
 

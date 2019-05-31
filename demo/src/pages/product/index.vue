@@ -161,7 +161,7 @@
 			    	
 					<div class="tagBox" >
 						<div style="" class="tagBar">
-							<div  class="tagBarRight">
+							<div  class="tagBarRight" v-show="false">
 								<Button 
 									class="addBtnBox"
 									icon="ios-download-outline"
@@ -192,7 +192,7 @@
 									class="addBtnBox"
 									type="success"  
 									@click="addItem"
-									:disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
+									:disabled="authIs2(['icdp_userStory_mng','icdp_userStory_view'])" 
 									>
 									添加用户故事
 								</Button>
@@ -220,7 +220,7 @@
 						    		:T="7" 
 						    		:Z="10" 
 						    		:W="270"  
-						    		content="用户故事状态说明：<br>1.提出（新建用户故事未开始处理）<br>2.设计分析（写测试案例、提交设计文档等附件）<br>3.开发测试（提交代码，开始单元测试）<br>4.用户验收测试（所有工作项都已完成）<br>5.待投产（发布版本审核通过，关联了用户故事）<br>6.已投产（用户故事投产成功）<br>7.停滞（实施过程中由于某些原因暂停实施）<br>8.废弃（废弃不再实施的用户故事）" 
+						    		content="用户故事状态分类说明：<br>1.已识别（新建用户故事未开始处理）<br>2.已计划（写测试案例、提交设计文档等附件）<br>3.实施中（提交代码，开始单元测试）<br>4.用户验收中（所有工作项都已完成）<br>5.待投产（发布版本审核通过，关联了用户故事）<br>6.已投产（用户故事投产成功）<br>7.停滞（实施过程中由于某些原因暂停实施）<br>8.废弃（废弃不再实施的用户故事）"
 					    		/>
 				    		</div>
 				    		<div class="hack">&nbsp;</div>
@@ -243,7 +243,7 @@
 					<div class="listBox" v-show="currentView == 'kanbanboard'" id="kanbanboard">
 						<!-- :groupList="[]" :groupList="groupList" :sortdisabled="true"  -->
 						<kanbanboard
-							:isDisabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])"
+							:isDisabled="authIs2(['icdp_userStory_mng','icdp_userStory_view'])"
 							:sortdisabled="false" 
 							:cardList="cardLists" 
 							:statusList="statusLists" 
@@ -1477,6 +1477,10 @@ export default {
 		authIs(KEY){
 			return Common.auth(this,KEY)            
         },
+        authIs2(KEY){
+			return Common.auth2(this,KEY)            
+        },
+        
 
         getPermissionFn(URL,params){
         	return Common.GetPermission(defaultAXIOS,this,URL,params);
@@ -1493,17 +1497,12 @@ export default {
 			let ID = N;
 			
 			//Common.setStorageAndCookie(Common,"id",N)
-			defaultAXIOS(projectDetail+ID,{},{timeout:2000,method:'get'}).then((response) => {
-			    let myData = response.data;
-			    console.log("<======detail***response+++",response,myData,"======>");
-
-			    //this.$refs.req_id.setQuery();
-			    
+			let fn = (response) => {
 			    this.$refs.ReqId.clearSingleSelect();
 			    this.$refs.Charger.clearSingleSelect();
 			    this.$refs.Sprint.clearSingleSelect();
 
-			    let DATA = myData.data ? myData.data : myData
+			    let DATA = response && response.data ? response.data : response
 			    let prodId = DATA.prod_id?DATA.prod_id : DATA.prod 
 			    
 			    if(prodId){
@@ -1520,16 +1519,21 @@ export default {
 			    }
 			    //this.kanbanboardIsShow = true;
 			    this.getInfoFn(ID);
+			}
+			
 
-
-
+			fn({data:{prod_id:"--"}});
+			return
+			defaultAXIOS(projectDetail+ID,{},{timeout:2000,method:'get'}).then((response) => {
+			    let myData = response.data;
+			    console.log("<======detail***response+++",response,myData,"======>");
+			    fn(myData);
+			    //this.$refs.req_id.setQuery();
 			}).catch( (error) => {
 				this.searchCan = true;
 			    console.log(error);
 			    this.showError(error);
 			});
-
-			
 		    //this.tableDataAjaxFn(storyAll,1,this.tableDAtaPageLine,"",ID);
 		    //this.storyGetKanBanFn(storyGetKanBan,ID);
         },

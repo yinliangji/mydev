@@ -305,6 +305,7 @@ export default {
                 depd_main_type:2,
                 depd_list:[],
                 depd_sn:"",
+                username:Common.getStorageAndCookie(this,Common,"username"),
             }
             defaultAXIOS(storyAdd,tempData,{timeout:20000,method:'post'}).then((response) => {
                 let myData = response.data;

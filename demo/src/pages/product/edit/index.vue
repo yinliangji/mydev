@@ -722,6 +722,7 @@ export default {
                 depd_main_type:2,
                 depd_list:this.dependList,
                 us_accept:this.formValidate.us_accept,
+                username:Common.getStorageAndCookie(this,Common,"username"),
             
             }
             defaultAXIOS(storyEdit,tempData,{timeout:20000,method:'post'}).then((response) => {
@@ -735,6 +736,7 @@ export default {
                     this.$router.push('/product');
                 }else{
                     this.showError(myData);
+                    Common.CommonWarning(this,myData.message);
                 }
 
                 

@@ -65,7 +65,7 @@
             </div>
             <div>
               <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" title="快速添加用户故事" >快捷添加</Button>
-              <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId)" class="addMissionBtn" title="快速添加工作项">快捷添加</Button>
+              <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId,itemGroup.sprint_id)" class="addMissionBtn" :disabled="getPermission" title="快速添加工作项">快捷添加</Button>
             </div>
           </Col>
           <Col class="Column" v-for="(items, index) in myStatusList" :key="index" :id="'C-'+itemGroup.groupId+'_'+items.state" :data-G="itemGroup.groupId" :data-S="items.state" >
@@ -142,6 +142,12 @@ export default {
       }
     },
     isDisabled: {
+      type: Boolean,
+      default: function() {
+        return false;
+      }
+    },
+    getPermission: {
       type: Boolean,
       default: function() {
         return false;
@@ -666,6 +672,7 @@ export default {
           prjSn:PrjSn,
           id:ID,
           prjId:ID,
+          menuType:"new",
         }
       }
       :
@@ -677,6 +684,7 @@ export default {
           prjSn:PrjSn,
           id:ID,
           prjId:ID,
+          menuType:"new",
         }
       }
       const {href}=this.$router.resolve(obj);

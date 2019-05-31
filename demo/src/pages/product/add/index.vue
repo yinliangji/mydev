@@ -806,6 +806,7 @@ export default {
                 depd_list:this.dependList,
                 depd_sn:this.depd_sn,
                 us_accept:this.formValidate.us_accept,
+                username:Common.getStorageAndCookie(this,Common,"username"),
             }
             
             defaultAXIOS(storyAdd,tempData,{timeout:20000,method:'post'}).then((response) => {
@@ -822,6 +823,7 @@ export default {
                 }else{
                     this.modal_add_loading = false;
                     this.showError(myData.status);
+                    Common.CommonWarning(this,myData.message);
                 }
             }).catch( (error) => {
                 console.log(error);

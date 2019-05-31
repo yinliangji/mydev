@@ -38,11 +38,11 @@
                                 
                             </Col>
                             <Col span="12">
-                                <FormItem label="总分行一体化研发类型" prop="subject" >
+                                <FormItem label="总分行一体化研发领域" prop="subject" >
                                     <span v-show="isMyEdit('subject')">
                                         {{valueChangelabel(formValidate.subject,subjectList)}}
                                     </span> 
-                                    <Select clearable v-model="formValidate.subject" placeholder="请选总分行一体化研发类型" v-show="isMyEdit('subject','else')">
+                                    <Select clearable v-model="formValidate.subject" placeholder="请选总分行一体化研发领域" v-show="isMyEdit('subject','else')">
                                         <Option v-for="item in subjectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                     </Select> 
                                     
@@ -1154,6 +1154,7 @@ export default {
                 }else{
                     this.modal_add_loading = false;
                     this.showError(myData.status);
+                    Common.CommonWarning(this,myData.message);
                 }
                 
             }).catch( (error) => {

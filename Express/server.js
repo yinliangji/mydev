@@ -4237,6 +4237,7 @@ let getSetGroup = (val1 = 200, val2 = 1, val3 = 3) => {
             {
                 "group_sn":"groupSn-1",
                 "groupName":"产品经理",
+                "isEdit|1":[true,false],
                 group_leader:"",
                 "member":[
                     {
@@ -4250,6 +4251,7 @@ let getSetGroup = (val1 = 200, val2 = 1, val3 = 3) => {
             {   
                 "group_sn":"groupSn-2",
                 "groupName":"项目经理",
+                "isEdit|1":[true,false],
                 group_leader:
                     {
                         "nick_name":"谢蓓",
@@ -4267,6 +4269,7 @@ let getSetGroup = (val1 = 200, val2 = 1, val3 = 3) => {
             {
                 "group_sn":"groupSn-3",
                 "groupName":"开发组",
+                "isEdit|1":[true,false],
                 group_leader:"",
                 "member":[
                     {

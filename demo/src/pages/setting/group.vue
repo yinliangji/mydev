@@ -36,20 +36,22 @@
                             	</div>
                                 <div :id="'roleBox_'+index">
                                 	<div class="ivu-tag" style="cursor:default;">小组员：</div>
-                                    <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" :id="myItem.myValue+'_'+item.value+'_'+index+'_'+index2" :closable="!isModifyMember" @on-close="roleClose">
+                                    <Tag v-for="(item,index2) in myItem.groupList" :value="item.value" :key="index2" :name="index2" :id="myItem.myValue+'_'+item.value+'_'+index+'_'+index2" :closable="myItem.isEdit" @on-close="roleClose">
+                                        <!-- :closable="!isModifyMember" -->
                                         {{ item.label}}
                                     </Tag>
+
                                     <Button 
                                         icon="ios-plus-empty" 
                                         type="success" 
                                         size="small" 
                                         @click="addRole(index)"
-                                        :disabled="isModifyMember"
+                                        :disabled="!myItem.isEdit"
                                         shape="circle"
                                         >
-                                        添加{{formValidate.AddGroupList[index].myLabel}}人员
+                                        添加{{myItem.myLabel}}人员
+                                        <!-- :disabled="isModifyMember" -->
                                     </Button>
-                                    
                                 </div>
                                 <Modal 
                                     :ref="myItem.myReftemp+index" 
@@ -223,20 +225,21 @@ export default {
             this.get_permissionMember(this.Data);
         }
 		this.addTeam(getUserByProjId,{projectId:ID}).then(()=>{
-			this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:ID});
+			this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:ID,username:Common.getStorageAndCookie(this,Common,"username"),});
 		},()=>{})
 	},
 	methods:{
 		get_permission(D){
             let Ide = D.identity;
             let Per = D.prj_permission || D.permission;
-            if(Ide && (Ide == "SuperAdmin" || Ide == "PlainAdmin" || Ide == "PrjManager")){
-                this.isModify = false;
-            }else if(Per && Array.isArray(Per) && Per.length){
+            if(Per && Array.isArray(Per) && Per.length){
                 this.isModify = (Per.findIndex(item=>item == "icdp_proj_group_mng") != -1) ? false : true;
             }else{
                 this.isModify = true;
             }
+            // else if(Ide && (Ide == "SuperAdmin" || Ide == "PlainAdmin" || Ide == "PrjManager")){
+            //     this.isModify = false;
+            // }
 
         },
         get_permissionMember(D){
@@ -327,9 +330,11 @@ export default {
 	                            myReftemp: "selfRefRole",//修改添加角色
 	                            groupLeader:[],//小组长
 	                            groupLeaderAddBtnClick:false,//小组长添加按钮
+                                isEdit:"",
 	                        }
 
-	                        _tempObj.myLabel = myData.data[J].groupName;
+	                        _tempObj.isEdit = myData.data[J].isEdit;
+                            _tempObj.myLabel = myData.data[J].groupName;
 	                        _tempObj.myValue = myData.data[J].group_sn;
 	                        _tempObj.groupList = groupList(myData.data[J].member);
 	                        _tempObj.group = group(myData.data[J].member); 
@@ -387,7 +392,7 @@ export default {
             	if(window.location.port == "9000"){
             		return
             	}
-            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
+            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
             }, ()=>{
             	
             })
@@ -448,7 +453,7 @@ export default {
             	if(window.location.port == "9000"){
             		return
             	}
-            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
+            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
             }, ()=>{
             	
             })
@@ -476,7 +481,7 @@ export default {
             	if(window.location.port == "9000"){
             		return
             	}
-            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
+            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
             }, ()=>{
             	
             })
@@ -554,7 +559,7 @@ export default {
             	if(window.location.port == "9000"){
             		return
             	}
-            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
+            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
 
             },()=>{
             	
@@ -605,7 +610,7 @@ export default {
             	if(window.location.port == "9000"){
             		return
             	}
-            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
+            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
 
             },()=>{
             	
@@ -731,6 +736,7 @@ export default {
 						myReftemp: "selfRefRole",//修改添加角色
 						groupLeader:[],//小组长
 						groupLeaderAddBtnClick:false,//小组长添加按钮
+                        isEdit:"",
 					}
 
 					_tempObj.myLabel = that.formPartValidate.addGroupList.length ? that.formPartValidate.addGroupList.filter((item) => {
@@ -810,7 +816,7 @@ export default {
             let ID = N;
 			//this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID()});
 			this.addTeam(getUserByProjId,{projectId:ID}).then(()=>{
-				this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:ID});
+				this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:ID,username:Common.getStorageAndCookie(this,Common,"username"),});
 			},()=>{})
 
         },

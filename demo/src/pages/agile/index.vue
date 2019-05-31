@@ -222,7 +222,7 @@
         
          
         
-        <ItmPop :isShow="isShowItm" @itmClose="itmCloseFn" />
+        <ItmPop :isShow="isShowItm" @itmClose="itmCloseFn" ref="ItmPop" />
         <ToItmPop :isShow="isShowToItem" :Data="actionArr" @toItmClose="toItemCloseFn" />
 
         <!-- <AddItemPop :isShow="isShowAddPop" :isAdd="isAdd" :addLoading="true" @popClose="popCloseFn"  @tableDataAdd="tableDataAddFn" :tabDataRow="tableDataRow" /> -->
@@ -689,6 +689,8 @@ export default {
         itmCloseFn(is,tab){
             this.isShowItm = is;
             if(tab){
+                this.$refs.ItmPop.hiddenPop();
+                //console.error(this.$refs.ItmPop.AddGroupList)
                 this.cancelSerchAll();
                 this.tableDAtaPageCurrent = 1;
                 this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);

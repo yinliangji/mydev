@@ -26,9 +26,9 @@ export default class Utils extends CommonRest {
       }
     }
    
-    static getQueryString(name) {
+    static getQueryString(name,myStr = window.location.search) {
         var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
-        var r = window.location.search.substr(1).match(reg)
+        var r = myStr.substr(1).match(reg)
         if (r != null) return unescape(r[2]); return null
     }
     

@@ -381,7 +381,7 @@ export default {
                 depd_main_type:1,
                 depd_list:this.dependList,
                 depd_sn:this.formItem.req_id,
-                username:Common.getStorageAndCookie(this,Common,"username"),
+                username:Common.getStorageAndCookie(this,Common,"username") || "",
 
                 intro:this.formItem.intro,
                 hope_time:this.formItem.hope_time,

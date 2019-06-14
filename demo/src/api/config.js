@@ -1,12 +1,17 @@
+import Vue from 'vue'
+import Common from '@/Common';
+let VM = new Vue(); 
+
 import Qs from 'qs'
+
 const defaultSet = {
   method: 'post',
   url: 'json.action',
   //baseURL:process.env.TEST_URL,
   baseURL:"",
-  
   data: {
-    defaultParams:Date.now(),
+    __defaultParams__:Date.now(),
+    __USERNAME__:Common.getCookie("username"),
   },
 
   transformRequest: [function (data) {
@@ -18,7 +23,7 @@ const defaultSet = {
     //   formData.append(I, data[I]);
     // }
     // data = formData;
-    
+
     data = JSON.stringify(data)
     //data = JSON.parse(JSON.stringify(data))
     //data = Qs.stringify(data);

@@ -396,7 +396,7 @@ window.dateEditError =()=>{
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail,listModule,logicSystem,phySystem,projectListDataNew,projectCondition} = Common.restUrl;
+const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,projectDetail,listModule,logicSystem,phySystem,projectListDataNew,projectCondition,getPermission} = Common.restUrl;
 import Store from '@/vuex/store'
 import AddPartPop from '@/pages/agile/add/addpartpop';
 import GoAgileMode from "@/components/goAgileMode";
@@ -446,18 +446,18 @@ export default {
         }
     },
     beforecreated(){
-        console.log("agileEdit--beforecreated-------",this.formValidate)
+        //console.log("agileEdit--beforecreated-------",this.formValidate)
     },
     created(){
-        console.log("agileEdit--created-------",this.formValidate);
+        //console.log("agileEdit--created-------",this.formValidate);
         
         Common.GetProjectList(defaultAXIOS,this,Common,projectListDataNew);
     },
     beforeUpdate(){
-        console.log("agileEdit--beforeUpdate-------",this.formValidate)
+        //console.log("agileEdit--beforeUpdate-------",this.formValidate)
     },
     updated(){
-        console.log("agileEdit--updated-------",this.formValidate)
+        //console.log("agileEdit--updated-------",this.formValidate)
     },
 	computed: {
     },
@@ -651,6 +651,10 @@ export default {
                 ],
             },
             inputLoad:false,
+
+
+            prj_permission:[],
+            identity:"",
             //检测id是否在projectListDataNew列表里
             GO:false,
             GOText:"",
@@ -660,6 +664,17 @@ export default {
         
         let ID = Common.GETID(this,Common,"inUrl") ? Common.GETID(this,Common,"inUrl") : "";
         let PRJ_ID = Common.GETprjid(this,Common,"inUrl") ? Common.GETprjid(this,Common,"inUrl") : "";
+
+        this.getPermissionFn(getPermission).then((result)=>{
+            let IS = this.authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view']);
+            if(IS){
+                this.GO = true;
+                this.GOText = "没有权限";    
+            }
+        },()=>{
+            this.showError("获取权限失败");
+        })
+
         this.getProjectCondition(projectCondition);
         if(ID && PRJ_ID){
             this.addTeamFn(addTeam);
@@ -689,6 +704,18 @@ export default {
     },
     
     methods: {
+        authIsAdmin(KEY){
+            return Common.AdminAuth(this,KEY)
+        },
+        authIs(KEY){
+            return Common.auth(this,KEY);
+        },
+        authAdminIs(KEY){
+            return Common.AdminAuth(this,KEY);
+        },
+        getPermissionFn(URL){
+            return Common.GetPermission(defaultAXIOS,this,URL);
+        },
         valueChangelabel(val,arr){
             let obj = arr.find(item=>item.value == val)
             return obj && obj.label ? obj.label : ""; 

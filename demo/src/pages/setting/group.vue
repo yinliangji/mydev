@@ -394,7 +394,7 @@ export default {
             	}
             	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
             }, ()=>{
-            	
+            	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
             })
 
 
@@ -455,6 +455,7 @@ export default {
             	}
             	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
             }, ()=>{
+                this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
             	
             })
         },
@@ -483,6 +484,7 @@ export default {
             	}
             	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
             }, ()=>{
+                this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
             	
             })
         },
@@ -562,6 +564,7 @@ export default {
             	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
 
             },()=>{
+                this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
             	
             });
 
@@ -613,6 +616,7 @@ export default {
             	this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
 
             },()=>{
+                this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
             	
             });
         },
@@ -790,9 +794,17 @@ export default {
 						_tempObj = null;
 						that.partAdd = false;
 						that.formPartValidate.partNameList = [];
+
+                        // -->
+                        if(window.location.port == "9000"){
+                            return
+                        }
+                        this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
+                        // <--
 					},(error)=>{
 						_tempObj = null;
 						that.partCancel();
+                        this.getGroupList(listGroup,{prjSn:Common.GETprjid(this,Common),id:this.getID(),username:Common.getStorageAndCookie(this,Common,"username"),});
 
 					})
 				}

@@ -271,7 +271,7 @@ import Common from '@/Common';
 import GoAgileMode from "@/components/goAgileMode";
 
 
-const {storyAdd,storyAddGet,storyGetSprint,storyGetReq,modifyCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,developEditAxiosData,updateView,projectListDataNew} = Common.restUrl;
+const {storyAdd,storyAddGet,storyGetSprint,storyGetReq,modifyCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,developEditAxiosData,updateView,projectListDataNew,getPermission} = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -318,18 +318,18 @@ const validateNumber2 = (rule, value, callback) => {
 };
 export default {
     beforecreated(){
-        console.log("productAdd--beforecreated-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
+        //console.log("productAdd--beforecreated-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
     },
     created(){
-        console.log("productAdd--created-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
+        //console.log("productAdd--created-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
         this.addCheckSerch();//搜索查询
         Common.GetProjectList(defaultAXIOS,this,Common,projectListDataNew);
     },
     beforeUpdate(){
-        console.log("productAdd--beforeUpdate-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
+        //console.log("productAdd--beforeUpdate-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
     },
     updated(){
-        console.log("productAdd--updated-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
+        //console.log("productAdd--updated-------",this.formValidate,this.proiList,this.userstory_typeList,this.userstory_statusList)
     },
     computed: {
         addtest() {
@@ -453,6 +453,10 @@ export default {
             depd_sn:"",
             dependonoff:false,
             //依赖结束
+            
+
+            prj_permission:[],
+            identity:"",
             //检测id是否在projectListDataNew列表里
             GO:false,
             GOText:"",
@@ -462,6 +466,19 @@ export default {
         }
     },
     mounted(){
+
+
+        this.getPermissionFn(getPermission).then((result)=>{
+            let IS = this.authIs2(['icdp_userStory_mng','icdp_userStory_view']);
+            if(IS){
+                this.GO = true;
+                this.GOText = "没有权限";    
+            }
+        },()=>{
+            this.showError("获取权限失败");
+        })
+
+
         Common.UserstorySession(Common);
 
         let ID = Common.GETID(this,Common);
@@ -522,6 +539,17 @@ export default {
         }
     },
     methods:{
+        authIs(KEY){
+            return Common.auth(this,KEY)            
+        },
+        authIs2(KEY){
+            return Common.auth2(this,KEY)            
+        },
+        
+
+        getPermissionFn(URL,params){
+            return Common.GetPermission(defaultAXIOS,this,URL,params);
+        },
         //依赖开始
         addDepend(){
             this.dependonoff = true;

@@ -219,11 +219,15 @@ CommonRest.restUrl = {
     "userstoryDeleteList": process.env.BASE_URL + "/userstory/deleteUserstory/",
     /**** 用户故事列表删除 get****/
 
-    "userstoryOutExcel": process.env.BASE_URL + "/exportExcelFile/usDetailExp/",
+    "userstoryOutExcel": process.env.BASE_URL + "/agile/us/export/",
+    //"userstoryOutExcel": process.env.BASE_URL + "/exportExcelFile/usDetailExp/",
     /**** 用户故事导出excel get****/
 
     "userstoryOutWord": process.env.BASE_URL + "/exportExcelFile/usBfuncExp/",
     /**** 用户故事导出word get****/
+
+
+
 
     /*****************************************/
 
@@ -280,6 +284,9 @@ CommonRest.restUrl = {
 
     "getRequirementStatList": process.env.BASE_URL + "/req/getRequirementStatList/",
     /**** 需求项目获取状态 get****/
+
+    "reqOutExcel": process.env.BASE_URL + "/agile/req/export/",
+    /**** 需求项导出excel get****/
 
     /*****************************************/
 
@@ -368,11 +375,20 @@ function addZUUL(val){
 }
 
 function rep_mp_e(val){
-    if(window.location.href.indexOf("128.196.0.127") != -1){
+    let _hostname = window.location.hostname;
+    let _port = window.location.port;
+    let _href = window.location.href;
+    if(_href.indexOf("127.0.0.1") != -1){
+        return "//128.196.96.210:8000"+"/mp_e/menu/getLeftMenu/"
+    }else if(_href.indexOf("128.196.0.127") != -1){
         return "//128.196.0.127:8000"+"/mp_e/menu/getLeftMenu/"
     }else{
-        return "//128.196.96.210:8000"+"/mp_e/menu/getLeftMenu/"
+        return "//"+_hostname+":"+_port+"/mp_e/menu/getLeftMenu/"
     }
 }
-
+/*
+if(_href.indexOf("128.196.0.127") != -1){
+        return "//128.196.0.127:8000"+"/mp_e/menu/getLeftMenu/"
+    }else 
+ */
 

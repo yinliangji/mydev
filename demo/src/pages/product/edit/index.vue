@@ -262,7 +262,7 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 import GoAgileMode from "@/components/goAgileMode";
-const {storyEdit,storyGetSprint,storyGetReq,modifyCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,userstoryGetReturnbfunc,storyGetDetail,projectListDataNew} = Common.restUrl;
+const {storyEdit,storyGetSprint,storyGetReq,modifyCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,userstoryGetReturnbfunc,storyGetDetail,projectListDataNew,getPermission} = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -309,18 +309,18 @@ const validateNumber2 = (rule, value, callback) => {
 };
 export default {
     beforecreated(){
-        console.log("productAdd--beforecreated-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
+        //console.log("productAdd--beforecreated-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
     },
     created(){
-        console.log("productAdd--created-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList);
+        //console.log("productAdd--created-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList);
         this.addCheckSerch();//搜索查询
         Common.GetProjectList(defaultAXIOS,this,Common,projectListDataNew);
     },
     beforeUpdate(){
-        console.log("productAdd--beforeUpdate-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
+        //console.log("productAdd--beforeUpdate-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
     },
     updated(){
-        console.log("productAdd--updated-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
+        //console.log("productAdd--updated-------",this.formValidate,this.req_idList,"sprintList=>",this.sprintList)
         if(this.addtest){
             this.$router.push('/product')
         }
@@ -435,12 +435,27 @@ export default {
             depd_sn:"",
             dependonoff:false,
             //依赖结束
+            
+
+            prj_permission:[],
+            identity:"",
             //检测id是否在projectListDataNew列表里
             GO:false,
             GOText:"",
         }
     },
     mounted(){
+
+
+        this.getPermissionFn(getPermission).then((result)=>{
+            let IS = this.authIs2(['icdp_userStory_mng','icdp_userStory_view']);
+            if(IS){
+                this.GO = true;
+                this.GOText = "没有权限";    
+            }
+        },()=>{
+            this.showError("获取权限失败");
+        })
         
         if(!this.$router.history.current.query.fromEdit){
             Common.UserstorySession(Common);
@@ -485,6 +500,19 @@ export default {
         }
     },
     methods:{
+
+        authIs(KEY){
+            return Common.auth(this,KEY)            
+        },
+        authIs2(KEY){
+            return Common.auth2(this,KEY)            
+        },
+        
+
+        getPermissionFn(URL,params){
+            return Common.GetPermission(defaultAXIOS,this,URL,params);
+        },
+
         storyGetDetailFn(URL = "",detail_id){
             return defaultAXIOS(URL,{detail_id},{timeout:5000,method:'get'})
             .then((response) => {

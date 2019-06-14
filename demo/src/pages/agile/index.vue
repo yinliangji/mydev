@@ -897,7 +897,7 @@ export default {
                 
                 obj = this.actionArr[0];
             }
-            let Query = {id:obj.id,prj_id:obj.prj_id}
+            let Query = {id:obj.id,prj_id:obj.prj_id,menuType:"new",}
             Query.DATA = JSON.stringify(obj);
             this.$router.push({path: '/agile/edit', query:Query})
             this.actionArr = [];

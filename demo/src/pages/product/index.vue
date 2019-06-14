@@ -161,17 +161,18 @@
 			    	
 					<div class="tagBox" >
 						<div style="" class="tagBar">
-							<div  class="tagBarRight" v-show="false">
+							<div  class="tagBarRight" >
+								
 								<Button 
 									class="addBtnBox"
 									icon="ios-download-outline"
 									type="info"  
 									@click="optputExecl"
-									:disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
 									size="small"
 									shape="circle"
 								>
-									导出 excel
+									<!-- :disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])"  -->
+									查询结果导出
 								</Button>
 								<Button 
 									class="addBtnBox"
@@ -181,6 +182,7 @@
 									:disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])" 
 									size="small"
 									shape="circle"
+									v-show="false"
 								>
 									导出 word
 								</Button>
@@ -889,10 +891,12 @@ export default {
 			return _arr
 		},
 		//所属需求项 多选结束
+		
 		optputExecl(){
 			let params = {
 				id:this.getID(),
 				prj_id:this.getID(),
+				prjId:this.getID(),
 				userstory_name:this.formValidate.userstory_name,
 				userstory_id:this.formValidate.userstory_id,
 				userstory_type:this.formValidate.userstory_type,
@@ -905,7 +909,7 @@ export default {
 				group_name:this.formValidate.group_name,
 				uscSn:this.formValidate.uscSn,
 			}
-			let fileName = "用户故事Excel导出"
+			let fileName = "用户故事导出_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'))
 			return Common.DownFile(defaultAXIOS,this,userstoryOutExcel,params,fileName);
 		},
 		optputWord(){

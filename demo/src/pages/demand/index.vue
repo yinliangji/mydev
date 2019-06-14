@@ -56,6 +56,16 @@
                         <div style="" class="tagBar">
                             <div  class="tagBarRight">
                                 <Button 
+                                    class="addBtnBox"
+                                    icon="ios-download-outline"
+                                    type="info"  
+                                    @click="optputExecl"
+                                    size="small"
+                                    shape="circle"
+                                >
+                                    查询结果导出
+                                </Button>
+                                <Button 
                                     type="primary"
                                     @click="toBusiness"
                                     size="small"
@@ -202,7 +212,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAll,getPermission,projectDetail,reqDelect,reqSetChange,getRequirementKanBan,getRequirementStatList} = Common.restUrl;
+const {reqAll,getPermission,projectDetail,reqDelect,reqSetChange,getRequirementKanBan,getRequirementStatList,reqOutExcel} = Common.restUrl;
 
 import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 import Addtablepop from "./addtablepop";
@@ -443,6 +453,19 @@ export default {
         console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
+        optputExecl(){
+            let params = {
+                id:this.getID(),
+                prj_id:this.getID(),
+                prjId:this.getID(),
+                req_name:this.formValidate.req_name,
+                req_id:this.formValidate.req_id,
+                req_submitter:this.formValidate.req_submitter,
+                req_stat:this.formValidate.req_stat,
+            }
+            let fileName = "需求项导出_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'));
+            return Common.DownFile(defaultAXIOS,this,reqOutExcel,params,fileName);
+        },
         isDel(val,type){
             if(this.prj_type != 2){
                 return 'visibility:hidden;';
@@ -728,7 +751,16 @@ export default {
                 return
             }
 
-            defaultAXIOS(reqSetChange,{id:_params.ID,status:_params.taskStatus.substring(1),charger:_params.nickname},{timeout:20000,method:'get'}).then((response) => {
+            let params = {
+                id:_params.ID,
+                status:_params.taskStatus.substring(1),
+                charger:_params.nickname,
+                username:Common.getStorageAndCookie(this,Common,"username"),
+                prjSn:Common.GETprjid(this,Common),
+                prj_id:Common.GETprjid(this,Common),
+            }
+
+            defaultAXIOS(reqSetChange,params,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======用户故事 状态改变***response+++",response,myData,"======>");
                 if(myData.status.indexOf("success") == -1){

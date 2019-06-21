@@ -24,8 +24,8 @@
           <td>{{ formValidate.proi | FALSEINFO}}</td>
           <th width="11%">所属迭代</th>
           <td width="20%">{{ formValidate.sprint_name | FALSEINFO}}</td>
-          <th width="11%">工时<br />(实际/预计)</th>
-          <td>0 / {{ formValidate.manHours | FALSEINFO}}</td>
+          <th width="11%">用户故事点数</th>
+          <td>{{ formValidate.manHours | FALSEINFO}}</td>
         </tr>
 
         <tr>
@@ -33,8 +33,16 @@
           <td>{{ formValidate.userstory_id | FALSEINFO}}</td>
           <th>关联工作项<br />(已完成/全部)</th>
           <td>{{ formValidate.complete_mission | FALSEINFO}} / {{ formValidate.mission | FALSEINFO}}</td>
-          <th width="11%"><!-- 创建时间 --></th>
-          <td><!-- {{ formValidate.created_time | FALSEINFO}} --></td>
+          <th width="11%">所属需求</th>
+          <td>{{ formValidate.req_name | FALSEINFO}}</td>
+        </tr>
+        <tr>
+          <th>责任协助人</th>
+          <td colspan="5">
+            <span v-for="(item,index) in formValidate.assist_list" :key="index" class="depdTxt">
+              <font>{{item.nick_name}}</font><em v-if="index != formValidate.assist_list.length-1"> 、</em>
+            </span>
+          </td>
         </tr>
         <tr>
           <th>依赖项</th>
@@ -126,10 +134,10 @@ export default {
         }
     },
     watch: {
-        Data(){
-            if(this.Data){
-                this.formValidate = this.Data;
-            }
+        Data(data){
+          if(data){
+            this.formValidate = data;
+          }
         },
     },
     methods: {
@@ -147,14 +155,14 @@ export default {
       },
     },
     created() {
-      console.log("用户故事detail--详情--created-------",this.formValidate)
+      //console.log("用户故事detail--详情--created-------",this.formValidate)
     },
     beforeUpdate(){
-      console.log("用户故事detail--详情--beforeUpdate-------",this.formValidate)
+      //console.log("用户故事detail--详情--beforeUpdate-------",this.formValidate)
         
     },
     updated(){
-      console.log("用户故事detail--详情--updated-------",this.formValidate)
+      //console.log("用户故事detail--详情--updated-------",this.formValidate)
     },
     mounted(){
       this.formValidate = this.Data;

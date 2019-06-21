@@ -23,7 +23,6 @@
                         <Row>
                             <Col span="12">
                                 <FormItem label="责任人"  prop="nick_name">
-                                    <!-- <span>{{formValidate.charger}}</span> -->
                                     <Select filterable clearable v-model="formValidate.nick_name" placeholder="请选择责任人">
                                         <Option v-for="(item,index) in chargerList" :key="index" :value="item.value">{{item.label}}</Option>
                                     </Select>
@@ -40,6 +39,27 @@
                                 </FormItem>
                             </Col>
                         </Row>
+                        <FormItem label="责任协助人" >
+                            <span style="position: relative;">
+                                <Tag 
+                                    v-for="(item,index) in assistList"
+                                    :value="index" 
+                                    :key="index" 
+                                    :name="index" 
+                                    closable 
+                                    @on-close="assistDel">
+                                    {{ item.label}}
+                                </Tag>
+                                <Button 
+                                    icon="ios-plus-empty" 
+                                    type="dashed" 
+                                    size="small" 
+                                    @click="addAssist">
+                                    添加责任协助人
+                                </Button>
+                                
+                            </span>
+                        </FormItem>
                             <!-- <FormItem label="业务模块" prop="business">
                                 <Select v-model="formValidate.business" multiple >
                                     <Option v-for="item in businessList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -110,15 +130,18 @@
                             </Select>
                             <ToolTip content="计划在哪个迭代周期内完成此用户故事" />
                         </FormItem>
-                        <Row v-show="false">
+                        <Row >
+                            <Col span="12">
+                                <FormItem label="用户故事点数" prop="manhour">
+                                    <Input v-model="formValidate.manhour" placeholder="请填写用户故事点数" number ></Input>
+                                    <ToolTip content="统计用户故事的工时(2人/天 表示2个点)" />
+                                </FormItem>
+                                
+                            </Col>
                             <Col span="12" class="relZIndex1">
                                 
                             </Col>
-                            <Col span="12">
-                               <FormItem label="工时(预计)" prop="manhour">
-                                    <Input v-model="formValidate.manhour" placeholder="请填写工时(预计)" number style="width: 120px"></Input> 小时
-                                </FormItem>
-                            </Col>
+                            
                         </Row>
 
                         
@@ -254,7 +277,19 @@
                
             </div>
         </Card>
-        <Depend :prjName="formValidate.prj_name" :DependOnOff="dependonoff" @sendDepend="receiveDepend" @sendCloseDepend="receiveCloseDepend" />
+        <Depend 
+            :prjName="formValidate.prj_name" 
+            :DependOnOff="dependonoff" 
+            @sendDepend="receiveDepend" 
+            @sendCloseDepend="receiveCloseDepend" 
+        />
+        <Assist 
+            :Data="myAssistList"
+            :List="myList"
+            :AssistOnOff="assistonoff" 
+            @sendAssist="receiveAssist" 
+            @sendCloseAssist="receiveCloseAssist" 
+        />
         <GoAgileMode :Data="GO" :Text="GOText" />
         
     </div>
@@ -263,6 +298,7 @@
 import Store from '@/vuex/store'
 import Trans from './trans'
 import Depend from './depend'
+import Assist from './assist'
 
 import API from '@/api'
 const {defaultAXIOS} = API;
@@ -367,6 +403,7 @@ export default {
 
 
 
+
                 person:"",
                 mission:"",
                 business:[],
@@ -453,7 +490,10 @@ export default {
             depd_sn:"",
             dependonoff:false,
             //依赖结束
-            
+            //协助人开始
+            assistList:[],
+            assistonoff:false,
+            //协助人结束
 
             prj_permission:[],
             identity:"",
@@ -573,7 +613,7 @@ export default {
             }
             defaultAXIOS(URL,_params,{timeout:20000,method:'post'}).then((response) => {
                 let myData = response.data;
-                console.log("<======用户故事 编辑依赖***response+++",response,myData,"======>");
+                //console.log("<======用户故事 编辑依赖***response+++",response,myData,"======>");
                 
                 
                 
@@ -589,7 +629,7 @@ export default {
             }
             defaultAXIOS(URL,_params,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======用户故事 展示依赖***response+++",response,myData,"======>");
+                //console.log("<======用户故事 展示依赖***response+++",response,myData,"======>");
                 
                 
                 
@@ -600,6 +640,32 @@ export default {
 
         },
         //依赖结束
+        //协助人开始
+        addAssist(){
+            this.assistonoff = true;
+        },
+        assistDel(event,name){
+            this.assistList.splice(name,1)
+        },
+        receiveCloseAssist(boo){
+            this.assistonoff = boo;
+        },
+        receiveAssist(arr){
+            if(Array.isArray(arr)){
+                arr.forEach((item)=>{
+                    for(let i=0;i<this.chargerList.length;i++){
+                        if(item == this.chargerList[i].value){
+                            this.assistList.push(this.chargerList[i]);
+                        }
+                    }
+                })
+            }
+            this.assistonoff = false;
+            //return
+            //this.assistList.push(obj);
+            //this.assistonoff = false;
+        },
+        //协助人结束
         goDemand(){
             this.$Modal.confirm({
                 title: '请先添加需求项',
@@ -624,10 +690,10 @@ export default {
         rightData(D){
         },
         selectQueryChange(ITEM){
-            console.log(ITEM,"selectQueryChange")
+            //console.log(ITEM,"selectQueryChange")
         },
         selectChange(ITEM){
-            console.log(ITEM,"selectChange");
+            //console.log(ITEM,"selectChange");
             Common.SelectChange(this);
         },
         addCheckSerch(){
@@ -651,7 +717,7 @@ export default {
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("<======product get storyGetReq***response+++",response,myData,"======>");
+                //console.log("<======product get storyGetReq***response+++",response,myData,"======>");
                 
                 if(myData.data && myData.data.length){
                      //value: 'New York',
@@ -678,7 +744,7 @@ export default {
             return //临时去掉
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======product get sprintlist***response+++",response,myData,"======>");
+                //console.log("<======product get sprintlist***response+++",response,myData,"======>");
                 if(myData.sprintlist && myData.sprintlist.length){
                     let _tempObj = {};
                     for(let i=0;i<myData.sprintlist.length;i++){
@@ -698,7 +764,7 @@ export default {
         getStoryAddFn(URL = "",id,prj_id,prod_id){
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======product get***response+++",response,myData,"======>");
+                //console.log("<======product get***response+++",response,myData,"======>");
                 let _data = Array.isArray(myData) ? myData[0] : myData
                 
                 if(_data.status == "success"){
@@ -805,6 +871,22 @@ export default {
             let _sprint = Common.replaceNullFn(this.formValidate.sprint);
             let _charger = Common.replaceNullFn(this.formValidate.nick_name);
             let _nick_name = Common.replaceNullFn(this.formValidate.charger);
+            let _assist_list = ((arr)=>{
+                let _arr = [];
+                let obj = {};
+                if(arr && Array.isArray(arr)){
+                    arr.forEach((item)=>{
+                        obj.user_name = item.value;
+                        obj.nick_name =  item.label;
+                        _arr.push(obj);
+                        obj = {};
+                    })
+                }
+                return JSON.stringify(_arr)
+            })(this.assistList)
+
+
+            
 
             // let _sprint = (this.formValidate.sprint === null ? "" : this.formValidate.sprint)|| "";
             // let _charger = (this.formValidate.nick_name === null ? "" : this.formValidate.nick_name) || "";
@@ -835,11 +917,12 @@ export default {
                 depd_sn:this.depd_sn,
                 us_accept:this.formValidate.us_accept,
                 username:Common.getStorageAndCookie(this,Common,"username"),
+                assist_list:_assist_list,
             }
             
             defaultAXIOS(storyAdd,tempData,{timeout:20000,method:'post'}).then((response) => {
                 let myData = response.data;
-                console.log("<======product add***response+++",response,myData,"======>");
+                //console.log("<======product add***response+++",response,myData,"======>");
                 if(myData.status = "success"){
                     this.modal_add_loading = false;
                     this.formItemReset();
@@ -889,6 +972,7 @@ export default {
        Trans,
        Depend,
        GoAgileMode,
+       Assist,
     },
     watch:{
         //查询搜索开始
@@ -909,6 +993,15 @@ export default {
         
         //查询搜索结束
     },
+    computed: {
+        myAssistList(){
+            return this.assistList;
+        },
+        myList(){
+            return this.chargerList;
+        }    
+    }
+    
 }
 </script>
 <style lang="less" scoped>

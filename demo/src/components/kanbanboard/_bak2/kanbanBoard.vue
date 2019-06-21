@@ -1,7 +1,6 @@
 <template>
   <Layout class="boardWrapper">
     <div class="tool" id="tool" ref="tool" v-show="aside == 'product'">
-      
       <span class="funnelBox">
         <!-- <Icon type="funnel" size="18" class="funnelIcon"></Icon> -->
         <div class="ivu-poptip funnelIcon">
@@ -36,7 +35,6 @@
         </div>
       </span>
       <Icon type="android-settings" size="18" class="settingIcon" @click="goSetting"></Icon>
-      
     </div>
     <content id="board">
       <p v-if="groupList.length > 0" class="left_border" :style="'left:'+ (firstColumn - 0) +'px;'"></p>
@@ -197,12 +195,6 @@ export default {
         return [];
       }
     },
-    isScroll: {//看板是否滚动
-      type: [Boolean,String,Number],
-      default: function() {
-        return false;
-      }
-    },
   },
 
   data() {
@@ -228,20 +220,19 @@ export default {
       userstoryStatusList:[],
       myStatusList:[],
       //筛选结束
-      scrollDom:"",
     };
   },
   created(){
-    //console.log("看板 kanbanboard--created-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId);
+    console.log("看板 kanbanboard--created-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId);
   },
   beforecreated(){
-    //console.log("看板 kanbanboard--beforecreated-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
+    console.log("看板 kanbanboard--beforecreated-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
   },
   beforeUpdate(){
-    //console.log("看板 kanbanboard--beforeUpdate-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
+    console.log("看板 kanbanboard--beforeUpdate-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
   },
   updated(){
-    //console.log("看板 kanbanboard--updated-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
+    console.log("看板 kanbanboard--updated-------","this.sortId=",this.sortId,"this.storySortId=",this.storySortId)
   },
   watch:{
     cardList(data){
@@ -275,9 +266,6 @@ export default {
   },
   mounted(){
     
-    
-
-    this.lineWidth();
     document.body.ondrop = function(event){
       event.preventDefault();
       event.stopPropagation();
@@ -287,70 +275,11 @@ export default {
     setTimeout(()=>{
       this.autoHeight();
       this.kanbanScrollFn("collapsedSider");
-
     },1000);
     
     EventBus.$on("KBScroll",this.kanbanScrollFn);
   },
   methods:{
-    lineWidth(){
-      let boardDom = document.getElementById("board");
-      
-      if(!boardDom){
-        return
-      }
-      let rwDom = boardDom.getElementsByClassName("row-wrapper");
-      if(boardDom && boardDom.parentNode.getAttribute("id") == "productBoardBox"){
-        //滚动设置为dom节点
-        this.scrollDom = boardDom;
-      }else{
-        // 设置为true 表示正常滚动 可以参见sortable.js
-        this.scrollDom = true;
-      }
-
-      let khbDom = document.getElementById("kanbanHeaderBox");
-
-      let khbColDom = document.getElementById("kanbanHeaderBox") && document.getElementById("kanbanHeaderBox").getElementsByClassName("ivu-col");
-
-      if(!(khbColDom && khbColDom.length)){
-        return
-      }
-
-      for(let j=0;j<rwDom.length;j++){
-        rwDom[j].removeAttribute("style");
-      }
-
-
-
-      let fn = ()=>{
-        let Num = 0;
-        for(let k=0;k<khbColDom.length;k++){
-          //console.error(khbColDom[k])
-          Num = Num + khbColDom[k].offsetWidth;
-        }
-
-        
-        if(boardDom.scrollLeft < 50){
-          for(let i=0;i<rwDom.length;i++){
-            rwDom[i].removeAttribute("style");
-          }
-        }else{
-          for(let i=0;i<rwDom.length;i++){
-            //console.error(rwDom[i]);
-            //rwDom[i].style.width = (boardDom.offsetWidth+boardDom.scrollLeft - 20)+"px"
-            rwDom[i].style.width = (Num - 15)+"px"
-          }
-        }
-
-      }
-
-      boardDom.onscroll = function(){
-        fn();
-      }
-      setTimeout(()=>{
-        fn();
-      },1000)
-    },
     noPutWipFn(data){//
       if("product" == "product"){
         //
@@ -432,7 +361,7 @@ export default {
           return;
         }
         if(!this.statusList.length || !this.checkAllGroup.length){
-          //console.log(this.statusList,this.checkAllGroup);
+          console.log(this.statusList,this.checkAllGroup);
           return
         }
         
@@ -487,7 +416,6 @@ export default {
         
         setTimeout(()=>{
           this.kanbanScrollFn("collapsedSider");
-          this.lineWidth();
         },500)
 
         
@@ -523,7 +451,7 @@ export default {
         }
     },
     funnelAllChange (data) {
-      //console.log(data.length,this.statusList.length,data)
+      console.log(data.length,this.statusList.length,data)
         if (data.length == this.userstoryStatusList.length) {
             //this.indeterminate = false;
             this.checkAll = true;
@@ -570,12 +498,12 @@ export default {
 
         let kbHeaderBoxDom = document.getElementById(kbdom);;
         if(!kbHeaderBoxDom){
-          //console.log("没有 "+kbdom)
+          console.log("没有 "+kbdom)
           return;
         }
         let topColumnDom = kbHeaderBoxDom.getElementsByClassName(topcol);
         if(!topColumnDom.length){
-          //console.log(kbdom+" 的 "+topcol+" 是0")
+          console.log(kbdom+" 的 "+topcol+" 是0")
           return;
         }
 
@@ -585,7 +513,7 @@ export default {
 
         let rowWrapperDoms = document.getElementsByClassName("row-wrapper");
         if(rowWrapperDoms <= 1){
-          //console.log("没有 "+rwdom+"或者只有一个"+rwdom)
+          console.log("没有 "+rwdom+"或者只有一个"+rwdom)
           return;
         }
         for(let j = 1;j<rowWrapperDoms.length;j++){
@@ -595,7 +523,7 @@ export default {
               //rowWrapperDoms[j].getElementsByClassName(col)[k].style.width = everyWArr[k]+"px"
               rowWrapperDoms[j].getElementsByClassName(col)[k].setAttribute("style","width:"+ everyWArr[k]+"px;flex-basis:auto; -ms-flex-preferred-size:auto;")
             }else{
-              //console.log(rwdom+"dom-->"+j+" 没有 "+col)
+              console.log(rwdom+"dom-->"+j+" 没有 "+col)
               return
             }
             
@@ -613,7 +541,7 @@ export default {
       let ivuRowFlexDomW;
       let kanbanHeaderDomH;
       if(!headerBoxH || !mainDom){
-        //console.log("没有 headerBoxH mainDom");
+        console.log("没有 headerBoxH mainDom");
         return;
       }
 
@@ -636,7 +564,7 @@ export default {
         ivuRowFlexDom = ivuRowFlexDom ? ivuRowFlexDom : document.getElementById("kanbanHeaderBox");
         let boardDom = boardDom ? boardDom : document.getElementById("board");
         if(!kanbanHeaderDom || !boardDom || !ivuRowFlexDom){
-          // /console.log("没有 kanbanHeaderDom boardDom ivuRowFlexDom");
+          console.log("没有 kanbanHeaderDom boardDom ivuRowFlexDom");
           return;
         }
 
@@ -647,19 +575,14 @@ export default {
         kanbanHeaderDomH = kanbanHeaderDom.offsetHeight ? kanbanHeaderDom.offsetHeight : 41;
 
         boardDom.style.position = "relative";
-
         let rectObject = boardDom.getBoundingClientRect();
         let num = rectObject.top - headerBoxH; 
         let numberBox = that.$route.path == "/demand" || that.$route.path ==  "/product" ? kanbanHeaderDom.getElementsByClassName("number") : false;
         if(num + 10 < 0){
-          //kanbanHeaderDom.style.height = kanbanHeaderDomH+"px";
-          kanbanHeaderDom.setAttribute("data-height","kanbanHeaderDomH_"+kanbanHeaderDomH);
-
-
+          kanbanHeaderDom.style.height = kanbanHeaderDomH+"px";
           ivuRowFlexDom.style.top = Math.abs(num-gap) + "px";
           ivuRowFlexDom.style.position = "absolute";
           ivuRowFlexDom.style.width = ivuRowFlexDomW ? ivuRowFlexDomW+"px" : "100%";
-          //ivuRowFlexDom.style.width = "100%";
           ivuRowFlexDom.style.left = "0";
           ivuRowFlexDom.style.zIndex = "100";
 
@@ -670,10 +593,7 @@ export default {
           }
 
         }else{
-          //kanbanHeaderDom.removeAttribute('style');
-          kanbanHeaderDom.removeAttribute('data-height');
-
-
+          kanbanHeaderDom.removeAttribute('style');
           ivuRowFlexDom.removeAttribute('style');
           //ivuRowFlexDom.style.marginLeft = "-8px";
           //ivuRowFlexDom.style.marginRight = "-8px";
@@ -903,9 +823,6 @@ export default {
         ghostClass:"placeholder-style",
         fallbackClass:"iview-admin-cloned-item",
         disabled:vm.sortdisabled,
-        //scroll:document.getElementById("board"),
-        scroll:this.isScroll ? this.scrollDom : true,
-        scrollSensitivity:this.isScroll ? 200 : 30,
         onMove:function(evt,originalEvent){
           if(vm.Group){
             if(evt.from.getAttribute("groupid") == evt.to.getAttribute("groupid")){
@@ -944,11 +861,11 @@ export default {
             }
           }
           if(vm.Group){
-            //console.log('moveEnd 》》》》》》')
+            console.log('moveEnd 》》》》》》')
             EventBus.$emit("moveEnd",{evt},that.Warning);
             vm.autoHeight();
           }else{
-            //console.log('story moveEnd 》》》》》》',evt);
+            console.log('story moveEnd 》》》》》》',evt);
             EventBus.$emit("storyMoveEnd",{evt},that.Warning);
             vm.autoHeight();
           }
@@ -1004,7 +921,7 @@ export default {
       });
     },
     beforeDestroy(){
-      //console.log('beforeDestroy开发看板 》》》》》》');
+      console.log('beforeDestroy开发看板 》》》》》》');
       EventBus.$off("bindSort",this.bindSortId);
       EventBus.$off("storyBindSort",this.bindStorySortId);
     },
@@ -1040,7 +957,6 @@ export default {
 }
 .tool {
   text-align: right;
-  /* text-align: left; */
   border-bottom: 1px dashed #ddd;
   padding-bottom: 5px;
   padding-top: 5px;
@@ -1095,7 +1011,6 @@ export default {
   background: white;
   width: 160px;
   right: -2px;
-  /* left: -2px; */
   top: -5px;
   border: 1px solid #ddd;
   z-index: 250;
@@ -1190,8 +1105,7 @@ export default {
 }
 .topColumnFirst{
   padding-left:0px;
-  /* padding-right:4px; */
-  padding-right:0px;
+  padding-right:4px;
   background:rgba(255,0,0,0.0); 
 }
 .topColumn{
@@ -1223,8 +1137,6 @@ export default {
   flex: 1 1 1px;/* flex-grow:1; flex-shrink:1; flex-basis:auto; */
   padding-right:2px;
   padding-left:2px;
-
-  
   
   
   /* flex-basis:auto; */
@@ -1262,7 +1174,6 @@ export default {
 }
 [data-title=hidden]{
   width: 0 !important;
-  min-width: 0 !important;
   overflow: hidden !important;
   flex: 0 0 auto !important;
   padding: 0 !important;
@@ -1460,7 +1371,6 @@ export default {
 }
 .centerHeader {
   width: 110px;
-  /* width: 200px; */
   margin: 0 auto;
   text-align: center;
   font-size: 12px;
@@ -1542,13 +1452,4 @@ export default {
 .funnelGroupBox > label .ivu-checkbox {
   float: left;
 }
-.scrollColWidth{
-  width: 200px;
-}
-#board {
-  overflow: auto;
-}
-#kanbanHeader[data-height=kanbanHeaderDomH_41]{
-  height: 41px;
-} 
 </style>

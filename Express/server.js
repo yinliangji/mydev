@@ -110,7 +110,9 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
     let _phycics_sys_id = ["W09020|TA2230","W09020","TA2230","TA2230|W09020","W09020"];
     let list = [];
     let obj = {};
+
     for(let i =1;i<10;i++){
+        let _prj_type = ((N)=>{return N >0.5?1:2 })(Math.random())
         obj.id = i;
         obj.prj_id = "PJ10000"+i;
         obj.itm_id_sn = "Itm10000"+i;
@@ -121,7 +123,8 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
         obj.settle_time = "2019-0"+i+"-01";
         obj.start_time = "2019-0"+i+"-12";
         obj.end_time = "2019-0"+i+"-23";
-        obj.prj_type = ((N)=>{return N >0.5?1:2 })(Math.random());
+        obj.prj_type = _prj_type;
+        obj.itm_url = _prj_type == 1 ?"http://www.baidu.com":"";
         obj.logic_sys_id = fn(Math.random(),_logic_sys_id);
         obj.phycics_sys_id = fn(Math.random(),_phycics_sys_id);
         obj.modules = fn(Math.random(),_modules);
@@ -2128,6 +2131,12 @@ let Userstorydetail = (val1 = 200, val2 = 1, val3 = 3) => {
             "product_name":"product_name_xxxxxxxx",
 
             "editStatus|1":[true,true],
+
+            assist_list:[
+                {"nick_name":"黄永华(huangyonghua)","user_name":5,},
+                {"nick_name":"赖磊(lailei)","user_name":6,},
+                {"nick_name":"殷良骥(yinliangji)","user_name":7,},
+            ],
 
             "depd_list|2-10":[
                 {

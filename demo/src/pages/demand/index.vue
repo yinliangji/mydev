@@ -70,6 +70,7 @@
                                     @click="toBusiness"
                                     size="small"
                                     style="float: right;margin-left:5px"
+                                    v-show="false"
                                     >
                                     业务功能总览
                                 </Button>
@@ -80,6 +81,7 @@
                                     size="small"
                                     style="float: right"
                                     ref="itmSync"
+                                    v-show="false"
                                     >
                                     从ITM同步需求项
                                 </Button>
@@ -97,6 +99,7 @@
                                     @click="editItemFn2"
                                     :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_edit','icdp_prjrequirement_view'])"
                                     :style="'visibility:'+(currentView == 'developList' ? 'visible' : 'hidden')"
+                                    v-show="false"
                                     >
                                     <!-- v-show="currentView == 'developList'" -->
                                     编辑
@@ -107,6 +110,7 @@
                                     :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
                                     :style="isDel(currentView == 'developList' ? 'visible' : 'hidden')"
                                     ref="delBtn"
+                                    v-show="false"
                                     >
                                     <!-- :style="'visibility:'+(currentView == 'developList' ? 'visible' : 'hidden')" -->
                                     <!-- v-show="currentView == 'developList'" -->
@@ -190,7 +194,7 @@
                 <span>删除确认</span>
             </p>
             <div style="text-align:center">
-                <p>确认删除？请点击删除按钮</p>
+                <p>是否确定删除此需求项？</p>
             </div>
             <div slot="footer">
                 <Button type="error"   :loading="modal_loading" @click="del">删除</Button>
@@ -223,6 +227,7 @@ export default {
     name: 'demand',
     data () {
         return {
+        	reqId:"",
             ToolTipL:400,
             req_statList:[],
             isShowAddPop:false,
@@ -237,11 +242,11 @@ export default {
             modal_loading: false,
 
             columns: [
-                {
-                    type: 'selection',
-                    width: 60,
-                    align: 'center'
-                },
+                // {
+                //     type: 'selection',
+                //     width: 60,
+                //     align: 'center'
+                // },
                 {
                     title: '需求项编号',
                     key: 'req_id',
@@ -348,18 +353,45 @@ export default {
                             }, '查看用户故事 '),
                             h('Button', {
                                 props: {
-                                    type: 'info',
+                                    type: 'warning',
                                     size: 'small'
                                 },
                                 style: {
-                                    marginRight: '5px'
+                                    marginRight: '4px',
+                                    display:(()=>{
+                                    	if(params.row.prj_type == "1"){
+                                    		return "none"
+                                    	}
+                                    })()
                                 },
+                                domProps:{disabled:this.authIs(["icdp_prjrequirement_mng","icdp_prjrequirement_view"])},
                                 on: {
                                     click: () => {
-                                        this.toBusiness(params.index,"fromlist")
+                                        this.editItemFn2(params.row)
                                     }
                                 }
-                            }, '查看业务功能'),
+                            }, '编辑'),
+                            h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '4px',
+                                    display:(()=>{
+                                    	if(params.row.prj_type == "1"){
+                                    		return "none"
+                                    	}
+                                    })()
+                                },
+                                domProps:{disabled:this.authIs(["icdp_prjrequirement_mng","icdp_prjrequirement_view"])},
+                                on: {
+                                    click: () => {
+                                    	//this.toBusiness(params.index,"fromlist") 查看业务功能
+                                        this.deleteTableItem(params.row.req_id)
+                                    }
+                                }
+                            }, '删除'),
 
                         ]);
                     }
@@ -439,18 +471,18 @@ export default {
         EventBus.$on("ReLoad",this.reLoad);
     },
     beforecreated(){
-        console.log("项目需求项--beforecreated-------",this.formValidate)
+        //console.log("项目需求项--beforecreated-------",this.formValidate)
     },
     created(){
         this.getSerachCondition();
-        console.log("项目需求项--created-------",this.formValidate);
+        //console.log("项目需求项--created-------",this.formValidate);
         this.checkUrlBoard();
     },
     beforeUpdate(){
-        console.log("项目需求项--beforeUpdate--","this.isShowITMPop==>",this.isShowITMPop)
+        //console.log("项目需求项--beforeUpdate--","this.isShowITMPop==>",this.isShowITMPop)
     },
     updated(){
-        console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
+        //console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
         optputExecl(){
@@ -463,7 +495,7 @@ export default {
                 req_submitter:this.formValidate.req_submitter,
                 req_stat:this.formValidate.req_stat,
             }
-            let fileName = "需求项导出_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'));
+            let fileName = "需求项导出_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'))+".xlsx";
             return Common.DownFile(defaultAXIOS,this,reqOutExcel,params,fileName);
         },
         isDel(val,type){
@@ -476,7 +508,7 @@ export default {
         getSendData(data){
             console.log(data,"<==========getSendData");
 
-            this.prj_type = data.prj_type || data.prj_type == 0 ? data.prj_type : "";
+            //this.prj_type = data.prj_type || data.prj_type == 0 ? data.prj_type : "";
 
             let params = {
                 prjSn:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
@@ -485,6 +517,7 @@ export default {
                 id:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
             }
             this.getPermissionFn(getPermission,params);
+            /*
 
             if(data.prj_type == 2){
                 this.$refs.itmSync.$el.setAttribute("style", "float: right; visibility: hidden;");
@@ -493,6 +526,7 @@ export default {
                 this.$refs.itmSync.$el.setAttribute("style", "float: right;");
                 this.isDel('hidden',"立项")
             }
+            */
 
         },
         helpToLeft(){
@@ -617,7 +651,7 @@ export default {
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:10000,method:'get'}).then((response) => {
                 let myData = response.data;
                 let statusData = myData.status_data ? myData.status_data : false;
-                console.log("<======用户故事 看板 ***response+++",response,myData,"======>");
+                console.log("<======依赖项 看板 ***response+++",response,myData,"======>");
                 myData = myData.data ? myData.data : myData;
 
                 let fn =(arr,val)=>{
@@ -762,7 +796,7 @@ export default {
 
             defaultAXIOS(reqSetChange,params,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======用户故事 状态改变***response+++",response,myData,"======>");
+                console.log("<======依赖项 状态改变***response+++",response,myData,"======>");
                 if(myData.status.indexOf("success") == -1){
                     this.showError(reqSetChange+"|返回结果错误");
                 }else{
@@ -1076,22 +1110,24 @@ export default {
                 _arr.push(this.actionArr[I].req_id)
             }
 
-            defaultAXIOS(reqDelect,{idArray:_arr},{timeout:2000,method:'post'}).then((response) => {
-                //alert(JSON.stringify(response))
+            defaultAXIOS(reqDelect,{idArray:_arr,reqSn:this.reqId},{timeout:2000,method:'post'}).then((response) => {
                 let myData = response.data;
                 console.log("<======agile***response+++",response,myData,"+++agile***response======>");
                 if(myData.status == "success"){
                     this.actionArr = [];
                     this.modal_loading = false;
                     this.modaDelete = false;
-                    this.$Message.config({
-                        top: 250,
-                        duration: 6,
-                        closable:true,
-                    });
+                    // this.$Message.config({
+                    //     top: 250,
+                    //     duration: 6,
+                    //     closable:true,
+                    // });
 
-                    this.$Message.warning(myData.message);
+                    // this.$Message.warning(myData.message);
+
                     //this.tableDataAjaxFn(projectAll,1,this.tableDAtaPageLine);
+                    
+                    Common.CommonMessage(this.myData.message)
                     this.tableDAtaPageCurrent = 1;
                     this.tableDataAjaxFn(reqAll,1,this.tableDAtaPageLine,"",Common.GETID(this,Common));
                     
@@ -1100,7 +1136,9 @@ export default {
                     this.modal_loading = false;
                     this.modaDelete = false;
 
-                    Common.CommonError(this,myData.message)
+                    let errTxt = myData.message || "该需求项下关联用户故事，不能删除"; 
+
+                    Common.CommonError(this,errTxt)
                     //this.$Message.success(myData.message);
                 }
                 
@@ -1129,7 +1167,10 @@ export default {
             }, 1000);
             */
         },
-        deleteTableItem(){
+        deleteTableItem(id = ""){
+        	this.reqId = id;
+        	this.modaDelete = true;
+        	return
             if(this.actionArr.length){
                 this.modaDelete = true;
             }else {
@@ -1143,7 +1184,8 @@ export default {
             });
             this.$Message.error(MSG);
         },
-        editItemFn2(){
+        editItemFn2(obj){
+        	/*
             this.$Message.config({
                 top: 250,
                 duration: 3
@@ -1155,8 +1197,9 @@ export default {
                 this.error("请选择一项，进行编辑！")
                 return
             }
+            */
 
-
+            this.actionArr = obj;
             this.$router.push({path: '/demand/addEdit/', query: {DATA:JSON.stringify(this.actionArr)}})
             return
 

@@ -41,6 +41,28 @@
                             </Col>
                         </Row>
 
+                        <FormItem label="责任协助人" >
+                            <span style="position: relative;">
+                                <Tag 
+                                    v-for="(item,index) in assistList"
+                                    :value="index" 
+                                    :key="index" 
+                                    :name="index" 
+                                    closable 
+                                    @on-close="assistDel">
+                                    {{ item.label}}
+                                </Tag>
+                                <Button 
+                                    icon="ios-plus-empty" 
+                                    type="dashed" 
+                                    size="small" 
+                                    @click="addAssist">
+                                    添加责任协助人
+                                </Button>
+                                
+                            </span>
+                        </FormItem>
+
                         
                     
 
@@ -107,15 +129,17 @@
                             <ToolTip content="计划在哪个迭代周期内完成此用户故事" />
                         </FormItem>
 
-                        <Row v-show="false">
+                        <Row >
+                            <Col span="12">
+                               <FormItem label="用户故事点数" prop="manhour">
+                                    <Input v-model="formValidate.manhour" placeholder="请填写用户故事点数" number ></Input>
+                                    <ToolTip content="统计用户故事的工时(2人/天 表示2个点)" />
+                                </FormItem>
+                            </Col>
                             <Col span="12" class="relZIndex1">
                                 
                             </Col>
-                            <Col span="12">
-                               <FormItem label="工时(预计)" prop="manhour">
-                                    <Input v-model="formValidate.manhour" placeholder="请填写工时(预计)" number style="width: 120px"></Input> 小时
-                                </FormItem>
-                            </Col>
+                            
                         </Row>
 
                         
@@ -249,7 +273,19 @@
                
             </div>
         </Card>
-        <Depend :prjName="formValidate.prj_name" :DependOnOff="dependonoff" @sendDepend="receiveDepend" @sendCloseDepend="receiveCloseDepend" />
+        <Depend 
+            :prjName="formValidate.prj_name" 
+            :DependOnOff="dependonoff" 
+            @sendDepend="receiveDepend" 
+            @sendCloseDepend="receiveCloseDepend" 
+        />
+        <Assist 
+            :Data="myAssistList"
+            :List="myList"
+            :AssistOnOff="assistonoff" 
+            @sendAssist="receiveAssist" 
+            @sendCloseAssist="receiveCloseAssist" 
+        />
         <GoAgileMode :Data="GO" :Text="GOText" />
     </div>
 </template>
@@ -257,6 +293,7 @@
 import Store from '@/vuex/store'
 import Trans from '@/pages/product/add/trans'
 import Depend from '@/pages/product/add/depend'
+import Assist from '@/pages/product/add/assist'
 
 import API from '@/api'
 const {defaultAXIOS} = API;
@@ -435,6 +472,10 @@ export default {
             depd_sn:"",
             dependonoff:false,
             //依赖结束
+            //协助人开始
+            assistList:[],
+            assistonoff:false,
+            //协助人结束
             
 
             prj_permission:[],
@@ -468,8 +509,10 @@ export default {
         if(this.$router.history.current.query.DATA){
             
             let _DATA = JSON.parse(this.$router.history.current.query.DATA);
-            console.log("_DATA=",_DATA)
+            //console.log("_DATA=",_DATA)
             this.formValidate.userstory_id = _DATA.userstory_id;
+
+            this.storyGetDetailFn(storyGetDetail,((D)=>{return D ? D : _DATA.id})(_DATA.detail_id));
 
             this.getStoryEditFn(_DATA)
             this.storyGetSprintFn(storyGetSprint,ID,ID,_DATA.prod_id)
@@ -493,7 +536,7 @@ export default {
 
             this.userstoryGetReturnbfuncFn(userstoryGetReturnbfunc,Common.GETID(this,Common),Common.GETprjid(this,Common),_DATA.userstory_id)
 
-            this.storyGetDetailFn(storyGetDetail,((D)=>{return D ? D : _DATA.id})(_DATA.detail_id));
+            
 
         }else{
             this.$router.push('/product');
@@ -517,12 +560,25 @@ export default {
             return defaultAXIOS(URL,{detail_id},{timeout:5000,method:'get'})
             .then((response) => {
                 let myData = response.data;
-                console.log("<======product detail***response+++",response,myData,"======>");
-
-
+                //console.log("<======product detail***response+++",response,myData,"======>");
 
                 if(Object.getOwnPropertyNames(myData).length >2){
                     this.dependList = myData.depd_list;
+                    this.formValidate.manhour = myData.manHours - 0;
+                    this.assistList = ((arr)=>{
+                        let _arr = [];
+                        let obj = {};
+                        if(arr && Array.isArray(arr)){
+                            arr.forEach((item)=>{
+                                obj.value = (item.value || item.user_name)+"";
+                                obj.label = (item.label || item.nick_name)+"";
+                                _arr.push(obj);
+                                obj = {};
+                            })
+                        }
+                        return _arr
+                    })(myData.assist_list);
+                    
                     
                     return Promise.resolve(myData)
                 }else{
@@ -553,11 +609,37 @@ export default {
             this.dependonoff = boo;
         },
         //依赖结束
+        //协助人开始
+        addAssist(){
+            this.assistonoff = true;
+        },
+        assistDel(event,name){
+            this.assistList.splice(name,1)
+        },
+        receiveCloseAssist(boo){
+            this.assistonoff = boo;
+        },
+        receiveAssist(arr){
+            if(Array.isArray(arr)){
+                arr.forEach((item)=>{
+                    for(let i=0;i<this.chargerList.length;i++){
+                        if(item == this.chargerList[i].value){
+                            this.assistList.push(this.chargerList[i]);
+                        }
+                    }
+                })
+            }
+            this.assistonoff = false;
+            //return
+            //this.assistList.push(obj);
+            //this.assistonoff = false;
+        },
+        //协助人结束
         //穿梭开始
         userstoryGetReturnbfuncFn(URL = "",id,prj_id,us_id){
             defaultAXIOS(URL,{id,prj_id,us_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======product userstoryGetReturnbfunc***+++",response,myData,"======>");
+                //console.log("<======product userstoryGetReturnbfunc***+++",response,myData,"======>");
                 if(myData.status = "success"){
                     this.toLeftData = myData.data;
                     for(let i=0;i<this.toLeftData.length;i++){
@@ -588,10 +670,10 @@ export default {
         rightData(D){
         },
         selectQueryChange(ITEM){
-            console.log(ITEM,"selectQueryChange")
+            //console.log(ITEM,"selectQueryChange")
         },
         selectChange(ITEM){
-            console.log(ITEM,"selectChange");
+            //console.log(ITEM,"selectChange");
             Common.SelectChange(this);
         },
         addCheckSerch(){
@@ -620,7 +702,7 @@ export default {
             return
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======product get storyGetReq***response+++",response,myData,"======>");
+                //console.log("<======product get storyGetReq***response+++",response,myData,"======>");
                 
                 if(myData.data && myData.data.length){
                     //value: 'New York',
@@ -646,7 +728,7 @@ export default {
             return
             defaultAXIOS(URL,{id,prj_id,prod_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======product get sprintlist***response+++",response,myData,"======>");
+                //console.log("<======product get sprintlist***response+++",response,myData,"======>");
                 
                 if(myData.sprintlist && myData.sprintlist.length){
                      //value: 'New York',
@@ -721,6 +803,20 @@ export default {
             let _charger = Common.replaceNullFn(this.formValidate.nick_name);
             let _nick_name = Common.replaceNullFn(this.formValidate.charger);
 
+            let _assist_list = ((arr)=>{
+                let _arr = [];
+                let obj = {};
+                if(arr && Array.isArray(arr)){
+                    arr.forEach((item)=>{
+                        obj.user_name = item.value;
+                        obj.nick_name =  item.label;
+                        _arr.push(obj);
+                        obj = {};
+                    })
+                }
+                return JSON.stringify(_arr)
+            })(this.assistList)
+
             // let _sprint = (this.formValidate.sprint === null ? "" : this.formValidate.sprint) || "";
             // let _charger = (this.formValidate.nick_name === null ? "" : this.formValidate.nick_name) || "";
             // let _nick_name = (this.formValidate.charger === null ? "" : this.formValidate.charger) || "";
@@ -751,12 +847,13 @@ export default {
                 depd_list:this.dependList,
                 us_accept:this.formValidate.us_accept,
                 username:Common.getStorageAndCookie(this,Common,"username"),
+                assist_list:_assist_list,
             
             }
             defaultAXIOS(storyEdit,tempData,{timeout:20000,method:'post'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("<======product add***response+++",response,myData,"======>");
+                //console.log("<======product add***response+++",response,myData,"======>");
                 if(myData.status == "success"){
                     this.modal_add_loading = false;
                     this.formItemReset();
@@ -804,6 +901,7 @@ export default {
        Trans,
        Depend,
        GoAgileMode,
+       Assist,
     },
     watch:{
         //查询搜索开始
@@ -822,6 +920,14 @@ export default {
             deep: true
         },
         //查询搜索结束
+    },
+    computed: {
+        myAssistList(){
+            return this.assistList;
+        },
+        myList(){
+            return this.chargerList;
+        }    
     },
 }
 </script>

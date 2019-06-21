@@ -72,8 +72,7 @@ mark{
 .number{
   position: absolute;
   right: 0;
-  /*top: 0;*/
-  top: -7px;
+  top: 0;
   font-size: 12px;
   height: 1.2em;
   line-height: 1.2em;
@@ -82,7 +81,7 @@ mark{
   background: red;
   color: white;
   border-radius: 4px;
-  /*transform:translate(100%,-150%);*/
+  transform:translate(100%,-150%);
 }
 .content-header{
   background: #f0d0a2;
@@ -90,7 +89,6 @@ mark{
   border-radius: 4px;
   line-height: 30px;
   text-align: center;
-  position: relative;
   
   /*
   border-top-left-radius: 5px;
@@ -106,7 +104,7 @@ mark{
 .content-header .title{
   font-weight: 600;
   font-size: 14px;
-  /* position: relative; */
+  position: relative;
 
 }
 

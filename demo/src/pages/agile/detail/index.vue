@@ -98,6 +98,14 @@
                         </div>
                     </div>
                 </TabPane>
+                <TabPane label="项目方案" name="name4">
+                    <div class="baseInfoBox">
+                        <!-- <h3 class="Title"><span>成员信息</span></h3> -->
+                        <div class="tableBox">
+                            <PrjScheme :Data="formValidate" />
+                        </div>
+                    </div>
+                </TabPane>
 		        
 		    </Tabs>
 
@@ -170,6 +178,10 @@ import Common from '@/Common';
 const {projectDetail,listModule,getPermission,fileDownList,downFile,fileUpload,fileDelete,projectOutputWord,projectOutputExecl,proByUser} = Common.restUrl;
 import InfoTable from './info'
 import Member from './member'
+import PrjScheme from './prjScheme'
+
+
+
 
 import GoAgileMode from "@/components/goAgileMode";
 
@@ -326,12 +338,13 @@ export default {
         GoAgileMode,
         InfoTable,
         Member,
+        PrjScheme,
     },
     beforecreated(){
-        console.log("项目详情页--beforecreated-------");
+        //console.log("项目详情页--beforecreated-------");
     },
     created(){
-        console.log("项目详情页--created-------");
+        //console.log("项目详情页--created-------");
         let _TabsCur = this.$router.history.current.query.TabsCur
         if(_TabsCur){
             this.TabsCur = _TabsCur;
@@ -413,10 +426,10 @@ export default {
 
     },
     beforeUpdate(){
-        console.log("项目详情页--beforeUpdate-------")
+        //console.log("项目详情页--beforeUpdate-------")
     },
     updated(){
-        console.log("项目详情页--updated-------")
+        //console.log("项目详情页--updated-------")
     },
     mounted(){
         if(this.$router.history.current.query.from && this.$router.history.current.query.from == "nav"){
@@ -481,7 +494,7 @@ export default {
             }
             return defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======主键列表***response+++",response,myData.data.list,"+++agile***response======>");
+                //console.log("<======主键列表***response+++",response,myData.data.list,"+++agile***response======>");
                 if(myData.status == "success"){
                     if(myData.data && Array.isArray(myData.data) && myData.data.length){
                         let list = [];
@@ -531,7 +544,7 @@ export default {
             
             defaultAXIOS(fileDelete,{file_path:this.delPath_file,fileId:this.tableData[this.delIndex].fileId,id:Common.GETID(this,Common),taskId:this.formValidate.prj_id},{timeout:2000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======agile***fileDelete+++",response,myData,"======>");
+                //console.log("<======agile***fileDelete+++",response,myData,"======>");
 
                 let STAUUS = myData.status ? myData.status : myData.message
                 
@@ -597,7 +610,7 @@ export default {
 
             return defaultAXIOS(URL,{id,taskId:prj_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======detail***fileUpload+++",response,myData,"======>");
+                //console.log("<======detail***fileUpload+++",response,myData,"======>");
 
                 let STAUUS = myData.status ? myData.status : myData.message
 
@@ -622,7 +635,7 @@ export default {
         fileDownFn(URL = "",page = 1,pageline = 3,id = "",prj_id = ""){
             defaultAXIOS(URL,{page,pageline,id,taskId:prj_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======detail***fileDown+++",response,myData,"======>");
+                //console.log("<======detail***fileDown+++",response,myData,"======>");
                 
                 if(myData && myData.files && Array.isArray(myData.files)){
                     this.tableData = myData.files
@@ -693,7 +706,7 @@ export default {
 
             return defaultAXIOS(URL+ID,{},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======detail***response+++",response,myData,"+++detail***response======>");
+                //console.log("<======detail***response+++",response,myData,"+++detail***response======>");
                 let _temp = false;
                 this.table=[];
                 this.HTML = "";
@@ -781,7 +794,7 @@ export default {
         listModuleFn(URL,params = {},_arr){
             defaultAXIOS(URL,params,{timeout:20000,method:'get'}).then((_response) => {
                 let _myData = _response.data;
-                console.log("<======_detail** listModule *_response+++",_response,_myData,"======>");
+                //console.log("<======_detail** listModule *_response+++",_response,_myData,"======>");
                 let _myArrFn = (arr,obj)=>{
                     if(arr.length){
                         for(let a=0;a<arr.length;a++){

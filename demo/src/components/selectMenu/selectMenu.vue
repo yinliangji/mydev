@@ -46,7 +46,7 @@ export default {
         curProject(curVal,oldVal){
         },
         Init(curVal,oldVal){
-            console.log("Init",this.Init)
+            //console.log("Init",this.Init)
             if(!curVal){
                 this.showProjectList();        
             }
@@ -77,7 +77,7 @@ export default {
                 let curID = Common.GETID(this,Common,"inCookie");
                 if(curID != (window.prjId ||  window.id)){
 
-                    console.log("ID cookie改变_"+Date.now());
+                    //console.log("ID cookie改变_"+Date.now());
 
                     //
                     let objData = this.checkGet(curID || "",this.projectList)
@@ -184,17 +184,17 @@ export default {
             if(!username){
                 Common.CommonError(this,"没有获取到username 无法获取项目列表");
                 this.$emit("sendData",false);
-                console.log("没有获取到username 无法获取项目列表");
+                //console.log("没有获取到username 无法获取项目列表");
                 return;
             }
             let params = {
                 username:username,
             }
-            defaultAXIOS(projectListDataNew,params,{timeout:20000,method:'get'}).then(res => {
+            defaultAXIOS(projectListDataNew,params,{timeout:150000,method:'get'}).then(res => {
                 if(res.status < 200 && res.status > 399){
                     Common.CommonError(this,"获取到projectListDataNew项目列表失败");
                     this.$emit("sendData",false);
-                    console.log("获取到projectListDataNew项目列表失败");
+                    //console.log("获取到projectListDataNew项目列表失败");
                     //this.$router.push({path:"/agile"});
                     return;
                 }
@@ -213,7 +213,7 @@ export default {
                 }else if(res.data.data && Array.isArray(res.data.data) && res.data.data.length == 0){
                     Common.CommonError(this,"没有项目");
                     this.$emit("sendData",false);
-                    console.log("没有项目");
+                    //console.log("没有项目");
                     return
                 }else{
                     Common.CommonError(this,"获取项目失败");
@@ -237,7 +237,7 @@ export default {
 
                     let myGetOutID =  this.isReturnValue(getUrlParam("prjId")) || this.isReturnValue(getUrlParam("id")) || this.isReturnValue(this.getCookie("prjId")) || this.isReturnValue(this.getCookie("id"));
 
-                    console.log("prjIdUrl=",prjIdUrl," prjIdCookie=",prjIdCookie," myGetOutID=",myGetOutID);
+                    //console.log("prjIdUrl=",prjIdUrl," prjIdCookie=",prjIdCookie," myGetOutID=",myGetOutID);
                     if(!this.isTrue(myGetOutID)){
                         let ID = this.isReturnValue(this.projectList[0].prjId) || this.isReturnValue(this.projectList[0].id);
                         setTimeout(()=>{
@@ -269,11 +269,11 @@ export default {
                         this.curProject = parseInt(prjIdUrl);
                         this.mySetCookie("prjId",prjIdUrl);
                         this.nextStep();
-                        console.log("prjIdUrl != false",prjIdUrl)
+                        //console.log("prjIdUrl != false",prjIdUrl)
                     }else if(prjIdCookie != false){
                         this.curProject = parseInt(prjIdCookie);
                         this.nextStep();
-                        console.log("prjIdCookie != false",prjIdCookie)
+                        //console.log("prjIdCookie != false",prjIdCookie)
                     }else{
                         Common.CommonError(this,"没有获取到prjId或id 回到agile")
                         this.$emit("sendData",false);

@@ -259,8 +259,7 @@
 							@addUS="speedAddItem"
 							@sendCheckbox="acceptCheckbox"
 							:MenuStatusList="menuStatusList"
-							:isScroll="true"
-							:firstColumn="200"
+							
 						/>
 						
 						<!-- <component :is="currentView" :myCardList="cardList" :myProduct="MyProduct" :myStatusList="statusList" :myGroupList="groupList"></component>-->
@@ -911,7 +910,7 @@ export default {
 				group_name:this.formValidate.group_name,
 				uscSn:this.formValidate.uscSn,
 			}
-			let fileName = "用户故事导出_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'))+".xlsx"
+			let fileName = "用户故事导出_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'))
 			return Common.DownFile(defaultAXIOS,this,userstoryOutExcel,params,fileName);
 		},
 		optputWord(){
@@ -1826,7 +1825,6 @@ export default {
 	}
 	.listBox {
 		overflow: hidden;
-		// overflow: auto;
 		position:relative;
 	}
 	span.high {
@@ -1868,7 +1866,7 @@ export default {
 	}
 
 	.cardpoplist{
-		text-align:left;
+		text-align:left
 	}
 	.cardpoplist p {
 		border-bottom: #ccc solid 1px;
@@ -1893,9 +1891,7 @@ export default {
 <style>
 #kanbanboard .content-header , #kanbanboard .ivu-col>div{
 	width: auto !important;
-}
-#kanbanboard .ColumnFirst , #kanbanboard .Column , #kanbanboard .topColumnFirst , #kanbanboard .topColumn{
-	min-width: 200px; 
+	
 }
 #kanbanboard .ivu-row-flex .ivu-col{
 	padding-right: 4px !important;

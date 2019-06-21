@@ -176,7 +176,8 @@ export default {
                 AddGroupList:[],//搜索查询
                 bfunc:[],//弹出业务窗口  
                 editStatus:"", 
-                us_accept:"",         
+                us_accept:"",  
+                assist_list:[],       
             },
             userstory_typeList:[],
             userstory_statusList:[],
@@ -288,10 +289,10 @@ export default {
 
     },
     beforecreated(){
-        console.log("用户故事detail--beforecreated-------",this.formValidate)
+        //console.log("用户故事detail--beforecreated-------",this.formValidate)
     },
     created(){
-        console.log("用户故事detail--created-------",this.formValidate)
+        //console.log("用户故事detail--created-------",this.formValidate)
         /*
         let detailID = Common.GETdetail_id(this,Common,"inUrl");
         if(detailID){
@@ -306,10 +307,10 @@ export default {
         Common.GetProjectList(defaultAXIOS,this,Common,projectListDataNew);
     },
     beforeUpdate(){
-        console.log("用户故事detail--beforeUpdate-------",this.formValidate)
+        //console.log("用户故事detail--beforeUpdate-------",this.formValidate)
     },
     updated(){
-        console.log("用户故事detail--updated-------",this.formValidate)
+        //console.log("用户故事detail--updated-------",this.formValidate)
     },
     methods: {
         iSauth(KEY){
@@ -392,7 +393,7 @@ export default {
             return defaultAXIOS(URL,{detail_id,username:Common.getCookie("username")},{timeout:5000,method:'get'})
             .then((response) => {
                 let myData = response.data;
-                console.log("<======product detail***response+++",response,myData,"======>");
+                //console.log("<======product detail***response+++",response,myData,"======>");
 
                 if(Object.getOwnPropertyNames(myData).length >2){
                     this.GetDetail = myData;

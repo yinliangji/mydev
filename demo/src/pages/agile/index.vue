@@ -291,7 +291,7 @@ export default {
     },
     watch:{
         loginSave(curVal,oldVal){
-            console.log(curVal,oldVal)
+            //console.log(curVal,oldVal)
         },
         "ITMitem.AddGroupList"(curVal,oldVal){
             let _this = this;
@@ -321,19 +321,19 @@ export default {
         },
     },
     beforecreated(){
-        console.log("agile--beforecreated-------",this.tableData,this.ITMitem);
+        //console.log("agile--beforecreated-------",this.tableData,this.ITMitem);
     },
     created(){
-        console.log("agile--created-------",this.tableData,this.ITMitem);
+        //console.log("agile--created-------",this.tableData,this.ITMitem);
         Common.delStorageAndCookie(Common,"detail_id");
         Common.DelectLocalStorage(Common);
         this.addCheckSerch();
     },
     beforeUpdate(){
-        console.log("agile--beforeUpdate-------",this.tableData,this.ITMitem)
+        //console.log("agile--beforeUpdate-------",this.tableData,this.ITMitem)
     },
     updated(){
-        console.log("agile--updated-------",this.tableData,this.ITMitem)
+        //console.log("agile--updated-------",this.tableData,this.ITMitem)
     },
     data () {
         return {
@@ -355,7 +355,7 @@ export default {
                 {
                     title: 'ICDP编号',
                     key: 'prj_id',
-                    width: 90,
+                    width: 110,
                     align: 'center',
                 },
                 
@@ -406,8 +406,22 @@ export default {
                 {
                     title: 'ITM编号',
                     key: 'itm_id_sn',
-                    width: 85,
+                    width: 110,
                     align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            ((U)=>{
+                                return U ? 'a' : "span"
+                            })(params.row.itm_url)
+                            ,
+                            {
+                                domProps:{href:params.row.itm_url,},
+                                attrs:{title:params.row.itm_url,target:"_blank"},
+                                on: {}
+                            },
+                            params.row.itm_id_sn
+                        );
+                    }
                 },
                 {
                     title: '项目经理',
@@ -428,12 +442,12 @@ export default {
                 //     title: '所属产品',
                 //     key: 'prod_name'
                 // },
-                {
-                    title: '开始时间',
-                    key: 'start_time',
-                    width: 100,
-                    align: 'center',
-                },
+                // {
+                //     title: '开始时间',
+                //     key: 'start_time',
+                //     width: 100,
+                //     align: 'center',
+                // },
                
                 {
                     title: '结束时间',
@@ -662,7 +676,7 @@ export default {
         projectGroupFn(URL,params = {},ARR,thatEle){
             defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======【checkSearch Allgroup】***response+++",response,myData,"====>");
+                //console.log("<======【checkSearch Allgroup】***response+++",response,myData,"====>");
                 this.inputLoad = false;
                 this.ITMitem.AddGroupList[0].groupList = [];
                 this.ITMitem.AddGroupList[0].groupList = myData.data.list;
@@ -774,7 +788,7 @@ export default {
         byRoleFn(URL,roleName){
             defaultAXIOS(URL,{roleName},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======agile byRole***response+++",roleName,response,myData,"======>");
+                //console.log("<======agile byRole***response+++",roleName,response,myData,"======>");
                 if(myData && (myData=="success")){
 
                 }else if(myData && myData.length){
@@ -829,7 +843,7 @@ export default {
             }
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======agile***列表+++",response,myData.data.list,"======>");
+                //console.log("<======agile***列表+++",response,myData.data.list,"======>");
                 if(myData.status == "success"){
                     this.tableData = myData.data.list;
                     this.tableDAtaTatol = myData.data.total;
@@ -857,7 +871,7 @@ export default {
             Store.dispatch('ADD_DATA_TEST/incrementAsync', {
                 msg: false
             })
-            console.log('this.$store.state["ADD_DATA_TEST"].data',this.$store.getters["ADD_DATA_TEST/getFn"])
+            //console.log('this.$store.state["ADD_DATA_TEST"].data',this.$store.getters["ADD_DATA_TEST/getFn"])
         },
         //---------
         popCloseFn(){
@@ -922,7 +936,7 @@ export default {
             defaultAXIOS(projectDelete,{idArray:_arr},{timeout:2000,method:'post'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("<======agile***response+++",response,myData,"+++agile***response======>");
+                //console.log("<======agile***response+++",response,myData,"+++agile***response======>");
                 if(myData.status == "success"){
                     this.actionArr = [];
                     this.modal_loading = false;
@@ -965,7 +979,7 @@ export default {
             }
         },
         onSelectionChangeFn(S){
-            console.log("<===*onSelectionChangeFn*===Sel->",S,"<-Sel===*onSelectionChangeFn*===>")
+            //console.log("<===*onSelectionChangeFn*===Sel->",S,"<-Sel===*onSelectionChangeFn*===>")
             this.actionArr = S;
             // if(!S.length){
             //     this.allSelectTableRome = false;
@@ -975,10 +989,10 @@ export default {
 
         },
         onSelectAllFn(S){
-            console.log("<===*onSelectAllFn*===Sel 全选->",S,"<-Sel===*onSelectAllFn*===>")
+            //console.log("<===*onSelectAllFn*===Sel 全选->",S,"<-Sel===*onSelectAllFn*===>")
         },
         onSelectFn(S,R){
-            console.log("<===*onSelectFn*===Sel->",S,"<-Sel======ROW->",R,"<-ROW===*onSelectFn*===>")
+            //console.log("<===*onSelectFn*===Sel->",S,"<-Sel======ROW->",R,"<-ROW===*onSelectFn*===>")
         },
         handleSelectAll (status) {
             this.$refs.selection.selectAll(status);

@@ -42,7 +42,17 @@
                                     <span v-show="isMyEdit('subject')">
                                         {{valueChangelabel(formValidate.subject,subjectList)}}
                                     </span> 
-                                    <Select clearable v-model="formValidate.subject" placeholder="请选总分行一体化研发领域" v-show="isMyEdit('subject','else')">
+                                    <Select
+
+                                        :clearable = "subject_clearable" 
+                                        :disabled = "subject_disabled"
+                                         
+                                        v-model="formValidate.subject" 
+                                        placeholder="请选总分行一体化研发领域" 
+                                        v-show="isMyEdit('subject','else')"
+
+                                        ref="Subject"
+                                        >
                                         <Option v-for="item in subjectList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                     </Select> 
                                     
@@ -658,6 +668,9 @@ export default {
             //检测id是否在projectListDataNew列表里
             GO:false,
             GOText:"",
+            //
+            subject_clearable:true,
+            subject_disabled:false,
         }
     },
     mounted(){
@@ -677,14 +690,16 @@ export default {
 
         this.getProjectCondition(projectCondition);
         if(ID && PRJ_ID){
-            this.addTeamFn(addTeam);
-            this.projectGetProdFn(projectGetProd,{id:ID,prj_id:PRJ_ID});
+            //this.addTeamFn(addTeam);//敏捷项目获取角色
+            //this.projectGetProdFn(projectGetProd,{id:ID,prj_id:PRJ_ID});//所属产品
             this.projectEditFn(projectEdit,{id:ID,prj_id:PRJ_ID});
         }else{
             Common.CommonError(this,"没有获取到prjId或id 和 prjSn或prj_id")
             this.resetData();
         }
 
+        return
+        //模块
         this.listModuleFn(listModule,((Id)=>{return Id?{id:Id}:{id:""}})(Common.GETID(this,Common,"inUrl"))).then((res)=>{
             let fn = (obj)=>{
                 return obj.label+"【"+obj.value+"】";            
@@ -817,7 +832,7 @@ export default {
         projectGroupFn(URL,params = {},ARR,thatEle){
             defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
+                //console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
                 this.inputLoad = false;
                 this.formValidate.AddGroupList[ARR].groupList = [];
                 this[ARR] = [];
@@ -849,7 +864,7 @@ export default {
         projectGetProdFn(URL,Obj = {}){
             defaultAXIOS(URL,Obj,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======【agile product get】***response+++",response,myData,"====>");
+                //console.log("<======【agile product get】***response+++",response,myData,"====>");
                 let _tempObj = {};
                 for(var i=0;i<myData.data.length;i++){
                     _tempObj.value = myData.data[i].pid+"";
@@ -866,7 +881,7 @@ export default {
 
             defaultAXIOS(URL,IDPRJID,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======【agile edit get】***response+++",response,myData,"====>");
+                //console.log("<======【agile edit get】***response+++",response,myData,"====>");
                 let _temp = false;
                 let _log = {
                     myRef:"selfRef",
@@ -907,6 +922,14 @@ export default {
                         
                     }
                 }
+
+                this.subject_clearable = this.formValidate.subject == 'SU-0000' || this.formValidate.subject == '' ? true : false;
+                this.subject_disabled = this.formValidate.subject == 'SU-0000' || this.formValidate.subject == '' ? false : true; 
+
+                //  subject_clearable:true,
+                // subject_disabled:false,
+  
+
                 if(window.location.host == "127.0.0.1:9000"){
                     let _DATA = this.$router.history.current.query.DATA;
                     _DATA = _DATA ? JSON.parse(_DATA) : _DATA;
@@ -1160,7 +1183,7 @@ export default {
             defaultAXIOS(projectEdit,tempData,{timeout:5000,method:'post'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("<======[agile edit post]***response+++",response,myData,"=====>");
+                //console.log("<======[agile edit post]***response+++",response,myData,"=====>");
                 if(myData.status == "success"){
                     this.modal_add_loading = false;
                     this.formItemReset();

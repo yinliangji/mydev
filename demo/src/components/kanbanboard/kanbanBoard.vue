@@ -35,7 +35,7 @@
           </div>
         </div>
       </span>
-      <Icon type="android-settings" size="18" class="settingIcon" @click="goSetting"></Icon>
+      <Icon type="android-settings" size="18" class="settingIcon" @click="goSetting" title="设置用户故事状态"></Icon>
       
     </div>
     <content id="board">
@@ -58,7 +58,10 @@
         <Row :gutter="0" class="kanbanBox" align="top">
           <Col :style="'width:'+((firstColumn - 0) + 1)+'px;'" class="ColumnFirst" v-if="groupLists.length > 0">
             <div class="centerHeader" v-if="aside=='product'">
-              <a class="txtBlock" @click="toStory(itemGroup,'us')" :title="itemGroup.text">{{itemGroup.text}}</a>
+              <a class="txtBlock" style="padding-bottom:3px;" @click="toStory(itemGroup,'us')" :title="itemGroup.text">
+                {{itemGroup.text}}
+              </a>
+              <span class="imgStatus">{{itemGroup.req_status_name}}</span>
             </div>
             <div class="centerHeader" v-else>
               <a class="txtBlock" @click="toStory(itemGroup)" :title="itemGroup.text">{{itemGroup.text}}</a>
@@ -66,7 +69,7 @@
               <span class="imgStatus">{{itemGroup.us_status}}</span>
             </div>
             <div>
-              <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup.text)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" title="快速添加用户故事" >快捷添加</Button>
+              <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" title="快速添加用户故事" >快捷添加</Button>
               <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId,itemGroup.sprint_id)" class="addMissionBtn" :disabled="getPermission" title="快速添加工作项">快捷添加</Button>
             </div>
           </Col>
@@ -544,9 +547,10 @@ export default {
       }
       
     },
-    btnIsShow(txt = ""){
-      let str = "@需求完成";
-      return txt.indexOf(str) != -1 ? false  : true;
+    btnIsShow(obj){
+    	return obj && obj.req_status == "8" ? false : true; 
+    	// let str = "@需求完成";
+    	// return obj.indexOf(str) != -1 ? false  : true;
     },
     autoHeight(){
       setTimeout(()=>{
@@ -752,7 +756,6 @@ export default {
           prjSn:PrjSn,
           id:ID,
           prjId:ID,
-          menuType:"new",
         }
       }
       :
@@ -764,7 +767,6 @@ export default {
           prjSn:PrjSn,
           id:ID,
           prjId:ID,
-          menuType:"new",
         }
       }
       const {href}=this.$router.resolve(obj);
@@ -905,7 +907,7 @@ export default {
         disabled:vm.sortdisabled,
         //scroll:document.getElementById("board"),
         scroll:this.isScroll ? this.scrollDom : true,
-        scrollSensitivity:this.isScroll ? 200 : 30,
+        scrollSensitivity:this.isScroll ? 100 : 30,
         onMove:function(evt,originalEvent){
           if(vm.Group){
             if(evt.from.getAttribute("groupid") == evt.to.getAttribute("groupid")){
@@ -1464,7 +1466,7 @@ export default {
   margin: 0 auto;
   text-align: center;
   font-size: 12px;
-  min-height: 36px;
+  min-height: 43px;
   overflow: hidden;
   line-height: 18px;
   /*

@@ -41,7 +41,7 @@ const { fileDownList,fileUpload,downFile,fileDelete,fileView} = Common.restUrl;
 import Delpop from '@/components/delectAlert'
 export default {
     props: {
-        USID: {
+        Data: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
                 return false;
@@ -50,28 +50,34 @@ export default {
         
     },
     watch:{
-        USID(){
-            if(this.USID){
-                this.formValidate.userstory_id = this.USID;
-                this.init(this.USID);
+        Data(data){
+            if(data.prj_id && data.id){
+                for(let I in this.formValidate){
+                    this.formValidate[I] = data[I] || "";
+                }
+                this.init();
             }
         },
     },
     beforecreated(){
-        console.log("beforecreated----用户故事附件---",this.formValidate)
+        //console.log("beforecreated----用户故事附件---",this.formValidate)
     },
     created(){
-        console.log("created----用户故事附件---",this.formValidate)
+        //console.log("created----用户故事附件---",this.formValidate)
     },
     beforeUpdate(){
-        console.log("beforeUpdate---用户故事附件----",this.formValidate)
+        //console.log("beforeUpdate---用户故事附件----",this.formValidate)
     },
     updated(){
-        console.log("updated----用户故事附件---",this.formValidate)
+        //console.log("updated----用户故事附件---",this.formValidate)
     },
     mounted(){
-        this.formValidate.userstory_id = this.USID;
-        this.init(this.USID);
+        if(this.Data.prj_id && this.Data.id){
+            for(let I in this.formValidate){
+                this.formValidate[I] = this.Data[I] || "";
+            }
+            this.init();
+        }
     },
     data() {
         return {
@@ -176,7 +182,8 @@ export default {
             tableData: [],
             actionUrl:"//jsonplaceholder.typicode.com/posts/",
             formValidate:{
-                userstory_id:"",
+                prj_id:"",
+                id:"",
             },
             //删除弹出--start
             delpopIsShow:false,
@@ -201,15 +208,15 @@ export default {
             this.tableDataCur = false;
         },
         delpopEnterFn(B){
-            defaultAXIOS(fileDelete,{file_path:this.delPath_file,fileId:this.tableData[this.tableDataCur].fileId,id:Common.GETID(this,Common),taskId:this.formValidate.userstory_id},{timeout:2000,method:'get'}).then((response) => {
+            defaultAXIOS(fileDelete,{file_path:this.delPath_file,fileId:this.tableData[this.tableDataCur].fileId,id:this.formValidate.id,taskId:this.formValidate.prj_id},{timeout:2000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======用户故事***文件删除+++",response,myData,"======>");
+                //console.log("<======用户故事***文件删除+++",response,myData,"======>");
                 let STAUUS = myData.status ? myData.status : myData.message
                 if(STAUUS.indexOf("success") != -1){
                     this.delpopIsLoading = B;
                     this.delpopIsShow = B;
                     this.Message("删除完成");
-                    this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.userstory_id)
+                    this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,this.formValidate.id,this.formValidate.prj_id)
                     this.tableDAtaPageCurrent = 1;
                     return Promise.resolve(STAUUS)
 
@@ -228,13 +235,13 @@ export default {
 
             let URL = userstorydelete;
             let params = {
-                us_id:this.tableData3[this.tableDataCur].us_id || this.formValidate.userstory_id,
+                us_id:this.tableData3[this.tableDataCur].us_id || this.formValidate.prj_id,
                 bfunc_id:this.tableData3[this.tableDataCur].bfunc_id,
                 version:this.tableData3[this.tableDataCur].version,
             }
             return defaultAXIOS(URL,params,{timeout:20000,method:'post'}).then((response) => {
                 let myData = response.data;
-                console.log("<======product 业务列表删除***response+++",response,myData,"======>");
+                //console.log("<======product 业务列表删除***response+++",response,myData,"======>");
                 if(myData.status == "success"){
                     this.delpopIsLoading = B;
                     this.delpopIsShow = B;
@@ -272,12 +279,18 @@ export default {
             return Common.DownFile(defaultAXIOS,this,URL,param,fileName)
         },
         //下载文件 end
-        init(usID){
+        init(id,prj_id){
+            //Common.GETID(this,Common)
+            //this.formValidate.id
             //Common.GETprjid(this,Common)
-            let us_ID = usID? usID : this.formValidate.userstory_id;
-            this.actionUrl = fileUpload+"?taskId="+us_ID+"&type=2&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
+            
+            let _id = id ? id : this.formValidate.id;
+            let _prj_id = prj_id ? prj_id : this.formValidate.prj_id; 
+            
+            
+            this.actionUrl = fileUpload+"?taskId="+_prj_id+"&type=1&id="+_id+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
 
-            this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),usID)
+            this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,_id,_prj_id)
             this.tableDAtaPageCurrent = 1;
         },
         handleError(res,file,list){
@@ -293,9 +306,9 @@ export default {
         },
         handleSuccess(res,file,list){
 
-            this.listUpFile(fileUpload,Common.GETID(this,Common),this.formValidate.userstory_id).then(()=>{
+            this.listUpFile(fileUpload,this.formValidate.id,this.formValidate.prj_id).then(()=>{
                 this.Message("添加成功")
-                this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.userstory_id)
+                this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,this.formValidate.id,this.formValidate.prj_id)
                 this.tableDAtaPageCurrent = 1;
 
             },(error)=>{
@@ -306,37 +319,22 @@ export default {
             
             
         },
-        listUpFile(URL,id="",userstory_id = ""){
+        listUpFile(URL,id="",prj_id = ""){
             return Promise.resolve("添加成功");
 
-            return defaultAXIOS(URL,{id,taskId:userstory_id},{timeout:20000,method:'get'}).then((response) => {
-                let myData = response.data;
-                console.log("<======detail***yong+++",response,myData,"======>");
-
-                let STAUUS = myData.status ? myData.status : myData.message
-
-                if(STAUUS.indexOf("success") != -1){
-                    return Promise.resolve(true)
-                }else{
-                    return Promise.reject(false);
-                }
-            }).catch( (error) => {
-                console.log(error);
-                return Promise.reject(false);
-                
-            });
+            
         },
         changePageSize(i) {
 
         },
         changeCurrentPage(i) {
-            this.fileDownFn(fileDownList,i,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.userstory_id)
+            this.fileDownFn(fileDownList,i,this.tableDAtaPageLine,this.formValidate.id,this.formValidate.prj_id)
             this.tableDAtaPageCurrent = i;
         },
-        fileDownFn(URL = "",page = 1,pageline = 3,id = "",userstory_id = ""){
-            defaultAXIOS(URL,{page,pageline,id,taskId:userstory_id},{timeout:20000,method:'get'}).then((response) => {
+        fileDownFn(URL = "",page = 1,pageline = 3,id = "",prj_id = ""){
+            defaultAXIOS(URL,{page,pageline,id,taskId:prj_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======detail***用户故事附件列表+++",response,myData,"======>");
+                //console.log("<======detail***用户故事附件列表+++",response,myData,"======>");
                 
                 if(myData && myData.files && Array.isArray(myData.files)){
                     this.tableData = myData.files

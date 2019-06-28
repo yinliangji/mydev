@@ -536,9 +536,38 @@ export default {
             let _prod_ID = prod_ID == "0" ? "" : prod_ID;
 
             this.getStoryAddFn(storyAddGet,ID,ID,_prod_ID);
-            this.storyGetSprintFn(storyGetSprint,ID,ID,_prod_ID)
-            this.storyGetReqFn(storyGetReq,ID,ID,_prod_ID)
+            this.storyGetSprintFn(storyGetSprint,ID,ID,_prod_ID);
+            this.storyGetReqFn(storyGetReq,ID,ID,_prod_ID);
 
+            this.storyGetConditionFn(modifyCondition,"userstory_type",ID).then((res)=>{
+
+                if(this.userstory_statusList && Array.isArray(this.userstory_statusList) && this.userstory_statusList.length){
+                    this.formValidate.userstory_status = this.userstory_statusList[0] && this.userstory_statusList[0].value ? this.userstory_statusList[0].value+"" : ""
+                }
+                if(this.chargerList && Array.isArray(this.chargerList) && this.chargerList.length){
+                    let _username = Common.getStorageAndCookie(this,Common,"username");
+                    let obj = this.chargerList.find(item => item.value == _username);
+                    this.formValidate.nick_name = obj ? obj.value : "";
+                }
+                
+                if(this.req_idList && Array.isArray(this.req_idList) && this.req_idList.length){
+
+                    if(this.req_idList[0].req_status || this.req_idList[0].req_status_name){
+                        Common.DelArrN(this.req_idList,"8","req_status");
+                        if(!this.req_idList.length){
+                            Common.CommonWarning(this,"都是已完成的需求，没有可选需求！");
+                        }    
+                    }
+                }else{
+                    this.goDemand();
+                }
+                
+            },()=>{
+                console.log("GetConditionAll 失败");
+                this.showError("GetConditionAll 失败");
+            })
+
+            /*
             this.publishUserFn(publishUser,{username:Common.getStorageAndCookie(this,Common,"username")}).then((chargerObj)=>{
 
                 //this.storyGetConditionFn(storyGetCondition,"userstory_status",ID);
@@ -551,7 +580,10 @@ export default {
 
 
                     if(this.req_idList && Array.isArray(this.req_idList) && this.req_idList.length){
-                        Common.DelArrN_indexOf(this.req_idList,"@需求完成","label")
+                        //Common.DelArrN_indexOf(this.req_idList,"@需求完成","label")
+                        if(this.req_idList[0].req_status || this.req_idList[0].req_status_name){
+                            Common.DelArrN(this.req_idList,"8","req_status");    
+                        }
                     }else{
                         this.goDemand();
                     }
@@ -562,6 +594,7 @@ export default {
                         this.formValidate.nick_name = chargerObj.nick_name;
                     },100)
                     
+                    
                 },()=>{
                     console.log("GetConditionAll 失败");
                     this.showError("GetConditionAll 失败");
@@ -571,6 +604,7 @@ export default {
                 console.log(error);
                 this.showError(error);
             })
+            */
 
 
             

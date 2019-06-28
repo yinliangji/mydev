@@ -106,12 +106,7 @@ export default {
                 return [];
             }
         },
-        ChargerList: {
-            type: [String,Number,Boolean,Function,Object,Array,Symbol],
-            default: function() {
-                return [];
-            }
-        },
+        
         SprintList: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
@@ -173,7 +168,7 @@ export default {
             this.req_idList = D;
         },
         SprintList(D){
-            //this.sprintList = D;
+            this.sprintList = D;
         },
         CurrentReqId(D){
             this.currentReq_id = D;
@@ -183,10 +178,10 @@ export default {
         },
     },
     beforeUpdate(){
-        console.log("添加用户故事 beforeUpdate-------","this.isShow----",this.isShow)
+        //console.log("添加用户故事 beforeUpdate-------","this.isShow----",this.isShow)
     },
     updated(){
-        console.log("添加用户故事 updated-------","this.isShow----",this.isShow)
+        //console.log("添加用户故事 updated-------","this.isShow----",this.isShow)
     },
     mounted(){
         this.storyGetConditionFn(modifyCondition,"",Common.GETID(this,Common)).then(()=>{},()=>{})
@@ -309,7 +304,7 @@ export default {
             }
             defaultAXIOS(storyAdd,tempData,{timeout:20000,method:'post'}).then((response) => {
                 let myData = response.data;
-                console.log("<======用户故事 添加***response+++",response,myData,"======>");
+                //console.log("<======用户故事 添加***response+++",response,myData,"======>");
                 if(myData.status = "success"){
                     this.modal_add_loading = false;
                     this.formItemReset();

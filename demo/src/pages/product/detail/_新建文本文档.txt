@@ -64,3 +64,28 @@
                 }
 				*/
                 //console.log(proiFn(1,"proi"))
+
+
+
+
+//在线预览开始
+        isOffice(file){
+            let fn = (f)=>{
+                let filename = f,type = "";
+                let index1 = filename.lastIndexOf(".");
+                let index2 = filename.length;
+                type = filename.substring(index1+1,index2);
+                return type;
+            }
+            let flag = false;
+            let type = fn(file);
+            if(type == "doc" || type == "xls" || type == "ppt" || type == "docx" || type == "pptx" || type == "xlsx"){
+                flag = true;
+            }
+            return flag;
+        },
+        onlineView(params){
+            let url = fileView + params.file_path;
+            window.open(url);
+        },
+        //在线预览结束

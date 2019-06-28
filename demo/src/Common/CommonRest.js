@@ -350,6 +350,8 @@ CommonRest.restUrl = {
 
     "getLMenu":rep_mp_e(process.env.BASE_URL + "/menu/getLeftMenu/"),
     /**** 获取左侧菜单列表 post****/
+    "fileView":"http://128.196.0.124:8080/office/preview2?objNm=",
+    /**** 文件预览****/
 }
 
 Object.setPrototypeOf(CommonRest.restUrl,CommonRestqhc.restUrl);

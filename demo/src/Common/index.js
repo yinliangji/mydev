@@ -51,7 +51,7 @@ export default class Common extends Utils {
 
     //数组变表格--不通用
     static toTable(OBJ,TAB,ROWS = 3,thW = 11,Col = false){
-      console.log("《=======【OBJ】",OBJ,"OBJ=======》")
+      //console.log("《=======【OBJ】",OBJ,"OBJ=======》")
       let _tempArr = [];
       let rows = ROWS;
       let _SH = parseInt(OBJ.length/rows);
@@ -144,7 +144,7 @@ export default class Common extends Utils {
         }
       }
 
-      console.log("《=======【TAB】",TAB,"TAB=======》")
+      //console.log("《=======【TAB】",TAB,"TAB=======》")
       
       for(var tr =0;tr<TAB.length;tr++){
          Element += '<tr>';
@@ -655,7 +655,7 @@ export default class Common extends Utils {
     static ProjectGroupFN(FUN, that, URL, params,ARR,thatEle,actionObj){
       FUN(URL,params,{timeout:60000,method:'get'}).then((response) => {
           let myData = response.data;
-          console.log("<======【checkSearch Allgroup】***response+++",response,myData,"====>");
+          //console.log("<======【checkSearch Allgroup】***response+++",response,myData,"====>");
           that.inputLoad = false;
           that.formValidate.AddGroupList[ARR].groupList = [];
           let _List = myData.data ? myData.data.list : myData.list;
@@ -865,7 +865,7 @@ export default class Common extends Utils {
         method: 'get'
       }).then((response) => {
         let myData = response.data;
-        console.log("<======【agile 获取模块 get】***response+++", response, myData, "====>");
+        //console.log("<======【agile 获取模块 get】***response+++", response, myData, "====>");
         if(myData.status == "success"){
           let MYDATA = myData.data ? myData.data : myData;
           if (MYDATA.res && Array.isArray(MYDATA.res) && MYDATA.res.length) {
@@ -922,7 +922,7 @@ export default class Common extends Utils {
 
       return FUN(URL,params,{timeout:60000,method:'get'}).then((response) => {
           let myData = response.data;
-          console.log("<======【getProjectCondition】***response+++",response,myData,"====>");
+          //console.log("<======【getProjectCondition】***response+++",response,myData,"====>");
           if(myData.status == "success"){
               if(Array.isArray(myData.type_list) && myData.type_list.length && that.prj_typeList){
                   let obj = {};
@@ -1011,7 +1011,7 @@ export default class Common extends Utils {
       //
       return FUN(URL,params,{timeout:20000,method:'get'}).then((response) => {
           let myData = response.data;
-          console.log("<======新增业务功能  userstoryGetLogic_sys_no***+++",response,myData,"======>");
+          //console.log("<======新增业务功能  userstoryGetLogic_sys_no***+++",response,myData,"======>");
           if(myData.typeList && myData.logicList){
               if(that.typeList && that.logicList){
                 that.typeList = myData.typeList;
@@ -1175,7 +1175,7 @@ export default class Common extends Utils {
       FUN(URL,params,{timeout:5000,method:'get'})
       .then((response) => {
           let myData = response.data;
-          console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
+          //console.log("<======【agile addTeam get】***response+++",response,myData,"====>");
           let _tempObj = {};
           
           let _myDataArr = false;
@@ -1215,7 +1215,7 @@ export default class Common extends Utils {
       return FUN(URL,{condition,prj_id},{timeout:20000,method:'get'})
       .then((response) => {
           let myData = response.data;
-          console.log("<======product condition***response+++",condition,response,myData,"======>");
+          //console.log("<======product condition***response+++",condition,response,myData,"======>");
           if(myData){
             //myData.length
             if(Array.isArray(myData) && myData.length){
@@ -1267,7 +1267,7 @@ export default class Common extends Utils {
       return FUN(URL,{condition,prj_id,id:prj_id},{timeout:20000,method:'get'})
       .then((response) => {
           let myData = response.data;
-          console.log("<======product condition***response+++",condition,response,myData,"======>");
+          //console.log("<======product condition***response+++",condition,response,myData,"======>");
           if(myData){
             let objFn = (arr)=>{
               let _OBJ = {};
@@ -1275,7 +1275,15 @@ export default class Common extends Utils {
               for(let i=0;i<arr.length;i++){
                 _OBJ.label = (arr[i].value || arr[i].uscName || arr[i].sprint_name || arr[i].nick_name || arr[i].key || "")+"";
                 _OBJ.value = (arr[i].key || arr[i].uscSn || arr[i].sprint || arr[i].user_name || 0)+"";
-                if(arr[i].reqID){_OBJ.reqID = arr[i].reqID}
+                if(arr[i].reqID){
+                  _OBJ.reqID = arr[i].reqID+"";
+                }
+                if(arr[i].req_status){
+                  _OBJ.req_status = arr[i].req_status+"";
+                }
+                if(arr[i].req_status_name){
+                  _OBJ.req_status_name = arr[i].req_status_name+"";
+                }
                 _arr.push(_OBJ);
                 _OBJ = {};
               }
@@ -1329,7 +1337,7 @@ export default class Common extends Utils {
       //
       return FUN(URL,params,{timeout:5000,method:'get'}).then((response) => {
           let myData = response.data;
-          console.log("<======【product publishUser get】***response+++",response,myData,"====>");
+          //console.log("<======【product publishUser get】***response+++",response,myData,"====>");
           if(myData && myData.user_name){
               that.formValidate.charger = myData.nick_name
               that.formValidate.nick_name = myData.user_name
@@ -1359,7 +1367,7 @@ export default class Common extends Utils {
       //let _params = params ? params : {username:super.getCookie("username")}
     	return FUN(URL,_params,{timeout:20000,method:'get'}).then((response) => {
 			let myData = response.data;
-			console.log("<======获取权限***response+++",response,myData,"======>");
+			//console.log("<======获取权限***response+++",response,myData,"======>");
 			if(myData.status =="success"){
 				if(myData.prj_permission && Array.isArray(myData.prj_permission) && myData.prj_permission.length){
 					that.prj_permission = myData.prj_permission;
@@ -1680,7 +1688,7 @@ export default class Common extends Utils {
     static ProjectGroup2(FUN,that,URL,params = {},ARR,thatEle,OBJECT,selElemFUN){
       FUN(URL,params,{timeout:60000,method:'get'}).then((response) => {
           let myData = response.data;
-          console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
+          //console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
           that.inputLoad = false;
 
           let OBJ = OBJECT ? OBJECT : that.formValidate
@@ -1855,7 +1863,7 @@ export default class Common extends Utils {
       return FUN(URL,_params,{timeout:60000,method:'get'})
       .then((response) => {
           let myData = response.data;
-          console.log("<======【 附件列表获取 get】***response+++",response,myData,"====>");
+          //console.log("<======【 附件列表获取 get】***response+++",response,myData,"====>");
           if(myData.status == "success" && myData.files && Array.isArray(myData.files)){
               that.tableData = myData.files;
               return Promise.resolve(true);
@@ -1888,7 +1896,7 @@ export default class Common extends Utils {
     static DownFile(FN,that,URL,params={},fileName=""){
       return FN(URL,params,{timeout:60000,method:'get',responseType:"blob"}).then((response) => {
           let myData = response.data;
-          console.log("<======***文件下载+++",response,myData,"======>");
+          //console.log("<======***文件下载+++",response,myData,"======>");
           let blob = new Blob([myData],{type:"application/vnd.ms-excel"});
           let link = document.createElement("a");
           link.href = window.URL.createObjectURL(blob);
@@ -2064,6 +2072,27 @@ export default class Common extends Utils {
               return false
           }
       });
+    }
+
+    //在线预览开始
+    static IsOffice(file){
+      let fn = (f)=>{
+          let filename = f,type = "";
+          let index1 = filename.lastIndexOf(".");
+          let index2 = filename.length;
+          type = filename.substring(index1+1,index2);
+          return type;
+      }
+      let flag = false;
+      let type = fn(file);
+      if(type == "doc" || type == "xls" || type == "ppt" || type == "docx" || type == "pptx" || type == "xlsx"){
+          flag = true;
+      }
+      return flag;
+    }
+    static OnlineView(params,URL){
+      let url = URL + params.file_path;
+      window.open(url);
     }
 
 }

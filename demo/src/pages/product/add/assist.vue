@@ -100,9 +100,6 @@ export default {
                         }
                         
                     })
-                    console.error(D,L,this.MyList)
-
-
 
                 }else{
                     this.MyList = L;

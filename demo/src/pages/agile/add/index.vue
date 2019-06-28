@@ -410,16 +410,16 @@ export default {
         },
     },
     beforecreated(){
-        console.log("agileAdd--beforecreated-------",this.formValidate)
+        //console.log("agileAdd--beforecreated-------",this.formValidate)
     },
     created(){
-        console.log("agileAdd--created-------",this.formValidate)
+        //console.log("agileAdd--created-------",this.formValidate)
     },
     beforeUpdate(){
-        console.log("agileAdd--beforeUpdate-------",this.formValidate)
+        //console.log("agileAdd--beforeUpdate-------",this.formValidate)
     },
     updated(){
-        console.log("agileAdd--updated-------",this.formValidate)
+        //console.log("agileAdd--updated-------",this.formValidate)
     },
 	computed: {
         addtest() {
@@ -730,13 +730,6 @@ export default {
         this.formValidate.AddGroupList.push(...this.defaultGroup);//添加小组信息
 
 
-
-        this.addTeamFn(addTeam);
-
-        this.projectGetProdFn();
-
-        this.listModuleFn(listModule,((ID)=>{return ID?{id:ID}:{id:""}})(Common.GETID(this,Common)));
-
         this.getProjectCondition(projectCondition).then((res)=>{
             if(Array.isArray(this.itm_statusList) && this.itm_statusList.length){
                 this.formValidate.itm_status = this.itm_statusList[0].value;
@@ -744,6 +737,16 @@ export default {
         },(error)=>{
 
         })
+        return
+        this.addTeamFn(addTeam);
+
+        this.projectGetProdFn();
+        
+        
+
+        this.listModuleFn(listModule,((ID)=>{return ID?{id:ID}:{id:""}})(Common.GETID(this,Common)));
+
+        
 
     },
     
@@ -804,7 +807,7 @@ export default {
         publishUserFn(URL,params = {},Arr=[]){
             defaultAXIOS(URL,params,{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======【agile publishUser get】***response+++",response,myData,"====>");
+                //console.log("<======【agile publishUser get】***response+++",response,myData,"====>");
                
                 let _tempObj = {
                     myRef: "selfRef",
@@ -913,7 +916,7 @@ export default {
         projectGroupFn(URL,params = {},ARR,thatEle){
             defaultAXIOS(URL,params,{timeout:60000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
+                //console.log("<======【agile Allgroup get】***response+++",response,myData,"====>");
                 this.inputLoad = false;
                 this.formValidate.AddGroupList[ARR].groupList = [];
 
@@ -937,7 +940,7 @@ export default {
         projectGetProdFn(){
             defaultAXIOS(projectGetProd,{},{timeout:5000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======【agile product get】***response+++",response,myData,"====>");
+                //console.log("<======【agile product get】***response+++",response,myData,"====>");
                 let _tempObj = {};
                 for(var i=0;i<myData.data.length;i++){
                     _tempObj.value = myData.data[i].pid+"";
@@ -1091,7 +1094,7 @@ export default {
             defaultAXIOS(projectAdd,tempData,{timeout:5000,method:'post'}).then((response) => {
                 //alert(JSON.stringify(response))
                 let myData = response.data;
-                console.log("<======agile add***response+++",response,myData,"+++agile add***response======>");
+                //console.log("<======agile add***response+++",response,myData,"+++agile add***response======>");
                 if(myData.status == "success"){
                     this.modal_add_loading = false;
                     this.formItemReset();

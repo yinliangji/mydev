@@ -196,6 +196,9 @@ export default {
         },
     },
     methods: {
+        projectDetail(){
+
+        },
       showError(ERR){
         Common.ErrorShow(ERR,this);
       },

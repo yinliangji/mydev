@@ -69,7 +69,8 @@
                         <!-- <h3 class="Title"><span>项目附件</span></h3> -->
                         <div class="tableBox">
                            <!-- -->
-                            <div class="tableContBox">
+                           <FileDownLoad :Data="formValidate" v-if="TabsCur == 'name3' && formValidate.prj_id && formValidate.id" ref="fileDownLoad" />
+                            <!-- <div class="tableContBox">
 
                                 <Upload
                                     multiple
@@ -93,19 +94,18 @@
                                     </Page>
                                     <p>总共{{tableDAtaTatol}}条记录</p>
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- -->
                         </div>
                     </div>
                 </TabPane>
-                <TabPane label="项目方案" name="name4">
+                <!-- <TabPane label="项目方案" name="name4">
                     <div class="baseInfoBox">
-                        <!-- <h3 class="Title"><span>成员信息</span></h3> -->
                         <div class="tableBox">
-                            <PrjScheme :Data="formValidate" />
+                            <PrjScheme :Data="formValidate" ref="PrjScheme" v-if="TabsCur == 'name4' && formValidate.subject_sn" />
                         </div>
                     </div>
-                </TabPane>
+                </TabPane> -->
 		        
 		    </Tabs>
 
@@ -152,7 +152,7 @@
             </Form>
         </Modal>
 
-        <Modal v-model="modaDelete" width="300">
+        <!-- <Modal v-model="modaDelete" width="300">
             <p slot="header" style="color:#f60;text-align:center">
                 <Icon type="ios-information-circle"></Icon>
                 <span>删除确认</span>
@@ -164,7 +164,7 @@
                 <Button color="#1c2438"  :loading="modal_loading"  @click="del">删除</Button>
                 <Button type="primary" @click="cancel">取消</Button>
             </div>
-        </Modal>
+        </Modal> -->
 
         <GoAgileMode :Data="GO" :Text="GOText" /> 
 
@@ -175,12 +175,13 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectDetail,listModule,getPermission,fileDownList,downFile,fileUpload,fileDelete,projectOutputWord,projectOutputExecl,proByUser} = Common.restUrl;
+const {projectDetail,listModule,getPermission,projectOutputWord,projectOutputExecl,proByUser} = Common.restUrl;
+//fileDownList,downFile,fileUpload,fileDelete,fileView
 import InfoTable from './info'
 import Member from './member'
 import PrjScheme from './prjScheme'
 
-
+import FileDownLoad from './filedown'
 
 
 import GoAgileMode from "@/components/goAgileMode";
@@ -200,6 +201,7 @@ export default {
         	count: ["技术模块1", "技术模块2", "技术模块3"],
         	count2: ["业务模块1", "业务模块2", "业务模块3"],
         	formValidate: {
+                id:"",
                 prj_type:"",
         		prj_id:"",
                 prj_name:"",
@@ -234,6 +236,10 @@ export default {
                 itm_lob:"",
                 itm_wthr_snd_ntc:"",
                 itm_id_sn:"",
+
+
+                subject_sn:"",
+                itm_url:"",
                 // allgroup:"",
                 // managerGroup:"",
                 // developerGroup:"",
@@ -246,6 +252,8 @@ export default {
             identity:"",
             myPermission:"",
 
+            //文件列表
+            /*
             tableDAtaTatol:0,
             tableDAtaPageLine:5,
             tableDAtaPageCurrent:1,
@@ -311,6 +319,27 @@ export default {
                                 }
                             }, '删除'),
                             
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginLeft: '5px',
+                                    visibility:((R)=>{
+                                        if(R && R.file_path && Common.IsOffice(R.file_path)){
+                                            return "visible"
+                                        }else{
+                                            return "hidden"
+                                        }
+                                    })(params.row)
+                                },
+                                on: {
+                                    click: () => {
+                                        Common.OnlineView(params.row,fileView)
+                                    }
+                                }
+                            }, '在线预览'),
                             
                             
                         ]);
@@ -323,6 +352,7 @@ export default {
             modal_loading: false,
             delIndex:false,
             delPath_file:"",
+            */
 
             //跳转组件
             GO:false,
@@ -339,6 +369,7 @@ export default {
         InfoTable,
         Member,
         PrjScheme,
+        FileDownLoad,
     },
     beforecreated(){
         //console.log("项目详情页--beforecreated-------");
@@ -357,8 +388,10 @@ export default {
                 let params = {
                     prjSn:Common.GETprjid(this,Common),
                     prj_id:Common.GETprjid(this,Common),
+                    username:userName,
                 }
                 this.getPermissionFn(getPermission,params).then((RESULT)=>{
+                	window.getPermission = RESULT;
 
                     setTimeout(()=>{
                         EVENT.emit("SIDER1",RESULT);
@@ -368,27 +401,41 @@ export default {
                         if(!result){
                             result = response[0];
                         }
-                        this.tableDataAjaxFn(projectDetail,result).then((res)=>{
-                            let queryObj = {id:result,prj_id:res};
-                            let _menuType = this.$router.history.current.query.menuType;
-                            let _curOpenName = this.$router.history.current.query.curOpenName;
-                            let _TabsCur = this.$router.history.current.query.TabsCur;
-                            if(_menuType){
-                                queryObj.menuType = _menuType;
-                            }
-                            if(_curOpenName){
-                                queryObj.curOpenName = _curOpenName;
-                            }
-                            if(_TabsCur){
-                                queryObj.TabsCur = _TabsCur;
-                            }
+                        let queryObj = {id:result};
+                        let _menuType = this.$router.history.current.query.menuType;
+                        let _curOpenName = this.$router.history.current.query.curOpenName;
+                        let _TabsCur = this.$router.history.current.query.TabsCur;
 
+                        if(_menuType){
+                            queryObj.menuType = _menuType;
+                        }
+                        if(_curOpenName){
+                            queryObj.curOpenName = _curOpenName;
+                        }
+                        if(_TabsCur){
+                            queryObj.TabsCur = _TabsCur;
+                        }
+
+                        if(params.prjSn){
+                            queryObj.prj_id = params.prjSn || params.prj_id;
                             this.$router.push({path: '/agile/detail', query: queryObj});
                             this.reload();
-                            //this.isSelectMenuInit = false;
-                        },()=>{
 
-                        })
+                        }else{
+
+                        	this.tableDataAjaxFn(projectDetail,result).then((res)=>{
+	                            //queryObj = {id:result,prj_id:res};
+	                            queryObj.prj_id = res;
+	                            this.$router.push({path: '/agile/detail', query: queryObj});
+	                            this.reload();
+	                            //this.isSelectMenuInit = false;
+	                        },()=>{
+
+	                        })
+
+                        }
+                        
+                        
                     },(error)=>{
                         this.GOText = "获取项目失败！";
                         this.GO = true;
@@ -438,9 +485,14 @@ export default {
     		Common.setStorageAndCookie(Common,"id",myID);
             Common.setStorageAndCookie(Common,"prjId",myID);
 
+            if(window.getDetail){
+            	window.getDetail = false;
+            	return
+            }
+            window.getDetail = false;
     		this.tableDataAjaxFn(projectDetail,myID).then((prj_id)=>{
-                this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,myID,prj_id)
-                this.tableDAtaPageCurrent = 1;
+                //this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,myID,prj_id)
+                //this.tableDAtaPageCurrent = 1;
             },(error)=>{
                 console.log(error);
                 this.showError(error);
@@ -515,19 +567,7 @@ export default {
                 return Promise.reject(error);
             });
         },
-        getSendData(data){
-            console.log(data,"<==========getSendData");
-            let params = {
-                prjSn:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
-                prj_id:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
-                prjId:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
-                id:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
-            }
-            this.getPermissionFn(getPermission,params).then((res)=>{
-            },()=>{
-                this.showError(getPermission+"获得权限失败");
-            });
-        },
+        
         //下载文件 start
         listFileDown(params){
             let URL = downFile + params.row.url;
@@ -538,6 +578,7 @@ export default {
             }
             return Common.DownFile(defaultAXIOS,this,URL,param,fileName)
         },
+        /*
         //下载文件 end
         del () {
             this.modal_loading = true;
@@ -656,6 +697,7 @@ export default {
             this.delIndex = i;
             this.delPath_file = path;
         },
+        */
         authIs(KEY){
             return Common.auth(this,KEY)
         },
@@ -685,14 +727,45 @@ export default {
             }
             this.$router.push({path: '/agile/edit', query:Query })
         },
+        getSendData(data){
+            //console.log(data,"<==========getSendData");
+            let params = {
+                prjSn:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
+                prj_id:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",
+                prjId:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
+                id:(data && data.prjId) || (data && data.id) || Common.GETprjid(this,Common) || "",
+            }
+            if(window.getPermission){
+            	let myData = window.getPermission;
+            	let Per = myData.prj_permission ? myData.prj_permission : myData.permission;
+            	if(Per && Array.isArray(Per) && Per.length){
+					this.prj_permission = Per;
+					this.identity = myData.identity
+				}
+            	window.getPermission = false;
+            	return
+            }
+            window.getPermission = false;
+            this.getPermissionFn(getPermission,params).then((res)=>{
+            	
+            },()=>{
+                this.showError(getPermission+"获得权限失败");
+            });
+            
+        },
         selectMenuFn(N){
             Common.setStorageAndCookie(Common,"id",N);
             for(let I in this.formValidate){
                 this.formValidate[I] = "";
             }
             this.tableDataAjaxFn(projectDetail,N).then((prj_id)=>{
-                this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,N,prj_id)
-                this.tableDAtaPageCurrent = 1;
+            	if(this.$refs.fileDownLoad){
+            		this.$refs.fileDownLoad.init(N,prj_id);	
+            	}
+                
+                //this.$refs.PrjScheme.projectDetail(this.formValidate.subject_sn);
+                //this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,N,prj_id)
+                //this.tableDAtaPageCurrent = 1;
             },(error)=>{
                 console.log(error);
                 this.showError(error);
@@ -776,7 +849,7 @@ export default {
                     
                     this.$router.push({path: '/agile/detail', query:queryObj });
 
-                    this.actionUrl = fileUpload+"?taskId="+this.formValidate.prj_id+"&type=1&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
+                    //this.actionUrl = fileUpload+"?taskId="+this.formValidate.prj_id+"&type=1&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
 
                     return Promise.resolve(this.formValidate.prj_id)
 

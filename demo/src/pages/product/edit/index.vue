@@ -299,7 +299,7 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 import GoAgileMode from "@/components/goAgileMode";
-const {storyEdit,storyGetSprint,storyGetReq,modifyCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,userstoryGetReturnbfunc,storyGetDetail,projectListDataNew,getPermission} = Common.restUrl;
+const {storyAdd,storyEdit,storyGetSprint,storyGetReq,modifyCondition,publishUser,userstoryAddGroup,userstoryGetDetail,userstoryGetBfunc_type,userstoryGetLogic_sys_no,userstoryGetReturnbfunc,storyGetDetail,projectListDataNew,getPermission} = Common.restUrl;
 
 const validateNumber = (rule, value, callback) => {
     if (!value) {
@@ -526,6 +526,42 @@ export default {
                 let any = this.req_idList.findIndex(item => this.formValidate.req_id == item.value+"");
                 if(any == -1){
                     this.formValidate.req_id = "";
+                }
+                if(!this.$route.query.Copy){
+                    return
+                }
+                if(Array.isArray(this.userstory_statusList) && this.userstory_statusList.length){
+                    this.formValidate.userstory_status = this.userstory_statusList[0].value
+                }
+                if(Array.isArray(this.req_idList) && this.req_idList.length){
+
+                    let isOver = this.req_idList.find((item)=>{
+                        return item.value == this.formValidate.req_id;
+                    })
+                    if(isOver && isOver.req_status == "8"){
+                        this.formValidate.req_id = "";
+                    }
+                    if(this.req_idList[0].req_status || this.req_idList[0].req_status_name){
+                        Common.DelArrN(this.req_idList,"8","req_status");
+                        if(!this.req_idList.length){
+                            Common.CommonWarning(this,"都是已完成的需求，没有可选需求！");
+                        }     
+                    }
+
+                    /*
+                    if(isOver && isOver.label.indexOf("@需求完成") != -1){
+                        this.formValidate.req_id = "";
+                    }
+
+                    let isOvers = this.req_idList.filter((item)=>{
+                        return item.label.indexOf("@需求完成") != -1;
+                    })
+
+                    isOvers.forEach((item)=>{
+                        Common.DelArrN(this.req_idList,item.value,"value")    
+                    })
+                    */
+
                 }
 
             },()=>{
@@ -767,6 +803,12 @@ export default {
                     this.formValidate[i] = (DATA[i] || "")+"";
                 }
             }
+
+            let _Copy = this.$route.query.Copy;
+            if(_Copy){
+                this.formValidate.userstory_name = _Copy+this.formValidate.userstory_name;
+            }
+
         },
         showError(ERR){
             Common.ErrorShow(ERR,this);
@@ -802,6 +844,8 @@ export default {
             let _sprint = Common.replaceNullFn(this.formValidate.sprint);
             let _charger = Common.replaceNullFn(this.formValidate.nick_name);
             let _nick_name = Common.replaceNullFn(this.formValidate.charger);
+            let _prj_id = this.$route.query.Copy?Common.GETprjid(this,Common):this.formValidate.prj_id;
+            let _id = this.$route.query.Copy?Common.GETID(this,Common):this.formValidate.id;
 
             let _assist_list = ((arr)=>{
                 let _arr = [];
@@ -831,8 +875,8 @@ export default {
                 manHours:this.formValidate.manhour,
                 mission:this.formValidate.mission + " | 0",
                 icon: "/assets/images/user_02.png",
-                id:this.formValidate.id,
-                prj_id:this.formValidate.prj_id,
+                id:_id,
+                prj_id:_prj_id,
                 prod_id:this.formValidate.prod_id,
                 product_name:this.formValidate.product_name,
                 prj_name:this.formValidate.prj_name,
@@ -850,8 +894,8 @@ export default {
                 assist_list:_assist_list,
             
             }
-            defaultAXIOS(storyEdit,tempData,{timeout:20000,method:'post'}).then((response) => {
-                //alert(JSON.stringify(response))
+            let URL = this.$route.query.Copy?storyAdd:storyEdit;
+            defaultAXIOS(URL,tempData,{timeout:20000,method:'post'}).then((response) => {
                 let myData = response.data;
                 //console.log("<======product add***response+++",response,myData,"======>");
                 if(myData.status == "success"){

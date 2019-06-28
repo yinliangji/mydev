@@ -37,7 +37,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const { fileDownList,fileUpload,downFile,fileDelete} = Common.restUrl;
+const { fileDownList,fileUpload,downFile,fileDelete,fileView} = Common.restUrl;
 import Delpop from '@/components/delectAlert'
 export default {
     props: {
@@ -142,7 +142,27 @@ export default {
                                 }
                             }, '删除'),
                             
-                            
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginLeft: '5px',
+                                    visibility:((R)=>{
+                                        if(R && R.file_path && Common.IsOffice(R.file_path)){
+                                            return "visible"
+                                        }else{
+                                            return "hidden"
+                                        }
+                                    })(params.row)
+                                },
+                                on: {
+                                    click: () => {
+                                        Common.OnlineView(params.row,fileView)
+                                    }
+                                }
+                            }, '在线预览'),
                             
                         ]);
                     }

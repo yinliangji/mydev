@@ -271,7 +271,7 @@
 			</div>
 		</Card>
 		
-		<AddPop 
+		<!-- <AddPop 
 			:isShow="isShowAddPop" 
 			:isAdd="isAdd" 
 			:addLoading="true" 
@@ -286,6 +286,22 @@
 			:CurrentReqId="currentReqId" 
 
 			ref="AddPopDom"
+		/> -->
+		<AddPop 
+			:isShow="isShowAddPop" 
+			:isAdd="isAdd" 
+			:addLoading="true" 
+			@popClose="popCloseFn"  
+			@tableDataAdd="tableDataAddFn"
+			:UserstorytypeList="_userstory_typeList"
+			:UserstorystatusList="_userstory_statusList"
+			:ProiList="_proiList"
+			:ChargerList="_chargerList"
+			:ReqidList="_req_idList"
+			:SprintList="_sprintList"
+			:CurrentReqId="_currentReqId" 
+			ref="AddPopDom"
+			id="AddPopDom"
 		/>
 		
 		<Modal v-model="cardpop" width="500" @on-cancel="cardpopClose">
@@ -410,7 +426,7 @@ export default {
 	        	{
                     title: '编号',
                     key: 'userstory_id',
-                    width: 110,
+                    width: 90,
                     align: 'center'
                 },
 
@@ -520,7 +536,7 @@ export default {
                 {
                     title: '优先级',
                     key: 'proi',
-                    width: 80,
+                    width: 75,
                     align: 'center',
                     render: (h, params) => {
                         return h(
@@ -549,12 +565,12 @@ export default {
                     key: 'task',
                     type: 'html',
                     align: 'center',
-                    width: 120,
+                    width: 105,
                     renderHeader: (h, params) => {
 				        return h('div', {}, [
 				            h('span', {}, '工作项个数'),
 				            h('br'),
-				            h('span', {}, '(已完成 | 全部)')
+				            h('span', {}, '(完成 | 全部)')
 				        ]);
 				    }
                 },
@@ -576,7 +592,7 @@ export default {
                 {
                     title: '操作',
                     key: 'action',
-                    width: 290,
+                    width: 320,
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
@@ -615,6 +631,23 @@ export default {
                             }, '编辑'),
                             h('Button', {
                                 props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                //domProps:{disabled:this.authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])},
+                                domProps:{disabled:this.iSauth(params.row.editStatus)},
+                                on: {
+                                    click: () => {
+                                        //this.show(params.index)
+                                        this.editItem(params.index,"Copy")
+                                    }
+                                }
+                            }, '复制'),
+                            h('Button', {
+                                props: {
                                     type: 'success',
                                     size: 'small'
                                 },
@@ -627,7 +660,7 @@ export default {
                                         this.goAddDevelopmentFn(params.index)
                                     }
                                 }
-                            }, '添加工作项'),
+                            }, '加工作项'),
                             h('Button', {
                                 props: {
                                     type: 'info',
@@ -643,7 +676,8 @@ export default {
                             }, '工作项看板')
                         ]);
                     }
-                }
+                },
+
             ],
 	        tableData: [],
             tableDataCur:"",
@@ -700,6 +734,29 @@ export default {
 
 	},
 	computed: {
+		//快速添加用户故事开始
+		_userstory_typeList(){
+			return this.userstory_typeList
+		},
+		_userstory_statusList(){
+			return this.userstory_statusList
+		},
+		_proiList(){
+			return this.proiList
+		},
+		_chargerList(){
+			return this.chargerList
+		},
+		_req_idList(){
+			return this.req_idList
+		},
+		_sprintList(){
+			return this.sprintList
+		},
+		_currentReqId(){
+			return this.currentReqId
+		},
+		//快速添加用户故事结束
 		//看板开始
 		cardLists(){
 			this.cardListBase.forEach((item)=>{item.source = "userstory"})
@@ -1370,6 +1427,8 @@ export default {
 	                				text:_temp.label,
 	                				groupId:val+"",
 	                				reqID:_temp.reqID || "",
+	                				req_status:_temp.req_status || "",
+	                				req_status_name:_temp.req_status_name || "",
 	                			}
 	                		}else{
 	                			return false;
@@ -1758,9 +1817,15 @@ export default {
 			this.isShowAddPop = true;
    			this.isAdd = true;
 		},
-		editItem(I){
+		editItem(I,val){
 			Common.GoUserstorySession(Common,this);
-			this.$router.push({path: '/product/edit', query: {DATA: JSON.stringify(this.tableData[I])}})
+			let Query = {
+				DATA: JSON.stringify(this.tableData[I])
+			}
+			if(val == "Copy"){
+				Query.Copy = "复制-"
+			}
+			this.$router.push({path: '/product/edit', query:Query })
             return;
 			//
 			// this.isShowAddPop = true;

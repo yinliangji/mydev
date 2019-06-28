@@ -213,7 +213,7 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             "pid": "2",
             "prod_name|5-8": /[a-zA-Z]/,
 
-            "subject|1-3": 0,
+            "subject|1": [2,"SU-0000"],
             "subject_name": "@ctitle",
             "dept_nm_id": "@ctitle",
             "stff_nm_id": "@ctitle",
@@ -231,6 +231,7 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             "itm_lob":"@ctitle",
             "itm_wthr_snd_ntc":"@ctitle",
             "itm_id_sn|5-10":/[a-zA-Z0-9]/,
+            "itm_url|1":["","http://www.baidu.com"],
 
             AddGroupList: [
                 {
@@ -2972,10 +2973,37 @@ let Condition = (val1 = 200, val2 = 1, val3 = 3) => {
                 // {"value":"黄永华","key":5,},
                 // {"value":"赖磊","key":6,},
                 // {"value":"殷良骥","key":7,},
-                {"value":"req_id_齐慧超(qihuichao)","key":4,"reqID":"RQ-PJ@title",},
-                {"value":"req_id_黄永华(huangyonghua)","key":5,"reqID":"RQ-PJ@title",},
-                {"value":"req_id_赖磊(lailei)@需求完成","key":6,"reqID":"RQ-PJ@title",},
-                {"value":"req_id_殷良骥(yinliangji)","key":7,"reqID":"RQ-PJ@title",},
+                 
+                {
+                    "value":"req_id_齐慧超(qihuichao)@需求完成",
+                    "key":4,
+                    "reqID":"RQ-PJ@title",
+                    "req_status_name":"需求完成",
+                    "req_status":8,
+                },
+                {
+                    "value":"req_id_黄永华(huangyonghua)",
+                    "key":5,
+                    "reqID":"RQ-PJ@title",
+                    "req_status_name":"已选中",
+                    "req_status":3,
+                },
+                {
+                    "value":"req_id_赖磊(lailei)@需求完成",
+                    "key":6,
+                    "reqID":"RQ-PJ@title",
+                    "req_status_name":"需求完成",
+                    "req_status":8,
+
+                },
+                {
+                    "value":"req_id_殷良骥(yinliangji)",
+                    "key":7,
+                    "reqID":"RQ-PJ@title",
+                    "req_status_name":"上线投产",
+                    "req_status":7,
+                },
+                
             ],
             charger:[
                 // {"value":"奇慧超","key":4,},
@@ -3679,9 +3707,9 @@ let filedown = (val1 = 200, val2 = 1, val3 = 3) => {
             creater:"@cname",
             "fileId|+1":280,
             "fileName|5-10":/[a-zA-Z0-9]/,
-            file_path:"files/xxxxx/xxx.jpg",
+            "file_path|1":["files/xxxxx/xxx.jpg","files/xxxxx/xxx.doc"],
             filesize:"162M",
-            url:"/uploads/files/xxx.jpg",
+            url:"/uploads/files/xxx.txt",
             
         }],
         "total|10-20": 1,
@@ -5047,6 +5075,10 @@ let projectCondition = (val1 = 200, val2 = 1, val3 = 3) => {
             {
                 "num":3,
                 "name":"类型3",
+            },
+            {
+                "num":"SU-0000",
+                "name":"SU-0000",
             },
         ],
 

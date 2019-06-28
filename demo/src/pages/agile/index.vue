@@ -1007,7 +1007,7 @@ export default {
             
             Common.setStorageAndCookie(Common,"prod_id",this.tableData[I].prod_id);
 
-            let Query = {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id,menuType:"new"}
+            let Query = {id: this.tableData[I].id,prj_id:this.tableData[I].prj_id}
 
 
 

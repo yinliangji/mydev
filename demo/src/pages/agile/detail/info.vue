@@ -101,8 +101,15 @@
           <td >
             {{formValidate.itm_tech_target | FALSEINFO}}
           </td>
-          <th>itm编号</th>
-          <td>{{formValidate.itm_id_sn | FALSEINFO}}</td>
+          <th>ITM编号</th>
+          <td>
+            <a target="_blank" :href="formValidate.itm_url" v-if="formValidate.itm_url">
+              {{formValidate.itm_id_sn | FALSEINFO}}
+            </a>
+            <span v-else>
+              {{formValidate.itm_id_sn | FALSEINFO}}
+            </span>
+          </td>
           </tr>
 
 
@@ -163,6 +170,7 @@ export default {
                 itm_lob:"",
                 itm_wthr_snd_ntc:"",
                 itm_id_sn:"",
+                itm_url:"",
                 // allgroup:"",
                 // managerGroup:"",
                 // developerGroup:"",
@@ -212,14 +220,14 @@ export default {
       },
     },
     created() {
-      console.log("项目detail--详情--created-------",this.formValidate)
+      //console.log("项目detail--详情--created-------",this.formValidate)
     },
     beforeUpdate(){
-      console.log("项目detail--详情--beforeUpdate-------",this.formValidate)
+      //console.log("项目detail--详情--beforeUpdate-------",this.formValidate)
         
     },
     updated(){
-      console.log("项目detail--详情--updated-------",this.formValidate)
+      //console.log("项目detail--详情--updated-------",this.formValidate)
     },
     mounted(){
       this.formValidate = this.Data;

@@ -39,6 +39,17 @@
                     >
                     工作项看板
                 </Button>
+                <Button 
+                    type="primary" 
+                    @click="editItemFn('Copy')"
+                    :disabled="iSauth(formValidate.editStatus)"
+                    class="editBtn3"
+                    long
+                    size="small"
+                    v-show="(TabsCur == 'name1') ? true : false"
+                    >
+                    复制
+                </Button>
             </div>
             <Tabs :value="TabsCur" type="card" :capture-focus="false" @on-click="tabsHandle" >
                 <TabPane label="基本信息" name="name1">
@@ -367,11 +378,15 @@ export default {
         getPermissionFn(URL,params){
             return Common.GetPermission(defaultAXIOS,this,URL,params);
         },
-        editItemFn(){
+        editItemFn(V,val){
             let _query = {
                 fromEdit:true,
                 DATA: JSON.stringify(this.GetDetail)
             }
+            if(V == "Copy" || val == "Copy"){
+                _query.Copy = "复制-"
+            }
+
             if(this.TabsCur == 'name1'){
                 this.$router.push({path: '/product/edit', query:_query})
             }else if(this.TabsCur == 'name2'){
@@ -482,6 +497,13 @@ h4{
     top:6px;
     z-index: 10;
     width: 82px;
+}
+.editBtn3{
+    position:absolute;
+    right:170px;
+    top:6px;
+    z-index: 10;
+    width: 62px;
 }
 
 .ivu-tabs {

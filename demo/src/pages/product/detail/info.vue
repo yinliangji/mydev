@@ -33,7 +33,7 @@
           <td>{{ formValidate.userstory_id | FALSEINFO}}</td>
           <th>关联工作项<br />(已完成/全部)</th>
           <td>{{ formValidate.complete_mission | FALSEINFO}} / {{ formValidate.mission | FALSEINFO}}</td>
-          <th width="11%">所属需求</th>
+          <th width="11%">所属需求项</th>
           <td>{{ formValidate.req_name | FALSEINFO}}</td>
         </tr>
         <tr>

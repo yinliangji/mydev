@@ -62,10 +62,10 @@ export default {
     },
 
     beforeUpdate(){
-        console.log("beforeUpdate---添加角色弹出框----",this.formPartValidate,this.partAdd)
+        //console.log("beforeUpdate---添加角色弹出框----",this.formPartValidate,this.partAdd)
     },
     updated(){
-        console.log("updated----添加角色弹出框---",this.formPartValidate,this.partAdd)
+        //console.log("updated----添加角色弹出框---",this.formPartValidate,this.partAdd)
     },
     data () {
         const validatePart = (rule, value, callback) => {

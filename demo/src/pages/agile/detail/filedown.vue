@@ -10,7 +10,7 @@
             :show-upload-list="false"
             class="UploadBtn"
             >
-            <Button type="ghost" icon="ios-cloud-upload-outline">文件上传</Button>
+            <Button  icon="ios-cloud-upload-outline">文件上传</Button>
         </Upload>
         <Table border :columns="columns" :data="tableData"  />
         <div class="pageBox" v-if="false">

@@ -64,12 +64,18 @@
                         <Row>
                             <Col span="12">
                                 <FormItem label="提出部门" prop="propose_depart">
-                                    <Input v-model="formValidate.propose_depart" placeholder="请填写提出部门"></Input>
+                                    <!-- <Input v-model="formValidate.propose_depart" placeholder="请填写提出部门"></Input> -->
+                                    <Select multiple clearable filterable v-model="formValidate.propose_depart" placeholder="请选提出部门">
+                                        <Option v-for="item in deptList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select> 
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem label="实施部门" prop="aply_id">
-                                    <Input v-model="formValidate.aply_id" placeholder="请填写实施部门"></Input>
+                                    <!-- <Input v-model="formValidate.aply_id" placeholder="请填写实施部门"></Input> -->
+                                    <Select multiple clearable filterable v-model="formValidate.aply_id" placeholder="请选提出部门">
+                                        <Option v-for="item in aplyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select>
                                 </FormItem> 
                             </Col>
                         </Row>
@@ -320,7 +326,7 @@
     				        <span v-if="!modal_add_loading">提交</span>
     				        <span v-else>Loading...</span>
     				    </Button>
-                        <Button type="ghost" style="margin-left: 8px" @click="cancel">返回</Button>
+                        <Button  style="margin-left: 8px" @click="cancel">返回</Button>
                     </FormItem>
                     
                 </Form>
@@ -365,8 +371,9 @@ import Common from '@/Common';
 const {projectAdd,projectAll,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,projectGetProd,projectAddGroup,addTeam,listModule,publishUser,logicSystem,phySystem,projectAddCustomizedGroup,projectCondition,getPermission} = Common.restUrl;
 import Store from '@/vuex/store'
 import AddPartPop from '@/pages/agile/add/addpartpop';
-
 import GoAgileMode from "@/components/goAgileMode";
+
+import OrgFn from "@/pages/agile/orgFn";
 
 const validateDate = (rule, value, callback) => {
     if (!value || !value[0] || !value[1]) {
@@ -460,8 +467,8 @@ export default {
 
                 subject:"",
                 itm_status:"",
-                aply_id:"",
-                propose_depart:"",
+                aply_id:[],
+                propose_depart:[],
 
                 
 
@@ -496,16 +503,18 @@ export default {
             ],
             subjectList:[
             ],
+            deptList:[
+            ],
+            aplyList:[
+            ],
 
             ruleValidate: {
                 aply_id: [
-                    { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                    { required:false, type:"array", message: '请填写内容，不能为空！', trigger: 'change' }
                 ],
                 propose_depart: [
-                    { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                    { required:false, type:"array", message: '请填写内容，不能为空！', trigger: 'change' }
                 ],
-
-
                 subject: [
                     { required: false,type: 'string',  message: 'Please select gender', trigger: 'change' }
                 ],
@@ -993,8 +1002,8 @@ export default {
             this.formValidate.subject = "";
             this.formValidate.itm_status = "";
 
-            this.formValidate.propose_depart = "";
-            this.formValidate.aply_id = "";
+            this.formValidate.propose_depart = [];
+            this.formValidate.aply_id = [];
 
            
 
@@ -1021,7 +1030,7 @@ export default {
             
         },
         submitAddData(){
-           
+
             let _join = "|";
             
 
@@ -1046,11 +1055,10 @@ export default {
 
             let _username = Common.getStorageAndCookie(this,Common,"username");
 
+            let _propose_depart = OrgFn.Multiple(this.formValidate.propose_depart,this.aplyList);
+            let _aply_id = OrgFn.Multiple(this.formValidate.aply_id,this.aplyList);
 
             //let _proj_role = JSON.stringify(Common.objInArr(this.formValidate.AddGroupList));
-
-
-
 
             let tempData = {
                 prj_type:this.formValidate.prj_type,
@@ -1062,8 +1070,8 @@ export default {
                 username:_username,
                 subject:this.formValidate.subject,
                 itm_status:this.formValidate.itm_status,
-                propose_depart:this.formValidate.propose_depart,
-                aply_id:this.formValidate.aply_id,
+                propose_depart:_propose_depart,
+                aply_id:_aply_id,
                 
                 /*
                 prod_id:this.formValidate.prod_id,

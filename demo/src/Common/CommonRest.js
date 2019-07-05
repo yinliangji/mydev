@@ -20,6 +20,9 @@ CommonRest.restUrl = {
     "projectDetail": process.env.BASE_URL + "/project/detail/",
     /**** 敏捷项目详情获取 get****/
 
+    "projectOtherDetail": process.env.BASE_URL + "/project/getOtherDetail/",
+    /**** 敏捷项目其他信息详情获取 get****/
+
     "proByUser": process.env.BASE_URL + "/project/proByUser/",
     /**** 敏捷项目详情获取主键ID数组 get****/
 
@@ -226,6 +229,9 @@ CommonRest.restUrl = {
     "userstoryOutWord": process.env.BASE_URL + "/exportExcelFile/usBfuncExp/",
     /**** 用户故事导出word get****/
 
+    "importUs": process.env.BASE_URL + "/agile/import_us/",
+    /**** 用户故事批量导入 post****/
+
 
 
 
@@ -287,6 +293,9 @@ CommonRest.restUrl = {
 
     "reqOutExcel": process.env.BASE_URL + "/agile/req/export/",
     /**** 需求项导出excel get****/
+
+    "importReq": process.env.BASE_URL + "/agile/import_req/",
+    /**** 需求项批量导入 post****/
 
     /*****************************************/
 

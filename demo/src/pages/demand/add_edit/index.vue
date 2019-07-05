@@ -116,7 +116,7 @@
         				        <span v-if="!modal_add_loading">提交</span>
         				        <span v-else>Loading...</span>
         				    </Button>
-                            <Button type="ghost" style="margin-left: 8px" @click="cancel">返回</Button>
+                            <Button  style="margin-left: 8px" @click="cancel">返回</Button>
                         </FormItem>
                     </div>
 		        </Form>

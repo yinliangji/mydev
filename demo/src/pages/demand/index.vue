@@ -55,6 +55,14 @@
                     <div class="tableBtnBox">
                         <div style="" class="tagBar">
                             <div  class="tagBarRight">
+                                <UpdataBtn 
+                                    style="display:inline-block" 
+                                    class="addBtnBox"
+                                    :Data="ImportReq"
+                                    @sendImport="getSendImport"
+                                    >
+                                    批量导入需求项
+                                </UpdataBtn>
                                 <Button 
                                     class="addBtnBox"
                                     icon="ios-download-outline"
@@ -216,13 +224,14 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAll,getPermission,projectDetail,reqDelect,reqSetChange,getRequirementKanBan,getRequirementStatList,reqOutExcel} = Common.restUrl;
+const {reqAll,getPermission,projectDetail,reqDelect,reqSetChange,getRequirementKanBan,getRequirementStatList,reqOutExcel,importReq} = Common.restUrl;
 
 import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 import Addtablepop from "./addtablepop";
 import ITMpop from "./itmpop2";
 import kanbanboard from "@/components/kanbanboard";
 import { EventBus } from "@/tools";
+import UpdataBtn from "@/pages/product/updataBtn";
 export default {
     name: 'demand',
     data () {
@@ -358,10 +367,12 @@ export default {
                                 },
                                 style: {
                                     marginRight: '4px',
-                                    display:(()=>{
+                                    visibility:(()=>{
                                     	if(params.row.prj_type == "1"){
-                                    		return "none"
-                                    	}
+                                    		return "hidden"
+                                    	}else{
+                                            return "visible"
+                                        }
                                     })()
                                 },
                                 domProps:{disabled:this.authIs(["icdp_prjrequirement_mng","icdp_prjrequirement_view"])},
@@ -378,10 +389,12 @@ export default {
                                 },
                                 style: {
                                     marginRight: '4px',
-                                    display:(()=>{
+                                    visibility:(()=>{
                                     	if(params.row.prj_type == "1"){
-                                    		return "none"
-                                    	}
+                                    		return "hidden"
+                                    	}else{
+                                            return "visible"
+                                        }
                                     })()
                                 },
                                 domProps:{disabled:this.authIs(["icdp_prjrequirement_mng","icdp_prjrequirement_view"])},
@@ -437,6 +450,7 @@ export default {
             //看板end
             clickTime:true,
             prj_type:"",
+            ImportReq:importReq,
 
 
 
@@ -485,6 +499,9 @@ export default {
         //console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
+        getSendImport(data){
+            this.getInfoFn(this.getID());
+        },
         optputExecl(){
             let params = {
                 id:this.getID(),
@@ -1291,6 +1308,7 @@ export default {
         Addtablepop,
         ITMpop,
         kanbanboard,
+        UpdataBtn,
     },
     computed: {
         cardLists(){

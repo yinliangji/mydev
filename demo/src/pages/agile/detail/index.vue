@@ -52,7 +52,7 @@
 		        	<div class="baseInfoBox">
 		            	<!-- <h3 class="Title"><span>项目基本信息</span></h3> -->
 		            	<div class="tableBox">
-		            		<InfoTable :Data="formValidate" />
+		            		<InfoTable :Data="formValidate" @getParentOtherIfo="getParentOtherIfo" :closeIfoMore="closeIfoMore" />
 		            	</div>
 		            </div>
 		        </TabPane>
@@ -99,13 +99,13 @@
                         </div>
                     </div>
                 </TabPane>
-                <!-- <TabPane label="项目方案" name="name4">
+                <TabPane label="项目方案" name="name4" v-if="formValidate.subject_sn == 'SU-0010'">
                     <div class="baseInfoBox">
                         <div class="tableBox">
-                            <PrjScheme :Data="formValidate" ref="PrjScheme" v-if="TabsCur == 'name4' && formValidate.subject_sn" />
+                            <PrjScheme :Data="formValidate"  v-if="TabsCur == 'name4' && formValidate.subject_sn" ref="PrjScheme" />
                         </div>
                     </div>
-                </TabPane> -->
+                </TabPane>
 		        
 		    </Tabs>
 
@@ -175,7 +175,7 @@ import Store from '@/vuex/store'
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectDetail,listModule,getPermission,projectOutputWord,projectOutputExecl,proByUser} = Common.restUrl;
+const {projectDetail,listModule,getPermission,projectOutputWord,projectOutputExecl,proByUser,projectOtherDetail} = Common.restUrl;
 //fileDownList,downFile,fileUpload,fileDelete,fileView
 import InfoTable from './info'
 import Member from './member'
@@ -361,6 +361,8 @@ export default {
             TabsCur:"name1",
             //-- tabs end
             isShowEdit:false,
+            //切换项目时隐藏项目的其他信息表格
+            closeIfoMore:"",
         }
     },
     inject:["reload"],
@@ -527,6 +529,28 @@ export default {
     },
     
     methods: {
+        getParentOtherIfo(){
+            let myID = Common.GETID(this,Common);
+            
+            return defaultAXIOS(projectOtherDetail,{prjId:myID},{timeout:20000,method:'get'}).then((response) => {
+                let myData = response.data;
+                //console.log("<======主键列表***response+++",response,myData.data.list,"+++agile***response======>");
+                if(myData.data){
+                    for(let I in myData.data){
+                        this.formValidate[I] = myData.data[I] || "";
+                    }
+                    return Promise.resolve(myData.data);    
+                }else{
+                    console.log(myData);
+                    this.showError(myData);
+                    return Promise.reject(myData);
+                }
+            }).catch( (error) => {
+                console.log(error);
+                this.showError(error);
+                return Promise.reject(error);
+            });
+        },
     	//tabs - start
         tabsHandle(name){
             this.TabsCur = name;
@@ -754,6 +778,9 @@ export default {
             
         },
         selectMenuFn(N){
+            //赋值为一个时间戳
+            this.closeIfoMore = (new Date()).getTime();
+
             Common.setStorageAndCookie(Common,"id",N);
             for(let I in this.formValidate){
                 this.formValidate[I] = "";
@@ -783,7 +810,7 @@ export default {
                 let _temp = false;
                 this.table=[];
                 this.HTML = "";
-
+                /*
                 if(myData.data && myData.data.id){
                 	for(var I in this.formValidate){
                         if(I == "logic_sys_id" || I == "logic_sys_name" || I == "physics_sys_id" || I == "physics_sys_name"){
@@ -798,6 +825,12 @@ export default {
                             this.formValidate[I] = myData.data[I]
                         }
                 	}
+                }
+                */
+                if(myData.data){
+                    for(var I in myData.data){
+                        this.formValidate[I] = myData.data[I] || "";
+                    }
                 }
 
                 if(myData.person && myData.person.length){

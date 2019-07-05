@@ -131,8 +131,8 @@
                         </Row>
 
                         <div class="formValidateMoreBtnBox" :class="isShowMoreShow ?'arrUp':'arrDown'" @click="isShowMoreShow = !isShowMoreShow">
-                            <Icon type="chevron-down" color="#fff" ></Icon>
-                            <Icon type="chevron-down" color="#fff" ></Icon>
+                            <Icon type="ios-arrow-down" color="#fff" ></Icon>
+                            <Icon type="ios-arrow-down" color="#fff" ></Icon>
                         </div>
                         
                     </FormItem>

@@ -25,9 +25,9 @@
         <tr>
           
           <th>提出部门</th>
-          <td>{{formValidate.propose_depart | FALSEINFO}}</td>
+          <td>{{separate2(formValidate.propose_depart)}}</td>
           <th>实施部门</th>
-          <td>{{formValidate.aply_id | FALSEINFO}}</td>
+          <td>{{separate2(formValidate.aply_id)}}</td>
           <th>项目状态</th>
           <td>{{formValidate.itm_status_name | FALSEINFO}}</td>
         </tr>
@@ -36,23 +36,22 @@
         <tr>
           <th>研发类型</th>
           <td>{{formValidate.subject_name | FALSEINFO}}</td>
-          
-          <th>逻辑子系统</th>
-          <td>{{formValidate.logic_sys_name | FALSEINFO}}</td>
-          <th>物理子系统</th>
-          <td>{{formValidate.physics_sys_name | FALSEINFO}}</td>
+          <th>创建人</th>
+          <td>{{formValidate.create_person | FALSEINFO}}</td>
+          <th>&nbsp;</th>
+          <td>&nbsp;</td>
           
         </tr>
 
-        <tr>
+        <!-- <tr>
           <th>创建人</th>
           <td>{{formValidate.create_person | FALSEINFO}}</td>
-          <th><!-- 逻辑子系统 --></th>
-          <td><!-- {{formValidate.logic_sys_name | FALSEINFO}} --></td>
-          <th><!-- 物理子系统 --></th>
-          <td><!-- {{formValidate.physics_sys_name | FALSEINFO}} --></td>
+          <th>逻辑子系统</th>
+          <td>{{formValidate.logic_sys_name | FALSEINFO}}</td>
+          <th>物理子系统</th>
+          <td>{{formValidate.physics_sys_name | FALSEINFO}}</td> 
           
-        </tr>
+        </tr> -->
 
         
         <!-- <tr>
@@ -70,52 +69,66 @@
         </tr>
         </tbody>
     </table>
-    <h3 class="Title" v-show="formValidate.prj_type == '1'"><span>其他基本信息</span></h3>
-    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable" v-show="formValidate.prj_type == '1'">
-        <tbody>
-        <tr>
-          <th width="12%">项目英文名称</th>
-          <td width="21%">{{ formValidate.itm_prj_eng_nm | FALSEINFO}}</td>
-          <th width="12%">项目英文简称</th>
-          <td width="21%">{{formValidate.itm_prj_eng_short_num | FALSEINFO}}</td>
-          <th width="12%">立项类型</th>
-          <td>{{transform(formValidate.itm_type) | FALSEINFO}}</td>
-          
-        </tr>
-        <tr>
-          <th>下达任务书时间</th>
-          <td>{{formValidate.itm_assignment_date | FALSEINFO}}</td>
-          <th>业务条线</th>
-          <td>{{formValidate.itm_lob | FALSEINFO}}</td>
-          <th>项目任务书编号</th>
-          <td>{{formValidate.itm_prj_tsk_id | FALSEINFO}}</td>
-        </tr>
-
-        <tr>
-          
-          <th>是否发送通知书</th>
-          <td>{{formValidate.itm_wthr_snd_ntc | FALSEINFO}}</td>        
-
-  
-          <th>技术目标</th>
-          <td >
-            {{formValidate.itm_tech_target | FALSEINFO}}
-          </td>
-          <th>ITM编号</th>
-          <td>
-            <a target="_blank" :href="formValidate.itm_url" v-if="formValidate.itm_url">
-              {{formValidate.itm_id_sn | FALSEINFO}}
-            </a>
-            <span v-else>
-              {{formValidate.itm_id_sn | FALSEINFO}}
-            </span>
-          </td>
+    <Button @click="getOtherIfo" class="otherIfoClass">
+      <span v-if="!otherIfoShow">
+        <Icon type="ios-arrow-down"></Icon>
+        <span>查看其他基本信息</span>
+      </span>
+      <span v-if="otherIfoShow">
+        <Icon type="ios-arrow-up"></Icon>
+        <span>隐藏其他基本信息</span>
+      </span>
+      
+    </Button>
+    <div v-if="otherIfoShow">
+      <h3 class="Title" v-show="formValidate.prj_type == '1'"><span>其他基本信息</span></h3>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="baseInfoTable" >
+          <tbody>
+            <tr>
+              <th width="12%">逻辑子系统</th>
+              <td width="21%">{{formValidate.logic_sys_name | FALSEINFO}}</td>
+              <th width="12%">物理子系统</th>
+              <td width="21%">{{formValidate.physics_sys_name | FALSEINFO}}</td>
+              <th width="12%">&nbsp;</th>
+              <td>&nbsp;</td>
+            </tr>
+            <tr v-show="formValidate.prj_type == '1'">
+              <th>ITM编号</th>
+              <td>
+                <a target="_blank" :href="formValidate.itm_url" v-if="formValidate.itm_url">
+                  {{formValidate.itm_id_sn | FALSEINFO}}
+                </a>
+                <span v-else>
+                  {{formValidate.itm_id_sn | FALSEINFO}}
+                </span>
+              </td>
+              <th>是否发送通知书</th>
+              <td>{{formValidate.itm_wthr_snd_ntc | FALSEINFO}}</td>        
+              <th>技术目标</th>
+              <td >
+                {{formValidate.itm_tech_target | FALSEINFO}}
+              </td>
+            </tr>
+          <tr v-show="formValidate.prj_type == '1'">
+            <th >项目英文名称</th>
+            <td >{{ formValidate.itm_prj_eng_nm | FALSEINFO}}</td>
+            <th >项目英文简称</th>
+            <td >{{formValidate.itm_prj_eng_short_num | FALSEINFO}}</td>
+            <th >立项类型</th>
+            <td>{{transform(formValidate.itm_type) | FALSEINFO}}</td>
+            
           </tr>
-
-
-       
+          <tr v-show="formValidate.prj_type == '1'">
+            <th>下达任务书时间</th>
+            <td>{{formValidate.itm_assignment_date | FALSEINFO}}</td>
+            <th>业务条线</th>
+            <td>{{formValidate.itm_lob | FALSEINFO}}</td>
+            <th>项目任务书编号</th>
+            <td>{{formValidate.itm_prj_tsk_id | FALSEINFO}}</td>
+          </tr>
         </tbody>
-    </table>
+      </table>
+    </div>
     
   </div>
 </template>
@@ -133,6 +146,7 @@ export default {
                 return false;
             }
         },
+        closeIfoMore:[String,Number],
     },
     data () {
         return {
@@ -181,6 +195,7 @@ export default {
             depdpopIsLoading:false,
             depdpopData:false,
             //业务弹出--end
+            otherIfoShow:false,
             
         }
     },
@@ -190,8 +205,33 @@ export default {
                 this.formValidate = this.Data;
             }
         },
+        closeIfoMore(){
+          this.otherIfoShow = false;
+        }
     },
     methods: {
+      separate2(val){
+        if(Array.isArray(val)){
+            let TXT = "";
+            let last = "、";
+            if(val.length){
+              val.forEach((item,index)=>{
+                if(index == val.length-1){last = ""}
+                TXT = TXT+item.org_name+last;
+              })
+            }
+            return TXT
+          }else{
+            return val.replace(/,/g,"、");
+             
+        }
+      },
+      getOtherIfo(){
+        this.otherIfoShow = !this.otherIfoShow;
+        if(this.otherIfoShow){
+          this.$emit("getParentOtherIfo");
+        }
+      },
       transform(val){
         if(val){
           if(val == "1"){
@@ -241,7 +281,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.otherIfoClass{
+  margin:20px 0 10px 0;
+}
 
 </style>
 

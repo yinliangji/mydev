@@ -988,6 +988,32 @@ export default class Common extends Utils {
                       obj = {}
                   })
               }
+              if(Array.isArray(myData.dept_list) && myData.dept_list.length && that.deptList){
+                  let obj = {};
+                  that.deptList = [];
+                  myData.dept_list.forEach((item)=>{
+                      obj.value = item.org_id+"";
+                      obj.label = item.org_name+"";
+                      obj.org_id = item.org_id || "";
+                      obj.org_name = item.org_name || "";
+                      obj.org_sn = item.org_sn || "";
+                      that.deptList.push(obj);
+                      obj = {}
+                  })
+              }
+              if(Array.isArray(myData.aply_list) && myData.aply_list.length && that.aplyList){
+                  let obj = {};
+                  that.aplyList = [];
+                  myData.aply_list.forEach((item)=>{
+                      obj.value = item.org_id+"";
+                      obj.label = item.org_name+"";
+                      obj.org_id = item.org_id || "";
+                      obj.org_name = item.org_name || "";
+                      obj.org_sn = item.org_sn || "";
+                      that.aplyList.push(obj);
+                      obj = {}
+                  })
+              }
               return Promise.resolve(myData)
           }else{
               console.log(URL+"_"+myData.status);

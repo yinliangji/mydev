@@ -32,7 +32,7 @@
           </span>
           
           <span class="iconBg" :class="'isFile'" v-if="item.isFile=='yes'" title="有附件" style="cursor:pointer" @click="itemClick(item,'附件')">
-            <Icon type="paperclip"></Icon>
+            <Icon type="ios-attach"></Icon>
           </span>
           <span class="iconBg" style="background:#00a6b6;cursor:pointer" title="测试案例个数"  @click="itemClick(item,'测试案例')" v-if="item.testCase != 0 || item.testCase != '0'">
             {{item.testCase}}
@@ -75,7 +75,7 @@
           </span>
 
           <span class="iconBg" :class="'isFile'"  v-if="item.isFile=='yes'" title="有附件" @click="itemClick(item,'附件')" style="cursor:pointer;">
-            <Icon type="paperclip"></Icon>
+            <Icon type="ios-attach"></Icon>
           </span>
           <span class="iconBg" style="font-size:20px;cursor:pointer;" v-if="item.isDepd=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'" @click="itemClick(item,'依赖项')">
             <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>
@@ -101,7 +101,7 @@
         <!-- 工作项状态识别 显示包括附件、依赖项状态 -->
         <p v-if="item.source=='task'" class="kananstatus">
           <span class="iconBg" :class="'isFile'" v-if="item.isFile=='yes'" title="有附件" @click="itemClick(item,'附件')" style="cursor:pointer;">
-            <Icon type="paperclip"></Icon>
+            <Icon type="ios-attach"></Icon>
           </span>
           <span class="iconBg" style="font-size:20px;cursor:pointer;" v-if="item.isDepend=='yes'" :title="item.depdDesc ? item.depdDesc : '依赖项状态'" @click="itemClick(item,'依赖项')">
             <Icon type="ios-color-filter" color="#199c40" v-if="item.isFinish=='finish'"></Icon>

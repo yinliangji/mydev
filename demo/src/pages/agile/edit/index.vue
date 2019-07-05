@@ -96,17 +96,23 @@
                             <Col span="12">
                                 <FormItem label="提出部门" prop="propose_depart">
                                     <span v-if="isMyEdit('propose_depart')">
-                                        {{formValidate.propose_depart}}
+                                        {{separate(formValidate.propose_depart,deptList)}}
                                     </span>
-                                    <Input v-model="formValidate.propose_depart" placeholder="请填写提出部门" v-if="isMyEdit('propose_depart','else')"></Input>
+                                    <!-- <Input v-model="formValidate.propose_depart" placeholder="请填写提出部门" v-if="isMyEdit('propose_depart','else')"></Input> -->
+                                    <Select multiple clearable filterable v-model="formValidate.propose_depart" placeholder="请选提出部门" v-if="isMyEdit('propose_depart','else')">
+                                        <Option v-for="item in deptList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select> 
                                 </FormItem>
                             </Col>
                             <Col span="12">
                                 <FormItem label="实施部门" prop="aply_id">
                                     <span v-if="isMyEdit('aply_id')">
-                                        {{formValidate.aply_id}}
+                                        {{separate(formValidate.aply_id,aplyList)}}
                                     </span>
-                                    <Input v-model="formValidate.aply_id" placeholder="请填写实施部门" v-if="isMyEdit('aply_id','else')"></Input>
+                                    <!-- <Input v-model="formValidate.aply_id" placeholder="请填写实施部门" v-if="isMyEdit('aply_id','else')"></Input> -->
+                                    <Select multiple clearable filterable v-model="formValidate.aply_id" placeholder="请选提出部门" v-if="isMyEdit('aply_id','else')">
+                                        <Option v-for="item in aplyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select>
                                 </FormItem> 
                             </Col>
                         </Row>
@@ -362,7 +368,7 @@
     				        <span v-if="!modal_add_loading">提交</span>
     				        <span v-else>Loading...</span>
     				    </Button>
-                        <Button type="ghost" style="margin-left: 8px" @click="cancel">返回</Button>
+                        <Button  style="margin-left: 8px" @click="cancel">返回</Button>
                     </FormItem>
                     
                 </Form>
@@ -410,6 +416,9 @@ const {projectAdd,projectAll,projectEdit,projectAllgroup,projectManagerGroup,pro
 import Store from '@/vuex/store'
 import AddPartPop from '@/pages/agile/add/addpartpop';
 import GoAgileMode from "@/components/goAgileMode";
+
+import OrgFn from "@/pages/agile/orgFn";
+
 const validateDate = (rule, value, callback) => {
     if (!value || !value[0] || !value[1]) {
         console.log("value 错误",)  
@@ -505,8 +514,8 @@ export default {
 
                 subject:"",
                 itm_status:"",
-                aply_id:"",
-                propose_depart:"",
+                aply_id:[],
+                propose_depart:[],
 
 
                 "itm_prj_eng_nm":"",
@@ -537,16 +546,20 @@ export default {
             itm_statusList:[],
             subjectList:[],
 
+            deptList:[],
+            aplyList:[],
+
+
 
 
 
             ruleValidate: {
 
                 aply_id: [
-                    { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                    { required:false,type:"array", message: '请填写内容，不能为空！', trigger: 'change' }
                 ],
                 propose_depart: [
-                    { required:false, message: '请填写内容，不能为空！', trigger: 'blur' }
+                    { required:false, type:"array", message: '请填写内容，不能为空！', trigger: 'change' }
                 ],
 
 
@@ -719,6 +732,23 @@ export default {
     },
     
     methods: {
+        separate(arr,list){
+            if(Array.isArray(arr)){
+                let TXT = "";
+                let last = "、";
+                if(arr.length){
+                    for(let i=0;i<arr.length;i++){
+                        if(i == arr.length-1){last = ""}
+                        let obj = list.find(item => item.org_id == arr[i]);
+                        obj = obj && obj.org_name ? obj.org_name : "";
+                        TXT = TXT+obj+last;
+                    }
+                }
+                return TXT;
+            }else{
+                return arr
+            }
+        },
         authIsAdmin(KEY){
             return Common.AdminAuth(this,KEY)
         },
@@ -912,13 +942,22 @@ export default {
                 for(var I in this.formValidate){
                     _temp = myData.data[I]+"";
                     if(I == "AddGroupList"){
+                    }else if(I == "aply_id" || I == "propose_depart"){
+                        this.formValidate[I] = ((arr)=>{
+                            let _arr = [];
+                            if(Array.isArray(arr)){
+                                arr.forEach((item)=>{
+                                    _arr.push((item.org_id+""))
+                                })
+
+                            }
+                            return _arr
+                        })(myData.data[I])
 
                     }else if(_temp.indexOf("|") != -1){
                         this.formValidate[I] = myData.data[I].split("|").filter(item=>item)
                     }else{
-                        if(myData.data[I]){
-                            this.formValidate[I] = myData.data[I]+"";    
-                        }
+                        this.formValidate[I] = (myData.data[I] || "")+"";
                         
                     }
                 }
@@ -1079,8 +1118,8 @@ export default {
             //this.formValidate.AddGroupList = this.defaultGroup;
             
             //this.formValidate.prj_id = this.$router.history.current.query.id ? this.$router.history.current.query.id : "";
-            this.formValidate.prj_id = "";
-            this.formValidate.propose_depart = "";
+            this.formValidate.prj_id = [];
+            this.formValidate.propose_depart = [];
             this.formValidate.aply_id = "";
             this.formValidate.subject = "";
             this.formValidate.itm_status = "";
@@ -1147,6 +1186,9 @@ export default {
             let _pid = this.formValidate.pid ? this.formValidate.pid : "";
             let _username = Common.getStorageAndCookie(this,Common,"username");
 
+            let _propose_depart = OrgFn.Multiple(this.formValidate.propose_depart,this.aplyList);
+            let _aply_id = OrgFn.Multiple(this.formValidate.aply_id,this.aplyList);
+
             let tempData = {
                 id:Common.GETID(this,Common,"inUrl"),
                 prjId:Common.GETID(this,Common,"inUrl"),
@@ -1159,8 +1201,8 @@ export default {
                 prj_id: this.formValidate.prj_id,
                 prjSn: this.formValidate.prj_id,
                 username:_username,
-                propose_depart:this.formValidate.propose_depart,
-                aply_id:this.formValidate.aply_id,
+                propose_depart:_propose_depart,
+                aply_id:_aply_id,
                 subject:this.formValidate.subject,
                 itm_status:this.formValidate.itm_status,
 

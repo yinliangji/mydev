@@ -3,7 +3,7 @@
         <router-link  :to="togo" >
             <Button >
                 {{cont}}
-                <Icon type="chevron-right"></Icon>
+                <Icon type="ios-arrow-forward"></Icon>
             </Button>
         </router-link>
     </div>

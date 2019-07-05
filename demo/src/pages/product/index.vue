@@ -140,8 +140,8 @@
 							</Col>
 						</Row>
 						<div class="formValidateMoreBtnBox" :class="isShowMoreShow ?'arrUp':'arrDown'" @click="isShowMoreShow = !isShowMoreShow">
-                            <Icon type="chevron-down" color="#fff"  ></Icon>
-                            <Icon type="chevron-down" color="#fff"></Icon>
+                            <Icon type="ios-arrow-down" color="#fff"  ></Icon>
+                            <Icon type="ios-arrow-down" color="#fff"></Icon>
                         </div>
 			        </FormItem>
 			    </Form>
@@ -158,10 +158,21 @@
 						<span class="low">低</span>
 					</Col>
 					-->
+
+
 			    	
 					<div class="tagBox" >
 						<div style="" class="tagBar">
 							<div  class="tagBarRight" >
+
+								<UpdataBtn 
+									style="display:inline-block" 
+									class="addBtnBox"
+									:Data="ImportUs"
+									@sendImport="getSendImport"
+									>
+									批量导入用户故事
+								</UpdataBtn>
 								
 								<Button 
 									class="addBtnBox"
@@ -330,11 +341,13 @@ import { EventBus } from "@/tools";
 import kanbanboard from "@/components/kanbanboard";
 import AddPop from "./addpop";
 
+import UpdataBtn from "./updataBtn";
+
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 import Delpop from '@/components/delectAlert'
-const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList,userstoryOutExcel,userstoryOutWord} = Common.restUrl;
+const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList,userstoryOutExcel,userstoryOutWord,importUs} = Common.restUrl;
 
 import Store from '@/vuex/store'
 
@@ -724,6 +737,8 @@ export default {
             
             clickTime:true,
             itemName:"",
+
+            ImportUs:importUs,
             
 		}
 	},
@@ -731,6 +746,7 @@ export default {
 		kanbanboard,
 		AddPop,
 		Delpop,
+		UpdataBtn,
 
 	},
 	computed: {
@@ -813,8 +829,11 @@ export default {
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
 	},
 	methods:{
+		getSendImport(data){
+			this.getInfoFn(this.getID());
+		},
 		getSendData(data){
-            console.log(data,"<==========getSendData",data.prj_name);
+            //console.log(data,"<==========getSendData",data.prj_name);
             this.itemName = data.prj_name;
             let params = {
                 prjSn:(data && data.prjSn) || (data && data.prj_id) || Common.GETID(this,Common) || "",

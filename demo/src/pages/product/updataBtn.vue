@@ -1,6 +1,4 @@
 <template>
-    <div class="tableContBox" style="padding-left:1px;">
-        
         <Upload
             multiple
             :action="actionUrl"
@@ -8,29 +6,13 @@
             :on-success="handleSuccess"
             :on-error="handleError"
             :show-upload-list="false"
-            class="UploadBtn"
+            :class="CLASS"
+            :data="params"
             >
-            <Button  icon="ios-cloud-upload-outline">文件上传</Button>
+            <Button :shape="SHAPE" :icon="ICON" :type="TYPE" :size="SIZE">
+                <slot>导入</slot>
+            </Button>
         </Upload>
-        <Table border :columns="columns" :data="tableData"  />
-        <div class="pageBox" v-if="false">
-            <Page 
-                :current="tableDAtaPageCurrent" 
-                :total="tableDAtaTatol/tableDAtaPageLine > 1 ? (tableDAtaTatol%tableDAtaPageLine ? parseInt(tableDAtaTatol/tableDAtaPageLine)+1 : tableDAtaTatol/tableDAtaPageLine)*10 : 1" 
-                show-elevator 
-                @on-change="changeCurrentPage" 
-                @on-page-size-change="changePageSize">
-            </Page>
-            <p>总共{{tableDAtaTatol}}条记录</p>
-        </div>
-
-        <Delpop
-            @delpopClose = "delpopCloseFn"
-            @delpopEnter = "delpopEnterFn" 
-            :isShow = "delpopIsShow"
-            :isLoading = "delpopIsLoading"
-        />
-    </div>
 </template>
 <script>
 
@@ -41,37 +23,64 @@ const { fileDownList,fileUpload,downFile,fileDelete,fileView} = Common.restUrl;
 import Delpop from '@/components/delectAlert'
 export default {
     props: {
-        REQID: {
+        Data: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
                 return false;
             }
         },
+        SHAPE: {
+            type: [String],
+            default: function() {
+                return "circle";
+            }
+        },
+        ICON: {
+            type: [String],
+            default: function() {
+                return "ios-cloud-upload-outline";
+            }
+        },
+        TYPE: {
+            type: [String],
+            default: function() {
+                return "info";
+            }
+        },
+        SIZE: {
+            type: [String],
+            default: function() {
+                return "small";
+            }
+        },
+        CLASS: {
+            type: [String],
+            default: function() {
+                return "UploadBtn";
+            }
+        },
+
         
     },
     watch:{
-        REQID(){
-            if(this.REQID){
-                this.formValidate.req_id = this.REQID;
-                this.init(this.REQID);
-            }
+        Data(data){
+            this.init(data);
         },
     },
     beforecreated(){
-        console.log("beforecreated----项目需求项附件---",this.formValidate)
+        //console.log("beforecreated----用户故事附件---",this.formValidate)
     },
     created(){
-        console.log("created----项目需求项附件---",this.formValidate)
+        //console.log("created----用户故事附件---",this.formValidate)
     },
     beforeUpdate(){
-        console.log("beforeUpdate---项目需求项附件----",this.formValidate)
+        //console.log("beforeUpdate---用户故事附件----",this.formValidate)
     },
     updated(){
-        console.log("updated----项目需求项附件---",this.formValidate)
+        //console.log("updated----用户故事附件---",this.formValidate)
     },
     mounted(){
-        this.formValidate.req_id = this.REQID;
-        this.init(this.REQID);
+        this.init(this.Data);
     },
     data() {
         return {
@@ -129,19 +138,22 @@ export default {
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
+
                             h('Button', {
                                 props: {
                                     type: 'error',
                                     size: 'small'
                                 },
-                                style: {},
+                                style: {
+                                    
+                                },
                                 on: {
                                     click: () => {
                                         this.tableDel(params.index,params.row.file_path)
                                     }
                                 }
                             }, '删除'),
-                            
+
                             h('Button', {
                                 props: {
                                     type: 'primary',
@@ -164,6 +176,8 @@ export default {
                                 }
                             }, '在线预览'),
                             
+                            
+                            
                         ]);
                     }
                 },
@@ -171,12 +185,17 @@ export default {
             tableData: [],
             actionUrl:"//jsonplaceholder.typicode.com/posts/",
             formValidate:{
-                req_id:"",
+                userstory_id:"",
             },
             //删除弹出--start
             delpopIsShow:false,
             delpopIsLoading:false,
             //删除弹出--end
+            params:{
+                username:Common.getStorageAndCookie(this,Common,'username'),
+                prjId:Common.GETID(this,Common),
+                prjSn:Common.GETprjid(this,Common),
+            },
             
         }
     },
@@ -196,15 +215,15 @@ export default {
             this.tableDataCur = false;
         },
         delpopEnterFn(B){
-            defaultAXIOS(fileDelete,{file_path:this.delPath_file,fileId:this.tableData[this.tableDataCur].fileId,id:Common.GETID(this,Common),taskId:this.formValidate.req_id},{timeout:2000,method:'get'}).then((response) => {
+            defaultAXIOS(fileDelete,{file_path:this.delPath_file,fileId:this.tableData[this.tableDataCur].fileId,id:Common.GETID(this,Common),taskId:this.formValidate.userstory_id},{timeout:2000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======项目需求项***文件删除+++",response,myData,"======>");
+                console.log("<======用户故事***文件删除+++",response,myData,"======>");
                 let STAUUS = myData.status ? myData.status : myData.message
                 if(STAUUS.indexOf("success") != -1){
                     this.delpopIsLoading = B;
                     this.delpopIsShow = B;
                     this.Message("删除完成");
-                    this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.req_id)
+                    this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.userstory_id)
                     this.tableDAtaPageCurrent = 1;
                     return Promise.resolve(STAUUS)
 
@@ -223,7 +242,7 @@ export default {
 
             let URL = userstorydelete;
             let params = {
-                us_id:this.tableData3[this.tableDataCur].us_id || this.formValidate.req_id,
+                us_id:this.tableData3[this.tableDataCur].us_id || this.formValidate.userstory_id,
                 bfunc_id:this.tableData3[this.tableDataCur].bfunc_id,
                 version:this.tableData3[this.tableDataCur].version,
             }
@@ -267,18 +286,17 @@ export default {
             return Common.DownFile(defaultAXIOS,this,URL,param,fileName)
         },
         //下载文件 end
-        init(usID){
-            //Common.GETprjid(this,Common)
-            let us_ID = usID? usID : this.formValidate.req_id;
-            this.actionUrl = fileUpload+"?taskId="+us_ID+"&type=8&id="+Common.GETID(this,Common)+"&username="+Common.getStorageAndCookie(this,Common,"username")+"&nickname="+Common.getStorageAndCookie(this,Common,"nickname");
+        init(URL = ""){
+            this.actionUrl = URL+"?import=true&username="+Common.getStorageAndCookie(this,Common,"username")+"&prjId="+Common.GETID(this,Common)+"&prjId="+Common.GETprjid(this,Common);
 
-            this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),usID)
-            this.tableDAtaPageCurrent = 1;
+            //this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),usID)
+            //this.tableDAtaPageCurrent = 1;
         },
         handleError(res,file,list){
-            console.log("添加失败");
-            this.showError("添加失败");
-            return Promise.reject("添加失败");
+            this.error(res.message || "导入失败");
+            console.log("导入失败");
+            this.showError("导入失败");
+            return Promise.reject("导入失败");
         },
         Message(MSG = "保存完成"){
             Common.CommonMessage(this,MSG)
@@ -287,24 +305,36 @@ export default {
             Common.CommonError(this,MSG)
         },
         handleSuccess(res,file,list){
+            if(res.status === "success"){
+                this.Message(res.message || "导入成功");
+                this.$emit("sendImport",res);
+                return Promise.resolve("导入成功");    
+            }else{
+                this.error(res.message || "导入失败");
+                this.$emit("sendImport",false);
+                return Promise.reject(false);
+            }
 
-            this.listUpFile(fileUpload,Common.GETID(this,Common),this.formValidate.req_id).then(()=>{
-                this.Message("添加成功")
-                this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.req_id)
-                this.tableDAtaPageCurrent = 1;
+            /*
+            this.listUpFile(fileUpload,Common.GETID(this,Common),this.formValidate.userstory_id).then(()=>{
+                
+                //this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.userstory_id)
+                //this.tableDAtaPageCurrent = 1;
 
             },(error)=>{
                 console.log(error);
                 this.error(JSON.stringify(error))
                 //this.showError(error);
+                return Promise.reject(false);
             })
+            */
             
             
         },
-        listUpFile(URL,id="",req_id = ""){
+        listUpFile(URL,id="",userstory_id = ""){
             return Promise.resolve("添加成功");
 
-            return defaultAXIOS(URL,{id,taskId:req_id},{timeout:20000,method:'get'}).then((response) => {
+            return defaultAXIOS(URL,{id,taskId:userstory_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
                 console.log("<======detail***yong+++",response,myData,"======>");
 
@@ -325,20 +355,19 @@ export default {
 
         },
         changeCurrentPage(i) {
-            this.fileDownFn(fileDownList,i,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.req_id)
+            this.fileDownFn(fileDownList,i,this.tableDAtaPageLine,Common.GETID(this,Common),this.formValidate.userstory_id)
             this.tableDAtaPageCurrent = i;
         },
-        fileDownFn(URL = "",page = 1,pageline = 3,id = "",req_id = ""){
-            if(!req_id){return}
-            defaultAXIOS(URL,{page,pageline,id,taskId:req_id},{timeout:20000,method:'get'}).then((response) => {
+        fileDownFn(URL = "",page = 1,pageline = 3,id = "",userstory_id = ""){
+            defaultAXIOS(URL,{page,pageline,id,taskId:userstory_id},{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;
-                console.log("<======detail***项目需求项附件列表+++",response,myData,"======>");
+                console.log("<======detail***用户故事附件列表+++",response,myData,"======>");
                 
                 if(myData && myData.files && Array.isArray(myData.files)){
                     this.tableData = myData.files
                     this.tableDAtaTatol = myData.total;
                 }else{
-                    this.showError(URL+"_错误或者没有数据","fileDownFn");
+                    this.showError(URL+"_错误或者没有数据");
                 }
 
               
@@ -348,10 +377,9 @@ export default {
                 
             });
         },
-        showError(ERR,isFileDownFn){
-            isFileDownFn ? Common.ErrorShow(ERR,this) : Common.CommonError(this,ERR);
+        showError(ERR){
+            Common.CommonError(this,ERR);
         },
-
     },
     components: {
         Delpop,

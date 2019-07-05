@@ -219,8 +219,23 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             "stff_nm_id": "@ctitle",
             "itm_status|1-5": 0,
             "itm_status_name": "@ctitle",
-            "propose_depart": "@ctitle",
-            "aply_id": "@ctitle",
+
+            //"propose_depart": "@ctitle",
+            //"aply_id": "@ctitle",
+            "propose_depart": [
+                {
+                    org_id:1,
+                    org_name:"dept-->name1",
+                    org_sn:11,
+                },
+            ],
+            "aply_id": [
+                {
+                    org_id:2,
+                    org_name:"name2",
+                    org_sn:22,
+                },
+            ],
 
             "itm_prj_eng_nm":"@title",
             "itm_prj_eng_short_num":"@title",
@@ -232,6 +247,8 @@ let detail = (val1 = 200,num, val2 = 1, val3 = 3) => {
             "itm_wthr_snd_ntc":"@ctitle",
             "itm_id_sn|5-10":/[a-zA-Z0-9]/,
             "itm_url|1":["","http://www.baidu.com"],
+
+            subject_sn:"SU-0010",
 
             AddGroupList: [
                 {
@@ -678,6 +695,13 @@ app.all("/project/detail/1", function(req, res) {
 for(let i=2;i<=itemNumber;i++){
     eval('app.all("/project/detail/'+i+'", function(req, res) {res.json(detail(req.body.myStatus,'+i+'));res.end();});')
 }
+
+app.all("/project/getOtherDetail/", function(req, res) {
+    console.log("req==>", req.body);
+    res.json(detail(req.body.myStatus,1));
+    res.end()
+});
+
 
 
 
@@ -3740,11 +3764,28 @@ app.all('/uploadfiles/delete_file/', function(req, res) {
 });
 
 
-app.all('/prj/sync_submit/', function(req, res) {
+
+app.all('/uploadfiles/delete_file/', function(req, res) {
+    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
-    res.json({status: "success",message: "import success",});
+    console.log("resVal==>", resVal);
+    res.json({status: "success",message: "delete success",});
     res.end()
 });
+
+app.all('/agile/import_us/', function(req, res) {
+    console.log("req==>", req.body);
+    res.json({status: "success",message: "agile/import_us success",});
+    res.end()
+});
+
+app.all('/agile/import_req/', function(req, res) {
+    console.log("req==>", req.body);
+    res.json({status: "success",message: "agile/import_us success",});
+    res.end()
+});
+
+
 
 app.all('/prj/update_submit/', function(req, res) {
     console.log("req==>", req.body);
@@ -5103,6 +5144,40 @@ let projectCondition = (val1 = 200, val2 = 1, val3 = 3) => {
                 "num":"5",
                 "name":"状态5",
             },
+        ],
+        dept_list:[
+            {
+                org_id:1,
+                org_name:"dept-->name1",
+                org_sn:11,
+            },
+            {
+                org_id:2,
+                org_name:"name2",
+                org_sn:22,
+            },
+            {
+                org_id:3,
+                org_name:"name3",
+                org_sn:33,
+            }
+        ],
+        aply_list:[
+            {
+                org_id:1,
+                org_name:"aply-->name1",
+                org_sn:11,
+            },
+            {
+                org_id:2,
+                org_name:"name2",
+                org_sn:22,
+            },
+            {
+                org_id:3,
+                org_name:"name3",
+                org_sn:33,
+            }
         ],
 
         "data": [{

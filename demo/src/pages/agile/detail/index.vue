@@ -37,7 +37,7 @@
                     type="warning"
                     @click="editItemFn"
                     :disabled="authIs(['icdp_projList_mng','icdp_projList_edit','icdp_projList_view'])" 
-                    shape="circle"
+                    
                     long
                     size="small"
                     v-show="(TabsCur == 'name1') ? true : false"

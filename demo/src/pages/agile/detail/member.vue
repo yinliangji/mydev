@@ -72,7 +72,7 @@
             <div class="fromBox fromBox2" >
                 <!-- :id="isOption()" -->
                 <div class="addpartBox">
-                    <Button type="success" @click="addpart" :disabled="authIs(['icdp_proj_role_edit','icdp_projList_view'])" >添加角色</Button>
+                    <Button type="success" @click="addpart" :disabled="authIs(['icdp_proj_role_edit','icdp_projList_view'])" icon="md-add" >添加角色</Button>
                 </div>
                 <div class="newAddGroup">
                     <Row v-for="(myItem,index) in formValidate.AddGroupList" :key="index" v-if="index>2">

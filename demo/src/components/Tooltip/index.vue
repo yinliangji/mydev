@@ -4,7 +4,7 @@
             <div slot="content" :style="'white-space:normal;width:'+W+'px;'">
                 <div v-html="content"></div>
             </div>
-            <Icon type="ios-help-outline" :size="size" :color="color"></Icon>
+            <Icon type="md-help-circle" :size="size" :color="color"></Icon>
         </Tooltip>
     </div>
 </template>

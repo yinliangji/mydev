@@ -3,7 +3,7 @@
 		<Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" >
     		<div class="fromBox fromBox2">
     			<div class="addpartBox">
-                    <Button type="success" @click="addpart('addPartPopBox')" :disabled="isModify">添加小组</Button>
+                    <Button type="success" @click="addpart('addPartPopBox')" :disabled="isModify" icon="md-add">添加小组</Button>
                 </div>
                 <!--  -->
                 <div class="newAddGroup" id="settingAddBox">

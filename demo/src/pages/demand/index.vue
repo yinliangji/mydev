@@ -55,21 +55,39 @@
                     <div class="tableBtnBox">
                         <div style="" class="tagBar">
                             <div  class="tagBarRight">
-                                <UpdataBtn 
-                                    style="display:inline-block" 
-                                    class="addBtnBox"
-                                    :Data="ImportReq"
-                                    @sendImport="getSendImport"
-                                    >
-                                    批量导入需求项
-                                </UpdataBtn>
+                                <div class="importBox">
+                                    <span>
+                                        批量导入/下载模板
+                                    </span>
+                                    <div >
+                                        <Button 
+                                            class="addBtnBox"
+                                            icon="ios-download-outline"
+                                            type="info"  
+                                            @click="importMode"
+                                            size="small"
+                                            style="margin-bottom:10px;"
+                                        >
+                                            下载模板
+                                        </Button>
+                                        <UpdataBtn 
+                                            style="display:inline-block" 
+                                            class="addBtnBox"
+                                            :Data="ImportReq"
+                                            @sendImport="getSendImport"
+                                            :IsDisabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])"
+                                            >
+                                            批量导入需求项
+                                        </UpdataBtn>
+                                        
+                                    </div>
+                                </div>
                                 <Button 
                                     class="addBtnBox"
                                     icon="ios-download-outline"
                                     type="info"  
                                     @click="optputExecl"
                                     size="small"
-                                    shape="circle"
                                 >
                                     查询结果导出
                                 </Button>
@@ -99,6 +117,7 @@
                                     type="success" 
                                     @click="addItem2"
                                     :disabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])" 
+                                    icon="md-add"
                                     >
                                     添加
                                 </Button>
@@ -224,7 +243,7 @@
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {reqAll,getPermission,projectDetail,reqDelect,reqSetChange,getRequirementKanBan,getRequirementStatList,reqOutExcel,importReq} = Common.restUrl;
+const {reqAll,getPermission,projectDetail,reqDelect,reqSetChange,getRequirementKanBan,getRequirementStatList,reqOutExcel,importReq,downloadTemplate} = Common.restUrl;
 
 import ADDorEDITpop from "@/pages/product/add_or_edit_pop";
 import Addtablepop from "./addtablepop";
@@ -333,7 +352,7 @@ export default {
                                 ]),
                             */
                             h('br'),
-                            h('span', {}, '(上线 / 未上线)')
+                            h('span', {}, '(上线 / 全部)')
                         ]);
                     }
 
@@ -499,6 +518,13 @@ export default {
         //console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
+        importMode(){
+            let params = {
+                name_mode:"req",
+            }
+            let fileName = "批量导入模板_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'))+".xlsx"
+            return Common.DownFile(defaultAXIOS,this,downloadTemplate,params,fileName);
+        },
         getSendImport(data){
             this.getInfoFn(this.getID());
         },

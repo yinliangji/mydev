@@ -232,6 +232,9 @@ CommonRest.restUrl = {
     "importUs": process.env.BASE_URL + "/agile/import_us/",
     /**** 用户故事批量导入 post****/
 
+    "downloadTemplate": process.env.BASE_URL + "/agile/download_template/",
+    /**** 用户故事模板 get****/
+
 
 
 

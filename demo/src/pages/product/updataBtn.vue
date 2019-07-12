@@ -9,7 +9,8 @@
             :class="CLASS"
             :data="params"
             >
-            <Button :shape="SHAPE" :icon="ICON" :type="TYPE" :size="SIZE">
+            <!-- :shape="SHAPE" -->
+            <Button  :icon="ICON" :type="TYPE" :size="SIZE" :disabled="IsDisabled">
                 <slot>导入</slot>
             </Button>
         </Upload>
@@ -32,7 +33,7 @@ export default {
         SHAPE: {
             type: [String],
             default: function() {
-                return "circle";
+                return "";
             }
         },
         ICON: {
@@ -57,6 +58,12 @@ export default {
             type: [String],
             default: function() {
                 return "UploadBtn";
+            }
+        },
+        IsDisabled: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
             }
         },
 
@@ -287,7 +294,7 @@ export default {
         },
         //下载文件 end
         init(URL = ""){
-            this.actionUrl = URL+"?import=true&username="+Common.getStorageAndCookie(this,Common,"username")+"&prjId="+Common.GETID(this,Common)+"&prjId="+Common.GETprjid(this,Common);
+            this.actionUrl = URL+"?import=true&username="+Common.getStorageAndCookie(this,Common,"username")+"&prjId="+Common.GETID(this,Common)+"&prjSn="+Common.GETprjid(this,Common);
 
             //this.fileDownFn(fileDownList,1,this.tableDAtaPageLine,Common.GETID(this,Common),usID)
             //this.tableDAtaPageCurrent = 1;
@@ -396,7 +403,7 @@ export default {
     overflow: hidden;
 }
 .UploadBtn{
-    margin-bottom:10px;
+    
 }
 </style>
 <style>

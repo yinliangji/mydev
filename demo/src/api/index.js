@@ -36,10 +36,10 @@ AXIOS.interceptors.request.use( (config) => {
             config.params = {};
         }
         if(config.method == "get" && !config.params.username){
-            config.params.username = Common.getCookie("username");
+            config.params.username = Common.getCookie("username") || "";
         }
         if(config.method == "get" && !config.params.prjSn   ){
-            let _prjSn = Common.getQueryString("prjSn",window.location.hash);
+            let _prjSn = Common.getQueryString("prjSn",window.location.hash) || "";
             if(_prjSn){
                 config.params.prjSn = _prjSn; 
             }

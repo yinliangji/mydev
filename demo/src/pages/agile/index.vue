@@ -66,11 +66,11 @@
                                         </FormItem>
                                     </Col>
                                      
-                                    <Col span="2" style="text-align: center">提出部门</Col>
+                                    <Col span="2" style="text-align: center"><!-- 提出部门 --></Col>
                                     <Col span="6">
-                                        <FormItem >
+                                        <!-- <FormItem >
                                             <Input clearable v-model="formValidate.propose_depart" placeholder="输入提出部门"></Input>
-                                        </FormItem>
+                                        </FormItem> -->
                                     </Col>
                                     
                                     
@@ -144,7 +144,8 @@
                         <Button 
                             type="success" 
                             :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
-                            @click="addItemFn" 
+                            @click="addItemFn"
+                            icon="md-add" 
                             >
                             添加自研项目
                         </Button>
@@ -355,14 +356,44 @@ export default {
                 {
                     title: 'ICDP编号',
                     key: 'prj_id',
-                    width: 110,
+                    width: 120,
                     align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('span', {
+                                style: {
+                                    display:"inline-block",
+                                    background: ((val)=>{
+                                        if(val == "1"){
+                                            return "red" 
+                                        }else if(val == "2"){
+                                            return "green"
+                                        }else{
+                                            return "gray";
+                                        }
+                                    })(params.row.prj_type),
+                                    color: "white",
+                                    padding: "2px",
+                                    borderRadius: "50%",
+                                    marginRight:"2px",
+                                },
+                                attrs:{title:this.translate(this.prj_typeList,params.row.prj_type)},
+                                on: {}
+                            	}, 
+                            this.translate(this.prj_typeList,params.row.prj_type).substr(0,1)),
+                            h('span', {
+                                style: {},
+                                on: {}
+                            }, params.row.prj_id),
+                        ]);
+                    }
+
                 },
                 
                 {
                     title: '项目名称',
                     key: 'prj_name',
-                    //
+                    align: 'center',
                     render: (h, params) => {
                         return h(
                             'a',
@@ -386,23 +417,7 @@ export default {
 
                 },
                 
-                {
-                    title: '项目类型',
-                    width: 90,
-                    key: 'prj_type',
-                    align: 'center',
-                    render: (h, params) => {
-                        return h(
-                            'p',
-                            {
-                                //domProps:{title:"prj_desc"},
-                            },
-                            this.translate(this.prj_typeList,params.row.prj_type)
-                            
-                        );
-                    }
-                    //
-                },
+                
                 {
                     title: 'ITM编号',
                     key: 'itm_id_sn',
@@ -426,6 +441,7 @@ export default {
                 {
                     title: '项目经理',
                     key: 'manager',
+                    align: 'center',
                     render: (h, params) => {
                         return h(
                             'span',
@@ -448,12 +464,36 @@ export default {
                 //     width: 100,
                 //     align: 'center',
                 // },
+                {
+                    title: '实施部门',
+                    width: 90,
+                    key: 'itm_aply_id',
+                    align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'span',
+                            {
+                                "class":{txtBlock:true,txtBlockNone:false},
+                                attrs:{title:params.row.itm_aply_id},
+                            },
+                            params.row.itm_aply_id)
+                    }
+                },
                
                 {
-                    title: '结束时间',
-                    key: 'end_time',
-                    width: 100,
+                    title: '专题领域',
+                    key: 'subject_name',
+                    width: 90,
                     align: 'center',
+                    render: (h, params) => {
+                        return h(
+                            'span',
+                            {
+                                "class":{txtBlock:true,txtBlockNone:false},
+                                attrs:{title:params.row.subject_name},
+                            },
+                            params.row.subject_name)
+                    }
                 },
                 {
                     title: '项目状态',
@@ -488,7 +528,7 @@ export default {
                             }, '编辑'),
                             h('Button', {
                                 props: {
-                                    type: 'primary',
+                                    type: 'info',
                                     size: 'small'
                                 },
                                 style: {
@@ -502,6 +542,27 @@ export default {
                                     }
                                 }
                             }, '成员'),
+                            
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '2px',
+                                    marginLeft: '2px',
+                                    visibility:this.transform(this.prj_typeList,params.row.prj_type),
+                                },
+                                domProps:{
+                                    disabled:!this.isEdit(params.row.isEdit),
+                                    title:"将自研项目转化为ITM立项项目，属性覆盖为ITM立项内容，原自研项目的需求项保留与ITM立项需求整合。",
+                                },
+                                on: {
+                                    click: () => {
+                                        this.toITM(params.row)
+                                    }
+                                }
+                            }, '转立项'),
                             h('Button', {
                                 props: {
                                     type: 'error',
@@ -523,26 +584,6 @@ export default {
                                     }
                                 }
                             }, '删除'),
-                            h('Button', {
-                                props: {
-                                    type: 'success',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '2px',
-                                    marginLeft: '2px',
-                                    visibility:this.transform(this.prj_typeList,params.row.prj_type),
-                                },
-                                domProps:{
-                                    disabled:!this.isEdit(params.row.isEdit),
-                                    title:"将自研项目转化为ITM立项项目，属性覆盖为ITM立项内容，原自研项目的需求项保留与ITM立项需求整合。",
-                                },
-                                on: {
-                                    click: () => {
-                                        this.toITM(params.row)
-                                    }
-                                }
-                            }, '转立项'),
                             
                         ]);
                     }
@@ -650,6 +691,7 @@ export default {
             }
             return name   
         },
+        
 
         getProjectCondition(URL,params = {}){
             return Common.GetProjectCondition(Common,this,defaultAXIOS,URL,params);

@@ -58,19 +58,21 @@
         <Row :gutter="0" class="kanbanBox" align="top">
           <Col :style="'width:'+((firstColumn - 0) + 1)+'px;'" class="ColumnFirst" v-if="groupLists.length > 0">
             <div class="centerHeader" v-if="aside=='product'">
-              <a class="txtBlock" style="padding-bottom:3px;" @click="toStory(itemGroup,'us')" :title="itemGroup.text">
+              <a class="txtBlock" style="padding-bottom:3px; text-align:center;" @click="toStory(itemGroup,'us')" :title="itemGroup.text">
                 {{itemGroup.text}}
               </a>
               <span class="imgStatus">{{itemGroup.req_status_name}}</span>
             </div>
             <div class="centerHeader" v-else>
-              <a class="txtBlock" @click="toStory(itemGroup)" :title="itemGroup.text">{{itemGroup.text}}</a>
+              <a class="txtBlock" @click="toStory(itemGroup)" :title="itemGroup.text" style="text-align:center;">
+                {{itemGroup.text}}
+              </a>
               <div style="overflow:hidden;height:5px;">&nbsp;</div>
               <span class="imgStatus">{{itemGroup.us_status}}</span>
             </div>
             <div>
-              <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" title="快速添加用户故事" >快捷添加</Button>
-              <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId,itemGroup.sprint_id)" class="addMissionBtn" :disabled="getPermission" title="快速添加工作项">快捷添加</Button>
+              <Button v-if="aside == 'product'" v-show="btnIsShow(itemGroup)" :disabled="isDisabled" type="success" @click="addItem(itemGroup.groupId)"  class="addUsBtn" title="快速添加用户故事" icon="md-add" >快捷添加</Button>
+              <Button v-if="aside == 'development'"  type="success" @click="addNewTask(itemGroup.groupId,itemGroup.sprint_id)" class="addMissionBtn" :disabled="getPermission" title="快速添加工作项" icon="md-add">快捷添加</Button>
             </div>
           </Col>
           <Col class="Column" v-for="(items, index) in myStatusList" :key="index" :id="'C-'+itemGroup.groupId+'_'+items.state" :data-G="itemGroup.groupId" :data-S="items.state" >
@@ -733,7 +735,7 @@ export default {
       this.$emit("addUS",{},req_id)
       //this.$router.push({path:'/product/add',query:{req_id}})
     },
-    addNewTask(id){
+    addNewTask(usid,sptid){
       // this.$router.push({
       //   path:'/development/add',
       //   query:{
@@ -741,7 +743,7 @@ export default {
       //     userStoryId:id,
       //   }
       // })
-      this.$emit("userStoryIdFn",id);
+      this.$emit("userStoryIdFn",usid,sptid);
     },
     toStory(IG,column){
       let ID = this.$router.history.current.query.prjId || this.$router.history.current.query.id || "";

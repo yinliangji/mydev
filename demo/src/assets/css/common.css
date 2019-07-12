@@ -393,6 +393,7 @@ a.txtBlock {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    text-align: left;
 }
 a.txtBlockNone{
     color: #2d8cf0;
@@ -403,6 +404,7 @@ span.txtBlock {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     line-height: 1.1em;
+    text-align: left;
 }
 /* 表格列表相关 end */
 /* 页面 内容头部 start */

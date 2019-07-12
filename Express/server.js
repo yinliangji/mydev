@@ -134,6 +134,9 @@ let mockDataList = (val1 = "success", val2 = 1, val3 = 3) => {
         obj.status = 0;
         obj.status_name = "ACTIVE";
         obj.itm_status = ((N)=>{return N >0.5?"1":"2" })(Math.random());
+        obj.itm_aply_id = "xxxxx,jjjjj,kkkkk";
+        obj.subject_sn = "su-0000";
+        obj.subject_name = "su-0000Name";
         list.push(obj);
         obj = {};
 
@@ -3210,7 +3213,7 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
             "icdp_proj_group_menber_edit",//项目设置
 
             
-            //"icdp_projList_mng",//25
+            "icdp_projList_mng",//25
             //========
             
             "icdp_projList_edit",//21
@@ -3270,7 +3273,7 @@ let getPermission2 = (val1 = 200, val2 = 1, val3 = 3) => {
             
             //"icdp_proj_role_edit",
             //========
-            //"icdp_projList_mng",//25
+            "icdp_projList_mng",//25
             "icdp_projList_edit",//21
 
 
@@ -3764,7 +3767,6 @@ app.all('/uploadfiles/delete_file/', function(req, res) {
 });
 
 
-
 app.all('/uploadfiles/delete_file/', function(req, res) {
     let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
@@ -3772,6 +3774,43 @@ app.all('/uploadfiles/delete_file/', function(req, res) {
     res.json({status: "success",message: "delete success",});
     res.end()
 });
+
+
+
+app.all('/uploadfiles/getuploadedfiles/', function(req, res) {
+    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(filedown(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+
+
+app.all('/agile/us/export/', function(req, res) {
+    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(filedown(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+app.all('/agile/req/export/', function(req, res) {
+    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(filedown(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
+app.all('/agile/download_template/', function(req, res) {
+    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(filedown(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
 
 app.all('/agile/import_us/', function(req, res) {
     console.log("req==>", req.body);

@@ -85,7 +85,7 @@ export default {
                 {
                     title: '文件名',
                     key: 'fileName',
-                    align: 'center',
+                    align: 'left',
                     render: (h, params) => {
                         return h(
                             'a',
@@ -111,22 +111,26 @@ export default {
                     title: '文件大小',
                     key: 'filesize',
                     align: 'center',
+                    width:'150',
                     
                 },
                 {
                     title: '创建者',
                     key: 'creater',
                     align: 'center',
+                    width:'150',
                 },
                 {
                     title: '创建时间',
                     key: 'created_time',
                     align: 'center',
+                    width:'150',
                 },
                 {
                     title: '操作',
                     key: 'action',
                     align: 'center',
+                    width:'150',
                     render: (h, params) => {
                         return h('div', [
 

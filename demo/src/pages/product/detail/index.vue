@@ -30,7 +30,7 @@
                     编辑
                 </Button>
                 <Button 
-                    type="success" 
+                    type="info" 
                     @click="goDevelopmentFn"
                     :disabled="false" 
                     class="editBtn2"

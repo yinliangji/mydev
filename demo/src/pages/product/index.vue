@@ -105,9 +105,7 @@
 						            <Col span="6">
 						                <FormItem >
                                             <Select clearable v-model="formValidate.uscSn" placeholder="请选择状态类型">
-                                                
                                                 <Option v-for="(item,index) in userstory_categoryList" :value="item.value" :key="index">{{ item.label }}</Option>
-                                                
                                             </Select>
                                         </FormItem>
 						            </Col>
@@ -129,7 +127,6 @@
 						                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
 						            </Spin> -->
 									查询
-    				        		
 								</Button>
 								<Button class="cancelSerchBtn" :disabled="!searchCan" @click="cancelSerchAll">
 									<!-- <Spin fix v-if="!searchCan" style="background:none;">
@@ -165,14 +162,33 @@
 						<div style="" class="tagBar">
 							<div  class="tagBarRight" >
 
-								<UpdataBtn 
-									style="display:inline-block" 
-									class="addBtnBox"
-									:Data="ImportUs"
-									@sendImport="getSendImport"
-									>
-									批量导入用户故事
-								</UpdataBtn>
+								
+								<div class="importBox">
+									<span>
+										批量导入/下载模板
+									</span>
+									<div >
+										<Button 
+											class="addBtnBox"
+											icon="ios-download-outline"
+											type="info"  
+											@click="importMode"
+											size="small"
+											style="margin-bottom:10px;"
+										>
+											下载模板
+										</Button>
+										<UpdataBtn 
+											style="display:inline-block" 
+											class="addBtnBox"
+											:Data="ImportUs"
+											@sendImport="getSendImport"
+											:IsDisabled="authIs2(['icdp_userStory_mng','icdp_userStory_view'])"
+											>
+											批量导入用户故事
+										</UpdataBtn>
+									</div>
+								</div>
 								
 								<Button 
 									class="addBtnBox"
@@ -180,7 +196,6 @@
 									type="info"  
 									@click="optputExecl"
 									size="small"
-									shape="circle"
 								>
 									<!-- :disabled="authIs(['icdp_userStory_mng','icdp_userStory_view'])"  -->
 									查询结果导出
@@ -206,6 +221,7 @@
 									type="success"  
 									@click="addItem"
 									:disabled="authIs2(['icdp_userStory_mng','icdp_userStory_view'])" 
+									icon="md-add"
 									>
 									添加用户故事
 								</Button>
@@ -333,6 +349,42 @@
             :isShow = "delpopIsShow"
             :isLoading = "delpopIsLoading"
         />
+        <Button @click="userStoryDetail.show = true" type="primary">Open</Button>
+        
+        
+        <Drawer
+        	:title="userStoryDetail.title"
+        	v-model="userStoryDetail.show"
+        	width="980"
+        	:mask-closeable="true"
+        	:styles="userStoryDetail.styles"
+        	:closable="true" 
+        	>
+        
+        	<div slot="header">
+        		{{userStoryDetail.title}}
+        		<Button 
+        			type="primary" 
+        			class="edit-btn" 
+        			size="small" 
+        			v-if="userStoryDetail.isDetail"
+        			@click="editUserStory"
+        		>
+        			编辑
+        		</Button>
+        		<Button 
+        			type="primary" 
+        			class="edit-btn" 
+        			size="small" 
+        			v-else
+        			@click="submitUserStory"
+        		>
+        			编辑
+        		</Button>
+        	</div>
+        	{{userStoryDetail.styles}}
+        </Drawer>
+    
 
 	</div>
 </template>
@@ -347,7 +399,7 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 import Delpop from '@/components/delectAlert'
-const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList,userstoryOutExcel,userstoryOutWord,importUs} = Common.restUrl;
+const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList,userstoryOutExcel,userstoryOutWord,importUs,downloadTemplate} = Common.restUrl;
 
 import Store from '@/vuex/store'
 
@@ -407,6 +459,27 @@ export default {
 	data() {
 		let that = this;
 		return {
+			// mfg--start
+            userStoryDetail:{
+            	title:"用户故事详情",
+            	show:false,
+            	//详情还是编辑
+            	isDetail:true,
+            	styles:{
+            		height:"calc(100% - 41px)",
+            		overflow:"auto",
+            		padding:"0",
+            		position:"static",
+            		background:"#000",
+            		
+            	}
+            },
+            // mfg--end
+
+
+
+
+
 			ToolTipL:400,
 			isShowMoreShow:false,
 			//--------
@@ -446,6 +519,7 @@ export default {
                 {
                     title: '用户故事名称',
                     key: 'userstory_name',
+                    align: 'center',
                     render: (h, params) => {
                         return h(
                             'a',
@@ -609,22 +683,7 @@ export default {
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
-                        	h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                //domProps:{disabled:this.authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])},
-                                domProps:{disabled:this.iSauth(params.row.editStatus)},
-                                on: {
-                                    click: () => {
-                                        this.deleteTableLine(params.index)
-                                    }
-                                }
-                            }, '废弃'),
+                        	
                             h('Button', {
                                 props: {
                                     type: 'warning',
@@ -679,14 +738,30 @@ export default {
                                     type: 'info',
                                     size: 'small'
                                 },
-
+                                style: {
+                                    marginRight: '5px'
+                                },
                                 on: {
                                     click: () => {
                                         //this.show(params.index)
                                         this.goDevelopmentFn(params.index);
                                     }
                                 }
-                            }, '工作项看板')
+                            }, '工作项看板'),
+                            h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                
+                                //domProps:{disabled:this.authIs(['icdp_userStory_mng','icdp_userStory_edit','icdp_userStory_view'])},
+                                domProps:{disabled:this.iSauth(params.row.editStatus)},
+                                on: {
+                                    click: () => {
+                                        this.deleteTableLine(params.index)
+                                    }
+                                }
+                            }, '废弃'),
                         ]);
                     }
                 },
@@ -739,6 +814,7 @@ export default {
             itemName:"",
 
             ImportUs:importUs,
+            
             
 		}
 	},
@@ -829,6 +905,19 @@ export default {
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
 	},
 	methods:{
+		editUserStory(){
+			this.userStoryDetail.isDetail = false;
+		},
+		submitUserStory(){
+			this.userStoryDetail.isDetail = true;
+		},
+		importMode(){
+			let params = {
+				name_mode:"us",
+			}
+			let fileName = "批量导入模板_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'))+".xlsx"
+			return Common.DownFile(defaultAXIOS,this,downloadTemplate,params,fileName);
+		},
 		getSendImport(data){
 			this.getInfoFn(this.getID());
 		},
@@ -2013,6 +2102,18 @@ export default {
 	width:100%;
 	height:1px; 
 	overflow:hidden;
+}
+.edit-btn{
+	float: right;
+	margin-right: 30px;
+}
+</style>
+<style>
+.ivu-drawer{
+	top: 74px ;
+	bottom: 50px;
+	height: auto;
+	
 }
 </style>
 

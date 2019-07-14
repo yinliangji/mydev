@@ -382,7 +382,16 @@
         			编辑
         		</Button>
         	</div>
-        	{{userStoryDetail.styles}}
+        	<Row :gutter="0">
+        		<Col span="18" style="border-right:8px solid #f7f7f7;">
+        			<userStoryDetailLeft :isDetail="userStoryDetail.isDetail"></userStoryDetailLeft>
+        			<attachmentTable></attachmentTable>
+        			<otherIfo></otherIfo>
+        		</Col>
+        		<Col span="6">
+        			<userStoryDetailRight :isDetail="userStoryDetail.isDetail"></userStoryDetailRight>
+        		</Col>
+        	</Row>
         </Drawer>
     
 
@@ -402,6 +411,13 @@ import Delpop from '@/components/delectAlert'
 const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList,userstoryOutExcel,userstoryOutWord,importUs,downloadTemplate} = Common.restUrl;
 
 import Store from '@/vuex/store'
+
+// mfg--start
+import userStoryDetailLeft from "./user-story-detail/userStoryDetailLeft"
+import userStoryDetailRight from "./user-story-detail/userStoryDetailRight"
+import attachmentTable from "./user-story-detail/attachmentTable"
+import otherIfo from "./user-story-detail/otherIfo"
+// mfg--end
 
 export default {
 	watch: {
@@ -823,7 +839,10 @@ export default {
 		AddPop,
 		Delpop,
 		UpdataBtn,
-
+		userStoryDetailLeft,
+		userStoryDetailRight,
+		attachmentTable,
+		otherIfo,
 	},
 	computed: {
 		//快速添加用户故事开始

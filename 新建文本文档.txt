@@ -116,3 +116,10 @@ Host xx.xx.x.xxx
 1
 2
 其中 xx.xx.x.xxx为服务器的ip地址或者域名
+
+
+
+$ git config --global http.proxy
+ 
+ 
+$ git config --global --unset http.proxy

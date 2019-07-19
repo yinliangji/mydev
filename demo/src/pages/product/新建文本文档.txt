@@ -84,3 +84,59 @@
 					// mission:"5 | 10",
 					// icon: require("@/assets/images/user_02.png")
      			//},
+
+
+
+
+<Drawer
+        	:title="userStoryDetail.title"
+        	v-model="userStoryDetail.show"
+        	width="980"
+        	:mask-closeable="true"
+        	:styles="userStoryDetail.styles"
+        	:closable="true" 
+        	>
+        
+        	<div slot="header">
+        		{{userStoryDetail.title}}
+        		<Button 
+        			type="primary" 
+        			class="edit-btn" 
+        			size="small" 
+        			v-if="userStoryDetail.isDetail"
+        			@click="editUserStory"
+        		>
+        			±à¼­
+        		</Button>
+        		<Button 
+        			type="primary" 
+        			class="edit-btn" 
+        			size="small" 
+        			v-else
+        			@click="submitUserStory"
+        		>
+        			±à¼­
+        		</Button>
+        	</div>
+        	
+        	<div class="usPopBoxRight">
+        		<userStoryDetailRight :isDetail="userStoryDetail.isDetail"></userStoryDetailRight>
+        	</div>
+        	<div class="usPopBoxCenter">&nbsp;</div>
+        	<div class="usPopBoxLeft">
+        		<userStoryDetailLeft :isDetail="userStoryDetail.isDetail"></userStoryDetailLeft>
+        		<attachmentTable></attachmentTable>
+        		<otherIfo></otherIfo>
+        	</div>
+        	
+        	<!-- <Row :gutter="0">
+        		<Col span="18" style="background:red;">
+        			<userStoryDetailLeft :isDetail="userStoryDetail.isDetail"></userStoryDetailLeft>
+        			<attachmentTable></attachmentTable>
+        			<otherIfo></otherIfo>
+        		</Col>
+        		<Col span="6"  style="background:green;">
+        			<userStoryDetailRight :isDetail="userStoryDetail.isDetail"></userStoryDetailRight>
+        		</Col>
+        	</Row> -->
+        </Drawer>

@@ -157,7 +157,7 @@
                             <ToolTip :W="135" content="此用户故事来源的需求项" />
                         </FormItem>
 
-                        <div class="transBox" v-show = "false">
+                        <div class="transBox" v-show="false">
                             <label class="transBoxTitle">关联业务功能</label>
                             <Row>
                                 <Col span="10">&nbsp;</Col>

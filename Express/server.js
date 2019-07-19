@@ -2127,7 +2127,7 @@ let Userstorydetail = (val1 = 200, val2 = 1, val3 = 3) => {
             "userstory_id": 1,
             "userstory_name|5-8": /[a-zA-Z]/,
             "userstory_type|1-3": 1,
-            "charger": "@name",
+            "charger": "xiebei.zh",
             "nick_name":"@cname",
             "userstory_status|1-4": 1,
             //"sprint_id": "迭代1",
@@ -3217,7 +3217,7 @@ let getPermission = (val1 = 200, val2 = 1, val3 = 3) => {
             //========
             
             "icdp_projList_edit",//21
-            //"icdp_proj_role_edit",
+            "icdp_proj_role_edit",
 
             //=======
             "icdp_prjrequirement_mng",
@@ -3271,7 +3271,7 @@ let getPermission2 = (val1 = 200, val2 = 1, val3 = 3) => {
             "icdp_proj_group_menber_edit",//项目设置
 
             
-            //"icdp_proj_role_edit",
+            "icdp_proj_role_edit",
             //========
             "icdp_projList_mng",//25
             "icdp_projList_edit",//21
@@ -3342,7 +3342,20 @@ app.all('/userstory/changeUserstoryStatus/', function(req, res) {
     if(req._parsedUrl.query.indexOf("userstory_status=4") != -1){
         res.json(changeUserstoryStatus(req.body.myStatus, req.body.page, req.body.pageline));
     }else{
-        res.json({status:"success",no_complete_task_list:[]});
+        let res1 = {
+            status:"success",
+            no_complete_task_list:[],
+            req_status: 8,
+            req_status_name: "需求完成",
+        }
+        let res2 = {
+            status:"success",
+            no_complete_task_list:[],
+            req_status: 3,
+            req_status_name: "已选中",
+        }
+        
+        res.json((()=>{return Math.random() > 0.5 ? res1 : res2})());
     }
     res.end()
 });
@@ -3803,6 +3816,14 @@ app.all('/agile/req/export/', function(req, res) {
     res.end()
 });
 
+app.all('/agile/prj/export/', function(req, res) {
+    let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
+    console.log("req==>", req.body);
+    console.log("resVal==>", resVal);
+    res.json(filedown(req.body.myStatus, req.body.page, req.body.pageline));
+    res.end()
+});
+
 app.all('/agile/download_template/', function(req, res) {
     let resVal = filedown(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
@@ -3811,16 +3832,32 @@ app.all('/agile/download_template/', function(req, res) {
     res.end()
 });
 
+let Import = (val1 = 200, val2 = 1, val3 = 3) => {
+    return Mock.mock({
+        "status": "success",
+        "message": "message xxxxxxx",
+        "data":{
+            "total|10-20": 1,
+            "success_total|10-20": 1,
+            "fail_total|10-20": 1,
+        },
+        
+    })
+}
 
 app.all('/agile/import_us/', function(req, res) {
+    let resVal = Import(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
-    res.json({status: "success",message: "agile/import_us success",});
+    console.log("resVal==>", resVal);
+    res.json(Import(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
 
 app.all('/agile/import_req/', function(req, res) {
+    let resVal = Import(req.body.myStatus, req.body.page, req.body.pageline);
     console.log("req==>", req.body);
-    res.json({status: "success",message: "agile/import_us success",});
+    console.log("resVal==>", resVal);
+    res.json(Import(req.body.myStatus, req.body.page, req.body.pageline));
     res.end()
 });
 

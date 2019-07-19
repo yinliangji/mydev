@@ -7,7 +7,8 @@
         <div class="ivu-poptip funnelIcon">
           <div class="ivu-poptip-rel">
             <span class="ivu-table-filter">
-              <i class="ivu-icon ivu-icon-funnel" style="color:#495060;font-weight:900;"></i>
+              <!-- <Icon type="ios-funnel"  class="settingIcon"></Icon> -->
+              <i class="ivu-icon ivu-icon-ios-funnel" style="color:#495060;font-weight:900;"></i>
             </span> 
           </div> 
           <!---->
@@ -35,7 +36,7 @@
           </div>
         </div>
       </span>
-      <Icon type="android-settings" size="18" class="settingIcon" @click="goSetting" title="设置用户故事状态"></Icon>
+      <Icon type="ios-settings" size="18" class="settingIcon" @click="goSetting" title="设置用户故事状态"></Icon>
       
     </div>
     <content id="board">

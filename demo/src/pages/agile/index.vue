@@ -46,10 +46,15 @@
                                             :ref="ITMitem.AddGroupList[0]+'0'" 
                                             :class="ITMitem.AddGroupList[0]+'0'"
                                             >
-                                            <Select v-model="ITMitem.AddGroupList[0].group" :id="'sel'+'0'" clearable filterable :loading="inputLoad"   :placeholder="'请输入内容并选择【'+ITMitem.AddGroupList[0].myLabel+'】'">
-                                                <Option v-for="(item,index2) in ITMitem.AddGroupList[0].groupList" :value="item.value" :key="index2">
-                                                    {{ item.label }}
-                                                </Option>
+                                            <Select 
+                                                v-model="ITMitem.AddGroupList[0].group" 
+                                                :id="'sel'+'0'" 
+                                                clearable 
+                                                filterable 
+                                                :loading="inputLoad"   
+                                                :placeholder="'请输入内容并选择【'+ITMitem.AddGroupList[0].myLabel+'】'"
+                                                >
+                                                <Option v-for="(item,index2) in ITMitem.AddGroupList[0].groupList" :value="item.value" :key="index2">{{item.label}}</Option>
                                             </Select>
                                         </FormItem>
                                         <!-- <FormItem >
@@ -66,8 +71,13 @@
                                         </FormItem>
                                     </Col>
                                      
-                                    <Col span="2" style="text-align: center"><!-- 提出部门 --></Col>
+                                    <Col span="2" style="text-align: center">研发领域<!-- 提出部门 --></Col>
                                     <Col span="6">
+                                        <FormItem >
+                                            <Select clearable v-model="formValidate.subject" placeholder="请选择研发领域">
+                                                <Option v-for="(item,index) in subjectList" :value="item.value" :key="index">{{ item.label }}</Option>
+                                            </Select>
+                                        </FormItem>
                                         <!-- <FormItem >
                                             <Input clearable v-model="formValidate.propose_depart" placeholder="输入提出部门"></Input>
                                         </FormItem> -->
@@ -141,6 +151,16 @@
 
                 <div class="tableBox">
                     <div class="tableBtnBox">
+                        <Button 
+                            class="addBtnBox"
+                            icon="ios-download-outline"
+                            type="info"  
+                            @click="optputExecl"
+                            size="small"
+                            style="float:right;"
+                        >
+                            查询结果导出
+                        </Button>
                         <Button 
                             type="success" 
                             :disabled="authIs(['icdp_projList_mng','icdp_projList_view'])" 
@@ -240,7 +260,7 @@ import ToItmPop from "./toitmpop";
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
-const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission,projectAddGroup,projectCondition} = Common.restUrl;
+const {projectAll,projectDelete,projectAllgroup,projectManagerGroup,projectDeveloperGroup,projectTesterGroup,byRole,getPermission,projectAddGroup,projectCondition,projectOutExcel} = Common.restUrl;
 export default {
     name: 'aglie',
     mounted(){
@@ -276,12 +296,7 @@ export default {
         }
         this.tableDAtaPageCurrent = 1;
 
-        
-
-        
-        
-
-        
+      
 
         /* 搜索条件 以后加上
         this.byRoleFn(byRole,"icdp_projManager");
@@ -365,9 +380,9 @@ export default {
                                     display:"inline-block",
                                     background: ((val)=>{
                                         if(val == "1"){
-                                            return "red" 
+                                            return "#ec6c4c" 
                                         }else if(val == "2"){
-                                            return "green"
+                                            return "#57a3f3"
                                         }else{
                                             return "gray";
                                         }
@@ -481,7 +496,7 @@ export default {
                 },
                
                 {
-                    title: '专题领域',
+                    title: '研发领域',
                     key: 'subject_name',
                     width: 90,
                     align: 'center',
@@ -608,6 +623,7 @@ export default {
                 department:"",//部门
                 propose_depart:"",//提出部门
                 aply_id:"",//实施部门
+                subject:"",//研发领域
             },
             icdp_projManagerList:[],
             icdp_agileCoachList:[],
@@ -616,6 +632,7 @@ export default {
             prj_typeList:[],
             departmentList:[],
             itm_statusList:[],
+            subjectList:[],
 
 
             prj_permission:[],
@@ -638,6 +655,39 @@ export default {
             })
         },
         /* ====== */
+       
+        optputExecl(){
+            let params;
+            let fn = (page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = "",prj_type = "",prjManager = "",department = "",propose_depart = "",aply_id = "",subject="")=>{
+                let starttimeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
+                let endtimeFromet = end_time ? end_time.Format("yyyy-MM-dd") : "";
+                params = {
+                    page,
+                    pageline,
+                    prj_name,
+                    prj_id,
+                    start_time:starttimeFromet,
+                    end_time:endtimeFromet,
+                    icdp_projManager,
+                    icdp_agileCoach,
+                    icdp_devTeam,
+                    icdp_testTeam,
+                    username:Common.getStorageAndCookie(this,Common,"username"),
+                    prj_type,
+                    prjManager,
+                    department,
+                    propose_depart,
+                    aply_id,
+                    subject,
+                }
+
+            }
+            let searchParams = this.searchKdy();
+            fn(this.tableDAtaPageCurrent,this.tableDAtaPageLine,...searchParams);
+           
+            let fileName = "项目查询导出_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'))+".xlsx"
+            return Common.DownFile(defaultAXIOS,this,projectOutExcel,params,fileName);
+        },
         transform(arr,val){
             //visible //hidden
             let name;
@@ -819,6 +869,7 @@ export default {
                 this.formValidate.department,
                 this.formValidate.propose_depart,
                 this.formValidate.aply_id,
+                this.formValidate.subject,
             ]
         },
 
@@ -863,11 +914,12 @@ export default {
             Common.ErrorShow(ERR,this);
         },
 
-        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = "",prj_type = "",prjManager = "",department = "",propose_depart = "",aply_id = ""){
+        tableDataAjaxFn(URL = "",page = 1,pageline = 3,prj_name = "",prj_id = "",start_time = "",end_time = "",icdp_projManager = "" , icdp_agileCoach= "", icdp_devTeam = "" , icdp_testTeam = "",prj_type = "",prjManager = "",department = "",propose_depart = "",aply_id = "",subject=""){
             let starttimeFromet = start_time ? start_time.Format("yyyy-MM-dd") : "";
             let endtimeFromet = end_time ? end_time.Format("yyyy-MM-dd") : "";
             let defaultAXIOSParams = {
-                page,pageline,
+                page,
+                pageline,
                 prj_name,
                 prj_id,
                 start_time:starttimeFromet,
@@ -882,6 +934,7 @@ export default {
                 department,
                 propose_depart,
                 aply_id,
+                subject,
             }
             defaultAXIOS(URL,defaultAXIOSParams,{timeout:20000,method:'get'}).then((response) => {
                 let myData = response.data;

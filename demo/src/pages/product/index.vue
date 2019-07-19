@@ -183,9 +183,10 @@
 											class="addBtnBox"
 											:Data="ImportUs"
 											@sendImport="getSendImport"
+											@sendUploadIng="getSendUploadIng"
 											:IsDisabled="authIs2(['icdp_userStory_mng','icdp_userStory_view'])"
 											>
-											批量导入用户故事
+											批量导入
 										</UpdataBtn>
 									</div>
 								</div>
@@ -276,7 +277,7 @@
 							:sortdisabled="false" 
 							:cardList="cardLists" 
 							:statusList="statusLists" 
-							:groupList="groupList" 
+							:groupList="groupLists" 
 							:Group="true"
 							:aside="'product'"
 							:role="borderRole"
@@ -349,52 +350,24 @@
             :isShow = "delpopIsShow"
             :isLoading = "delpopIsLoading"
         />
-        <Button @click="userStoryDetail.show = true" type="primary">Open</Button>
-        
-        
-        <Drawer
-        	:title="userStoryDetail.title"
-        	v-model="userStoryDetail.show"
-        	width="980"
-        	:mask-closeable="true"
-        	:styles="userStoryDetail.styles"
-        	:closable="true" 
-        	>
-        
-        	<div slot="header">
-        		{{userStoryDetail.title}}
-        		<Button 
-        			type="primary" 
-        			class="edit-btn" 
-        			size="small" 
-        			v-if="userStoryDetail.isDetail"
-        			@click="editUserStory"
-        		>
-        			编辑
-        		</Button>
-        		<Button 
-        			type="primary" 
-        			class="edit-btn" 
-        			size="small" 
-        			v-else
-        			@click="submitUserStory"
-        		>
-        			编辑
-        		</Button>
-        	</div>
-        	<Row :gutter="0">
-        		<Col span="18" style="border-right:8px solid #f7f7f7;">
-        			<userStoryDetailLeft :isDetail="userStoryDetail.isDetail"></userStoryDetailLeft>
-        			<attachmentTable></attachmentTable>
-        			<otherIfo></otherIfo>
-        		</Col>
-        		<Col span="6">
-        			<userStoryDetailRight :isDetail="userStoryDetail.isDetail"></userStoryDetailRight>
-        		</Col>
-        	</Row>
-        </Drawer>
-    
+        <UsDetail 
+        	:isShow="isDetailShow" 
+        	@sendDetailClose="getSendDetailClose" 
+        	:Data="usDetailSn"
+        	:PrjPermission="prj_permission"
+        	:Identity="identity"
 
+			:UserstoryTypeList="userstory_typeList"
+			:UserstoryStatusList="userstory_statusList"
+			:ReqIdList="req_idList"
+			:ProiList="proiList"
+			:ChargerList="chargerList"
+			:SprintList="sprintList"
+			:groupNameList="group_nameList"
+			:userstoryCategoryList="userstory_categoryList"
+
+
+        />
 	</div>
 </template>
 <script>
@@ -408,15 +381,12 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 import Delpop from '@/components/delectAlert'
-const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList,userstoryOutExcel,userstoryOutWord,importUs,downloadTemplate} = Common.restUrl;
+const {storyAll,storyGetKanBan,storyGetCondition,getPermission,storySetChange,projectDetail,getDefSpring,userstoryDeleteList,userstoryOutExcel,userstoryOutWord,importUs,downloadTemplate,storyGetDetail} = Common.restUrl;
 
 import Store from '@/vuex/store'
 
 // mfg--start
-import userStoryDetailLeft from "./user-story-detail/userStoryDetailLeft"
-import userStoryDetailRight from "./user-story-detail/userStoryDetailRight"
-import attachmentTable from "./user-story-detail/attachmentTable"
-import otherIfo from "./user-story-detail/otherIfo"
+import UsDetail from "./user-story-detail"
 // mfg--end
 
 export default {
@@ -476,20 +446,8 @@ export default {
 		let that = this;
 		return {
 			// mfg--start
-            userStoryDetail:{
-            	title:"用户故事详情",
-            	show:false,
-            	//详情还是编辑
-            	isDetail:true,
-            	styles:{
-            		height:"calc(100% - 41px)",
-            		overflow:"auto",
-            		padding:"0",
-            		position:"static",
-            		background:"#000",
-            		
-            	}
-            },
+            usDetailSn:"",
+            isDetailShow:false,
             // mfg--end
 
 
@@ -839,10 +797,7 @@ export default {
 		AddPop,
 		Delpop,
 		UpdataBtn,
-		userStoryDetailLeft,
-		userStoryDetailRight,
-		attachmentTable,
-		otherIfo,
+		UsDetail,
 	},
 	computed: {
 		//快速添加用户故事开始
@@ -880,6 +835,9 @@ export default {
 		},
 		userstory_statusLists(){
 			return this.userstory_statusList;
+		},
+		groupLists(){
+			return this.groupList
 		},
 		
 		//看板结束
@@ -924,17 +882,39 @@ export default {
 		//Common.GetConditionAll(defaultAXIOS,this,storyGetCondition,"xxxxx",ID,["userstory_type","userstory_status","req_id","proi","charger","learn_concern","sprint"]);
 	},
 	methods:{
-		editUserStory(){
-			this.userStoryDetail.isDetail = false;
+		// mfg--start
+		getSendDetailClose(data){
+			this.usDetailSn = "";
+			this.isDetailShow = data;
 		},
-		submitUserStory(){
-			this.userStoryDetail.isDetail = true;
+		storyGetDetailFn(URL = "",detail_id){
+            return defaultAXIOS(URL,{detail_id,username:Common.getCookie("username")},{timeout:5000,method:'get'})
+            .then((response) => {
+                let myData = response.data;
+                //console.log("<======用户故事 详情***response+++",response,myData,"======>");
+                if(Object.getOwnPropertyNames(myData).length >2){
+                	this.usDetailSn = myData;
+                    return Promise.resolve(myData)
+                }else{
+                    return Promise.reject("没有数据");
+                }
+
+            })
+            .catch( (error) => {
+                console.log(error);
+                return Promise.reject(error);
+                //this.showError(error);
+            });
+        },
+		// mfg--end
+		getSendUploadIng(data){
+			this.searchCan = data;
 		},
 		importMode(){
 			let params = {
 				name_mode:"us",
 			}
-			let fileName = "批量导入模板_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'))+".xlsx"
+			let fileName = "用户故事批量导入模板_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'))+".xlsx"
 			return Common.DownFile(defaultAXIOS,this,downloadTemplate,params,fileName);
 		},
 		getSendImport(data){
@@ -988,12 +968,10 @@ export default {
 	    		this.formValidate.charger = "";
 	    		this.formValidate.learn_concern = "";
 	    		this.formValidate.group_name = "";
-	    		this.isShowMoreShow = true;
 
 	    		this.formValidate.uscSn = "";
 
-	    	}
-	        else if(Common.GetSession("REQ_ID")){
+	    	}else if(Common.GetSession("REQ_ID")){
 
 	    		this.formValidate.req_id = Common.GetSession("REQ_ID") + "";
 	    		this.formValidate.sprint = "";
@@ -1006,10 +984,29 @@ export default {
 	    		this.formValidate.charger = "";
 	    		this.formValidate.learn_concern = "";
 	    		this.formValidate.group_name = "";
-	    		this.isShowMoreShow = true;
 
 	    		this.formValidate.uscSn = "";
 
+	    	}else{
+	    		let usSearch = Common.GetSession("userstorySerch") ? JSON.parse(Common.GetSession("userstorySerch")) : false ;
+	    		if(usSearch){
+	    			for(let J in usSearch){
+	    				if(J == "tableDAtaPageCurrent"){
+	    					this.tableDAtaPageCurrent = usSearch[J] - 0;
+	    					if(usSearch[J] && usSearch[J] != 1){
+			    				Common.SetSession("isSprint",true);
+			    			}
+	    				}else if(J == "uss"){
+
+	    				}else{
+	    					this.formValidate[J] = usSearch[J];
+	    					if(usSearch[J]){
+			    				Common.SetSession("isSprint",true);
+			    			}
+	    				}
+	    			}
+	    			
+	    		}
 	    	} 
 
 	        Common.RemoveSession("userstorySerch");
@@ -1189,6 +1186,8 @@ export default {
 			    		Common.RemoveSession("allSession");
 			    	}else if(Common.GetSession("REQ_ID") || Common.GetSession("SPRINT_ID")){
 			    		this.optionSession();
+			    	}else if(Common.GetSession("isSprint")){
+			    		Common.RemoveSession("isSprint");
 			    	}else{
 			    		if(Common.GetSession("isClickedDelBtn")){
 			    			//
@@ -1315,6 +1314,7 @@ export default {
 			_params.ID = info.evt.item.getAttribute('detailid');
 			_params.taskStatus = info.evt.to.getAttribute('state');
 			_params.taskStatusFrom = info.evt.from.getAttribute('state');
+			_params.req_id = info.evt.item.getAttribute('groupid');
 			if(_params.taskStatus == _params.taskStatusFrom){
 				return
 			}
@@ -1332,7 +1332,17 @@ export default {
                 	this.showError(storySetChange+"|返回结果错误");
                 }else{
                 	this.cardpopList = [];
+                	let objNum = this.req_idList.findIndex(item=>item.value == _params.req_id);
+                	let groupNum = this.groupList.findIndex(item=>item.groupId == _params.req_id);
+                	if(objNum != -1 && myData.req_status_name){
+                		this.req_idList[objNum].req_status_name = myData.req_status_name;
+                		this.req_idList[objNum].req_status = myData.req_status;
+                		this.groupList[groupNum].req_status_name = myData.req_status_name;
+                		this.groupList[groupNum].req_status = myData.req_status;
+                	}
+                	/*************************/
                 	return;
+                	/*************************/
                 	if(myData.no_complete_task_list && Array.isArray(myData.no_complete_task_list) && myData.no_complete_task_list.length){
                 		this.cardpop = true;
                 		this.cardpopList = myData.no_complete_task_list;
@@ -1340,6 +1350,7 @@ export default {
                 			item.task_statusCN = Common.StatusFn(item.task_status,"userstory_status",this);
                 		})
                 	}
+                	/*************************/
                 }
                 
             }).catch( (error) => {
@@ -1402,9 +1413,21 @@ export default {
             		}
             	}else{
             		Query.detail_id = info.detail_id;
+            		
             	}
 
-            	this.$router.push({path:Path , query:Query })
+            	if(!type){
+            		let usDetail = this.storyGetDetailFn(storyGetDetail,info.detail_id)
+            		Promise.all([this._sprint,usDetail]).then((REP)=>{
+		                this.isDetailShow = true;
+		            },(ERR)=>{
+		                console.log(ERR)
+		                this.showError(ERR);
+		            })
+            		
+            	}else{
+            		this.$router.push({path:Path , query:Query })
+            	} 
             	EventBus.productClicked = true;
             	setTimeout(()=>{
             		EventBus.productClicked = false;
@@ -1747,12 +1770,14 @@ export default {
             if(Common.IsObject(val)){
                 val.tableDAtaPageCurrent = this.tableDAtaPageCurrent;
             }
+            Common.RemoveSession("isSprint");
             Common.RemoveSession("userstorySerch");
             Common.RemoveSession("allSession");
             Common.SetSession("userstorySerch",JSON.stringify(val));
             Common.RemoveSession("isClickedDelBtn");
         },
         optionSession(){
+        	Common.RemoveSession("isSprint");
         	Common.RemoveSession("REQ_ID");
         	Common.RemoveSession("SPRINT_ID");
         },
@@ -2122,17 +2147,9 @@ export default {
 	height:1px; 
 	overflow:hidden;
 }
-.edit-btn{
-	float: right;
-	margin-right: 30px;
-}
+
 </style>
 <style>
-.ivu-drawer{
-	top: 74px ;
-	bottom: 50px;
-	height: auto;
-	
-}
+
 </style>
 

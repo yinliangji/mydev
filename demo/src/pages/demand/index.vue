@@ -75,9 +75,10 @@
                                             class="addBtnBox"
                                             :Data="ImportReq"
                                             @sendImport="getSendImport"
+                                            @sendUploadIng="getSendUploadIng"
                                             :IsDisabled="authIs(['icdp_prjrequirement_mng','icdp_prjrequirement_view'])"
                                             >
-                                            批量导入需求项
+                                            批量导入
                                         </UpdataBtn>
                                         
                                     </div>
@@ -518,11 +519,14 @@ export default {
         //console.log("项目需求项--updated--","this.isShowITMPop==>",this.isShowITMPop)
     },
     methods: {
+        getSendUploadIng(data){
+            this.searchCan = data;
+        },
         importMode(){
             let params = {
                 name_mode:"req",
             }
-            let fileName = "批量导入模板_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'))+".xlsx"
+            let fileName = "需求项批量导入模板_"+(new Date().Format('yyyy_MM_dd_hh_mm_ss'))+".xlsx"
             return Common.DownFile(defaultAXIOS,this,downloadTemplate,params,fileName);
         },
         getSendImport(data){

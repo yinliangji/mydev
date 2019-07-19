@@ -122,6 +122,9 @@ CommonRest.restUrl = {
     "findItm": process.env.BASE_URL + "/findItm/",
     /**** 敏捷项目转立项搜索 post****/
 
+    "projectOutExcel": process.env.BASE_URL + "/agile/prj/export/",
+    /**** 敏捷项目列表查询结果导出excel get****/
+
 
 
     /*****************************************/

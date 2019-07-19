@@ -914,7 +914,7 @@ export default {
 </style>
 
 <style >
-.ivu-tag.donot .ivu-icon-ios-close-empty{
+.ivu-tag.donot .ivu-icon-ios-close-empty , .ivu-tag.donot .ivu-icon-ios-close{
     visibility: hidden;
     width: 0;
     height: 0;
@@ -929,7 +929,7 @@ export default {
 #option_no .ivu-btn-dashed{
     display: none;
 }
-#option_no .ivu-icon-ios-close-empty{
+#option_no .ivu-icon-ios-close-empty ,#option_no .ivu-icon-ios-close{
     display: none;
 }
 </style>

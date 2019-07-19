@@ -534,6 +534,7 @@ export default class Common extends Utils {
         for (var i = 0; i < curVal.length; i++) {
           let _DOM = document.getElementById(ID).getElementsByClassName("ivu-select-input")[0];
           _DOM.addEventListener("keyup", function(event) {
+            
             let _num = Number(this.parentNode.parentNode.parentNode.id.replace("sel", ""));
             let exec = _Common.throttle(
               (value, THIS) => {
@@ -1818,7 +1819,7 @@ export default class Common extends Utils {
       _Common.RemoveSession("userstorySerch");
       _Common.RemoveSession("oldAllSession");
       _Common.RemoveSession("userstorySerchTemp");
-        
+      _Common.RemoveSession("isSprint");
     }
     //删除用户故事分页和搜索还原--不通用
     static DelectUserstorySession(_Common){
@@ -1827,6 +1828,7 @@ export default class Common extends Utils {
       _Common.RemoveSession("userstorySerch");
       _Common.RemoveSession("tableDAtaPageCurrent");
       _Common.RemoveSession("oldAllSession");
+      _Common.RemoveSession("isSprint");
     }
     //删除项目需求项分页和搜索还原--不通用
     static DelectDemandSession(_Common){

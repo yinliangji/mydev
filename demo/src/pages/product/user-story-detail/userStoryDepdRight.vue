@@ -1,29 +1,51 @@
 <template>
-    <div>
-    	<Form 
-    		id="leftform"
-    		class="leftform" 
-    		ref="formValidate" 
-    		:model="formValidate" 
-    		:rules="ruleValidate" 
-    		:label-width="104" 
-    		>
-    		<FormItem label="故事名称" prop="userstory_name">
-                <Input v-model="formValidate.userstory_name" placeholder="请填用户故事名称"></Input>
+	<div>
+	    <Form 
+	    	id="rightform2"
+	    	ref="formValidate" 
+	    	:model="formValidate" 
+	    	:rules="ruleValidate" 
+	    	:label-width="100" 
+	    	class="rightform2" 
+	    	>
+            <h3 class="Title"><span>依赖相关</span></h3>
+            <FormItem label="添加依赖项" >
+                <span style="position: relative;">
+                    <Tag 
+                        v-for="(item,index) in dependList"
+                        :value="index" 
+                        :key="index" 
+                        :name="index" 
+                        closable 
+                        @on-close="dependDel">
+                        {{ item.depd_name}}
+                    </Tag>
+                    <Button 
+                        icon="ios-add" 
+                        type="dashed" 
+                        size="small" 
+                        @click="addDepend">
+                        添加依赖项
+                    </Button>
+                    <ToolTip  style="position:relative; top:0;right:0; display:inline-block" :T="-4" content="建议针对项目组外部依赖项的跟踪" />
+                </span>
             </FormItem>
-            <FormItem label="故事描述">
-                <Input v-model="formValidate.userstory_desc" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写故事描述"></Input>
-            </FormItem>
-            <FormItem label="验收标准">
-                <Input v-model="formValidate.us_accept" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写验收标准"></Input>
-            </FormItem>
-    	</Form>
+        </Form>
+	    	
+	    <Depend 
+            :prjName="formValidate.prj_name" 
+            :DependOnOff="dependonoff" 
+            @sendDepend="receiveDepend" 
+            @sendCloseDepend="receiveCloseDepend" 
+        />
+       
     </div>
+
 </template>
 <script>
 import Store from '@/vuex/store'
 import Depend from '@/pages/product/add/depend'
-import Assist from '@/pages/product/add/assist'
+
 import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
@@ -70,6 +92,9 @@ export default {
                 return "";
             }
         },
+
+
+        
     },
     watch:{
         Data(data){
@@ -78,12 +103,17 @@ export default {
         	}
         },
         PrjPermission(data){
+            //console.error("PrjPermission",data)
             this.prj_permission = data;
         },
         Identity(data){
+            //console.error("Identity",data)
             this.identity = data;
         },
+        
+       
     },
+
     data () {
         return {
             modaAdd: false,
@@ -208,10 +238,10 @@ export default {
     },
     methods: {
     	init(data){
-    		console.error("左侧 init",data);
-    		let ID = Common.GETID(this,Common)
-    		for (let i in this.formValidate){
+    		let ID = Common.GETID(this,Common);
+            for (let i in this.formValidate){
                 if(i == "manhour" || i == "manhour" || i == "manHour" || i == "manHours"){
+                    this.formValidate.manHours = ((data[i] - 0) || "")
                 }else if(i == "AddGroupList" || i == "bfunc"){
                 }else if(i == "depd_list"){
                 }else if(i == "assist_list"){
@@ -219,16 +249,40 @@ export default {
                     this.formValidate[i] = (data[i] || "")+"";
                 }
             }
-            
+            if(data.depd_list){
+                this.dependList = data.depd_list;
+            }
     	},
-    }
+    	
+        //依赖开始
+        addDepend(){
+            this.dependonoff = true;
+        },
+        dependDel(event,name){
+            this.dependList.splice(name,1)
+        },
+        receiveDepend(obj){
+            this.dependList.push(obj);
+            this.dependonoff = false;
+        },
+        receiveCloseDepend(boo){
+            this.dependonoff = boo;
+        },
+        //依赖结束
+    },
+    components: {
+       Depend,
+    },
+    computed: {
+        
+    },
 }
 </script>
 <style>
-.leftform {
+.rightform2 {
 	padding-right: 30px;
 }
-#leftform .ivu-form-item{
+#rightform2 .ivu-form-item{
 
 }
 </style>

@@ -1,4 +1,5 @@
 <template>
+    <div>
         <Upload
             multiple
             :action="actionUrl"
@@ -8,12 +9,30 @@
             :show-upload-list="false"
             :class="CLASS"
             :data="params"
+            :on-before-upload="handleBeforeUpload"
+            :on-progress="handleBeforeUpload"
             >
             <!-- :shape="SHAPE" -->
             <Button  :icon="ICON" :type="TYPE" :size="SIZE" :disabled="IsDisabled">
                 <slot>导入</slot>
             </Button>
         </Upload>
+        <Modal 
+            id="uploadPop"
+            ref="uploadPop" 
+            v-model="modaUpload" 
+            title="导入结果" 
+            @on-ok="ok" 
+            @on-cancel="cancel" 
+            ok-text="关闭"  
+            width="500px"
+            >
+                <p>导入总计：{{modaUploadData ? modaUploadData.data.total : ""}}条数据</p>
+                <p>导入成功：{{modaUploadData ? modaUploadData.data.success_total : ""}}条数据</p>
+                <p>导入失败：{{modaUploadData ? modaUploadData.data.fail_total:""}}条数据</p>
+                <p>详细结果已通过邮件发送，请查收</p>
+        </Modal>
+    </div>
 </template>
 <script>
 
@@ -203,10 +222,26 @@ export default {
                 prjId:Common.GETID(this,Common),
                 prjSn:Common.GETprjid(this,Common),
             },
+            //窗口
+            modaUpload:false,
+            modaUploadData:"",
             
         }
     },
     methods:{
+        //窗口开始
+        ok(){
+            this.$emit("sendImport",this.modaUploadData);
+            this.modaUploadData = "";
+            this.modaUpload = false;
+            
+        },
+        cancel(){
+            this.$emit("sendImport",this.modaUploadData);
+            this.modaUploadData = "";
+            this.modaUpload = false;
+        },
+        //窗口结束
         //删除文件开始
         tableDel(i,path){
             this.delPath_file = path;
@@ -300,6 +335,8 @@ export default {
             //this.tableDAtaPageCurrent = 1;
         },
         handleError(res,file,list){
+            this.$emit("sendUploadIng",false);
+            this.modaUploadData = "";
             this.error(res.message || "导入失败");
             console.log("导入失败");
             this.showError("导入失败");
@@ -312,11 +349,18 @@ export default {
             Common.CommonError(this,MSG)
         },
         handleSuccess(res,file,list){
+            this.$emit("sendUploadIng",false);
             if(res.status === "success"){
-                this.Message(res.message || "导入成功");
-                this.$emit("sendImport",res);
+                if(res && res.data && res.data.total){
+                    this.modaUploadData = res;
+                    this.modaUpload = true;    
+                }else{
+                    this.Message(res.message || "导入成功");
+                    this.$emit("sendImport",res);    
+                }
                 return Promise.resolve("导入成功");    
             }else{
+                this.modaUploadData = "";
                 this.error(res.message || "导入失败");
                 this.$emit("sendImport",false);
                 return Promise.reject(false);
@@ -337,6 +381,9 @@ export default {
             */
             
             
+        },
+        handleBeforeUpload(){
+            this.$emit("sendUploadIng",true);
         },
         listUpFile(URL,id="",userstory_id = ""){
             return Promise.resolve("添加成功");
@@ -405,7 +452,14 @@ export default {
 .UploadBtn{
     
 }
+
 </style>
 <style>
-
+#uploadPop .ivu-btn-text {
+    display:none;
+}
+#uploadPop p {
+    font-size: 14px;
+    line-height: 1.5em;
+}
 </style>

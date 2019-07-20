@@ -4,23 +4,24 @@
         v-model="userStoryDetail.show"
         @on-close="onClose"
         @on-visible-change="onVisibleChange"
-        width="1220"
+        :width="drawerWidth"
         :mask-closeable="true"
         :styles="userStoryDetail.styles"
         :closable="true" 
         >
-    
         <div slot="header">
             {{userStoryDetail.title}}
             <Button 
                 type="primary" 
                 class="edit-btn" 
                 size="small" 
-                v-if="userStoryDetail.isDetail"
-                @click="editUserStory"
-            >
-                编辑
+                @click="editSubmitUserStory"
+                :disabled="false"
+                >
+                {{userStoryDetail.isEditDetail?"提交":"编辑"}}
             </Button>
+            <!--
+            v-if="userStoryDetail.isEditDetail" 
             <Button 
                 type="primary" 
                 class="edit-btn" 
@@ -28,13 +29,13 @@
                 v-else
                 @click="submitUserStory"
             >
-                编辑
-            </Button>
+                提交
+            </Button> -->
         </div>
         
-        <div class="usPopBoxRight">
+        <span class="usPopBoxRight">
             <UserStoryDetailRight 
-                :isDetail="userStoryDetail.isDetail"
+                :IsEditDetail="userStoryDetail.isEditDetail"
                 :Data="Data"
                 :PrjPermission="PrjPermission"
                 :Identity="Identity" 
@@ -48,35 +49,41 @@
                 :userstoryCategoryList="userstoryCategoryList"
             />
             <UserStoryDepdRight 
-                :isDetail="userStoryDetail.isDetail"
+                :IsEditDetail="userStoryDetail.isEditDetail"
                 :Data="Data"
                 :PrjPermission="PrjPermission"
                 :Identity="Identity" 
             />
-        </div>
-        <div class="usPopBoxCenter">&nbsp;</div>
-        <div class="usPopBoxLeft">
+        </span>
+        
+        <span class="usPopBoxLeft">
             <UserStoryDetailLeft 
-                :isDetail="userStoryDetail.isDetail"
+                :IsEditDetail="userStoryDetail.isEditDetail"
                 :Data="Data"
                 :PrjPermission="PrjPermission"
                 :Identity="Identity" 
 
             />
             <AttachmentTable
+                :IsEditDetail="userStoryDetail.isEditDetail"
                 :USID="Data.userstory_id"
             />
-            <otherIfo />
-        </div>
+            <otherIfo
+                :IsEditDetail="userStoryDetail.isEditDetail"
+                :Data="Data"
+                :PrjPermission="PrjPermission"
+                :Identity="Identity" 
+            />
+        </span>
         
         <!-- <Row :gutter="0">
             <Col span="18" style="background:red;">
-                <userStoryDetailLeft :isDetail="userStoryDetail.isDetail"></userStoryDetailLeft>
+                <userStoryDetailLeft :isEditDetail="userStoryDetail.isEditDetail"></userStoryDetailLeft>
                 <attachmentTable></attachmentTable>
                 <otherIfo></otherIfo>
             </Col>
             <Col span="6"  style="background:green;">
-                <userStoryDetailRight :isDetail="userStoryDetail.isDetail"></userStoryDetailRight>
+                <userStoryDetailRight :isEditDetail="userStoryDetail.isEditDetail"></userStoryDetailRight>
             </Col>
         </Row> -->
     </Drawer>
@@ -178,8 +185,10 @@ export default {
     },
     watch: {
         isShow(data){
-            console.error("isShow",data)
             this.userStoryDetail.show = data;
+            if(!data){
+                this.userStoryDetail.isEditDetail = data
+            }
         },
         Data(data){
             if(data){
@@ -217,17 +226,21 @@ export default {
     },
     mounted(){
         this.userStoryDetail.show = this.isShow;
+        if(!this.isShow){
+            this.userStoryDetail.isEditDetail = this.isShow;
+        }
         if(this.Data){
             this.init(data)
         }
     },
     data () {
         return {
+            drawerWidth:document.documentElement.clientWidth - 260,//1220
             userStoryDetail:{
                 title:"用户故事详情",
                 show:false,
                 //详情还是编辑
-                isDetail:true,
+                isEditDetail:false,
                 styles:{
                     height:"calc(100% - 41px)",
                     overflow:"auto",
@@ -293,32 +306,18 @@ export default {
             identity:"",
             TASKID:"",
            
-            //--业务功能列表开始
             
-            //--业务功能列表结束
             //-- tabs start
             TabsCur:"name1",
             //-- tabs end
-            //查询搜索开始
            
-            //查询搜索结束
-            //关联业务开始
-            
-            //关联业务结束
-            ruleValidate: {
-            },
-            
-            
-            
             // wy start
             storyTestCaseData:{},
             // wy end
             //juzi start
             userStoryId:"",
             //juzi end
-            //检测id是否在projectListDataNew列表里
-            GO:false,
-            GOText:"",
+            
         }
     },
     methods: {
@@ -351,12 +350,9 @@ export default {
             //console.error("onVisibleChange",data,this.userStoryDetail.show)
             //this.$emit("sendDetailClose",this.userStoryDetail.show);
         },
-        editUserStory(){
-            this.userStoryDetail.isDetail = false;
-        },
-        submitUserStory(){
-            this.userStoryDetail.isDetail = true;
-        },
+        editSubmitUserStory(){
+            this.userStoryDetail.isEditDetail = !this.userStoryDetail.isEditDetail;
+        }
     },
     components: {
         UserStoryDetailLeft,
@@ -382,26 +378,30 @@ export default {
     
 }
 .usPopBoxRight{
-    background:#f5f5f5;
     position: absolute;
     width:354px;
     right: 0;
     top: 0;
 }
-.usPopBoxCenter {
-    position: absolute;
-    width: 12px;
-    background: #edf2f5;
-    right: 354px;
-    bottom: 0;
-    top: 0;
+.usPopBoxRight:before{
+    left: -12px;
 }
+
 .usPopBoxLeft{
-    background:#ccc;
     position: absolute;
     left: 0;
     right: 366px;
-
+}
+.usPopBoxLeft:after{
+    right: -12px;
+}
+.usPopBoxRight:before , .usPopBoxLeft:after{
+    position: absolute;
+    content: "";
+    top: 0;
+    height: 100%;
+    width: 12px;
+    background: #edf2f5;
 }
 .edit-btn{
     float: right;

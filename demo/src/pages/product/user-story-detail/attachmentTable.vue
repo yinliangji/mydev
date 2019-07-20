@@ -4,8 +4,6 @@
     	<Form 
 	    	id="rightform2"
 	    	ref="formValidate" 
-	    	:model="formValidate" 
-	    	:rules="ruleValidate" 
 	    	:label-width="100" 
 	    	class="rightform2" 
 	    	>
@@ -55,15 +53,22 @@ const { fileDownList,fileUpload,downFile,fileDelete,fileView} = Common.restUrl;
 import Delpop from '@/components/delectAlert'
 export default {
 	props: {
+        IsEditDetail: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
         USID: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
                 return false;
             }
         },
-        
     },
     watch:{
+        IsEditDetail(data){
+        },
         USID(){
             if(this.USID){
                 this.formValidate.userstory_id = this.USID;
@@ -122,7 +127,7 @@ export default {
                     title: '创建时间',
                     key: 'created_time',
                     align: 'center',
-                    width:'100',
+                    width:'120',
                 },
                 {
                     title: '操作',
@@ -138,6 +143,10 @@ export default {
                                     size: 'small'
                                 },
                                 style: {
+                                    visibility:((is)=>{
+                                        return is ? "visible" : "hidden";
+
+                                    })(this.IsEditDetail),
                                     
                                 },
                                 on: {

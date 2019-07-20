@@ -9,8 +9,14 @@
 	    	class="rightform2" 
 	    	>
             <h3 class="Title"><span>依赖相关</span></h3>
-            <FormItem label="添加依赖项" >
-                <span style="position: relative;">
+            <FormItem label="依赖项名称" >
+                <span 
+                    v-show="!IsEditDetail"
+                    v-for="(item,index) in dependList" 
+                    :key="index" 
+                    class="depdTxt" 
+                    >【<a @click="depdPop(item,index)">{{item.depd_name}}</a>】<em v-if="index != dependList.length-1">、</em></span>
+                <span style="position: relative;" v-show="IsEditDetail">
                     <Tag 
                         v-for="(item,index) in dependList"
                         :value="index" 
@@ -38,6 +44,12 @@
             @sendDepend="receiveDepend" 
             @sendCloseDepend="receiveCloseDepend" 
         />
+        <Depdpop 
+            @buspopClose = "depdpopCloseFn"
+            :data="depdpopData"
+            :isShow = "depdpopIsShow"
+            :isLoading = "depdpopIsLoading"
+        />
        
     </div>
 
@@ -50,6 +62,11 @@ import API from '@/api'
 const {defaultAXIOS} = API;
 import Common from '@/Common';
 const {} = Common.restUrl;
+//import Depdepd from './depdpop'
+import Depdpop from '@/pages/product/detail/depdpop'
+
+
+
 const validateNumber = (rule, value, callback) => {
     if (!value) {
         return callback(new Error('请填写内容，不能为空'));
@@ -74,6 +91,12 @@ const validateNumber2 = (rule, value, callback) => {
 };
 export default {
 	props: {
+        IsEditDetail: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
         Data: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
@@ -97,17 +120,17 @@ export default {
         
     },
     watch:{
+        IsEditDetail(data){
+        },
         Data(data){
         	if(data){
         		this.init(data)
         	}
         },
         PrjPermission(data){
-            //console.error("PrjPermission",data)
             this.prj_permission = data;
         },
         Identity(data){
-            //console.error("Identity",data)
             this.identity = data;
         },
         
@@ -229,6 +252,14 @@ export default {
             //检测id是否在projectListDataNew列表里
             GO:false,
             GOText:"",
+            //业务弹出--start
+            depdpopIsShow:false,
+            depdpopIsLoading:false,
+            depdpopData:false,
+            //业务弹出--end
+            depdPop(d,i){
+                this.depdpopOpenFn(true,i,d)
+            },
         }
     },
     mounted(){
@@ -269,9 +300,19 @@ export default {
             this.dependonoff = boo;
         },
         //依赖结束
+        //业务窗口 -start
+        depdpopCloseFn(B){
+          this.depdpopIsShow = B;
+        },
+        depdpopOpenFn(B,i,d){
+          this.depdpopData = d;
+          this.depdpopIsShow = B;
+        },
+        //业务窗口 -end
     },
     components: {
        Depend,
+       Depdpop,
     },
     computed: {
         

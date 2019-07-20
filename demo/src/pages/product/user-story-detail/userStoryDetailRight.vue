@@ -11,31 +11,72 @@
 	    	<FormItem label="所属项目" >
 	            <span>{{formValidate.prj_name}}</span>
 	        </FormItem>
+            <FormItem label="故事编号" >
+                <span>{{formValidate.userstory_id}}</span>
+            </FormItem>
+            
+
 	        
 	        <FormItem label="故事类型" prop="userstory_type">
-	            <Select v-model="formValidate.userstory_type" placeholder="请选择故事类型">
+                <span v-show="!IsEditDetail">
+                    {{translateFn(formValidate.userstory_type,"userstory_typeList")}}
+                </span>
+	            <Select
+                    v-show="IsEditDetail"  
+                    v-model="formValidate.userstory_type" 
+                    placeholder="请选择故事类型"
+                    >
 	                <Option v-for="(item,index) in userstory_typeList" :key="index" :value="item.value">{{item.label}}</Option>
 	            </Select>
 	        </FormItem>
 	        <FormItem label="所属迭代" prop="sprint">
-	            <Select clearable v-model="formValidate.sprint" placeholder="请选所属迭代">
+                <span v-show="!IsEditDetail">
+                    {{translateFn(formValidate.sprint,"sprintList")}}
+                </span>
+	            <Select
+                    v-show="IsEditDetail"   
+                    clearable 
+                    v-model="formValidate.sprint" 
+                    placeholder="请选所属迭代"
+                    >
 	                <Option v-for="(item , index) in sprintList" :value="item.value" :key="index">{{ item.label }}</Option>
 	            </Select>
 	            <ToolTip content="计划在哪个迭代周期内完成此用户故事" />
 	        </FormItem>
 	        <FormItem label="所属需求项" prop="req_id">
-	            <Select filterable clearable v-model="formValidate.req_id" placeholder="请选择所属需求项">
+                <span v-show="!IsEditDetail">
+                    {{translateFn(formValidate.req_id,"req_idList")}}
+                </span>
+	            <Select 
+                    v-show="IsEditDetail" 
+                    filterable 
+                    clearable 
+                    v-model="formValidate.req_id" 
+                    placeholder="请选择所属需求项"
+                    >
 	                <Option v-for="(item , index) in req_idList" :value="item.value" :key="index">{{ item.label }}</Option>
 	            </Select>
 	            <ToolTip :W="135" content="此用户故事来源的需求项" />
 	        </FormItem>
 	        <FormItem label="责任人" >
-	            <Select filterable clearable v-model="formValidate.charger" placeholder="请选择责任人">
+                <span v-show="!IsEditDetail">
+                    {{translateFn(formValidate.charger,"chargerList")}}
+                </span>
+	            <Select 
+                    v-show="IsEditDetail" 
+                    filterable 
+                    clearable 
+                    v-model="formValidate.charger" 
+                    placeholder="请选择责任人"
+                    >
 	                <Option v-for="(item,index) in chargerList" :key="index" :value="item.value">{{item.label}}</Option>
 	            </Select>
 	        </FormItem>
 	        <FormItem label="责任协助人" >
-	            <span style="position: relative;">
+                <span v-show="!IsEditDetail">
+                    {{translateListFn(assistList)}}
+                </span>
+	            <span style="position: relative;" v-show="IsEditDetail" >
 	                <Tag 
 	                    v-for="(item,index) in assistList"
 	                    :value="index" 
@@ -52,16 +93,29 @@
 	                    @click="addAssist">
 	                    添加责任协助人
 	                </Button>
-	                
 	            </span>
 	        </FormItem>
 	        <FormItem label="优先级" prop="proi">
-	            <RadioGroup v-model="formValidate.proi">
+                <span v-show="!IsEditDetail">
+                    {{translateFn(formValidate.proi,"proiList")}}
+                </span>
+	            <RadioGroup 
+                    v-show="IsEditDetail"
+                    v-model="formValidate.proi"
+                    >
 	                <Radio v-for="(item,index) in proiList" :key="index" :label="item.value" >{{item.label}}</Radio>
 	            </RadioGroup>
 	        </FormItem>
 	        <FormItem label="用户故事点数" prop="manHours">
-                <Input v-model="formValidate.manHours" placeholder="请填写用户故事点数" number ></Input>
+                <span v-show="!IsEditDetail">
+                    {{formValidate.manHours}}
+                </span>
+                <Input 
+                    v-show="IsEditDetail"
+                    v-model="formValidate.manHours" 
+                    placeholder="请填写用户故事点数" 
+                    number 
+                    ></Input>
                 <ToolTip content="统计用户故事的工时(2人/天 表示2个点)" />
             </FormItem>
 	        <FormItem label="状态" prop="userstory_status" id="myUserstoryStatus" v-show="false">
@@ -69,6 +123,12 @@
 	                <Radio :disabled="item.value == formValidate.userstory_status ? false : true" v-for="(item,index) in userstory_statusList" :key="index" :label="item.value">{{item.label}}</Radio>
 	            </RadioGroup>
 	        </FormItem>
+            <FormItem label="关联工作项" >
+                <span>{{ formValidate.complete_mission}} / {{ formValidate.mission}}(已完成/全部)</span>
+            </FormItem>
+            <FormItem label="创建时间" >
+                <span>{{formValidate.created_time}}</span>
+            </FormItem>
 	    </Form>
 	    <Depend 
             :prjName="formValidate.prj_name" 
@@ -118,6 +178,12 @@ const validateNumber2 = (rule, value, callback) => {
 };
 export default {
 	props: {
+        IsEditDetail: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
         Data: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
@@ -188,48 +254,48 @@ export default {
         },
     },
     watch:{
+        IsEditDetail(data){
+        },
         Data(data){
         	if(data){
         		this.init(data)
         	}
         },
         PrjPermission(data){
-            console.error("PrjPermission",data)
             this.prj_permission = data;
+            console.log("prj_permission",this.prj_permission)
         },
         Identity(data){
-            console.error("Identity",data)
             this.identity = data;
+            console.log("identity",this.identity)
         },
         UserstoryTypeList(data){
-            console.error("UserstoryTypeList",data)
             this.userstory_typeList = data;
+            console.log("userstory_typeList",this.userstory_typeList)
         },
         UserstoryStatusList(data){
-            console.error("UserstoryStatusList",data)
             this.userstory_statusList = data;
+            console.log("userstory_statusList",this.userstory_statusList)
         },
         ReqIdList(data){
-            console.error("ReqIdList",data);
             this.req_idList = data;
+            console.log("req_idList",this.req_idList);
         },
         ProiList(data){
-            console.error("ProiList",data)
             this.proiList = data;
+            console.log("proiList",this.proiList)
         },
         ChargerList(data){
-            console.error("ChargerList",data)
             this.chargerList = data;
+            console.log("chargerList",this.chargerList)
         },
         SprintList(data){
-            console.error("SprintList",data)
-            this.sprintList = data
+            this.sprintList = data;
+            console.log("sprintList",this.sprintList)
         },
         groupNameList(data){
-            console.error("groupNameList",data)
         },
         userstoryCategoryList(data){
-            console.error("userstoryCategoryList",data)
         },
        
     },
@@ -264,6 +330,9 @@ export default {
                 bfunc: [], //弹出业务窗口
 
                 us_accept:"",
+                mission: "",
+                complete_mission: "",
+                created_time:"",
                 
             },
             req_idList:[
@@ -389,6 +458,30 @@ export default {
             	this.dependList = data.depd_list;
             }
     	},
+        translateFn(val,list){
+            if(val && list){
+                let obj = this[list].find(item=>item.value == val);
+                return obj && obj.label ? obj.label : "未知";
+            }else{
+                return "错误"
+            }
+        },
+        translateListFn(list){
+            if(list && Array.isArray(list) && list.length){
+                let Symbol = "、";
+                let txt = "";
+                for(let i=0;i<list.length;i++){
+                    if(i== list.length -1){Symbol=""}
+                    txt = txt+list[i].label+Symbol;
+                }
+                return txt;
+            }else{
+               return ""; 
+            }
+
+            
+        },
+        
     	//协助人开始
         addAssist(){
             this.assistonoff = true;

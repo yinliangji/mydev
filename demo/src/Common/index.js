@@ -1487,12 +1487,12 @@ export default class Common extends Utils {
       return Lable;
     }
     //翻译优先级--不通用
-    static ProiFn(N,STR=""){
+    static ProiFn(N,STR="",that){
       let Lable = "无"
-      if(this[STR+"List"] && this[STR+"List"].length){
-        for(let j=0;j<this[STR+"List"].length;j++){
-          if(this[STR+"List"][j].value == N){
-            Lable = this[STR+"List"][j].label
+      if(that && that[STR+"List"] && that[STR+"List"].length){
+        for(let j=0;j<that[STR+"List"].length;j++){
+          if(that[STR+"List"][j].value == N){
+            Lable = that[STR+"List"][j].label
           }
         }
       }else{
@@ -1509,12 +1509,12 @@ export default class Common extends Utils {
       return Lable;
     }
     //翻译故事类型--不通用
-    static TypeFn(N,STR=""){
+    static TypeFn(N,STR="",that){
       let Lable = "未知"
-      if(this[STR+"List"] && this[STR+"List"].length){
-        for(let j=0;j<this[STR+"List"].length;j++){
-          if(this[STR+"List"][j].value == N){
-            Lable = this[STR+"List"][j].label
+      if(that && that[STR+"List"] && that[STR+"List"].length){
+        for(let j=0;j<that[STR+"List"].length;j++){
+          if(that[STR+"List"][j].value == N){
+            Lable = that[STR+"List"][j].label
           }
         }
       }else{

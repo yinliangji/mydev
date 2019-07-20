@@ -1417,12 +1417,16 @@ export default {
             	}
 
             	if(!type){
-            		let usDetail = this.storyGetDetailFn(storyGetDetail,info.detail_id)
+            		this.searchCan = false;
+            		let usDetail = this.storyGetDetailFn(storyGetDetail,info.detail_id);
             		Promise.all([this._sprint,usDetail]).then((REP)=>{
 		                this.isDetailShow = true;
+		                this.searchCan = true;
 		            },(ERR)=>{
+		            	this.searchCan = true;
 		                console.log(ERR)
 		                this.showError(ERR);
+
 		            })
             		
             	}else{

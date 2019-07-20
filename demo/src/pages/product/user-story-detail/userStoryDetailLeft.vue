@@ -9,13 +9,41 @@
     		:label-width="104" 
     		>
     		<FormItem label="故事名称" prop="userstory_name">
-                <Input v-model="formValidate.userstory_name" placeholder="请填用户故事名称"></Input>
+                <span v-show="!IsEditDetail">
+                    {{formValidate.userstory_name}}
+                </span>
+                <Input
+                    v-show="IsEditDetail" 
+                    v-model="formValidate.userstory_name" 
+                    placeholder="请填用户故事名称" 
+                />
+
             </FormItem>
             <FormItem label="故事描述">
-                <Input v-model="formValidate.userstory_desc" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写故事描述"></Input>
+                <span v-show="!IsEditDetail">
+                    <pre>{{formValidate.userstory_desc}}</pre>
+                </span>
+                <Input 
+                    v-show="IsEditDetail" 
+                    v-model="formValidate.userstory_desc" 
+                    type="textarea" 
+                    :autosize="{minRows: 5,maxRows: 10}" 
+                    placeholder="请填写故事描述"
+                    >
+                </Input>
             </FormItem>
             <FormItem label="验收标准">
-                <Input v-model="formValidate.us_accept" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请填写验收标准"></Input>
+                <span v-show="!IsEditDetail">
+                    <pre>{{formValidate.us_accept}}</pre>
+                </span>
+                <Input 
+                    v-show="IsEditDetail" 
+                    v-model="formValidate.us_accept" 
+                    type="textarea" 
+                    :autosize="{minRows: 5,maxRows: 10}" 
+                    placeholder="请填写验收标准"
+                    >
+                </Input>
             </FormItem>
     	</Form>
     </div>
@@ -52,6 +80,12 @@ const validateNumber2 = (rule, value, callback) => {
 };
 export default {
 	props: {
+        IsEditDetail: {
+            type: [String,Number,Boolean,Function,Object,Array,Symbol],
+            default: function() {
+                return false;
+            }
+        },
         Data: {
             type: [String,Number,Boolean,Function,Object,Array,Symbol],
             default: function() {
@@ -72,6 +106,8 @@ export default {
         },
     },
     watch:{
+        IsEditDetail(data){
+        },
         Data(data){
         	if(data){
         		this.init(data)

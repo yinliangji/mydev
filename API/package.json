@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.19",
     "promise-polyfill": "^7.1.0",
     "element-ui": "^2.4.1",
     "iview": "^2.14.3",
